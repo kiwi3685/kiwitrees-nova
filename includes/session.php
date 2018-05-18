@@ -49,9 +49,9 @@ if (KT_USE_GOOGLE_API) {
 	define('KT_JQUERYUI_URL',			KT_STATIC_URL .'js/jquery-ui.min.js');			    // 1.12.1	Updated 16/10/2017 (autocomplete only)
 }
 //from foundation
-define('KT_FOUNDATION_JS',				KT_STATIC_URL . 'library/foundation/vendor/js/js/foundation.min.js');
-define('KT_JQUERY_JS',					KT_STATIC_URL . 'library/foundation/vendor/js/jquery.js');
-define('KT_WHAT_INPUT_JS',				KT_STATIC_URL . 'library/foundation/vendor/js/what-input.js');
+define('KT_FOUNDATION_JS',				KT_STATIC_URL . 'library/foundation/js/vendor/foundation.min.js');
+define('KT_JQUERY_JS',					KT_STATIC_URL . 'library/foundation/js/vendor/jquery.js');
+define('KT_WHAT_INPUT_JS',				KT_STATIC_URL . 'library/foundation/js/vendor/what-input.js');
 //define('KT_MOTIONUI_JS',				KT_STATIC_URL . 'library/foundation/js/vendor/motion-ui.js');
 
 // other js
