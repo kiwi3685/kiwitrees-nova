@@ -50,6 +50,13 @@
 
  		jQuery("textarea").autosize();
 
+		// toggle widget bar icons
+		jQuery(".button.widget").on("click", function () {
+			jQuery(this).find("[data-fa-i2svg]")
+			.toggleClass("fa-arrow-alt-from-left")
+			.toggleClass("fa-arrow-alt-to-left");
+		});
+
  	');
 
  global $ALL_CAPS, $iconStyle;
@@ -85,10 +92,25 @@
 	</head>
 	<body>
 		<?php if ($view!='simple') { ?>
+			<?php if ($show_widgetbar) { ?>
+				<div class="widget-bar off-canvas position-left" id="widgetBar" data-off-canvas>
+					<?php include_once 'widget-bar.php'; ?>
+				</div>
+				<div class="cell off-canvas-content" data-off-canvas-content> <!-- closed in footer -->
+			<?php } ?>
+
 			<nav class="grid-x">
 				<div class="top-bar first-top-bar">
 					<div class="top-bar-left">
 						<ul class="dropdown menu" data-dropdown-menu>
+							<?php if ($show_widgetbar) { ?>
+								<li>
+								<button class="button clear widget" type="button" data-toggle="widgetBar">
+									<i class="<?php echo $iconStyle; ?> fa-arrow-alt-from-left fa-2x"></i>
+								</button>
+							</li>
+							<?php } ?>
+
 							<li class="show-for-large"><span class="kiwitrees_logo"><span></li>
 							<?php foreach (KT_MenuBar::getOtherMenus() as $menu) {
 								if (strpos($menu, KT_I18N::translate('Login')) && !KT_USER_ID && (array_key_exists('block_login', KT_Module::getInstalledModules('%')))) {
@@ -139,23 +161,12 @@
 						</ul>
 					</div>
 				</div>
-				<?php if ($show_widgetbar) { ?>
-					<div class="cell widget_dropdown">
-						<button class="button" type="button" data-toggle="widgetDropdown">Toggle information bar</button>
-					</div>
-				<?php } ?>
 			</nav>
 
 			<?php echo KT_FlashMessages::getHtmlMessages(), // Feedback from asynchronous actions
 
 			$javascript;
 		} ?>
-		<main class="grid-x grid-padding-x">
-			<!--  add widget bar for all pages except Home, and only for logged in users with role 'visitor' or above -->
-			<?php if ($show_widgetbar) { ?>
-				<div class="dropdown-pane xlarge" id="widgetDropdown" data-dropdown data-auto-focus="true">
-					<?php include_once 'widget-bar.php'; ?>
-				</div>
-			<?php } ?>
 
+		<main class="grid-x grid-padding-x">
 			<div class="cell"> <!-- container for all pages -->

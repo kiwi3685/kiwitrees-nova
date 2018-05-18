@@ -28,6 +28,13 @@ if (!defined('KT_KIWITREES')) {
 
 global $SHOW_COUNTER, $hitCount, $iconStyle;
 
+if (KT_USER_ID && KT_SCRIPT_NAME != 'index.php') {
+   $show_widgetbar = true;
+   $this->addInlineJavascript ('widget_bar();');
+} else {
+   $show_widgetbar = false;
+}
+
 //get the widgets list
 $footer_blocks		= KT_Module::getActiveFooters();
 $ct_footer_blocks	= min(count($footer_blocks), 5); // no more than 5 footer blocks can be permitted
@@ -154,4 +161,7 @@ $cells				= '1';
 			<?php }
 		} ?>
 	</footer>
+	<?php if ($show_widgetbar) { ?>
+		</div>
+	<?php } ?>
 <?php }

@@ -27,7 +27,7 @@ if (!defined('KT_KIWITREES')) {
 }
 
 ?>
-<li id="<?php echo $id; ?>" class="accordion-item" data-accordion-item>
+<li id="<?php echo $id; ?>" class="accordion-item is-active" data-accordion-item> <!-- all widgets initially open -->
 	<a class="accordion-title blockheader" href="#"><?php echo $title; ?></a>
 	<div class="accordion-content blockcontent small_inner_block <?php echo $class; ?>" data-tab-content>
 		<?php echo $content; ?>
