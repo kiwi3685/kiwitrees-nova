@@ -1,0 +1,91 @@
+<?php
+/**
+ * Kiwitrees: Web based Family History software
+ * Copyright (C) 2012 to 2018 kiwitrees.net
+ *
+ * Derived from webtrees (www.webtrees.net)
+ * Copyright (C) 2010 to 2012 webtrees development team
+ *
+ * Derived from PhpGedView (phpgedview.sourceforge.net)
+ * Copyright (C) 2002 to 2010 PGV Development Team
+ *
+ * Kiwitrees is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with Kiwitrees. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+if (!defined('KT_KIWITREES')) {
+	header('HTTP/1.0 403 Forbidden');
+	exit;
+}
+
+class footer_contacts_KT_Module extends KT_Module implements KT_Module_Footer {
+	// Extend class KT_Module
+	public function getTitle() {
+		return /* I18N: Name of a module */ KT_I18N::translate('Footer contacts');
+	}
+
+	// Extend class KT_Module
+	public function getDescription() {
+		return /* I18N: Description of the “Footer contacts” module */ KT_I18N::translate('Add contact links in a footer block');
+	}
+
+	// Implement KT_Module_Sidebar
+	public function defaultFooterOrder() {
+		return 10;
+	}
+
+	// Implement KT_Module_Menu
+	public function defaultAccessLevel() {
+		return KT_PRIV_PUBLIC;
+	}
+
+	// Implement class KT_Module_Footer
+	public function getFooter($footer_id) {
+		global $iconStyle;
+
+		$id			= $this->getName();
+		$class		= $this->getName();
+		$title		= $this->getTitle();
+
+		//list all users for inter-user communication, only when logged in, and there is more than one user -->
+		$content = '
+			<div class="card-divider">
+				<h5>' . KT_I18N::translate('Contact Information') . '</h5>
+			</div>
+			<div class="card-section">';
+				if (contact_links()) {
+					$content .= contact_links();
+				}
+				if (array_key_exists('contact', KT_Module::getActiveModules())) {
+					$content .= '<p>
+						<a href="module.php?mod=contact&amp;mod_action=show&amp;url=' . addslashes(urlencode(get_query_url())) . '">
+							<i class="' . $iconStyle . ' fa-pencil"></i>
+							' . KT_I18N::translate('Contact form') . '
+						</a>
+					</p>';
+				}
+			$content .= '</div>
+		';
+
+		return $content;
+	}
+
+	// Implement class KT_Module_Footer
+	public function loadAjax() {
+		return false;
+	}
+
+	// Implement class KT_Module_Footer
+	public function configureBlock($footer_id) {
+		return false;
+	}
+
+}
