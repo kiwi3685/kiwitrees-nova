@@ -60,13 +60,13 @@ class block_welcome_KT_Module extends KT_Module implements KT_Module_Block {
 						get_block_setting($block_id, 'text', $default_text) . '
 					</p>
 				</div>
-				<div class="cell auto small-4 text-center">
+				<div class="cell small-4 text-center">
 					<a href="pedigree.php?rootid=' . $indi_xref . '&amp;ged=' . KT_GEDURL . '">
 						<i class="' . $iconStyle . ' fa-sitemap fa-2x"></i>
 						<p>' . KT_I18N::translate('Default chart') . '</p>
 					</a>
 				</div>
-				<div class="cell auto small-4 text-center">
+				<div class="cell small-4 text-center">
 					<a href="individual.php?pid=' . $indi_xref . '&amp;ged=' . KT_GEDURL . '">
 						<i class="' . $iconStyle . ' fa-street-view fa-2x"></i>
 						<p>' . KT_I18N::translate('Default individual') . '</p>
