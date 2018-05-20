@@ -174,7 +174,6 @@ switch($action) {
 $controller
 	->pageHeader()
 	->addExternalJavascript(KT_DATATABLES_JS)
-	->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
 	->addExternalJavascript(KT_DATEPICKER_JS)
 	->addExternalJavascript(KT_DATEPICKER_JS_LOCALE)
 	->addInlineJavascript('

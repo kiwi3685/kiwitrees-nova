@@ -48,7 +48,6 @@ function format_indi_table($datalist, $option='') {
 
 	$controller
 		->addExternalJavascript(KT_DATATABLES_JS)
-		->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
 		->addInlineJavascript('
 		jQuery.fn.dataTableExt.oSort["unicode-asc"  ]=function(a,b) {return a.replace(/<[^<]*>/, "").localeCompare(b.replace(/<[^<]*>/, ""))};
 		jQuery.fn.dataTableExt.oSort["unicode-desc" ]=function(a,b) {return b.replace(/<[^<]*>/, "").localeCompare(a.replace(/<[^<]*>/, ""))};
@@ -597,7 +596,6 @@ function format_fam_table($datalist, $option = '') {
 
 	$controller
 		->addExternalJavascript(KT_DATATABLES_JS)
-		->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
 		->addInlineJavascript('
 			jQuery.fn.dataTableExt.oSort["unicode-asc" ]=function(a,b) {return a.replace(/<[^<]*>/, "").localeCompare(b.replace(/<[^<]*>/, ""))};
 			jQuery.fn.dataTableExt.oSort["unicode-desc"]=function(a,b) {return b.replace(/<[^<]*>/, "").localeCompare(a.replace(/<[^<]*>/, ""))};
@@ -1177,7 +1175,6 @@ function format_sour_table($datalist) {
 
 	$controller
 		->addExternalJavascript(KT_DATATABLES_JS)
-		->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
 		->addInlineJavascript('
 			jQuery.fn.dataTableExt.oSort["unicode-asc" ]=function(a,b) {return a.replace(/<[^<]*>/, "").localeCompare(b.replace(/<[^<]*>/, ""))};
 			jQuery.fn.dataTableExt.oSort["unicode-desc"]=function(a,b) {return b.replace(/<[^<]*>/, "").localeCompare(a.replace(/<[^<]*>/, ""))};
@@ -1370,7 +1367,6 @@ function format_note_table($datalist) {
 
 	$controller
 		->addExternalJavascript(KT_DATATABLES_JS)
-		->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
 		->addInlineJavascript('
 			jQuery.fn.dataTableExt.oSort["unicode-asc" ]=function(a,b) {return a.replace(/<[^<]*>/, "").localeCompare(b.replace(/<[^<]*>/, ""))};
 			jQuery.fn.dataTableExt.oSort["unicode-desc"]=function(a,b) {return b.replace(/<[^<]*>/, "").localeCompare(a.replace(/<[^<]*>/, ""))};
@@ -1540,7 +1536,6 @@ function format_repo_table($repos) {
 
 	$controller
 		->addExternalJavascript(KT_DATATABLES_JS)
-		->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
 		->addInlineJavascript('
 			jQuery.fn.dataTableExt.oSort["unicode-asc" ]=function(a,b) {return a.replace(/<[^<]*>/, "").localeCompare(b.replace(/<[^<]*>/, ""))};
 			jQuery.fn.dataTableExt.oSort["unicode-desc"]=function(a,b) {return b.replace(/<[^<]*>/, "").localeCompare(a.replace(/<[^<]*>/, ""))};
@@ -1666,7 +1661,6 @@ function format_media_table($datalist) {
 
 	$controller
 		->addExternalJavascript(KT_DATATABLES_JS)
-		->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
 		->addInlineJavascript('
 			jQuery.fn.dataTableExt.oSort["unicode-asc" ]=function(a,b) {return a.replace(/<[^<]*>/, "").localeCompare(b.replace(/<[^<]*>/, ""))};
 			jQuery.fn.dataTableExt.oSort["unicode-desc"]=function(a,b) {return b.replace(/<[^<]*>/, "").localeCompare(a.replace(/<[^<]*>/, ""))};
@@ -1786,7 +1780,6 @@ function format_surname_table($surnames, $module_url = '', $sort = '2') {
 	$html = '';
 	$controller
 		->addExternalJavascript(KT_DATATABLES_JS)
-		->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
 		->addInlineJavascript('
 			jQuery.fn.dataTableExt.oSort["num-asc" ]=function(a,b) {a=parseFloat(a); b=parseFloat(b); return (a<b) ? -1 : (a>b ? 1 : 0);};
 			jQuery.fn.dataTableExt.oSort["num-desc"]=function(a,b) {a=parseFloat(a); b=parseFloat(b); return (a>b) ? -1 : (a<b ? 1 : 0);};
@@ -2007,7 +2000,6 @@ function format_story_table($datalist) {
 
 		$controller
 			->addExternalJavascript(KT_DATATABLES_JS)
-			->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
 			->addInlineJavascript('
 			jQuery.fn.dataTableExt.oSort["unicode-asc" ]=function(a,b) {return a.replace(/<[^<]*>/, "").localeCompare(b.replace(/<[^<]*>/, ""))};
 			jQuery.fn.dataTableExt.oSort["unicode-desc"]=function(a,b) {return b.replace(/<[^<]*>/, "").localeCompare(a.replace(/<[^<]*>/, ""))};
@@ -2147,7 +2139,6 @@ function print_changes_table($change_ids, $sort) {
 	$html = '';
 	$controller
 		->addExternalJavascript(KT_DATATABLES_JS)
-		->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
 		->addInlineJavascript('
 			jQuery.fn.dataTableExt.oSort["unicode-asc" ]=function(a,b) {return a.replace(/<[^<]*>/, "").localeCompare(b.replace(/<[^<]*>/, ""))};
 			jQuery.fn.dataTableExt.oSort["unicode-desc"]=function(a,b) {return b.replace(/<[^<]*>/, "").localeCompare(a.replace(/<[^<]*>/, ""))};
@@ -2251,7 +2242,6 @@ function print_events_table($startjd, $endjd, $events='BIRT MARR DEAT', $only_li
 	$table_id = 'ID'.(int)(microtime(true)*1000000); // lists requires a unique ID in case there are multiple lists per page
 	$controller
 		->addExternalJavascript(KT_DATATABLES_JS)
-		->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
 		->addInlineJavascript('
 			jQuery("#' . $table_id . '").dataTable({
 				"sDom": \'t\',

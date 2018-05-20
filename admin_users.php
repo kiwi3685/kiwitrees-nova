@@ -750,7 +750,6 @@ switch (KT_Filter::get('action')) {
 	default:
 		$controller
 		->addExternalJavascript(KT_DATATABLES_JS)
-		->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
 		->addInlineJavascript('
 			jQuery("#list").dataTable({
 				dom: \'<"top"blp<"clear">irf>t<"bottom"pl>\',

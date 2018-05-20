@@ -79,7 +79,6 @@ case 'delete_module':
 $controller
 	->pageHeader()
 	->addExternalJavascript(KT_DATATABLES_JS)
-	->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
 	->addInlineJavascript('
 		function reindexMods(id) {
 			jQuery("#"+id+" input").each(

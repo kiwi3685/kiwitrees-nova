@@ -39,47 +39,47 @@ define('KT_TRANSLATORS_URL', 'https://kiwitrees.net/forums/forum/support-forum/t
 // For example, http://my.cdn.com/kiwitrees-static-1.3.1/
 define('KT_STATIC_URL', ''); // For example, http://my.cdn.com/kiwitrees-static-1.3.1/
 
-// Optionally, load major JS libraries from Google’s public CDN
-define ('KT_USE_GOOGLE_API', false);
-if (KT_USE_GOOGLE_API) {
-//	define('KT_JQUERY_URL',        'https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js');
-//	define('KT_JQUERYUI_URL',      'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.0/jquery-ui.min.js');
+// Optionally, load major JS libraries from a CDN cerver
+define ('KT_USE_CDN', false);
+
+if (KT_USE_CDN) {
+	define('KT_FOUNDATION_JS',				'https://cdn.jsdelivr.net/npm/foundation-sites@6.4.3/dist/js/foundation.min.js" integrity="sha256-mRYlCu5EG+ouD07WxLF8v4ZAZYCA6WrmdIXyn1Bv9Vk= sha384-KzKofw4qqetd3kvuQ5AdapWPqV1ZI+CnfyfEwZQgPk8poOLWaabfgJOfmW7uI+AV sha512-0gHfaMkY+Do568TgjJC2iMAV0dQlY4NqbeZ4pr9lVUTXQzKu8qceyd6wg/3Uql9qA2+3X5NHv3IMb05wb387rA==" crossorigin="anonymous"'); //6.4.3
+	define('KT_JQUERY_JS',					'https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="crossorigin="anonymous"'); //3.3.1
+	define('KT_JQUERYUI_JS',				'https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"'); // 1.12.1
+	define('KT_DATEPICKER_JS',				'https://cdn.jsdelivr.net/npm/foundation-datepicker@1.5.6/js/foundation-datepicker.min.js'); //1.5.6
+	define('KT_DATATABLES_JS',				'https://cdn.datatables.net/v/zf/dt-1.10.16/b-1.5.1/b-html5-1.5.1/datatables.min.js'); //1.10.16
+	define('KT_DATATABLES_CSS',				'https://cdn.datatables.net/v/zf/dt-1.10.16/b-1.5.1/b-html5-1.5.1/datatables.min.css'); //1.10.16
 } else {
-//	define('KT_JQUERY_URL',				KT_STATIC_URL .'js/jquery.min.js');
-	define('KT_JQUERYUI_URL',			KT_STATIC_URL .'js/jquery-ui.min.js');			    // 1.12.1	Updated 16/10/2017 (autocomplete only)
+	define('KT_FOUNDATION_JS',				KT_STATIC_URL . 'library/foundation/js/vendor/foundation.min.js'); // 6.4.3
+	define('KT_JQUERY_JS',					KT_STATIC_URL . 'library/foundation/js/vendor/jquery.js'); //3.3.1
+	define('KT_JQUERYUI_JS',				KT_STATIC_URL . 'js/jquery-ui.min.js');	 // 1.12.1 (all options. Also requires some css in individual theme stylesheets)
+	define('KT_DATEPICKER_JS',				KT_STATIC_URL . 'library/foundation-datepicker/js/foundation-datepicker.min.js'); // 1.5.6
+	define('KT_DATATABLES_JS',				KT_STATIC_URL . 'library/DataTables/datatables.min.js'); // 1.10.16
+	define('KT_DATATABLES_CSS',				KT_STATIC_URL . 'library/DataTables/DataTables-1.10.16/css/dataTables.foundation.min.css');
 }
-//from foundation
-define('KT_FOUNDATION_JS',				KT_STATIC_URL . 'library/foundation/js/vendor/foundation.min.js');
-define('KT_JQUERY_JS',					KT_STATIC_URL . 'library/foundation/js/vendor/jquery.js');
-define('KT_WHAT_INPUT_JS',				KT_STATIC_URL . 'library/foundation/js/vendor/what-input.js');
-//define('KT_MOTIONUI_JS',				KT_STATIC_URL . 'library/foundation/js/vendor/motion-ui.js');
 
 // other js
-define('KT_FONTAWESOME_JS',				KT_STATIC_URL . 'library/fontawesome/fontawesome-all.min.js'); // fontawesome-pro-5.0.13 Updated 11-05-2018
-define('KT_DATEPICKER_JS',				KT_STATIC_URL . 'library/foundation-datepicker/js/foundation-datepicker.min.js');
-define('KT_JQUERY_COLORBOX_URL',		KT_STATIC_URL . 'js/jquery.colorbox-min.js');	    // 1.6.1	Updated 18-06-2015
-define('KT_DATATABLES_JS',				KT_STATIC_URL . 'library/DataTables/datatables.min.js');	    // 1.10.16	Updated 07-10-2017
-define('KT_DATATABLES_FOUNDATION_JS',	KT_STATIC_URL . 'library/DataTables/DataTables-1.10.16/js/dataTables.foundation.min.js');	    // 1.10.16	Updated 07-10-2017
-define('KT_JQUERY_JEDITABLE_URL',		KT_STATIC_URL . 'js/jquery.jeditable.js');		    // 1.7.3
-define('KT_JQUERY_WHEELZOOM_URL',		KT_STATIC_URL . 'js/jquery.wheelzoom.js');		    // 2.0.0
-define('KT_JQUERY_AUTOSIZE',			KT_STATIC_URL . 'js/jquery.autosize.min.js');	    // 1.18.18	Updated 18-06-2015
-define('KT_JQUERYUI_TOUCH_PUNCH',		KT_STATIC_URL . 'js/jquery.ui.touch-punch.min.js');
-define('KT_JQUERY_SHORTEN',				KT_STATIC_URL . 'js/jquery.shorten.js');
-define('KT_PASSWORDSCHECK',				KT_STATIC_URL . 'js/passwordscheck.js');			// Installed 09-11-2016
-define('KT_D3_JS',						KT_STATIC_URL . 'js/d3.v4.custom.min.js');			// v4. Installed from https://github.com/magicsunday/ancestral-fan-chart
+define('KT_FONTAWESOME_JS',					KT_STATIC_URL . 'library/fontawesome/fontawesome-all.min.js'); // fontawesome-pro-5.0.13 Updated 11-05-2018 Pro icons only available via CDN on subscription
+define('KT_JQUERY_COLORBOX_URL',			KT_STATIC_URL . 'js/jquery.colorbox-min.js');	    // 1.6.1	Updated 18-06-2015
+define('KT_JQUERY_JEDITABLE_URL',			KT_STATIC_URL . 'js/jquery.jeditable.js');		    // 1.7.3
+define('KT_JQUERY_WHEELZOOM_URL',			KT_STATIC_URL . 'js/jquery.wheelzoom.js');		    // 2.0.0
+define('KT_JQUERY_AUTOSIZE',				KT_STATIC_URL . 'js/jquery.autosize.min.js');	    // 1.18.18	Updated 18-06-2015
+define('KT_JQUERYUI_TOUCH_PUNCH',			KT_STATIC_URL . 'js/jquery.ui.touch-punch.min.js');
+define('KT_JQUERY_SHORTEN',					KT_STATIC_URL . 'js/jquery.shorten.js');
+define('KT_PASSWORDSCHECK',					KT_STATIC_URL . 'js/passwordscheck.js');			// Installed 09-11-2016
+define('KT_D3_JS',							KT_STATIC_URL . 'js/d3.v4.custom.min.js');			// v4. Installed from https://github.com/magicsunday/ancestral-fan-chart
 
 // kiwitrees own javascript libraries
-//define('KT_KIWITREES_JS_URL',		KT_STATIC_URL . 'js/kiwitrees.min.js');					// used system wide, via Pages WT class
-define('KT_KIWITREES_JS_URL',		KT_STATIC_URL . 'js/kiwitrees.js');					// used system wide, via Pages WT class
-//define('KT_AUTOCOMPLETE_JS_URL',	KT_STATIC_URL . 'js/autocomplete.min.js');				// used system wide
-define('KT_AUTOCOMPLETE_JS_URL',	KT_STATIC_URL . 'js/autocomplete.js');				// used system wide
-define('KT_JQUERY_TREEVIEW_JS_URL',	KT_STATIC_URL . 'js/jquery.treeview.js');			// used in branches.php
-define('KT_FANCY_TREEVIEW_JS_URL',	KT_STATIC_URL . 'js/fancytreeview.js');				// used in fancy_treeview_descendants & fancy_treeview_ancestors
-define('KT_KIWITREES_ADMIN_JS_URL',	KT_STATIC_URL . 'themes/_administration/js/kiwitrees-admin.js');			// used on some admin pages
+//define('KT_KIWITREES_JS_URL',				KT_STATIC_URL . 'js/kiwitrees.min.js');					// used system wide, via Pages WT class
+define('KT_KIWITREES_JS_URL',				KT_STATIC_URL . 'js/kiwitrees.js');					// used system wide, via Pages WT class
+//define('KT_AUTOCOMPLETE_JS_URL',			KT_STATIC_URL . 'js/autocomplete.min.js');				// used system wide
+define('KT_AUTOCOMPLETE_JS_URL',			KT_STATIC_URL . 'js/autocomplete.js');				// used system wide
+define('KT_JQUERY_TREEVIEW_JS_URL',			KT_STATIC_URL . 'js/jquery.treeview.js');			// used in branches.php
+define('KT_FANCY_TREEVIEW_JS_URL',			KT_STATIC_URL . 'js/fancytreeview.js');				// used in fancy_treeview_descendants & fancy_treeview_ancestors
+define('KT_KIWITREES_ADMIN_JS_URL',			KT_STATIC_URL . 'themes/_administration/js/kiwitrees-admin.js');			// used on some admin pages
 
 // external css libraries
-define('KT_DATEPICKER_CSS',				KT_STATIC_URL . 'library/foundation-datepicker/css/foundation-datepicker.min.css');
-define('KT_DATATABLES_CSS',				KT_STATIC_URL . 'library/DataTables/DataTables-1.10.16/css/dataTables.foundation.min.css');
+define('KT_DATEPICKER_CSS',					KT_STATIC_URL . 'library/foundation-datepicker/css/foundation-datepicker.min.css');
 
 // Location of our modules and themes.  These are used as URLs and folder paths.
 define('KT_MODULES_DIR', 'modules_v4/'); // Update setup.php when this changes
