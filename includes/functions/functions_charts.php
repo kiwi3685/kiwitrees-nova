@@ -669,11 +669,11 @@ function print_cousins($famid, $personcount=1) {
 /*
  * display parents on family.php
 */
-function print_parents($famid, $personcount=1) {
+function print_parents($famid, $personcount = 1) {
 	global $GEDCOM, $pbwidth, $pbheight;
 	$controller = new KT_Controller_Family();
-	$ged_id=get_id_from_gedcom($GEDCOM);
-	$family = KT_Family::getInstance($famid);
+	$ged_id		= get_id_from_gedcom($GEDCOM);
+	$family		= KT_Family::getInstance($famid);
 	if (is_null($family)) return;
 	$husb = $family->getHusband();
 	if (is_null($husb)) $husb = new KT_Person('');
