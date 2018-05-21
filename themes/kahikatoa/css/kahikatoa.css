@@ -8180,7 +8180,7 @@ div[id$="-page"]:not(#indi-page) h3 {
 #indi-page .indiHeader i.icon-silhouette-M,
 #indi-page .indiHeader i.icon-silhouette-F,
 #indi-page .indiHeader i.icon-silhouette-U {
-  height: 100%;
+  height: 60%;
   width: 95%; }
 
 #indi-page .indiHeader .accordion .accordion-item .accordion-title:before {
