@@ -26,7 +26,7 @@ if (!defined('KT_KIWITREES')) {
 	exit;
 }
 
-class itab_census_KT_Module extends KT_Module implements KT_Module_Tab {
+class tab_i_census_KT_Module extends KT_Module implements KT_Module_Tab {
 	// Extend KT_Module
 	public function getTitle() {
 		return /* I18N: Name of a module/tab on the individual page. */ KT_I18N::translate('Census summary');
@@ -91,44 +91,42 @@ class itab_census_KT_Module extends KT_Module implements KT_Module_Tab {
 							</thead>
 							<tbody>
 								<?php foreach ($facts as $fact) {
-									if ($fact->getTag() === 'CENS') {
-										$styleadd = "";
-										if ($fact->getIsNew()) $styleadd = "change_new";
-										if ($fact->getIsOld()) $styleadd = "change_old";
-										?>
-										<tr>
-											<td class="date nowrap"><?php echo $fact->getDate()->JD() != 0 ?  format_fact_date($fact, $person, false, false, true) : ""; ?></td>
-											<td class="nowrap"><?php echo format_fact_place($fact, true); ?></td>
-											<td class="nowrap"><?php echo print_address_structure($fact->getGedcomRecord(), 2, 'inline'); ?></td>
-											<td><?php echo print_fact_notes($fact->getGedcomRecord(), 2); ?></td>
-											<td><?php echo print_fact_sources($fact->getGedcomRecord(), 2, true, true); ?></td>
-											<td><?php echo print_media_links($fact->getGedcomRecord(), 2, $xref); ?></td>
-											<?php if (KT_USER_CAN_EDIT && $styleadd!='change_old' && $fact->getLineNumber()>0 && $fact->canEdit()) { ?>
-												<td>
-													<div class="editfacts button-group stacked">
-														<a class="button clear" onclick="return edit_record('<?php echo $xref; ?>', <?php echo $fact->getLineNumber(); ?>);" title="<?php echo KT_I18N::translate('Edit'); ?>">
-															<i class="<?php echo $iconStyle; ?> fa-edit"></i>
-															<span class="link_text" tabindex="1">
-																<?php echo KT_I18N::translate('Edit'); ?>
-															</span>
-														</a>
-														<a class="button clear" onclick="jQuery.post('action.php',{action:'copy-fact', type:'<?php echo $fact->getParentObject()->getType(); ?>',factgedcom:'<?php echo rawurlencode($fact->getGedcomRecord()); ?>'},function(){location.reload();})" title="<?php echo  KT_I18N::translate('Copy'); ?>">
-															<i class="<?php echo $iconStyle; ?> fa-copy"></i>
-															<span class="link_text" tabindex="2">
-																<?php echo KT_I18N::translate('Copy'); ?>
-															</span>
-														</a>
-														<a class="button clear" onclick="return delete_fact('<?php echo $pid; ?>', <?php echo $fact->getLineNumber(); ?>, '', '<?php echo KT_I18N::translate('Are you sure you want to delete this fact?'); ?>');" title="<?php echo KT_I18N::translate('Delete'); ?>">
-															<i class="<?php echo $iconStyle; ?> fa-trash-alt"></i>
-															<span class="link_text" tabindex="3">
-																<?php echo KT_I18N::translate('Delete'); ?>
-															</span>
-														</a>
-													</div>
-												</td>
-											<?php } ?>
-										</tr>
-									<?php } ?>
+									$styleadd = "";
+									if ($fact->getIsNew()) $styleadd = "change_new";
+									if ($fact->getIsOld()) $styleadd = "change_old";
+									?>
+									<tr>
+										<td class="date nowrap"><?php echo $fact->getDate()->JD() != 0 ?  format_fact_date($fact, $person, false, false, true) : ""; ?></td>
+										<td class="nowrap"><?php echo format_fact_place($fact, true); ?></td>
+										<td class="nowrap"><?php echo print_address_structure($fact->getGedcomRecord(), 2, 'inline'); ?></td>
+										<td><?php echo print_fact_notes($fact->getGedcomRecord(), 2); ?></td>
+										<td><?php echo print_fact_sources($fact->getGedcomRecord(), 2, true, true); ?></td>
+										<td><?php echo print_media_links($fact->getGedcomRecord(), 2, $xref); ?></td>
+										<?php if (KT_USER_CAN_EDIT && $styleadd!='change_old' && $fact->getLineNumber()>0 && $fact->canEdit()) { ?>
+											<td>
+												<div class="editfacts button-group stacked">
+													<a class="button clear" onclick="return edit_record('<?php echo $xref; ?>', <?php echo $fact->getLineNumber(); ?>);" title="<?php echo KT_I18N::translate('Edit'); ?>">
+														<i class="<?php echo $iconStyle; ?> fa-edit"></i>
+														<span class="link_text" tabindex="1">
+															<?php echo KT_I18N::translate('Edit'); ?>
+														</span>
+													</a>
+													<a class="button clear" onclick="jQuery.post('action.php',{action:'copy-fact', type:'<?php echo $fact->getParentObject()->getType(); ?>',factgedcom:'<?php echo rawurlencode($fact->getGedcomRecord()); ?>'},function(){location.reload();})" title="<?php echo  KT_I18N::translate('Copy'); ?>">
+														<i class="<?php echo $iconStyle; ?> fa-copy"></i>
+														<span class="link_text" tabindex="2">
+															<?php echo KT_I18N::translate('Copy'); ?>
+														</span>
+													</a>
+													<a class="button clear" onclick="return delete_fact('<?php echo $pid; ?>', <?php echo $fact->getLineNumber(); ?>, '', '<?php echo KT_I18N::translate('Are you sure you want to delete this fact?'); ?>');" title="<?php echo KT_I18N::translate('Delete'); ?>">
+														<i class="<?php echo $iconStyle; ?> fa-trash-alt"></i>
+														<span class="link_text" tabindex="3">
+															<?php echo KT_I18N::translate('Delete'); ?>
+														</span>
+													</a>
+												</div>
+											</td>
+										<?php } ?>
+									</tr>
 								<?php } ?>
 							</tbody>
 						</table>

@@ -8248,18 +8248,18 @@ div[id$="-page"]:not(#indi-page) h3 {
     font-size: .875rem;
     vertical-align: middle; }
 
-#indi-page .tabs-panel #itab_events_content .indiFactHeader {
+#indi-page .tabs-panel #tab_i_events_content .indiFactHeader {
   background: #e7e7e7;
   border-bottom: 0.0125rem solid #ab3334;
   padding: 0 0.5rem; }
-  #indi-page .tabs-panel #itab_events_content .indiFactHeader .event, #indi-page .tabs-panel #itab_events_content .indiFactHeader .place, #indi-page .tabs-panel #itab_events_content .indiFactHeader .detail, #indi-page .tabs-panel #itab_events_content .indiFactHeader .edit {
+  #indi-page .tabs-panel #tab_i_events_content .indiFactHeader .event, #indi-page .tabs-panel #tab_i_events_content .indiFactHeader .place, #indi-page .tabs-panel #tab_i_events_content .indiFactHeader .detail, #indi-page .tabs-panel #tab_i_events_content .indiFactHeader .edit {
     padding: 0; }
 
-#indi-page .tabs-panel #itab_events_content .indiFact .cell.edit {
+#indi-page .tabs-panel #tab_i_events_content .indiFact .cell.edit {
   margin: 0;
   padding: 0; }
 
-#indi-page .tabs-panel #itab_census_content table td {
+#indi-page .tabs-panel #tab_i_census_content table td {
   font-size: 0.875rem;
   vertical-align: top; }
 
@@ -8617,6 +8617,10 @@ div[id$="-page"]:not(#indi-page) h3 {
 /* Icon settings */
 .svg-inline--fa {
   margin: 0.25rem 0.5rem 0 0.75rem; }
+  .svg-inline--fa.success {
+    color: #3adb76; }
+  .svg-inline--fa.alert {
+    color: #ab3334; }
 
 .fa-female {
   color: #e09798; }

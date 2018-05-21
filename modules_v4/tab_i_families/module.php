@@ -26,7 +26,7 @@ if (!defined('KT_KIWITREES')) {
 	exit;
 }
 
-class itab_families_KT_Module extends KT_Module implements KT_Module_Tab {
+class tab_i_families_KT_Module extends KT_Module implements KT_Module_Tab {
 	// Extend KT_Module
 	public function getTitle() {
 		return /* I18N: Name of a module */ KT_I18N::translate('Families');

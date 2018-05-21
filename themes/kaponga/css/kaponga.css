@@ -7454,16 +7454,16 @@ div[id$="-page"] h3 {
 #indi-page .tabs-panel .elderdate .svg-inline--fa {
   margin: 0; }
 
-#indi-page .tabs-panel #itab_events_content .indiFactHeader {
+#indi-page .tabs-panel #tab_i_events_content .indiFactHeader {
   background: #eeeeee;
   border-bottom: 0.0125rem solid #aaaaaa;
   padding: 0 0.5rem; }
 
-#indi-page .tabs-panel #itab_events_content .indiFact .cell.edit {
+#indi-page .tabs-panel #tab_i_events_content .indiFact .cell.edit {
   margin: 0;
   padding: 0; }
 
-#indi-page .tabs-panel #itab_census_content table td {
+#indi-page .tabs-panel #tab_i_census_content table td {
   font-size: 0.875rem;
   vertical-align: top; }
 

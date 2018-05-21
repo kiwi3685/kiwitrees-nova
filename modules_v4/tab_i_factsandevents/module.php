@@ -26,15 +26,15 @@ if (!defined('KT_KIWITREES')) {
 	exit;
 }
 
-class itab_events_KT_Module extends KT_Module implements KT_Module_Tab {
+class tab_i_factsandevents_KT_Module extends KT_Module implements KT_Module_Tab {
 	// Extend KT_Module
 	public function getTitle() {
-		return /* I18N: Name of a module/tab on the individual page. */ KT_I18N::translate('Events');
+		return /* I18N: Name of a module/tab on the individual page. */ KT_I18N::translate('Facts and events');
 	}
 
 	// Extend KT_Module
 	public function getDescription() {
-		return /* I18N: Description of the “Facts and events” module */ KT_I18N::translate('A tab showing all events in an individuals life in date order');
+		return /* I18N: Description of the “Facts and events” module */ KT_I18N::translate('A tab showing the facts and events of the individual.');
 	}
 
 	// Extend class KT_Module_Tab
@@ -81,44 +81,23 @@ class itab_events_KT_Module extends KT_Module implements KT_Module_Tab {
 		');
 
 		ob_start();
-			$indifacts = $controller->getIndiFacts();
+		?>
+
+			<?php $indifacts = $controller->getIndiFacts();
 			if (count($indifacts) == 0) {
 				echo '<div class="callout alert">', KT_I18N::translate('There are no Facts for this individual.'), '</div>';
 			} ?>
 			<div class="cell tabHeader">
-				<?php if ($SHOW_RELATIVES_EVENTS || file_exists(KT_Site::preference('INDEX_DIRECTORY') . 'histo.' . KT_LOCALE . '.php')) { ?>
-					<div class="grid-x">
+				<div class="grid-x">
+					<div class="cell">
 						<?php if ($SHOW_RELATIVES_EVENTS) { ?>
-							<div class="cell medium-2">
-								<input id="checkbox_rela_facts" type="checkbox">
-								<label for="checkbox_rela_facts"><?php echo KT_I18N::translate('Events of close relatives'); ?></label>
-							</div>
+							<input id="checkbox_rela_facts" type="checkbox">
+							<label for="checkbox_rela_facts"><?php echo KT_I18N::translate('Events of close relatives'); ?></label>
 						<?php }
 						if (file_exists(KT_Site::preference('INDEX_DIRECTORY') . 'histo.' . KT_LOCALE . '.php')) { ?>
-							<div class="cell medium-2">
-								<input id="checkbox_histo" type="checkbox">
-								<label for="checkbox_histo"><?php echo KT_I18N::translate('Historical events'); ?></label>
-							</div>
+							<input id="checkbox_histo" type="checkbox">
+							<label for="checkbox_histo"><?php echo KT_I18N::translate('Historical events'); ?></label>
 						<?php } ?>
-					</div>
-				<?php } ?>
-			</div>
-			<div class="cell show-for-medium indiFactHeader">
-				<div class="grid-x grid-padding-x">
-					<div class="cell medium-2 date">
-						<label><?php echo KT_I18N::translate('Date'); ?></label>
-					</div>
-					<div class="cell medium-2 event">
-						<label><?php echo KT_I18N::translate('Event'); ?></label>
-					</div>
-					<div class="cell medium-2 place">
-						<label><?php echo KT_I18N::translate('Place'); ?></label>
-					</div>
-					<div class="cell medium-5 detail">
-						<label><?php echo KT_I18N::translate('Details'); ?></label>
-					</div>
-					<div class="cell medium-1 edit">
-						<label><?php echo KT_I18N::translate('Edit'); ?></label>
 					</div>
 				</div>
 			</div>
@@ -126,11 +105,11 @@ class itab_events_KT_Module extends KT_Module implements KT_Module_Tab {
 			foreach ($indifacts as $fact) {
 				if ($fact->getParentObject() instanceof KT_Family) {
 					// Print all family facts
-					print_timeline($fact, $controller->record);
+					print_fact($fact, $controller->record);
 				} else {
 					// Individual/reference facts (e.g. CHAN, IDNO, RFN, AFN, REFN, RIN, _UID) can be shown in the sidebar
 					if (!array_key_exists('extra_info', KT_Module::getActiveSidebars()) || !extra_info_KT_Module::showFact($fact)) {
-						print_timeline($fact, $controller->record);
+						print_fact($fact, $controller->record);
 					}
 
 				}
@@ -140,7 +119,7 @@ class itab_events_KT_Module extends KT_Module implements KT_Module_Tab {
 				print_add_new_fact($controller->record->getXref(), $indifacts, 'INDI');
 			} ?>
 
-			<?php
+		<?php
 		return '
 			<div id="' . $this->getName() . '_content" class="grid-x grid-padding-y">' .
 				ob_get_clean() . '

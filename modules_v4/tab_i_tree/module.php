@@ -26,7 +26,7 @@ if (!defined('KT_KIWITREES')) {
 	exit;
 }
 
-class itab_tree_KT_Module extends KT_Module implements KT_Module_Tab {
+class tab_i_tree_KT_Module extends KT_Module implements KT_Module_Tab {
 	var $headers; // CSS and script to include in the top of <head> section, before theme’s CSS
 	var $js; // the TreeViewHandler javascript
 
