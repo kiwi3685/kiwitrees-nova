@@ -167,7 +167,7 @@ function fetch_latest_version() {
 	$last_update_timestamp = KT_Site::preference('LATEST_KT_VERSION_TIMESTAMP');
 	if ($last_update_timestamp < KT_TIMESTAMP - 24*60*60) {
 		$row = KT_DB::prepare("SHOW VARIABLES LIKE 'version'")->fetchOneRow();
-		$latest_version_txt = fetch_remote_file('www.kiwitrees.net', '/latest-version.txt');
+		$latest_version_txt = fetch_remote_file('www.kiwitrees.net', '/latest_ktn_version.txt');
 		if ($latest_version_txt) {
 			KT_Site::preference('LATEST_KT_VERSION', $latest_version_txt);
 			KT_Site::preference('LATEST_KT_VERSION_TIMESTAMP', KT_TIMESTAMP);
