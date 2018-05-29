@@ -30,3 +30,4 @@ prepros-*.config
 themes/*/scss
 
 /uploads
+latest_ktn_version.txt

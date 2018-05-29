@@ -169,7 +169,7 @@ if (version_compare(PHP_VERSION, '6.0', '<')) {
 		// Disabling them on PHP5.3 will cause a strict-warning, so ignore errors.
 		@set_magic_quotes_runtime(false);
 	}
-	// magic_quotes_gpc can‚Äôt be disabled at run-time, so clean them up as necessary.
+	// magic_quotes_gpc canít be disabled at run-time, so clean them up as necessary.
 	if (get_magic_quotes_gpc() || ini_get('magic_quotes_sybase') && strtolower(ini_get('magic_quotes_sybase')) != 'off') {
 		$in = array(&$_GET, &$_POST, &$_REQUEST, &$_COOKIE);
 		foreach ($in as $k => $v) {
@@ -225,7 +225,7 @@ if (!empty($_SERVER['SCRIPT_NAME'])) {
 	define('KT_SCRIPT_PATH', '/');
 }
 
-// Microsoft IIS servers don‚Äôt set REQUEST_URI, so generate it for them.
+// Microsoft IIS servers donít set REQUEST_URI, so generate it for them.
 if (!isset($_SERVER['REQUEST_URI']))  {
 	$_SERVER['REQUEST_URI'] = substr($_SERVER['PHP_SELF'], 1);
 	if (isset($_SERVER['QUERY_STRING'])) {
@@ -335,7 +335,7 @@ case 'deny':
 	exit;
 case 'robot':
 case 'unknown':
-	// Search engines don‚Äôt send cookies, and so create a new session with every visit.
+	// Search engines donít send cookies, and so create a new session with every visit.
 	// Make sure they always use the same one
 	Zend_Session::setId('search-engine-'.str_replace('.', '-', $KT_REQUEST->getClientIp()));
 	$SEARCH_SPIDER = true;
@@ -407,7 +407,7 @@ $cfg = array(
 	'cookie_httponly' => true,
 );
 
-// Search engines don‚Äôt send cookies, and so create a new session with every visit.
+// Search engines donít send cookies, and so create a new session with every visit.
 // Make sure they always use the same one
 if ($SEARCH_SPIDER) {
 	Zend_Session::setId('search-engine-'.str_replace('.', '-', $KT_REQUEST->getClientIp()));
@@ -415,9 +415,9 @@ if ($SEARCH_SPIDER) {
 
 Zend_Session::start($cfg);
 
-// Register a session ‚Äúnamespace‚Äù to store session data.  This is better than
+// Register a session ìnamespaceî to store session data.  This is better than
 // using $_SESSION, as we can avoid clashes with other modules or applications,
-// and problems with servers that have enabled ‚Äúregister_globals‚Äù.
+// and problems with servers that have enabled ìregister_globalsî.
 $KT_SESSION = new Zend_Session_Namespace('KIWITREES');
 
 if (!$SEARCH_SPIDER && !$KT_SESSION->initiated) {
@@ -524,7 +524,7 @@ if (KT_USER_ID) {
 
 define('KT_CLIENT_JD', 2440588 + (int)(KT_CLIENT_TIMESTAMP/86400));
 
-// Application configuration data - things that aren‚Äôt (yet?) user-editable
+// Application configuration data - things that arenít (yet?) user-editable
 require KT_ROOT . 'includes/config_data.php';
 
 //-- load the privacy functions
@@ -567,7 +567,7 @@ if (KT_USER_ID) {
 
 // Set the theme
 if (substr(KT_SCRIPT_NAME, 0, 5) == 'admin' || KT_SCRIPT_NAME == 'module.php' && substr(safe_GET('mod_action'), 0, 5) == 'admin') {
-	// Administration scripts begin with ‚Äúadmin‚Äù and use a special administration theme
+	// Administration scripts begin with ìadminî and use a special administration theme
 	define('KT_THEME_DIR', KT_THEMES_DIR.'_administration/');
 } else {
 	// Requested change of theme?
@@ -581,7 +581,7 @@ if (substr(KT_SCRIPT_NAME, 0, 5) == 'admin' || KT_SCRIPT_NAME == 'module.php' &&
 			$THEME_DIR = get_gedcom_setting(KT_GED_ID, 'THEME_DIR');
 		}
 		if (!in_array($THEME_DIR, get_theme_names())) {
-			$THEME_DIR = 'kahikatoa';
+			$THEME_DIR = 'kiwitrees';
 		}
 		if (!in_array($THEME_DIR, get_theme_names())) {
 			list($THEME_DIR) = get_theme_names();
