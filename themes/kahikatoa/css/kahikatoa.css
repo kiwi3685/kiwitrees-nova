@@ -8948,8 +8948,6 @@ table.dataTable .ui-state-active {
     font-size: 0.9rem; } }
 
 @media screen and (min-width: 48.0625em) {
-  nav .top-bar ul.menu.dropdown #menu-favorites {
-    display: none; }
   #medialist-page .card .card-divider img {
     height: 3rem; }
   #calendar_utilities-page .card-section {

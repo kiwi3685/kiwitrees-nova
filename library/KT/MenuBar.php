@@ -237,20 +237,20 @@ class KT_MenuBar {
 
 		foreach ($favorites as $favorite) {
 			switch($favorite['type']) {
-			case 'URL':
-				$submenu = new KT_Menu($favorite['title'], $favorite['url']);
-				$menu->addSubMenu($submenu);
-				break;
-			case 'INDI':
-			case 'FAM':
-			case 'SOUR':
-			case 'OBJE':
-			case 'NOTE':
-				$obj = KT_GedcomRecord::getInstance($favorite['gid']);
-				if ($obj && $obj->canDisplayName()) {
-					$submenu = new KT_Menu($obj->getFullName(), $obj->getHtmlUrl());
+				case 'URL':
+					$submenu = new KT_Menu($favorite['title'], $favorite['url']);
 					$menu->addSubMenu($submenu);
-				}
+				break;
+				case 'INDI':
+				case 'FAM':
+				case 'SOUR':
+				case 'OBJE':
+				case 'NOTE':
+					$obj = KT_GedcomRecord::getInstance($favorite['gid']);
+					if ($obj && $obj->canDisplayName()) {
+						$submenu = new KT_Menu($obj->getFullName(), $obj->getHtmlUrl());
+						$menu->addSubMenu($submenu);
+					}
 				break;
 			}
 		}
