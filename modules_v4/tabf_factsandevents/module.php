@@ -81,11 +81,7 @@ class tabf_factsandevents_KT_Module extends KT_Module implements KT_Module_FamTa
 			</div>
 		</div>
 		<?php if ($controller->record->canDisplayDetails()) { ?>
-			<div class="cell FamFact">
-				<div class="grid-x">
-					<?php echo $controller->printFamilyFacts(); ?>
-				</div>
-			</div>
+			<?php echo $controller->printFamilyFacts(); ?>
 		<?php } else { ?>
 			<div class="callout secondary">
 				<?php echo KT_I18N::translate('The details of this family are private.'); ?>

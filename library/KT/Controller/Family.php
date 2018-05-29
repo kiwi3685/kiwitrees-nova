@@ -228,56 +228,44 @@ class KT_Controller_Family extends KT_Controller_GedcomRecord {
 
 		if (KT_USER_CAN_EDIT) { ?>
 			<div class="cell <?php echo $fam_width2; ?>">
-				<table>
-					<tr>
-						<th class="descriptionbox" colspan="2"><?php echo KT_I18N::translate('Add new family information'); ?></th>
-					</tr>
-					<?php echo print_add_new_fact2($this->record->getXref(), $famFacts, 'FAM'); ?>
-					<tr>
-						<td class="descriptionbox"><?php echo KT_Gedcom_Tag::getLabel('NOTE'); ?></td>
-						<td class="optionbox">
-							<a href="#" onclick="return add_new_record('<?php echo $this->record->getXref(); ?>','NOTE');">
-								<?php echo KT_I18N::translate('Add a note'); ?>
-							</a>
-							<?php echo help_link('add_note'); ?>
-						</td>
-					</tr>
-					<tr>
-						<td class="descriptionbox"><?php echo KT_Gedcom_Tag::getLabel('SHARED_NOTE'); ?></td>
-						<td class="optionbox">
-							<a href="#" onclick="return add_new_record('<?php echo $this->record->getXref(); ?>','SHARED_NOTE');">
-								<?php echo KT_I18N::translate('Add a shared note'); ?>
-							</a>
-							<?php echo help_link('add_shared_note'); ?>
-						</td>
-					</tr>
+				<div class="grid-x">
+					<div class="cell">
+						<h6 class="text-center"><?php echo KT_I18N::translate('Add new family information'); ?></h6>
+					</div>
+					<?php echo print_add_new_fact($this->record->getXref(), $famFacts, 'FAM'); ?>
+					<div class="cell">
+						<a href="#" onclick="return add_new_record('<?php echo $this->record->getXref(); ?>','NOTE');">
+							<?php echo KT_I18N::translate('Add a note'); ?>
+						</a>
+						<?php echo help_link('add_note'); ?>
+					</div>
+					<div class="cell">
+						<a href="#" onclick="return add_new_record('<?php echo $this->record->getXref(); ?>','SHARED_NOTE');">
+							<?php echo KT_I18N::translate('Add a shared note'); ?>
+						</a>
+						<?php echo help_link('add_shared_note'); ?>
+					</div>
 					<?php if (get_gedcom_setting(KT_GED_ID, 'MEDIA_UPLOAD') >= KT_USER_ACCESS_LEVEL) { ?>
-						<tr>
-							<td class="descriptionbox"><?php echo KT_Gedcom_Tag::getLabel('OBJE'); ?></td>
-							<td class="optionbox">
-								<a href="#" onclick="window.open('addmedia.php?action=showmediaform&amp;linktoid=<?php echo $this->record->getXref(); ?>', '_blank', edit_window_specs); return false;">
-									<?php echo KT_I18N::translate('Add a media object'); ?>
-								</a>
-								<?php echo help_link('OBJE'); ?>
-								<br>
-								<a href="#" onclick="window.open('inverselink.php?linktoid=<?php echo $this->record->getXref(); ?>&amp;linkto=family', '_blank', find_window_specs); return false;">
-									<?php echo KT_I18N::translate('Link to an existing media object'); ?>
-								</a>
-							</td>
-						</tr>
-					<?php } ?>
-					<tr>
-						<td class="descriptionbox"><?php echo KT_Gedcom_Tag::getLabel('SOUR'); ?></td>
-						<td class="optionbox">
-							<a href="#" onclick="return add_new_record('<?php echo $this->record->getXref(); ?>','SOUR');">
-								<?php echo KT_I18N::translate('Add a source citation'); ?>
+						<div class="cell">
+							<a href="#" onclick="window.open('addmedia.php?action=showmediaform&amp;linktoid=<?php echo $this->record->getXref(); ?>', '_blank', edit_window_specs); return false;">
+								<?php echo KT_I18N::translate('Add a media object'); ?>
 							</a>
-							<?php echo help_link('add_source'); ?>
-						</td>
-					</tr>
-				</table>
+							<?php echo help_link('OBJE'); ?>
+						</div>
+						<div class="cell">
+							<a href="#" onclick="window.open('inverselink.php?linktoid=<?php echo $this->record->getXref(); ?>&amp;linkto=family', '_blank', find_window_specs); return false;">
+								<?php echo KT_I18N::translate('Link to an existing media object'); ?>
+							</a>
+						</div>
+					<?php } ?>
+					<div class="cell famFact">
+						<a href="#" onclick="return add_new_record('<?php echo $this->record->getXref(); ?>','SOUR');">
+							<?php echo KT_I18N::translate('Add a source citation'); ?>
+						</a>
+						<?php echo help_link('add_source'); ?>
+					</div>
+				</div>
 			</div>
 		<?php }
 	}
-
 }

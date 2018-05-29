@@ -1178,7 +1178,7 @@ function CheckFactUnique($uniquefacts, $recfacts, $type) {
 function print_add_new_fact($id, $usedfacts, $type) {
 	global $KT_SESSION; ?>
 
-	<div class="cell indiFact">
+	<div class="cell indiFact famFact">
 		<div class="grid-x">
 			<?php if ($KT_SESSION->clipboard) { // -- Add from clipboard
 				$newRow = true;
@@ -1215,7 +1215,6 @@ function print_add_new_fact($id, $usedfacts, $type) {
 					</div>
 					</form>
 					</div>
-					<div class="cell medium-3"></div>
 				<?php }
 			}
 
@@ -1257,9 +1256,9 @@ function print_add_new_fact($id, $usedfacts, $type) {
 			}
 			uasort($translated_addfacts, 'factsort'); ?>
 			<div class="cell medium-3 fact-title">
-				<label><?php echo KT_I18N::translate('Add new event'); ?></label>
+				<label class="h6"><?php echo KT_I18N::translate('Add fact or event'); ?></label>
 			</div>
-			<div class="cell medium-7 fact-detail">
+			<div class="cell medium-9 fact-detail">
 				<form method="get" name="newfactform" action="" onsubmit="return false;">
 					<div class="input-group">
 						<div class="input-group-button">
@@ -1289,112 +1288,9 @@ function print_add_new_fact($id, $usedfacts, $type) {
 					<?php } ?>
 				</form>
 			</div>
-			<div class="cell medium-3"></div>
 		</div>
 	</div>
 <?php }
-
-/**
-* Print a new fact box on details pages - VERSION 2
-* @param string $id the id of the person, family, source etc the fact will be added to
-* @param array $usedfacts an array of facts already used in this record
-* @param string $type the type of record INDI, FAM, SOUR etc
-*/
-function print_add_new_fact2($id, $usedfacts, $type) {
-	global $KT_SESSION;
-
-	// -- Add from clipboard
-	if ($KT_SESSION->clipboard) {
-		$newRow = true;
-		foreach (array_reverse($KT_SESSION->clipboard, true) as $key=>$fact) {
-			if ($fact["type"]==$type || $fact["type"]=='all') {
-				if ($newRow) {
-					$newRow = false;
-					echo '<tr><td class="descriptionbox">';
-					echo KT_I18N::translate('Add from clipboard'), '</td>';
-					echo '<td class="optionbox wrap"><form method="get" name="newFromClipboard" action="" onsubmit="return false;">';
-					echo '<select id="newClipboardFact" name="newClipboardFact">';
-				}
-				$fact_type=KT_Gedcom_Tag::getLabel($fact['fact']);
-				echo '<option value="clipboard_', $key, '">', $fact_type;
-				// TODO use the event class to store/parse the clipboard events
-				if (preg_match('/^2 DATE (.+)/m', $fact['factrec'], $match)) {
-					$tmp=new KT_Date($match[1]);
-					echo '; ', $tmp->minDate()->Format('%Y');
-				}
-				if (preg_match('/^2 PLAC ([^,\n]+)/m', $fact['factrec'], $match)) {
-					echo '; ', $match[1];
-				}
-				echo '</option>';
-			}
-		}
-		if (!$newRow) {
-			echo '</select>';
-			echo '&nbsp;&nbsp;<input type="button" value="', KT_I18N::translate('Add'), "\" onclick=\"addClipboardRecord('$id', 'newClipboardFact');\"> ";
-			echo '</form></td></tr>', "\n";
-		}
-	}
-
-	// -- Add from pick list
-	switch ($type) {
-	case "INDI":
-		$addfacts   =preg_split("/[, ;:]+/", get_gedcom_setting(KT_GED_ID, 'INDI_FACTS_ADD'),    -1, PREG_SPLIT_NO_EMPTY);
-		$uniquefacts=preg_split("/[, ;:]+/", get_gedcom_setting(KT_GED_ID, 'INDI_FACTS_UNIQUE'), -1, PREG_SPLIT_NO_EMPTY);
-		$quickfacts =preg_split("/[, ;:]+/", get_gedcom_setting(KT_GED_ID, 'INDI_FACTS_QUICK'),  -1, PREG_SPLIT_NO_EMPTY);
-		break;
-	case "FAM":
-		$addfacts   =preg_split("/[, ;:]+/", get_gedcom_setting(KT_GED_ID, 'FAM_FACTS_ADD'),     -1, PREG_SPLIT_NO_EMPTY);
-		$uniquefacts=preg_split("/[, ;:]+/", get_gedcom_setting(KT_GED_ID, 'FAM_FACTS_UNIQUE'),  -1, PREG_SPLIT_NO_EMPTY);
-		$quickfacts =preg_split("/[, ;:]+/", get_gedcom_setting(KT_GED_ID, 'FAM_FACTS_QUICK'),   -1, PREG_SPLIT_NO_EMPTY);
-		break;
-	case "SOUR":
-		$addfacts   =preg_split("/[, ;:]+/", get_gedcom_setting(KT_GED_ID, 'SOUR_FACTS_ADD'),    -1, PREG_SPLIT_NO_EMPTY);
-		$uniquefacts=preg_split("/[, ;:]+/", get_gedcom_setting(KT_GED_ID, 'SOUR_FACTS_UNIQUE'), -1, PREG_SPLIT_NO_EMPTY);
-		$quickfacts =preg_split("/[, ;:]+/", get_gedcom_setting(KT_GED_ID, 'SOUR_FACTS_QUICK'),  -1, PREG_SPLIT_NO_EMPTY);
-		break;
-	case "NOTE":
-		$addfacts   =preg_split("/[, ;:]+/", get_gedcom_setting(KT_GED_ID, 'NOTE_FACTS_ADD'),    -1, PREG_SPLIT_NO_EMPTY);
-		$uniquefacts=preg_split("/[, ;:]+/", get_gedcom_setting(KT_GED_ID, 'NOTE_FACTS_UNIQUE'), -1, PREG_SPLIT_NO_EMPTY);
-		$quickfacts =preg_split("/[, ;:]+/", get_gedcom_setting(KT_GED_ID, 'NOTE_FACTS_QUICK'),  -1, PREG_SPLIT_NO_EMPTY);
-		break;
-	case "REPO":
-		$addfacts   =preg_split("/[, ;:]+/", get_gedcom_setting(KT_GED_ID, 'REPO_FACTS_ADD'),    -1, PREG_SPLIT_NO_EMPTY);
-		$uniquefacts=preg_split("/[, ;:]+/", get_gedcom_setting(KT_GED_ID, 'REPO_FACTS_UNIQUE'), -1, PREG_SPLIT_NO_EMPTY);
-		$quickfacts =preg_split("/[, ;:]+/", get_gedcom_setting(KT_GED_ID, 'REPO_FACTS_QUICK'),  -1, PREG_SPLIT_NO_EMPTY);
-		break;
-	default:
-		return;
-	}
-	$addfacts=array_merge(CheckFactUnique($uniquefacts, $usedfacts, $type), $addfacts);
-	$quickfacts=array_intersect($quickfacts, $addfacts);
-	$translated_addfacts=array();
-	foreach ($addfacts as $addfact) {
-		$translated_addfacts[$addfact] = KT_Gedcom_Tag::getLabel($addfact);
-	}
-	uasort($translated_addfacts, 'factsort');
-	echo '<tr><td class="descriptionbox">';
-	echo KT_I18N::translate('Fact or event');
-	echo help_link('add_facts'), '</td>';
-	echo '<td class="optionbox wrap">';
-	echo '<form method="get" name="newfactform" action="" onsubmit="return false;">';
-	echo '<select id="newfact2" name="newfact2">';
-	echo '<option value="" disabled selected>' . KT_I18N::translate('Select') . '</option>';
-	foreach ($translated_addfacts as $fact=>$fact_name) {
-		echo '<option value="', $fact, '">', $fact_name, '</option>';
-	}
-	if ($type == 'INDI' || $type == 'FAM') {
-		echo '<option value="EVEN">', KT_I18N::translate('Custom event'), '</option>';
-	}
-	echo '</select>';
-	echo '<input type="button" value="', KT_I18N::translate('Add'), '" onclick="add_record(\''.$id.'\', \'newfact2\');">';
-	echo '<span class="quickfacts">';
-	foreach ($quickfacts as $fact) {
-		echo '<a href="edit_interface.php?action=add&pid=' . $id . '&fact=' . $fact . '&accesstime=' . KT_TIMESTAMP . '&ged=' . KT_GEDCOM . '" target="_blank">', KT_Gedcom_Tag::getLabel($fact), '</a>';
-	}
-	echo '</span></form>';
-	echo '</td></tr>';
-}
-
 
 /**
 * javascript declaration for calendar popup
