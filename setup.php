@@ -729,11 +729,12 @@ try {
 		"CREATE TABLE IF NOT EXISTS `##module` (".
 		" module_name   	VARCHAR(32)               		NOT NULL,".
 		" status        	ENUM('enabled', 'disabled') NOT NULL DEFAULT 'enabled',".
-		" tab_order     	INTEGER                         NULL, ".
+		" tabi_order     	INTEGER                         NULL, ".
 		" menu_order    	INTEGER                         NULL, ".
 		" sidebar_order 	INTEGER                         NULL, ".
 		" widget_order  	INTEGER                         NULL, ".
 		" footer_order  	INTEGER                         NULL, ".
+		" tabf_order     	INTEGER                         NULL, ".
 		" PRIMARY KEY (module_name)".
 		") COLLATE utf8_unicode_ci ENGINE=InnoDB"
 	);
@@ -750,7 +751,7 @@ try {
 		"CREATE TABLE IF NOT EXISTS `##module_privacy` (".
 		" module_name   VARCHAR(32) NOT NULL,".
 		" gedcom_id     INTEGER     NOT NULL,".
-		" component     ENUM('block', 'chart', 'list', 'menu', 'report', 'sidebar', 'tab', 'widget', 'footer') NOT NULL,".
+		" component     ENUM('block', 'chart', 'list', 'menu', 'report', 'sidebar', 'tabi', 'widget', 'footer', 'tabf') NOT NULL,".
 		" access_level  TINYINT     NOT NULL,".
 		" PRIMARY KEY                        (module_name, gedcom_id, component),".
 		" FOREIGN KEY `##module_privacy_fk1` (module_name) REFERENCES `##module` (module_name) /* ON DELETE CASCADE */,".

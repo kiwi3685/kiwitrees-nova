@@ -27,7 +27,7 @@ if (!defined('KT_KIWITREES')) {
 }
 
 // add resource to module_privacy components
-self::exec("ALTER TABLE `##module_privacy` CHANGE component component ENUM('block', 'chart', 'list', 'menu', 'report', 'sidebar', 'tab', 'widget', 'resource')");
+self::exec("ALTER TABLE `##module_privacy` CHANGE component component ENUM('block', 'chart', 'list', 'menu', 'report', 'sidebar', 'tabi', 'widget', 'resource')");
 
 try {
 	self::exec(

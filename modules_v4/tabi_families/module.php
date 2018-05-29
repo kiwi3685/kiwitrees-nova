@@ -26,7 +26,7 @@ if (!defined('KT_KIWITREES')) {
 	exit;
 }
 
-class tab_i_families_KT_Module extends KT_Module implements KT_Module_Tab {
+class tabi_families_KT_Module extends KT_Module implements KT_Module_IndiTab {
 	// Extend KT_Module
 	public function getTitle() {
 		return /* I18N: Name of a module */ KT_I18N::translate('Families');
@@ -37,32 +37,32 @@ class tab_i_families_KT_Module extends KT_Module implements KT_Module_Tab {
 		return /* I18N: Description of the “Families” module */ KT_I18N::translate('A tab showing the close relatives of an individual.');
 	}
 
-	// Extend class KT_Module_Tab
+	// Extend class KT_Module_IndiTab
 	public function defaultAccessLevel() {
 		return KT_PRIV_PUBLIC;
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function defaultTabOrder() {
 		return 20;
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function hasTabContent() {
 		return true;
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function isGrayedOut() {
 		return false;
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function canLoadAjax() {
 		return false; // Search engines cannot use AJAX
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function getPreLoadContent() {
 		return '';
 	}
@@ -428,7 +428,7 @@ class tab_i_families_KT_Module extends KT_Module implements KT_Module_Tab {
 		}
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function getTabContent() {
 		global $GEDCOM, $ABBREVIATE_CHART_LABELS;
 		global $iconStyle, $show_full, $personcount, $controller;

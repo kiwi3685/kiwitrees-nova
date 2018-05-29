@@ -26,7 +26,7 @@ if (!defined('KT_KIWITREES')) {
 	exit;
 }
 
-class sources_tab_KT_Module extends KT_Module implements KT_Module_Tab {
+class sources_tab_KT_Module extends KT_Module implements KT_Module_IndiTab {
 	// Extend KT_Module
 	public function getTitle() {
 		return /* I18N: Name of a module */ KT_I18N::translate('Sources');
@@ -37,19 +37,19 @@ class sources_tab_KT_Module extends KT_Module implements KT_Module_Tab {
 		return /* I18N: Description of the “Sources” module */ KT_I18N::translate('A tab showing the sources linked to an individual.');
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function defaultTabOrder() {
 		return 30;
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function defaultAccessLevel() {
 		return KT_PRIV_PUBLIC;
 	}
 
 	protected $sourceCount = null;
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function getTabContent() {
 		global $NAV_SOURCES, $controller;
 
@@ -110,22 +110,22 @@ class sources_tab_KT_Module extends KT_Module implements KT_Module_Tab {
 		return $this->sourceCount;
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function hasTabContent() {
 		return KT_USER_CAN_EDIT || $this->get_source_count()>0;
 	}
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function isGrayedOut() {
 		return $this->get_source_count()==0;
 	}
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function canLoadAjax() {
 		global $SEARCH_SPIDER;
 
 		return !$SEARCH_SPIDER; // Search engines cannot use AJAX
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function getPreLoadContent() {
 		return '';
 	}

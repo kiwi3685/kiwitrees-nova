@@ -45,7 +45,7 @@ define('KT_GM_SCRIPT', 'https://maps.google.com/maps/api/js?v=3&amp;language=' .
 //
 // Hence, use "Google Maps™ mapping service" where appropriate.
 
-class googlemap_KT_Module extends KT_Module implements KT_Module_Config, KT_Module_Tab, KT_Module_Chart {
+class googlemap_KT_Module extends KT_Module implements KT_Module_Config, KT_Module_IndiTab, KT_Module_Chart {
 	// Extend KT_Module
 	public function getTitle() {
 		return /* I18N: The name of a module.  Google Maps™ is a trademark.  Do not translate it? http://en.wikipedia.org/wiki/Google_maps */ KT_I18N::translate('Google Maps™');
@@ -107,12 +107,12 @@ class googlemap_KT_Module extends KT_Module implements KT_Module_Config, KT_Modu
 		return $menus;
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function defaultTabOrder() {
 		return 60;
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function getPreLoadContent() {
 		ob_start();
 		require_once KT_ROOT . KT_MODULES_DIR . 'googlemap/googlemap.php';
@@ -121,12 +121,12 @@ class googlemap_KT_Module extends KT_Module implements KT_Module_Config, KT_Modu
 		return ob_get_clean();
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function canLoadAjax() {
 		return true;
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function getTabContent() {
 		global $controller;
 
@@ -167,14 +167,14 @@ class googlemap_KT_Module extends KT_Module implements KT_Module_Config, KT_Modu
 		}
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function hasTabContent() {
 		global $SEARCH_SPIDER;
 
 		return !$SEARCH_SPIDER && (array_key_exists('googlemap', KT_Module::getActiveModules()) || KT_USER_IS_ADMIN);
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function isGrayedOut() {
 		return false;
 	}
@@ -2073,7 +2073,7 @@ class googlemap_KT_Module extends KT_Module implements KT_Module_Config, KT_Modu
 		<?php
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function defaultAccessLevel() {
 		return KT_PRIV_PUBLIC;
 	}

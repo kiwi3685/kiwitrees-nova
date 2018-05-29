@@ -113,6 +113,7 @@ $controller
 				{ sClass: "center" },
 				{ sClass: "center" },
 				{ sClass: "center" },
+				{ sClass: "center" },
 				{ sClass: "center" }
 			]
 		});
@@ -139,8 +140,9 @@ $controller
 							<th><?php echo KT_I18N::translate('Menu'); ?></th>
 							<th><?php echo KT_I18N::translate('Report'); ?></th>
 							<th><?php echo KT_I18N::translate('Sidebar'); ?></th>
-							<th><?php echo KT_I18N::translate('Tab'); ?></th>
+							<th><?php echo KT_I18N::translate('Indi tab'); ?></th>
 							<th><?php echo KT_I18N::translate('Widget'); ?></th>
+							<th><?php echo KT_I18N::translate('Fam tab'); ?></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -169,8 +171,9 @@ $controller
 										<td>', $module instanceof KT_Module_Menu    	? KT_I18N::translate('Menu') : '-', '</td>
 										<td>', $module instanceof KT_Module_Report  	? KT_I18N::translate('Report') : '-', '</td>
 										<td>', $module instanceof KT_Module_Sidebar 	? KT_I18N::translate('Sidebar') : '-', '</td>
-										<td>', $module instanceof KT_Module_Tab     	? KT_I18N::translate('Tab') : '-', '</td>
+										<td>', $module instanceof KT_Module_IndiTab     ? KT_I18N::translate('Indi tab') : '-', '</td>
 										<td>', $module instanceof KT_Module_Widget  	? KT_I18N::translate('Widget') : '-', '</td>
+										<td>', $module instanceof KT_Module_FamTab      ? KT_I18N::translate('Fam tab') : '-', '</td>
 									</tr>
 								';
 							} else {
@@ -186,6 +189,7 @@ $controller
 												KT_I18N::translate('This module cannot be found.  Delete its configuration settings.') .
 											'</a>
 										</td>
+										<td></td>
 										<td></td>
 										<td></td>
 										<td></td>

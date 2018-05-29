@@ -300,7 +300,8 @@ case 'module':
 
 	switch($id1) {
 	case 'status':
-	case 'tab_order':
+	case 'tabf_order':
+	case 'tabi_order':
 	case 'menu_order':
 	case 'sidebar_order':
 		KT_DB::prepare("UPDATE `##module` SET {$id1}=? WHERE module_name=?")

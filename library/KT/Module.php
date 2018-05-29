@@ -64,7 +64,17 @@ interface KT_Module_Sidebar {
 	public function hasSidebarContent();
 }
 
-interface KT_Module_Tab {
+interface KT_Module_FamTab {
+	public function defaultTabOrder();
+	public function getTabContent();
+	public function hasTabContent();
+	public function canLoadAjax();
+	public function getPreLoadContent();
+	public function isGrayedOut();
+	public function defaultAccessLevel();
+}
+
+interface KT_Module_IndiTab {
 	public function defaultTabOrder();
 	public function getTabContent();
 	public function hasTabContent();
@@ -165,7 +175,8 @@ abstract class KT_Module {
 			 ORDER BY CASE component
 			  WHEN 'menu' THEN menu_order
 			  WHEN 'sidebar' THEN sidebar_order
-			  WHEN 'tab' THEN tab_order
+			  WHEN 'tabf' THEN tabf_order
+			  WHEN 'tabi' THEN tabi_order
 			  WHEN 'widget' THEN widget_order
 			  ELSE 0 END, module_name"
 		)->execute(array($ged_id, $component, $access_level))->fetchOneColumn();
@@ -183,7 +194,7 @@ abstract class KT_Module {
 				)->execute(array($module_name));
 			}
 		}
-		if ($component != 'menu' && $component != 'sidebar' && $component != 'tab' && $component != 'widget') {
+		if ($component != 'menu' && $component != 'sidebar' && $component != 'tabi' && $component != 'tabf' && $component != 'widget') {
 			uasort($array, function ($x, $y) {
 				return KT_I18N::strcasecmp((string)$x, (string)$y);
 			});
@@ -254,11 +265,20 @@ abstract class KT_Module {
 		return $sidebars;
 	}
 
-	// Get a list of all the active, authorised tabs
-	static public function getActiveTabs($ged_id = KT_GED_ID, $access_level = KT_USER_ACCESS_LEVEL) {
+	// Get a list of all the active, authorised family tabs
+	static public function getActiveFamTabs($ged_id = KT_GED_ID, $access_level = KT_USER_ACCESS_LEVEL) {
 		static $tabs = null;
 		if ($tabs === null) {
-			$tabs = self::getActiveModulesByComponent('tab', $ged_id, $access_level);
+			$tabs = self::getActiveModulesByComponent('tabf', $ged_id, $access_level);
+		}
+		return $tabs;
+	}
+
+	// Get a list of all the active, authorised individual tabs
+	static public function getActiveIndiTabs($ged_id = KT_GED_ID, $access_level = KT_USER_ACCESS_LEVEL) {
+		static $tabs = null;
+		if ($tabs === null) {
+			$tabs = self::getActiveModulesByComponent('tabi', $ged_id, $access_level);
 		}
 		return $tabs;
 	}
@@ -310,15 +330,16 @@ abstract class KT_Module {
 				$class	= $file . '_KT_Module';
 				$module	= new $class();
 				$modules[$module->getName()] = $module;
-				KT_DB::prepare("INSERT IGNORE INTO `##module` (module_name, status, menu_order, sidebar_order, tab_order, widget_order) VALUES (?, ?, ?, ?, ?, ?)")
+				KT_DB::prepare("INSERT IGNORE INTO `##module` (module_name, status, menu_order, sidebar_order, tabi_order, widget_order, tabf_order) VALUES (?, ?, ?, ?, ?, ?, ?)")
 					->execute(array(
 						$module->getName(),
 						$status,
 						$module instanceof KT_Module_Menu    ? $module->defaultMenuOrder   () : null,
 						$module instanceof KT_Module_Sidebar ? $module->defaultSidebarOrder() : null,
-						$module instanceof KT_Module_Tab     ? $module->defaultTabOrder    () : null,
+						$module instanceof KT_Module_IndiTab ? $module->defaultTabOrder    () : null,
 						$module instanceof KT_Module_Widget  ? $module->defaultWidgetOrder () : null,
-					));
+						$module instanceof KT_Module_FamTab  ? $module->defaultTabOrder    () : null,
+	));
 				// Set the default privacy for this module.  Note that this also sets it for the
 				// default family tree, with a gedcom_id of -1
 				if ($module instanceof KT_Module_Block) {
@@ -363,10 +384,17 @@ abstract class KT_Module {
 						" FROM `##gedcom`"
 					)->execute(array($module->getName(), $module->defaultAccessLevel()));
 				}
-				if ($module instanceof KT_Module_Tab) {
+				if ($module instanceof KT_Module_IndiTab) {
 					KT_DB::prepare(
 						"INSERT IGNORE INTO `##module_privacy` (module_name, gedcom_id, component, access_level)".
-						" SELECT ?, gedcom_id, 'tab', ?".
+						" SELECT ?, gedcom_id, 'tabi', ?".
+						" FROM `##gedcom`"
+					)->execute(array($module->getName(), $module->defaultAccessLevel()));
+				}
+				if ($module instanceof KT_Module_FamTab) {
+					KT_DB::prepare(
+						"INSERT IGNORE INTO `##module_privacy` (module_name, gedcom_id, component, access_level)".
+						" SELECT ?, gedcom_id, 'tabf', ?".
 						" FROM `##gedcom`"
 					)->execute(array($module->getName(), $module->defaultAccessLevel()));
 				}
@@ -426,9 +454,14 @@ abstract class KT_Module {
 					"INSERT IGNORE `##module_privacy` (module_name, gedcom_id, component, access_level) VALUES (?, ?, 'sidebar', ?)"
 				)->execute(array($module->getName(), $ged_id, $module->defaultAccessLevel()));
 			}
-			if ($module instanceof KT_Module_Tab) {
+			if ($module instanceof KT_Module_FamTab) {
 				KT_DB::prepare(
-					"INSERT IGNORE `##module_privacy` (module_name, gedcom_id, component, access_level) VALUES (?, ?, 'tab', ?)"
+					"INSERT IGNORE `##module_privacy` (module_name, gedcom_id, component, access_level) VALUES (?, ?, 'tabf', ?)"
+				)->execute(array($module->getName(), $ged_id, $module->defaultAccessLevel()));
+			}
+			if ($module instanceof KT_Module_IndiTab) {
+				KT_DB::prepare(
+					"INSERT IGNORE `##module_privacy` (module_name, gedcom_id, component, access_level) VALUES (?, ?, 'tabi', ?)"
 				)->execute(array($module->getName(), $ged_id, $module->defaultAccessLevel()));
 			}
 			if ($module instanceof KT_Module_Widget) {
@@ -454,7 +487,10 @@ abstract class KT_Module {
 		 * @param display order for tabs, menus, sidebar, widgets, resources
 		 */
 		$default_modules = array(
-			// tabs
+			// fam tabs
+			'factsandevents'		=> array('enabled', 1, NULL, NULL, NULL),
+			'census'				=> array('enabled', 2, NULL, NULL, NULL),
+			// indi tabs
 			'personal_facts'		=> array('enabled', 1, NULL, NULL, NULL),
 			'relatives'				=> array('enabled', 2, NULL, NULL, NULL),
 			'sources_tab'			=> array('enabled', 3, NULL, NULL, NULL),
@@ -547,8 +583,8 @@ abstract class KT_Module {
 
 		foreach($default_modules as $module => $order) {
 			KT_DB::prepare(
-				"INSERT INTO `##module` (module_name, status, tab_order, menu_order, sidebar_order, widget_order) VALUES (?, ?, ?, ?, ?, ?)"
-			)->execute(array($module, $order[0], $order[1], $order[2], $order[3], $order[4], $order[5]));
+				"INSERT INTO `##module` (module_name, status, tabi_order, menu_order, sidebar_order, widget_order, tabf_order) VALUES (?, ?, ?, ?, ?, ?, ?)"
+			)->execute(array($module, $order[0], $order[1], $order[2], $order[3], $order[4], $order[5], $order[6]));
 		}
 	}
 

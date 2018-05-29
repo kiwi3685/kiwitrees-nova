@@ -78,7 +78,7 @@ arsort($custom);
  */
 $module_cats = array(
 	"admin_module_menus.php"		=> KT_I18N::translate('Menus'),
-	"admin_module_tabs.php"			=> KT_I18N::translate('Tabs'),
+	"admin_module_tabs_indi.php"	=> KT_I18N::translate('Indi tabs'),
 	"admin_module_blocks.php"		=> KT_I18N::translate('Blocks'),
 	"admin_module_widgets.php"		=> KT_I18N::translate('Widgets'),
 	"admin_module_sidebar.php"		=> KT_I18N::translate('Sidebar'),
@@ -86,6 +86,7 @@ $module_cats = array(
 	"admin_module_charts.php"		=> KT_I18N::translate('Charts'),
 	"admin_module_lists.php"		=> KT_I18N::translate('Lists'),
 	"admin_module_footers.php"		=> KT_I18N::translate('Footer blocks'),
+	"admin_module_tabs_fam.php"		=> KT_I18N::translate('Family tabs'),
 );
 asort($module_cats);
 

@@ -26,7 +26,7 @@ if (!defined('KT_KIWITREES')) {
 	exit;
 }
 
-class cousins_tab_KT_Module extends KT_Module implements KT_Module_Tab {
+class cousins_tab_KT_Module extends KT_Module implements KT_Module_IndiTab {
 	// Extend KT_Module
 	public function getTitle() {
 		return /* I18N: Name of a module/tab on the individual page. */ KT_I18N::translate('Cousins');
@@ -37,12 +37,12 @@ class cousins_tab_KT_Module extends KT_Module implements KT_Module_Tab {
 		return /* I18N: Description of the "Facts and events" module */ KT_I18N::translate('A tab showing cousins of an individual.');
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function defaultTabOrder() {
 		return 80;
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function isGrayedOut() {
 		return false;
 	}
@@ -52,7 +52,7 @@ class cousins_tab_KT_Module extends KT_Module implements KT_Module_Tab {
 		return KT_PRIV_USER;
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function getTabContent() {
 		global $controller;
 		$list_f				= array();
@@ -216,17 +216,17 @@ class cousins_tab_KT_Module extends KT_Module implements KT_Module_Tab {
 
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function hasTabContent() {
 		return true;
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function canLoadAjax() {
 		return true;
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function getPreLoadContent() {
 		return '';
 	}

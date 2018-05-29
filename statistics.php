@@ -25,7 +25,7 @@ define('KT_SCRIPT_NAME', 'statistics.php');
 require './includes/session.php';
 
 // check for on demand content loading
-$tab = safe_GET('tab', KT_REGEX_NOSCRIPT, 0);
+$tab = safe_GET('tabi', KT_REGEX_NOSCRIPT, 0);
 $ajax = safe_GET('ajax', KT_REGEX_NOSCRIPT, 0);
 
 if (!$ajax) {

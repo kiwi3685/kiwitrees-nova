@@ -26,7 +26,7 @@ if (!defined('KT_KIWITREES')) {
 	exit;
 }
 
-class album_KT_Module extends KT_Module implements KT_Module_Tab, KT_Module_Config {
+class album_KT_Module extends KT_Module implements KT_Module_IndiTab, KT_Module_Config {
 	// Extend KT_Module
 	public function getTitle() {
 		return /* I18N: Name of a module */ KT_I18N::translate('Album');
@@ -37,12 +37,12 @@ class album_KT_Module extends KT_Module implements KT_Module_Tab, KT_Module_Conf
 		return /* I18N: Description of the “Album” module */ KT_I18N::translate('A tab showing the media objects linked to an individual.');
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function defaultAccessLevel() {
 		return KT_PRIV_PUBLIC;
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function defaultTabOrder() {
 		return 90;
 	}
@@ -67,17 +67,17 @@ class album_KT_Module extends KT_Module implements KT_Module_Tab, KT_Module_Conf
 		return 'module.php?mod='.$this->getName().'&amp;mod_action=admin_config';
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function hasTabContent() {
 		return KT_USER_CAN_EDIT || $this->get_media_count()>0;
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function isGrayedOut() {
 		return $this->get_media_count()==0;
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function getTabContent() {
 		global $controller;
 
@@ -129,14 +129,14 @@ class album_KT_Module extends KT_Module implements KT_Module_Tab, KT_Module_Conf
 	}
 
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function canLoadAjax() {
 		global $SEARCH_SPIDER;
 
 		return !$SEARCH_SPIDER; // Search engines cannot use AJAX
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function getPreLoadContent() {
 		return '';
 	}

@@ -28,7 +28,7 @@ if (!defined('KT_KIWITREES')) {
 
 // add resource to module_privacy components
 try {
-	self::exec("ALTER TABLE `##module_privacy` CHANGE component component ENUM('block', 'chart', 'menu', 'report', 'sidebar', 'tab', 'theme', 'widget', 'resource')");
+	self::exec("ALTER TABLE `##module_privacy` CHANGE component component ENUM('block', 'chart', 'menu', 'report', 'sidebar', 'tabi', 'theme', 'widget', 'resource')");
 } catch (PDOException $ex) {
 	// Perhaps we have already deleted this data?
 }

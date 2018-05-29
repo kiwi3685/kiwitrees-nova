@@ -74,7 +74,7 @@ class KT_Controller_Individual extends KT_Controller_GedcomRecord {
 			}
 		}
 
-		$this->tabs = KT_Module::getActiveTabs();
+		$this->tabs = KT_Module::getActiveIndiTabs();
 
 		// Our parent needs $this->record
 		parent::__construct();

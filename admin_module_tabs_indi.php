@@ -21,7 +21,7 @@
  * along with Kiwitrees. If not, see <http://www.gnu.org/licenses/>.
  */
 
-define('KT_SCRIPT_NAME', 'admin_module_menus.php');
+define('KT_SCRIPT_NAME', 'admin_module_tabs_indi.php');
 require 'includes/session.php';
 require KT_ROOT . 'includes/functions/functions_edit.php';
 
@@ -33,10 +33,10 @@ $controller
 	->setPageTitle(KT_I18N::translate('Module administration'))
 	->pageHeader()
 	->addInlineJavascript('
-    jQuery("#menus_table").sortable({items: ".sortme", forceHelperSize: true, forcePlaceholderSize: true, opacity: 0.7, cursor: "move", axis: "y"});
+    jQuery("#tabs_table").sortable({items: ".sortme", forceHelperSize: true, forcePlaceholderSize: true, opacity: 0.7, cursor: "move", axis: "y"});
 
     //-- update the order numbers after drag-n-drop sorting is complete
-    jQuery("#menus_table").bind("sortupdate", function(event, ui) {
+    jQuery("#tabs_table").bind("sortupdate", function(event, ui) {
 			jQuery("#"+jQuery(this).attr("id")+" input").each(
 				function (index, value) {
 					value.value = index+1;
@@ -45,21 +45,21 @@ $controller
 		});
 	');
 
-$modules	= KT_Module::getActiveMenus(KT_GED_ID, KT_PRIV_HIDE);
+$modules	= KT_Module::getActiveIndiTabs(KT_GED_ID, KT_PRIV_HIDE);
 
 $action		= KT_Filter::post('action');
 
 if ($action == 'update_mods' && KT_Filter::checkCsrf()) {
-	foreach ($modules as $module_name=>$module) {
+	foreach ($modules as $module_name => $module) {
 		foreach (KT_Tree::getAll() as $tree) {
 			$access_level = KT_Filter::post("access-{$module_name}-{$tree->tree_id}", KT_REGEX_INTEGER, $module->defaultAccessLevel());
 			KT_DB::prepare(
-				"REPLACE INTO `##module_privacy` (module_name, gedcom_id, component, access_level) VALUES (?, ?, 'menu', ?)"
+				"REPLACE INTO `##module_privacy` (module_name, gedcom_id, component, access_level) VALUES (?, ?, 'tabi', ?)"
 			)->execute(array($module_name, $tree->tree_id, $access_level));
 		}
 		$order = safe_POST('order-'.$module_name);
 		KT_DB::prepare(
-			"UPDATE `##module` SET menu_order=? WHERE module_name=?"
+			"UPDATE `##module` SET tabi_order=? WHERE module_name=?"
 		)->execute(array($order, $module_name));
 		$module->order = $order; // Make the new order take effect immediately
 	}
@@ -70,7 +70,7 @@ if ($action == 'update_mods' && KT_Filter::checkCsrf()) {
 }
 
 ?>
-<div id="menus" class="cell">
+<div id="tabs" class="cell">
 	<form method="post" action="<?php echo KT_SCRIPT_NAME; ?>">
 		<input type="hidden" name="action" value="update_mods">
 		<?php echo KT_Filter::getCsrf(); ?>
@@ -78,10 +78,10 @@ if ($action == 'update_mods' && KT_Filter::checkCsrf()) {
 			<i class="<?php echo $iconStyle; ?> fa-save"></i>
 			<?php echo KT_I18N::translate('Save'); ?>
 		</button>
-		<table id="menus_table" class="modules_table">
+		<table id="tabs_table" class="modules_table">
 			<thead>
 				<tr>
-					<th><?php echo KT_I18N::translate('Menu'); ?></th>
+					<th><?php echo KT_I18N::translate('Tab'); ?></th>
 					<th><?php echo KT_I18N::translate('Description'); ?></th>
 					<th><?php echo KT_I18N::translate('Order'); ?></th>
 					<th><?php echo KT_I18N::translate('Access level'); ?></th>
@@ -120,7 +120,7 @@ if ($action == 'update_mods' && KT_Filter::checkCsrf()) {
 										<td>
 											<?php
 												$access_level = KT_DB::prepare(
-													"SELECT access_level FROM `##module_privacy` WHERE gedcom_id=? AND module_name=? AND component='menu'"
+													"SELECT access_level FROM `##module_privacy` WHERE gedcom_id=? AND module_name=? AND component='tabi'"
 												)->execute(array($tree->tree_id, $module->getName()))->fetchOne();
 												if ($access_level === null) {
 													$access_level = $module->defaultAccessLevel();

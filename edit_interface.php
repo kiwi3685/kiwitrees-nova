@@ -70,7 +70,7 @@ if (!empty($pid)) {
 			$edit = $tmp->canDisplayDetails() && $tmp->canEdit();
 		}
 		// Don't allow edits if the record has changed since the edit-link was created
-		checkChangeTime($pid, $gedrec, KT_Filter::get('accesstime', KT_REGEX_INTEGER));
+		checkChangeTime($pid, $gedrec, safe_GET('accesstime', KT_REGEX_INTEGER));
 	} else {
 		$edit = true;
 	}
@@ -84,7 +84,7 @@ if (!empty($pid)) {
 			$edit = $tmp->canDisplayDetails() && $tmp->canEdit();
 		}
 		// Don't allow edits if the record has changed since the edit-link was created
-		checkChangeTime($famid, $gedrec, KT_Filter::get('accesstime', KT_REGEX_INTEGER));
+		checkChangeTime($famid, $gedrec, safe_GET('accesstime', KT_REGEX_INTEGER));
 	}
 } else {
 	$edit = true;
@@ -125,7 +125,7 @@ case 'delete':
 
 ////////////////////////////////////////////////////////////////////////////////
 case 'editraw':
-	$pid    = KT_Filter::get('pid', KT_REGEX_XREF); // print_indi_form() uses this
+	$pid    = safe_GET('pid', KT_REGEX_XREF); // print_indi_form() uses this
 	$record = KT_GedcomRecord::getInstance($pid);
 	$controller->addInlineJavascript('
 		display_help();
@@ -162,12 +162,12 @@ case 'editraw':
 			<?php echo no_update_chan($record); ?>
 			<p id="save-cancel">
 				<button class="btn btn-primary" type="submit">
-					<i class="fas fa-save"></i>
+					<i class="fa fa-save"></i>
 					<?php echo KT_I18N::translate('Save'); ?>
 				</button>
 				<button class="btn btn-primary" type="button" onclick="window.close();">
-					<i class="fas fa-times"></i>
-					<?php echo KT_I18N::translate('Close'); ?>
+					<i class="fa fa-times"></i>
+					<?php echo KT_I18N::translate('close'); ?>
 				</button>
 			</p>
 		</form>
@@ -177,7 +177,7 @@ case 'editraw':
 
 ////////////////////////////////////////////////////////////////////////////////
 case 'edit':
-	$pid    = KT_Filter::get('pid', KT_REGEX_XREF);
+	$pid    = safe_GET('pid', KT_REGEX_XREF);
 	$record = KT_GedcomRecord::getInstance($pid);
 
 	$controller
@@ -188,7 +188,7 @@ case 'edit':
 	list($gedrec) = $record->privatizeGedcom(KT_USER_ACCESS_LEVEL);
 	?>
 	<div id="edit_interface-page">
-		<h3><?php echo $controller->getPageTitle(); ?></h3>
+		<h2><?php echo $controller->getPageTitle(); ?></h2>
 		<?php init_calendar_popup(); ?>
 		<form name="editform" method="post" action="edit_interface.php" enctype="multipart/form-data">
 			<input type="hidden" name="action" value="update">
@@ -262,12 +262,12 @@ case 'edit':
 			</div>
 			<p id="save-cancel">
 				<button class="btn btn-primary" type="submit">
-					<i class="fas fa-save"></i>
+					<i class="fa fa-save"></i>
 					<?php echo KT_I18N::translate('Save'); ?>
 				</button>
 				<button class="btn btn-primary" type="button" onclick="window.close();">
-					<i class="fas fa-times"></i>
-					<?php echo KT_I18N::translate('Close'); ?>
+					<i class="fa fa-times"></i>
+					<?php echo KT_I18N::translate('close'); ?>
 				</button>
 			</p>
 		</form>
@@ -277,75 +277,68 @@ case 'edit':
 
 ////////////////////////////////////////////////////////////////////////////////
 case 'add':
-	$pid    		= KT_Filter::get('pid',  KT_REGEX_XREF);
-	$fact   		= KT_Filter::get('fact', KT_REGEX_TAG);
-	$record 		= KT_GedcomRecord::getInstance($pid);
-	$factLabel		= KT_I18N::translate('Add new fact') . ' - ' . KT_Gedcom_Tag::getLabel($fact, $record);
-	$recordLabel	= ($type == 'INDI' ? $record->getLifespanName() : $record->getFullName());
+	$pid    = KT_Filter::get('pid',  KT_REGEX_XREF);
+	$fact   = KT_Filter::get('fact', KT_REGEX_TAG);
+	$record = KT_GedcomRecord::getInstance($pid);
 
 	$controller
-		->setPageTitle($factLabel . $recordLabel)
+		->setPageTitle(KT_I18N::translate('Add new fact') . ' - ' . KT_Gedcom_Tag::getLabel($fact, $record) . ' - ' . ($type == 'INDI' ? $record->getLifespanName() : $record->getFullName()))
 		->pageHeader();
 	?>
-	<div id="edit_interface-page" class="grid-x grid-padding-x">
-		<div class="cell large-8 large-offset-2">
-			<h3><?php echo $factLabel; ?></h3>
-			<h4 class="text-center"><?php echo $recordLabel; ?></h4>
-			<?php echo init_calendar_popup(); ?>
-			<form name="addform" method="post" action="edit_interface.php" enctype="multipart/form-data">
-				<input type="hidden" name="action" value="update">
-				<input type="hidden" name="linenum" value="new">
-				<input type="hidden" name="pid" value="<?php echo $pid; ?>">
-				<?php // Genealogical facts (e.g. for INDI and FAM records) can have 2 SOUR/NOTE/OBJE/ASSO/RESN ...
-				if ($level0type === 'INDI' || $level0type === 'FAM') { ?>
-					<div id="add_layer" class="grid-x">
-						<div class="cell" id="additional_facts" >
-							<?php // ... but not facts which are simply links to other records
-							if ($fact !== 'OBJE' && $fact !== 'NOTE' && $fact !== 'SHARED_NOTE' && $fact !== 'REPO' && $fact !== 'SOUR' && $fact !== 'ASSO' && $fact !== 'ALIA') { ?>
-								<?php echo print_add_layer('SOUR'); ?>
-								<?php echo print_add_layer('OBJE'); ?>
-								<?php // Don't add notes to notes!
-								if ($fact != 'NOTE') { ?>
-									<?php echo print_add_layer('NOTE'); ?>
-									<?php echo print_add_layer('SHARED_NOTE'); ?>
-								<?php } ?>
-								<?php echo print_add_layer('ASSO'); ?>
-								<?php // allow to add godfather and godmother for CHR fact or best man and bridesmaid for MARR fact in one window
-								if ($fact === 'BAPM' || $fact === 'CHR' || $fact === 'MARR') { ?>
-									<?php echo print_add_layer('ASSO2'); ?>
-								<?php } ?>
-								<?php echo print_add_layer('RESN'); ?>
-							<?php } ?>
-						</div>
-					</div>
-				<?php } ?>
-				<div id="add_facts" class="grid-x">
-					<div class="cell">
-						<?php echo create_add_form($fact); ?>
-						<?php echo no_update_chan($record); ?>
-					</div>
+	<div id="edit_interface-page">
+		<h2><?php echo $controller->getPageTitle(); ?></h2>
+		<?php echo init_calendar_popup(); ?>
+		<form name="addform" method="post" action="edit_interface.php" enctype="multipart/form-data">
+			<input type="hidden" name="action" value="update">
+			<input type="hidden" name="linenum" value="new">
+			<input type="hidden" name="pid" value="<?php echo $pid; ?>">
+			<div id="add_facts">
+				<?php
+				echo create_add_form($fact);
+				echo no_update_chan($record);
+				?>
+			</div>
+			<?php // Genealogical facts (e.g. for INDI and FAM records) can have 2 SOUR/NOTE/OBJE/ASSO/RESN ...
+			if ($level0type === 'INDI' || $level0type === 'FAM') { ?>
+				<div id="additional_facts">
+					<?php // ... but not facts which are simply links to other records
+					if ($fact !== 'OBJE' && $fact !== 'NOTE' && $fact !== 'SHARED_NOTE' && $fact !== 'REPO' && $fact !== 'SOUR' && $fact !== 'ASSO' && $fact !== 'ALIA') {
+						echo '<p>' . print_add_layer('SOUR') . '</p>';
+						echo '<p>' . print_add_layer('OBJE') . '</p>';
+						// Don't add notes to notes!
+						if ($fact != 'NOTE') {
+							echo '<p>' . print_add_layer('NOTE') . '</p>';
+							echo '<p>' . print_add_layer('SHARED_NOTE') . '</p>';
+						}
+						echo '<p>' . print_add_layer('ASSO') . '</p>';
+						// allow to add godfather and godmother for CHR fact or best man and bridesmaid for MARR fact in one window
+						if ($fact === 'BAPM' || $fact === 'CHR' || $fact === 'MARR') {
+							echo '<p>' . print_add_layer('ASSO2') . '</p>';
+						}
+						echo '<p>' . print_add_layer('RESN') . '</p>';
+					} ?>
 				</div>
-				<p id="save-cancel">
-					<button class="button" type="submit">
-						<i class="<?php echo $iconStyle; ?> fa-save"></i>
-						<?php echo KT_I18N::translate('Save'); ?>
-					</button>
-					<button class="button" type="button"  onclick="window.close();">
-						<i class="<?php echo $iconStyle; ?> fa-times"></i>
-						<?php echo KT_I18N::translate('Close'); ?>
-					</button>
-				</p>
-			</form>
-		</div>
+			<?php } ?>
+			<p id="save-cancel">
+				<button class="btn btn-primary" type="submit">
+					<i class="fa fa-save"></i>
+					<?php echo KT_I18N::translate('Save'); ?>
+				</button>
+				<button class="btn btn-primary" type="button"  onclick="window.close();">
+					<i class="fa fa-times"></i>
+					<?php echo KT_I18N::translate('close'); ?>
+				</button>
+			</p>
+		</form>
 	</div> <!-- id="edit_interface-page" -->
 	<?php
 	break;
 
 ////////////////////////////////////////////////////////////////////////////////
 case 'addchild':
-	$gender = KT_Filter::get('gender', '[MF]', 'U');
-	$famid  = KT_Filter::get('famid',  KT_REGEX_XREF);
-	$pid    = KT_Filter::get('pid',    KT_REGEX_XREF); // print_indi_form() uses this
+	$gender = safe_GET('gender', '[MF]', 'U');
+	$famid  = safe_GET('famid',  KT_REGEX_XREF);
+	$pid    = safe_GET('pid',    KT_REGEX_XREF); // print_indi_form() uses this
 	$family = KT_Family::getInstance($famid);
 
 	if ($family) {
@@ -357,7 +350,7 @@ case 'addchild':
 	?>
 
 	<div id="edit_interface-page">
-		<h3><?php echo $controller->getPageTitle(); ?></h3>
+		<h2><?php echo $controller->getPageTitle(); ?></h2>
 		<?php echo print_indi_form('addchildaction', $famid, '', '', 'CHIL', $gender); ?>
 	</div> <!-- id="edit_interface-page" -->
 	<?php
@@ -365,8 +358,8 @@ case 'addchild':
 
 ////////////////////////////////////////////////////////////////////////////////
 case 'addspouse':
-	$famtag = KT_Filter::get('famtag', '(HUSB|WIFE)');
-	$famid  = KT_Filter::get('famid',  KT_REGEX_XREF);
+	$famtag = safe_GET('famtag', '(HUSB|WIFE)');
+	$famid  = safe_GET('famid',  KT_REGEX_XREF);
 
 	if ($famtag=='WIFE') {
 		$controller->setPageTitle(KT_I18N::translate('Add a wife'));
@@ -376,7 +369,7 @@ case 'addspouse':
 	$controller->pageHeader();
 	?>
 	<div id="edit_interface-page">
-		<h3><?php echo $controller->getPageTitle(); ?></h3>
+		<h2><?php echo $controller->getPageTitle(); ?></h2>
 		<?php echo print_indi_form('addspouseaction', $famid, '', '', $famtag); ?>
 	</div> <!-- id="edit_interface-page" -->
 	<?php
@@ -384,9 +377,9 @@ case 'addspouse':
 
 ////////////////////////////////////////////////////////////////////////////////
 case 'addnewparent':
-	$famtag = KT_Filter::get('famtag', '(HUSB|WIFE)');
-	$famid  = KT_Filter::get('famid',  KT_REGEX_XREF);
-	$pid    = KT_Filter::get('pid',    KT_REGEX_XREF); // print_indi_form() uses this
+	$famtag = safe_GET('famtag', '(HUSB|WIFE)');
+	$famid  = safe_GET('famid',  KT_REGEX_XREF);
+	$pid    = safe_GET('pid',    KT_REGEX_XREF); // print_indi_form() uses this
 	$person = KT_Person::getInstance($pid);
 
 	if ($person) {
@@ -406,7 +399,7 @@ case 'addnewparent':
 	?>
 
 	<div id="edit_interface-page">
-		<h3><?php echo $controller->getPageTitle(); ?></h3>
+		<h2><?php echo $controller->getPageTitle(); ?></h2>
 		<?php echo print_indi_form('addnewparentaction', $famid, '', '', $famtag); ?>
 	</div> <!-- id="edit_interface-page" -->
 	<?php
@@ -414,8 +407,8 @@ case 'addnewparent':
 
 ////////////////////////////////////////////////////////////////////////////////
 case 'addopfchild':
-	$pid    = KT_Filter::get('pid',   KT_REGEX_XREF);
-	$famid  = KT_Filter::get('famid', KT_REGEX_XREF);
+	$pid    = safe_GET('pid',   KT_REGEX_XREF);
+	$famid  = safe_GET('famid', KT_REGEX_XREF);
 	$person = KT_Person::getInstance($pid);
 
 	$controller
@@ -423,7 +416,7 @@ case 'addopfchild':
 		->pageHeader();
 	?>
 	<div id="edit_interface-page">
-		<h3><?php echo $controller->getPageTitle(); ?></h3>
+		<h2><?php echo $controller->getPageTitle(); ?></h2>
 		<?php echo print_indi_form('addopfchildaction', $famid, '', '', 'CHIL'); ?>
 	</div> <!-- id="edit_interface-page" -->
 	<?php
@@ -444,7 +437,7 @@ case 'addfamlink':
 	$controller->pageHeader();
 	?>
 	<div id="edit_interface-page">
-		<h3><?php echo $controller->getPageTitle(); ?></h3>
+		<h2><?php echo $controller->getPageTitle(); ?></h2>
 
 		<form method="post" name="addchildform" action="edit_interface.php">
 			<input type="hidden" name="action" value="linkfamaction">
@@ -487,12 +480,12 @@ case 'addfamlink':
 			</div>
 			<p id="save-cancel">
 				<button class="btn btn-primary" type="submit">
-					<i class="fas fa-save"></i>
+					<i class="fa fa-save"></i>
 					<?php echo KT_I18N::translate('Save'); ?>
 				</button>
 				<button class="btn btn-primary" type="button"  onclick="window.close();">
-					<i class="fas fa-times"></i>
-					<?php echo KT_I18N::translate('Close'); ?>
+					<i class="fa fa-times"></i>
+					<?php echo KT_I18N::translate('close'); ?>
 				</button>
 			</p>
 		</form>
@@ -513,7 +506,7 @@ case 'linkspouse':
 	$controller->pageHeader();
 	?>
 	<div id="edit_interface-page">
-		<h3><?php echo $controller->getPageTitle(); ?></h3>
+		<h2><?php echo $controller->getPageTitle(); ?></h2>
 
 		<?php echo init_calendar_popup(); ?>
 		<form method="post" name="addchildform" action="edit_interface.php">
@@ -558,12 +551,12 @@ case 'linkspouse':
 			</div>
 			<p id="save-cancel">
 				<button class="btn btn-primary" type="submit">
-					<i class="fas fa-save"></i>
+					<i class="fa fa-save"></i>
 					<?php echo KT_I18N::translate('Save'); ?>
 				</button>
 				<button class="btn btn-primary" type="button"  onclick="window.close();">
-					<i class="fas fa-times"></i>
-					<?php echo KT_I18N::translate('Close'); ?>
+					<i class="fa fa-times"></i>
+					<?php echo KT_I18N::translate('close'); ?>
 				</button>
 			</p>
 		</form>
@@ -673,7 +666,7 @@ case 'addnewsource':
 	</script>
 
 	<div id="edit_interface-page">
-		<h3><?php echo $controller->getPageTitle(); ?></h3>
+		<h2><?php echo $controller->getPageTitle(); ?></h2>
 		<form method="post" action="edit_interface.php" onsubmit="return check_form(this);">
 			<input type="hidden" name="action" value="addsourceaction">
 			<input type="hidden" name="pid" value="newsour">
@@ -819,12 +812,12 @@ case 'addnewsource':
 			</div>
 			<p id="save-cancel">
 				<button class="btn btn-primary" type="submit">
-					<i class="fas fa-save"></i>
+					<i class="fa fa-save"></i>
 					<?php echo KT_I18N::translate('Save'); ?>
 				</button>
 				<button class="btn btn-primary" type="button"  onclick="window.close();">
-					<i class="fas fa-times"></i>
-					<?php echo KT_I18N::translate('Close'); ?>
+					<i class="fa fa-times"></i>
+					<?php echo KT_I18N::translate('close'); ?>
 				</button>
 			</p>
 		</form>
@@ -890,7 +883,7 @@ case 'addnewnote':
 	?>
 
 	<div id="edit_interface-page">
-		<h3><?php echo $controller->getPageTitle(); ?></h3>
+		<h2><?php echo $controller->getPageTitle(); ?></h2>
 		<form method="post" action="edit_interface.php" onsubmit="return check_form(this);">
 			<input type="hidden" name="action" value="addnoteaction">
 			<input type="hidden" name="noteid" value="newnote">
@@ -909,16 +902,30 @@ case 'addnewnote':
 						<?php echo print_specialchar_link('NOTE'); ?>
 					</div>
 				</div>
-				<?php echo no_update_chan($record); ?>
+				<?php if (KT_USER_IS_ADMIN) { ?>
+					<div class="last_change">
+						<label>
+							<?php echo KT_Gedcom_Tag::getLabel('CHAN'); ?>
+						</label>
+						<div class="input">
+							<?php if ($NO_UPDATE_CHAN) { ?>
+								<input type="checkbox" checked="checked" name="preserve_last_changed">
+							<?php } else { ?>
+								<input type="checkbox" name="preserve_last_changed">
+							<?php }
+							echo KT_I18N::translate('Do not update the “last change” record'), help_link('no_update_CHAN'); ?>
+						</div>
+					</div>
+				<?php }?>
 			</div>
 			<p id="save-cancel">
 				<button class="btn btn-primary" type="submit">
-					<i class="fas fa-save"></i>
+					<i class="fa fa-save"></i>
 					<?php echo KT_I18N::translate('Save'); ?>
 				</button>
 				<button class="btn btn-primary" type="button"  onclick="window.close();">
-					<i class="fas fa-times"></i>
-					<?php echo KT_I18N::translate('Close'); ?>
+					<i class="fa fa-times"></i>
+					<?php echo KT_I18N::translate('close'); ?>
 				</button>
 			</p>
 		</form>
@@ -976,7 +983,7 @@ case 'addmedia_links':
 
 ////////////////////////////////////////////////////////////////////////////////
 case 'editsource':
-	$pid    = KT_Filter::get('pid', KT_REGEX_XREF);
+	$pid    = safe_GET('pid', KT_REGEX_XREF);
 	$source = KT_Source::getInstance($pid);
 
 	// Hide the private data
@@ -1001,7 +1008,7 @@ case 'editsource':
 	?>
 
 	<div id="edit_interface-page">
-		<h3><?php echo $controller->getPageTitle(); ?></h3>
+		<h2><?php echo $controller->getPageTitle(); ?></h2>
 		<form method="post" action="edit_interface.php" enctype="multipart/form-data">
 			<input type="hidden" name="action" value="update">
 			<input type="hidden" name="pid" value="<?php echo $pid; ?>">
@@ -1050,12 +1057,12 @@ case 'editsource':
 			</div>
 			<p id="save-cancel">
 				<button class="btn btn-primary" type="submit">
-					<i class="fas fa-save"></i>
+					<i class="fa fa-save"></i>
 					<?php echo KT_I18N::translate('Save'); ?>
 				</button>
 				<button class="btn btn-primary" type="button"  onclick="window.close();">
-					<i class="fas fa-times"></i>
-					<?php echo KT_I18N::translate('Close'); ?>
+					<i class="fa fa-times"></i>
+					<?php echo KT_I18N::translate('close'); ?>
 				</button>
 			</p>
 		</form>
@@ -1065,7 +1072,7 @@ case 'editsource':
 
 ////////////////////////////////////////////////////////////////////////////////
 case 'editnote':
-	$pid  = KT_Filter::get('pid', KT_REGEX_XREF);
+	$pid  = safe_GET('pid', KT_REGEX_XREF);
 	$note = KT_Note::getInstance($pid);
 
 	// Hide the private data
@@ -1089,7 +1096,7 @@ case 'editnote':
 	?>
 
 	<div id="edit_interface-page">
-		<h3><?php echo $controller->getPageTitle(); ?></h3>
+		<h2><?php echo $controller->getPageTitle(); ?></h2>
 		<form method="post" action="edit_interface.php" >
 			<input type="hidden" name="action" value="update">
 			<input type="hidden" name="pid" value="<?php echo $pid; ?>">
@@ -1126,12 +1133,12 @@ case 'editnote':
 			</div>
 			<p id="save-cancel">
 				<button class="btn btn-primary" type="submit">
-					<i class="fas fa-save"></i>
+					<i class="fa fa-save"></i>
 					<?php echo KT_I18N::translate('Save'); ?>
 				</button>
 				<button class="btn btn-primary" type="button"  onclick="window.close();">
-					<i class="fas fa-times"></i>
-					<?php echo KT_I18N::translate('Close'); ?>
+					<i class="fa fa-times"></i>
+					<?php echo KT_I18N::translate('close'); ?>
 				</button>
 			</p>
 		</form>
@@ -1158,7 +1165,7 @@ case 'addnewrepository':
 	</script>
 
 	<div id="edit_interface-page">
-		<h3><?php echo $controller->getPageTitle(); ?></h3>
+		<h2><?php echo $controller->getPageTitle(); ?></h2>
 		<form method="post" action="edit_interface.php" onsubmit="return check_form(this);">
 			<input type="hidden" name="action" value="addrepoaction">
 			<input type="hidden" name="pid" value="newrepo">
@@ -1253,12 +1260,12 @@ case 'addnewrepository':
 			</div>
 			<p id="save-cancel">
 				<button class="btn btn-primary" type="submit">
-					<i class="fas fa-save"></i>
+					<i class="fa fa-save"></i>
 					<?php echo KT_I18N::translate('Save'); ?>
 				</button>
 				<button class="btn btn-primary" type="button"  onclick="window.close();">
-					<i class="fas fa-times"></i>
-					<?php echo KT_I18N::translate('Close'); ?>
+					<i class="fa fa-times"></i>
+					<?php echo KT_I18N::translate('close'); ?>
 				</button>
 			</p>
 		</form>
@@ -1452,11 +1459,11 @@ case 'update':
 			if (!empty($NSFX)) $newged .= "\n2 NSFX $NSFX";
 
 			if (!empty($NOTE)) {
-				$cmpfunc = preg_replace_callback(
-					function($e) {
-						return 'strpos($e,"0 @N") !== 0 && strpos($e,"1 CONT") !== 0;';
-					}
-				);
+
+				$cmpfunc = function($e) {
+					return strpos($e,"0 @N") !== 0 && strpos($e,"1 CONT") !== 0;
+				};
+
 				$gedlines = array_filter($gedlines, $cmpfunc);
 				$tempnote = preg_split('/\r?\n/', trim($NOTE) . "\n"); // make sure only one line ending on the end
 				$title[] = "0 @$pid@ NOTE " . array_shift($tempnote);
@@ -1522,11 +1529,11 @@ case 'update':
 				if (!empty($NSFX)) $newged .= "\n2 NSFX $NSFX";
 
 				if (!empty($NOTE)) {
-					$cmpfunc = preg_replace_callback(
-						function($e) {
-							return 'strpos($e,"0 @N") !== 0 && strpos($e,"1 CONT") !== 0;';
-						}
-					);
+
+					$cmpfunc = function($e) {
+						return strpos($e,"0 @N") !== 0 && strpos($e,"1 CONT") !== 0;
+					};
+
 					$gedlines = array_filter($gedlines, $cmpfunc);
 					$tempnote = preg_split('/\r?\n/', trim($NOTE) . "\n"); // make sure only one line ending on the end
 					$title[] = "0 @$pid@ NOTE " . array_shift($tempnote);
@@ -1939,7 +1946,7 @@ case 'addopfchildaction':
 
 ////////////////////////////////////////////////////////////////////////////////
 case 'editname':
-	$pid    = KT_Filter::get('pid', KT_REGEX_XREF); // print_indi_form() needs this global
+	$pid    = safe_GET('pid', KT_REGEX_XREF); // print_indi_form() needs this global
 	$person = KT_Person::getInstance($pid);
 
 	$controller
@@ -1974,7 +1981,7 @@ case 'addname':
 	?>
 
 	<div id="edit_interface-page">
-		<h3><?php echo $controller->getPageTitle(); ?></h3>
+		<h2><?php echo $controller->getPageTitle(); ?></h2>
 		<?php
 			$person = KT_Person::getInstance($pid);
 			print_indi_form('update', '', 'new', 'NEW', '', $person->getSex());
@@ -2062,7 +2069,7 @@ case 'al_reorder_media_update': // Update sort using Album Page
 	if (isset($_REQUEST['order1'])) $order1 = $_REQUEST['order1'];
 	function SwapArray($Array) {
 		$Values = array();
-		foreach ($Array as $Key => $Val) {
+		while (list($Key, $Val) = each($Array))
 			$Values[$Val] = $Key;
 		return $Values;
 	}
@@ -2097,7 +2104,7 @@ case 'reorder_children':
 	?>
 
 	<div id="edit_interface-page">
-		<h3><?php echo $controller->getPageTitle(); ?></h3>
+		<h2><?php echo $controller->getPageTitle(); ?></h2>
 		<span class="help_content">
 			<?php echo KT_I18N::translate('Either click the "sort by date" button or click a row then drag-and-drop to re-order.'); ?>
 		</span>
@@ -2147,16 +2154,16 @@ case 'reorder_children':
 			<?php echo no_update_chan($family); ?>
 			<p id="save-cancel">
 				<button class="btn btn-primary" type="submit">
-					<i class="fas fa-save"></i>
+					<i class="fa fa-save"></i>
 					<?php echo KT_I18N::translate('Save'); ?>
 				</button>
 				<button type="submit" class="btn btn-primary" onclick="document.reorder_form.action.value='reorder_children'; document.reorder_form.submit();">
-					<i class="fas fa-arrows"></i>
+					<i class="fa fa-arrows"></i>
 					<?php echo KT_I18N::translate('sort by date'); ?>
 				</button>
 				<button class="btn btn-primary" type="button" onclick="window.close();">
-					<i class="fas fa-times"></i>
-					<?php echo KT_I18N::translate('Close'); ?>
+					<i class="fa fa-times"></i>
+					<?php echo KT_I18N::translate('close'); ?>
 				</button>
 			</p>
 		</form>
@@ -2188,7 +2195,7 @@ case 'changefamily':
 	?>
 
 	<div id="edit_interface-page">
-		<h3><?php echo $controller->getPageTitle(); ?></h3>
+		<h2><?php echo $controller->getPageTitle(); ?></h2>
 		<div class="help_text">
 			<p class="helpcontent">
 				<?php echo KT_I18N::translate('For family member you can use the "Select person" field to choose a different person from your tree to fill that role or add someone if the role is empty. Tick the Remove option to delete that person from the family. Click "Add a child" to create fields for more children.'); ?>
@@ -2305,12 +2312,12 @@ case 'changefamily':
 			<?php echo no_update_chan($family); ?>
 			<p id="save-cancel">
 				<button class="btn btn-primary" type="submit">
-					<i class="fas fa-save"></i>
+					<i class="fa fa-save"></i>
 					<?php echo KT_I18N::translate('Save'); ?>
 				</button>
 				<button class="btn btn-primary" type="button" onclick="window.close();">
-					<i class="fas fa-times"></i>
-					<?php echo KT_I18N::translate('Close'); ?>
+					<i class="fa fa-times"></i>
+					<?php echo KT_I18N::translate('close'); ?>
 				</button>
 			</p>
 		</form>
@@ -2540,7 +2547,7 @@ case 'reorder_fams':
 		->pageHeader();
 	?>
 	<div id="edit_interface-page">
-		<h3><?php echo $controller->getPageTitle(); ?></h3>
+		<h2><?php echo $controller->getPageTitle(); ?></h2>
 		<span class="help_content">
 			<?php echo KT_I18N::translate('Either click the "sort by date" button or click a row then drag-and-drop to re-order.'); ?>
 		</span>
@@ -2568,16 +2575,16 @@ case 'reorder_fams':
 			</ul>
 			<p id="save-cancel">
 				<button class="btn btn-primary" type="submit">
-					<i class="fas fa-save"></i>
+					<i class="fa fa-save"></i>
 					<?php echo KT_I18N::translate('Save'); ?>
 				</button>
 				<button type="submit" class="btn btn-primary" onclick="document.reorder_form.action.value='reorder_fams'; document.reorder_form.submit();">
-					<i class="fas fa-arrows"></i>
+					<i class="fa fa-arrows"></i>
 					<?php echo KT_I18N::translate('sort by date'); ?>
 				</button>
 				<button class="btn btn-primary" type="button" onclick="window.close();">
-					<i class="fas fa-times"></i>
-					<?php echo KT_I18N::translate('Close'); ?>
+					<i class="fa fa-times"></i>
+					<?php echo KT_I18N::translate('close'); ?>
 				</button>
 			</p>
 		</form>
@@ -2635,7 +2642,20 @@ case 'checkduplicates':
 	$controller
 		->setPageTitle(KT_I18N::translate('Possible duplicates'))
 		->pageHeader()
-		->addExternalJavascript(KT_JQUERY_DATATABLES_URL);
+		->addExternalJavascript(KT_JQUERY_DATATABLES_URL)
+		->addInlineJavascript('
+			jQuery("#duplicates").dataTable({
+				"sDom": \'t\',
+				' . KT_I18N::datatablesI18N() . ',
+				jQueryUI: true,
+				autoWidth: false,
+				filter: false,
+				lengthChange: false,
+				info: true,
+				paging: false
+			});
+		');
+
 
 	$html = '
 		<div id="edit_interface-page" class="duplicates">
@@ -2677,8 +2697,8 @@ case 'checkduplicates':
 	$html .= '
 			<p id="save-cancel">
 				<button class="btn btn-primary" type="button" onclick="window.close();">
-					<i class="fas fa-times"></i> ' .
-					KT_I18N::translate('Close') . '
+					<i class="fa fa-times"></i> ' .
+					KT_I18N::translate('close') . '
 				</button>
 			</p>
 		</div>';

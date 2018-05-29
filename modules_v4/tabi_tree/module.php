@@ -26,7 +26,7 @@ if (!defined('KT_KIWITREES')) {
 	exit;
 }
 
-class tab_i_tree_KT_Module extends KT_Module implements KT_Module_Tab {
+class tabi_tree_KT_Module extends KT_Module implements KT_Module_IndiTab {
 	var $headers; // CSS and script to include in the top of <head> section, before theme’s CSS
 	var $js; // the TreeViewHandler javascript
 
@@ -40,22 +40,22 @@ class tab_i_tree_KT_Module extends KT_Module implements KT_Module_Tab {
 		return /* I18N: Description of the “Interactive tree” module */ KT_I18N::translate('An interactive tree, showing all the ancestors and descendants of an individual.');
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function defaultTabOrder() {
 		return 70;
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function defaultAccessLevel() {
 		return KT_PRIV_PUBLIC;
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function isGrayedOut() {
 		return false;
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function getTabContent() {
 		global $controller;
 
@@ -69,19 +69,19 @@ class tab_i_tree_KT_Module extends KT_Module implements KT_Module_Tab {
 			$html;
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function hasTabContent() {
 		global $SEARCH_SPIDER;
 
 		return !$SEARCH_SPIDER;
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function canLoadAjax() {
 		return false;
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function getPreLoadContent() {
 		// We cannot use jQuery("head").append(<link rel="stylesheet" ...as jQuery is not loaded at this time
 		return

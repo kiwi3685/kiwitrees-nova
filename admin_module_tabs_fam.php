@@ -21,7 +21,7 @@
  * along with Kiwitrees. If not, see <http://www.gnu.org/licenses/>.
  */
 
-define('KT_SCRIPT_NAME', 'admin_module_tabs.php');
+define('KT_SCRIPT_NAME', 'admin_module_tabs_fam.php');
 require 'includes/session.php';
 require KT_ROOT . 'includes/functions/functions_edit.php';
 
@@ -45,7 +45,7 @@ $controller
 		});
 	');
 
-$modules	= KT_Module::getActiveTabs(KT_GED_ID, KT_PRIV_HIDE);
+$modules	= KT_Module::getActiveFamTabs(KT_GED_ID, KT_PRIV_HIDE);
 
 $action		= KT_Filter::post('action');
 
@@ -54,16 +54,16 @@ if ($action == 'update_mods' && KT_Filter::checkCsrf()) {
 		foreach (KT_Tree::getAll() as $tree) {
 			$access_level = KT_Filter::post("access-{$module_name}-{$tree->tree_id}", KT_REGEX_INTEGER, $module->defaultAccessLevel());
 			KT_DB::prepare(
-				"REPLACE INTO `##module_privacy` (module_name, gedcom_id, component, access_level) VALUES (?, ?, 'tab', ?)"
+				"REPLACE INTO `##module_privacy` (module_name, gedcom_id, component, access_level) VALUES (?, ?, 'tabi', ?)"
 			)->execute(array($module_name, $tree->tree_id, $access_level));
 		}
 		$order = safe_POST('order-'.$module_name);
 		KT_DB::prepare(
-			"UPDATE `##module` SET tab_order=? WHERE module_name=?"
+			"UPDATE `##module` SET tabf_order=? WHERE module_name=?"
 		)->execute(array($order, $module_name));
 		$module->order = $order; // Make the new order take effect immediately
 	}
-	uasort($array, function ($x, $y) {
+	uasort($modules, function ($x, $y) {
 		return $x->order > $y->order;
 	});
 
@@ -120,7 +120,7 @@ if ($action == 'update_mods' && KT_Filter::checkCsrf()) {
 										<td>
 											<?php
 												$access_level = KT_DB::prepare(
-													"SELECT access_level FROM `##module_privacy` WHERE gedcom_id=? AND module_name=? AND component='tab'"
+													"SELECT access_level FROM `##module_privacy` WHERE gedcom_id=? AND module_name=? AND component='tabi'"
 												)->execute(array($tree->tree_id, $module->getName()))->fetchOne();
 												if ($access_level === null) {
 													$access_level = $module->defaultAccessLevel();

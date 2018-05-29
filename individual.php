@@ -45,7 +45,7 @@ if ($controller->record && $controller->record->canDisplayDetails()) {
 				<?php echo /* I18N: %1$s is “accept”, %2$s is “reject”.  These are links. */
 					KT_I18N::translate(
 						'This individual has been deleted.  You should review the deletion and then %1$s or %2$s it.',
-						'<a href="#" onclick="jQuery.post(\'action.php\',{action:\'accept-changes\',xref:\''.$controller->record->getXref().'\'},function(){location.reload();})">' .
+						'<a href="#" onclick="jQuery.post(\'action.php\',{action:\'accept-changes\',xref:\'' . $controller->record->getXref() . '\'},function(){location.reload();})">' .
 							KT_I18N::translate_c('You should review the deletion and then accept or reject it.', 'accept') . '
 						</a>',
 						'<a href="#" onclick="jQuery.post(\'action.php\',{action:\'reject-changes\',xref:\'' . $controller->record->getXref() . '\'},function(){location.reload();})">' .
@@ -201,34 +201,39 @@ if (KT_Module::getActiveSidebars()) {
 		<?php }
 		// =============== Individual page tabs ======================
 		foreach ($controller->tabs as $tab) {
-			echo $tab->getPreLoadContent();
+			if (substr($tab->getName(), 0, 4) == 'tabi') {
+				echo $tab->getPreLoadContent();
+				$modules[] = $tab;
+			}
 		} ?>
-		<div class="cell">
-			<ul class="tabs" id="indiTabs" data-deep-link="true" data-allow-all-closed="true" data-responsive-accordion-tabs="tabs small-accordion medium-tabs" >
-				<?php foreach ($controller->tabs as $tab) {
-					if ($tab->isGrayedOut()) {
-						$greyed_out = ' rela';
-					} else {
-						$greyed_out = '';
-					}
-					$ajax = '';
-					if ($tab->hasTabContent()) { ?>
-						<li class="<?php echo $tab->getName(); ?> tabs-title<?php echo $greyed_out; ?>">
-							<a href="#<?php echo $tab->getName(); ?>" title="<?php echo $tab->getDescription(); ?>">
-								<?php echo $tab->getTitle(); ?>
-							</a>
-						</li>
-					<?php }
-				} ?>
-			</ul>
-			<div class="tabs-content" data-tabs-content="indiTabs">
-				<?php foreach ($controller->tabs as $tab) {
-					if ($tab->hasTabContent()) { ?>
-						<div class="tabs-panel" id="<?php echo $tab->getName(); ?>">
-							<?php echo $tab->getTabContent(); ?>
-						</div>
-					<?php }
-				} ?>
+		<div class="grid-x">
+			<div class="cell">
+				<ul class="tabs" id="indiTabs" data-deep-link="true" data-allow-all-closed="true" data-responsive-accordion-tabs="tabs small-accordion medium-tabs" >
+					<?php foreach ($modules as $tab) {
+						if ($tab->isGrayedOut()) {
+							$greyed_out = ' rela';
+						} else {
+							$greyed_out = '';
+						}
+						$ajax = '';
+						if ($tab->hasTabContent()) { ?>
+							<li class="<?php echo $tab->getName(); ?> tabs-title<?php echo $greyed_out; ?>">
+								<a href="#<?php echo $tab->getName(); ?>" title="<?php echo $tab->getDescription(); ?>">
+									<?php echo $tab->getTitle(); ?>
+								</a>
+							</li>
+						<?php }
+					} ?>
+				</ul>
+				<div class="tabs-content" data-tabs-content="indiTabs">
+					<?php foreach ($modules as $tab) {
+						if ($tab->hasTabContent()) { ?>
+							<div class="tabs-panel" id="<?php echo $tab->getName(); ?>">
+								<?php echo $tab->getTabContent(); ?>
+							</div>
+						<?php }
+					} ?>
+				</div>
 			</div>
 		</div>
 	</div>

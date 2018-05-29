@@ -26,7 +26,7 @@ if (!defined('KT_KIWITREES')) {
 	exit;
 }
 
-class tab_i_census_KT_Module extends KT_Module implements KT_Module_Tab {
+class tabi_census_KT_Module extends KT_Module implements KT_Module_IndiTab {
 	// Extend KT_Module
 	public function getTitle() {
 		return /* I18N: Name of a module/tab on the individual page. */ KT_I18N::translate('Census summary');
@@ -37,12 +37,12 @@ class tab_i_census_KT_Module extends KT_Module implements KT_Module_Tab {
 		return /* I18N: Description of the "Facts and events" module */ KT_I18N::translate('A tab summarising census events.');
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function defaultTabOrder() {
 		return 100;
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function isGrayedOut() {
 		return $this->getCensFacts() == null;
 	}
@@ -52,7 +52,7 @@ class tab_i_census_KT_Module extends KT_Module implements KT_Module_Tab {
 		return false;
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function getTabContent() {
 		global $EXPAND_SOURCES, $EXPAND_NOTES, $controller, $iconStyle;
 		$person		= $controller->getSignificantIndividual();
@@ -141,17 +141,17 @@ class tab_i_census_KT_Module extends KT_Module implements KT_Module_Tab {
 		';
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function hasTabContent() {
 		return KT_USER_CAN_EDIT || $this->getCensFacts();
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function canLoadAjax() {
 		return false;
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function getPreLoadContent() {
 		return '';
 	}

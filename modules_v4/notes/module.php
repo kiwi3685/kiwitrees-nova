@@ -26,7 +26,7 @@ if (!defined('KT_KIWITREES')) {
 	exit;
 }
 
-class notes_KT_Module extends KT_Module implements KT_Module_Tab {
+class notes_KT_Module extends KT_Module implements KT_Module_IndiTab {
 	// Extend KT_Module
 	public function getTitle() {
 		return /* I18N: Name of a module */ KT_I18N::translate('Notes');
@@ -37,14 +37,14 @@ class notes_KT_Module extends KT_Module implements KT_Module_Tab {
 		return /* I18N: Description of the “Notes” module */ KT_I18N::translate('A tab showing the notes attached to an individual.');
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function defaultTabOrder() {
 		return 40;
 	}
 
 	protected $noteCount = null;
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function getTabContent() {
 		global $NAV_NOTES, $controller;
 
@@ -130,27 +130,27 @@ class notes_KT_Module extends KT_Module implements KT_Module_Tab {
 		return $this->noteCount;
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function hasTabContent() {
 		return KT_USER_CAN_EDIT || $this->get_note_count()>0;
 	}
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function isGrayedOut() {
 		return $this->get_note_count()==0;
 	}
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function canLoadAjax() {
 		global $SEARCH_SPIDER;
 
 		return !$SEARCH_SPIDER; // Search engines cannot use AJAX
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function getPreLoadContent() {
 		return '';
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function defaultAccessLevel() {
 		return KT_PRIV_USER;
 	}

@@ -36,6 +36,7 @@ class KT_Controller_Family extends KT_Controller_GedcomRecord {
 	var $display = false;
 	var $famrec = '';
 	var $title = '';
+	public $tabs;
 
 	public function __construct() {
 		global $Dbwidth, $bwidth, $pbwidth, $pbheight, $bheight;
@@ -59,7 +60,7 @@ class KT_Controller_Family extends KT_Controller_GedcomRecord {
 			return;
 		}
 
-		$xref=$this->record->getXref(); // Correct upper/lower case mismatch
+		$xref = $this->record->getXref(); // Correct upper/lower case mismatch
 
 		//-- if the user can edit and there are changes then get the new changes
 		if (KT_USER_CAN_EDIT) {
@@ -70,6 +71,8 @@ class KT_Controller_Family extends KT_Controller_GedcomRecord {
 				$this->record->diffMerge($this->diff_record);
 			}
 		}
+
+		$this->tabs = KT_Module::getActiveFamTabs();
 
 		parent::__construct();
 	}
@@ -197,65 +200,84 @@ class KT_Controller_Family extends KT_Controller_GedcomRecord {
 
 		/* Set width */
 		if (KT_USER_CAN_EDIT) {
-			$fam_width = '65';
+			$fam_width1 = 'medium-8';
+			$fam_width2 = 'medium-4';
 		} else {
-			$fam_width = '100';
+			$fam_width1 = '';
+			$fam_width2 = '';
 		}
 
-		$indifacts = $this->record->getFacts();
-		if ($indifacts) {
-			echo '
-				<div style="display:inline-block;width:', $fam_width, '%;">
-					<table style="width:100%;">';
-					sort_facts($indifacts);
-					foreach ($indifacts as $fact) {
-						print_fact($fact, $this->record);
-					}
-					print_main_media($this->record->getXref());
-					echo '</table>
-				</div>';
-		} else {
-			echo '<tr><td class="messagebox" colspan="2">', KT_I18N::translate('No facts for this family.'), '</td></tr>';
-		}
+		$famFacts = $this->record->getFacts();
+		if ($famFacts) { ?>
+			<div class="cell <?php echo $fam_width1; ?>">
+				<div class="grid-x">
+						<?php
+						sort_facts($famFacts);
+						foreach ($famFacts as $fact) {
+							print_fact($fact, $this->record);
+						}
+						print_main_media($this->record->getXref());
+						?>
+				</div>
+			</div>
+		<?php } else { ?>
+			<div class="callout secondary">
+				<?php echo KT_I18N::translate('No facts for this family.'); ?>
+			</div>
+		<?php }
 
-		if (KT_USER_CAN_EDIT) {
-			echo '<div style="display:inline-block;width:', 100 - $fam_width, '%;vertical-align:top;"><table style="width:100%;">';
-			echo '<tr><th class="descriptionbox" colspan="2">', KT_I18N::translate('Add new family information'), '</th></tr>';
-			print_add_new_fact2($this->record->getXref(), $indifacts, 'FAM');
-
-			echo '<tr><td class="descriptionbox">';
-			echo KT_Gedcom_Tag::getLabel('NOTE');
-			echo '</td><td class="optionbox">';
-			echo "<a href=\"#\" onclick=\"return add_new_record('".$this->record->getXref()."','NOTE');\">", KT_I18N::translate('Add a note'), '</a>';
-			echo help_link('add_note');
-			echo '</td></tr>';
-
-			echo '<tr><td class="descriptionbox">';
-			echo KT_Gedcom_Tag::getLabel('SHARED_NOTE');
-			echo '</td><td class="optionbox">';
-			echo "<a href=\"#\" onclick=\"return add_new_record('".$this->record->getXref()."','SHARED_NOTE');\">", KT_I18N::translate('Add a shared note'), '</a>';
-			echo help_link('add_shared_note');
-			echo '</td></tr>';
-
-			if (get_gedcom_setting(KT_GED_ID, 'MEDIA_UPLOAD') >= KT_USER_ACCESS_LEVEL) {
-				echo '<tr><td class="descriptionbox">';
-				echo KT_Gedcom_Tag::getLabel('OBJE');
-				echo '</td><td class="optionbox">';
-				echo "<a href=\"#\" onclick=\"window.open('addmedia.php?action=showmediaform&amp;linktoid=".$this->record->getXref()."', '_blank', edit_window_specs); return false;\">", KT_I18N::translate('Add a media object'), '</a>';
-				echo help_link('OBJE');
-				echo '<br>';
-				echo "<a href=\"#\" onclick=\"window.open('inverselink.php?linktoid=".$this->record->getXref()."&amp;linkto=family', '_blank', find_window_specs); return false;\">", KT_I18N::translate('Link to an existing media object'), '</a>';
-				echo '</td></tr>';
-			}
-
-			echo '<tr><td class="descriptionbox">';
-			echo KT_Gedcom_Tag::getLabel('SOUR');
-			echo '</td><td class="optionbox">';
-			echo "<a href=\"#\" onclick=\"return add_new_record('".$this->record->getXref()."','SOUR');\">", KT_I18N::translate('Add a source citation'), '</a>';
-			echo help_link('add_source');
-			echo '</td></tr>';
-			echo '</table></div>';
-		}
+		if (KT_USER_CAN_EDIT) { ?>
+			<div class="cell <?php echo $fam_width2; ?>">
+				<table>
+					<tr>
+						<th class="descriptionbox" colspan="2"><?php echo KT_I18N::translate('Add new family information'); ?></th>
+					</tr>
+					<?php echo print_add_new_fact2($this->record->getXref(), $famFacts, 'FAM'); ?>
+					<tr>
+						<td class="descriptionbox"><?php echo KT_Gedcom_Tag::getLabel('NOTE'); ?></td>
+						<td class="optionbox">
+							<a href="#" onclick="return add_new_record('<?php echo $this->record->getXref(); ?>','NOTE');">
+								<?php echo KT_I18N::translate('Add a note'); ?>
+							</a>
+							<?php echo help_link('add_note'); ?>
+						</td>
+					</tr>
+					<tr>
+						<td class="descriptionbox"><?php echo KT_Gedcom_Tag::getLabel('SHARED_NOTE'); ?></td>
+						<td class="optionbox">
+							<a href="#" onclick="return add_new_record('<?php echo $this->record->getXref(); ?>','SHARED_NOTE');">
+								<?php echo KT_I18N::translate('Add a shared note'); ?>
+							</a>
+							<?php echo help_link('add_shared_note'); ?>
+						</td>
+					</tr>
+					<?php if (get_gedcom_setting(KT_GED_ID, 'MEDIA_UPLOAD') >= KT_USER_ACCESS_LEVEL) { ?>
+						<tr>
+							<td class="descriptionbox"><?php echo KT_Gedcom_Tag::getLabel('OBJE'); ?></td>
+							<td class="optionbox">
+								<a href="#" onclick="window.open('addmedia.php?action=showmediaform&amp;linktoid=<?php echo $this->record->getXref(); ?>', '_blank', edit_window_specs); return false;">
+									<?php echo KT_I18N::translate('Add a media object'); ?>
+								</a>
+								<?php echo help_link('OBJE'); ?>
+								<br>
+								<a href="#" onclick="window.open('inverselink.php?linktoid=<?php echo $this->record->getXref(); ?>&amp;linkto=family', '_blank', find_window_specs); return false;">
+									<?php echo KT_I18N::translate('Link to an existing media object'); ?>
+								</a>
+							</td>
+						</tr>
+					<?php } ?>
+					<tr>
+						<td class="descriptionbox"><?php echo KT_Gedcom_Tag::getLabel('SOUR'); ?></td>
+						<td class="optionbox">
+							<a href="#" onclick="return add_new_record('<?php echo $this->record->getXref(); ?>','SOUR');">
+								<?php echo KT_I18N::translate('Add a source citation'); ?>
+							</a>
+							<?php echo help_link('add_source'); ?>
+						</td>
+					</tr>
+				</table>
+			</div>
+		<?php }
 	}
 
 }

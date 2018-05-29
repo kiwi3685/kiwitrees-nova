@@ -35,10 +35,32 @@ try {
 
 self::exec("ALTER TABLE `##block` CHANGE location location ENUM('main', 'side', 'footer')");
 
-self::exec("ALTER TABLE `##module_privacy` CHANGE component component ENUM('block', 'chart', 'footer', 'list', 'menu', 'report', 'sidebar', 'tab', 'theme', 'widget')");
-
 // Add the initial default footer block settings
 self::exec("INSERT IGNORE INTO `##block` (gedcom_id, location, block_order, module_name) VALUES (-1, 'footer', 1, 'footer_contacts'), (-1, 'footer', 2, 'footer_html'), (-1, 'footer', 3, 'footer_logo')");
+
+// Rename tab to tabi and add tabf
+try {
+	self::exec("ALTER TABLE `##module` CHANGE `tab_order` `tabi_order` INTEGER NULL;");
+} catch (PDOException $ex) {
+	// If this fails, it has probably already been done.
+}
+try {
+	self::exec("ALTER TABLE `##module` ADD COLUMN `tabf_order` INTEGER NULL;");
+} catch (PDOException $ex) {
+	// If this fails, it has probably already been done.
+}
+try {
+	self::exec("DELETE FROM `kt_module_privacy` WHERE `component` = 'tab';");
+} catch (PDOException $ex) {
+	// If this fails, it has probably already been done.
+}
+try {
+	self::exec("ALTER TABLE `##module_privacy` CHANGE component component ENUM('block', 'chart', 'footer', 'list', 'menu', 'report', 'sidebar', 'tabi', 'widget', 'tabf')");
+} catch (PDOException $ex) {
+	// If this fails, it has probably already been done.
+}
+
+
 
 // Update the version to indicate success
 KT_Site::preference($schema_name, $next_version);

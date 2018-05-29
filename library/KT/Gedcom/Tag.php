@@ -891,7 +891,7 @@ class KT_Gedcom_Tag {
 		return $facts;
 	}
 
-	// Get a list of reference facts that will be displayed in the "Extra information" sidebar module, and at the same time excluded from the personal_facts module
+	// Get a list of reference facts that will be displayed in the "Extra information" sidebar module, and at the same time excluded from the factsandevents module
 	public static function getReferenceFacts() {
 		return array('CHAN', 'IDNO', 'RFN', 'AFN', 'REFN', 'RIN', '_UID', 'SSN');
 	}

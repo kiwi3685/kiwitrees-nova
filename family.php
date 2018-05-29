@@ -2,13 +2,13 @@
 /**
  * Kiwitrees: Web based Family History software
  * Copyright (C) 2012 to 2018 kiwitrees.net
- * 
+ *
  * Derived from webtrees (www.webtrees.net)
  * Copyright (C) 2010 to 2012 webtrees development team
- * 
+ *
  * Derived from PhpGedView (phpgedview.sourceforge.net)
  * Copyright (C) 2002 to 2010 PGV Development Team
- * 
+ *
  * Kiwitrees is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -28,7 +28,7 @@ $controller = new KT_Controller_Family();
 
 if ($controller->record && $controller->record->canDisplayDetails()) {
 	$controller->pageHeader();
-	
+
 	if ($controller->record->isMarkedDeleted()) {
 		if (KT_USER_CAN_ACCEPT) {
 			echo
@@ -80,34 +80,100 @@ if ($controller->record && $controller->record->canDisplayDetails()) {
 $PEDIGREE_FULL_DETAILS = '1'; // Override GEDCOM configuration
 $show_full = '1';
 
-echo '
-	<div id="family-page">
-		<h2 class="name_head" class="center">', $controller->record->getFullName(), '</h2>
-		<div id="family_chart">';
-				print_parents($controller->record->getXref());
-				if (KT_USER_CAN_EDIT) {
-					if ($controller->diff_record) {
-						$husb=$controller->diff_record->getHusband();
-					} else {
-						$husb=$controller->record->getHusband();
-					}
-					if ($controller->diff_record) {
-						$wife=$controller->diff_record->getWife();
-					} else {
-						$wife=$controller->record->getWife();
-					}
-				}
-			echo '<div id="children">',
-				print_children($controller->record->getXref()), '
+$controller->addInlineJavascript('
+	// open specified tab, previously saved tab, or the first one
+	if (window.location.hash) {
+		var hash = window.location.hash;
+	} else if (sessionStorage.getItem("fam-tab")) {
+		var hash = sessionStorage.getItem("fam-tab");
+	} else {
+		var hash = jQuery("#famTabs li:first a").attr("href");
+	};
+	var openhash = hash.substr(1);
+	jQuery("#famTabs li." + openhash).addClass("is-active");
+	jQuery("div#" + openhash).addClass("is-active");
+	jQuery("#famTabs li." + openhash + " a").attr("aria-selected","true");
+	jQuery("#famTabs").on("change.zf.tabs", function() {
+		sessionStorage.setItem("fam-tab", window.location.hash);
+	});
+');
+
+?>
+
+<div class="grid-x grid-padding-y" id="family-page">
+	<div class="cell">
+		<h3>
+			<?php echo $controller->record->getFullName(); ?>
+		</h3>
+		<div class="grid-x">
+			<div class="cell" id="family_chart">
+					<?php print_parents($controller->record->getXref());
+					if (KT_USER_CAN_EDIT) {
+						if ($controller->diff_record) {
+							$husb = $controller->diff_record->getHusband();
+						} else {
+							$husb = $controller->record->getHusband();
+						}
+						if ($controller->diff_record) {
+							$wife = $controller->diff_record->getWife();
+						} else {
+							$wife = $controller->record->getWife();
+						}
+					} ?>
+				<div id="children">
+					<?php print_children($controller->record->getXref()); ?>
+				</div>
 			</div>
 		</div>
-		<div id="fam_info">
-			<div class="subheaders">', KT_I18N::translate('Family Group Information'), '</div>';
-				if ($controller->record->canDisplayDetails()) {
-					echo '<div>';
-					$controller->printFamilyFacts();
-					echo '</div>';
-				} else {
-					echo '<p class="ui-state-highlight">', KT_I18N::translate('The details of this family are private.'), '</p>';
-				}
-		echo '</div>';
+	</div>
+
+	<?php // =============== Family page tabs ======================
+	foreach ($controller->tabs as $tab) {
+		if (substr($tab->getName(), 0, 4) == 'tabf') {
+			echo $tab->getPreLoadContent();
+			$modules[] = $tab;
+		}
+	} ?>
+
+		<?php if (count($modules) > 1) { ?>
+			<div class="cell">
+				<ul class="tabs" id="famTabs" data-deep-link="true" data-allow-all-closed="true" data-responsive-accordion-tabs="tabs small-accordion medium-tabs" >
+					<?php foreach ($modules as $tab) {
+						if ($tab->isGrayedOut()) {
+							$greyed_out = ' rela';
+						} else {
+							$greyed_out = '';
+						}
+						$ajax = '';
+						if ($tab->hasTabContent()) { ?>
+							<li class="<?php echo $tab->getName(); ?> tabs-title<?php echo $greyed_out; ?>">
+								<a href="#<?php echo $tab->getName(); ?>" title="<?php echo $tab->getDescription(); ?>">
+									<?php echo $tab->getTitle(); ?>
+								</a>
+							</li>
+						<?php }
+					} ?>
+				</ul>
+				<div class="tabs-content" data-tabs-content="famTabs">
+					<?php foreach ($modules as $tab) {
+						if ($tab->hasTabContent()) { ?>
+							<div class="tabs-panel" id="<?php echo $tab->getName(); ?>">
+								<?php echo $tab->getTabContent(); ?>
+							</div>
+						<?php }
+					} ?>
+				</div>
+			</div>
+		<?php } else { ?>
+				<?php foreach ($modules as $tab) {
+					if ($tab->hasTabContent()) { ?>
+						<div class="cell" id="<?php echo $tab->getName(); ?>">
+							<?php echo $tab->getTabContent(); ?>
+						</div>
+					<?php }
+				} ?>
+		<?php } ?>
+
+</div>
+
+<?php

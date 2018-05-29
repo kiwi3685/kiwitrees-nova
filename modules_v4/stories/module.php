@@ -26,7 +26,7 @@ if (!defined('KT_KIWITREES')) {
 	exit;
 }
 
-class stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Module_Tab, KT_Module_Config, KT_Module_Menu {
+class stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Module_IndiTab, KT_Module_Config, KT_Module_Menu {
 	// Extend class KT_Module
 	public function getTitle() {
 		return /* I18N: Name of a module */ KT_I18N::translate('Stories');
@@ -108,12 +108,12 @@ class stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Module_
 		return false;
 	}
 
-	// Implement class KT_Module_Tab
+	// Implement class KT_Module_IndiTab
 	public function defaultTabOrder() {
 		return 50;
 	}
 
-	// Implement class KT_Module_Tab
+	// Implement class KT_Module_IndiTab
 	public function getTabContent() {
 		global  $controller;
 
@@ -248,22 +248,22 @@ class stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Module_
 		return $count_of_stories;
 	}
 
-	// Implement class KT_Module_Tab
+	// Implement class KT_Module_IndiTab
 	public function hasTabContent() {
 		return KT_USER_CAN_EDIT || $this->getStoriesCount() > 0;
 	}
 
-	// Implement KT_Module_Tab
+	// Implement KT_Module_IndiTab
 	public function isGrayedOut() {
 		return $this->getStoriesCount() == 0;
 	}
 
-	// Implement class KT_Module_Tab
+	// Implement class KT_Module_IndiTab
 	public function canLoadAjax() {
 		return false;
 	}
 
-	// Implement class KT_Module_Tab
+	// Implement class KT_Module_IndiTab
 	public function getPreLoadContent() {
 		return '';
 	}

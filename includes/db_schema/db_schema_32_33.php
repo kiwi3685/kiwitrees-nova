@@ -60,7 +60,7 @@ try {
 }
 
 // remove resource from module_privacy components
-self::exec("ALTER TABLE `##module_privacy` CHANGE component component ENUM('block', 'chart', 'list', 'menu', 'report', 'sidebar', 'tab', 'widget')");
+self::exec("ALTER TABLE `##module_privacy` CHANGE component component ENUM('block', 'chart', 'list', 'menu', 'report', 'sidebar', 'tabi', 'widget')");
 
 // remove no longer used gedcom settings
 try {
