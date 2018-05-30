@@ -101,7 +101,7 @@ function print_pedigree_person($person, $style = 1, $count = 0, $personcount = "
 			if (empty($SEARCH_SPIDER)) {
 				$personlinks = getPersonLinks($person);
 			} else {
-				if ($style==1) {
+				if ($style == 1) {
 					$outBoxAdd .= 'person_box_template' . $isF . '" style="width: ' . $bwidth . 'px; height: ' . $bheight . 'px; overflow: hidden;"';
 				} else {
 					$outBoxAdd .= 'person_box_template' . $isF . '" style="overflow: hidden;"';
@@ -219,14 +219,16 @@ function print_pedigree_person($person, $style = 1, $count = 0, $personcount = "
 	};
 
 	// Output to template
-	if ($style == 3) {
-	   require KT_THEME_DIR . 'templates/compactbox_template.php';
-	} else {
-		if ($show_full) {
-		   require KT_THEME_DIR . 'templates/personbox_template.php';
-		} else {
-		   require KT_THEME_DIR . 'templates/verticalbox_template.php';
-		}
+	switch ($style) {
+		case '1':
+			require KT_THEME_DIR . 'templates/compactbox_template.php';
+			break;
+		case '2':
+		default:
+			require KT_THEME_DIR . 'templates/personbox_template.php';
+			break;
+		case '3':
+			require KT_THEME_DIR . 'templates/verticalbox_template.php';
 	}
 }
 

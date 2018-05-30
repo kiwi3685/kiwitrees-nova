@@ -102,26 +102,20 @@ $controller->addInlineJavascript('
 		<h3>
 			<?php echo $controller->record->getFullName(); ?>
 		</h3>
-		<div class="grid-x">
-			<div class="cell" id="family_chart">
-					<?php print_parents($controller->record->getXref());
-					if (KT_USER_CAN_EDIT) {
-						if ($controller->diff_record) {
-							$husb = $controller->diff_record->getHusband();
-						} else {
-							$husb = $controller->record->getHusband();
-						}
-						if ($controller->diff_record) {
-							$wife = $controller->diff_record->getWife();
-						} else {
-							$wife = $controller->record->getWife();
-						}
-					} ?>
-				<div id="children">
-					<?php print_children($controller->record->getXref()); ?>
-				</div>
-			</div>
-		</div>
+		<?php print_parents($controller->record->getXref());
+		if (KT_USER_CAN_EDIT) {
+			if ($controller->diff_record) {
+				$husb = $controller->diff_record->getHusband();
+			} else {
+				$husb = $controller->record->getHusband();
+			}
+			if ($controller->diff_record) {
+				$wife = $controller->diff_record->getWife();
+			} else {
+				$wife = $controller->record->getWife();
+			}
+		} ?>
+		<?php print_children($controller->record->getXref()); ?>
 	</div>
 
 	<!-- =============== Family page tabs ====================== -->

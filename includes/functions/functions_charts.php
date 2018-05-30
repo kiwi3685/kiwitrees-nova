@@ -569,7 +569,7 @@ function ancestry_array($rootid, $maxgen=0) {
  * @param string $dir arrow direction 0=left 1=right 2=up 3=down (default=2)
  */
 function print_url_arrow($id, $url, $label, $dir = 2) {
-	global $TEXT_DIRECTION;
+	global $TEXT_DIRECTION, $iconStyle;
 
 	if ($id == "" || $url == "") return;
 
@@ -580,11 +580,14 @@ function print_url_arrow($id, $url, $label, $dir = 2) {
 
 
 	// arrow style     				0    	     1    		     2     		    3
-	$array_style	= array("fa fa-arrow-left", "fa fa-arrow-right", "fa fa-arrow-up", "fa fa-arrow-down");
+	$array_style	= array("fa-arrow-left", "fa-arrow-right", "fa-arrow-up", "fa-arrow-down");
 	$astyle			= $array_style[$adir];
 
 	// Labels include people's names, which may contain markup
-	echo '<a href="' . $url . '" title="' . strip_tags($label) . '" data-tooltip aria-haspopup="true" class="' . $astyle . ' has-tip top" data-disable-hover="false"></a>';
+	echo '
+		<a href="' . $url . '" title="' . strip_tags($label) . '" data-tooltip aria-haspopup="true" has-tip top" data-disable-hover="false">
+			<i class="' . $iconStyle . ' ' . $astyle . '"></i>
+		</a>';
 }
 
 /**
@@ -674,285 +677,356 @@ function print_parents($famid, $personcount = 1) {
 	$controller = new KT_Controller_Family();
 	$ged_id		= get_id_from_gedcom($GEDCOM);
 	$family		= KT_Family::getInstance($famid);
-	if (is_null($family)) return;
-	$husb = $family->getHusband();
-	if (is_null($husb)) $husb = new KT_Person('');
-	$wife = $family->getWife();
-	if (is_null($wife))	$wife = new KT_Person('');
+	if (is_null($family)) {
+		return;
+	} else {
+		$husb = $family->getHusband();
+	}
+	if (is_null($husb)) {
+		$husb = new KT_Person('');
+	} else {
+		$wife = $family->getWife();
+	}
+	if (is_null($wife))	{
+		$wife = new KT_Person('');
+	}
 
 	// -- get the new record and parents if in editing show_changes mode
 	if (find_gedcom_record($famid, $ged_id) != find_gedcom_record($famid, $ged_id, KT_USER_CAN_EDIT)) {
-		$newrec = find_gedcom_record($famid, $ged_id, true);
-		$newparents = find_parents_in_record($newrec);
-	}
-	echo '<div id="grandparents" class="center">';
-		/* husband's parents */
-		$hfams = $husb->getChildFamilies();
-		$hparents = false;
-		$upfamid = "";
+		$newrec		= find_gedcom_record($famid, $ged_id, true);
+		$newparents	= find_parents_in_record($newrec);
+	} ?>
+
+	<div class="grid-x" id="grandparents">
+		<!-- husband's parents -->
+		<?php
+		$hfams		= $husb->getChildFamilies();
+		$hparents	= false;
+		$upfamid	= "";
 		if ($hfams) {
 			$hparents = false;
 			foreach ($hfams as $hfamily) {
-				$hparents = find_parents_in_record($hfamily->getGedcomRecord());
-				$upfamid = $hfamily->getXref();
+				$hparents	= find_parents_in_record($hfamily->getGedcomRecord());
+				$upfamid	= $hfamily->getXref();
 				break;
-			}
-			echo '<div id="husb_parents">';
-				$husb_father = KT_Person::getInstance($hparents['HUSB']);
-				$husb_mother = KT_Person::getInstance($hparents['WIFE']);
+			} ?>
+			<div class="cell medium-4 medium-offset-1" id="husb_parents">
+				<div class="grid-x grid-margin-x">
+					<?php
+					$husb_father = KT_Person::getInstance($hparents['HUSB']);
+					$husb_mother = KT_Person::getInstance($hparents['WIFE']);
 
-				if (!empty($upfamid)) {
-					echo '<p>', print_url_arrow($upfamid, '?famid='. $upfamid. '&amp;ged='. KT_GEDURL, $upfamid, 2), '</p>';
-				}
-				// husbants's father
-				if ($hparents && !empty($husb_father)) {
-					echo '<div class="fam_parent">';
-						print_pedigree_person(KT_Person::getInstance($hparents['HUSB']), 3, 4, $personcount);
-					echo '</div>';
-				} else {
-					echo '<div class="fam_parent">
+					if (!empty($upfamid)) { ?>
+						<div class="cell text-center">
+							<p><?php echo print_url_arrow($upfamid, '?famid='. $upfamid. '&amp;ged='. KT_GEDURL, $upfamid, 2); ?></p>
+						</div>
+					<?php }
+					// husbands's father
+					if ($hparents && !empty($husb_father)) { ?>
+						<div class="cell medium-6 fam_parent">
+							<?php print_pedigree_person(KT_Person::getInstance($hparents['HUSB']), 1, 4, $personcount); ?>
+						</div>
+					<?php } else { ?>
+						<div class="cell medium-6 fam_parent">
 						  	<div class="person_box empty_parent">
-						 		<a href="#" onclick="return addnewparentfamily(\'', $husb_mother, '\', \'HUSB\', \'', $upfamid, '\');"><i class="icon-sex_m_15x15"></i><span>', KT_I18N::translate('Add new'), '</span></a>
+						 		<a href="#" onclick="return addnewparentfamily(\'<?php echo $husb_mother; ?>\', \'HUSB\', \'<?php echo $upfamid; ?>\');">
+									<i class="icon-silhouette-M small"></i>
+									<span><?php echo KT_I18N::translate('Add new'); ?></span>
+								</a>
 						  	</div>
-					</div>';
-				}
-				// husband's mother
-				if ($hparents && !empty($husb_mother)) {
-					echo '<div class="fam_parent">';
-						print_pedigree_person($husb_mother, 3, 5, $personcount);
-					echo '</div>';
-				} else {
-					echo '<div class="fam_parent">
+						</div>
+					<?php }
+					// husband's mother
+					if ($hparents && !empty($husb_mother)) { ?>
+						<div class="cell medium-6 fam_parent">
+							<?php print_pedigree_person($husb_mother, 1, 5, $personcount); ?>
+						</div>
+					<?php } else { ?>
+						<div class="cell medium-6 fam_parent">
 						  	<div class="person_box empty_parent">
-						 		<a href="#" onclick="return addnewparentfamily(\'', $husb_father, '\', \'WIFE\', \'', $upfamid, '\');"><i class="icon-sex_f_15x15"></i><span>', KT_I18N::translate('Add new'), '</span></a>
+						 		<a href="#" onclick="return addnewparentfamily(\'<?php echo $husb_father; ?>\', \'WIFE\', \'<?php echo $upfamid; ?>\');">
+									<i class="icon-silhouette-F small"></i>
+									<span><?php echo KT_I18N::translate('Add new'); ?></span>
+								</a>
 						  	</div>
-					</div>';
-				}
-				/* marriage details */
-				echo '<div class="center">';
-					echo '<a href="', $hfamily->getHtmlUrl(), '" class="details1">';
-							$marriage = $hfamily->getMarriage();
+						</div>
+					<?php } ?>
+					<!-- marriage details -->
+					<small class="cell text-center">
+						<a href="<?php echo $hfamily->getHtmlUrl(); ?>">
+							<?php $marriage = $hfamily->getMarriage();
 							if ($marriage->canShow()) {
-							$marriage->print_simple_fact();
-							}
-						echo '</a>';
-				echo '</div>';
-			echo '</div>';
-		} else {
-			echo '<div id="husb_parents">';
-					echo '<p></p>';
-					echo '<div class="fam_parent">
-						  	<div class="person_box empty_parent">
-						 		<a href="#" onclick="return addnewparentfamily(\'', $husb->getXref(), '\', \'HUSB\', \'new\');"><i class="icon-sex_m_15x15"></i><span>', KT_I18N::translate('Add new'), '</span></a>
-						  	</div>
-					</div>';
-					echo '<div class="fam_parent">
-						  	<div class="person_box empty_parent">
-						 		<a href="#" onclick="return addnewparentfamily(\'', $husb->getXref(), '\', \'WIFE\', \'new\');"><i class="icon-sex_f_15x15"></i><span>', KT_I18N::translate('Add new'), '</span></a>
-						  	</div>
-					</div>';
-			echo '</div>';
-		}
+								$marriage->print_simple_fact();
+							} ?>
+						</a>
+					</small>
+				</div>
+			</div>
+		<?php } else { ?>
+			<div class="cell medium-5 medium-offset-1" id="husb_parents">
+				<div class="grid-x">
+					<div class="fam_parent">
+					  	<div class="person_box empty_parent">
+					 		<a href="#" onclick="return addnewparentfamily(\'<?php echo $husb->getXref(); ?>\', \'HUSB\', \'new\');">
+								<i class="icon-silhouette-M small"></i>
+								<span><?php echo KT_I18N::translate('Add new'); ?></span>
+							</a>
+					  	</div>
+					</div>
+					<div class="fam_parent">
+					  	<div class="person_box empty_parent">
+					 		<a href="#" onclick="return addnewparentfamily(\'<?php echo $husb->getXref(); ?>\', \'WIFE\', \'new\');">
+								<i class="icon-silhouette-F small"></i>
+								<span><?php echo KT_I18N::translate('Add new'); ?></span>
+							</a>
+					  	</div>
+					</div>
+				</div>
+			</div>
+		<?php }
 
 		/* wife's parents */
 		$wfams = $wife->getChildFamilies();
 		$wparents = false;
 		$upfamid = "";
 		if ($wfams) {
-				$wparents = false;
-				foreach ($wfams as $wfamily) {
-					$wparents = find_parents_in_record($wfamily->getGedcomRecord());
-					$upfamid = $wfamily->getXref();
-					break;
-				}
-			echo '<div id="wife_parents">';
-				$wife_father = KT_Person::getInstance($wparents['HUSB']);
-				$wife_mother = KT_Person::getInstance($wparents['WIFE']);
+			$wparents = false;
+			foreach ($wfams as $wfamily) {
+				$wparents = find_parents_in_record($wfamily->getGedcomRecord());
+				$upfamid = $wfamily->getXref();
+				break;
+			} ?>
+			<div class="cell medium-4 medium-offset-2" id="husb_parents">
+				<div class="grid-x grid-margin-x">
+					<?php
+					$wife_father = KT_Person::getInstance($wparents['HUSB']);
+					$wife_mother = KT_Person::getInstance($wparents['WIFE']);
 
-				if (!empty($upfamid)) {
-					echo '<p>', print_url_arrow($upfamid, '?famid='. $upfamid. '&amp;ged='. KT_GEDURL, $upfamid, 2), '</p>';
-				}
-				// wife's father
-				if ($wparents && !empty($wife_father)) {
-					echo '<div class="fam_parent">';
-						print_pedigree_person(KT_Person::getInstance($wparents['HUSB']), 3, 4, $personcount);
-					echo '</div>';
-				} else {
-					echo '<div class="fam_parent">
+					if (!empty($upfamid)) { ?>
+						<div class="cell text-center">
+							<p><?php echo print_url_arrow($upfamid, '?famid='. $upfamid. '&amp;ged='. KT_GEDURL, $upfamid, 2); ?></p>
+						</div>
+					<?php }
+					// wife's father
+					if ($wparents && !empty($wife_father)) { ?>
+						<div class="cell medium-6 fam_parent">
+							<?php print_pedigree_person(KT_Person::getInstance($wparents['HUSB']), 1, 4, $personcount); ?>
+						</div>
+					<?php } else { ?>
+						<div class="cell medium-6 fam_parent">
 						  	<div class="person_box empty_parent">
-						 		<a href="#" onclick="return addnewparentfamily(\'', $wife_father, '\', \'HUSB\', \'', $upfamid, '\');"><i class="icon-sex_m_15x15"></i><span>', KT_I18N::translate('Add new'), '</span></a>
+						 		<a href="#" onclick="return addnewparentfamily(\'<?php echo $wife_father; ?>\', \'HUSB\', \'<?php echo $upfamid; ?>\');">
+									<i class="icon-silhouette-M small"></i>
+									<span><?php echo KT_I18N::translate('Add new'); ?></span>
+								</a>
 						  	</div>
-					</div>';
-				}
-				// wife's mother
-				if ($wparents && !empty($wife_mother)) {
-					echo '<div class="fam_parent">';
-						print_pedigree_person($wife_mother, 3, 5, $personcount);
-					echo '</div>';
-				} else {
-					echo '<div class="fam_parent">
+						</div>
+					<?php }
+					// wife's mother
+					if ($wparents && !empty($wife_mother)) { ?>
+						<div class="cell medium-6 fam_parent">
+							<?php print_pedigree_person($wife_mother, 1, 5, $personcount); ?>
+						</div>
+					<?php } else { ?>
+						<div class="cell medium-6 fam_parent">
 						  	<div class="person_box empty_parent">
-						 		<a href="#" onclick="return addnewparentfamily(\'', $wife_mother, '\', \'WIFE\', \'', $upfamid, '\');"><i class="icon-sex_f_15x15"></i><span>', KT_I18N::translate('Add new'), '</span></a>
+						 		<a href="#" onclick="return addnewparentfamily(\'<?php echo $wife_mother; ?>\', \'WIFE\', \'<?php echo $upfamid; ?>\');">
+									<i class="icon-silhouette-F small"></i>
+									<span><?php echo KT_I18N::translate('Add new'); ?></span>
+								</a>
 						  	</div>
-					</div>';
-				}
-				/* marriage details */
-				echo '<div class="center">';
-					echo '<a href="', $wfamily->getHtmlUrl(), '" class="details1">';
-							$marriage = $wfamily->getMarriage();
+						</div>
+					<?php } ?>
+					<!-- marriage details -->
+					<small class="cell text-center">
+						<a href="<?php echo $wfamily->getHtmlUrl(); ?>">
+							<?php $marriage = $wfamily->getMarriage();
 							if ($marriage->canShow()) {
+								$marriage->print_simple_fact();
+							} ?>
+						</a>
+					</small>
+				</div>
+			</div>
+		<?php } else { ?>
+			<div class="cell medium-5 medium-offset-1" id="wife_parents">
+				<div class="grid-x">
+					<div class="fam_parent">
+					  	<div class="person_box empty_parent">
+					 		<a href="#" onclick="return addnewparentfamily(\'<?php echo $wife->getXref(); ?>\', \'HUSB\', \'new\');">
+								<i class="icon-silhouette-M small"></i>
+								<span><?php echo KT_I18N::translate('Add new'); ?></span>
+							</a>
+					  	</div>
+					</div>
+					<div class="fam_parent">
+					  	<div class="person_box empty_parent">
+					 		<a href="#" onclick="return addnewparentfamily(\'<?php echo $wife->getXref(); ?>\', \'WIFE\', \'new\');">
+								<i class="icon-silhouette-F small"></i>
+								<span><?php echo KT_I18N::translate('Add new'); ?></span>
+							</a>
+					  	</div>
+					</div>
+				</div>
+			</div>
+		<?php } ?>
+	</div>
+
+	<!-- lines -->
+	<div class="grid-x" id="family_lines">
+		<div class="cell medium-6 medium-offset-3 parents"></div>
+		<div class="cell medium-2 medium-offset-5 self"></div>
+	</div>
+
+	<!-- parents -->
+	<div class="grid-x" id="parents">
+		<div class="cell medium-4 medium-offset-4">
+			<div class="grid-x grid-margin-x">
+				<!-- husband -->
+				<?php if (isset($newparents) && $husb->getXref() != $newparents["HUSB"]) { ?>
+					<div class="cell medium-6 facts_valueblue parent_husb">
+						<?php print_pedigree_person(KT_Person::getInstance($newparents['HUSB']), 1, 2, $personcount); ?>
+					</div>
+				<?php } elseif ($husb->getXref()) { ?>
+					<div class="cell medium-6 parent_husb">
+						<?php print_pedigree_person($husb, 1, 2, $personcount); ?>
+					</div>
+				<?php } else { ?>
+					<div class="cell medium-6 parent_husb">
+						<div class="person_box empty_parent">
+							<a href="#" onclick="return addnewparentfamily(\'\', \'HUSB\', \'<?php echo $controller->record->getXref(); ?>\');">
+								<i class="icon-silhouette-M small"></i>
+								<span><?php echo KT_I18N::translate('Add new'); ?></span>
+							</a>
+						</div>
+					</div>
+				<?php } ?>
+				<!-- wife -->
+				<?php if (isset($newparents) && $wife->getXref() != $newparents["WIFE"]) { ?>
+					<div class="cell medium-6 facts_valueblue parent_wife">
+						<?php print_pedigree_person(KT_Person::getInstance($newparents['WIFE']), 1, 3, $personcount); ?>
+					</div>
+				<?php } elseif ($wife->getXref()) { ?>
+					<div class="cell medium-6 parent_wife">
+						<?php print_pedigree_person($wife, 1, 3, $personcount); ?>
+					</div>
+				<?php } else { ?>
+					<div class="cell medium-6 parent_wife">
+						<div class="person_boxF empty_parent">
+							<a href="#" onclick="return addnewparentfamily(\'\', \'WIFE\', \'<?php echo $controller->record->getXref(); ?>\');">
+								<i class="icon-silhouette-F small"></i>
+								<span><?php echo KT_I18N::translate('Add new'); ?></span>
+							</a>
+						</div>
+					</div>
+				<?php } ?>
+				<!-- marriage details -->
+				<small class="cell text-center" id="marriage_parents">
+					<a href="<?php echo $family->getHtmlUrl(); ?>">
+						<?php $marriage = $family->getMarriage();
+						if ($marriage->canShow()) {
 							$marriage->print_simple_fact();
-							}
-						echo '</a>';
-				echo '</div>';
-			echo '</div>';
-		} else {
-			echo '<div id="wife_parents">';
-					echo '<p></p>';
-					echo '<div class="fam_parent">
-						  	<div class="person_box empty_parent">
-						 		<a href="#" onclick="return addnewparentfamily(\'', $wife->getXref(), '\', \'HUSB\', \'new\');"><i class="icon-sex_m_15x15"></i><span>', KT_I18N::translate('Add new'), '</span></a>
-						  	</div>
-					</div>';
-					echo '<div class="fam_parent">
-						  	<div class="person_box empty_parent">
-						 		<a href="#" onclick="return addnewparentfamily(\'', $wife->getXref(), '\', \'WIFE\', \'new\');"><i class="icon-sex_f_15x15"></i><span>', KT_I18N::translate('Add new'), '</span></a>
-						  	</div>
-					</div>';
-			echo '</div>';
-		}
-	echo '</div>';
-
-	/* parents */
-	echo '<div id="family_lines1"></div>';
-	echo '<div id="parents">';
-		/* husband */
-		if (isset($newparents) && $husb->getXref() != $newparents["HUSB"]) {
-			echo '<div class="facts_valueblue parent_husb">
-				<div id="family_lines2"></div>';
-			print_pedigree_person(KT_Person::getInstance($newparents['HUSB']), 3, 2, $personcount);
-		} elseif ($husb->getXref()) {
-			echo '<div class="parent_husb">
-				<div id="family_lines2"></div>';
-			print_pedigree_person($husb, 3, 2, $personcount);
-		} else {
-			echo '<div class="parent_husb">
-				<div id="family_lines2"></div>
-				<div class="person_box empty_parent">
-					<a href="#" onclick="return addnewparentfamily(\'\', \'HUSB\', \'', $controller->record->getXref(), '\');"><i class="icon-sex_m_15x15"></i><span>', KT_I18N::translate('Add new'), '</span></a>
-				</div>';
-		}
-		echo '</div>';
-		/* wife */
-		if (isset($newparents) && $wife->getXref() != $newparents["WIFE"]) {
-			echo '<div class="facts_valueblue parent_wife">
-				<div id="family_lines2"></div>';
-
-			print_pedigree_person(KT_Person::getInstance($newparents['WIFE']), 3, 3, $personcount);
-		} elseif ($wife->getXref()) {
-			echo '<div class="parent_wife">
-				<div id="family_lines2"></div>';
-			print_pedigree_person($wife, 3, 3, $personcount);
-		} else  {
-			echo '<div class="parent_wife">
-				<div id="family_lines2"></div>
-				<div class="person_boxF empty_parent">
-					<a href="#" onclick="return addnewparentfamily(\'\', \'WIFE\', \'', $controller->record->getXref(), '\');"><i class="icon-sex_f_15x15"></i><span>', KT_I18N::translate('Add new'), '</span></a>';
-		}
-		echo '</div>';
-		/* marriage details */
-		echo '<div id="marriage_parents">
-				<a href="', $family->getHtmlUrl(), '" class="details1">';
-					$marriage = $family->getMarriage();
-					if ($marriage->canShow()) {
-					$marriage->print_simple_fact();
-					}
-				echo '</a>';
-		echo '</div>
-	</div>';
+						} ?>
+					</a>
+				</small>
+			</div>
+		</div>
+	</div>
+	<?php
 }
 
 /*
  * display children on family.php
 */
 function print_children($famid, $childid = "", $personcount="1") {
-	global $bwidth, $bheight, $pbwidth, $pbheight, $cbheight, $cbwidth,$KT_IMAGES, $GEDCOM;
+	global $bwidth, $bheight, $pbwidth, $pbheight, $cbheight, $cbwidth, $GEDCOM, $iconStyle;
 
-	$family=KT_Family::getInstance($famid);
-	$children=array();
+	$family		= KT_Family::getInstance($famid);
+	$children	= array();
 	foreach ($family->getChildren() as $child) {
-		$children[]=$child->getXref();
+		$children[] = $child->getXref();
 	}
-	$numchil=$family->getNumberOfChildren();
-	echo '<div>
-			<div class="subheaders">';
-				if ($numchil==0) {
-					echo KT_I18N::translate('No children');
-				} else {
-					echo /* I18N: This is a title, so needs suitable capitalisation */ KT_I18N::plural('%d Child', '%d Children', $numchil, $numchil);
-				}
-			echo '</div>';
-		if (KT_USER_CAN_EDIT) {
-			echo '<div>
-				<a href="#" onclick="return addnewchild(\'',$famid,'\');">' . KT_I18N::translate('Add a child to this family') . '</a>
-				<a class="icon-sex_m_15x15" href="#" onclick="return addnewchild(\'', $famid, '\',\'M\');" title="',KT_I18N::translate('son'), '"></a>
-				<a class="icon-sex_f_15x15" href="#" onclick="return addnewchild(\'', $famid, '\',\'F\');" title="',KT_I18N::translate('daughter'), '"></a>
-			</div>';
-		}
-	echo '</div>';
+	$numchil = $family->getNumberOfChildren(); ?>
 
-	$newchildren = array();
-	$oldchildren = array();
-	if (KT_USER_CAN_EDIT || KT_USER_CAN_ACCEPT) {
-		$newrec = find_gedcom_record($famid, KT_GED_ID, true);
-		$ct = preg_match_all("/1 CHIL @(.*)@/", $newrec, $match, PREG_SET_ORDER);
-		if ($ct > 0) {
-			$oldchil = array();
-			for ($i = 0; $i < $ct; $i++) {
-				if (!in_array($match[$i][1], $children)) $newchildren[] = $match[$i][1];
-				else $oldchil[] = $match[$i][1];
-			}
-			foreach ($children as $indexval => $chil) {
-				if (!in_array($chil, $oldchil)) $oldchildren[] = $chil;
-			}
-			//-- if there are no old or new children then the children were reordered
-			if ((count($newchildren)==0) && (count($oldchildren)==0)) {
-				$children = array();
+	<div class="grid-x grid-margin-x" id="children">
+		<div class="cell text-center">
+			<?php if ($numchil==0) { ?>
+				<span><?php echo KT_I18N::translate('No children'); ?></span>
+			<?php } else { ?>
+				<span><?php echo /* I18N: This is a title, so needs suitable capitalisation */ KT_I18N::plural('%d Child', '%d Children', $numchil, $numchil); ?></span>
+			<?php } ?>
+		</div>
+		<?php if (KT_USER_CAN_EDIT) { ?>
+			<div class="cell text-center">
+				<a href="#" onclick="return addnewchild(\'<?php echo $famid; ?>'\');">
+					<?php echo KT_I18N::translate('Add a child to this family'); ?>
+				</a>
+				<a href="#" onclick="return addnewchild(\'<?php echo $famid; ?>\',\'M\');" title="<?php echo KT_I18N::translate('son'); ?>">
+					<i class="<?php echo $iconStyle; ?> fa-male"></i>
+				</a>
+				<a href="#" onclick="return addnewchild(\'<?php echo $famid; ?>\',\'F\');" title="<?php echo KT_I18N::translate('daughter'); ?>">
+					<i class="<?php echo $iconStyle; ?> fa-female"></i>
+				</a>
+			</div>
+		<?php } ?>
+
+		<?php
+		$newchildren = array();
+		$oldchildren = array();
+		if (KT_USER_CAN_EDIT || KT_USER_CAN_ACCEPT) {
+			$newrec = find_gedcom_record($famid, KT_GED_ID, true);
+			$ct = preg_match_all("/1 CHIL @(.*)@/", $newrec, $match, PREG_SET_ORDER);
+			if ($ct > 0) {
+				$oldchil = array();
 				for ($i = 0; $i < $ct; $i++) {
-					$children[] = $match[$i][1];
+					if (!in_array($match[$i][1], $children)) $newchildren[] = $match[$i][1];
+					else $oldchil[] = $match[$i][1];
+				}
+				foreach ($children as $indexval => $chil) {
+					if (!in_array($chil, $oldchil)) $oldchildren[] = $chil;
+				}
+				//-- if there are no old or new children then the children were reordered
+				if ((count($newchildren)==0) && (count($oldchildren)==0)) {
+					$children = array();
+					for ($i = 0; $i < $ct; $i++) {
+						$children[] = $match[$i][1];
+					}
 				}
 			}
 		}
-	}
-	if ((count($children) > 0) || (count($newchildren) > 0) || (count($oldchildren) > 0)) {
-			foreach ($children as $indexval => $chil) {
-				if (!in_array($chil, $oldchildren)) {
-					echo '<div class="fam_child">';
-						print_pedigree_person(KT_Person::getInstance($chil), 3, 8, $personcount);
-					echo '</div>';
-					$personcount++;
-				}
-			}
-			foreach ($newchildren as $indexval => $chil) {
+		if ((count($children) > 0) || (count($newchildren) > 0) || (count($oldchildren) > 0)) { ?>
+			<div class="grid-container fluid">
+				<div class="grid-x grid-margin-x grid-margin-y align-center">
+					<?php foreach ($children as $indexval => $chil) {
+						if (!in_array($chil, $oldchildren)) { ?>
+									<?php print_pedigree_person(KT_Person::getInstance($chil), 3, 8, $personcount);
+									$personcount++; ?>
+						<?php }
+					}
+					foreach ($newchildren as $indexval => $chil) { ?>
+							<div class="cell medium-2 fam_child">
+								<?php print_pedigree_person(KT_Person::getInstance($chil), 3, 0, $personcount);
+								$personcount++; ?>
+							</div>
+					<?php }
+					foreach ($oldchildren as $indexval => $chil) { ?>
+							<div class="cell medium-2 fam_child">
+								<?php print_pedigree_person(KT_Person::getInstance($chil), 3, 0, $personcount);
+								$personcount++; ?>
+							</div>
+					<?php } ?>
+				</div>
+			</div>
+		<!-- message 'no children' -->
+		<?php } else {
+			if (preg_match('/\n1 NCHI (\d+)/', $family->getGedcomRecord(), $match) && $match[1]==0) {
+				echo '<div><i class="icon-childless"></i> '.KT_I18N::translate('This family remained childless').'</div>';
 				echo '<div class="fam_child">';
-					print_pedigree_person(KT_Person::getInstance($chil), 3, 0, $personcount);
+					print_pedigree_person(KT_Person::getInstance($childid), 3, 0, $personcount);
 					$personcount++;
 				echo '</div>';
 			}
-			foreach ($oldchildren as $indexval => $chil) {
-				echo '<div class="fam_child">';
-					print_pedigree_person(KT_Person::getInstance($chil), 3, 0, $personcount);
-					$personcount++;
-				echo '</div>';
-			}
-	// message 'no children'
-	} else {
-		if (preg_match('/\n1 NCHI (\d+)/', $family->getGedcomRecord(), $match) && $match[1]==0) {
-			echo '<div><i class="icon-childless"></i> '.KT_I18N::translate('This family remained childless').'</div>';
-			echo '<div class="fam_child">';
-				print_pedigree_person(KT_Person::getInstance($childid), 3, 0, $personcount);
-				$personcount++;
-			echo '</div>';
-		}
-	}
+		} ?>
+	</div>
+	<?php
 }

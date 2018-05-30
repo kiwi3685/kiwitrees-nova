@@ -26,21 +26,45 @@ if (!defined('KT_KIWITREES')) {
 	exit;
 }
 
-echo '<div id="out-', $boxID ,'" ', $outBoxAdd, '>
-		<div class="compact_view">', $thumbnail, '</div>
-		<div class="name">
-			<span id="namedef-',$boxID, '" class="name',$style,' ',$classfacts,'">', $shortname, '</span>
+if ($missing) { ?>
+	<div class="grid-x vertical_box_template <?php echo $isF; ?> text-center">
+		<div class="card">
+			<div class="card-divider show-for-medium">
+				<?php echo $thumbnail; ?>
+			</div>
+			<div class="card-section">
+				<p>
+					<a href="individual.php?pid=<?php echo $pid; ?>&amp;ged=<?php echo rawurlencode($GEDCOM); ?>" title="<?php echo strip_tags($name.$addname); ?>">
+						<?php echo $shortname; ?>
+					</a>
+				<p>
+				<p><?php echo $person->getLifeSpan(); ?></p>
+				<p><?php echo $birthplace; ?></p>
+			</div>
 		</div>
-		<div style="height:20px; text-align:center;">', $person->getLifeSpan(), '</div>';
-	//	details for zoom view
-	echo '<div id="fontdef-',$boxID,'" class="details',$style,'">
-			<div class="exp_thumb">', $thumbnail, '</div>
-			<a href="individual.php?pid=', $pid, '&amp;ged=', rawurlencode($GEDCOM), '">
-				<div id="namedef-',$boxID, '" class="name',$style,' ',$classfacts,'">', $name.$addname, '</div>
+		<button class="button clear tiny show-for-medium" type="button" data-toggle="<?php echo $dataToggle; ?>">
+			<i class="<?php echo $iconStyle; ?> fa-search-plus fa-lg"></i>
+		</button>
+	</div>
+
+	<!-- details for details view -->
+	<div class="dropdown-pane compact_box_template card shadow" data-position="bottom" data-alignment="left" id="<?php echo $dataToggle; ?>" data-dropdown data-auto-focus="true" data-v-offset=10 data-h-offset=-216 data-closable data-close-on-click="true" >
+		<div class="card-divider text-center">
+			<a href="individual.php?pid=<?php echo $pid; ?>&amp;ged=<?php echo rawurlencode($GEDCOM); ?>" class="h6">
+				<span><?php echo $name . $addname; ?></span>
 			</a>
-			<div class="name',$style,'">',$genderImage,'</div>
-			<div>',$BirthDeath, '</div>
-			<div class="icon">', $icons, '</div>
-		</div>';
-	// end of zoom view
-echo '</div>';
+		</div>
+		<div class="card-section">
+			<div><?php echo $detailedView; ?></div>
+			<?php echo $personlinks; ?>
+		</div>
+		<button class="close-button" aria-label="<?php echo KT_I18N::translate('Close details popup'); ?>" type="button" data-close>
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<!-- end of zoom view -->
+<?php } else { ?> <!-- empty box for missing individual -->
+	<div class="grid-x compact_box_template U">
+		<div class="cell medium-2 show-for-medium"></div>
+	</div>
+<?php }

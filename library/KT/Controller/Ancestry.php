@@ -103,7 +103,7 @@ class KT_Controller_Ancestry extends KT_Controller_Chart {
 		<li>
 			<div class="grid-x grid-padding-x">
 			<div class="cell shrink ancestry-details-1">
-				<?php print_pedigree_person($person, 3); ?>
+				<?php print_pedigree_person($person, 1); ?>
 			</div>
 			<div class="auto cell medium-6 ancestry-details-2">
 				<?php if ($sosa > 1) {
