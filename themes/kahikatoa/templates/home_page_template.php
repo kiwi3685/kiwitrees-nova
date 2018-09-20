@@ -38,7 +38,10 @@ if (!defined('KT_KIWITREES')) {
 				$module->getBlock($block_id);
 			} else {
 				// Load the block asynchronously ?>
-				<div class="cell align-center loading-image"><i class="' . $iconStyle . ' fa-spinner fa-spin fa-3x"></i><span class="sr-only">Loading...</span></div>
+				<div class="cell align-center loading-image">
+					<i class="<?php echo $iconStyle; ?> fa-spinner fa-spin fa-3x"></i>
+					<span class="sr-only">Loading...</span>
+				</div>
 				<div id="block_<?php echo $block_id; ?>"></div>
 				<?php $controller->addInlineJavascript(
 					'jQuery("#block_' . $block_id . '").load("index.php?action=ajax&block_id=' . $block_id . '");'
@@ -57,7 +60,10 @@ if (!defined('KT_KIWITREES')) {
 				$module->getBlock($block_id);
 			} else {
 				// Load the block asynchronously ?>
-				<div class="cell align-center loading-image"><i class="' . $iconStyle . ' fa-spinner fa-spin fa-3x"></i><span class="sr-only">Loading...</span></div>
+				<div class="cell align-center loading-image">
+					<i class="<?php echo $iconStyle; ?> fa-spinner fa-spin fa-3x"></i>
+					<span class="sr-only">Loading...</span>
+				</div>
 				<div id="block_<?php echo $block_id; ?>"></div>
 				<?php $controller->addInlineJavascript(
 					'jQuery("#block_' . $block_id . '").load("index.php?action=ajax&block_id=' . $block_id . '");'
