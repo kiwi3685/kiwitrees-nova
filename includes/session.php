@@ -59,7 +59,7 @@ if (KT_USE_CDN) {
 }
 
 // other js
-define('KT_FONTAWESOME_JS',					KT_STATIC_URL . 'library/fontawesome/fontawesome-all.min.js'); // fontawesome-pro-5.0.13 Updated 11-05-2018 Pro icons only available via CDN on subscription
+define('KT_FONTAWESOME_JS',					KT_STATIC_URL . 'library/fontawesome/all.min.js');  // fontawesome-pro-5.0.13 Updated 11-05-2018 Pro icons only available via CDN on subscription
 define('KT_JQUERY_COLORBOX_URL',			KT_STATIC_URL . 'js/jquery.colorbox-min.js');	    // 1.6.1	Updated 18-06-2015
 define('KT_JQUERY_JEDITABLE_URL',			KT_STATIC_URL . 'js/jquery.jeditable.js');		    // 1.7.3
 define('KT_JQUERY_WHEELZOOM_URL',			KT_STATIC_URL . 'js/jquery.wheelzoom.js');		    // 2.0.0
@@ -169,7 +169,7 @@ if (version_compare(PHP_VERSION, '6.0', '<')) {
 		// Disabling them on PHP5.3 will cause a strict-warning, so ignore errors.
 		@set_magic_quotes_runtime(false);
 	}
-	// magic_quotes_gpc can’t be disabled at run-time, so clean them up as necessary.
+	// magic_quotes_gpc canï¿½t be disabled at run-time, so clean them up as necessary.
 	if (get_magic_quotes_gpc() || ini_get('magic_quotes_sybase') && strtolower(ini_get('magic_quotes_sybase')) != 'off') {
 		$in = array(&$_GET, &$_POST, &$_REQUEST, &$_COOKIE);
 		foreach ($in as $k => $v) {
@@ -225,7 +225,7 @@ if (!empty($_SERVER['SCRIPT_NAME'])) {
 	define('KT_SCRIPT_PATH', '/');
 }
 
-// Microsoft IIS servers don’t set REQUEST_URI, so generate it for them.
+// Microsoft IIS servers donï¿½t set REQUEST_URI, so generate it for them.
 if (!isset($_SERVER['REQUEST_URI']))  {
 	$_SERVER['REQUEST_URI'] = substr($_SERVER['PHP_SELF'], 1);
 	if (isset($_SERVER['QUERY_STRING'])) {
@@ -335,7 +335,7 @@ case 'deny':
 	exit;
 case 'robot':
 case 'unknown':
-	// Search engines don’t send cookies, and so create a new session with every visit.
+	// Search engines donï¿½t send cookies, and so create a new session with every visit.
 	// Make sure they always use the same one
 	Zend_Session::setId('search-engine-'.str_replace('.', '-', $KT_REQUEST->getClientIp()));
 	$SEARCH_SPIDER = true;
@@ -407,7 +407,7 @@ $cfg = array(
 	'cookie_httponly' => true,
 );
 
-// Search engines don’t send cookies, and so create a new session with every visit.
+// Search engines donï¿½t send cookies, and so create a new session with every visit.
 // Make sure they always use the same one
 if ($SEARCH_SPIDER) {
 	Zend_Session::setId('search-engine-'.str_replace('.', '-', $KT_REQUEST->getClientIp()));
@@ -415,9 +415,9 @@ if ($SEARCH_SPIDER) {
 
 Zend_Session::start($cfg);
 
-// Register a session “namespace” to store session data.  This is better than
+// Register a session ï¿½namespaceï¿½ to store session data.  This is better than
 // using $_SESSION, as we can avoid clashes with other modules or applications,
-// and problems with servers that have enabled “register_globals”.
+// and problems with servers that have enabled ï¿½register_globalsï¿½.
 $KT_SESSION = new Zend_Session_Namespace('KIWITREES');
 
 if (!$SEARCH_SPIDER && !$KT_SESSION->initiated) {
@@ -524,7 +524,7 @@ if (KT_USER_ID) {
 
 define('KT_CLIENT_JD', 2440588 + (int)(KT_CLIENT_TIMESTAMP/86400));
 
-// Application configuration data - things that aren’t (yet?) user-editable
+// Application configuration data - things that arenï¿½t (yet?) user-editable
 require KT_ROOT . 'includes/config_data.php';
 
 //-- load the privacy functions
@@ -567,7 +567,7 @@ if (KT_USER_ID) {
 
 // Set the theme
 if (substr(KT_SCRIPT_NAME, 0, 5) == 'admin' || KT_SCRIPT_NAME == 'module.php' && substr(safe_GET('mod_action'), 0, 5) == 'admin') {
-	// Administration scripts begin with “admin” and use a special administration theme
+	// Administration scripts begin with ï¿½adminï¿½ and use a special administration theme
 	define('KT_THEME_DIR', KT_THEMES_DIR.'_administration/');
 } else {
 	// Requested change of theme?

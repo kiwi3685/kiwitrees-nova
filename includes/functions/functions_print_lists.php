@@ -2244,7 +2244,7 @@ function print_events_table($startjd, $endjd, $events='BIRT MARR DEAT', $only_li
 		->addExternalJavascript(KT_DATATABLES_JS)
 		->addInlineJavascript('
 			jQuery("#' . $table_id . '").dataTable({
-				"sDom": \'t\',
+				dom: \'t\',
 				' . KT_I18N::datatablesI18N() . ',
 				autoWidth: false,
 				filter: false,
