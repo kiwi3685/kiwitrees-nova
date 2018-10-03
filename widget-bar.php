@@ -26,17 +26,25 @@
  	exit;
  }
 
- global $controller;
+ global $controller, $iconStyle;
 
  $controller->addInlineJavascript('
  	// Set the first widget open
-//	var firstAccordion = jQuery("#widget-bar li:first").attr("id");
-//	jQuery("#widget-bar").foundation("down", jQuery(".accordion-content." + firstAccordion));
+	//	var firstAccordion = jQuery("#widget-bar li:first").attr("id");
+	//	jQuery("#widget-bar").foundation("down", jQuery(".accordion-content." + firstAccordion));
  ');
 
 //get the widgets list
 $widgets = KT_Module::getActiveWidgets();
 ?>
+<!-- Close button -->
+<button class="close-button" aria-label="Close menu" type="button" data-close>
+  <span aria-hidden="true">
+	  <i class="<?php echo $iconStyle; ?> fa-window-close"></i>
+  </span>
+  <?php echo KT_I18N::translate('Close'); ?>
+</button>
+
 <ul class="accordion" id="widget-bar" data-accordion  data-multi-expand="true">
 	<?php foreach ($widgets as $module_name => $module) {
 		$class_name = $module_name . '_KT_Module';

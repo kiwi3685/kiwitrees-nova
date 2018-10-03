@@ -3514,7 +3514,9 @@ table {
   width: 100%;
   margin-bottom: 1rem;
   border-radius: 0; }
-  thead, tbody, tfoot {
+  thead,
+  tbody,
+  tfoot {
     border: 1px solid #e5e5e5;
     background-color: #fefefe; }
   caption {
@@ -3526,13 +3528,18 @@ table {
   tfoot {
     background: #e5e5e5;
     color: #331919; }
-  thead tr, tfoot tr {
+  thead tr,
+  tfoot tr {
     background: transparent; }
-  thead th, thead td, tfoot th, tfoot td {
+  thead th,
+  thead td,
+  tfoot th,
+  tfoot td {
     padding: 0.5rem 0.625rem 0.625rem;
     font-weight: 900;
     text-align: left; }
-  tbody th, tbody td {
+  tbody th,
+  tbody td {
     padding: 0.5rem 0.625rem 0.625rem; }
   tbody tr:nth-child(even) {
     border-bottom: 0;
@@ -8126,26 +8133,30 @@ button.widget {
   -webkit-box-shadow: 0.25rem 0.25rem 0.5rem 0 #8a8a8a;
   box-shadow: 0.25rem 0.25rem 0.5rem 0 #8a8a8a;
   padding: 0.5rem; }
-  #widgetBar .button {
+  #widgetBar .close-button {
+    font-size: 1rem;
+    height: 2rem;
     position: fixed;
-    top: 0;
-    right: 1rem; }
-  #widgetBar #widget-bar.accordion {
-    list-style-type: none; }
-    #widgetBar #widget-bar.accordion .accordion-item .accordion-title {
-      background-color: #cacaca;
-      font-weight: 600;
-      margin-bottom: 0.125rem;
-      padding: 1rem; }
-      #widgetBar #widget-bar.accordion .accordion-item .accordion-title svg {
-        position: absolute;
-        right: 1rem;
-        margin-top: 0.35rem; }
-    #widgetBar #widget-bar.accordion .widget_quicklinks td {
-      text-align: center;
-      vertical-align: top; }
-      #widgetBar #widget-bar.accordion .widget_quicklinks td svg {
-        font-size: 1.5rem; }
+    right: 1rem;
+    top: 0.25rem; }
+  #widgetBar #widget-bar {
+    margin-top: 2rem; }
+    #widgetBar #widget-bar.accordion {
+      list-style-type: none; }
+      #widgetBar #widget-bar.accordion .accordion-item .accordion-title {
+        background-color: #cacaca;
+        font-weight: 600;
+        margin-bottom: 0.125rem;
+        padding: 1rem; }
+        #widgetBar #widget-bar.accordion .accordion-item .accordion-title svg {
+          position: absolute;
+          right: 1rem;
+          margin-top: 0.35rem; }
+      #widgetBar #widget-bar.accordion .widget_quicklinks td {
+        text-align: center;
+        vertical-align: top; }
+        #widgetBar #widget-bar.accordion .widget_quicklinks td svg {
+          font-size: 1.5rem; }
 
 /* Pages */
 div[id$="-page"]:not(#indi-page) h3 {
@@ -8925,7 +8936,10 @@ table.dataTable thead th {
   table.dataTable thead th .button-group {
     margin-bottom: 0; }
 
-thead th, thead td, tfoot th, tfoot td {
+thead th,
+thead td,
+tfoot th,
+tfoot td {
   padding: 0.25rem 0.625rem; }
 
 thead th .button {

@@ -49,14 +49,6 @@
  		});
 
  		jQuery("textarea").autosize();
-
-		// toggle widget bar icons
-		jQuery(".button.widget").on("click", function () {
-			jQuery(this).find("[data-fa-i2svg]")
-			.toggleClass("fa-arrow-alt-from-left")
-			.toggleClass("fa-arrow-alt-to-left");
-		});
-
  	');
 
  global $ALL_CAPS, $iconStyle;
@@ -106,7 +98,7 @@
 							<?php if ($show_widgetbar) { ?>
 								<li>
 								<button class="button clear widget" type="button" data-toggle="widgetBar">
-									<i class="<?php echo $iconStyle; ?> fa-arrow-alt-from-left fa-2x"></i>
+									<i class="<?php echo $iconStyle; ?> fa-bars fa-2x"></i>
 								</button>
 							</li>
 							<?php } ?>
