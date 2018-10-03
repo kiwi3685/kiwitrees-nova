@@ -25,6 +25,10 @@ if (!defined('KT_KIWITREES')) {
 	header('HTTP/1.0 403 Forbidden');
 	exit;
 }
+
+$controller->addInlineJavascript('
+	jQuery(".loading-image").css("display", "none");
+');
 ?>
 
 <div class="grid-x home-page">
