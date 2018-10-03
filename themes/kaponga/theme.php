@@ -38,7 +38,8 @@ $headerfile = KT_THEME_DIR . 'header.php';
  * @ far	= regular
  * @ fal	 light
  */
-$iconStyle		= 'far';
+$iconStyle	= 'fas'; // fontawesome style set
+//$iconStyle	= 'far';
 
 //-- pedigree chart variables
 $bwidth			= 270;	// width of boxes on pedigree chart
@@ -54,18 +55,18 @@ $shadowoffsetX	= 0;	// shadowOffsetX for joining lines
 $shadowoffsetY	= 0;	// shadowOffsetY for joining lines
 
 // descendancy - relationship chart variables
-$Dbaseyoffset = 20;		// position the entire descendancy tree relative to the top of the page
-$Dbasexoffset = 20;		// position the entire descendancy tree relative to the left of the page
-$Dbxspacing = 5;			// horizontal spacing between boxes
-$Dbyspacing = 20;			// vertical spacing between boxes
-$Dbwidth = 270;			// width of DIV layer boxes
-$Dbheight = 90;			// height of DIV layer boxes
-$Dindent = 15;			// width to indent descendancy boxes
-$Darrowwidth = 30;		// additional width to include for the up arrows
+$Dbaseyoffset	= 20;	// position the entire descendancy tree relative to the top of the page
+$Dbasexoffset	= 20;	// position the entire descendancy tree relative to the left of the page
+$Dbxspacing		= 5;	// horizontal spacing between boxes
+$Dbyspacing		= 20;	// vertical spacing between boxes
+$Dbwidth		= 270;	// width of DIV layer boxes
+$Dbheight		= 90;	// height of DIV layer boxes
+$Dindent		= 15;	// width to indent descendancy boxes
+$Darrowwidth	= 30;	// additional width to include for the up arrows
 
 // -- Dimensions for compact version of chart displays
-$cbwidth = 240;
-$cbheight = 60;
+$cbwidth	 = 240;
+$cbheight	 = 60;
 
 // --  The largest possible area for charts is 300,000 pixels, so the maximum height or width is 1000 pixels
 $KT_STATS_S_CHART_X = 550;

@@ -38,7 +38,7 @@ $headerfile = KT_THEME_DIR . 'header.php';
  * @top			= icon above label
  * @bottom		= icons below label
  */
-$iconStyle	= 'fas'; // fontawesome style set
+//$iconStyle	= 'fas'; // fontawesome style set
 $iconStyle	= 'fal'; // fontawesome style set
 
 //- main icons
@@ -50,7 +50,7 @@ $KT_IMAGES = array(
 	'spacer'         =>KT_THEME_URL.'images/spacer.png',
 	'vline'          =>KT_THEME_URL.'images/vline.png',
 
-	// used in button images and javascript
+	/* used in button images and javascript
 	'add'            =>KT_THEME_URL.'images/add.png',
 	'button_family'  =>KT_THEME_URL.'images/buttons/family.png',
 	'minus'          =>KT_THEME_URL.'images/minus.png',
@@ -62,6 +62,7 @@ $KT_IMAGES = array(
 	'default_image_M'=>KT_THEME_URL.'images/silhouette_male.png',
 	'default_image_F'=>KT_THEME_URL.'images/silhouette_female.png',
 	'default_image_U'=>KT_THEME_URL.'images/silhouette_unknown.png',
+	*/
 );
 
 //-- pedigree chart variables
