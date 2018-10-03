@@ -50,6 +50,13 @@
 
  		jQuery("textarea").autosize();
 
+		// toggle widget bar icons
+		jQuery(".button.widget").on("click", function () {
+			jQuery(this).find("[data-fa-i2svg]")
+			.toggleClass("fa-arrow-alt-from-left")
+			.toggleClass("fa-arrow-alt-to-left");
+		});
+
  	');
 
  global $ALL_CAPS, $iconStyle;
@@ -85,8 +92,15 @@
 	</head>
 	<body>
 		<?php if ($view!='simple') { ?>
+			<?php if ($show_widgetbar) { ?>
+				<div class="widget-bar off-canvas position-left" id="widgetBar" data-off-canvas>
+					<?php include_once 'widget-bar.php'; ?>
+				</div>
+				<div class="cell off-canvas-content" data-off-canvas-content> <!-- closed in footer -->
+			<?php } ?>
+
 			<nav class="grid-x">
-				<div class="top-bar stack-for-small first-top-bar">
+				<div class="top-bar first-top-bar">
 					<div class="top-bar-left">
 						<div class="treetitle text-center medium-text-left"><?php echo KT_TREE_TITLE; ?>
 							<span class="subtitle show-for-large"><?php echo KT_TREE_SUBTITLE; ?></span>
@@ -146,12 +160,6 @@
 
 			$javascript;
 		} ?>
-		<main class="grid-x grid-padding-x grid-padding-y">
-			<!--  add widget bar for all pages except Home, and only for logged in users with role 'visitor' or above -->
-			<?php if ($show_widgetbar) { ?>
-				<div class="dropdown-pane xlarge" data-position="bottom" id="widgetDropdown" data-dropdown data-v-offset="4" data-h-offset="-8">
-					<?php include_once 'widget-bar.php'; ?>
-				</div>
-			<?php } ?>
-			<!-- container for all pages -->
-			<div class="cell">
+
+		<main class="grid-x grid-padding-x">
+			<div class="cell"> <!-- container for all pages -->
