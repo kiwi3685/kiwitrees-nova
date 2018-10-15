@@ -261,7 +261,7 @@ switch (KT_Filter::get('action')) {
 			}
 			// Add extra column for "masquerade" action
 			if ($user_id != KT_USER_ID) {
-				$aData[13]='<div class="' . $iconStyle . ' fa-user-secret" onclick="if (confirm(\''.htmlspecialchars(KT_I18N::translate('Are you sure you want to masquerade as “%s”?', $username)).'\')) { document.location=\''.KT_SCRIPT_NAME.'?action=masquerade_user&username='.htmlspecialchars($username).'\'; }"></div>';
+				$aData[13]='<div class="' . $iconStyle . ' fa-mask" onclick="if (confirm(\''.htmlspecialchars(KT_I18N::translate('Are you sure you want to masquerade as “%s”?', $username)).'\')) { document.location=\''.KT_SCRIPT_NAME.'?action=masquerade_user&username='.htmlspecialchars($username).'\'; }"></div>';
 			} else {
 				// Do not masquerade as ourself!
 				$aData[13]='';
