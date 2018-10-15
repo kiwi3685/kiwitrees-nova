@@ -586,7 +586,7 @@ function print_note_record($text, $nlevel, $nrec, $textOnly = false) {
 						</span>
 						<span data-toggle="' . $element_id . ' ' . $element_id . '-alt">
 							<span id="' . $element_id . '-alt" class="first-line" data-toggler=".is-shown">' . $first_line . '</span>
-							<i class="' . $iconStyle . ' fa-expand-alt"></i>
+							<i class="' . $iconStyle . ' fa-arrows-alt-v" data-fa-transform="rotate-45" ></i>
 						</span>
 						<div id="' . $element_id . '" class="callout secondary expandable" data-toggler=".is-shown">
 							' . $html . '
@@ -604,7 +604,7 @@ function print_note_record($text, $nlevel, $nrec, $textOnly = false) {
 						<span id="' . $element_id . '-alt">
 							<a data-open="' . $element_id . '">
 								' . $revealText . '
-								<i class="' . $iconStyle . ' fa-expand-arrows-alt"></i>
+								<i class="' . $iconStyle . ' fa-arrows-alt-v" data-fa-transform="rotate-45" ></i>
 							</a>
 						</span>
 						<div class="reveal" id="' . $element_id . '" data-reveal data-overlay="false">
