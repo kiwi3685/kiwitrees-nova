@@ -159,8 +159,8 @@ class KT_Media extends KT_GedcomRecord {
 						}
 						if ($main_image) {
 							// How big should the thumbnail be?
-							$width  = $THUMBNAIL_WIDTH;
-							$height = round($imgsize[1] * ($width/$imgsize[0]));
+							$width  	 = $THUMBNAIL_WIDTH;
+							$height 	 = round($imgsize[1] * ($width/$imgsize[0]));
 							$thumb_image = @imagecreatetruecolor($width, $height);
 							// Create a transparent background, instead of the default black one
 							@imagesavealpha($thumb_image, true);
