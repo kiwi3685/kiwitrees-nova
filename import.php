@@ -46,7 +46,7 @@ ignore_user_abort(true);
 KT_DB::exec("START TRANSACTION");
 
 // Only allow one process to import each gedcom at a time
-KT_DB::prepare("SELECT * FROM `##gedcom_chunk` WHERE gedcom_id=? FOR UPDATE")->execute(array($gedcom_id));
+KT_DB::prepare("SELECT imported FROM `##gedcom_chunk` WHERE gedcom_id=? FOR UPDATE")->execute(array($gedcom_id));
 
 // What is the current import status?
 $row = KT_DB::prepare(
