@@ -1,5 +1,9 @@
 @charset "UTF-8";
 @import url("https://fonts.googleapis.com/css?family=Taviraj");
+.lead {
+  font-weight: 600;
+  margin-top: 0.25rem; }
+
 .accordion-title > a {
   font-weight: 600; }
 
@@ -725,7 +729,7 @@ kbd {
   color: #8a8a8a; }
 
 .lead {
-  font-size: 125%;
+  font-size: 100%;
   line-height: 1.6; }
 
 .stat {
@@ -8230,18 +8234,6 @@ div[id$="-page"]:not(#indi-page) h3 {
     #indi-page .indiFact td.date span.date + span {
       font-size: 0.875rem;
       margin: auto 0.5rem; }
-  #indi-page .indiFact .subHeader {
-    background-color: #e7e7e7;
-    margin-bottom: 0.125rem;
-    padding: 0.5rem; }
-
-#indi-page .rela {
-  background-color: #eddab6;
-  opacity: 0.65; }
-
-#indi-page .histo {
-  background-color: #eddab6;
-  color: #0193b7; }
 
 #indi-page .elderdate {
   color: #ab3334; }
@@ -8273,6 +8265,19 @@ div[id$="-page"]:not(#indi-page) h3 {
 #indi-page .tabs-panel #tabi_census_content table td {
   font-size: 0.875rem;
   vertical-align: top; }
+
+#indi-page .tabs-panel .subHeader {
+  background-color: #e7e7e7;
+  margin-bottom: 0.125rem;
+  padding: 0.5rem; }
+
+#indi-page .tabs-panel .rela {
+  background-color: #eddab6;
+  opacity: 0.65; }
+
+#indi-page .tabs-panel .histo {
+  background-color: #eddab6;
+  color: #0193b7; }
 
 #family-page ul#famTabs {
   margin-top: 1rem; }

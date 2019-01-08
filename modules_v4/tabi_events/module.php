@@ -82,65 +82,67 @@ class tabi_events_KT_Module extends KT_Module implements KT_Module_IndiTab {
 
 		ob_start();
 			$indifacts = $controller->getIndiFacts();
-			if (count($indifacts) == 0) {
-				echo '<div class="callout alert">', KT_I18N::translate('There are no Facts for this individual.'), '</div>';
-			} ?>
-			<div class="cell tabHeader">
-				<?php if ($SHOW_RELATIVES_EVENTS || file_exists(KT_Site::preference('INDEX_DIRECTORY') . 'histo.' . KT_LOCALE . '.php')) { ?>
-					<div class="grid-x">
-						<?php if ($SHOW_RELATIVES_EVENTS) { ?>
-							<div class="cell medium-2">
-								<input id="checkbox_rela_facts" type="checkbox">
-								<label for="checkbox_rela_facts"><?php echo KT_I18N::translate('Events of close relatives'); ?></label>
-							</div>
-						<?php }
-						if (file_exists(KT_Site::preference('INDEX_DIRECTORY') . 'histo.' . KT_LOCALE . '.php')) { ?>
-							<div class="cell medium-2">
-								<input id="checkbox_histo" type="checkbox">
-								<label for="checkbox_histo"><?php echo KT_I18N::translate('Historical events'); ?></label>
-							</div>
-						<?php } ?>
-					</div>
-				<?php } ?>
-			</div>
-			<div class="cell show-for-medium indiFactHeader">
-				<div class="grid-x grid-padding-x">
-					<div class="cell medium-2 date">
-						<label><?php echo KT_I18N::translate('Date'); ?></label>
-					</div>
-					<div class="cell medium-2 event">
-						<label><?php echo KT_I18N::translate('Event'); ?></label>
-					</div>
-					<div class="cell medium-2 place">
-						<label><?php echo KT_I18N::translate('Place'); ?></label>
-					</div>
-					<div class="cell medium-5 detail">
-						<label><?php echo KT_I18N::translate('Details'); ?></label>
-					</div>
-					<div class="cell medium-1 edit">
-						<label><?php echo KT_I18N::translate('Edit'); ?></label>
+			if (count($indifacts) == 0) { ?>
+				<div class="callout alert">
+					<?php echo KT_I18N::translate('There are no Facts for this individual.'); ?>
+				</div>
+			<?php } else { ?>
+				<div class="cell tabHeader">
+					<?php if ($SHOW_RELATIVES_EVENTS || file_exists(KT_Site::preference('INDEX_DIRECTORY') . 'histo.' . KT_LOCALE . '.php')) { ?>
+						<div class="grid-x">
+							<?php if ($SHOW_RELATIVES_EVENTS) { ?>
+								<div class="cell medium-2">
+									<input id="checkbox_rela_facts" type="checkbox">
+									<label for="checkbox_rela_facts"><?php echo KT_I18N::translate('Events of close relatives'); ?></label>
+								</div>
+							<?php }
+							if (file_exists(KT_Site::preference('INDEX_DIRECTORY') . 'histo.' . KT_LOCALE . '.php')) { ?>
+								<div class="cell medium-2">
+									<input id="checkbox_histo" type="checkbox">
+									<label for="checkbox_histo"><?php echo KT_I18N::translate('Historical events'); ?></label>
+								</div>
+							<?php } ?>
+						</div>
+					<?php } ?>
+				</div>
+				<div class="cell show-for-medium indiFactHeader">
+					<div class="grid-x grid-padding-x">
+						<div class="cell medium-2 date">
+							<label><?php echo KT_I18N::translate('Date'); ?></label>
+						</div>
+						<div class="cell medium-2 event">
+							<label><?php echo KT_I18N::translate('Event'); ?></label>
+						</div>
+						<div class="cell medium-2 place">
+							<label><?php echo KT_I18N::translate('Place'); ?></label>
+						</div>
+						<div class="cell medium-5 detail">
+							<label><?php echo KT_I18N::translate('Details'); ?></label>
+						</div>
+						<div class="cell medium-1 edit">
+							<label><?php echo KT_I18N::translate('Edit'); ?></label>
+						</div>
 					</div>
 				</div>
-			</div>
-			<?php
-			foreach ($indifacts as $fact) {
-				if ($fact->getParentObject() instanceof KT_Family) {
-					// Print all family facts
-					print_timeline($fact, $controller->record);
-				} else {
-					// Individual/reference facts (e.g. CHAN, IDNO, RFN, AFN, REFN, RIN, _UID) can be shown in the sidebar
-					if (!array_key_exists('extra_info', KT_Module::getActiveSidebars()) || !extra_info_KT_Module::showFact($fact)) {
+				<?php
+				foreach ($indifacts as $fact) {
+					if ($fact->getParentObject() instanceof KT_Family) {
+						// Print all family facts
 						print_timeline($fact, $controller->record);
-					}
+					} else {
+						// Individual/reference facts (e.g. CHAN, IDNO, RFN, AFN, REFN, RIN, _UID) can be shown in the sidebar
+						if (!array_key_exists('extra_info', KT_Module::getActiveSidebars()) || !extra_info_KT_Module::showFact($fact)) {
+							print_timeline($fact, $controller->record);
+						}
 
+					}
+				}
+				//-- new fact link
+				if ($controller->record->canEdit()) {
+					print_add_new_fact($controller->record->getXref(), $indifacts, 'INDI');
 				}
 			}
-			//-- new fact link
-			if ($controller->record->canEdit()) {
-				print_add_new_fact($controller->record->getXref(), $indifacts, 'INDI');
-			} ?>
 
-			<?php
 		return '
 			<div id="' . $this->getName() . '_content" class="grid-x grid-padding-y">' .
 				ob_get_clean() . '
