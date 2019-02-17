@@ -820,7 +820,7 @@ class KT_Controller_Individual extends KT_Controller_GedcomRecord {
 		foreach (KT_Module::getActiveSidebars() as $module) {
 			if ($module->hasSidebarContent()) {
 				// The family navigator should be opened by default
-				if ($module->getName() == 'family_nav') {
+				if ($module->getName() == 'sidebar_family_nav') {
 					$active = ' is-active';
 				} else {
 					$active = '';

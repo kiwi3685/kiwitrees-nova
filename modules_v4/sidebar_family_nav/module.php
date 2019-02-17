@@ -113,8 +113,8 @@ class sidebar_family_nav_KT_Module extends KT_Module implements KT_Module_Sideba
 	private function drawFamily(KT_Family $family, $title) {
 		global $controller;
 		?>
-		<tr>
-			<td class="center" colspan="2">
+		<tr class="famnavTitleContainer">
+			<td class="text-center" colspan="2">
 				<a class="famnav_title" href="<?php echo $family->getHtmlUrl(); ?>">
 					<?php echo $title; ?>
 				</a>
@@ -123,19 +123,19 @@ class sidebar_family_nav_KT_Module extends KT_Module implements KT_Module_Sideba
 		<?php
 		foreach ($family->getSpouses() as $spouse) {
 			$menu = new KT_Menu(getCloseRelationshipName($controller->record, $spouse));
-			$menu->addClass('', 'submenu flyout');
+			$menu->addClass('', 'submenu');
 			$menu->addSubmenu(new KT_Menu($this->getParents($spouse)));
 			?>
 			<tr>
 				<td class="facts_label">
 					<?php echo $menu->getMenu(); ?>
 				</td>
-				<td class="center <?php echo $controller->getPersonStyle($spouse); ?> nam">
+				<td class="text-center <?php echo $controller->getPersonStyle($spouse); ?>">
 					<?php if ($spouse->canDisplayName()): ?>
 						<a class="famnav_link" href="<?php echo $spouse->getHtmlUrl(); ?>">
 							<?php echo $spouse->getFullName(); ?>
 						</a>
-						<div class="font9">
+						<div class="lifeSpan">
 							<?php echo $spouse->getLifeSpan(); ?>
 						</div>
 					<?php else: ?>
@@ -147,19 +147,19 @@ class sidebar_family_nav_KT_Module extends KT_Module implements KT_Module_Sideba
 		}
 		foreach ($family->getChildren() as $child) {
 			$menu = new KT_Menu(getCloseRelationshipName($controller->record, $child));
-			$menu->addClass('', 'submenu flyout');
+			$menu->addClass('', 'submenu');
 			$menu->addSubmenu(new KT_Menu($this->getFamily($child)));
 			?>
 			<tr>
 				<td class="facts_label">
 					<?php echo $menu->getMenu(); ?>
 				</td>
-				<td class="center <?php echo $controller->getPersonStyle($child); ?> nam">
+				<td class="text-center <?php echo $controller->getPersonStyle($child); ?>">
 					<?php if ($child->canDisplayName()): ?>
 					<a class="famnav_link" href="<?php echo $child->getHtmlUrl(); ?>">
 						<?php echo $child->getFullName(); ?>
 					</a>
-					<div class="font9">
+					<div class="lifeSpan">
 						<?php echo $child->getLifeSpan(); ?>
 					</div>
 					<?php else: ?>
@@ -274,7 +274,7 @@ class sidebar_family_nav_KT_Module extends KT_Module implements KT_Module_Sideba
 		$step_parentlinks = '';
 
 		if ($person->canDisplayName() && !$SEARCH_SPIDER) {
-			//-- draw a box for the family flyout
+			//-- draw a box for the family
 			$parentlinks      .= '<div class="flyout4">' . KT_I18N::translate('Parents') . '</div>';
 			$step_parentlinks .= '<div class="flyout4">' . KT_I18N::translate('Parents') . '</div>';
 			$spouselinks      .= '<div class="flyout4">' . KT_I18N::translate('Family' ) . '</div>';

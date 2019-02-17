@@ -8172,6 +8172,19 @@ button.widget {
   font-weight: 700;
   font-size: 0.9rem; }
 
+#sb_family_nav_content .nav_content {
+  font-size: 0.9rem; }
+  #sb_family_nav_content .nav_content .famnavTitleContainer {
+    border: 0.1rem solid;
+    font-size: 0.95rem; }
+  #sb_family_nav_content .nav_content .lifeSpan {
+    font-size: 0.7rem;
+    text-align: center; }
+  #sb_family_nav_content .nav_content .submenu {
+    background-color: #eddab6;
+    font-size: 0.75rem;
+    padding: 0.5rem; }
+
 /* Pages */
 div[id$="-page"]:not(#indi-page) h3 {
   text-align: center; }
