@@ -97,7 +97,7 @@
 						<ul class="dropdown menu" data-dropdown-menu>
 							<?php if ($show_widgetbar) { ?>
 								<li>
-								<button class="button clear widget" type="button" data-toggle="widgetBar">
+								<button class="button clear widget" type="button" data-toggle="widgetBar" title="<?php echo KT_I18N::translate('Widget bar'); ?>">
 									<i class="<?php echo $iconStyle; ?> fa-bars fa-2x"></i>
 								</button>
 							</li>
