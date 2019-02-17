@@ -586,7 +586,7 @@ class research_links_KT_Module extends KT_Module implements KT_Module_Config, KT
 
 	private function getCurrency($plugin) {
 		if ($plugin->getPaySymbol()) {
-			$symbol = ' (' . /* Currency symbol from http://character-code.com/currency-html-codes.php */ KT_I18N::translate('&#36;') . ') ';
+			$symbol = '&nbsp;(<span class="currency">' . /* Currency symbol from http://character-code.com/currency-html-codes.php */ KT_I18N::translate('&#36;') . '</span>)&nbsp;';
 		} else {
 			$symbol = '';
 		}

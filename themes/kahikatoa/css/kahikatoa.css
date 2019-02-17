@@ -8128,7 +8128,7 @@ footer {
   font-size: 1rem;
   font-weight: 600; }
 
-/* Widgets and sidebar */
+/* Widgets */
 .widget-bar.position-left {
   width: 30rem; }
 
@@ -8166,6 +8166,11 @@ button.widget {
         vertical-align: top; }
         #widgetBar #widget-bar.accordion .widget_quicklinks td svg {
           font-size: 1.5rem; }
+
+/* Sidebar content */
+#sb_content_research_links .currency {
+  font-weight: 700;
+  font-size: 0.9rem; }
 
 /* Pages */
 div[id$="-page"]:not(#indi-page) h3 {
