@@ -136,7 +136,7 @@ class widget_html_KT_Module extends KT_Module implements KT_Module_Widget {
 			set_block_setting($widget_id, 'timestamp',      KT_Filter::post('timestamp'));
 			$languages = array();
 			foreach (KT_I18N::used_languages() as $code=>$name) {
-				if (safe_POST_bool('lang_'.$code)) {
+				if (KT_Filter::post_bool('lang_'.$code)) {
 					$languages[] = $code;
 				}
 			}

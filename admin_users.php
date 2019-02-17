@@ -739,7 +739,7 @@ switch (KT_Filter::get('action')) {
 	case 'cleanup2':
 		foreach (get_all_users() as $user_id=>$username) {
 			$var = "del_".str_replace(array(".", "-", " "), array("_", "_", "_"), $username);
-			if (safe_POST($var)=='1') {
+			if (KT_Filter::post($var)=='1') {
 				delete_user($user_id);
 				AddToLog("deleted user ->{$username}<-", 'auth');
 				echo KT_I18N::translate('Deleted user: '); echo $username, "<br>";

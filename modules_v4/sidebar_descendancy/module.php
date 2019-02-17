@@ -26,7 +26,7 @@ if (!defined('KT_KIWITREES')) {
 	exit;
 }
 
-class descendancy_KT_Module extends KT_Module implements KT_Module_Sidebar {
+class sidebar_descendancy_KT_Module extends KT_Module implements KT_Module_Sidebar {
 	// Extend KT_Module
 	public function getTitle() {
 		return /* I18N: Name of a module/sidebar */

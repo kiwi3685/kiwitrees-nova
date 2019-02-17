@@ -109,57 +109,78 @@ class list_places_KT_Module extends KT_Module implements KT_Module_List {
 				<?php
 				switch ($display) {
 					case 'list':
-						$list_places	= KT_Place::allPlaces(KT_GED_ID);
+						$listPlaceNames = array();
+						$placeName		= array();
+						$maxParts		= 0;
+						$list_places = KT_Place::allPlaces(KT_GED_ID);
 
-						//calculate column requirements, based on 2-cols out of 12 grid per item
-						$numfound		= count($list_places);
-						if ($list_places) {
-							$colItems	= ceil(count($list_places)/6); // max number places displayed per page column
-							$columns	= array_chunk($list_places, $colItems); // arrays for each column
+						foreach ($list_places as $n=>$list_place) {
+							$placeName	= explode(', ', $list_place->getReverseName());
+							$countParts	= count($placeName);
+							if ($countParts > $maxParts) {
+								$maxParts = $countParts;
+							}
+							$listPlaceNames[]	= $placeName;
+						}
+
+						$controller->addExternalJavascript(KT_DATATABLES_JS);
+						if (KT_USER_CAN_EDIT) {
+							$buttons = 'B';
 						} else {
-							$columns	= array();
+							$buttons = '';
 						}
-						$numColumns		= count($columns);
-						$offset			= (12 - ($numColumns * 2)) / 2;
-						if ($offset % 2 == 1) $offset ++; // If odd, add one to make even
+						$controller->addInlineJavascript('
+							jQuery("#placeListTable").dataTable({
+								dom: \'<"top"' . $buttons . 'lp<"clear">irf>t<"bottom"pl>\',
+								' . KT_I18N::datatablesI18N() . ',
+								buttons: [{extend: "csv"}],
+								jQueryUI: true,
+								autoWidth: false,
+								displayLength: 20,
+								pagingType: "full_numbers",
+								stateSave: true,
+								stateDuration: -1
+							});
+							jQuery("#placeListContainer").css("visibility", "visible");
+							jQuery(".loading-image").css("display", "none");
+						'); ?>
 
-						//-- if the number of places found is 0 then automatically redirect to search page
-						if ($numfound == 0) {
-							$action='view';
-						}
-						?>
-
-						<h3><?php echo $controller->getPageTitle(); ?></h3>
-						<h5 class="text-center">
-							<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=show&amp;ged=<?php echo KT_GEDURL; ?>&amp;display=hierarchy">
-								<?php echo KT_I18N::translate('Switch to Place hierarchy'); ?>
-							</a>
-						</h5>
-
-						<?php if ($numfound == 0) { ?>
-							<h6><?php echo KT_I18N::translate('No results found.'); ?><h6>
-						<?php } else { ?>
-							<div id="place-list" class="grid-x">
-								<div class="cell large-<?php echo 12 - $offset; ?> large-offset-<?php echo $offset; ?>">
-									<div class="grid-x">
-										<?php foreach ($columns as $list_places) { ?>
-										    <div class="cell medium-2">
-												<ul>
-													<?php foreach ($list_places as $n => $list_place) { ?>
-														<li>
-															<a href="<?php echo $list_place->getURL(); ?>">
-																<?php echo $list_place->getReverseName(); ?>
-															</a>
-														</li>
-													<?php } ?>
-												</ul>
-											</div>
+						<div id="PlaceListContainer-page" class="grid-x grid-padding-x">
+							<div class="cell large-10 large-offset-1">
+								<h3><?php echo $controller->getPageTitle(); ?></h3>
+								<h5 class="text-center">
+									<a href="module.php?mod=<?php echo $this->getName(); ?>&mod_action=show&amp;ged=<?php echo KT_GEDURL; ?>&amp;display=hierarchy">
+										<?php echo KT_I18N::translate('Switch to Place hierarchy'); ?>
+									</a>
+								</h5>
+								<table id="placeListTable">
+									<thead>
+										<tr>
+											<?php for ($i = 0; $i < $maxParts; $i++) { ?>
+												<th><?php echo KT_I18N::translate('Places'); ?>&nbsp;<?php echo $i + 1; ?></th>
+											<?php } ?>
+										</tr>
+									</thead>
+									<tbody>
+										<?php foreach ($list_places as $n=>$list_place) {
+											$placeName	= explode(', ', $list_place->getReverseName());?>
+											<tr>
+												<?php for ($i = 0; $i < $maxParts; $i++) { ?>
+													<td>
+														<?php if ($i < count($placeName)) { ?>
+															<a href="<?php echo $list_place->getURL(); ?>"><?php echo $placeName[$i]; ?></a>
+														<?php } else { ?>
+															&nbsp;
+														<?php }?>
+													</td>
+												<?php } ?>
+											</tr>
 										<?php } ?>
-									</div>
-								</div>
+									</tbody>
+								</table>
 							</div>
-						<?php }
-						break;
+						</div>
+					<?php break;
 					case 'hierarchy':
 						$use_googlemap = array_key_exists('googlemap', KT_Module::getActiveModules()) && get_module_setting('googlemap', 'GM_PLACE_HIERARCHY');
 						if ($use_googlemap) {

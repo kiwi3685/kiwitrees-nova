@@ -145,7 +145,7 @@ function format_indi_table($datalist, $option='') {
 	for ($age = 0; $age <= $max_age; $age ++) {
 		$deat_by_age[$age] = '';
 	}
-	for ($year=1550; $year<2030; $year+=10) {
+	for ($year = 1550; $year < 2030; $year += 10) {
 		$birt_by_decade[$year] = '';
 		$deat_by_decade[$year] = '';
 	}
@@ -153,7 +153,7 @@ function format_indi_table($datalist, $option='') {
 	$html = '
 		<div class="loading-image">&nbsp;</div>
 		<div class="indi-list clearfix">
-			<table id="'. $table_id. '">
+			<table id="' . $table_id . '">
 				<thead>
 					<tr>
 						<th colspan="24">

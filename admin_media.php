@@ -51,11 +51,11 @@ $action     = safe_GET('action');
 ////////////////////////////////////////////////////////////////////////////////
 // POST callback for file deletion
 ////////////////////////////////////////////////////////////////////////////////
-$delete_file = safe_POST('delete', KT_REGEX_UNSAFE);
+$delete_file = KT_Filter::post('delete', KT_REGEX_UNSAFE);
 if ($delete_file) {
 	$controller = new KT_Controller_Ajax;
 	// Only delete valid (i.e. unused) media files
-	$media_folder = safe_POST('media_folder', KT_REGEX_UNSAFE);
+	$media_folder = KT_Filter::post('media_folder', KT_REGEX_UNSAFE);
 	$disk_files = all_disk_files ($media_folder, '', 'include', '');
 	if (in_array($delete_file, $disk_files)) {
 		$tmp = KT_DATA_DIR . $media_folder . $delete_file;

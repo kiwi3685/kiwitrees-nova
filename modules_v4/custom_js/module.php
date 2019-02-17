@@ -67,7 +67,7 @@ class custom_js_KT_Module extends KT_Module implements KT_Module_Config, KT_Modu
 					}
 				');
 
-			$action = safe_POST("action");
+			$action = KT_Filter::post("action");
 
 			if ($action == 'update') {
 				set_module_setting('custom_js', 'CJS_FOOTER',  $_POST['NEW_CJS_FOOTER']);

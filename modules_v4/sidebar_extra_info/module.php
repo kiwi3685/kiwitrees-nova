@@ -26,7 +26,7 @@ if (!defined('KT_KIWITREES')) {
 	exit;
 }
 
-class extra_info_KT_Module extends KT_Module implements KT_Module_Sidebar {
+class sidebar_extra_info_KT_Module extends KT_Module implements KT_Module_Sidebar {
 	// Extend KT_Module
 	public function getTitle() {
 		return /* I18N: Name of a module/sidebar */ KT_I18N::translate('Extra information');

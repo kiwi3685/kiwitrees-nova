@@ -278,12 +278,12 @@ class stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Module_
 				if ($block_id) {
 					KT_DB::prepare(
 						"UPDATE `##block` SET gedcom_id=? WHERE block_id=?"
-					)->execute(array(safe_POST('gedcom_id'), $block_id));
+					)->execute(array(KT_Filter::post('gedcom_id'), $block_id));
 				} else {
 					KT_DB::prepare(
 						"INSERT INTO `##block` (gedcom_id, module_name, block_order) VALUES (?, ?, ?)"
 					)->execute(array(
-						safe_POST('gedcom_id'),
+						KT_Filter::post('gedcom_id'),
 						$this->getName(),
 						0
 					));
@@ -294,11 +294,11 @@ class stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Module_
 					$xref[] = $name;
 				}
 				set_block_setting($block_id, 'xref', implode(',', $xref));
-				set_block_setting($block_id, 'title', safe_POST('title', KT_REGEX_UNSAFE)); // allow html
-				set_block_setting($block_id, 'story_body',  safe_POST('story_body', KT_REGEX_UNSAFE)); // allow html
+				set_block_setting($block_id, 'title', KT_Filter::post('title', KT_REGEX_UNSAFE)); // allow html
+				set_block_setting($block_id, 'story_body',  KT_Filter::post('story_body', KT_REGEX_UNSAFE)); // allow html
 				$languages = array();
 				foreach (KT_I18N::used_languages() as $code => $name) {
-					if (safe_POST_bool('lang_' . $code)) {
+					if (KT_Filter::post_bool('lang_' . $code)) {
 						$languages[] = $code;
 					}
 				}
@@ -474,7 +474,7 @@ class stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Module_
 		}
 
 		foreach ($stories as $this->getName=>$story) {
-			$order = safe_POST('taborder-'. $story->block_id);
+			$order = KT_Filter::post('taborder-'. $story->block_id);
 			if ($order) {
 				KT_DB::prepare(
 					"UPDATE `##block` SET block_order=? WHERE block_id=?"

@@ -77,7 +77,7 @@ require 'includes/functions/functions_edit.php';
 $KT_REQUEST = new Zend_Controller_Request_Http();
 $KT_SESSION = new \stdClass;
 $KT_SESSION->locale = null; // Can't use Zend_Session until we've checked ini_set
-define('KT_LOCALE', KT_I18N::init(safe_POST('lang', '[@a-zA-Z_]+')));
+define('KT_LOCALE', KT_I18N::init(KT_Filter::post('lang', '[@a-zA-Z_]+')));
 
 header('Content-Type: text/html; charset=UTF-8'); ?>
 <!DOCTYPE html>
@@ -928,7 +928,7 @@ try {
 	)->execute();
 
 	// Write the config file.  We already checked that this would work.
-	$config_ini_php=
+	$config_ini_php =
 		'; <'.'?php exit; ?'.'> DO NOT DELETE THIS LINE'      . PHP_EOL.
 		'dbhost="' . addcslashes($_POST['dbhost'], '"') . '"' . PHP_EOL.
 		'dbport="' . addcslashes($_POST['dbport'], '"') . '"' . PHP_EOL.

@@ -89,7 +89,7 @@ class KT_Controller_Search extends KT_Controller_Page {
 		// action comes from $_GET (menus) or $_POST (form submission)
 		$this->action = safe_REQUEST($_REQUEST, 'action', array('advanced', 'general', 'soundex', 'replace'), 'general');
 
-		$topsearch = safe_POST_bool('topsearch');
+		$topsearch = KT_Filter::post_bool('topsearch');
 
 		if ($topsearch) {
 			$this->isPostBack = true;

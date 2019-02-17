@@ -146,9 +146,9 @@ function radio_buttons($name, $values, $selected, $extra='') {
 }
 
 // Print an edit control for a Yes/No field
-function edit_field_yes_no($name, $selected=false, $extra='class="radio_inline"') {
+function edit_field_yes_no($name, $selected = false, $extra = 'class="radio_inline"') {
 	return radio_buttons(
-		$name, array(false=>KT_I18N::translate('no'), true=>KT_I18N::translate('yes')), $selected, $extra
+		$name, array(false => KT_I18N::translate('no'), true => KT_I18N::translate('yes')), $selected, $extra
 	);
 }
 
@@ -2095,7 +2095,7 @@ function addSimpleTags($fact) {
 function addNewName() {
 	global $ADVANCED_NAME_FACTS;
 
-	$gedrec="\n1 NAME ".safe_POST('NAME', KT_REGEX_UNSAFE, '//');
+	$gedrec="\n1 NAME ".KT_Filter::post('NAME', KT_REGEX_UNSAFE, '//');
 
 	$tags=array('NPFX', 'GIVN', 'SPFX', 'SURN', 'NSFX');
 
@@ -2110,7 +2110,7 @@ function addNewName() {
 	}
 
 	foreach (array_unique($tags) as $tag) {
-		$TAG=safe_POST($tag, KT_REGEX_UNSAFE);
+		$TAG=KT_Filter::post($tag, KT_REGEX_UNSAFE);
 		if ($TAG) {
 			$gedrec.="\n2 {$tag} {$TAG}";
 		}
@@ -2118,7 +2118,7 @@ function addNewName() {
 	return $gedrec;
 }
 function addNewSex() {
-	switch (safe_POST('SEX', '[MF]', 'U')) {
+	switch (KT_Filter::post('SEX', '[MF]', 'U')) {
 	case 'M':
 		return "\n1 SEX M";
 	case 'F':
@@ -2130,9 +2130,9 @@ function addNewSex() {
 function addNewFact($fact) {
 	global $tagSOUR, $ADVANCED_PLAC_FACTS;
 
-	$FACT=safe_POST($fact,          KT_REGEX_UNSAFE);
-	$DATE=safe_POST("{$fact}_DATE", KT_REGEX_UNSAFE);
-	$PLAC=safe_POST("{$fact}_PLAC", KT_REGEX_UNSAFE);
+	$FACT=KT_Filter::post($fact,          KT_REGEX_UNSAFE);
+	$DATE=KT_Filter::post("{$fact}_DATE", KT_REGEX_UNSAFE);
+	$PLAC=KT_Filter::post("{$fact}_PLAC", KT_REGEX_UNSAFE);
 	if ($DATE || $PLAC || $FACT && $FACT != 'Y') {
 		if ($FACT && $FACT != 'Y') {
 			$gedrec="\n1 {$fact} {$FACT}";
@@ -2147,25 +2147,25 @@ function addNewFact($fact) {
 
 			if (preg_match_all('/('.KT_REGEX_TAG.')/', $ADVANCED_PLAC_FACTS, $match)) {
 				foreach ($match[1] as $tag) {
-					$TAG=safe_POST("{$fact}_{$tag}", KT_REGEX_UNSAFE);
+					$TAG=KT_Filter::post("{$fact}_{$tag}", KT_REGEX_UNSAFE);
 					if ($TAG) {
 						$gedrec.="\n3 {$tag} {$TAG}";
 					}
 				}
 			}
-			$LATI=safe_POST("{$fact}_LATI", KT_REGEX_UNSAFE);
-			$LONG=safe_POST("{$fact}_LONG", KT_REGEX_UNSAFE);
+			$LATI=KT_Filter::post("{$fact}_LATI", KT_REGEX_UNSAFE);
+			$LONG=KT_Filter::post("{$fact}_LONG", KT_REGEX_UNSAFE);
 			if ($LATI || $LONG) {
 				$gedrec.="\n3 MAP\n4 LATI {$LATI}\n4 LONG {$LONG}";
 			}
 		}
-		if (safe_POST_bool("SOUR_{$fact}")) {
+		if (KT_Filter::post_bool("SOUR_{$fact}")) {
 			return updateSOUR($gedrec, 2);
 		} else {
 			return $gedrec;
 		}
 	} elseif ($FACT == 'Y') {
-		if (safe_POST_bool("SOUR_{$fact}")) {
+		if (KT_Filter::post_bool("SOUR_{$fact}")) {
 			return updateSOUR("\n1 {$fact} Y", 2);
 		} else {
 			return "\n1 {$fact} Y";

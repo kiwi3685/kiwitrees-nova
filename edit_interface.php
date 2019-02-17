@@ -53,7 +53,7 @@ $noteid				= safe_REQUEST($_REQUEST, 'noteid',  KT_REGEX_UNSAFE);
 //$pid_array			= safe_REQUEST($_REQUEST, 'pid_array', KT_REGEX_XREF);
 //$pids_array_add		= safe_REQUEST($_REQUEST, 'pids_array_add', KT_REGEX_XREF);
 //$pids_array_edit	= safe_REQUEST($_REQUEST, 'pids_array_edit', KT_REGEX_XREF);
-$update_CHAN		= !safe_POST_bool('preserve_last_changed');
+$update_CHAN		= !KT_Filter::post_bool('preserve_last_changed');
 
 $uploaded_files = array();
 
@@ -1320,14 +1320,14 @@ case 'updateraw':
 		->setPageTitle(KT_I18N::translate('Edit raw GEDCOM record'))
 		->pageHeader();
 
-	$pid    = safe_POST('pid', KT_REGEX_XREF);
+	$pid    = KT_Filter::post('pid', KT_REGEX_XREF);
 	$record = KT_GedcomRecord::getInstance($pid);
 
 	// Retrieve the private data
 	list(, $private_gedrec) = $record->privatizeGedcom(KT_USER_ACCESS_LEVEL);
 
 	$newgedrec	= $_POST['newgedrec1'] . "\n" . $_POST['newgedrec2'] . $private_gedrec;
-	$success	= replace_gedrec($pid, KT_GED_ID, $newgedrec, !safe_POST_bool('preserve_last_changed'));
+	$success	= replace_gedrec($pid, KT_GED_ID, $newgedrec, !KT_Filter::post_bool('preserve_last_changed'));
 
 	if ($success && !KT_DEBUG) {
 		$controller->addInlineJavascript('closePopupAndReloadParent();');
@@ -1592,7 +1592,7 @@ case 'addchildaction':
 		$gedrec.="\n".KT_Gedcom_Code_Pedi::createNewFamcPedi($PEDI, $famid);
 	}
 
-	if (safe_POST_bool('SOUR_INDI')) {
+	if (KT_Filter::post_bool('SOUR_INDI')) {
 		$gedrec = handle_updates($gedrec);
 	} else {
 		$gedrec = updateRest($gedrec);
@@ -1635,7 +1635,7 @@ case 'addchildaction':
 	}
 
 	if ($success && !KT_DEBUG) {
-		if (safe_POST('goto')=='new') {
+		if (KT_Filter::post('goto')=='new') {
 			$record = KT_Person::getInstance($xref);
 			$controller->addInlineJavascript('closePopupAndReloadParent("' . $record->getRawUrl() . '");');
 		} else {
@@ -1661,7 +1661,7 @@ case 'addspouseaction':
 		}
 	}
 
-	if (safe_POST_bool('SOUR_INDI')) {
+	if (KT_Filter::post_bool('SOUR_INDI')) {
 		$gedrec = handle_updates($gedrec);
 	} else {
 		$gedrec = updateRest($gedrec);
@@ -1671,7 +1671,7 @@ case 'addspouseaction':
 	$success = true;
 	if ($famid=="new") {
 		$famrec = "0 @new@ FAM";
-		$SEX = safe_POST('SEX', '[MF]', 'U');
+		$SEX = KT_Filter::post('SEX', '[MF]', 'U');
 		if ($SEX	== "M") $famtag = "HUSB";
 		if ($SEX	== "F") $famtag = "WIFE";
 		if ($famtag	== "HUSB") {
@@ -1688,7 +1688,7 @@ case 'addspouseaction':
 			}
 		}
 
-		if (safe_POST_bool('SOUR_FAM')) {
+		if (KT_Filter::post_bool('SOUR_FAM')) {
 			$famrec = handle_updates($famrec);
 		} else {
 			$famrec = updateRest($famrec);
@@ -1706,7 +1706,7 @@ case 'addspouseaction':
 				}
 			}
 
-			if (safe_POST_bool('SOUR_FAM')) {
+			if (KT_Filter::post_bool('SOUR_FAM')) {
 				$famrec = handle_updates($famrec);
 			} else {
 				$famrec = updateRest($famrec);
@@ -1728,7 +1728,7 @@ case 'addspouseaction':
 	}
 
 	if ($success && !KT_DEBUG) {
-		if (safe_POST('goto')=='new') {
+		if (KT_Filter::post('goto')=='new') {
 			$record = KT_Person::getInstance($xref);
 			$controller->addInlineJavascript('closePopupAndReloadParent("' . $record->getRawUrl() . '");');
 		} else {
@@ -1764,7 +1764,7 @@ case 'linkspouseaction':
 				}
 				$famrec.=addNewFact('MARR');
 
-				if (safe_POST_bool('SOUR_FAM') || count($tagSOUR)>0) {
+				if (KT_Filter::post_bool('SOUR_FAM') || count($tagSOUR)>0) {
 					// before adding 2 SOUR it needs to add 1 MARR Y first
 					if (addNewFact('MARR')=='') {
 						$famrec .= "\n1 MARR Y";
@@ -1816,7 +1816,7 @@ case 'addnewparentaction':
 		}
 	}
 
-	if (safe_POST_bool('SOUR_INDI')) {
+	if (KT_Filter::post_bool('SOUR_INDI')) {
 		$gedrec = handle_updates($gedrec);
 	} else {
 		$gedrec = updateRest($gedrec);
@@ -1840,7 +1840,7 @@ case 'addnewparentaction':
 			}
 		}
 
-		if (safe_POST_bool('SOUR_FAM')) {
+		if (KT_Filter::post_bool('SOUR_FAM')) {
 			$famrec = handle_updates($famrec);
 		} else {
 			$famrec = updateRest($famrec);
@@ -1856,7 +1856,7 @@ case 'addnewparentaction':
 					$famrec.=addNewFact($match);
 				}
 			}
-			if (safe_POST_bool('SOUR_FAM')) {
+			if (KT_Filter::post_bool('SOUR_FAM')) {
 				$famrec = handle_updates($famrec);
 			} else {
 				$famrec = updateRest($famrec);
@@ -1880,7 +1880,7 @@ case 'addnewparentaction':
 	}
 
 	if ($success && !KT_DEBUG) {
-		if (safe_POST('goto')=='new') {
+		if (KT_Filter::post('goto')=='new') {
 			$record = KT_Person::getInstance($xref);
 			$controller->addInlineJavascript('closePopupAndReloadParent("' . $record->getRawUrl() . '");');
 		} else {
@@ -1914,7 +1914,7 @@ case 'addopfchildaction':
 	}
 	$gedrec.="\n".KT_Gedcom_Code_Pedi::createNewFamcPedi($PEDI, $newfamxref);
 
-	if (safe_POST_bool('SOUR_INDI')) {
+	if (KT_Filter::post_bool('SOUR_INDI')) {
 		$gedrec=handle_updates($gedrec);
 	} else {
 		$gedrec=updateRest($gedrec);
@@ -2069,8 +2069,9 @@ case 'al_reorder_media_update': // Update sort using Album Page
 	if (isset($_REQUEST['order1'])) $order1 = $_REQUEST['order1'];
 	function SwapArray($Array) {
 		$Values = array();
-		while (list($Key, $Val) = each($Array))
+		foreach ($Array as $Key => $Val) {
 			$Values[$Val] = $Key;
+		}
 		return $Values;
 	}
 	if (isset($_REQUEST['order2'])) $order2 = $_REQUEST['order2'];
@@ -2655,7 +2656,6 @@ case 'checkduplicates':
 				paging: false
 			});
 		');
-
 
 	$html = '
 		<div id="edit_interface-page" class="duplicates">

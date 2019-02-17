@@ -441,6 +441,7 @@ label {
   .input-group-button button,
   .input-group-button label {
     -ms-flex-item-align: stretch;
+    -ms-grid-row-align: stretch;
     align-self: stretch;
     height: auto;
     padding-top: 0;
@@ -4321,6 +4322,7 @@ a.thumbnail {
     .menu.icon-top li a i,
     .menu.icon-top li a svg {
       -ms-flex-item-align: stretch;
+      -ms-grid-row-align: stretch;
       align-self: stretch;
       margin-bottom: 0.25rem;
       text-align: center; }
@@ -4333,6 +4335,7 @@ a.thumbnail {
     .menu.icon-bottom li a i,
     .menu.icon-bottom li a svg {
       -ms-flex-item-align: stretch;
+      -ms-grid-row-align: stretch;
       align-self: stretch;
       margin-bottom: 0.25rem;
       text-align: center; }
@@ -5470,6 +5473,7 @@ html.is-reveal-open {
 
 .align-self-middle {
   -ms-flex-item-align: center;
+  -ms-grid-row-align: center;
   align-self: center; }
 
 .align-stretch {
@@ -5479,6 +5483,7 @@ html.is-reveal-open {
 
 .align-self-stretch {
   -ms-flex-item-align: stretch;
+  -ms-grid-row-align: stretch;
   align-self: stretch; }
 
 .align-center-middle {
@@ -8959,7 +8964,7 @@ table.dataTable thead th.sorting:after,
 table.dataTable thead th.sorting_asc:after,
 table.dataTable thead th.sorting_desc:after {
   position: absolute;
-  top: 30%;
+  top: 15%;
   left: 0.5rem;
   display: block;
   font-family: FontAwesome; }

@@ -26,7 +26,7 @@ if (!defined('KT_KIWITREES')) {
 	exit;
 }
 
-class album_KT_Module extends KT_Module implements KT_Module_IndiTab, KT_Module_Config {
+class tabi_album_KT_Module extends KT_Module implements KT_Module_IndiTab, KT_Module_Config {
 	// Extend KT_Module
 	public function getTitle() {
 		return /* I18N: Name of a module */ KT_I18N::translate('Album');

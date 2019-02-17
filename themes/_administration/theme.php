@@ -32,4 +32,4 @@ $theme_name = "_administration"; /* I18N: Name of a theme. */ KT_I18N::translate
 $headerfile = KT_THEME_DIR . 'header.php';
 
 //$iconStyle	= 'far'; // fontawesome style set
-$iconStyle	= 'fas'; // fontawesome style set )only fas available for free
+$iconStyle	= 'fas'; // fontawesome style set - only fas available for free

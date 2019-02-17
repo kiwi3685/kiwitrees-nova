@@ -31,12 +31,12 @@ $controller
 	->requireEditorLogin() /* Editing may be disabled, even for admins */
 	->setPageTitle(KT_I18N::translate('Upload media files'));
 
-$action = safe_POST('action');
+$action = KT_Filter::post('action');
 
 if ($action == "upload") {
 	for ($i=1; $i<6; $i++) {
 		if (!empty($_FILES['mediafile'.$i]["name"]) || !empty($_FILES['thumbnail'.$i]["name"])) {
-			$folder = safe_POST('folder' . $i, KT_REGEX_UNSAFE);
+			$folder = KT_Filter::post('folder' . $i, KT_REGEX_UNSAFE);
 
 			// Validate the media folder
 			$folderName = str_replace('\\', '/', $folder);
@@ -100,7 +100,7 @@ if ($action == "upload") {
 			}
 
 			// User-specified filename?
-			$filename = safe_POST('filename' . $i, KT_REGEX_UNSAFE);
+			$filename = KT_Filter::post('filename' . $i, KT_REGEX_UNSAFE);
 			// Use the name of the uploaded file?
 			if (!$filename && !empty($_FILES['mediafile' . $i]['name'])) {
 				$filename = $_FILES['mediafile' . $i]['name'];

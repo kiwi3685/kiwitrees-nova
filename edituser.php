@@ -27,16 +27,16 @@ require_once KT_ROOT . 'includes/functions/functions_print_lists.php';
 require KT_ROOT . 'includes/functions/functions_edit.php';
 
 // Extract form variables
-$form_action         = safe_POST('form_action');
-$form_username       = safe_POST('form_username', KT_REGEX_USERNAME);
-$form_realname       = safe_POST('form_realname' );
-$form_pass1          = safe_POST('form_pass1', KT_REGEX_PASSWORD);
-$form_pass2          = safe_POST('form_pass2', KT_REGEX_PASSWORD);
-$form_email          = safe_POST('form_email', KT_REGEX_EMAIL, 'email@example.com');
-$form_rootid         = safe_POST('form_rootid', KT_REGEX_XREF, KT_USER_ROOT_ID   );
-$form_language       = safe_POST('form_language', array_keys(KT_I18N::used_languages()), KT_LOCALE );
-$form_contact_method = safe_POST('form_contact_method');
-$form_visible_online = safe_POST_bool('form_visible_online');
+$form_action         = KT_Filter::post('form_action');
+$form_username       = KT_Filter::post('form_username', KT_REGEX_USERNAME);
+$form_realname       = KT_Filter::post('form_realname' );
+$form_pass1          = KT_Filter::post('form_pass1', KT_REGEX_PASSWORD);
+$form_pass2          = KT_Filter::post('form_pass2', KT_REGEX_PASSWORD);
+$form_email          = KT_Filter::post('form_email', KT_REGEX_EMAIL, 'email@example.com');
+$form_rootid         = KT_Filter::post('form_rootid', KT_REGEX_XREF, KT_USER_ROOT_ID   );
+$form_language       = KT_Filter::post('form_language', array_keys(KT_I18N::used_languages()), KT_LOCALE );
+$form_contact_method = KT_Filter::post('form_contact_method');
+$form_visible_online = KT_Filter::post_bool('form_visible_online');
 
 // Respond to form action
 if ($form_action && KT_Filter::checkCsrf()) {

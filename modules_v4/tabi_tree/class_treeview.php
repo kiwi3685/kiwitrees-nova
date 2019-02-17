@@ -61,7 +61,7 @@ class TreeView {
 						<li id="tvbAllPartners" class="tv_button' . ($this->all_partners === 'true' ? ' tvPressed' : '') . '">
 							<a class="icon-sfamily" href="#" title="' . KT_I18N::translate('Show all spouses and ancestors') . '"></a>
 						</li>
-						<li class="tv_button" id="' . $this->name . '_loading">
+						<li id="switch-full-screen" class="tv_button tvfs-switch-full-screen" alt="' . KT_I18N::translate('Toggle fullscreen view') . '" title="' . KT_I18N::translate('Toggle fullscreen view') . '"></li>						<li class="tv_button" id="' . $this->name . '_loading">
 							<i class="icon-loading-small"></i>
 						</li>
 					</ul>
@@ -129,7 +129,6 @@ class TreeView {
 
 		return $html;
 	}
-
 	/**
 	 * Return the details for a person
 	 */

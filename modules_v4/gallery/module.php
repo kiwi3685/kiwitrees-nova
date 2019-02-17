@@ -155,35 +155,35 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 			require_once KT_ROOT . 'includes/functions/functions_edit.php';
 
 			if (KT_Filter::postBool('save') && KT_Filter::checkCsrf()) {
-				$block_id=safe_POST('block_id');
+				$block_id=KT_Filter::post('block_id');
 				if ($block_id) {
 					KT_DB::prepare(
 						"UPDATE `##block` SET gedcom_id=NULLIF(?, ''), block_order=? WHERE block_id=?"
 					)->execute(array(
-						safe_POST('gedcom_id'),
-						(int)safe_POST('block_order'),
+						KT_Filter::post('gedcom_id'),
+						(int)KT_Filter::post('block_order'),
 						$block_id
 					));
 				} else {
 					KT_DB::prepare(
 						"INSERT INTO `##block` (gedcom_id, module_name, block_order) VALUES (NULLIF(?, ''), ?, ?)"
 					)->execute(array(
-						safe_POST('gedcom_id'),
+						KT_Filter::post('gedcom_id'),
 						$this->getName(),
-						(int)safe_POST('block_order')
+						(int)KT_Filter::post('block_order')
 					));
 					$block_id=KT_DB::getInstance()->lastInsertId();
 				}
-				set_block_setting($block_id, 'gallery_title',		safe_POST('gallery_title',		KT_REGEX_UNSAFE)); // allow html
-				set_block_setting($block_id, 'gallery_description', safe_POST('gallery_description',KT_REGEX_UNSAFE)); // allow html
-				set_block_setting($block_id, 'gallery_folder_w',	safe_POST('gallery_folder_w',	KT_REGEX_UNSAFE));
-				set_block_setting($block_id, 'gallery_folder_f',	safe_POST('gallery_folder_f',	KT_REGEX_UNSAFE));
-				set_block_setting($block_id, 'gallery_folder_p',	safe_POST('gallery_folder_p',	KT_REGEX_UNSAFE));
-				set_block_setting($block_id, 'gallery_access',	 	safe_POST('gallery_access',		KT_REGEX_UNSAFE));
-				set_block_setting($block_id, 'plugin',			 	safe_POST('plugin',				KT_REGEX_UNSAFE));
+				set_block_setting($block_id, 'gallery_title',		KT_Filter::post('gallery_title',		KT_REGEX_UNSAFE)); // allow html
+				set_block_setting($block_id, 'gallery_description', KT_Filter::post('gallery_description',KT_REGEX_UNSAFE)); // allow html
+				set_block_setting($block_id, 'gallery_folder_w',	KT_Filter::post('gallery_folder_w',	KT_REGEX_UNSAFE));
+				set_block_setting($block_id, 'gallery_folder_f',	KT_Filter::post('gallery_folder_f',	KT_REGEX_UNSAFE));
+				set_block_setting($block_id, 'gallery_folder_p',	KT_Filter::post('gallery_folder_p',	KT_REGEX_UNSAFE));
+				set_block_setting($block_id, 'gallery_access',	 	KT_Filter::post('gallery_access',		KT_REGEX_UNSAFE));
+				set_block_setting($block_id, 'plugin',			 	KT_Filter::post('plugin',				KT_REGEX_UNSAFE));
 				$languages=array();
 				foreach (KT_I18N::used_languages() as $code=>$name) {
-					if (safe_POST_bool('lang_'.$code)) {
+					if (KT_Filter::post_bool('lang_'.$code)) {
 						$languages[]=$code;
 					}
 				}
@@ -448,12 +448,12 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 			ckeditor_KT_Module::enableEditor($controller);
 		}
 
-		$action = safe_POST('action');
+		$action = KT_Filter::post('action');
 
 		if ($action == 'update') {
-			set_module_setting($this->getName(), 'HEADER_TITLE',		safe_POST('NEW_HEADER_TITLE'));
-			set_module_setting($this->getName(), 'HEADER_DESCRIPTION',	safe_POST('NEW_HEADER_DESCRIPTION', KT_REGEX_UNSAFE)); // allow html
-			set_module_setting($this->getName(), 'THEME_DIR',			safe_POST('NEW_THEME_DIR'));
+			set_module_setting($this->getName(), 'HEADER_TITLE',		KT_Filter::post('NEW_HEADER_TITLE'));
+			set_module_setting($this->getName(), 'HEADER_DESCRIPTION',	KT_Filter::post('NEW_HEADER_DESCRIPTION', KT_REGEX_UNSAFE)); // allow html
+			set_module_setting($this->getName(), 'THEME_DIR',			KT_Filter::post('NEW_THEME_DIR'));
 			AddToLog($this->getName() . 'config updated', 'config');
 		}
 

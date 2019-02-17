@@ -1786,6 +1786,8 @@ function old_paths() {
 		// Removed in kiwitrees 3.3.3
 		KT_ROOT . 'js/d3.min.js',
 		KT_ROOT . 'modules_v4/research_links/plugins/vlaardingengeschiedenis.php',
+
+		// *********************************************
 		// Removed in kiwitrees-nova 1.0.0
 		// Lists
 		KT_ROOT . 'indilist.php',
@@ -1807,10 +1809,9 @@ function old_paths() {
 		KT_ROOT . 'modules_v4/html',
 		KT_ROOT . 'modules_v4/logged_in',
 		KT_ROOT . 'modules_v4/login_block',
-		KT_ROOT . 'modules_v4/personal_facts',
+		KT_ROOT . 'modules_v4/page_menu',
 		KT_ROOT . 'modules_v4/random_media',
 		KT_ROOT . 'modules_v4/recent_changes',
-		KT_ROOT . 'modules_v4/relatives',
 		KT_ROOT . 'modules_v4/review_changes',
 		KT_ROOT . 'modules_v4/tab_census',
 		KT_ROOT . 'modules_v4/todays_events',
@@ -1818,11 +1819,26 @@ function old_paths() {
 		KT_ROOT . 'modules_v4/top10_givnnames',
 		KT_ROOT . 'modules_v4/top10_pageviews',
 		KT_ROOT . 'modules_v4/top10_surnames',
-		KT_ROOT . 'modules_v4/tree',
 		KT_ROOT . 'modules_v4/upcoming_events',
 		KT_ROOT . 'modules_v4/yahrzeit',
 		// Charts
 		KT_ROOT . 'ancestry.php',
+		// tabs
+		KT_ROOT . 'modules_v4/album',
+		KT_ROOT . 'modules_v4/census',
+		KT_ROOT . 'modules_v4/cousins',
+		KT_ROOT . 'modules_v4/notes',
+		KT_ROOT . 'modules_v4/personal_facts',
+		KT_ROOT . 'modules_v4/relatives',
+		KT_ROOT . 'modules_v4/sources_tab',
+		KT_ROOT . 'modules_v4/tree',
+		//sidebars
+		KT_ROOT . 'modules_v4/descendacy',
+		KT_ROOT . 'modules_v4/extra_info',
+		KT_ROOT . 'modules_v4/families',
+		KT_ROOT . 'modules_v4/family_nav',
+		KT_ROOT . 'modules_v4/individuals',
+		KT_ROOT . 'modules_v4/privacy',
 		// Other
 		KT_ROOT . 'expand_view.php',
 

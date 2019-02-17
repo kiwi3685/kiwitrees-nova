@@ -44,7 +44,7 @@ class widget_favorites_KT_Module extends KT_Module implements KT_Module_Widget {
 		switch($modAction) {
 		case 'menu-add-favorite':
 			// Process the "add to user favorites" menu item on indi/fam/etc. pages
-			$record = KT_GedcomRecord::getInstance(safe_POST_xref('xref'));
+			$record = KT_GedcomRecord::getInstance(KT_Filter::post_xref('xref'));
 			if (KT_USER_ID && $record->canDisplayName()) {
 				self::addFavorite(array(
 					'user_id'  =>KT_USER_ID,

@@ -115,16 +115,15 @@ class KT_Filter {
 	 *
 	 * @return string
 	 */
-	public static function expandUrls($text) {
-		return preg_replace_callback(
-			'/' . addcslashes('(?!>)' . self::URL_REGEX . '(?!</a>)', '/') . '/i',
-			create_function( // Insert soft hyphens into the replaced string
-				'$m',
-				'return "<a href=\"" . $m[0] . "\" target=\"blank\">" . preg_replace("/\b/", "&shy;", $m[0]) . "</a>";'
-			),
-			KT_Filter::escapeHtml($text)
-		);
-	}
+	 public static function expandUrls($text) {
+ 		return preg_replace_callback(
+ 			'/' . addcslashes('(?!>)' . self::URL_REGEX . '(?!</a>)', '/') . '/i',
+ 			function ($m) {
+ 				return '<a href="' . $m[0] . '">' . $m[0] . '</a>';
+ 			},
+ 			self::escapeHtml($text)
+ 		);
+ 	}
 
 	//////////////////////////////////////////////////////////////////////////////
 	// Validate INPUT requests

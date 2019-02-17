@@ -57,7 +57,7 @@ if ($action == 'update_mods' && KT_Filter::checkCsrf()) {
 				"REPLACE INTO `##module_privacy` (module_name, gedcom_id, component, access_level) VALUES (?, ?, 'sidebar', ?)"
 			)->execute(array($module_name, $tree->tree_id, $access_level));
 		}
-		$order = safe_POST('order-'.$module_name);
+		$order = KT_Filter::post('order-'.$module_name);
 		KT_DB::prepare(
 			"UPDATE `##module` SET sidebar_order=? WHERE module_name=?"
 		)->execute(array($order, $module_name));

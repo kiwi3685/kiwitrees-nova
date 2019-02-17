@@ -127,22 +127,22 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 					KT_DB::prepare(
 						"UPDATE `##block` SET gedcom_id=NULLIF(?, ''), block_order=? WHERE block_id=?"
 					)->execute(array(
-						safe_POST('gedcom_id'),
-						(int)safe_POST('block_order'),
+						KT_Filter::post('gedcom_id'),
+						(int)KT_Filter::post('block_order'),
 						$block_id
 					));
 				} else {
 					KT_DB::prepare(
 						"INSERT INTO `##block` (gedcom_id, module_name, block_order) VALUES (NULLIF(?, ''), ?, ?)"
 					)->execute(array(
-						safe_POST('gedcom_id'),
+						KT_Filter::post('gedcom_id'),
 						$this->getName(),
-						(int)safe_POST('block_order')
+						(int)KT_Filter::post('block_order')
 					));
 					$block_id = KT_DB::getInstance()->lastInsertId();
 				}
-				set_block_setting($block_id, 'header',  safe_POST('header',  KT_REGEX_UNSAFE));
-				set_block_setting($block_id, 'faqbody', safe_POST('faqbody', KT_REGEX_UNSAFE)); // allow html
+				set_block_setting($block_id, 'header',  KT_Filter::post('header',  KT_REGEX_UNSAFE));
+				set_block_setting($block_id, 'faqbody', KT_Filter::post('faqbody', KT_REGEX_UNSAFE)); // allow html
 				$languages = array();
 				foreach (KT_I18N::used_languages() as $code=>$name) {
 					if (KT_Filter::postBool('lang_'.$code)) {
@@ -312,11 +312,25 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 				jQuery("#faq_accordion").css("visibility", "visible");
 				jQuery(".faq_subaccordion").accordion({heightStyle: "content", collapsible: true, active: false});
 				jQuery(".faq_subaccordion").css("visibility", "visible");
+
+				// Get hash from query string
+				var hash = window.location.hash;
+
+				if (hash) {
+				    // Get panel header element
+				    var requestedPanel = jQuery(hash);
+				    if (requestedPanel.length) {
+				        // Hide all panels
+				        jQuery(".faq_body").hide();
+				        // Show requested panel
+				        requestedPanel.next(".faq_body").show();
+				    }
+				}
 			');
 			/* Use a structure like <div id="faq_subaccordion"><h2>Your sub-level title<h2><p>Your sub-level content</p></div> inside any FAQ page to create sub-levels within that FAQ */
 
-		if (safe_POST('query_faq')) {
-			$search = safe_POST('query_faq');
+		if (KT_Filter::post('query_faq')) {
+			$search = KT_Filter::post('query_faq');
 		} else {
 			$search = '%';
 		};
@@ -359,7 +373,7 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 					$faqbody	= get_block_setting($faq->block_id, 'faqbody');
 					$languages	= get_block_setting($faq->block_id, 'languages');
 					if (!$languages || in_array(KT_LOCALE, explode(',', $languages))) { ?>
-						<h2><?php echo $this->faq_search_hits($faq->header, $search); ?></h2>
+						<h2 id="faq<?php echo $faq->block_id; ?>"><?php echo $this->faq_search_hits($faq->header, $search); ?></h2>
 						<div class="faq_body"> <?php echo $this->faq_search_hits(substr($faqbody, 0, 1)=='<' ? $faqbody : nl2br($faqbody), $search); ?> </div>
 					<?php } ?>
 				<?php } ?>
@@ -382,11 +396,11 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 			ckeditor_KT_Module::enableEditor($controller);
 		}
 
-		$action = safe_POST('action');
+		$action = KT_Filter::post('action');
 
 		if ($action == 'update') {
-			set_module_setting($this->getName(), 'FAQ_TITLE',		safe_POST('NEW_FAQ_TITLE'));
-			set_module_setting($this->getName(), 'FAQ_DESCRIPTION',	safe_POST('NEW_FAQ_DESCRIPTION', KT_REGEX_UNSAFE)); // allow html
+			set_module_setting($this->getName(), 'FAQ_TITLE',		KT_Filter::post('NEW_FAQ_TITLE'));
+			set_module_setting($this->getName(), 'FAQ_DESCRIPTION',	KT_Filter::post('NEW_FAQ_DESCRIPTION', KT_REGEX_UNSAFE)); // allow html
 			AddToLog($this->getName() . ' config updated', 'config');
 		}
 

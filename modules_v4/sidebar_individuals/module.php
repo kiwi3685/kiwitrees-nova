@@ -26,7 +26,7 @@ if (!defined('KT_KIWITREES')) {
 	exit;
 }
 
-class individuals_KT_Module extends KT_Module implements KT_Module_Sidebar {
+class sidebar_individuals_KT_Module extends KT_Module implements KT_Module_Sidebar {
 	// Extend class KT_Module
 	public function getTitle() {
 		return /* I18N: Name of a module */ KT_I18N::translate('Individual list');
@@ -71,13 +71,13 @@ class individuals_KT_Module extends KT_Module implements KT_Module_Sidebar {
 
 	// Implement KT_Module_Sidebar
 	public function getSidebarAjaxContent() {
-		$alpha   =safe_GET('alpha'); // All surnames beginning with this letter where "@"=unknown and ","=none
-		$surname =safe_GET('surname', '[^<>&%{};]*'); // All indis with this surname.  NB - allow ' and "
-		$search   =safe_GET('search');
+		$alpha   = safe_GET('alpha'); // All surnames beginning with this letter where "@"=unknown and ","=none
+		$surname = safe_GET('surname', '[^<>&%{};]*'); // All indis with this surname.  NB - allow ' and "
+		$search  = safe_GET('search');
 
 		if ($search) {
 			return $this->search($search);
-		} elseif ($alpha=='@' || $alpha==',' || $surname) {
+		} elseif ($alpha == '@' || $alpha == ',' || $surname) {
 			return $this->getSurnameIndis($alpha, $surname);
 		} elseif ($alpha) {
 			return $this->getAlphaSurnames($alpha, $surname);
@@ -118,12 +118,12 @@ class individuals_KT_Module extends KT_Module implements KT_Module_Sidebar {
 
 				if (!loadedNames[surname]) {
 					jQuery.ajax({
-					  url: "module.php?mod='.$this->getName().'&mod_action=ajax&sb_action=individuals&alpha="+alpha+"&surname="+surname,
+					  url: "module.php?mod=' . $this->getName().'&mod_action=ajax&sb_action=individuals&alpha="+alpha+"&surname="+surname,
 					  cache: false,
 					  success: function(html) {
 					    jQuery("#sb_indi_"+surname+" div").html(html);
 					    jQuery("#sb_indi_"+surname+" div").show("fast");
-					    jQuery("#sb_indi_"+surname).css("list-style-image", "url('.$KT_IMAGES['minus'].')");
+					    jQuery("#sb_indi_"+surname).css("list-style-image", "url(' . $KT_IMAGES['minus'] . ')");
 					    loadedNames[surname]=2;
 					  }
 					});
@@ -131,12 +131,12 @@ class individuals_KT_Module extends KT_Module implements KT_Module_Sidebar {
 				else if (loadedNames[surname]==1) {
 					loadedNames[surname]=2;
 					jQuery("#sb_indi_"+surname+" div").show("fast");
-					jQuery("#sb_indi_"+surname).css("list-style-image", "url('.$KT_IMAGES['minus'].')");
+					jQuery("#sb_indi_"+surname).css("list-style-image", "url(' . $KT_IMAGES['minus'] . ')");
 				}
 				else {
 					loadedNames[surname]=1;
 					jQuery("#sb_indi_"+surname+" div").hide("fast");
-					jQuery("#sb_indi_"+surname).css("list-style-image", "url('.$KT_IMAGES['plus'].')");
+					jQuery("#sb_indi_"+surname).css("list-style-image", "url(' . $KT_IMAGES['plus'] . ')");
 				}
 				return false;
 			});
@@ -144,19 +144,19 @@ class individuals_KT_Module extends KT_Module implements KT_Module_Sidebar {
 
 
 		$out='<form method="post" action="module.php?mod='.$this->getName().'&amp;mod_action=ajax" onsubmit="return false;"><input type="search" name="sb_indi_name" id="sb_indi_name" placeholder="'.KT_I18N::translate('Search').'"><p>';
-		foreach ($initials as $letter=>$count) {
+		foreach ($initials as $letter => $count) {
 			switch ($letter) {
 				case '@':
-					$html=$UNKNOWN_NN;
+					$html = $UNKNOWN_NN;
 					break;
 				case ',':
-					$html=KT_I18N::translate('None');
+					$html = KT_I18N::translate('None');
 					break;
 				case ' ':
-					$html='&nbsp;';
+					$html = '&nbsp;';
 					break;
 				default:
-					$html=$letter;
+					$html = $letter;
 					break;
 			}
 			$html='<a href="module.php?mod='.$this->getName().'&amp;mod_action=ajax&amp;sb_action=individuals&amp;alpha='.urlencode($letter).'" class="sb_indi_letter">'.$html.'</a>';
