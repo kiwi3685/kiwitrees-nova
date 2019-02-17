@@ -109,13 +109,14 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 
 		//-- main PAGES menu item
 		$menu = '';
-		$menu = new KT_Menu($this->getMenuTitle(), 'module.php?mod='.$this->getName().'&amp;mod_action=show&amp;pages_id='.$default_block, 'menu-my_pages', 'down');
+		$menu = new KT_Menu($this->getMenuTitle(), 'module.php?mod=' . $this->getName().'&amp;mod_action=show&amp;pages_id=' . $default_block, 'menu-my_pages', 'down');
 		$menu->addClass('menuitem', 'menuitem_hover', '');
+		$menu->addClass('', '', 'fa-book-reader');
 		foreach ($this->getMenupagesList() as $items) {
 			$languages = get_block_setting($items->block_id, 'languages');
 			if ((!$languages || in_array(KT_LOCALE, explode(',', $languages))) && $items->pages_access >= KT_USER_ACCESS_LEVEL) {
-				$path = 'module.php?mod='.$this->getName().'&amp;mod_action=show&amp;pages_id='.$items->block_id;
-				$submenu = new KT_Menu(KT_I18N::translate($items->pages_title), $path, 'menu-my_pages-'.$items->block_id);
+				$path = 'module.php?mod=' . $this->getName() . '&amp;mod_action=show&amp;pages_id=' . $items->block_id;
+				$submenu = new KT_Menu(KT_I18N::translate($items->pages_title), $path, 'menu-my_pages-' . $items->block_id);
 				$menu->addSubmenu($submenu);
 			}
 		}
