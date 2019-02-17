@@ -152,8 +152,8 @@ class block_media_KT_Module extends KT_Module implements KT_Module_Block {
 						</script>
 
 						<div id="cell block_media_controls' . $block_id . '">
-							<a href="#" onclick="togglePlay(); return false;" id="play_stop" class="fa ' . $icon_class . '" title="' . KT_I18N::translate('Play') . '/' . KT_I18N::translate('Stop') . '"></a>
-							<a href="#" onclick="jQuery(\'#'. $id.'\').load(\'index.php?action=ajax&amp;block_id='.$block_id.'\');return false;" title="'.KT_I18N::translate('Next image').'" class="fa fa-chevron-double-right"></a>
+							<a href="#" onclick="togglePlay(); return false;" id="play_stop" class="' . $iconStyle  . ' ' . $icon_class . '" title="' . KT_I18N::translate('Play') . '/' . KT_I18N::translate('Stop') . '"></a>
+							<a href="#" onclick="jQuery(\'#'. $id . '\').load(\'index.php?action=ajax&amp;block_id=' . $block_id . '\');return false;" title="' . KT_I18N::translate('Next image') . '" class="' . $iconStyle  . ' fa-angle-double-right"></a>
 						</div>';
 
 						if ($start) {

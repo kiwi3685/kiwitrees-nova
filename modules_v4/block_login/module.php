@@ -75,7 +75,7 @@ class block_login_KT_Module extends KT_Module implements KT_Module_Block {
 						<label for="password">' . KT_I18N::translate('Password') . '</label>
 						<input type="password" name="password" class="formField">
 						<button class="button expanded" type="submit" >
-							<i class="' . $iconStyle . ' fa-sign-in"></i>' .
+							<i class="' . $iconStyle . ' fa-sign-in-alt"></i>' .
 							KT_I18N::translate('Login') . '
 						</button>
 						<p>
