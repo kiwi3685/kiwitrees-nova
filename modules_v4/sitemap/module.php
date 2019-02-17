@@ -227,7 +227,7 @@ class sitemap_KT_Module extends KT_Module implements KT_Module_Config {
 		// Save the updated preferences
 		if (KT_Filter::post('action', 'save')=='save') {
 			foreach (KT_Tree::getAll() as $tree) {
-				set_gedcom_setting($tree->tree_id, 'include_in_sitemap', KT_Filter::post_bool('include'.$tree->tree_id));
+				set_gedcom_setting($tree->tree_id, 'include_in_sitemap', KT_Filter::postBool('include'.$tree->tree_id));
 			}
 			// Clear cache and force files to be regenerated
 			KT_DB::prepare(

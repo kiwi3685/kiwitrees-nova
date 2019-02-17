@@ -2159,13 +2159,13 @@ function addNewFact($fact) {
 				$gedrec.="\n3 MAP\n4 LATI {$LATI}\n4 LONG {$LONG}";
 			}
 		}
-		if (KT_Filter::post_bool("SOUR_{$fact}")) {
+		if (KT_Filter::postBool("SOUR_{$fact}")) {
 			return updateSOUR($gedrec, 2);
 		} else {
 			return $gedrec;
 		}
 	} elseif ($FACT == 'Y') {
-		if (KT_Filter::post_bool("SOUR_{$fact}")) {
+		if (KT_Filter::postBool("SOUR_{$fact}")) {
 			return updateSOUR("\n1 {$fact} Y", 2);
 		} else {
 			return "\n1 {$fact} Y";

@@ -298,7 +298,7 @@ class stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Module_
 				set_block_setting($block_id, 'story_body',  KT_Filter::post('story_body', KT_REGEX_UNSAFE)); // allow html
 				$languages = array();
 				foreach (KT_I18N::used_languages() as $code => $name) {
-					if (KT_Filter::post_bool('lang_' . $code)) {
+					if (KT_Filter::postBool('lang_' . $code)) {
 						$languages[] = $code;
 					}
 				}

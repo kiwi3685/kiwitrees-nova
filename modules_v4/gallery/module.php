@@ -183,7 +183,7 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 				set_block_setting($block_id, 'plugin',			 	KT_Filter::post('plugin',				KT_REGEX_UNSAFE));
 				$languages=array();
 				foreach (KT_I18N::used_languages() as $code=>$name) {
-					if (KT_Filter::post_bool('lang_'.$code)) {
+					if (KT_Filter::postBool('lang_'.$code)) {
 						$languages[]=$code;
 					}
 				}

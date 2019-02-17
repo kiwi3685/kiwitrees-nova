@@ -159,7 +159,7 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 		if (KT_USER_IS_ADMIN) {
 			require_once KT_ROOT . 'includes/functions/functions_edit.php';
 
-			if (KT_Filter::post_bool('save')) {
+			if (KT_Filter::postBool('save')) {
 				$block_id=KT_Filter::post('block_id');
 				if ($block_id) {
 					KT_DB::prepare(
@@ -184,7 +184,7 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 				set_block_setting($block_id, 'pages_access', KT_Filter::post('pages_access', KT_REGEX_UNSAFE));
 				$languages=array();
 				foreach (KT_I18N::used_languages() as $code=>$name) {
-					if (KT_Filter::post_bool('lang_'.$code)) {
+					if (KT_Filter::postBool('lang_'.$code)) {
 						$languages[]=$code;
 					}
 				}
