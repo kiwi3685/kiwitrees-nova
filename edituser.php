@@ -36,7 +36,7 @@ $form_email          = KT_Filter::post('form_email', KT_REGEX_EMAIL, 'email@exam
 $form_rootid         = KT_Filter::post('form_rootid', KT_REGEX_XREF, KT_USER_ROOT_ID   );
 $form_language       = KT_Filter::post('form_language', array_keys(KT_I18N::used_languages()), KT_LOCALE );
 $form_contact_method = KT_Filter::post('form_contact_method');
-$form_visible_online = KT_Filter::post_bool('form_visible_online');
+$form_visible_online = KT_Filter::postBool('form_visible_online');
 
 // Respond to form action
 if ($form_action && KT_Filter::checkCsrf()) {

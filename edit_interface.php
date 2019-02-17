@@ -53,7 +53,7 @@ $noteid				= safe_REQUEST($_REQUEST, 'noteid',  KT_REGEX_UNSAFE);
 //$pid_array			= safe_REQUEST($_REQUEST, 'pid_array', KT_REGEX_XREF);
 //$pids_array_add		= safe_REQUEST($_REQUEST, 'pids_array_add', KT_REGEX_XREF);
 //$pids_array_edit	= safe_REQUEST($_REQUEST, 'pids_array_edit', KT_REGEX_XREF);
-$update_CHAN		= !KT_Filter::post_bool('preserve_last_changed');
+$update_CHAN		= !KT_Filter::postBool('preserve_last_changed');
 
 $uploaded_files = array();
 
@@ -1327,7 +1327,7 @@ case 'updateraw':
 	list(, $private_gedrec) = $record->privatizeGedcom(KT_USER_ACCESS_LEVEL);
 
 	$newgedrec	= $_POST['newgedrec1'] . "\n" . $_POST['newgedrec2'] . $private_gedrec;
-	$success	= replace_gedrec($pid, KT_GED_ID, $newgedrec, !KT_Filter::post_bool('preserve_last_changed'));
+	$success	= replace_gedrec($pid, KT_GED_ID, $newgedrec, !KT_Filter::postBool('preserve_last_changed'));
 
 	if ($success && !KT_DEBUG) {
 		$controller->addInlineJavascript('closePopupAndReloadParent();');
@@ -1592,7 +1592,7 @@ case 'addchildaction':
 		$gedrec.="\n".KT_Gedcom_Code_Pedi::createNewFamcPedi($PEDI, $famid);
 	}
 
-	if (KT_Filter::post_bool('SOUR_INDI')) {
+	if (KT_Filter::postBool('SOUR_INDI')) {
 		$gedrec = handle_updates($gedrec);
 	} else {
 		$gedrec = updateRest($gedrec);
@@ -1661,7 +1661,7 @@ case 'addspouseaction':
 		}
 	}
 
-	if (KT_Filter::post_bool('SOUR_INDI')) {
+	if (KT_Filter::postBool('SOUR_INDI')) {
 		$gedrec = handle_updates($gedrec);
 	} else {
 		$gedrec = updateRest($gedrec);
@@ -1688,7 +1688,7 @@ case 'addspouseaction':
 			}
 		}
 
-		if (KT_Filter::post_bool('SOUR_FAM')) {
+		if (KT_Filter::postBool('SOUR_FAM')) {
 			$famrec = handle_updates($famrec);
 		} else {
 			$famrec = updateRest($famrec);
@@ -1706,7 +1706,7 @@ case 'addspouseaction':
 				}
 			}
 
-			if (KT_Filter::post_bool('SOUR_FAM')) {
+			if (KT_Filter::postBool('SOUR_FAM')) {
 				$famrec = handle_updates($famrec);
 			} else {
 				$famrec = updateRest($famrec);
@@ -1764,7 +1764,7 @@ case 'linkspouseaction':
 				}
 				$famrec.=addNewFact('MARR');
 
-				if (KT_Filter::post_bool('SOUR_FAM') || count($tagSOUR)>0) {
+				if (KT_Filter::postBool('SOUR_FAM') || count($tagSOUR)>0) {
 					// before adding 2 SOUR it needs to add 1 MARR Y first
 					if (addNewFact('MARR')=='') {
 						$famrec .= "\n1 MARR Y";
@@ -1816,7 +1816,7 @@ case 'addnewparentaction':
 		}
 	}
 
-	if (KT_Filter::post_bool('SOUR_INDI')) {
+	if (KT_Filter::postBool('SOUR_INDI')) {
 		$gedrec = handle_updates($gedrec);
 	} else {
 		$gedrec = updateRest($gedrec);
@@ -1840,7 +1840,7 @@ case 'addnewparentaction':
 			}
 		}
 
-		if (KT_Filter::post_bool('SOUR_FAM')) {
+		if (KT_Filter::postBool('SOUR_FAM')) {
 			$famrec = handle_updates($famrec);
 		} else {
 			$famrec = updateRest($famrec);
@@ -1856,7 +1856,7 @@ case 'addnewparentaction':
 					$famrec.=addNewFact($match);
 				}
 			}
-			if (KT_Filter::post_bool('SOUR_FAM')) {
+			if (KT_Filter::postBool('SOUR_FAM')) {
 				$famrec = handle_updates($famrec);
 			} else {
 				$famrec = updateRest($famrec);
@@ -1914,7 +1914,7 @@ case 'addopfchildaction':
 	}
 	$gedrec.="\n".KT_Gedcom_Code_Pedi::createNewFamcPedi($PEDI, $newfamxref);
 
-	if (KT_Filter::post_bool('SOUR_INDI')) {
+	if (KT_Filter::postBool('SOUR_INDI')) {
 		$gedrec=handle_updates($gedrec);
 	} else {
 		$gedrec=updateRest($gedrec);
