@@ -25,7 +25,7 @@ define('KT_SCRIPT_NAME', 'setup.php');
 define('KT_CONFIG_FILE', 'config.ini.php');
 
 if (version_compare(PHP_VERSION, '5.6') < 0) {
-	// Our translation system requires PHP 5.3, so we cannot translate this message :-(
+	// Our translation system requires PHP 5.6, so we cannot translate this message :-(
 	header('Content-Type: text/html; charset=UTF-8'); ?>
 	<!DOCTYPE html>
 	<html lang="en" dir="ltr">

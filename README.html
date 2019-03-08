@@ -1,0 +1,91 @@
+<html>
+      <head>
+        <meta charset="UTF-8">
+        <title>README.md</title>
+      </head>
+      <body>
+        <p>#Kiwitrees-nova
+The next version of kiwitrees, a fresh new design for kiwitrees</p>
+<h2 id="contents">Contents</h2>
+<ol>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#license">License</a></li>
+<li><a href="#requirements">Requirements</a></li>
+<li><a href="#installing">Installing</a></li>
+<li><a href="#translations">Translations</a></li>
+<li><a href="#contributing">Contributing</a></li>
+</ol>
+<p>##Introduction
+Kiwitrees is among the web’s leading online collaborative genealogy applications. The project website is <a href="http://kiwitrees.net/">kiwitrees.net</a>.</p>
+<p>It works from standard GEDCOM files, and is therefore compatible with every major desktop application. It aims to to be efficient and effective by using the right combination of third-party tools, design techniques and open standards.</p>
+<p><strong>For more information visit the website <a href="http://kiwitrees.net/faqs/">FAQ pages</a>.</strong></p>
+<p>##License</p>
+<ul>
+<li><strong>Kiwitrees-nova: Web based Family History software</strong></li>
+<li><strong>Copyright (&copy;) 2012 to 2017 kiwitrees.net</strong></li>
+</ul>
+<p>Derived from webtrees (<a href="http://www.webtrees.net">www.webtrees.net</a>)</p>
+<p>Copyright (&copy;) 2010 to 2012 webtrees development team</p>
+<p>Derived from PhpGedView (phpgedview.sourceforge.net)</p>
+<p>Copyright (&copy;) 2002 to 2010 PGV Development Team</p>
+<p>All rights reserved.</p>
+<p>Kiwitrees is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by The Free Software Foundation; either version 3 of the License, or (at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License along with Kiwitrees.  If not, see <a href="http://www.gnu.org/licenses">http://www.gnu.org/licenses</a>.</p>
+<p><strong><a href="#kiwitrees">Back to top</a></strong></p>
+<p>##Requirements</p>
+<h3 id="a-webserver">A webserver</h3>
+<ul>
+<li>Apache and IIS are the most common types. There are no requirements to use a specific type or version.</li>
+<li>Approximately 65MB of disk space for the application files, plus whatever is needed for your multi-media files, GEDCOM files and database.</li>
+</ul>
+<h3 id="php">PHP</h3>
+<ul>
+<li>PHP 5.6.0 or later. Note that many web hosts offer <em>both</em> PHP4 and PHP5, typically with PHP4 as the default. If this is the case, you will be able to switch between the two using a control panel or a configuration file. Refer to your web host&#39;s support documentation for details. <span style="color: #008000;"><em><strong>PHP 7+</strong> can also be used. However testing on this platform is not complete so bugs may still exist. Please use the <strong>support forum</strong> to report and discuss these. They will be fixed as soon as we are aware of any new ones.</em></span><ul>
+<li>PHP should be configured with the PHP/PDO library for MySQL. This is a server configuration option. It is enabled by default on most hosts. See <a href="http://php.net/pdo">http://php.net/pdo</a></li>
+<li>PHP should be configured to allow sufficient server resources (memory and execution time) for the size of your system. Typical requirements are:<ul>
+<li>Small systems (500 individuals): 16-32MB, 10-20 seconds</li>
+<li>Medium systems (5000 individuals): 32-64MB, 20-40 seconds</li>
+<li>Large systems (50000 individuals): 64-128MB, 40-80 seconds</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="mysql">MySQL</h3>
+<ul>
+<li>MySQL 5.0.13 or later. Note that kiwitrees can share a single database with other applications by choosing a unique table prefix during configuration. If the number of databases is not restricted, you can set up a database purely for use by kiwitrees and create a separate user and password for only your genealogy.</li>
+</ul>
+<h3 id="a-compatible-internet-browser-">A compatible internet browser.</h3>
+<ul>
+<li>Kiwitrees supports the use of most current versions of open-source browsers such as Firefox, Chrome, and Safari. We will do our best to support others such as Opera and Internet Explorer, though not their earlier versions. Currently many things do not work well in IE7, and some not in IE8 either. <strong>We strongly recommend anyone using these obsolete browsers upgrade as soon as possible.</strong> We are also aware that IE and Opera browsers provide poor RTL language support generally, so cannot recommend those for sites requiring RTL languages.</li>
+<li>To view sites that contain both left-to-right and right-to-left text (e.g. English data on Hebrew pages), you will need to use a browser that provides support for the HTML5 dir=&quot;auto&quot; attribute. At present, only browsers based on the WebKit engine (Chrome and Safari) have this. The Gecko (Firefox) and Presto (Opera) engines promise to provide this soon.</li>
+<li>HTML Frames. Note that kiwitrees uses cookies to track login sessions. Sites that make kiwitrees pages available inside an HTML Frames will encounter problems with login for versions 7, 8, and 9 of Internet Explorer. IE users should review the Privacy settings Tools / Internet Options for more details.</li>
+</ul>
+<p><strong><a href="#kiwitrees">Back to top</a></strong></p>
+<h2 id="installing">Installing</h2>
+<p>All you need to install kiwitrees is a webserver with PHP and MySQL. Almost every web hosting service provides these, but be sure to confirm that those supplied meet or exceed the minimum system requirements. Download the latest version of kiwitrees available from <span style="color: #857d50;"><strong><a href="http://kiwitrees.net/services/downloads/">the downloads page</a></strong></span></p>
+<ol>
+<li>Unzip the files and upload them to an empty directory on your web server.</li>
+<li>Open your web browser and type the URL for your kiwitrees site (for example, <a href="http://www.yourserver.com/kiwitrees">http://www.yourserver.com/kiwitrees</a>) into the address bar.</li>
+<li>The kiwitrees setup wizard will start automatically. Simply follow the steps, answering each question as you proceed.</li>
+</ol>
+<p>That&#39;s it! However, before you can use kiwitrees, you need one (or possibly more) GEDCOM (family tree) files. If you have been doing your research using a desktop program such as Family Tree Maker, you can use it&#39;s &quot;save as GEDCOM&quot; function to create a GEDCOM file. If you are starting from scratch, then kiwitrees can create a GEDCOM file for you. So, after installation, you&#39;ll be directed to the GEDCOM (family tree) administration page, where you&#39;ll need to select one of the following options:</p>
+<ol>
+<li>UPLOAD a GEDCOM file from your local machine</li>
+<li>ADD a GEDCOM file from your server, (if your GEDCOM file is too large to upload, you can copy it to the kiwitrees/data folder, and load it from there)</li>
+<li>CREATE a new, empty GEDCOM file</li>
+</ol>
+<p>There are <em>lots</em> of configuration options. You&#39;ll probably want to review the privacy settings first. Don&#39;t worry too much about all the other options - the defaults are good for most people. If you get stuck, there&#39;s lots of built-in help and you can get friendly advice from the <span style="color: #857d50;"><strong>help</strong></span> forum.</p>
+<p><strong><a href="#kiwitrees">Back to top</a></strong></p>
+<h2 id="translations">Translations</h2>
+<ul>
+<li><a href="https://www.transifex.com/projects/p/kiwitrees/">Transifex</a></li>
+</ul>
+<p><strong><a href="#kiwitrees">Back to top</a></strong></p>
+<p>##Contributing
+Either visit the <a href="http://kiwitrees.net/forums/">project form</a> or open an issue on <a href="https://github.com/kiwi3685/kiwitrees">Github</a> first to discuss potential changes/additions.</p>
+<p><strong><a href="#kiwitrees">Back to top</a></strong></p>
+
+      </body>
+    </html>

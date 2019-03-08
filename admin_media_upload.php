@@ -34,8 +34,8 @@ $controller
 $action = KT_Filter::post('action');
 
 if ($action == "upload") {
-	for ($i=1; $i<6; $i++) {
-		if (!empty($_FILES['mediafile'.$i]["name"]) || !empty($_FILES['thumbnail'.$i]["name"])) {
+	for ($i = 1; $i < 6; $i ++) {
+		if (!empty($_FILES['mediafile' . $i]["name"]) || !empty($_FILES['thumbnail' . $i]["name"])) {
 			$folder = KT_Filter::post('folder' . $i, KT_REGEX_UNSAFE);
 
 			// Validate the media folder
@@ -48,7 +48,7 @@ if ($action == "upload") {
 				$folderName .= '/';
 				// Not allowed to use “../”
 				if (strpos('/' . $folderName, '/../')!==false) {
-					KT_FlashMessages::addMessage(KT_I18N::translate('Folder names are not allowed to include “../”'), 'alert');
+					KT_FlashMessages::addMessage('Folder names are not allowed to include “../”');
 					break;
 				}
 			}
@@ -91,6 +91,13 @@ if ($action == "upload") {
 				// Assume the user used the wrong field, and treat this as a main image
 				$_FILES['mediafile' . $i] = $_FILES['thumbnail' . $i];
 				unset($_FILES['thumbnail' . $i]);
+			}
+
+			// Check for image having 0 bytes (corrupted)  or too large to import
+			if ($_FILES['mediafile' . $i]['size'] && ($_FILES['mediafile' . $i]['size'] === 0 || $_FILES['mediafile' . $i]['size'] > int_from_bytestring(detectMaxUploadFileSize()))) {
+				KT_FlashMessages::addMessage(KT_I18N::translate('The media file you selected either has a size of zero bytes or is too large to be uploaded.'));
+				unset($_FILES['mediafile' . $i]);
+				break;
 			}
 
 			// Thumbnails must be images.

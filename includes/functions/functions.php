@@ -57,11 +57,9 @@ if (!defined('KT_KIWITREES')) {
 function safe_POST($var, $regex = KT_REGEX_NOSCRIPT, $default = null) {
 	return safe_REQUEST($_POST, $var, $regex, $default);
 }
-
 function safe_GET($var, $regex = KT_REGEX_NOSCRIPT, $default = null) {
 	return safe_REQUEST($_GET, $var, $regex, $default);
 }
-
 function safe_COOKIE($var, $regex = KT_REGEX_NOSCRIPT, $default = null) {
 	return safe_REQUEST($_COOKIE, $var, $regex, $default);
 }
@@ -72,7 +70,6 @@ function safe_GET_integer($var, $min, $max, $default) {
 	$num = min($num, $max);
 	return (int)$num;
 }
-
 function safe_POST_integer($var, $min, $max, $default) {
 	$num = KT_Filter::post($var, KT_REGEX_INTEGER, $default);
 	$num = max($num, $min);
@@ -233,6 +230,7 @@ function load_gedcom_settings($ged_id =  KT_GED_ID) {
 	global $GENERATE_UIDS;                $GENERATE_UIDS                = get_gedcom_setting($ged_id, 'GENERATE_UIDS');
 	global $HIDE_GEDCOM_ERRORS;           $HIDE_GEDCOM_ERRORS           = get_gedcom_setting($ged_id, 'HIDE_GEDCOM_ERRORS');
 	global $HIDE_LIVE_PEOPLE;             $HIDE_LIVE_PEOPLE             = get_gedcom_setting($ged_id, 'HIDE_LIVE_PEOPLE');
+	global $IMAGE_EDITOR;             	  $IMAGE_EDITOR         	    = get_gedcom_setting($ged_id, 'IMAGE_EDITOR');
 	global $KEEP_ALIVE_YEARS_BIRTH;       $KEEP_ALIVE_YEARS_BIRTH       = get_gedcom_setting($ged_id, 'KEEP_ALIVE_YEARS_BIRTH');
 	global $KEEP_ALIVE_YEARS_DEATH;       $KEEP_ALIVE_YEARS_DEATH       = get_gedcom_setting($ged_id, 'KEEP_ALIVE_YEARS_DEATH');
 	global $LANGUAGE;                     $LANGUAGE                     = get_gedcom_setting($ged_id, 'LANGUAGE');
@@ -446,7 +444,7 @@ function get_gedcom_value($tag, $level, $gedrec, $truncate = '') {
 	$tags = explode(':', $tag);
 	$origlevel = $level;
 	if ($level == 0) {
-		$level = $gedrec{0} + 1;
+		$level = (int) $gedrec{0} + 1;
 	}
 
 	$subrec = $gedrec;
@@ -1011,11 +1009,26 @@ function get_relationship_name($nodes) {
  *
  * @return string
  */
-function getCloseRelationshipName(KT_Person $individual1, KT_Person $individual2) {
+function getCloseRelationshipName(KT_Person $individual1, KT_Person $individual2, $family = '') {
+	$family ? $include_pedi = true : $include_pedi = false;
+
 	if ($individual1->getXref() === $individual2->getXref()) {
 		$label = '<i class="icon-selected"></i>' . reflexivePronoun($individual1);
 	} else {
 		$label = get_relationship_name(get_relationship($individual1, $individual2));
+	}
+
+	if ($family) {
+		$gedrec		= $individual2->getGedcomRecord();
+		preg_match('/\n1 ADOP(\n[2-9].*)*\n2 FAMC @(.+)@/', $gedrec, $match);
+		if ($match) {
+			preg_match('~2 FAMC @(.*?)@~', $match[0], $output);
+			$famcrec = get_sub_record(1, "1 FAMC @" . $output[1] . "@", $gedrec);
+			$pedi	 = get_gedcom_value("PEDI", 2, $famcrec);
+			if ($pedi && $output[1] == $family) {
+				$label .= '<br>(' . KT_Gedcom_Code_Pedi::getValue($pedi, $individual2) . ')';
+			}
+		}
 	}
 
 	return $label;
@@ -1200,44 +1213,56 @@ function get_relationship_name_from_path($path, KT_Person $person1 = null, KT_Pe
 	case 'fat': return KT_I18N::translate('father');
 	case 'par': return KT_I18N::translate('parent');
 	case 'hus':
-		if ($person1 && $person2) {
-			foreach ($person1->getSpouseFamilies() as $family) {
-				if ($person2->equals($family->getSpouse($person1))) {
-					if ($family->isNotMarried()) {
-						return KT_I18N::translate_c('MALE', 'partner');
-					} elseif($family->isDivorced()) {
+	if ($person1 && $person1) {
+		foreach ($person1->getSpouseFamilies() as $family) {
+			if ($person2 === $family->getSpouse($person1)) {
+				if ($family->isMarried()) {
+					if($family->isDivorced()) {
 						return KT_I18N::translate('ex-husband');
 					}
+					return KT_I18N::translate('husband');
+				}
+				if($family->isDivorced()) {
+					return KT_I18N::translate_c('MALE', 'ex-partner');
 				}
 			}
 		}
-		return KT_I18N::translate('husband');
+	}
+	return KT_I18N::translate_c('MALE', 'partner');
 	case 'wif':
 		if ($person1 && $person1) {
 			foreach ($person1->getSpouseFamilies() as $family) {
-				if ($person2->equals($family->getSpouse($person1))) {
-					if ($family->isNotMarried()) {
-						return KT_I18N::translate_c('FEMALE', 'partner');
-					} elseif($family->isDivorced()) {
-						return KT_I18N::translate('ex-wife');
+				if ($person2 === $family->getSpouse($person1)) {
+					if ($family->isMarried()) {
+						if($family->isDivorced()) {
+							return KT_I18N::translate('ex-wife');
+						}
+						return KT_I18N::translate('wife');
+					}
+					if($family->isDivorced()) {
+						return KT_I18N::translate_c('FEMALE', 'ex-partner');
 					}
 				}
 			}
 		}
-		return KT_I18N::translate('wife');
+		return KT_I18N::translate_c('FEMALE', 'partner');
 	case 'spo':
-		if ($person1 && $person2) {
-			foreach ($person1->getSpouseFamilies() as $family) {
-				if ($person2->equals($family->getSpouse($person1))) {
-					if ($family->isNotMarried()) {
-						return KT_I18N::translate_c('MALE/FEMALE', 'partner');
-					} elseif($family->isDivorced()) {
+	if ($person1 && $person1) {
+		foreach ($person1->getSpouseFamilies() as $family) {
+			if ($person2 === $family->getSpouse($person1)) {
+				if ($family->isMarried()) {
+					if($family->isDivorced()) {
 						return KT_I18N::translate('ex-spouse');
 					}
+					return KT_I18N::translate('spouse');
+				}
+				if($family->isDivorced()) {
+					return KT_I18N::translate('ex-partner');
 				}
 			}
 		}
-		return KT_I18N::translate('spouse');
+	}
+	return KT_I18N::translate('partner');
 	case 'son': return KT_I18N::translate('son');
 	case 'dau': return KT_I18N::translate('daughter');
 	case 'chi': return KT_I18N::translate('child');
@@ -2414,7 +2439,7 @@ function add_descendancy(&$list, $pid, $parents = false, $generations = -1) {
 
 // Generate a new XREF, unique across all family trees
 function get_new_xref($type = 'INDI', $ged_id = KT_GED_ID) {
-	global $SOURCE_ID_PREFIX, $REPO_ID_PREFIX, $MEDIA_ID_PREFIX, $FAM_ID_PREFIX, $GEDCOM_ID_PREFIX, $NOTE_ID_PREFIX;;
+	global $SOURCE_ID_PREFIX, $REPO_ID_PREFIX, $MEDIA_ID_PREFIX, $FAM_ID_PREFIX, $GEDCOM_ID_PREFIX, $NOTE_ID_PREFIX;
 
 	switch ($type) {
 	case 'INDI':
@@ -2534,7 +2559,7 @@ function strstrb($haystack, $needle){
 }
 
 /**
-* Detects max size of file cab be uploaded to server
+* Detects max size of file that can be uploaded to server
 *
 * Based on php.ini parameters “upload_max_filesize”, “post_max_size” &
 * “memory_limit”. Valid for single file upload form. May be used
@@ -2549,9 +2574,7 @@ function strstrb($haystack, $needle){
 * Shorthand notation, as described in this FAQ, may also be used. If the size
 * of post data is greater than post_max_size, the $_POST and $_FILES
 * superglobals are empty. This can be tracked in various ways, e.g. by passing
-* the $_GET variable to the script processing the data, i.e.
-* , and then checking
-* if $_GET['processed'] is set.
+* the $_GET variable to the script processing the data, i.e., and then checking if $_GET['processed'] is set.
 * memory_limit > post_max_size > upload_max_filesize
 * @author Paul Melekhov edited by lostinscope http://www.kavoir.com/2010/02/php-get-the-file-uploading-limit-max-file-size-allowed-to-upload.html
 * @return int Max file size in bytes
@@ -2565,23 +2588,17 @@ function detectMaxUploadFileSize(){
 	*/
 	$normalize = function($size) {
 		if (preg_match('/^([\d\.]+)([KMG])$/i', $size, $match)) {
-		$pos = array_search($match[2], array("K", "M", "G"));
-			if ($pos !== false) {
+		$pos = array_search($match[2], array('K', 'M', 'G'));
+			if ($pos) {
 				$size = $match[1] * pow(1024, $pos + 1);
 			}
 		}
 		return $size;
 	};
 
-	$max_upload = $normalize(ini_get('upload_max_filesize'));
-
-	$max_post = (ini_get('post_max_size') == 0) ?
-		function(){throw new Exception('Check Your php.ini settings');}
-		: $normalize(ini_get('post_max_size')
-	);
-
-	$memory_limit = (ini_get('memory_limit') == -1) ?
-	$max_post : $normalize(ini_get('memory_limit'));
+	$max_upload		= $normalize(ini_get('upload_max_filesize'));
+	$max_post		= (ini_get('post_max_size') == 0) ? function(){throw new Exception('Check Your php.ini settings');} : $normalize(ini_get('post_max_size'));
+	$memory_limit	= (ini_get('memory_limit') == -1) ? $max_post : $normalize(ini_get('memory_limit'));
 
 	if($memory_limit < $max_post || $memory_limit < $max_upload)
 	return $memory_limit;
@@ -2598,6 +2615,31 @@ function detectMaxUploadFileSize(){
 	$display_maxsize = round(pow(1024, $base - floor($base)), $precision) . $suffixes[floor($base)];
 
 	return $display_maxsize;
+
+}
+
+function int_from_bytestring ($byteString) {
+	preg_match('/^\s*([0-9.]+)\s*([KMGTPE])B?\s*$/i', $byteString, $matches);
+	if ($matches) {
+		$num = (float)$matches[1];
+		switch (strtoupper($matches[2])) {
+			case 'E':
+			$num = $num * 1024;
+			case 'P':
+			$num = $num * 1024;
+			case 'T':
+			$num = $num * 1024;
+			case 'G':
+			$num = $num * 1024;
+			case 'M':
+			$num = $num * 1024;
+			case 'K':
+			$num = $num * 1024;
+		}
+		return intval($num);
+	} else {
+		return $byteString;
+	}
 
 }
 
@@ -2908,39 +2950,4 @@ function FamilyNavigator($pid){
 		</table>
 	</div> <!-- close "media-links" -->
 	<?php
-}
-
-/**
- * Convert a file upload PHP error code into user-friendly text.
- *
- * @param int $error_code
- *
- * @return string
- */
-function fileUploadErrorText($error_code) {
-	switch ($error_code) {
-	case UPLOAD_ERR_OK:
-		return KT_I18N::translate('File successfully uploaded');
-	case UPLOAD_ERR_INI_SIZE:
-	case UPLOAD_ERR_FORM_SIZE:
-		// I18N: PHP internal error message - php.net/manual/en/features.file-upload.errors.php
-		return KT_I18N::translate('The uploaded file exceeds the allowed size.');
-	case UPLOAD_ERR_PARTIAL:
-		// I18N: PHP internal error message - php.net/manual/en/features.file-upload.errors.php
-		return KT_I18N::translate('The file was only partially uploaded. Please try again.');
-	case UPLOAD_ERR_NO_FILE:
-		// I18N: PHP internal error message - php.net/manual/en/features.file-upload.errors.php
-		return KT_I18N::translate('No file was received. Please try again.');
-	case UPLOAD_ERR_NO_TMP_DIR:
-		// I18N: PHP internal error message - php.net/manual/en/features.file-upload.errors.php
-		return KT_I18N::translate('The PHP temporary folder is missing.');
-	case UPLOAD_ERR_CANT_WRITE:
-		// I18N: PHP internal error message - php.net/manual/en/features.file-upload.errors.php
-		return KT_I18N::translate('PHP failed to write to disk.');
-	case UPLOAD_ERR_EXTENSION:
-		// I18N: PHP internal error message - php.net/manual/en/features.file-upload.errors.php
-		return KT_I18N::translate('PHP blocked the file because of its extension.');
-	default:
-		return 'Error: ' . $error_code;
-	}
 }
