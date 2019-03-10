@@ -30,7 +30,7 @@ if (!defined('KT_KIWITREES')) {
  * Compare various event datess with date of birth
  *
  * @param array $tag_array - an array of vaild GEDCOM tags for comparison
- * @param string $tag2 - a single secondary tag where $tag_array is FAMS, FAMC, etc (e.g. array('FAMS'), 'CHIL');)
+ * @param string $tag2 - a single cell small-6 medium-4ary tag where $tag_array is FAMS, FAMC, etc (e.g. array('FAMS'), 'CHIL');)
  */
 function birth_comparisons($tag_array, $tag2 = '') {
 	$html = '';
@@ -53,11 +53,11 @@ function birth_comparisons($tag_array, $tag2 = '') {
 								$age_diff	= KT_Date::Compare($event_date, $birth_date);
 								if ($event_date->MinJD() && $birth_date->MinJD() && ($age_diff < 0)) {
 									$html .= '
-										<p>
-											<div class="first"><a href="' . $person->getHtmlUrl(). '" target="_blank" rel="noopener noreferrer">' . $person->getFullName() . '</a></div>
-											<div class="second"><span class="label">' . KT_Gedcom_Tag::getLabel('BIRT') . '</span>' . $birth_date->Display() . '</div>
-											<div class="third"><span class="label">' . KT_Gedcom_Tag::getLabel($tag2) . '</span>' . $event_date->Display() . '</div>
-										</p>';
+										<div class="grid-x">
+											<div class="cell small-6 medium-4"><a href="' . $person->getHtmlUrl(). '" target="_blank" rel="noopener noreferrer">' . $person->getFullName() . '</a></div>
+											<div class="cell small-6 medium-4"><span class="label">' . KT_Gedcom_Tag::getLabel('BIRT') . '</span>' . $birth_date->Display() . '</div>
+											<div class="cell auto"><span class="label">' . KT_Gedcom_Tag::getLabel($tag2) . '</span>' . $event_date->Display() . '</div>
+										</div>';
 									$count ++;
 								}
 							}
@@ -70,11 +70,11 @@ function birth_comparisons($tag_array, $tag2 = '') {
 									$age_diff	= KT_Date::Compare($event_date, $birth_date);
 									if ($event_date->MinJD() && $birth_date->MinJD() && ($age_diff < 0)) {
 										$html .= '
-											<p>
-												<div class="first"><a href="' . $person->getHtmlUrl(). '" target="_blank" rel="noopener noreferrer">' . $person->getFullName() . '</a></div>
-												<div class="second"><span class="label">' . KT_Gedcom_Tag::getLabel('BIRT') . '</span>' . $birth_date->Display() . '</div>
-												<div class="third"><span class="label">' . KT_Gedcom_Tag::getLabel($tag2) . '<a href="' . $child->getHtmlUrl(). '" target="_blank" rel="noopener noreferrer">' . $child->getFullName(). '</a>' . KT_Gedcom_Tag::getLabel('BIRT') . '</span>' . $event_date->Display() . '</div>
-											</p>';
+											<div class="grid-x">
+												<div class="cell small-6 medium-4"><a href="' . $person->getHtmlUrl(). '" target="_blank" rel="noopener noreferrer">' . $person->getFullName() . '</a></div>
+												<div class="cell small-6 medium-4"><span class="label">' . KT_Gedcom_Tag::getLabel('BIRT') . '</span>' . $birth_date->Display() . '</div>
+												<div class="cell auto"><span class="label">' . KT_Gedcom_Tag::getLabel($tag2) . '<a href="' . $child->getHtmlUrl(). '" target="_blank" rel="noopener noreferrer">' . $child->getFullName(). '</a>' . KT_Gedcom_Tag::getLabel('BIRT') . '</span>' . $event_date->Display() . '</div>
+											</div>';
 										$count ++;
 									}
 								}
@@ -91,11 +91,11 @@ function birth_comparisons($tag_array, $tag2 = '') {
 						$age_diff	= KT_Date::Compare($event_date, $birth_date);
 						if ($event_date->MinJD() && $birth_date->MinJD() && ($age_diff < 0)) {
 							$html .= '
-								<p>
-									<div class="first"><a href="' . $person->getHtmlUrl(). '" target="_blank" rel="noopener noreferrer">' . $person->getFullName() . '</a></div>
-									<div class="second"><span class="label">' . KT_Gedcom_Tag::getLabel('BIRT') . '</span>' . $birth_date->Display() . '</div>
-									<div class="third"><span class="label">' . KT_Gedcom_Tag::getLabel($tag_array[$i]) . '</span>' . $event_date->Display() . '</div>
-								</p>';
+								<div class="grid-x">
+									<div class="cell small-6 medium-4"><a href="' . $person->getHtmlUrl(). '" target="_blank" rel="noopener noreferrer">' . $person->getFullName() . '</a></div>
+									<div class="cell small-6 medium-4"><span class="label">' . KT_Gedcom_Tag::getLabel('BIRT') . '</span>' . $birth_date->Display() . '</div>
+									<div class="cell auto"><span class="label">' . KT_Gedcom_Tag::getLabel($tag_array[$i]) . '</span>' . $event_date->Display() . '</div>
+								</div>';
 							$count ++;
 						}
 					}
@@ -125,11 +125,11 @@ function death_comparisons($tag_array) {
 				$age_diff	= KT_Date::Compare($event_date, $death_date);
 				if ($event_date->MinJD() && $death_date->MinJD() && ($age_diff < 0)) {
 					$html .= '
-						<p>
-							<div class="first"><a href="' . $person->getHtmlUrl(). '" target="_blank" rel="noopener noreferrer">' . $person->getFullName() . '</a></div>
-							<div class="second"><span class="label">' . KT_Gedcom_Tag::getLabel($tag_array[$i]) . '</span>' . $event_date->Display() . '</div>
-							<div class="third"><span class="label">' . KT_Gedcom_Tag::getLabel('DEAT') . '</span>' . $death_date->Display() . '</div>
-						</p>';
+						<div class="grid-x">
+							<div class="cell small-6 medium-4"><a href="' . $person->getHtmlUrl(). '" target="_blank" rel="noopener noreferrer">' . $person->getFullName() . '</a></div>
+							<div class="cell small-6 medium-4"><span class="label">' . KT_Gedcom_Tag::getLabel($tag_array[$i]) . '</span>' . $event_date->Display() . '</div>
+							<div class="cell auto"><span class="label">' . KT_Gedcom_Tag::getLabel('DEAT') . '</span>' . $death_date->Display() . '</div>
+						</div>';
 					$count ++;
 				}
 			}
@@ -622,10 +622,10 @@ function child_order() {
 
 		if ($dates_original !== $dates_sorted) {
 			$html .= '
-				<p>
-					<div class="first"><a href="' . $family->getHtmlUrl() . '" target="_blank" rel="noopener noreferrer">' . $family->getFullName() . '</a></div>
-					<div class="second" style="font-size:90%; font-style:italic;"><a href="edit_interface.php?action=reorder_children&pid=' . $family->getXref() . '&amp;ged=KT_GEDCOM" target="_blank">click to update order</a></div>
-				</p>';
+				<div class="grid-x">
+					<div class="cell small-6 medium-4"><a href="' . $family->getHtmlUrl() . '" target="_blank" rel="noopener noreferrer">' . $family->getFullName() . '</a></div>
+					<div class="cell small-6 medium-4" style="font-size:90%; font-style:italic;"><a href="edit_interface.php?action=reorder_children&pid=' . $family->getXref() . '&amp;ged=KT_GEDCOM" target="_blank">click to update order</a></div>
+				</div>';
 			$count ++;
 		}
 	}
@@ -661,10 +661,10 @@ function fam_order() {
 			sort($dates_sorted);
 			if ($dates_original !== $dates_sorted) {
 				$html .= '
-				<p>
-					<div class="first"><a href="individual.php?pid=' . $person->getXref(). '&amp;ged=' . KT_GEDCOM . '#relatives" target="_blank" rel="noopener noreferrer">' . $person->getFullName() . '</a></div>
-					<div class="second" style="font-size:90%; font-style:italic;"><a href="edit_interface.php?action=reorder_fams&pid=' . $person->getXref() . '&amp;ged=' . KT_GEDCOM . '" target="_blank">click to update order</a></div>
-				</p>';
+				<div class="grid-x">
+					<div class="cell small-6 medium-4"><a href="individual.php?pid=' . $person->getXref(). '&amp;ged=' . KT_GEDCOM . '#relatives" target="_blank" rel="noopener noreferrer">' . $person->getFullName() . '</a></div>
+					<div class="cell small-6 medium-4" style="font-size:90%; font-style:italic;"><a href="edit_interface.php?action=reorder_fams&pid=' . $person->getXref() . '&amp;ged=' . KT_GEDCOM . '" target="_blank">click to update order</a></div>
+				</div>';
 				$count ++;
 			}
 		}
@@ -693,10 +693,10 @@ function missing_vital($tag) {
 		$person = KT_Person::getInstance($row->xref);
 		if ($tag != 'DEAT' || ($tag == 'DEAT' && $person->isDead())) {
 			$html 	.= '
-				<p>
-					<div class="first"><a href="' . $person->getHtmlUrl(). '" target="_blank" rel="noopener noreferrer">' . $person->getFullName() . '</a></div>
-					<div class="second" style="font-size:90%; font-style:italic; vertical-align:top;"><pre style="margin:0;">' . $gedrec . '</pre></div>
-				</p>
+				<div class="grid-x">
+					<div class="cell small-6 medium-4"><a href="' . $person->getHtmlUrl(). '" target="_blank" rel="noopener noreferrer">' . $person->getFullName() . '</a></div>
+					<div class="cell small-6 medium-4" style="font-size:90%; font-style:italic; vertical-align:top;"><pre style="margin:0;">' . $gedrec . '</pre></div>
+				</div>
 			';
 			$count	++;
 		}

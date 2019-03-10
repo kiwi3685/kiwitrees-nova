@@ -8471,10 +8471,14 @@ div[id$="-page"]:not(#indi-page) h3 {
 #edit_interface-page .popup_links {
   font-size: 1.25rem;
   padding-top: 0.25rem; }
-  #edit_interface-page .popup_links .svg-inline--fa {
-    cursor: pointer; }
-    #edit_interface-page .popup_links .svg-inline--fa:hover {
-      color: #ab3334; }
+  #edit_interface-page .popup_links a {
+    color: #331919; }
+    #edit_interface-page .popup_links a .fa-fw {
+      width: 3rem; }
+    #edit_interface-page .popup_links a .svg-inline--fa {
+      cursor: pointer; }
+      #edit_interface-page .popup_links a .svg-inline--fa:hover {
+        color: #ab3334; }
 
 #edit_interface-page .fdatepicker .input-group-label {
   height: 2.4rem; }
