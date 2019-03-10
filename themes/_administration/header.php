@@ -49,7 +49,7 @@ asort($site_tools);
 $ft_tools = array(
 	"admin_trees_check.php"			=> KT_I18N::translate('Check for GEDCOM errors'),
 	"admin_site_change.php"			=> KT_I18N::translate('Changes log'),
-	"admin_site_other.php"			=> KT_I18N::translate('Add unlinked records'),
+	"admin_trees_addunlinked.php"	=> KT_I18N::translate('Add unlinked records'),
 	"admin_trees_places.php"		=> KT_I18N::translate('Place name editing'),
 	"admin_site_merge.php"			=> KT_I18N::translate('Merge records'),
 	"admin_trees_renumber.php"		=> KT_I18N::translate('Renumber family tree'),
@@ -158,7 +158,7 @@ $this
 						</li>
 						<?php if (KT_USER_CAN_ACCEPT && exists_pending_change()) { ?>
 							<li>
-							 	<p><a href="edit_changes.php" target="_blank" rel="noopener noreferrer" style="color:red;"><?php echo KT_I18N::translate('Pending changes'); ?></a></p>
+							 	<p><a href="edit_changes.php" target="_blank" rel="noopener noreferrer" class="alert"><?php echo KT_I18N::translate('Pending changes'); ?></a></p>
 							</li>
 						<?php } ?>
 					</ul>
