@@ -25,8 +25,8 @@ define('KT_SCRIPT_NAME', 'statistics.php');
 require './includes/session.php';
 
 // check for on demand content loading
-$tab = safe_GET('tabi', KT_REGEX_NOSCRIPT, 0);
-$ajax = safe_GET('ajax', KT_REGEX_NOSCRIPT, 0);
+$tab	= KT_Filter::get('tab', KT_REGEX_NOSCRIPT, 0);
+$ajax	= KT_Filter::get('ajax', KT_REGEX_NOSCRIPT, 0);
 
 if (!$ajax) {
 	$controller = new KT_Controller_Page();
@@ -98,8 +98,8 @@ if (!$ajax) {
 				<td class="facts_label">', KT_I18N::translate('Total deaths'), '</td>
 			</tr>
 			<tr>
-				<td class="facts_value" align="center">', $stats->totalBirths(), '</td>
-				<td class="facts_value" align="center">', $stats->totalDeaths(), '</td>
+				<td class="facts_value" align="center">', KT_I18n::number($stats->totalBirths()), '</td>
+				<td class="facts_value" align="center">', KT_I18n::number($stats->totalDeaths()), '</td>
 			</tr>
 			<tr>
 				<td class="facts_label">', KT_I18N::translate('Births by century'), '</td>
@@ -200,8 +200,8 @@ if (!$ajax) {
 				<td class="facts_label">', KT_I18N::translate('Total divorces'), '</td>
 			</tr>
 			<tr>
-				<td class="facts_value" align="center">', $stats->totalMarriages(), '</td>
-				<td class="facts_value" align="center">', $stats->totalDivorces(), '</td>
+				<td class="facts_value" align="center">', KT_I18n::number($stats->totalMarriages()), '</td>
+				<td class="facts_value" align="center">', KT_I18n::number($stats->totalDivorces()), '</td>
 			</tr>
 			<tr>
 				<td class="facts_label">', KT_I18N::translate('Marriages by century'), '</td>
