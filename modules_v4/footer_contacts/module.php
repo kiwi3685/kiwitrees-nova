@@ -65,9 +65,10 @@ class footer_contacts_KT_Module extends KT_Module implements KT_Module_Footer {
 					$content .= contact_links();
 				}
 				if (array_key_exists('contact', KT_Module::getActiveModules())) {
-					$content .= '<p>
+					$content .= '
+					<p>
 						<a href="module.php?mod=contact&amp;mod_action=show&amp;url=' . addslashes(urlencode(get_query_url())) . '">
-							<i class="' . $iconStyle . ' fa-pencil"></i>
+							<i class="' . $iconStyle . ' fa-pencil-alt"></i>
 							' . KT_I18N::translate('Contact form') . '
 						</a>
 					</p>';

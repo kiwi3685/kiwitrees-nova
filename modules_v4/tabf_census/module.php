@@ -70,6 +70,10 @@ class tabf_census_KT_Module extends KT_Module implements KT_Module_FamTab {
 	// Implement KT_Module_FamTab
 	public function getTabContent() {
 		global $controller, $iconStyle;
+		// $icon styles
+		$nothing	= '<i class="fa-xs ' . $iconStyle . ' fa-minus"></i>';
+		$correct	= '<i class="success ' . $iconStyle . '  fa-check"></i>';
+		$missing	= '<i class="alert ' . $iconStyle . '  fa-times"></i>';
 
 		ob_start();
 		?>
@@ -108,21 +112,26 @@ class tabf_census_KT_Module extends KT_Module implements KT_Module_FamTab {
 										$year	= substr($census->censusDate(), -4);
 										$date	= new KT_Date($census->censusDate()); ?>
 										<td>
-											<?php if ($person->getBirthDate()->JD() > $date->JD()) {
-												echo "-";
-											 } elseif ($person->getDeathDate()->JD() < $date->JD()) {
-												echo "-";
-											} elseif (in_array($year, $details['cens'])) { ?>
-												<i class="success <?php echo $iconStyle; ?> fa-check"></i>
-											<?php } else { ?>
-												<i class="alert <?php echo $iconStyle; ?> fa-times"></i>
-											<?php } ?>
+											<?php if ($person->getBirthDate()->JD() > $date->JD() || $person->getDeathDate()->JD() < $date->JD()) {
+												echo $nothing;
+											} elseif (in_array($year, $details['cens'])) {
+												echo $correct;
+											} else {
+												echo $missing;
+											} ?>
 										</td>
 									<?php } ?>
 								</tr>
 							<?php } ?>
 						</tbody>
 					</table>
+					<div>
+						<!-- key of symbols used in table -->
+						<span><?php echo KT_I18N::translate('Key to summary'); ?> : </span>
+						<span><?php echo $correct . KT_I18N::translate('Census entry found'); ?> | </span>
+						<span><?php echo $missing . KT_I18N::translate('Census entry missing'); ?> | </span>
+						<span><?php echo $nothing . KT_I18N::translate('No census entry expected'); ?></span>
+					</div>
 			</div>
 		</div>
 

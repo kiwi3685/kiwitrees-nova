@@ -120,7 +120,12 @@ class block_favorites_KT_Module extends KT_Module implements KT_Module_Block {
 		}
 
 		$content = '';
-		$style = 2; // 1 means "regular box", 2 means "wide box"
+
+		if (get_block_location($block_id) === 'side') {
+			$style = 1;
+		} else {
+			$style = 2; // 1 means "regular box", 2 means "wide box"
+		}
 
 		if ($favorites) {
 			foreach ($favorites as $key => $favorite) {

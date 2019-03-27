@@ -32,7 +32,7 @@ if ($missing) { ?>
 			<?php echo $thumbnail; ?>
 		</div>
 		<div class="cell medium-10">
-			<a href="individual.php?pid=<?php echo $pid; ?>&amp;ged=<?php echo rawurlencode($GEDCOM); ?>" title="<?php echo strip_tags($name.$addname); ?>">
+			<a class="name" href="individual.php?pid=<?php echo $pid; ?>&amp;ged=<?php echo rawurlencode($GEDCOM); ?>" title="<?php echo strip_tags($name.$addname); ?>">
 				<?php echo $shortname; ?>
 			</a>
 			<button class="float-right clear tiny button show-for-medium" type="button" data-toggle="<?php echo $dataToggle; ?>">

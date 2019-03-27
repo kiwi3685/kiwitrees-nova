@@ -985,7 +985,7 @@ function print_indi_form($nextaction, $famid, $linenum='', $namerec='', $famtag=
 			</button>
 			<button class="btn btn-primary" type="button" onclick="check_duplicates();" title="<?php /* I18N: button hover title */ KT_I18N::translate('Check for possible duplicates'); ?>">
 				<i class="' . $iconStyle . ' fa-eye"></i>
-				<?php echo KT_I18N::translate('check'); ?>
+				<?php echo KT_I18N::translate('Check'); ?>
 			</button>
 		</p>
 	</form>
@@ -1168,12 +1168,17 @@ function print_calendar_popup() {
 			<i class="' . $iconStyle . ' fa-calendar-alt"></i>
 		</span>
 	';
-//		' <a href="#" onclick="cal_toggleDate(\'caldiv'.$id.'\', \''.$id.'\'); return false;" class="icon-button_calendar" title="'.KT_I18N::translate('Select a date').'"></a>'.
-//		'<div id="caldiv'.$id.'" style="position:absolute;visibility:hidden;background-color:white;z-index:1000;"></div>';
 }
 
 function print_addnewmedia_link($element_id) {
-	return '<a href="#" onclick="pastefield=document.getElementById(\''.$element_id.'\'); window.open(\'addmedia.php?action=showmediaform&type=event\', \'_blank\', \'\'); return false;" class="icon-button_addmedia" title="'.KT_I18N::translate('Add a media object').'"></a>';
+	global $iconStyle;
+	return '
+		<a href="#" onclick="pastefield=document.getElementById(\''.$element_id.'\'); window.open(\'addmedia.php?action=showmediaform&type=event\', \'_blank\', \'\'); return false;" title="'.KT_I18N::translate('Add a media object').'">
+			<span class="fa-layers fa-fw">
+				<i class="' . $iconStyle . ' fa-camera-retro"></i>
+				<i class="' . $iconStyle . ' fa-plus" data-fa-transform="shrink-2 up-8 right-8"></i>
+			</span>
+		</a>';
 }
 
 function print_addnewrepository_link($element_id) {
@@ -1526,9 +1531,7 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 				<?php } else { ?>
 					<!-- textarea -->
 					<?php if ($fact == 'TEXT' || $fact == 'ADDR' || ($fact == 'SHARED_NOTE' && !$islink)) { ?>
-						<textarea id="<?php echo $element_id; ?>" name="<?php echo $element_name; ?>">
-							<?php echo htmlspecialchars($value); ?>
-						</textarea>
+						<textarea id="<?php echo $element_id; ?>" name="<?php echo $element_name; ?>"><?php echo htmlspecialchars($value); ?></textarea>
 					<?php } else {
 						// Extra markup for specific fact types
 						$extra_markup = '';
@@ -1780,7 +1783,6 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 							}
 						break;
 						case 'OBJE':
-							echo print_findmedia_link($element_id, '1media');
 							if (!$value) {
 								echo ' ', print_addnewmedia_link($element_id);
 								$value = 'new';
@@ -1966,41 +1968,39 @@ function print_add_layer($tag, $level=2) {
 
 	if ($tag == "SOUR") { ?>
 		<!--  Add new source to fact -->
-		<button class="dropdown button" type="button" data-toggle="newsource">
-			 <?php echo KT_I18N::translate('Add source citation'); ?>
-		</button>
-		<div class="add_layer expandable" id="newsource" data-toggler=".is-shown">
-			<div class="grid-x">
-				<?php $source = "SOUR @";
-				add_simple_tag("$level $source");
-				$page = "PAGE";
-				add_simple_tag(($level + 1) . " $page");
-				$text = "TEXT";
-				add_simple_tag(($level + 2) . " $text");
-				if ($FULL_SOURCES) {
-					add_simple_tag(($level + 2) . " DATE", '', KT_Gedcom_Tag::getLabel('DATA:DATE'));
-					add_simple_tag(($level + 1) . " QUAY");
-				}
-				add_simple_tag(($level + 1) . " OBJE");
-				add_simple_tag(($level + 1) . " SHARED_NOTE"); ?>
+		<li class="accordion-item" data-accordion-item>
+			<a href="#" class="accordion-title"><?php echo KT_I18N::translate('Add source citation'); ?></a>
+			<div id="newsource" class="accordion-content" data-tab-content>
+				<div class="grid-x">
+					<div class="cell">
+						<?php $source = "SOUR @";
+						add_simple_tag("$level $source");
+						$page = "PAGE";
+						add_simple_tag(($level + 1) . " $page");
+						$text = "TEXT";
+						add_simple_tag(($level + 2) . " $text");
+						if ($FULL_SOURCES) {
+							add_simple_tag(($level + 2) . " DATE", '', KT_Gedcom_Tag::getLabel('DATA:DATE'));
+							add_simple_tag(($level + 1) . " QUAY");
+						}
+						add_simple_tag(($level + 1) . " OBJE");
+						add_simple_tag(($level + 1) . " SHARED_NOTE"); ?>
+					</div>
+				</div>
 			</div>
-		</div>
+		</li>
 	<?php }
 	if ($tag == "ASSO" || $tag == "ASSO2") { ?>
 		<!--  Add an associate -->
-		<?php if ($tag == "ASSO") { ?>
-			<button class="dropdown button" type="button" data-toggle="newasso">
-				 <?php echo KT_I18N::translate('Add associate'); ?>
-			</button>
-			<div class="add_layer expandable" id="newasso" data-toggler=".is-shown">
-		<?php } else { ?>
-			<button class="dropdown button" type="button" data-toggle="newasso2">
-				 <?php echo KT_I18N::translate('Add associate'); ?>
-			</button>
-			<div class="add_layer expandable" id="newasso2" data-toggler=".is-shown">
-		<?php } ?>
+		<li class="accordion-item" data-accordion-item>
+			<a href="#" class="accordion-title"><?php echo KT_I18N::translate('Add associate'); ?></a>
+			<?php if ($tag == "ASSO") { ?>
+				<div id="newasso" class="accordion-content" data-tab-content>
+			<?php } else { ?>
+				<div id="newasso2" class="accordion-content" data-tab-content>
+			<?php } ?>
 			<div class="grid-x">
-				<div class="">
+				<div class="cell">
 					<?php
 					add_simple_tag(($level) ." ASSO @");
 					add_simple_tag(($level + 1) . " RELA");
@@ -2009,62 +2009,63 @@ function print_add_layer($tag, $level=2) {
 					?>
 				</div>
 			</div>
-		</div>
+		<li>
 	<?php }
 	if ($tag == "NOTE") { ?>
 		<!--  Retrieve existing note or add new note to fact -->
 		<?php $text = ''; ?>
-		<button class="dropdown button" type="button" data-toggle="newnote">
-			 <?php echo KT_I18N::translate('Add note'); ?>
-		</button>
-		<div class="add_layer expandable" id="newnote" data-toggler=".is-shown">
-			<div class="grid-x">
-				<div class="">
-					<?php add_simple_tag(($level) . " NOTE " . $text); ?>
+		<li class="accordion-item" data-accordion-item>
+			<a href="#" class="accordion-title"><?php echo KT_I18N::translate('Add note'); ?></a>
+			<div id="newnote" class="accordion-content" data-tab-content>
+				<div class="grid-x">
+					<div class="cell">
+						<?php add_simple_tag(($level) . " NOTE " . $text); ?>
+					</div>
 				</div>
 			</div>
-		</div>
+		</li>
 	<?php }
 	if ($tag == "SHARED_NOTE") { ?>
 		<!--  Retrieve existing shared note or add new shared note to fact -->
 		<?php $text = ''; ?>
-		<button class="dropdown button" type="button" data-toggle="newshared_note">
-			 <?php echo KT_I18N::translate('Add shared note'); ?>
-		</button>
-		<div class="add_layer expandable" id="newshared_note" data-toggler=".is-shown">
-			<div class="grid-x">
-				<div class="">
-					<?php add_simple_tag(($level) . " SHARED_NOTE "); ?>
+		<li class="accordion-item" data-accordion-item>
+			<a href="#" class="accordion-title"><?php echo KT_I18N::translate('Add shared note'); ?></a>
+			<div id="newshared_note" class="accordion-content" data-tab-content>
+				<div class="grid-x">
+					<div class="cell">
+						<?php add_simple_tag(($level) . " SHARED_NOTE "); ?>
+					</div>
 				</div>
 			</div>
-		</div>
+		</li>
 	<?php }
+
 	if ($tag == "OBJE") { ?>
 		<!--  Add new obje to fact -->
-		<button class="dropdown button" type="button" data-toggle="newobje">
-			 <?php echo KT_I18N::translate('Add media object'); ?>
-		</button>
-		<div class="add_layer expandable" id="newobje" data-toggler=".is-shown">
-			<div class="grid-x">
-				<div class="">
-					<?php add_simple_tag($level . " OBJE"); ?>
+		<li class="accordion-item" data-accordion-item>
+			<a href="#" class="accordion-title"><?php echo KT_I18N::translate('Add media object'); ?></a>
+			<div id="newobje" class="accordion-content" data-tab-content>
+				<div class="grid-x">
+					<div class="cell">
+						<?php add_simple_tag($level . " OBJE"); ?>
+					</div>
 				</div>
 			</div>
-		</div>
+		</li>
 	<?php }
 	if ($tag == "RESN") { ?>
 		<!--  Retrieve existing resn or add new resn to fact -->
 		<?php $text = ''; ?>
-		<button class="dropdown button" type="button" data-toggle="newresn">
-			 <?php echo KT_I18N::translate('Add restriction'); ?>
-		</button>
-		<div class="add_layer expandable" id="newresn" data-toggler=".is-shown">
-			<div class="grid-x">
-				<div class="">
-					<?php add_simple_tag(($level) . " RESN " . $text); ?>
+		<li class="accordion-item" data-accordion-item>
+			<a href="#" class="accordion-title"><?php echo KT_I18N::translate('Add restriction'); ?></a>
+			<div id="newresn" class="accordion-content" data-tab-content>
+				<div class="grid-x">
+					<div class="cell">
+						<?php add_simple_tag(($level) . " RESN " . $text); ?>
+					</div>
 				</div>
 			</div>
-		</div>
+		</li>
 	<?php }
 }
 
@@ -2511,9 +2512,19 @@ function create_edit_form($gedrec, $linenum, $level0type) {
 		return;
 	}
 
-	$type = trim($fields[1]);
-	$level1type = $type;
+	$type				= trim($fields[1]);
+	$level1type			= $type;
+	$level1typeLabel	= KT_Gedcom_Tag::getLabel($level1type);
+ 	?>
 
+	<!-- Sub-heading for edit_interface page -->
+	<h4>
+		<?php echo KT_I18N::translate('Editing %s data', $level1typeLabel); ?>
+	</h4>
+	<hr>
+	<!-- end heading -->
+
+	<?php
 	if (count($fields)>2) {
 		$ct = preg_match("/@.*@/", $fields[2]);
 		$levellink = $ct > 0;
@@ -2546,17 +2557,17 @@ function create_edit_form($gedrec, $linenum, $level0type) {
 	// Loop on existing tags :
 	while (true) {
 		// Keep track of our hierarchy, e.g. 1=>BIRT, 2=>PLAC, 3=>FONE
-		$stack[(int)$level]=$type;
+		$stack[(int)$level] = $type;
 		// Merge them together, e.g. BIRT:PLAC:FONE
 		$label = implode(':', array_slice($stack, 1, $level));
 
 		$text = '';
-		for ($j=2; $j<count($fields); $j++) {
-			if ($j>2) $text .= ' ';
+		for ($j = 2; $j < count($fields); $j++) {
+			if ($j > 2) $text .= ' ';
 			$text .= $fields[$j];
 		}
 		$text = rtrim($text);
-		while (($i+1<count($gedlines)) && (preg_match("/".($level+1) . " CONT ?(.*)/", $gedlines[$i+1], $cmatch)>0)) {
+		while (($i + 1 < count($gedlines)) && (preg_match("/".($level+1) . " CONT ?(.*)/", $gedlines[$i+1], $cmatch)>0)) {
 			$text .= "\n" . $cmatch[1];
 			$i++;
 		}
@@ -2592,7 +2603,7 @@ function create_edit_form($gedrec, $linenum, $level0type) {
 
 		// Get a list of tags present at the next level
 		$subtags = array();
-		for ($ii = $i+1; isset($gedlines[$ii]) && preg_match('/^\s*(\d+)\s+(\S+)/', $gedlines[$ii], $mm) && $mm[1]>$level; ++$ii)
+		for ($ii = $i + 1; isset($gedlines[$ii]) && preg_match('/^\s*(\d+)\s+(\S+)/', $gedlines[$ii], $mm) && $mm[1]>$level; ++$ii)
 			if ($mm[1] == $level+1)
 				$subtags[] = $mm[2];
 

@@ -78,23 +78,25 @@ if ($controller->record && $controller->record->canDisplayDetails()) {
 $PEDIGREE_FULL_DETAILS = '1'; // Override GEDCOM configuration
 $show_full = '1';
 
-$controller->addInlineJavascript('
-	// open specified tab, previously saved tab, or the first one
-	if (window.location.hash) {
-		var hash = window.location.hash;
-	} else if (sessionStorage.getItem("fam-tab")) {
-		var hash = sessionStorage.getItem("fam-tab");
-	} else {
-		var hash = jQuery("#famTabs li:first a").attr("href");
-	};
-	var openhash = hash.substr(1);
-	jQuery("#famTabs li." + openhash).addClass("is-active");
-	jQuery("div#" + openhash).addClass("is-active");
-	jQuery("#famTabs li." + openhash + " a").attr("aria-selected","true");
-	jQuery("#famTabs").on("change.zf.tabs", function() {
-		sessionStorage.setItem("fam-tab", window.location.hash);
-	});
-');
+if (KT_USER_ID){
+	$controller->addInlineJavascript('
+		// open specified tab, previously saved tab, or the first one
+		if (window.location.hash) {
+			var hash = window.location.hash;
+		} else if (sessionStorage.getItem("fam-tab")) {
+			var hash = sessionStorage.getItem("fam-tab");
+		} else {
+			var hash = jQuery("#famTabs li:first a").attr("href");
+		};
+		var openhash = hash.substr(1);
+		jQuery("#famTabs li." + openhash).addClass("is-active");
+		jQuery("div#" + openhash).addClass("is-active");
+		jQuery("#famTabs li." + openhash + " a").attr("aria-selected","true");
+		jQuery("#famTabs").on("change.zf.tabs", function() {
+			sessionStorage.setItem("fam-tab", window.location.hash);
+		});
+	');
+}
 ?>
 
 <div class="grid-x grid-padding-y" id="family-page">

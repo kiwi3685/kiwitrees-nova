@@ -682,7 +682,7 @@ function missing_vital($tag) {
 			SELECT i_id AS xref, i_gedcom AS gedrec
 				FROM `##individuals`
 				WHERE `i_file`=?
-				AND `i_gedcom` NOT REGEXP CONCAT('\n1 ', ?, '(?:.)*(?:\n[2-9].+)*\n2 (DATE|PLAC|SOUR)')
+				AND `i_gedcom` NOT REGEXP CONCAT('\n1 ', ?, '.*(?:\n[2-9](?:.*))*\n2 (DATE|PLAC|SOUR).*')
 		")->execute(array(KT_GED_ID, $tag))->fetchAll();
 	foreach ($rows as $row) {
 		preg_match('/\n(1 ' . $tag . '\n[2-9].*|1 ' . $tag . ' Y\n[2-9].*|1 ' . $tag . ' Y)/i', $row->gedrec, $match);

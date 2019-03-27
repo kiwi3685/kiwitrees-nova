@@ -177,100 +177,85 @@ case 'editraw':
 
 ////////////////////////////////////////////////////////////////////////////////
 case 'edit':
-	$pid    = safe_GET('pid', KT_REGEX_XREF);
+	$pid    = KT_Filter::get('pid', KT_REGEX_XREF);
 	$record = KT_GedcomRecord::getInstance($pid);
 
 	$controller
-		->setPageTitle(KT_I18N::translate('Edit') . ' - ' . ($type == 'INDI' ? $record->getLifespanName() : $record->getFullName()))
+		->setPageTitle(($type == 'INDI' ? $record->getLifespanName() : $record->getFullName()))
 		->pageHeader();
 
 	// Hide the private data
 	list($gedrec) = $record->privatizeGedcom(KT_USER_ACCESS_LEVEL);
 	?>
-	<div id="edit_interface-page">
-		<h2><?php echo $controller->getPageTitle(); ?></h2>
-		<?php init_calendar_popup(); ?>
-		<form name="editform" method="post" action="edit_interface.php" enctype="multipart/form-data">
-			<input type="hidden" name="action" value="update">
-			<input type="hidden" name="linenum" value="<?php echo $linenum; ?>">
-			<input type="hidden" name="pid" value="<?php echo $pid; ?>">
-			<div id="add_facts">
-				<?php $level1type = create_edit_form($gedrec, $linenum, $level0type);
-				if (KT_USER_IS_ADMIN) { ?>
-					<div class="last_change">
-						<label class="width25">
-							<?php echo KT_Gedcom_Tag::getLabel('CHAN'); ?>
-						</label>
-						<div class="input">
-							<?php if ($NO_UPDATE_CHAN) { ?>
-								<input type="checkbox" checked="checked" name="preserve_last_changed">
-							<?php } else { ?>
-								<input type="checkbox" name="preserve_last_changed">
-							<?php }
-							echo KT_I18N::translate('Do not update the “last change” record'), help_link('no_update_CHAN');
-							if (isset($famrec)) {
-								$event = new KT_Event(get_sub_record(1, "1 CHAN", $famrec), null, 0);
-								echo format_fact_date($event, new KT_Person(''), false, true);
-							} ?>
-						</div>
-					</div>
-				<?php } ?>
-			</div>
-			<div id="additional_facts">
-				<?php switch ($level0type) {
-					case 'OBJE':
-					case 'NOTE':
-						// OBJE and NOTE "facts" are all special, and none can take lower-level links
-					break;
-					case 'SOUR':
-					case 'REPO':
-						// SOUR and REPO "facts" may only take a NOTE
-						if ($level1type!='NOTE') {
-							print_add_layer('NOTE');
-							echo '<p>' . print_add_layer('NOTE') . '</p>';
-						}
-					break;
-					case 'FAM':
-					case 'INDI':
-						// FAM and INDI records have "real facts".  They can take NOTE/SOUR/OBJE/etc.
-						if ($level1type != 'SEX') {
-							if ($level1type != 'SOUR' && $level1type != 'REPO') {
-								echo '<p>' . print_add_layer('SOUR') . '</p>';
-							}
-							if ($level1type != 'OBJE' && $level1type != 'REPO') {
-								echo '<p>' . print_add_layer('OBJE') . '</p>';
-							}
+	<div id="edit_interface-page" class="grid-x grid-padding-x">
+		<div class="cell large-10 large-offset-1">
+			<h2><?php echo $controller->getPageTitle(); ?></h2>
+			<?php init_calendar_popup(); ?>
+			<form name="editform" method="post" action="edit_interface.php" enctype="multipart/form-data">
+				<input type="hidden" name="action" value="update">
+				<input type="hidden" name="linenum" value="<?php echo $linenum; ?>">
+				<input type="hidden" name="pid" value="<?php echo $pid; ?>">
+
+				<?php $level1type = create_edit_form($gedrec, $linenum, $level0type); ?>
+
+				<?php echo no_update_chan($record); ?>
+
+				<ul class="accordion" data-accordion data-allow-all-closed="true" data-multi-expand="true">
+					<?php switch ($level0type) {
+						case 'OBJE':
+						case 'NOTE':
+							// OBJE and NOTE "facts" are all special, and none can take lower-level links
+						break;
+						case 'SOUR':
+						case 'REPO':
+							// SOUR and REPO "facts" may only take a NOTE
 							if ($level1type != 'NOTE') {
-								echo '<p>' . print_add_layer('NOTE') . '</p>';
+								echo print_add_layer('NOTE');
 							}
-							// Shared Note addition ------------
-							if ($level1type != 'SHARED_NOTE' && $level1type != 'NOTE') {
-								echo '<p>' . print_add_layer('SHARED_NOTE') . '</p>';
+						break;
+						case 'FAM':
+						case 'INDI':
+							// FAM and INDI records have "real facts".  They can take NOTE/SOUR/OBJE/etc.
+							if ($level1type != 'SEX') {
+								if ($level1type != 'SOUR' && $level1type != 'REPO') {
+									echo print_add_layer('SOUR');
+								}
+								if ($level1type != 'OBJE' && $level1type != 'REPO') {
+									echo print_add_layer('OBJE');
+								}
+								if ($level1type != 'NOTE') {
+									echo print_add_layer('NOTE');
+								}
+								// Shared Note addition ------------
+								if ($level1type != 'SHARED_NOTE' && $level1type != 'NOTE') {
+									echo print_add_layer('SHARED_NOTE');
+								}
+								if ($level1type != 'ASSO' && $level1type != 'REPO' && $level1type != 'NOTE') {
+									echo print_add_layer('ASSO');
+								}
+								// allow to add godfather and godmother for CHR fact or best man and bridesmaid for MARR fact in one window
+								if ($level1type=='BAPM' || $level1type=='CHR' || $level1type == 'MARR') {
+									echo print_add_layer('ASSO2');
+								}
+								// RESN can be added to all level 1 tags
+								echo print_add_layer('RESN');
 							}
-							if ($level1type != 'ASSO' && $level1type != 'REPO' && $level1type != 'NOTE') {
-								echo '<p>' . print_add_layer('ASSO') . '</p>';
-							}
-							// allow to add godfather and godmother for CHR fact or best man and bridesmaid for MARR fact in one window
-							if ($level1type=='BAPM' || $level1type=='CHR' || $level1type=='MARR') {
-								echo '<p>' . print_add_layer('ASSO2') . '</p>';
-							}
-							// RESN can be added to all level 1 tags
-							echo '<p>' . print_add_layer('RESN') . '</p>';
-						}
-					break;
-				} ?>
-			</div>
-			<p id="save-cancel">
-				<button class="btn btn-primary" type="submit">
-					<i class="fa fa-save"></i>
+						break;
+					} ?>
+				</ul>
+
+				<button class="button" type="submit">
+					<i class="<?php echo $iconStyle; ?> fa-save"></i>
 					<?php echo KT_I18N::translate('Save'); ?>
 				</button>
-				<button class="btn btn-primary" type="button" onclick="window.close();">
-					<i class="fa fa-times"></i>
-					<?php echo KT_I18N::translate('close'); ?>
+				<button class="button" type="submit" onclick="window.close();">
+					<i class="<?php echo $iconStyle; ?> fa-times"></i>
+					<?php echo KT_I18N::translate('Cancel'); ?>
 				</button>
-			</p>
-		</form>
+
+
+			</form>
+		</div>
 	</div> <!-- id="edit_interface-page" -->
 	<?php
 	break;

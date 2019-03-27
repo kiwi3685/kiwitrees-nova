@@ -799,12 +799,12 @@ $controller
 		</div>
 		<p id="save-cancel">
 			<button class="btn btn-primary" type="submit">
-				<i class="' . $iconStyle . ' fa-save"></i>
+				<i class="<?php echo $iconStyle; ?> fa-save"></i>
 				<?php echo KT_I18N::translate('Save'); ?>
 			</button>
 			<button class="btn btn-primary" type="button" onclick="window.close();">
-				<i class="' . $iconStyle . ' fa-times"></i>
-				<?php echo KT_I18N::translate('close'); ?>
+				<i class="<?php echo $iconStyle; ?> fa-times"></i>
+				<?php echo KT_I18N::translate('Cancel'); ?>
 			</button>
 		</p>
 	</form>

@@ -79,7 +79,7 @@ class widget_user_contacts_KT_Module extends KT_Module implements KT_Module_Widg
 						</div>
 						<p id="save-cancel">
 							<button class="btn btn-primary" type="submit">
-								<i class="' . $iconStyle . ' fa-pencil-square-o"></i>' .
+								<i class="' . $iconStyle . ' fa-pencil-alt"></i>' .
 								KT_I18N::translate('Write message') . '
 							</button>
 						</p>

@@ -31,7 +31,7 @@ if (!defined('KT_KIWITREES')) {
 *
 * find and print a given individuals information for a pedigree chart
 * @param string $pid the Gedcom Xref ID of the   to print
-* @param int $style the style to print the box in, 1 for smaller boxes, 2 for larger boxes
+* @param int $style the style to print the box in, 1 for smaller boxes, 2 for larger boxes, 3 for vertical template
 * @param int $count on some charts it is important to keep a count of how many boxes were printed
 */
 function print_pedigree_person($person, $style = 1, $count = 0, $personcount = "1") {

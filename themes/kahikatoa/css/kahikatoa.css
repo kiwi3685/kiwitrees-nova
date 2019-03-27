@@ -8039,7 +8039,8 @@ footer {
 .block {
   margin-bottom: 1.875rem;
   /* block_charts */
-  /* block_login */ }
+  /* block_login */
+  /* block_favorites */ }
   .block .blockheader {
     background-color: #ab3334;
     color: #eddab6;
@@ -8094,6 +8095,14 @@ footer {
     margin: 0; }
     .block form.login-form button {
       margin-bottom: 1rem; }
+  .block .compact_box_template {
+    font-size: inherit;
+    margin-bottom: 0.25rem;
+    width: auto; }
+    .block .compact_box_template img {
+      max-height: 4rem; }
+    .block .compact_box_template .button.tiny {
+      font-size: inherit; }
 
 .small-block {
   font-size: 0.875rem; }
@@ -8313,6 +8322,9 @@ div[id$="-page"]:not(#indi-page) h3 {
     font-size: .875rem;
     vertical-align: middle; }
 
+#family-page .tabs-panel table td {
+  border: 0.025rem solid #cacaca; }
+
 #family-page .indiFact {
   border: none; }
 
@@ -8325,6 +8337,7 @@ div[id$="-page"]:not(#indi-page) h3 {
     font-size: 100%; }
   #family-page .compact_box_template button {
     border: none;
+    font-size: inherit;
     margin: 0;
     padding: 0; }
 
@@ -8666,6 +8679,9 @@ div[id$="-page"]:not(#indi-page) h3 {
       margin: 0; }
   .compact_box_template .cell + .cell {
     padding: 0.3125rem !important; }
+  .compact_box_template .name {
+    font-weight: 600;
+    font-size: .8rem; }
   .compact_box_template img {
     border-radius: 0;
     height: auto;
@@ -8725,6 +8741,9 @@ div[id$="-page"]:not(#indi-page) h3 {
     .vertical_box_template .card .card-section {
       height: 60%;
       padding: 0; }
+      .vertical_box_template .card .card-section .name {
+        font-weight: 600;
+        font-size: .8rem; }
   .vertical_box_template i.svg-inline--fa {
     margin: 0; }
   .vertical_box_template.M {
