@@ -156,7 +156,7 @@ if (!isset($_POST['lang'])) { ?>
 		'simplexml' => /* I18N: a program feature */ KT_I18N::translate('reporting'),
 	) as $extension=>$features) {
 		if (!extension_loaded($extension)) {
-			echo '<p class="callout alert">' . KT_I18N::translate('PHP extension "%1$s" is disabled.  Without it . the following features will not work: %2$s.  Please ask your server\'s administrator to enable it.', $extension, $features) . '</p>';
+			echo '<p class="callout alert">' . KT_I18N::translate('PHP extension "%1$s" is disabled.  Without it, the following features will not work: %2$s.  Please ask your server\'s administrator to enable it.', $extension, $features) . '</p>';
 			$warnings=true;
 		}
 	}
@@ -533,7 +533,7 @@ try {
 		"CREATE TABLE IF NOT EXISTS `##log` (".
 		" log_id      INTEGER AUTO_INCREMENT NOT NULL,".
 		" log_time    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,".
-		" log_type    ENUM('auth', 'config', 'debug', 'edit', 'error', 'media', 'search') NOT NULL,".
+		" log_type    ENUM('auth', 'config', 'debug', 'edit', 'error', 'media', 'search', 'spam') NOT NULL,".
 		" log_message TEXT         NOT NULL,".
 		" ip_address  VARCHAR(40)  NOT NULL,".
 		" user_id     INTEGER          NULL,".
@@ -768,9 +768,9 @@ try {
 		" block_order INTEGER                NOT NULL,".
 		" module_name VARCHAR(32)            NOT NULL,".
 		" PRIMARY KEY               (block_id),".
-		" FOREIGN KEY `##block_fk1` (gedcom_id)   REFERENCES `##gedcom` (gedcom_id),  /* ON DELETE CASCADE */".
-		" FOREIGN KEY `##block_fk2` (user_id)     REFERENCES `##user`   (user_id),    /* ON DELETE CASCADE */".
-		" FOREIGN KEY `##block_fk3` (module_name) REFERENCES `##module` (module_name) /* ON DELETE CASCADE */".
+		" FOREIGN KEY `##block_fk1` (gedcom_id)   REFERENCES `##gedcom` (gedcom_id)		/* ON DELETE CASCADE */,".
+		" FOREIGN KEY `##block_fk2` (user_id)     REFERENCES `##user`   (user_id)		/* ON DELETE CASCADE */,".
+		" FOREIGN KEY `##block_fk3` (module_name) REFERENCES `##module` (module_name)	/* ON DELETE CASCADE */".
  		") COLLATE utf8_unicode_ci ENGINE=InnoDB"
 	);
 	KT_DB::exec(
@@ -870,9 +870,9 @@ try {
 	KT_DB::prepare(
 		"INSERT IGNORE INTO `##user` (user_id, user_name, real_name, email, password) VALUES ".
 		" (-1, 'DEFAULT_USER', 'DEFAULT_USER', 'DEFAULT_USER', 'DEFAULT_USER'), (1, ?, ?, ?, ?)"
-	)->execute(array(
-		$_POST['ktuser'], $_POST['ktname'], $_POST['ktemail'], crypt($_POST['ktpass'], $hash)
-	));
+	)->execute(
+		array($_POST['ktuser'], $_POST['ktname'], $_POST['ktemail'], crypt($_POST['ktpass'], $hash))
+	);
 
 	KT_DB::prepare(
 		"INSERT IGNORE INTO `##user_setting` (user_id, setting_name, setting_value) VALUES ".
@@ -883,9 +883,9 @@ try {
 		" (1, 'auto_accept',       ?),".
 		" (1, 'visibleonline',     ?),".
 		" (1, 'notify_clipping',   ?)"
-	)->execute(array(
-		1, KT_LOCALE, 1, 1, 0, 1, 1
-	));
+	)->execute(
+		array(1, KT_LOCALE, 1, 1, 0, 1, 1)
+	);
 
 	KT_DB::prepare(
 		"INSERT IGNORE INTO `##site_setting` (setting_name, setting_value) VALUES ".
@@ -903,10 +903,11 @@ try {
 		"('SMTP_AUTH_PASS',                  ''),".
 		"('SMTP_SSL',                        'none'),".
 		"('SMTP_HELO',                       ?),".
-		"('SMTP_FROM_NAME',                  ?)"
-	)->execute(array(
-		$_SERVER['SERVER_NAME'], $_SERVER['SERVER_NAME']
-	));
+		"('SMTP_FROM_NAME',                  ?),".
+		"('BLOCKED_EMAIL_ADDRESS_LIST',      'youremail@gmail.com')"
+	)->execute(
+		array($_SERVER['SERVER_NAME'], $_SERVER['SERVER_NAME'])
+	);
 
 	// Create the default modules for new family trees
 	KT_Module::setDefaultModules();
@@ -957,13 +958,13 @@ try {
 
 <?php
 function to_mb($str) {
-	if (substr($str, -1, 1)=='K') {
-		return floor(substr($str, 0, strlen($str)-1)/1024);
+	if (substr($str, -1, 1) == 'K') {
+		return floor(substr($str, 0, strlen($str) - 1) / 1024);
 	}
-	if (substr($str, -1, 1)=='M') {
-		return floor(substr($str, 0, strlen($str)-1));
+	if (substr($str, -1, 1) == 'M') {
+		return floor(substr($str, 0, strlen($str) - 1));
 	}
-	if (substr($str, -1, 1)=='G') {
-		return floor(1024*substr($str, 0, strlen($str)-1));
+	if (substr($str, -1, 1) == 'G') {
+		return floor(1024 * substr($str, 0, strlen($str) - 1));
 	}
 }
