@@ -1615,7 +1615,8 @@ function get_admin_id($gedcom_id) {
 // since the privacy depends on KT_USER_ACCESS_LEVEL, which depends
 // on KT_GED_ID
 function get_gedcom_blocks($gedcom_id) {
-	$rows = KT_DB::prepare("
+	$blocks	= array('main' => array(), 'side' => array(), 'footer' => array());
+	$rows	= KT_DB::prepare("
 		SELECT SQL_CACHE location, block_id, module_name
 		 FROM  `##block`
 		 JOIN  `##module` USING (module_name)
