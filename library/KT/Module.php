@@ -178,6 +178,7 @@ abstract class KT_Module {
 			  WHEN 'tabf' THEN tabf_order
 			  WHEN 'tabi' THEN tabi_order
 			  WHEN 'widget' THEN widget_order
+			  WHEN 'footer' THEN footer_order
 			  ELSE 0 END, module_name"
 		)->execute(array($ged_id, $component, $access_level))->fetchOneColumn();
 		$array = array();
@@ -330,7 +331,7 @@ abstract class KT_Module {
 				$class	= $file . '_KT_Module';
 				$module	= new $class();
 				$modules[$module->getName()] = $module;
-				KT_DB::prepare("INSERT IGNORE INTO `##module` (module_name, status, menu_order, sidebar_order, tabi_order, widget_order, tabf_order) VALUES (?, ?, ?, ?, ?, ?, ?)")
+				KT_DB::prepare("INSERT IGNORE INTO `##module` (module_name, status, menu_order, sidebar_order, tabi_order, widget_order, tabf_order, footer_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
 					->execute(array(
 						$module->getName(),
 						$status,
@@ -339,6 +340,7 @@ abstract class KT_Module {
 						$module instanceof KT_Module_IndiTab ? $module->defaultTabOrder    () : null,
 						$module instanceof KT_Module_Widget  ? $module->defaultWidgetOrder () : null,
 						$module instanceof KT_Module_FamTab  ? $module->defaultTabOrder    () : null,
+						$module instanceof KT_Module_Footer  ? $module->defaultFooterOrder () : null,
 	));
 				// Set the default privacy for this module.  Note that this also sets it for the
 				// default family tree, with a gedcom_id of -1
@@ -487,103 +489,102 @@ abstract class KT_Module {
 		 * @param display order for tabs, menus, sidebar, widgets, resources
 		 */
 		$default_modules = array(
-			// fam tabs
-			'factsandevents'		=> array('enabled', 1, NULL, NULL, NULL),
-			'census'				=> array('enabled', 2, NULL, NULL, NULL),
 			// indi tabs
-			'tabi_factsandevents'	=> array('enabled', 1, NULL, NULL, NULL),
-			'tabi_families'			=> array('enabled', 2, NULL, NULL, NULL),
-			'tabi_sources'			=> array('enabled', 3, NULL, NULL, NULL),
-			'tabi_notes'			=> array('enabled', 4, NULL, NULL, NULL),
-			'tabi_tree'				=> array('enabled', 5, NULL, NULL, NULL),
-			'tabi_album'			=> array('enabled', 6, NULL, NULL, NULL),
+			'tabi_factsandevents'	=> array('enabled', 1, NULL, NULL, NULL, NULL, NULL),
+			'tabi_families'			=> array('enabled', 2, NULL, NULL, NULL, NULL, NULL),
+			'tabi_sources'			=> array('enabled', 3, NULL, NULL, NULL, NULL, NULL),
+			'tabi_notes'			=> array('enabled', 4, NULL, NULL, NULL, NULL, NULL),
+			'tabi_tree'				=> array('enabled', 5, NULL, NULL, NULL, NULL, NULL),
+			'tabi_album'			=> array('enabled', 6, NULL, NULL, NULL, NULL, NULL),
 			// menus - main menu
-			'menu_homepage'			=> array('enabled', NULL, 1, NULL, NULL),
-			'menu_edit'				=> array('enabled', NULL, 2, NULL, NULL),
-			'menu_charts'			=> array('enabled', NULL, 3, NULL, NULL),
-			'menu_lists'			=> array('enabled', NULL, 4, NULL, NULL),
-			'menu_reports'			=> array('enabled', NULL, 5, NULL, NULL),
-			'menu_search'			=> array('enabled', NULL, 6, NULL, NULL),
+			'menu_homepage'			=> array('enabled', NULL, 1, NULL, NULL, NULL, NULL),
+			'menu_edit'				=> array('enabled', NULL, 2, NULL, NULL, NULL, NULL),
+			'menu_charts'			=> array('enabled', NULL, 3, NULL, NULL, NULL, NULL),
+			'menu_lists'			=> array('enabled', NULL, 4, NULL, NULL, NULL, NULL),
+			'menu_reports'			=> array('enabled', NULL, 5, NULL, NULL, NULL, NULL),
+			'menu_search'			=> array('enabled', NULL, 6, NULL, NULL, NULL, NULL),
 			// menus - extra menu
-			'menu_login'			=> array('enabled', NULL, 13, NULL, NULL),
-			'menu_favorites'		=> array('enabled', NULL, 14, NULL, NULL),
-			'menu_languages'		=> array('enabled', NULL, 15, NULL, NULL),
+			'menu_login'			=> array('enabled', NULL, 13, NULL, NULL, NULL, NULL),
+			'menu_favorites'		=> array('enabled', NULL, 14, NULL, NULL, NULL, NULL),
+			'menu_languages'		=> array('enabled', NULL, 15, NULL, NULL, NULL, NULL),
 			// sidebar
-			'sidebar_extra_info'			=> array('enabled', NULL, NULL, 1, NULL),
-			'sidebar_family_nav'			=> array('enabled', NULL, NULL, 2, NULL),
-			'sidebar_descendancy'			=> array('enabled', NULL, NULL, 3, NULL),
-			'sidebar_individuals'			=> array('enabled', NULL, NULL, 4, NULL),
-			'sidebar_families'				=> array('enabled', NULL, NULL, 5, NULL),
+			'sidebar_extra_info'	=> array('enabled', NULL, NULL, 1, NULL, NULL, NULL),
+			'sidebar_family_nav'	=> array('enabled', NULL, NULL, 2, NULL, NULL, NULL),
+			'sidebar_descendancy'	=> array('enabled', NULL, NULL, 3, NULL, NULL, NULL),
+			'sidebar_individuals'	=> array('enabled', NULL, NULL, 4, NULL, NULL, NULL),
+			'sidebar_families'		=> array('enabled', NULL, NULL, 5, NULL, NULL, NULL),
 			// widgets
-			'widget_quicklinks'		=> array('enabled', NULL, NULL, NULL, 10),
-			'widget_todays_events'	=> array('enabled', NULL, NULL, NULL, 20),
-			'widget_upcoming'		=> array('enabled', NULL, NULL, NULL, 30),
-			'widget_recent_changes'	=> array('enabled', NULL, NULL, NULL, 40),
+			'widget_quicklinks'		=> array('enabled', NULL, NULL, NULL, 10, NULL, NULL),
+			'widget_todays_events'	=> array('enabled', NULL, NULL, NULL, 20, NULL, NULL),
+			'widget_upcoming'		=> array('enabled', NULL, NULL, NULL, 30, NULL, NULL),
+			'widget_recent_changes'	=> array('enabled', NULL, NULL, NULL, 40, NULL, NULL),
+			// fam tabs
+			'tabf_factsandevents'	=> array('enabled', NULL, NULL, NULL, NULL, 1, NULL),
 			// footer_blocks
-			'footer_contacts'		=> array('enabled', NULL, NULL, NULL, 10),
-			'footer_html		'	=> array('enabled', NULL, NULL, NULL, 20),
-			'footer_logo'			=> array('enabled', NULL, NULL, NULL, 30),
+			'footer_contacts'		=> array('enabled', NULL, NULL, NULL, NULL, NULL, 10),
+			'footer_html'			=> array('enabled', NULL, NULL, NULL, NULL, NULL, 20),
+			'footer_logo'			=> array('enabled', NULL, NULL, NULL, NULL, NULL, 30),
 			// not ordered
 			//  charts (sorted alphabetically)
-			'chart_ancestry'		=> array('enabled', NULL, NULL, NULL, NULL),
-			'chart_compact'			=> array('enabled', NULL, NULL, NULL, NULL),
-			'chart_descendancy'		=> array('enabled', NULL, NULL, NULL, NULL),
-			'chart_familybook'		=> array('enabled', NULL, NULL, NULL, NULL),
-			'chart_fanchart'		=> array('enabled', NULL, NULL, NULL, NULL),
-			'chart_hourglass'		=> array('enabled', NULL, NULL, NULL, NULL),
-			'chart_lifespan'		=> array('enabled', NULL, NULL, NULL, NULL),
-			'chart_pedigree'		=> array('enabled', NULL, NULL, NULL, NULL),
-			'chart_relationship'	=> array('enabled', NULL, NULL, NULL, NULL),
-			'chart_statistics'		=> array('enabled', NULL, NULL, NULL, NULL),
-			'chart_timeline'		=> array('enabled', NULL, NULL, NULL, NULL),
+			'chart_ancestry'		=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'chart_compact'			=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'chart_descendancy'		=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'chart_familybook'		=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'chart_fanchart'		=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'chart_hourglass'		=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'chart_lifespan'		=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'chart_pedigree'		=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'chart_relationship'	=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'chart_statistics'		=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'chart_timeline'		=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
 			// lists (sorted alphabetically)
-			'list_branches'			=> array('enabled', NULL, NULL, NULL, NULL),
-			'list_calendar'			=> array('enabled', NULL, NULL, NULL, NULL),
-			'calendar_utilities'	=> array('enabled', NULL, NULL, NULL, NULL),
-			'list_families'			=> array('enabled', NULL, NULL, NULL, NULL),
-			'list_individuals'		=> array('enabled', NULL, NULL, NULL, NULL),
-			'list_media'			=> array('enabled', NULL, NULL, NULL, NULL),
-			'list_places'			=> array('enabled', NULL, NULL, NULL, NULL),
-			'list_repositories'		=> array('enabled', NULL, NULL, NULL, NULL),
-			'list_shared_notes'		=> array('enabled', NULL, NULL, NULL, NULL),
-			'list_sources'			=> array('enabled', NULL, NULL, NULL, NULL),
+			'list_branches'			=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'list_calendar'			=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'calendar_utilities'	=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'list_families'			=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'list_individuals'		=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'list_media'			=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'list_places'			=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'list_repositories'		=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'list_shared_notes'		=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'list_sources'			=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
 			// reports (sorted alphabetically)
-			'report_changes'		=> array('enabled', NULL, NULL, NULL, NULL),
-			'report_fact'			=> array('enabled', NULL, NULL, NULL, NULL),
-			'report_family'			=> array('enabled', NULL, NULL, NULL, NULL),
-			'report_individual'		=> array('enabled', NULL, NULL, NULL, NULL),
-			'report_marriages'		=> array('enabled', NULL, NULL, NULL, NULL),
-			'report_related_fam'	=> array('enabled', NULL, NULL, NULL, NULL),
-			'report_related_indi'	=> array('enabled', NULL, NULL, NULL, NULL),
-			'report_todo'			=> array('enabled', NULL, NULL, NULL, NULL),
-			'report_vital_records'	=> array('enabled', NULL, NULL, NULL, NULL),
+			'report_changes'		=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'report_fact'			=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'report_family'			=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'report_individual'		=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'report_marriages'		=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'report_related_fam'	=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'report_related_indi'	=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'report_todo'			=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'report_vital_records'	=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
 			// blocks (manually positioned and sorted)
-			'block_charts'			=> array('enabled', NULL, NULL, NULL, NULL),
-			'block_welcome'			=> array('enabled', NULL, NULL, NULL, NULL),
-			'block_favorites'		=> array('enabled', NULL, NULL, NULL, NULL),
-			'block_news'			=> array('enabled', NULL, NULL, NULL, NULL),
-			'block_statistics'		=> array('enabled', NULL, NULL, NULL, NULL),
-			'block_html'			=> array('enabled', NULL, NULL, NULL, NULL),
-			'block_login'			=> array('enabled', NULL, NULL, NULL, NULL),
-			'block_logged_in'		=> array('enabled', NULL, NULL, NULL, NULL),
-			'block_media'			=> array('enabled', NULL, NULL, NULL, NULL),
-			'block_recent_changes'	=> array('enabled', NULL, NULL, NULL, NULL),
-			'block_pending'			=> array('enabled', NULL, NULL, NULL, NULL),
-			'block_today'			=> array('enabled', NULL, NULL, NULL, NULL),
-			'block_todo'			=> array('enabled', NULL, NULL, NULL, NULL),
-			'block_givnnames'		=> array('enabled', NULL, NULL, NULL, NULL),
-			'block_pageviews'		=> array('enabled', NULL, NULL, NULL, NULL),
-			'block_surnames'		=> array('enabled', NULL, NULL, NULL, NULL),
-			'block_upcoming'		=> array('enabled', NULL, NULL, NULL, NULL),
+			'block_charts'			=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'block_welcome'			=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'block_favorites'		=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'block_news'			=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'block_statistics'		=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'block_html'			=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'block_login'			=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'block_logged_in'		=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'block_media'			=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'block_recent_changes'	=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'block_pending'			=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'block_today'			=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'block_todo'			=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'block_givnnames'		=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'block_pageviews'		=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'block_surnames'		=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'block_upcoming'		=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
 			// other
-			'batch_update'			=> array('enabled', NULL, NULL, NULL, NULL),
-			'ckeditor'				=> array('enabled', NULL, NULL, NULL, NULL),
-			'sitemap'				=> array('enabled', NULL, NULL, NULL, NULL),
+			'batch_update'			=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'ckeditor'				=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
+			'sitemap'				=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
 		);
 
 		foreach($default_modules as $module => $order) {
 			KT_DB::prepare(
-				"INSERT INTO `##module` (module_name, status, tabi_order, menu_order, sidebar_order, widget_order, tabf_order) VALUES (?, ?, ?, ?, ?, ?, ?)"
+				"INSERT INTO `##module` (module_name, status, tabi_order, menu_order, sidebar_order, widget_order, tabf_order, footer_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
 			)->execute(array($module, $order[0], $order[1], $order[2], $order[3], $order[4], $order[5], $order[6]));
 		}
 	}
