@@ -37,7 +37,8 @@ if (KT_USER_ID && KT_SCRIPT_NAME != 'index.php') {
 
 //get the widgets list
 $footer_blocks		= KT_Module::getActiveFooters();
-$ct_footer_blocks	= min(count($footer_blocks), 5); // no more than 5 footer blocks can be permitted
+ // no more than 5 footer blocks can be permitted, minimum of 1 required.
+count($footer_blocks) ? $ct_footer_blocks = min(count($footer_blocks), 5) : $ct_footer_blocks = '1';
 $layouts			= array(
 						'1' => array('12'),
 						'2' => array('6','6'),
