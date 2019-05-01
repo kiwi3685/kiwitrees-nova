@@ -30,7 +30,7 @@ if (!defined('KT_KIWITREES')) {
  * Compare various event datess with date of birth
  *
  * @param array $tag_array - an array of vaild GEDCOM tags for comparison
- * @param string $tag2 - a single cell small-6 medium-4ary tag where $tag_array is FAMS, FAMC, etc (e.g. array('FAMS'), 'CHIL');)
+ * @param string $tag2 - a single secondary tag where $tag_array is FAMS, FAMC, etc (e.g. array('FAMS'), 'CHIL');)
  */
 function birth_comparisons($tag_array, $tag2 = '') {
 	$html = '';
@@ -674,32 +674,83 @@ function fam_order() {
 	return array('html' => $html, 'count' => $count, 'time' => $time_elapsed_secs);
 }
 
-function missing_vital($tag) {
-	$html	= '';
-	$count	= 0;
-	$start	= microtime(true);
-	$rows	= KT_DB::prepare("
-			SELECT i_id AS xref, i_gedcom AS gedrec
-				FROM `##individuals`
-				WHERE `i_file`=?
-				AND `i_gedcom` NOT REGEXP CONCAT('\n1 ', ?, '.*(?:\n[2-9](?:.*))*\n2 (DATE|PLAC|SOUR).*')
-		")->execute(array(KT_GED_ID, $tag))->fetchAll();
-	foreach ($rows as $row) {
-		preg_match('/\n(1 ' . $tag . '\n[2-9].*|1 ' . $tag . ' Y\n[2-9].*|1 ' . $tag . ' Y)/i', $row->gedrec, $match);
-		$gedrec = '';
-		if ($match) {
-			$gedrec = $match[0];
-		}
+function missing_vital($tag, $DateTag, $PlacTag, $SourTag) {
+	$html		= '';
+	$count		= 0;
+	$start		= microtime(true);
+	$gedrec 	= '';
+	$subTags	= trim($DateTag . '|' . $PlacTag . '|' . $SourTag, "|");
+	$subTags	= str_replace("||", "|", $subTags);
+	$results 	= array();
+
+	// no <<$tag>> record at all
+	$rows_1 = KT_DB::prepare("
+		SELECT i_id AS xref, i_gedcom AS gedrec
+			FROM `##individuals`
+			WHERE `i_file` = ?
+			AND `i_gedcom` NOT REGEXP '\n1 " . $tag . "'
+	")->execute(array(KT_GED_ID))->fetchAll();
+	foreach ($rows_1 as $row) {
 		$person = KT_Person::getInstance($row->xref);
 		if ($tag != 'DEAT' || ($tag == 'DEAT' && $person->isDead())) {
-			$html 	.= '
-				<div class="grid-x">
-					<div class="cell small-6 medium-4"><a href="' . $person->getHtmlUrl(). '" target="_blank" rel="noopener noreferrer">' . $person->getFullName() . '</a></div>
-					<div class="cell small-6 medium-4" style="font-size:90%; font-style:italic; vertical-align:top;"><pre style="margin:0;">' . $gedrec . '</pre></div>
-				</div>
-			';
-			$count	++;
+			$results[] = array(
+				'HtmlUrl'	=> $person->getHtmlUrl(),
+				'FullName'	=> $person->getFullName(),
+				'gedrec'	=> KT_I18N::translate('No %s data', KT_Gedcom_Tag::getLabel($tag))
+			);
 		}
+	}
+
+	// <<$tag>> record with only <<Y>>
+	$rows_2 = KT_DB::prepare("
+		SELECT i_id AS xref, i_gedcom AS gedrec
+			FROM `##individuals`
+			WHERE `i_file` = ?
+			AND `i_gedcom` REGEXP '\n1 " . $tag . " Y\n1'
+	")->execute(array(KT_GED_ID))->fetchAll();
+	foreach ($rows_2 as $row) {
+		$person = KT_Person::getInstance($row->xref);
+		if ($tag != 'DEAT' || ($tag == 'DEAT' && $person->isDead())) {
+			$results[] = array(
+				'HtmlUrl'	=> $person->getHtmlUrl(),
+				'FullName'	=> $person->getFullName(),
+				'gedrec'	=> '1 ' . $tag . ' Y'
+			);
+		}
+	}
+
+	// <<$tag>> record with or without <<Y>> but without any of the sub-tags specified
+	$rows_3 = KT_DB::prepare("
+		SELECT i_id AS xref, i_gedcom AS gedrec
+			FROM `##individuals`
+			WHERE `i_file` = ?
+			AND `i_gedcom` REGEXP '\n1 " . $tag . "'
+	")->execute(array(KT_GED_ID))->fetchAll();
+	foreach ($rows_3 as $row) {
+		preg_match('/\n(1 ' . $tag . '.*\n([2-9] (?!' . $subTags . ').*\n)+)1/i', $row->gedrec, $match2);
+		if ($match2) {
+			$person = KT_Person::getInstance($row->xref);
+			if ($tag != 'DEAT' || ($tag == 'DEAT' && $person->isDead())) {
+				$results[] = array(
+					'HtmlUrl'	=> $person->getHtmlUrl(),
+					'FullName'	=> $person->getFullName(),
+					'gedrec'	=> $match2[1]
+				);
+			}
+		}
+	}
+
+	asort($results);
+
+	foreach ($results as $result) {
+		$html 	.= '
+			<p>
+				<div class="first"><a href="' . $result['HtmlUrl'] . '" target="_blank" rel="noopener noreferrer">' . $result['FullName'] . '</a></div>
+				<div class="second" style="font-size:90%; font-style:italic; vertical-align:top;"><pre style="margin:0;">' . $result['gedrec'] . '</pre></div>
+			</p>
+			<hr>
+		';
+		$count	++;
 	}
 
 	$time_elapsed_secs = number_format((microtime(true) - $start), 2);
