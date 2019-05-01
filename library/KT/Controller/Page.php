@@ -112,7 +112,7 @@ class KT_Controller_Page extends KT_Controller_Base {
 	}
 
 	// Restrict access
-	public function requireManagerLogin($ged_id=KT_GED_ID) {
+	public function requireManagerLogin($ged_id = KT_GED_ID) {
 		require_once KT_ROOT.'includes/functions/functions.php'; // for get_query_url
 		if (
 			$ged_id == KT_GED_ID && !KT_USER_GEDCOM_ADMIN ||
