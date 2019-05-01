@@ -340,8 +340,9 @@ switch (KT_Filter::get('action')) {
 					</li>
 				<?php }
 			}
-			if (KT_USER_IS_ADMIN) { ?>
-				<li class="accordion-item" data-accordion-item>
+			if (KT_USER_IS_ADMIN) {
+				KT_Tree::GetAll() ? $accordionClass = '' : $accordionClass = ' is-active'; ?>
+				<li class="accordion-item<?php echo $accordionClass; ?>" data-accordion-item>
 					<a class="accordion-title" href="#create">
 						<i class="<?php echo $iconStyle; ?> fa-plus-circle"></i>
 						<?php echo KT_I18N::translate('Create a new family tree'); ?>
@@ -350,7 +351,7 @@ switch (KT_Filter::get('action')) {
 						<div class="">
 							<?php if (!KT_Tree::GetAll()) { ?>
 								<div class="callout alert">
-									<?php echo KT_I18N::translate('You need to create a family tree.'); ?>
+									<?php echo KT_I18N::translate('You need to create a family tree before you can start adding your data.'); ?>
 								</div>
 							<?php } ?>
 							<div class="cell callout alert small">
