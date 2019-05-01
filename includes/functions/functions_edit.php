@@ -133,14 +133,19 @@ function select_edit_control_inline($name, $values, $empty, $selected, $controll
 // $extra    - extra markup for field (optional class)
 function radio_buttons($name, $values, $selected, $extra='') {
 	$html = '';
-	foreach ($values as $key=>$value) {
+	foreach ($values as $key => $value) {
 		$uniqueID = $name . (int)(microtime(true) * 1000000);
 
-		$html .= '<label for="' . $uniqueID . '" ' . $extra . '><input type="radio" name="' . $name . '" id="' . $uniqueID . '" value="' . htmlspecialchars($key) . '"';
-		if ((string)$key === (string)$selected) {
-			$html .= ' checked';
-		}
-		$html .= '>' . htmlspecialchars($value) . '</label>';
+		$html .= '
+			<label for="' . $uniqueID . '" ' . $extra . '>
+				<input type="radio" name="' . $name . '" id="' . $uniqueID . '" value="' . htmlspecialchars($key) . '"';
+					if ((string)$key === (string)$selected) {
+						$html .= ' checked';
+					}
+				$html .= '>' .
+				htmlspecialchars($value) . '
+			</label>
+		';
 	}
 	return $html;
 }
