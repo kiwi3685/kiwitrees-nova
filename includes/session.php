@@ -96,7 +96,7 @@ define('KT_FONT_DEJAVU_SANS_TTF',	KT_STATIC_URL . 'library/KT/Fonts/DejaVuSans.t
 define('KT_ERROR_LEVEL', 2); // 0=none, 1=minimal, 2=full
 
 // Required version of database tables/columns/indexes/etc.
-define('KT_SCHEMA_VERSION', 37);
+define('KT_SCHEMA_VERSION', 38);
 
 // Regular expressions for validating user input, etc.
 define('KT_MINIMUM_PASSWORD_LENGTH', 6);
@@ -581,7 +581,7 @@ if (substr(KT_SCRIPT_NAME, 0, 5) == 'admin' || KT_SCRIPT_NAME == 'module.php' &&
 			$THEME_DIR = get_gedcom_setting(KT_GED_ID, 'THEME_DIR');
 		}
 		if (!in_array($THEME_DIR, get_theme_names())) {
-			$THEME_DIR = 'kiwitrees';
+			$THEME_DIR = 'kahikatoa';
 		}
 		if (!in_array($THEME_DIR, get_theme_names())) {
 			list($THEME_DIR) = get_theme_names();
