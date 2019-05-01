@@ -159,7 +159,7 @@ $controller
 						<p><i class="fi-alert"></i><?php echo /* I18N: A general error message for forms */ KT_I18N::translate('There are some errors in your form.'); ?></p>
 					</div>
 					<div class="cell large-3">
-						<label for="data" class="large-text-right"><?php echo KT_I18N::translate('Data folder'); ?></label>
+						<label for="data"><?php echo KT_I18N::translate('Data folder'); ?></label>
 					</div>
 					<div class="cell large-9">
 						<input type="text" id="data" name="INDEX_DIRECTORY" value="<?php echo KT_Filter::escapeHtml(KT_Site::preference('INDEX_DIRECTORY')); ?>" placeholder="data/" required>
@@ -168,7 +168,7 @@ $controller
 						</div>
 					</div>
 					<div class="cell large-3">
-						<label for="memory" class="large-text-right"><?php echo KT_I18N::translate('Memory limit'); ?></label>
+						<label for="memory"><?php echo KT_I18N::translate('Memory limit'); ?></label>
 					</div>
 					<div class="cell large-9">
 						<input type="text" id="memory" name="MEMORY_LIMIT" value="<?php echo KT_Filter::escapeHtml(KT_Site::preference('MEMORY_LIMIT')); ?>" pattern="[0-9]+[KMG]" placeholder="<?php echo get_cfg_var('memory_limit'); ?>" maxlength="255">
@@ -180,7 +180,7 @@ $controller
 						</div>
 					</div>
 					<div class="cell large-3">
-						<label for="time" class="large-text-right"><?php echo KT_I18N::translate('PHP time limit'); ?></label>
+						<label for="time"><?php echo KT_I18N::translate('PHP time limit'); ?></label>
 					</div>
 					<div class="cell large-9">
 						<input type="text" id="time" name="MAX_EXECUTION_TIME" value="<?php echo KT_Filter::escapeHtml(KT_Site::preference('MAX_EXECUTION_TIME')); ?>" pattern="[0-9]*" placeholder="<?php echo get_cfg_var('max_execution_time') ?>" maxlength="255">
@@ -198,16 +198,16 @@ $controller
 						</div>
 					</div>
 					<div class="cell large-3">
-						<label for="gedcom" class="large-text-right"><?php echo KT_I18N::translate('Show list of family trees'); ?></label>
+						<label for="gedcom"><?php echo KT_I18N::translate('Show list of family trees'); ?></label>
 					</div>
 					<div class="cell large-9">
 						<?php echo edit_field_yes_no('ALLOW_CHANGE_GEDCOM', KT_Site::preference('ALLOW_CHANGE_GEDCOM')); ?>
-						<div class="cell helpcontent">
+						<div class="cell helpcontent space">
 							<?php echo /* I18N: Help text for the “Show list of family trees” site configuration setting */ KT_I18N::translate('For sites with more than one family tree, this option will show the list of family trees in the main menu, the search pages, etc.'); ?>
 						</div>
 					</div>
 					<div class="cell large-3">
-						<label for="session" class="large-text-right"><?php echo KT_I18N::translate('Session timeout'); ?></label>
+						<label for="session"><?php echo KT_I18N::translate('Session timeout'); ?></label>
 					</div>
 					<div class="cell large-9">
 						<input type="text" id="session" name="SESSION_TIME" value="<?php echo KT_Filter::escapeHtml(KT_Site::preference('SESSION_TIME')); ?>" pattern="[0-9]*" placeholder="7200" maxlength="255">
@@ -216,7 +216,7 @@ $controller
 						</div>
 					</div>
 					<div class="cell large-3">
-						<label for="website" class="large-text-right"><?php echo KT_I18N::translate('Website URL'); ?></label>
+						<label for="website"><?php echo KT_I18N::translate('Website URL'); ?></label>
 					</div>
 					<div class="cell large-9">
 						<?php echo select_edit_control('SERVER_URL', array(KT_SERVER_NAME.KT_SCRIPT_PATH=>KT_SERVER_NAME.KT_SCRIPT_PATH), '', KT_Site::preference('SERVER_URL')); ?>
@@ -225,11 +225,11 @@ $controller
 						</div>
 					</div>
 					<div class="cell large-3">
-						<label for="maintenance" class="large-text-right"><?php echo KT_I18N::translate('Site maintenance'); ?></label>
+						<label for="maintenance"><?php echo KT_I18N::translate('Site maintenance'); ?></label>
 					</div>
 					<div class="cell large-9">
 						<?php echo edit_field_yes_no('MAINTENANCE', KT_Site::preference('MAINTENANCE')); ?>
-						<div class="cell helpcontent">
+						<div class="cell helpcontent space">
 							<?php echo KT_I18N::translate('Set this to <b>yes</b> to temporarily prevent anyone <u>except the site administrator</u> from accessing your site.'); ?>
 						</div>
 					</div>
@@ -250,7 +250,7 @@ $controller
 						<p><i class="<?php echo $iconStyle; ?> fa-exclamation-triangle"></i><?php echo /* I18N: A general error message for forms */ KT_I18N::translate('There are errors in your form.'); ?></p>
 					</div>
 					<div class="cell large-3">
-						<label for="smtp" class="large-text-right"><?php echo KT_I18N::translate('Messages'); ?></label>
+						<label for="smtp"><?php echo KT_I18N::translate('Messages'); ?></label>
 					</div>
 					<div class="cell large-9">
 						<select id="smtp_select" name="SMTP_ACTIVE">
@@ -265,16 +265,16 @@ $controller
 						</div>
 					</div>
 					<div class="cell large-3">
-						<label for="smtp" class="large-text-right"><?php echo KT_I18N::translate('Send mail in HTML format'); ?></label>
+						<label for="smtp"><?php echo KT_I18N::translate('Send mail in HTML format'); ?></label>
 					</div>
 					<div class="cell large-9">
 						<?php echo edit_field_yes_no('MAIL_FORMAT', KT_Site::preference('MAIL_FORMAT')); ?>
-						<div class="cell helpcontent">
+						<div class="cell helpcontent space">
 							<?php echo /* I18N: Help text for the “Messages” site configuration setting */ KT_I18N::translate('By default kiwitrees sends emails in plain text format. Setting this option to <b>yes</b> will change that to the multipart format. This allows the use of HTML formatting, but also includes a plain text version for recipients that do not allow HTML formatted emails.'); ?>
 						</div>
 					</div>
 					<div class="cell large-3">
-						<label for="sender" class="large-text-right"><?php echo KT_I18N::translate('Sender email'); ?></label>
+						<label for="sender"><?php echo KT_I18N::translate('Sender email'); ?></label>
 					</div>
 					<div class="cell large-9">
 						<input type="email" id="sender" name="SMTP_FROM_NAME" value="<?php echo KT_Filter::escapeHtml(KT_Site::preference('SMTP_FROM_NAME')); ?>" placeholder="admin@mydomain.com" maxlength="255" required pattern="email">
@@ -287,7 +287,7 @@ $controller
 						<h5 class="accepted"><?php echo KT_I18N::translate('SMTP mail server settings'); ?></h5>
 						<div class="grid-x grid-margin-x">
 							<div class="cell large-3">
-								<label for="server" class="large-text-right"><?php echo KT_I18N::translate('Server name'); ?></label>
+								<label for="server"><?php echo KT_I18N::translate('Server name'); ?></label>
 							</div>
 							<div class="cell large-9">
 								<input type="text" id="server" name="SMTP_HOST" value="<?php echo KT_Filter::escapeHtml(KT_Site::preference('SMTP_HOST')); ?>" placeholder="smtp.example.com" pattern="[a-z0-9-]+(\.[a-z0-9-]+)*" maxlength="255">
@@ -296,7 +296,7 @@ $controller
 								</div>
 							</div>
 							<div class="cell large-3">
-								<label for="port" class="large-text-right"><?php echo KT_I18N::translate('Port number'); ?></label>
+								<label for="port"><?php echo KT_I18N::translate('Port number'); ?></label>
 							</div>
 							<div class="cell large-9">
 								<input type="text" id="port" name="SMTP_PORT" value="<?php echo KT_Filter::escapeHtml(KT_Site::preference('SMTP_PORT')); ?>" placeholder="25" maxlength="5" required pattern="number">
@@ -305,16 +305,16 @@ $controller
 								</div>
 							</div>
 							<div class="cell large-3">
-								<label for="use_password" class="large-text-right"><?php echo KT_I18N::translate('Use password'); ?></label>
+								<label for="use_password"><?php echo KT_I18N::translate('Use password'); ?></label>
 							</div>
 							<div class="cell large-9">
 								<?php echo edit_field_yes_no('SMTP_AUTH', KT_Site::preference('SMTP_AUTH')); ?>
-								<div class="cell helpcontent">
+								<div class="cell helpcontent space">
 									<?php echo /* I18N: Help text for the “Use password” site configuration setting */ KT_I18N::translate('Most SMTP servers require a password.'); ?>
 								</div>
 							</div>
 							<div class="cell large-3">
-								<label for="username" class="large-text-right"><?php echo KT_I18N::translate('Username'); ?></label>
+								<label for="username"><?php echo KT_I18N::translate('Username'); ?></label>
 							</div>
 							<div class="cell large-9">
 								<input type="text" id="username" name="SMTP_AUTH_USER" value="<?php echo KT_Filter::escapeHtml(KT_Site::preference('SMTP_AUTH_USER')); ?>">
@@ -323,7 +323,7 @@ $controller
 								</div>
 							</div>
 							<div class="cell large-3">
-								<label for="password" class="large-text-right"><?php echo KT_I18N::translate('Password'); ?></label>
+								<label for="password"><?php echo KT_I18N::translate('Password'); ?></label>
 							</div>
 							<div class="cell large-9">
 								<input type="text" id="password" name="SMTP_AUTH_PASS" value="">
@@ -332,7 +332,7 @@ $controller
 								</div>
 							</div>
 							<div class="cell large-3">
-								<label for="secure" class="large-text-right"><?php echo KT_I18N::translate('Secure connection'); ?></label>
+								<label for="secure"><?php echo KT_I18N::translate('Secure connection'); ?></label>
 							</div>
 							<div class="cell large-9">
 								<?php echo select_edit_control('SMTP_SSL', $SMTP_SSL_OPTIONS, null, KT_Site::preference('SMTP_SSL')); ?>
@@ -341,7 +341,7 @@ $controller
 								</div>
 							</div>
 							<div class="cell large-3">
-								<label for="sending" class="large-text-right"><?php echo KT_I18N::translate('Sending server name'); ?></label>
+								<label for="sending"><?php echo KT_I18N::translate('Sending server name'); ?></label>
 							</div>
 							<div class="cell large-9">
 								<input type="text" id="sending" name="SMTP_HELO" value="<?php echo KT_Filter::escapeHtml(KT_Site::preference('SMTP_HELO')); ?>" placeholder="abc.com" required pattern="domain" maxlength="255">
@@ -372,7 +372,7 @@ $controller
 						<p><i class="fi-alert"></i><?php echo /* I18N: A general error message for forms */ KT_I18N::translate('There are some errors in your form.'); ?></p>
 					</div>
 					<div class="cell large-3">
-						<label for="loginurl" class="large-text-right"><?php echo KT_I18N::translate('Login URL'); ?></label>
+						<label for="loginurl"><?php echo KT_I18N::translate('Login URL'); ?></label>
 					</div>
 					<div class="cell large-9">
 						<input type="text" id="loginurl" name="LOGIN_URL" value="<?php echo KT_Filter::escapeHtml(KT_Site::preference('LOGIN_URL')); ?>" maxlength="255">
@@ -381,7 +381,7 @@ $controller
 						</div>
 					</div>
 					<div class="cell large-3">
-						<label for="welcome" class="large-text-right"><?php echo KT_I18N::translate('Welcome text on login page'); ?></label>
+						<label for="welcome"><?php echo KT_I18N::translate('Welcome text on login page'); ?></label>
 					</div>
 					<div class="cell large-9">
 						<?php echo select_edit_control('WELCOME_TEXT_AUTH_MODE', $WELCOME_TEXT_AUTH_MODE_OPTIONS, null, KT_Site::preference('WELCOME_TEXT_AUTH_MODE')); ?>
@@ -390,7 +390,7 @@ $controller
 						</div>
 					</div>
 					<div class="cell large-3">
-						<label for="custom" class="large-text-right"><?php echo KT_I18N::translate('Custom welcome text'); ?></label>
+						<label for="custom"><?php echo KT_I18N::translate('Custom welcome text'); ?></label>
 					</div>
 					<div class="cell large-9">
 						<textarea maxlength="2000" id="custom" name="WELCOME_TEXT_AUTH_MODE_4" rows="4"><?php echo KT_Filter::escapeHtml(KT_Site::preference('WELCOME_TEXT_AUTH_MODE_' . KT_LOCALE)) ?></textarea>
@@ -399,25 +399,25 @@ $controller
 						</div>
 					</div>
 					<div class="cell large-3">
-						<label for="USE_REGISTRATION_MODULE" class="large-text-right"><?php echo KT_I18N::translate('Allow visitors to request account registration'); ?></label>
+						<label for="USE_REGISTRATION_MODULE"><?php echo KT_I18N::translate('Allow visitors to request account registration'); ?></label>
 					</div>
 					<div class="cell large-9">
 						<?php echo edit_field_yes_no('USE_REGISTRATION_MODULE', KT_Site::preference('USE_REGISTRATION_MODULE')); ?>
-						<div class="cell helpcontent">
+						<div class="cell helpcontent space">
 							<?php echo KT_I18N::translate('Gives visitors the option of registering themselves for an account on the site. The visitor will receive an email message with a code to verify their application for an account. After verification the Administrator will have to approve the registration before it becomes active.'); ?>
 						</div>
 					</div>
 					<div class="cell large-3">
-						<label for="SHOW_REGISTER_CAUTION" class="large-text-right"><?php echo KT_I18N::translate('Show acceptable use agreement<br>on "Request new user account" page'); ?></label>
+						<label for="SHOW_REGISTER_CAUTION"><?php echo KT_I18N::translate('Show acceptable use agreement<br>on "Request new user account" page'); ?></label>
 					</div>
 					<div class="cell large-9">
 						<?php echo edit_field_yes_no('SHOW_REGISTER_CAUTION', KT_Site::preference('SHOW_REGISTER_CAUTION')); ?>
-						<div class="cell helpcontent">
+						<div class="cell helpcontent space">
 							<?php echo KT_I18N::translate('When set to <b>Yes</b>, the following message will appear above the input fields on the "Request new user account" page:<div class="list_value_wrap"><div class="largeError">Notice:</div><div class="error">By completing and submitting this form, you agree:<ul><li>to protect the privacy of living people listed on our site;</li><li>and in the text box below, to explain to whom you are related, or to provide us with information on someone who should be listed on our site.</li></ul></div></div>'); ?>
 						</div>
 					</div>
 					<div class="cell large-3">
-						<label for="blocked" class="large-text-right"><?php echo KT_I18N::translate('Blocked email address list'); ?></label>
+						<label for="blocked"><?php echo KT_I18N::translate('Blocked email address list'); ?></label>
 					</div>
 					<div class="cell large-9">
 						<?php
