@@ -211,7 +211,7 @@ class KT_Controller_Page extends KT_Controller_Base {
 
 			// Common help_content shortening script
 			jQuery(".helpcontent").shorten({
-			    showChars: 300,
+			    showChars: 900,
 				moreText: "' . KT_I18N::translate('More') . '",
 				lessText: "' . KT_I18N::translate('Less') . '"
 			});
