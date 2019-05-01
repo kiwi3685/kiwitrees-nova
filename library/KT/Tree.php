@@ -42,8 +42,8 @@ class KT_Tree {
 	private static $trees   = null;
 
 	// Tree settings
-	private $preference     = null;    // wt_gedcom_setting table
-	private $user_preference = array(); // wt_user_gedcom_setting table
+	private $preference			= null;    // _gedcom_setting table
+	private $user_preference	= array(); // _user_gedcom_setting table
 
 	// Create a tree object.  This is a private constructor - it can only
 	// be called from KT_Tree::getAll() to ensure proper initialisation.
@@ -136,7 +136,7 @@ class KT_Tree {
 	public static function getAll() {
 		if (self::$trees === null) {
 			self::$trees=array();
-			$rows=KT_DB::prepare(
+			$rows = KT_DB::prepare(
 				"SELECT SQL_CACHE g.gedcom_id AS tree_id, g.gedcom_name AS tree_name, gs1.setting_value AS tree_title, gs2.setting_value AS imported, gs3.setting_value AS tree_subtitle".
 				" FROM `##gedcom` g".
 				" LEFT JOIN `##gedcom_setting`      gs1 ON (g.gedcom_id=gs1.gedcom_id AND gs1.setting_name='title')".
@@ -207,9 +207,9 @@ class KT_Tree {
 	// Create arguments to select_edit_control()
 	// Note - these will be escaped later
 	public static function getNameList() {
-		$list = array();
+		$list=array();
 		foreach (self::getAll() as $tree) {
-			$list[$tree->tree_name] = $tree->tree_title;
+			$list[$tree->tree_name]=$tree->tree_title;
 		}
 		return $list;
 	}
@@ -309,6 +309,7 @@ class KT_Tree {
 		set_gedcom_setting($tree_id, 'GENERATE_UIDS',                false);
 		set_gedcom_setting($tree_id, 'HIDE_GEDCOM_ERRORS',           true);
 		set_gedcom_setting($tree_id, 'HIDE_LIVE_PEOPLE',             true);
+		set_gedcom_setting($tree_id, 'IMAGE_EDITOR',				 'https://pixlr.com/x/');
 		set_gedcom_setting($tree_id, 'INDI_FACTS_ADD',               'AFN,BIRT,DEAT,BURI,CREM,ADOP,BAPM,BARM,BASM,BLES,CHRA,CONF,FCOM,ORDN,NATU,EMIG,IMMI,CENS,PROB,WILL,GRAD,RETI,DSCR,EDUC,IDNO,NATI,NCHI,NMR,OCCU,PROP,RELI,RESI,SSN,TITL,BAPL,CONL,ENDL,SLGC,_MILI,ASSO,RESN');
 		set_gedcom_setting($tree_id, 'INDI_FACTS_QUICK',             'BIRT,BURI,BAPM,CENS,DEAT,OCCU,RESI');
 		set_gedcom_setting($tree_id, 'INDI_FACTS_UNIQUE',            '');
@@ -340,6 +341,18 @@ class KT_Tree {
 		set_gedcom_setting($tree_id, 'REPO_FACTS_QUICK',             '');
 		set_gedcom_setting($tree_id, 'REPO_FACTS_UNIQUE',            'NAME,ADDR');
 		set_gedcom_setting($tree_id, 'REPO_ID_PREFIX',               'R');
+		set_gedcom_setting($tree_id, 'SANITY_BAPTISM',				 5);
+		set_gedcom_setting($tree_id, 'SANITY_OLDAGE',				 120);
+		set_gedcom_setting($tree_id, 'SANITY_MARRIAGE',				 14);
+		set_gedcom_setting($tree_id, 'SANITY_SPOUSE_AGE',			 30);
+		set_gedcom_setting($tree_id, 'SANITY_CHILD_Y',				 15);
+		set_gedcom_setting($tree_id, 'SANITY_CHILD_O',				 50);
+		set_gedcom_setting($tree_id, 'SANITY_INCOMPLETE_BD',		 1);
+		set_gedcom_setting($tree_id, 'SANITY_INCOMPLETE_BP',		 1);
+		set_gedcom_setting($tree_id, 'SANITY_INCOMPLETE_BS',		 1);
+		set_gedcom_setting($tree_id, 'SANITY_INCOMPLETE_DD',		 1);
+		set_gedcom_setting($tree_id, 'SANITY_INCOMPLETE_DP',		 1);
+		set_gedcom_setting($tree_id, 'SANITY_INCOMPLETE_DS',		 1);
 		set_gedcom_setting($tree_id, 'SAVE_WATERMARK_IMAGE',         false);
 		set_gedcom_setting($tree_id, 'SAVE_WATERMARK_THUMB',         false);
 		set_gedcom_setting($tree_id, 'SHOW_COUNTER',                 true);
@@ -372,7 +385,7 @@ class KT_Tree {
 		case 'pt-BR': set_gedcom_setting($tree_id, 'SURNAME_TRADITION', 'portuguese'); break;
 		default:      set_gedcom_setting($tree_id, 'SURNAME_TRADITION', 'paternal');   break;
 		}
-		set_gedcom_setting($tree_id, 'THEME_DIR',                    'kiwitrees');
+		set_gedcom_setting($tree_id, 'THEME_DIR',                    'kahikatoa');
 		set_gedcom_setting($tree_id, 'THUMBNAIL_WIDTH',              '100');
 		set_gedcom_setting($tree_id, 'USE_GEONAMES',                 false);
 		set_gedcom_setting($tree_id, 'USE_RIN',                      false);
@@ -380,8 +393,10 @@ class KT_Tree {
 		set_gedcom_setting($tree_id, 'WATERMARK_THUMB',              false);
 		set_gedcom_setting($tree_id, 'WEBMASTER_USER_ID',            KT_USER_ID);
 		set_gedcom_setting($tree_id, 'WORD_WRAPPED_NOTES',           false);
+		set_gedcom_setting($tree_id, 'imported',                     0);
+		set_gedcom_setting($tree_id, 'title',                        $tree_title);
 		set_gedcom_setting($tree_id, 'subtitle',                     '');
-		if (file_exists(KT_Site::preference('INDEX_DIRECTORY').'histo.'.KT_LOCALE.'.php')) {
+		if (file_exists(KT_Site::preference('INDEX_DIRECTORY').'histo.' . KT_LOCALE . '.php')) {
 			set_gedcom_setting($tree_id, 'EXPAND_HISTO_EVENTS',      false);
 		}
 
@@ -514,14 +529,14 @@ class KT_Tree {
 	 */
 	public static function import_gedcom_file($gedcom_id, $path, $filename) {
 		// Read the file in blocks of roughly 64K.  Ensure that each block
-		// contains complete gedcom records.  This will ensure we don’t split
+		// contains complete gedcom records.  This will ensure we don't split
 		// multi-byte characters, as well as simplifying the code to import
 		// each block.
 
 		$file_data	= '';
 		$fp			= fopen($path, 'rb');
 
-		// Don’t allow the user to cancel the request.  We do not want to be left
+		// Don't allow the user to cancel the request.  We do not want to be left
 		// with an incomplete transaction.
 		ignore_user_abort(true);
 
