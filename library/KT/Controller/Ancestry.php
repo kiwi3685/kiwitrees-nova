@@ -153,7 +153,7 @@ class KT_Controller_Ancestry extends KT_Controller_Chart {
 						<?php } ?>
 					</div>
 					<!-- display parents recursively - or show empty boxes -->
-					<ul class="auto cell" id="sosa_<?php echo $sosa; ?>" data-toggler=".toggle_hide">
+					<ul class="auto cell" id="sosa_<?php echo $sosa; ?>" data-toggler=".hide">
 						<?php echo
 							$this->print_child_ascendancy($family->getHusband(), $sosa * 2, $depth - 1);
 							$this->print_child_ascendancy($family->getWife(), $sosa * 2 + 1, $depth - 1);
