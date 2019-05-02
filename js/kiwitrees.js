@@ -289,12 +289,12 @@ function clear_family_box_timeout(boxid) {
 }
 
 function expand_layer(sid) {
-	if (jQuery("#" + sid + "_img").hasClass("fa-arrow-from-bottom")) {
-		jQuery('#' + sid + "_img").removeClass("fa-arrow-from-bottom").addClass("fa-arrow-from-top");
-	//	jQuery('#' + sid).slideDown("fast");
+	if (jQuery("#" + sid + "_img").hasClass("fa-compress-arrows-alt")) {
+		jQuery('#' + sid).slideDown("slow");
+		jQuery('#' + sid + "_img").removeClass("fa-compress-arrows-alt").addClass("fa-expand-arrows-alt");
 	} else {
-		jQuery('#' + sid + "_img").removeClass("fa-arrow-from-top").addClass("fa-arrow-from-bottom");
-//		jQuery('#' + sid).slideUp("fast");
+		jQuery('#' + sid).slideUp("slow");
+		jQuery('#' + sid + "_img").removeClass("fa-expand-arrows-alt").addClass("fa-compress-arrows-alt");
 	}
 	return false;
 }
