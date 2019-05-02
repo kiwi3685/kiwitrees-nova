@@ -90,7 +90,7 @@ class KT_Controller_Ancestry extends KT_Controller_Chart {
 	 * @param int $depth the ascendancy depth to show
 	 */
 	function print_child_ascendancy($person, $sosa, $depth) {
-		global $KT_IMAGES, $Dindent, $pidarr;
+		global $KT_IMAGES, $Dindent, $pidarr, $iconStyle;
 
 		if ($person) {
 			$pid	= $person->getXref();
@@ -102,64 +102,65 @@ class KT_Controller_Ancestry extends KT_Controller_Chart {
 
 		<li>
 			<div class="grid-x grid-padding-x">
-			<div class="cell shrink ancestry-details-1">
-				<?php print_pedigree_person($person, 1); ?>
-			</div>
-			<div class="auto cell medium-6 ancestry-details-2">
-				<?php if ($sosa > 1) {
-					print_url_arrow($pid, '?mod=chart_ancestry&mod_action=show&rootid=' . $pid . '&amp;generations=' . $this->generations . '&amp;show_full=' . $this->show_full . '&amp;chart_style=' . $this->chart_style . '&amp;ged=' . KT_GEDURL, $label, 3);
-				} else {
-					echo '&nbsp;';
-				} ?>
-				<?php
-					$sosa == 1 ? $sex = 'U' : (($sosa%2) ? $sex = 'F' : $sex = 'M');
-					print_sosa_number($sosa, $person, 'blank', $sex);
-					$relation	= '';
-					$new		= ($pid == '' or !isset($pidarr[$pid]));
-					if (!$new) {
-						$relation = '<br>[=<a href="#sosa' . $pidarr[$pid] . '">' . $pidarr[$pid] . '</a> - ' . get_sosa_name($pidarr[$pid]) . ']';
-					} else {
-						$pidarr[$pid] = $sosa;
-					}
-					echo get_sosa_name($sosa) . $relation;
-				?>
-			</div>
-			<?php
-
-			if (is_null($person)) {
-				echo '</div></li>';
-				return;
-			}
-			// parents
-			$family = $person->getPrimaryChildFamily();
-
-			if ($family && $new && $depth > 0) {
-				// print marriage info ?>
-				<div class="auto cell small-12 ancestry-details-3">
-					<button type="button" class="clear button show-for-medium" data-toggle="sosa_<?php echo $sosa; ?>" aria-controls="sosa_<?php echo $sosa; ?>">
-						<i id="sosa_<?php echo $sosa; ?>_img" class="fa fa-arrow-from-bottom fa-lg" onclick="return expand_layer('sosa_<?php echo $sosa; ?>');"></i>
-					</button>
-					<?php
-					print_sosa_number($sosa * 2, $person, 'blank', 'M');
-					echo KT_I18N::translate('and');
-					print_sosa_number($sosa * 2 + 1, $person, 'blank', 'F');
-					$marriage = $family->getMarriage();
-					if ($marriage->canShow()) { ?>
-						<a href="<?php echo $family->getHtmlUrl(); ?>" class="details">
-							<?php echo KT_USER_CAN_EDIT ? KT_I18N::translate('Edit family: ') : KT_I18N::translate('View family: '); ?>
-							<?php echo $marriage->print_simple_fact(); ?>
-						</a>
-					<?php } ?>
+				<div class="cell shrink ancestry-details-1">
+					<?php print_pedigree_person($person, 1); ?>
 				</div>
-			</div>
-				<!-- display parents recursively - or show empty boxes -->
-				<ul data-toggler="toggler" data-animate="fade-in fade-out" class="auto cell ease" aria-expanded="true" id="sosa_<?php echo $sosa; ?>">
-					<?php echo
-						$this->print_child_ascendancy($family->getHusband(), $sosa * 2, $depth - 1);
-						$this->print_child_ascendancy($family->getWife(), $sosa * 2 + 1, $depth - 1);
+				<div class="auto cell medium-6 ancestry-details-2">
+					<?php if ($sosa > 1) {
+						print_url_arrow($pid, '?mod=chart_ancestry&mod_action=show&rootid=' . $pid . '&amp;generations=' . $this->generations . '&amp;show_full=' . $this->show_full . '&amp;chart_style=' . $this->chart_style . '&amp;ged=' . KT_GEDURL, $label, 3);
+					} else {
+						echo '&nbsp;';
+					} ?>
+					<?php
+						$sosa == 1 ? $sex = 'U' : (($sosa%2) ? $sex = 'F' : $sex = 'M');
+						print_sosa_number($sosa, $person, 'blank', $sex);
+						$relation	= '';
+						$new		= ($pid == '' or !isset($pidarr[$pid]));
+						if (!$new) {
+							$relation = '<br>[=<a href="#sosa' . $pidarr[$pid] . '">' . $pidarr[$pid] . '</a> - ' . get_sosa_name($pidarr[$pid]) . ']';
+						} else {
+							$pidarr[$pid] = $sosa;
+						}
+						echo get_sosa_name($sosa) . $relation;
 					?>
-				</ul>
-			<?php } ?>
+				</div>
+				<?php
+
+				if (is_null($person)) {
+					echo '</div></li>';
+					return;
+				}
+				// parents
+				$family = $person->getPrimaryChildFamily();
+
+				if ($family && $new && $depth > 0) {
+					// print marriage info ?>
+
+					<div class="auto cell small-12 ancestry-details-3">
+						<button type="button" class="clear button show-for-medium has-tip top" data-tooltip aria-haspopup="true" data-disable-hover="false" title="<?php echo KT_I18N::translate('Hide or show ancestors'); ?>"" data-toggle="sosa_<?php echo $sosa; ?>" >
+							<i class="<?php echo $iconStyle; ?> fa-compress-arrows-alt fa-lg"></i>
+						</button>
+						<?php
+						print_sosa_number($sosa * 2, $person, 'blank', 'M');
+						echo KT_I18N::translate('and');
+						print_sosa_number($sosa * 2 + 1, $person, 'blank', 'F');
+						$marriage = $family->getMarriage();
+						if ($marriage->canShow()) { ?>
+							<a href="<?php echo $family->getHtmlUrl(); ?>" class="details">
+								<?php echo KT_USER_CAN_EDIT ? KT_I18N::translate('Edit family: ') : KT_I18N::translate('View family: '); ?>
+								<?php echo $marriage->print_simple_fact(); ?>
+							</a>
+						<?php } ?>
+					</div>
+					<!-- display parents recursively - or show empty boxes -->
+					<ul class="auto cell" id="sosa_<?php echo $sosa; ?>" data-toggler=".toggle_hide">
+						<?php echo
+							$this->print_child_ascendancy($family->getHusband(), $sosa * 2, $depth - 1);
+							$this->print_child_ascendancy($family->getWife(), $sosa * 2 + 1, $depth - 1);
+						?>
+					</ul>
+				<?php } ?>
+			</div>
 		</li>
 	<?php }
 

@@ -94,7 +94,12 @@ class chart_ancestry_KT_Module extends KT_Module implements KT_Module_Chart {
 						<div class="cell medium-6 large-3">
 							<label class="h5" for="autocompleteInput"><?php echo KT_I18N::translate('Individual'); ?></label>
 							<div class="input-group autocomplete_container">
-								<input data-autocomplete-type="INDI" type="text" id="autocompleteInput" value="<?php echo strip_tags($person->getLifespanName()); ?>">
+								<input
+									data-autocomplete-type="INDI"
+									type="text"
+									id="autocompleteInput"
+									value="<?php echo strip_tags($person->getLifespanName()); ?>"
+								>
 								<span class="input-group-label">
 									<button class="clearAutocomplete autocomplete_icon">
 										<i class="<?php echo $iconStyle; ?> fa-times"></i>
