@@ -185,8 +185,6 @@ $controller
 					<div class="cell large-9">
 						<input type="text" id="time" name="MAX_EXECUTION_TIME" value="<?php echo KT_Filter::escapeHtml(KT_Site::preference('MAX_EXECUTION_TIME')); ?>" pattern="[0-9]*" placeholder="<?php echo get_cfg_var('max_execution_time') ?>" maxlength="255">
 						<div class="cell helpcontent">
-							<?php echo /* I18N: %s is an amount of memory, such as 32MB */ KT_I18N::translate('By default, your server allows scripts to use %s of memory.', get_cfg_var('memory_limit')); ?>
-							<p>
 								<?php echo KT_I18N::plural(
 									'By default, your server allows scripts to run for %s second.',
 									'By default, your server allows scripts to run for %s seconds.',
