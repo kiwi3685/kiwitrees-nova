@@ -126,6 +126,34 @@ function select_edit_control_inline($name, $values, $empty, $selected, $controll
 	}
 }
 
+// Create a set of switches for a form
+// $name     - the ID for the form element
+// $values   - array of value=>display items
+// $selected - the currently selected item (if any)
+function switch_group($name, $values, $selected) {
+	$html = '<div class="grid-x grid-margin-y">';
+		foreach ($values as $key => $value) {
+			$uniqueID = $name . (int)(microtime(true) * 1000000);
+
+			$html .= '
+				<div class="switch tiny cell small-8 medium-4 large-2">
+					<label>' . $value . '</label>
+					<input class="switch-input" id="' . $uniqueID . '" type="radio" name="' . $name . '" value="' . htmlspecialchars($key) . '"';
+						if ((string)$key === (string)$selected) {
+							$html .= ' checked';
+						}
+					$html .= '>' . '
+					<label class="switch-paddle" for="' . $uniqueID . '">
+						<span class="show-for-sr">' . $value . '</span>
+					</label>
+				</div>
+			';
+		}
+	$html .= '</div>';
+
+	return $html;
+}
+
 // Create a set of radio buttons for a form
 // $name     - the ID for the form element
 // $values   - array of value=>display items
