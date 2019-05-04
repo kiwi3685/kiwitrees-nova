@@ -126,17 +126,45 @@ function select_edit_control_inline($name, $values, $empty, $selected, $controll
 	}
 }
 
-// Create a set of switches for a form
-// $name     - the ID for the form element
-// $values   - array of value=>display items
-// $selected - the currently selected item (if any)
+/**
+* Create an on-off switch for a form
+* @param string $name     - the ID for the form element
+* @param array  $values   - array of value=>display items
+* @param string $selected - the currently selected item (if any)
+*
+*/
+function simple_switch($name, $value, $selected) {
+	$html = '
+		<div class="grid-x grid-margin-y">
+			<div class="switch cell small-8 medium-4 large-2">
+				<input class="switch-input" id="' . $name . '" type="checkbox" name="' . $name . '"';
+					if ((string)$value === (string)$selected) {
+						$html .= ' checked';
+					}
+				$html .= '>' . '
+				<label class="switch-paddle" for="' . $name . '">
+					<span class="show-for-sr">' . $value . '</span>
+				</label>
+			</div>
+		</div>
+	';
+
+	return $html;
+}
+
+/**
+* Create a set of switches for a form
+* @param string $name     - the ID for the form element
+* @param array  $values   - array of value=>display items
+* @param string $selected - the currently selected item (if any)
+*
+*/
 function switch_group($name, $values, $selected) {
 	$html = '<div class="grid-x grid-margin-y">';
 		foreach ($values as $key => $value) {
 			$uniqueID = $name . (int)(microtime(true) * 1000000);
-
 			$html .= '
-				<div class="switch tiny cell small-8 medium-4 large-2">
+				<div class="switch cell small-8 medium-4 large-2">
 					<label>' . $value . '</label>
 					<input class="switch-input" id="' . $uniqueID . '" type="radio" name="' . $name . '" value="' . htmlspecialchars($key) . '"';
 						if ((string)$key === (string)$selected) {
@@ -154,16 +182,19 @@ function switch_group($name, $values, $selected) {
 	return $html;
 }
 
-// Create a set of radio buttons for a form
-// $name     - the ID for the form element
-// $values   - array of value=>display items
-// $selected - the currently selected item (if any)
-// $extra    - extra markup for field (optional class)
+
+/**
+* Create a set of radio buttons for a form
+*
+* @param string $name     - the ID for the form element
+* @param array  $values   - array of value=>display items
+* @param string $selected - the currently selected item (if any)
+* @param string $extra    - extra markup for field (optional class)
+*/
 function radio_buttons($name, $values, $selected, $extra='') {
 	$html = '';
 	foreach ($values as $key => $value) {
 		$uniqueID = $name . (int)(microtime(true) * 1000000);
-
 		$html .= '
 			<label for="' . $uniqueID . '" ' . $extra . '>
 				<input type="radio" name="' . $name . '" id="' . $uniqueID . '" value="' . htmlspecialchars($key) . '"';
@@ -177,6 +208,8 @@ function radio_buttons($name, $values, $selected, $extra='') {
 	}
 	return $html;
 }
+
+
 
 // Print an edit control for a Yes/No field
 function edit_field_yes_no($name, $selected = false, $extra = 'class="radio_inline"') {
