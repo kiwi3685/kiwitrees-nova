@@ -74,21 +74,6 @@ $custom_files = array(
 		'myfooter.php'
 	);
 
-// Set active tab based on view parameter from url
-$view = KT_Filter::get('view');
-switch ($view) {
-	case 'file-options':	$active = 0; break;
-	case 'contact':			$active = 1; break;
-	case 'website':			$active = 2; break;
-	case 'privacy':			$active = 3; break;
-	case 'config-media':	$active = 4; break;
-	case 'layout-options':	$active = 5; break;
-	case 'hide-show':		$active = 6; break;
-	case 'edit-options':	$active = 7; break;
-	case 'theme':			$active = 8; break;
-	default:				$active = 0; break;
-}
-
 switch (KT_Filter::post('action')) {
 	case 'delete':
 		if (!KT_Filter::checkCsrf()) {
@@ -140,34 +125,98 @@ switch (KT_Filter::post('action')) {
 				$gedcom = KT_GEDCOM;
 			}
 		}
-		set_gedcom_setting(KT_GED_ID, 'LANGUAGE',						KT_Filter::post('GEDCOMLANG'));
-		set_gedcom_setting(KT_GED_ID, 'PEDIGREE_ROOT_ID',				KT_Filter::post('NEW_PEDIGREE_ROOT_ID', KT_REGEX_XREF));
 		// For backwards compatibility with we store the two calendar formats in one variable
 		// e.g. "gregorian_and_jewish"
 		set_gedcom_setting(KT_GED_ID, 'CALENDAR_FORMAT', implode('_and_', array_unique(array(
 			KT_Filter::post('NEW_CALENDAR_FORMAT0', 'gregorian|julian|french|jewish|hijri|jalali', 'none'),
 			KT_Filter::post('NEW_CALENDAR_FORMAT1', 'gregorian|julian|french|jewish|hijri|jalali', 'none')
 		))));
-		set_gedcom_setting(KT_GED_ID, 'USE_RIN',						KT_Filter::postBool('NEW_USE_RIN'));
-		set_gedcom_setting(KT_GED_ID, 'GENERATE_UIDS',					KT_Filter::postBool('NEW_GENERATE_UIDS'));
-		set_gedcom_setting(KT_GED_ID, 'GEDCOM_ID_PREFIX',				KT_Filter::post('NEW_GEDCOM_ID_PREFIX'));
 		set_gedcom_setting(KT_GED_ID, 'FAM_ID_PREFIX',					KT_Filter::post('NEW_FAM_ID_PREFIX'));
-		set_gedcom_setting(KT_GED_ID, 'SOURCE_ID_PREFIX',				KT_Filter::post('NEW_SOURCE_ID_PREFIX'));
-		set_gedcom_setting(KT_GED_ID, 'REPO_ID_PREFIX',					KT_Filter::post('NEW_REPO_ID_PREFIX'));
+		set_gedcom_setting(KT_GED_ID, 'GEDCOM_ID_PREFIX',				KT_Filter::post('NEW_GEDCOM_ID_PREFIX'));
+		set_gedcom_setting(KT_GED_ID, 'GENERATE_UIDS',					KT_Filter::postBool('NEW_GENERATE_UIDS'));
+		set_gedcom_setting(KT_GED_ID, 'LANGUAGE',						KT_Filter::post('GEDCOMLANG'));
 		set_gedcom_setting(KT_GED_ID, 'MEDIA_ID_PREFIX',				KT_Filter::post('NEW_MEDIA_ID_PREFIX'));
 		set_gedcom_setting(KT_GED_ID, 'NOTE_ID_PREFIX',					KT_Filter::post('NEW_NOTE_ID_PREFIX'));
-
+		set_gedcom_setting(KT_GED_ID, 'PEDIGREE_ROOT_ID',				KT_Filter::post('NEW_PEDIGREE_ROOT_ID', KT_REGEX_XREF));
+		set_gedcom_setting(KT_GED_ID, 'REPO_ID_PREFIX',					KT_Filter::post('NEW_REPO_ID_PREFIX'));
+		set_gedcom_setting(KT_GED_ID, 'SOURCE_ID_PREFIX',				KT_Filter::post('NEW_SOURCE_ID_PREFIX'));
+		set_gedcom_setting(KT_GED_ID, 'USE_RIN',						KT_Filter::postBool('NEW_USE_RIN'));
 		// Reload the page, so that the settings take effect immediately.
 		Zend_Session::writeClose();
-		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '?ged=' . $gedcom);
+		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '#general');
 		exit;
 	case 'update-contact':
 		if (!KT_Filter::checkCsrf()) {
 			break;
 		}
+		set_gedcom_setting(KT_GED_ID, 'CONTACT_USER_ID',				KT_Filter::post('NEW_CONTACT_USER_ID'));
+		set_gedcom_setting(KT_GED_ID, 'KIWITREES_EMAIL',				KT_Filter::post('NEW_KIWITREES_EMAIL'));
+		set_gedcom_setting(KT_GED_ID, 'WEBMASTER_USER_ID',				KT_Filter::post('NEW_WEBMASTER_USER_ID'));
+		// Reload the page, so that the settings take effect immediately.
+		Zend_Session::writeClose();
+		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '#contact');
+		exit;
+	case 'update-meta':
+		if (!KT_Filter::checkCsrf()) {
+			break;
+		}
+		set_gedcom_setting(KT_GED_ID, 'META_DESCRIPTION',				KT_Filter::post('NEW_META_DESCRIPTION'));
+		set_gedcom_setting(KT_GED_ID, 'META_TITLE',						KT_Filter::post('NEW_META_TITLE'));
+		// Reload the page, so that the settings take effect immediately.
+		Zend_Session::writeClose();
+		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '#meta');
+		exit;
+		case 'update-privacy':
+			if (!KT_Filter::checkCsrf()) {
+				break;
+			}
+		set_gedcom_setting(KT_GED_ID, 'HIDE_LIVE_PEOPLE',				KT_Filter::postBool('NEW_HIDE_LIVE_PEOPLE'));
+		set_gedcom_setting(KT_GED_ID, 'KEEP_ALIVE_YEARS_BIRTH',			KT_Filter::post('KEEP_ALIVE_YEARS_BIRTH', KT_REGEX_INTEGER, 0));
+		set_gedcom_setting(KT_GED_ID, 'KEEP_ALIVE_YEARS_DEATH',			KT_Filter::post('KEEP_ALIVE_YEARS_DEATH', KT_REGEX_INTEGER, 0));
+		set_gedcom_setting(KT_GED_ID, 'MAX_ALIVE_AGE',					KT_Filter::post('MAX_ALIVE_AGE', KT_REGEX_INTEGER, 100));
+		set_gedcom_setting(KT_GED_ID, 'SHOW_DEAD_PEOPLE',				KT_Filter::post('SHOW_DEAD_PEOPLE'));
+		set_gedcom_setting(KT_GED_ID, 'SHOW_LIVING_NAMES',				KT_Filter::post('SHOW_LIVING_NAMES'));
+		set_gedcom_setting(KT_GED_ID, 'SHOW_PRIVATE_RELATIONSHIPS',		KT_Filter::post('SHOW_PRIVATE_RELATIONSHIPS'));
+		// Reload the page, so that the settings take effect immediately.
+		Zend_Session::writeClose();
+		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '#privacy');
+		exit;
+		case 'update-media':
+			if (!KT_Filter::checkCsrf()) {
+				break;
+			}
+			// Only accept valid folders for NEW_MEDIA_DIRECTORY
+			$NEW_MEDIA_DIRECTORY = preg_replace('/[\/\\\\]+/', '/', KT_Filter::post('NEW_MEDIA_DIRECTORY') . '/');
+			if (substr($NEW_MEDIA_DIRECTORY, 0, 1) == '/') {
+				$NEW_MEDIA_DIRECTORY = substr($NEW_MEDIA_DIRECTORY, 1);
+			}
 
+			if ($NEW_MEDIA_DIRECTORY) {
+				if (is_dir(KT_DATA_DIR . $NEW_MEDIA_DIRECTORY)) {
+					set_gedcom_setting(KT_GED_ID, 'MEDIA_DIRECTORY', $NEW_MEDIA_DIRECTORY);
+				} elseif (@mkdir(KT_DATA_DIR . $NEW_MEDIA_DIRECTORY, 0755, true)) {
+					set_gedcom_setting(KT_GED_ID, 'MEDIA_DIRECTORY', $NEW_MEDIA_DIRECTORY);
+					KT_FlashMessages::addMessage(KT_I18N::translate('The folder %s was created.', KT_DATA_DIR . $NEW_MEDIA_DIRECTORY));
+				} else {
+					KT_FlashMessages::addMessage(KT_I18N::translate('The folder %s does not exist, and it could not be created.', KT_DATA_DIR . $NEW_MEDIA_DIRECTORY));
+				}
+			}
 
+			set_gedcom_setting(KT_GED_ID, 'MEDIA_UPLOAD',					KT_Filter::post('NEW_MEDIA_UPLOAD'));
+			set_gedcom_setting(KT_GED_ID, 'SAVE_WATERMARK_IMAGE',			KT_Filter::postBool('NEW_SAVE_WATERMARK_IMAGE'));
+			set_gedcom_setting(KT_GED_ID, 'SAVE_WATERMARK_THUMB',			KT_Filter::postBool('NEW_SAVE_WATERMARK_THUMB'));
+			set_gedcom_setting(KT_GED_ID, 'SHOW_HIGHLIGHT_IMAGES',			KT_Filter::postBool('NEW_SHOW_HIGHLIGHT_IMAGES'));
+			set_gedcom_setting(KT_GED_ID, 'SHOW_MEDIA_DOWNLOAD',			KT_Filter::postBool('NEW_SHOW_MEDIA_DOWNLOAD'));
+			set_gedcom_setting(KT_GED_ID, 'SHOW_NO_WATERMARK',				KT_Filter::post('NEW_SHOW_NO_WATERMARK'));
+			set_gedcom_setting(KT_GED_ID, 'THUMBNAIL_WIDTH',				KT_Filter::post('NEW_THUMBNAIL_WIDTH'));
+			set_gedcom_setting(KT_GED_ID, 'USE_SILHOUETTE',					KT_Filter::postBool('NEW_USE_SILHOUETTE'));
+			set_gedcom_setting(KT_GED_ID, 'WATERMARK_THUMB',				KT_Filter::postBool('NEW_WATERMARK_THUMB'));
+			// Reload the page, so that the settings take effect immediately.
+			Zend_Session::writeClose();
+			header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '#media');
+			exit;
 
+/*
 		set_gedcom_setting(KT_GED_ID, 'ABBREVIATE_CHART_LABELS',		KT_Filter::postBool('NEW_ABBREVIATE_CHART_LABELS'));
 		set_gedcom_setting(KT_GED_ID, 'ADVANCED_NAME_FACTS',			KT_Filter::post('NEW_ADVANCED_NAME_FACTS'));
 		set_gedcom_setting(KT_GED_ID, 'ADVANCED_PLAC_FACTS',			KT_Filter::post('NEW_ADVANCED_PLAC_FACTS'));
@@ -176,7 +225,6 @@ switch (KT_Filter::post('action')) {
 		set_gedcom_setting(KT_GED_ID, 'COMMON_NAMES_ADD',				str_replace(' ', '', KT_Filter::post('NEW_COMMON_NAMES_ADD')));
 		set_gedcom_setting(KT_GED_ID, 'COMMON_NAMES_REMOVE',			str_replace(' ', '', KT_Filter::post('NEW_COMMON_NAMES_REMOVE')));
 		set_gedcom_setting(KT_GED_ID, 'COMMON_NAMES_THRESHOLD',			KT_Filter::post('NEW_COMMON_NAMES_THRESHOLD', KT_REGEX_INTEGER, 40));
-		set_gedcom_setting(KT_GED_ID, 'CONTACT_USER_ID',				KT_Filter::post('NEW_CONTACT_USER_ID'));
 		set_gedcom_setting(KT_GED_ID, 'DEFAULT_PEDIGREE_GENERATIONS',	KT_Filter::post('NEW_DEFAULT_PEDIGREE_GENERATIONS'));
 		set_gedcom_setting(KT_GED_ID, 'EXPAND_NOTES',					KT_Filter::postBool('NEW_EXPAND_NOTES'));
 		set_gedcom_setting(KT_GED_ID, 'EXPAND_SOURCES',					KT_Filter::postBool('NEW_EXPAND_SOURCES'));
@@ -186,19 +234,11 @@ switch (KT_Filter::post('action')) {
 		set_gedcom_setting(KT_GED_ID, 'FULL_SOURCES',					KT_Filter::postBool('NEW_FULL_SOURCES'));
 		set_gedcom_setting(KT_GED_ID, 'GEDCOM_MEDIA_PATH',				KT_Filter::post('NEW_GEDCOM_MEDIA_PATH'));
 		set_gedcom_setting(KT_GED_ID, 'HIDE_GEDCOM_ERRORS',				KT_Filter::postBool('NEW_HIDE_GEDCOM_ERRORS'));
-		set_gedcom_setting(KT_GED_ID, 'HIDE_LIVE_PEOPLE',				KT_Filter::postBool('NEW_HIDE_LIVE_PEOPLE'));
 		set_gedcom_setting(KT_GED_ID, 'INDI_FACTS_ADD',					str_replace(' ', '', KT_Filter::post('NEW_INDI_FACTS_ADD')));
 		set_gedcom_setting(KT_GED_ID, 'INDI_FACTS_QUICK',				str_replace(' ', '', KT_Filter::post('NEW_INDI_FACTS_QUICK')));
 		set_gedcom_setting(KT_GED_ID, 'INDI_FACTS_UNIQUE',				str_replace(' ', '', KT_Filter::post('NEW_INDI_FACTS_UNIQUE')));
-		set_gedcom_setting(KT_GED_ID, 'KEEP_ALIVE_YEARS_BIRTH',			KT_Filter::post('KEEP_ALIVE_YEARS_BIRTH', KT_REGEX_INTEGER, 0));
-		set_gedcom_setting(KT_GED_ID, 'KEEP_ALIVE_YEARS_DEATH',			KT_Filter::post('KEEP_ALIVE_YEARS_DEATH', KT_REGEX_INTEGER, 0));
-		set_gedcom_setting(KT_GED_ID, 'KIWITREES_EMAIL',				KT_Filter::post('NEW_KIWITREES_EMAIL'));
-		set_gedcom_setting(KT_GED_ID, 'MAX_ALIVE_AGE',					KT_Filter::post('MAX_ALIVE_AGE', KT_REGEX_INTEGER, 100));
 		set_gedcom_setting(KT_GED_ID, 'MAX_DESCENDANCY_GENERATIONS',	KT_Filter::post('NEW_MAX_DESCENDANCY_GENERATIONS'));
 		set_gedcom_setting(KT_GED_ID, 'MAX_PEDIGREE_GENERATIONS',		KT_Filter::post('NEW_MAX_PEDIGREE_GENERATIONS'));
-		set_gedcom_setting(KT_GED_ID, 'MEDIA_UPLOAD',					KT_Filter::post('NEW_MEDIA_UPLOAD'));
-		set_gedcom_setting(KT_GED_ID, 'META_DESCRIPTION',				KT_Filter::post('NEW_META_DESCRIPTION'));
-		set_gedcom_setting(KT_GED_ID, 'META_TITLE',						KT_Filter::post('NEW_META_TITLE'));
 		set_gedcom_setting(KT_GED_ID, 'NO_UPDATE_CHAN',					KT_Filter::postBool('NEW_NO_UPDATE_CHAN'));
 		set_gedcom_setting(KT_GED_ID, 'PEDIGREE_FULL_DETAILS',			KT_Filter::postBool('NEW_PEDIGREE_FULL_DETAILS'));
 		set_gedcom_setting(KT_GED_ID, 'PEDIGREE_LAYOUT',				KT_Filter::postBool('NEW_PEDIGREE_LAYOUT'));
@@ -209,23 +249,15 @@ switch (KT_Filter::post('action')) {
 		set_gedcom_setting(KT_GED_ID, 'REPO_FACTS_ADD',					str_replace(' ', '', KT_Filter::post('NEW_REPO_FACTS_ADD')));
 		set_gedcom_setting(KT_GED_ID, 'REPO_FACTS_QUICK',				str_replace(' ', '', KT_Filter::post('NEW_REPO_FACTS_QUICK')));
 		set_gedcom_setting(KT_GED_ID, 'REPO_FACTS_UNIQUE',				str_replace(' ', '', KT_Filter::post('NEW_REPO_FACTS_UNIQUE')));
-		set_gedcom_setting(KT_GED_ID, 'SAVE_WATERMARK_IMAGE',			KT_Filter::postBool('NEW_SAVE_WATERMARK_IMAGE'));
-		set_gedcom_setting(KT_GED_ID, 'SAVE_WATERMARK_THUMB',			KT_Filter::postBool('NEW_SAVE_WATERMARK_THUMB'));
 		set_gedcom_setting(KT_GED_ID, 'SHOW_COUNTER',					KT_Filter::postBool('NEW_SHOW_COUNTER'));
-		set_gedcom_setting(KT_GED_ID, 'SHOW_DEAD_PEOPLE',				KT_Filter::post('SHOW_DEAD_PEOPLE'));
 		set_gedcom_setting(KT_GED_ID, 'SHOW_EST_LIST_DATES',			KT_Filter::postBool('NEW_SHOW_EST_LIST_DATES'));
 		set_gedcom_setting(KT_GED_ID, 'SHOW_FACT_ICONS',				KT_Filter::postBool('NEW_SHOW_FACT_ICONS'));
 		set_gedcom_setting(KT_GED_ID, 'SHOW_GEDCOM_RECORD',				KT_Filter::postBool('NEW_SHOW_GEDCOM_RECORD'));
-		set_gedcom_setting(KT_GED_ID, 'SHOW_HIGHLIGHT_IMAGES',			KT_Filter::postBool('NEW_SHOW_HIGHLIGHT_IMAGES'));
 		set_gedcom_setting(KT_GED_ID, 'SHOW_LAST_CHANGE',				KT_Filter::postBool('NEW_SHOW_LAST_CHANGE'));
 		set_gedcom_setting(KT_GED_ID, 'SHOW_LDS_AT_GLANCE',				KT_Filter::postBool('NEW_SHOW_LDS_AT_GLANCE'));
-		set_gedcom_setting(KT_GED_ID, 'SHOW_LIVING_NAMES',				KT_Filter::post('SHOW_LIVING_NAMES'));
-		set_gedcom_setting(KT_GED_ID, 'SHOW_MEDIA_DOWNLOAD',			KT_Filter::postBool('NEW_SHOW_MEDIA_DOWNLOAD'));
-		set_gedcom_setting(KT_GED_ID, 'SHOW_NO_WATERMARK',				KT_Filter::post('NEW_SHOW_NO_WATERMARK'));
 		set_gedcom_setting(KT_GED_ID, 'SHOW_PARENTS_AGE',				KT_Filter::postBool('NEW_SHOW_PARENTS_AGE'));
 		set_gedcom_setting(KT_GED_ID, 'SHOW_PEDIGREE_PLACES',			KT_Filter::post('NEW_SHOW_PEDIGREE_PLACES'));
 		set_gedcom_setting(KT_GED_ID, 'SHOW_PEDIGREE_PLACES_SUFFIX',	KT_Filter::postBool('NEW_SHOW_PEDIGREE_PLACES_SUFFIX'));
-		set_gedcom_setting(KT_GED_ID, 'SHOW_PRIVATE_RELATIONSHIPS',		KT_Filter::post('SHOW_PRIVATE_RELATIONSHIPS'));
 		set_gedcom_setting(KT_GED_ID, 'SHOW_RELATIVES_EVENTS',			KT_Filter::post('NEW_SHOW_RELATIVES_EVENTS'));
 		set_gedcom_setting(KT_GED_ID, 'SOUR_FACTS_ADD',					str_replace(' ', '', KT_Filter::post('NEW_SOUR_FACTS_ADD')));
 		set_gedcom_setting(KT_GED_ID, 'SOUR_FACTS_QUICK',				str_replace(' ', '', KT_Filter::post('NEW_SOUR_FACTS_QUICK')));
@@ -235,34 +267,16 @@ switch (KT_Filter::post('action')) {
 		set_gedcom_setting(KT_GED_ID, 'SURNAME_TRADITION',				KT_Filter::post('NEW_SURNAME_TRADITION'));
 		set_gedcom_setting(KT_GED_ID, 'THEME_DIR',						KT_Filter::post('NEW_THEME_DIR'));
 		set_gedcom_setting(KT_GED_ID, 'COLOR_PALETTE',					KT_Filter::post('NEW_COLOR_PALETTE'));
-		set_gedcom_setting(KT_GED_ID, 'THUMBNAIL_WIDTH',				KT_Filter::post('NEW_THUMBNAIL_WIDTH'));
 		set_gedcom_setting(KT_GED_ID, 'USE_GEONAMES',					KT_Filter::postBool('NEW_USE_GEONAMES'));
-		set_gedcom_setting(KT_GED_ID, 'USE_SILHOUETTE',					KT_Filter::postBool('NEW_USE_SILHOUETTE'));
-		set_gedcom_setting(KT_GED_ID, 'WATERMARK_THUMB',				KT_Filter::postBool('NEW_WATERMARK_THUMB'));
-		set_gedcom_setting(KT_GED_ID, 'WEBMASTER_USER_ID',				KT_Filter::post('NEW_WEBMASTER_USER_ID'));
 
-		// Only accept valid folders for NEW_MEDIA_DIRECTORY
-		$NEW_MEDIA_DIRECTORY = preg_replace('/[\/\\\\]+/', '/', KT_Filter::post('NEW_MEDIA_DIRECTORY') . '/');
-		if (substr($NEW_MEDIA_DIRECTORY, 0, 1) == '/') {
-			$NEW_MEDIA_DIRECTORY = substr($NEW_MEDIA_DIRECTORY, 1);
-		}
 
-		if ($NEW_MEDIA_DIRECTORY) {
-			if (is_dir(KT_DATA_DIR . $NEW_MEDIA_DIRECTORY)) {
-				set_gedcom_setting(KT_GED_ID, 'MEDIA_DIRECTORY', $NEW_MEDIA_DIRECTORY);
-			} elseif (@mkdir(KT_DATA_DIR . $NEW_MEDIA_DIRECTORY, 0755, true)) {
-				set_gedcom_setting(KT_GED_ID, 'MEDIA_DIRECTORY', $NEW_MEDIA_DIRECTORY);
-				KT_FlashMessages::addMessage(KT_I18N::translate('The folder %s was created.', KT_DATA_DIR . $NEW_MEDIA_DIRECTORY));
-			} else {
-				KT_FlashMessages::addMessage(KT_I18N::translate('The folder %s does not exist, and it could not be created.', KT_DATA_DIR . $NEW_MEDIA_DIRECTORY));
-			}
-		}
 
 
 		// Reload the page, so that the settings take effect immediately.
 		Zend_Session::writeClose();
-		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '?ged=' . $gedcom);
+		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME);
 	exit;
+	*/
 }
 
 $controller
@@ -311,7 +325,7 @@ global $iconstyles;
 					<a href="#contact"><?php echo KT_I18N::translate('Contact information'); ?></a>
 				</li>
 				<li class="tabs-title">
-					<a href="#website"><?php echo KT_I18N::translate('Metadata'); ?></a>
+					<a href="#meta"><?php echo KT_I18N::translate('Metadata'); ?></a>
 				</li>
 				<li class="tabs-title">
 					<a href="#privacy"><?php echo KT_I18N::translate('Privacy'); ?></a>
@@ -335,7 +349,7 @@ global $iconstyles;
 			<div class="tabs-content" data-tabs-content="tree_config_tabs">
 				<!-- General tab -->
 				<div class="tabs-panel is-active" id="general">
-					<form method="post" id="configform" name="configform" action="<?php echo KT_SCRIPT_NAME; ?>#general" data-abide novalidate>
+					<form method="post" name="configform" action="<?php echo KT_SCRIPT_NAME . '#general'; ?>" data-abide novalidate>
 						<?php echo KT_Filter::getCsrf(); ?>
 						<input type="hidden" name="action" value="update-general">
 						<div class="grid-x grid-margin-x">
@@ -376,19 +390,19 @@ global $iconstyles;
 								</div>
 							</div>
 							<div class="cell large-3">
-								<label for="autocompleteInput"><?php echo KT_I18N::translate('Default individual'); ?></label>
+								<label for="autocompleteInput-default"><?php echo KT_I18N::translate('Default individual'); ?></label>
 							</div>
 							<div class="cell large-9">
 								<div class="input-group autocomplete_container">
 									<?php $person = KT_Person::getInstance(get_gedcom_setting(KT_GED_ID, 'PEDIGREE_ROOT_ID')); ?>
-									<input data-autocomplete-type="INDI" type="text" id="autocompleteInput" value="<?php echo strip_tags($person->getLifespanName()); ?>">
+									<input data-autocomplete-type="INDI" type="text" id="autocompleteInput-default" value="<?php echo strip_tags($person->getLifespanName()); ?>">
 									<span class="input-group-label">
 										<button class="clearAutocomplete autocomplete_icon">
 											<i class="<?php echo $iconStyle; ?> fa-times"></i>
 										</button>
 									</span>
 								</div>
-								<input type="hidden" id="selectedValue" name="rootid">
+								<input type="hidden" id="selectedValue-rootid" name="rootid">
 								<div class="cell helpcontent">
 									<?php echo KT_I18N::translate('This individual will be selected by default when viewing charts and reports.'); ?>
 								</div>
@@ -532,24 +546,429 @@ global $iconstyles;
 					</form>
 				</div>
 				<!-- Contact tab -->
-				<div class="tabs-panel is-active" id="contact">
-					<form method="post" id="configform" name="configform" action="<?php echo KT_SCRIPT_NAME; ?>#contact" data-abide novalidate>
+				<div class="tabs-panel" id="contact">
+					<form method="post" name="configform" action="<?php echo KT_SCRIPT_NAME . '#contact'; ?>" data-abide novalidate>
 						<?php echo KT_Filter::getCsrf(); ?>
 						<input type="hidden" name="action" value="update-contact">
 						<div class="grid-x grid-margin-x">
 							<div data-abide-error class="alert callout" style="display: none;">
 								<p><i class="fi-alert"></i><?php echo /* I18N: A general error message for forms */ KT_I18N::translate('There are some errors in your form.'); ?></p>
 							</div>
+							<?php if (empty($KIWITREES_EMAIL)) {
+								$KIWITREES_EMAIL = "kiwitrees-noreply@".preg_replace("/^www\./i", "", $_SERVER["SERVER_NAME"]);
+							} ?>
 							<div class="cell large-3">
-								<label for="tree_title"><?php echo KT_I18N::translate('Family tree title'); ?></label>
+								<label for="tree_email"><?php echo KT_I18N::translate('Kiwitrees reply address'); ?></label>
 							</div>
 							<div class="cell large-9">
-								<input type="text" id="tree_title" name="gedcom_title" value="<?php echo KT_Filter::escapeHtml(get_gedcom_setting(KT_GED_ID, 'title')); ?>" required maxlength="255">
+								<input type="text" id="tree_email" name="NEW_KIWITREES_EMAIL" required value="<?php echo $KIWITREES_EMAIL; ?>" size="50" maxlength="255">
+								<div class="cell helpcontent">
+									<?php echo KT_I18N::translate('Email address to be used in the “From:” field of emails that kiwitrees creates automatically.<br>Kiwitrees can automatically create emails to notify administrators of changes that need to be reviewed. Kiwitrees also sends notification emails to users who have requested an account.<br>Usually, the “From:” field of these automatically created emails is something like From: kiwitrees-noreply@yoursite to show that no response to the email is required. To guard against spam or other email abuse, some email systems require each message’s “From:” field to reflect a valid email account and will not accept messages that are apparently from account kiwitrees-noreply.'); ?>
+								</div>
+							</div>
+							<div class="cell large-3">
+								<label for="tree_gene"><?php echo KT_I18N::translate('Genealogy contact'); ?></label>
+							</div>
+							<div class="cell large-9">
+								<select id="tree_gene" name="NEW_CONTACT_USER_ID">
+									<?php $CONTACT_USER_ID = get_gedcom_setting(KT_GED_ID, 'CONTACT_USER_ID');
+									echo '<option value="" ';
+										if ($CONTACT_USER_ID == '') echo ' selected="selected"';
+									echo '>' . KT_I18N::translate('none') . '</option>';
+									foreach (get_all_users() as $user_id => $user_name) {
+										if (get_user_setting($user_id, 'verified_by_admin')) {
+											echo '<option value="' . $user_id . '"';
+											if ($CONTACT_USER_ID == $user_id) echo ' selected="selected"';
+											echo '>' . getUserFullName($user_id) . ' - ' . $user_name . '</option>';
+										}
+									} ?>
+								</select>
+								<div class="cell helpcontent">
+									<?php echo KT_I18N::translate('The person to contact about the genealogical data on this site.'); ?>
+								</div>
+							</div>
+							<div class="cell large-3">
+								<label for="tree_tech"><?php echo KT_I18N::translate('Technical help contact'); ?></label>
+							</div>
+							<div class="cell large-9">
+								<select id="tree_tech" name="NEW_WEBMASTER_USER_ID">
+									<?php $WEBMASTER_USER_ID=get_gedcom_setting(KT_GED_ID, 'WEBMASTER_USER_ID');
+									echo '<option value="" ';
+									if ($WEBMASTER_USER_ID == '') echo ' selected="selected"';
+									echo '>' . KT_I18N::translate('none') . '</option>';
+									foreach (get_all_users() as $user_id => $user_name) {
+										if (userIsAdmin($user_id)) {
+											echo '<option value="' . $user_id . ' "';
+											if ($WEBMASTER_USER_ID == $user_id) echo ' selected="selected"';
+											echo '>' . getUserFullName($user_id) . ' - ' . $user_name . '</option>';
+										}
+									} ?>
+								</select>
+								<div class="cell helpcontent">
+									<?php echo KT_I18N::translate('The person to be contacted about technical questions or errors encountered on your site.'); ?>
+								</div>
 							</div>
 						</div>
+						<button type="submit" class="button">
+							<i class="<?php echo $iconStyle; ?> fa-save"></i>
+							<?php echo KT_I18N::translate('Save'); ?>
+						</button>
+						<a class="button secondary" href="<?php echo KT_SCRIPT_NAME . '#general'; ?>">
+							<i class="<?php echo $iconStyle; ?> fa-times"></i>
+							<?php echo KT_I18N::translate('Cancel'); ?>
+						</a>
 					</form>
 				</div>
+				<!-- Metadata tab -->
+				<div class="tabs-panel" id="meta">
+					<form method="post" name="configform" action="<?php echo KT_SCRIPT_NAME . '#meta'; ?>" data-abide novalidate>
+						<?php echo KT_Filter::getCsrf(); ?>
+						<input type="hidden" name="action" value="update-meta">
+						<div class="grid-x grid-margin-x">
+							<div data-abide-error class="alert callout" style="display: none;">
+								<p><i class="fi-alert"></i><?php echo /* I18N: A general error message for forms */ KT_I18N::translate('There are some errors in your form.'); ?></p>
+							</div>
+							<div class="cell large-3">
+								<label for="tree_head"><?php echo KT_I18N::translate('Add to TITLE header tag'); ?></label>
+							</div>
+							<div class="cell large-9">
+								<input type="text" id="tree_head" name="NEW_META_TITLE" value="<?php echo htmlspecialchars(get_gedcom_setting(KT_GED_ID, 'META_TITLE')); ?>" size="40" maxlength="255">
+								<div class="cell helpcontent">
+									<?php echo KT_I18N::translate('This text will be appended to each page title. It will be shown in the browser’s title bar, bookmarks, etc.'); ?>
+								</div>
+							</div>
+							<div class="cell large-3">
+								<label for="tree_desc"><?php echo KT_I18N::translate('Description META tag'); ?></label>
+							</div>
+							<div class="cell large-9">
+								<input type="text" id="tree_desc" name="NEW_META_DESCRIPTION" value="<?php echo get_gedcom_setting(KT_GED_ID, 'META_DESCRIPTION'); ?>" size="40" maxlength="255">
+								<div class="cell helpcontent">
+									<?php echo KT_I18N::translate('The value to place in the “meta description” tag in the HTML page header. Leave this field empty to use the name of the currently active family tree.'); ?>
+								</div>
+							</div>
+						</div>
+						<button type="submit" class="button">
+							<i class="<?php echo $iconStyle; ?> fa-save"></i>
+							<?php echo KT_I18N::translate('Save'); ?>
+						</button>
+						<a class="button secondary" href="<?php echo KT_SCRIPT_NAME . '#general'; ?>">
+							<i class="<?php echo $iconStyle; ?> fa-times"></i>
+							<?php echo KT_I18N::translate('Cancel'); ?>
+						</a>
+					</form>
+				</div>
+				<!-- Privacy tab -->
+				<div class="tabs-panel" id="privacy">
+					<form method="post" name="configform-privacy" action="<?php echo KT_SCRIPT_NAME . '#privacy'; ?>" data-abide novalidate>
+						<?php echo KT_Filter::getCsrf(); ?>
+						<input type="hidden" name="action" value="update-privacy">
+						<div class="grid-x grid-margin-x">
+							<div data-abide-error class="alert callout" style="display: none;">
+								<p><i class="fi-alert"></i><?php echo /* I18N: A general error message for forms */ KT_I18N::translate('There are some errors in your form.'); ?></p>
+							</div>
+							<div class="cell large-3">
+								<label for="NEW_HIDE_LIVE_PEOPLE"><?php echo KT_I18N::translate('Enable privacy'); ?></label>
+							</div>
+							<div class="cell large-9">
+								<?php echo edit_field_yes_no('NEW_HIDE_LIVE_PEOPLE', $HIDE_LIVE_PEOPLE); ?>
+								<div class="cell helpcontent space">
+									<?php echo KT_I18N::translate('This option will enable all privacy settings and hide the details of living people, as defined or modified below. If privacy is not enabled kiwitrees will ignore all the other settings on this page.'); ?>
+									<?php echo KT_I18N::plural('<b>Note:</b> "living" is defined (if no death or burial is known) as ending %d year after birth or estimated birth.','<b>Note:</b> "living" is defined (if no death or burial is known) as ending %d years after birth or estimated birth.', get_gedcom_setting(KT_GED_ID, 'MAX_ALIVE_AGE'), get_gedcom_setting(KT_GED_ID, 'MAX_ALIVE_AGE')); ?>
+									<br>
+									<?php echo KT_I18N::translate('The length of time after birth can be set using the option "Age at which to assume a person is dead".'); ?>
+								</div>
+							</div>
+							<div class="cell large-3">
+								<label for="SHOW_DEAD_PEOPLE"><?php echo KT_I18N::translate('Show dead people'); ?></label>
+							</div>
+							<div class="cell large-9">
+								<?php echo edit_field_access_level("SHOW_DEAD_PEOPLE", get_gedcom_setting(KT_GED_ID, 'SHOW_DEAD_PEOPLE')); ?>
+								<div class="cell helpcontent">
+									<?php echo KT_I18N::translate('Set the privacy access level for all dead people.'); ?>
+								</div>
+							</div>
+							<div class="cell large-3">
+								<label for="tree_maxage"><?php echo KT_I18N::translate('Age at which to assume a person is dead'); ?></label>
+							</div>
+							<div class="cell large-2">
+								<div class="input-group">
+									<input type="text" id="tree_maxage" name="MAX_ALIVE_AGE" value="<?php echo get_gedcom_setting(KT_GED_ID, 'MAX_ALIVE_AGE'); ?>" size="5" maxlength="3">
+									<span class="input-group-label"><?php echo KT_I18N::translate('years'); ?></span>
+								</div>
+							</div>
+							<div class="cell large-7"></div>
+							<div class="cell large-9 large-offset-3">
+								<div class="cell full helpcontent">
+									<?php echo KT_I18N::translate('If this person has any events other than death, burial, or cremation more recent than this number of years, they are considered to be "alive". Children\'s birth dates are considered to be such events for this purpose.'); ?>
+								</div>
+							</div>
+							<div class="cell large-3">
+								<label for="tree_extend"><?php /* I18N: ... [who were] born in the last XX years or died in the last YY years */ echo KT_I18N::translate('Extend privacy of dead people'); ?></label>
+							</div>
+							<div class="cell large-9" id="tree_extend">
+								<?php echo /* I18N: ... Extend privacy to dead people [who were] ... */ KT_I18N::translate(
+										'Born in the last %1$s years or died in the last %2$s years',
+										'<input type="text" class="tree_extend" name="KEEP_ALIVE_YEARS_BIRTH" value="'.get_gedcom_setting(KT_GED_ID, 'KEEP_ALIVE_YEARS_BIRTH').'" size="5" maxlength="3">',
+										'<input type="text" class="tree_extend" name="KEEP_ALIVE_YEARS_DEATH" value="'.get_gedcom_setting(KT_GED_ID, 'KEEP_ALIVE_YEARS_DEATH').'" size="5" maxlength="3">'
+									); ?>
+								<div class="cell helpcontent">
+									<?php echo KT_I18N::translate('In some countries privacy laws apply not only to living people but also to those who have died recently. This option allows you to extend the privacy rules for living people to those who were born or died within a specified number of years. Leave these values at zero to disable this feature.'); ?>
+								</div>
+							</div>
+							<div class="cell large-3">
+								<label for="SHOW_LIVING_NAMES"><?php echo KT_I18N::translate('Names of private individuals'); ?></label>
+							</div>
+							<div class="cell large-9">
+								<?php echo edit_field_access_level("SHOW_LIVING_NAMES", get_gedcom_setting(KT_GED_ID, 'SHOW_LIVING_NAMES')); ?>
+								<div class="cell helpcontent">
+									<?php echo KT_I18N::translate('This option will show the names (but no other details) of private individuals. Individuals are private if they are still alive or if a privacy restriction has been added to their individual record. To hide a specific name, add a privacy restriction to that name record.'); ?>
+								</div>
+							</div>
+							<div class="cell large-3">
+								<label for="SHOW_PRIVATE_RELATIONSHIPS"><?php echo KT_I18N::translate('Show private relationships'); ?></label>
+							</div>
+							<div class="cell large-9">
+								<?php echo switch_group('SHOW_PRIVATE_RELATIONSHIPS', $privacy, get_gedcom_setting(KT_GED_ID, 'SHOW_PRIVATE_RELATIONSHIPS')); ?>
+								<div class="cell helpcontent space">
+									<?php echo KT_I18N::translate('This option will retain family links in private records. This means you will see empty "private" boxes on the pedigree chart and on other charts with private people.'); ?>
+								</div>
+							</div>
+							<div class="cell h5">
+								<?php echo KT_I18N::translate('Privacy restrictions'); ?>
+							</div>
+							<div class="cell callout secondary">
+								<div>
+									<?php echo KT_I18N::translate('You can set the access for a specific record, fact, or event by adding a restriction to it. If a record, fact, or event does not have a restriction the following default restrictions will be used.'); ?>
+								</div>
+								<?php
+								$all_tags	= array();
+								$tags		= array_unique(array_merge(
+									explode(',', get_gedcom_setting(KT_GED_ID, 'INDI_FACTS_ADD')), explode(',', get_gedcom_setting(KT_GED_ID, 'INDI_FACTS_UNIQUE')),
+									explode(',', get_gedcom_setting(KT_GED_ID, 'FAM_FACTS_ADD' )), explode(',', get_gedcom_setting(KT_GED_ID, 'FAM_FACTS_UNIQUE' )),
+									explode(',', get_gedcom_setting(KT_GED_ID, 'NOTE_FACTS_ADD')), explode(',', get_gedcom_setting(KT_GED_ID, 'NOTE_FACTS_UNIQUE')),
+									explode(',', get_gedcom_setting(KT_GED_ID, 'SOUR_FACTS_ADD')), explode(',', get_gedcom_setting(KT_GED_ID, 'SOUR_FACTS_UNIQUE')),
+									explode(',', get_gedcom_setting(KT_GED_ID, 'REPO_FACTS_ADD')), explode(',', get_gedcom_setting(KT_GED_ID, 'REPO_FACTS_UNIQUE')),
+									array('SOUR', 'REPO', 'OBJE', '_PRIM', 'NOTE', 'SUBM', 'SUBN', '_UID', 'CHAN')
+								));
+								foreach ($tags as $tag) {
+									if ($tag) {
+										$all_tags[$tag] = KT_Gedcom_Tag::getLabel($tag);
+									}
+								}
+								uasort($all_tags, 'utf8_strcasecmp');
+								?>
+								<div class="grid-x grid-margin-x">
+									<div class="cell large-10 large-offset-1">
+										<table>
+											<thead>
+												<tr>
+													<th><?php echo KT_I18N::translate('Record'); ?></th>
+													<th><?php echo KT_I18N::translate('Fact or event'); ?></th>
+													<th><?php echo KT_I18N::translate('Access level'); ?></th>
+													<th><?php echo KT_I18N::translate('Action'); ?></th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>
+														<div class="input-group autocomplete_container">
+															<input
+																data-autocomplete-type="IFSRO"
+																type="text"
+																id="autocompleteInput-priv"
+																maxlength="20"
+																name="xref"
+																placeholder="<?php echo /* I18N: a placeholder for input of all or any record type */ KT_I18N::translate('All records'); ?>"
+															>
+															<span class="input-group-label">
+																<button class="clearAutocomplete autocomplete_icon">
+																	<i class="<?php echo $iconStyle; ?> fa-times"></i>
+																</button>
+															</span>
+														</div>
+														<input type="hidden" id="selectedValue-xref" name="xref">
+													</td>
+													<td><?php echo select_edit_control('tag_type', $all_tags, '', null, null); ?></td>
+													<td><?php echo select_edit_control('resn', $PRIVACY_CONSTANTS, null, 'privacy', null); ?></td>
+													<td>
+														<button type="submit" class="button" onClick="document.configform-privacy.elements['action'].value='add';document.configform-privacy.submit();">
+															<i class="<?php echo $iconStyle; ?> fa-plus"></i>
+															<?php echo KT_I18N::translate('add'); ?>
+														</button>
+														<input type="hidden" name="default_resn_id" value=""><!-- value set by JS -->
+													</td>
+												</tr>
+												<?php
+												$rows = KT_DB::prepare(
+													"SELECT default_resn_id, tag_type, xref, resn".
+													" FROM `##default_resn`".
+													" LEFT JOIN `##name` ON (gedcom_id=n_file AND xref=n_id AND n_num=0)".
+													" WHERE gedcom_id=?".
+													" ORDER BY xref IS NULL, n_sort, xref, tag_type"
+												)->execute(array(KT_GED_ID))->fetchAll();
+												$n = 1;
+												foreach ($rows as $row) { ?>
+													<tr>
+														<td>
+															<?php
+															$n++;
+															if ($row->xref) {
+																$record = GedcomRecord::getInstance($row->xref);
+																if ($record) {
+																	echo '<a href="' . $record->getHtmlUrl() . '">' . $record->getFullName() . '</a>';
+																} else {
+																	echo KT_I18N::translate('this record does not exist');
+																}
+															} else {
+																echo '&nbsp;';
+															} ?>
+														</td>
+														<td>
+															<?php if ($row->tag_type) {
+																// I18N: e.g. Marriage (MARR)
+																echo KT_Gedcom_Tag::getLabel($row->tag_type);
+															} else {
+																echo '&nbsp;';
+															} ?>
+														</td>
+														<td>
+															<?php echo $PRIVACY_CONSTANTS[$row->resn]; ?>
+														</td>
+														<td>
+															<button type="submit" class="button" onClick="document.configform-privacy.elements['action'].value='delete';if (confirm('<?php echo htmlspecialchars(KT_I18N::translate('Are you sure you want to delete “%s”?', KT_Gedcom_Tag::getLabel($row->tag_type))); ?>')) { document.configform-privacy.elements['default_resn_id'].value='<?php echo $row->default_resn_id; ?>';document.configform-privacy.submit();}">
+																<i class="<?php echo $iconStyle; ?> fa-trash-alt"></i>
+																<?php echo KT_I18N::translate('delete'); ?>
+															</button>
+														</td>
+													</tr>
+												<?php } ?>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+						<button type="submit" class="button">
+							<i class="<?php echo $iconStyle; ?> fa-save"></i>
+							<?php echo KT_I18N::translate('Save'); ?>
+						</button>
+						<a class="button secondary" href="<?php echo KT_SCRIPT_NAME . '#general'; ?>">
+							<i class="<?php echo $iconStyle; ?> fa-times"></i>
+							<?php echo KT_I18N::translate('Cancel'); ?>
+						</a>
+					</form>
+				</div>
+				<!-- Media tab -->
+				<div class="tabs-panel" id="media">
+					<form method="post" name="configform-media" action="<?php echo KT_SCRIPT_NAME . '#media'; ?>" data-abide novalidate>
+						<?php echo KT_Filter::getCsrf(); ?>
+						<input type="hidden" name="action" value="update-media">
+						<div class="grid-x grid-margin-x">
+							<div data-abide-error class="alert callout" style="display: none;">
+								<p><i class="fi-alert"></i><?php echo /* I18N: A general error message for forms */ KT_I18N::translate('There are some errors in your form.'); ?></p>
+							</div>
+							<div class="cell large-3">
+								<label for="tree_media"><?php echo KT_I18N::translate('Media folder'); ?></label>
+							</div>
+							<div class="cell large-9">
+								<div class="input-group">
+									<span class="input-group-label"><?php echo KT_DATA_DIR; ?></span>
+									<input class="input-group-field" id="tree_media" type="text" name="NEW_MEDIA_DIRECTORY" value="<?php echo $MEDIA_DIRECTORY; ?>" dir="ltr" maxlength="255">
+								</div>
+								<div class="helpcontent space">
+									<?php echo KT_I18N::translate('This folder will be used to store the media files for this family tree. If you select a different folder you must also move any media files from the existing folder to the new one. If two family trees use the same media folder they will be able to share media files. If they use different media folders their media files will be kept separate.'); ?>
+								</div>
+							</div>
+							<div class="cell large-3">
+								<label for="NEW_MEDIA_UPLOAD"><?php echo KT_I18N::translate('Option to upload new media files'); ?></label>
+							</div>
+							<div class="cell large-9">
+								<?php echo switch_group('NEW_MEDIA_UPLOAD', $privacy, get_gedcom_setting(KT_GED_ID, 'MEDIA_UPLOAD')); ?>
+								 <div class="helpcontent space">
+									<?php echo KT_I18N::translate('If you are concerned that users might upload inappropriate images, you can restrict media uploads to managers only.'); ?>
+								</div>
+							</div>
+							<div class="cell large-3">
+								<label for="NEW_SHOW_MEDIA_DOWNLOAD"><?php echo KT_I18N::translate('Download link in media viewer'); ?></label>
+							</div>
+							<div class="cell large-9">
+								<?php echo switch_group('NEW_SHOW_MEDIA_DOWNLOAD', $privacy, get_gedcom_setting(KT_GED_ID, 'SHOW_MEDIA_DOWNLOAD')); ?>
+								 <div class="helpcontent space">
+									 <?php echo KT_I18N::translate('The media viewer can show a link which when clicked will download the media file to the local PC.<br>You may want to hide the download link for security reasons.'); ?>
+								</div>
+							</div>
+							<div class="cell large-3">
+								<label for="tree_thumb"><?php echo KT_I18N::translate('Width of generated thumbnails'); ?></label>
+							</div>
+							<div class="cell large-2">
+								<div class="input-group">
+									<input class="input-group-field" type="text" id="tree_thumb" name="NEW_THUMBNAIL_WIDTH" value="<?php echo $THUMBNAIL_WIDTH; ?>" maxlength="4" required>
+									<span class="input-group-label"><?php echo /* I18N: the suffix to a media size */ KT_I18N::translate('pixels'); ?></span>
+								</div>
+								<div class="helpcontent">
+									<?php echo KT_I18N::translate('This is the width (in pixels) that the program will use when automatically generating thumbnails. The default setting is 100.'); ?>
+								</div>
+							</div>
+							<div class="cell large-7"></div>
+							<div class="cell large-3">
+								<label for="NEW_USE_SILHOUETTE"><?php echo KT_I18N::translate('Use silhouettes'); ?></label>
+							</div>
+							<div class="cell large-9">
+								<?php echo simple_switch('NEW_USE_SILHOUETTE', true, get_gedcom_setting(KT_GED_ID, 'USE_SILHOUETTE')); ?>
+								 <div class="helpcontent space">
+									 <?php echo KT_I18N::translate('Use silhouette images when no highlighted image for that individual has been specified. The images used are specific to the gender of the individual in question and may also vary according to the theme you use.'); ?>
+								</div>
+							</div>
+							<div class="cell large-3">
+								<label for="tree_editor"><?php echo KT_I18N::translate('External image editor'); ?></label>
+							</div>
+							<div class="cell large-9">
+								<input type="url" id="tree_editor" name="NEW_IMAGE_EDITOR" required value="<?php echo $IMAGE_EDITOR; ?>" size="50" maxlength="255" dir="ltr">
+								 <div class="helpcontent">
+									 <?php echo KT_I18N::translate('Preferred URL link to an external image editor provided for members use when uploading media images. The default link is %s>', $IMAGE_EDITOR); ?>
+								</div>
+							</div>
 
+
+
+
+
+						</div>
+						<button type="submit" class="button">
+							<i class="<?php echo $iconStyle; ?> fa-save"></i>
+							<?php echo KT_I18N::translate('Save'); ?>
+						</button>
+						<a class="button secondary" href="<?php echo KT_SCRIPT_NAME . '#general'; ?>">
+							<i class="<?php echo $iconStyle; ?> fa-times"></i>
+							<?php echo KT_I18N::translate('Cancel'); ?>
+						</a>
+					</form>
+				</div>
+				<!-- Layout tab -->
+				<div class="tabs-panel" id="layout">
+					<form method="post" name="configform-layout" action="<?php echo KT_SCRIPT_NAME . '#layout'; ?>" data-abide novalidate>
+						<?php echo KT_Filter::getCsrf(); ?>
+						<input type="hidden" name="action" value="update-layout">
+						<div class="grid-x grid-margin-x">
+							<div data-abide-error class="alert callout" style="display: none;">
+								<p><i class="fi-alert"></i><?php echo /* I18N: A general error message for forms */ KT_I18N::translate('There are some errors in your form.'); ?></p>
+							</div>
+
+
+
+
+
+							<button type="submit" class="button">
+								<i class="<?php echo $iconStyle; ?> fa-save"></i>
+								<?php echo KT_I18N::translate('Save'); ?>
+							</button>
+							<a class="button secondary" href="<?php echo KT_SCRIPT_NAME . '#general'; ?>">
+								<i class="<?php echo $iconStyle; ?> fa-times"></i>
+								<?php echo KT_I18N::translate('Cancel'); ?>
+							</a>
+						</form>
+					</div>
+				</div>
 
 
 
