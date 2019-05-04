@@ -97,6 +97,13 @@ if ($controller->record && $controller->record->canDisplayDetails()) {
 	<?php exit;
 }
 
+/* Check for Highlight image or silhouette */
+$highlightImage = false;
+$image = $controller->record->displayImage();
+if ($image || $USE_SILHOUETTE) {
+	$highlightImage = true;
+}
+
 $linkToID = $controller->record->getXref(); // -- Tell addmedia.php what to link to
 
 $controller->addInlineJavascript('
@@ -169,14 +176,14 @@ if (KT_Module::getActiveSidebars()) {
 				</div>
 				<div class="cell">
 					<div class="grid-x grid-padding-x indiHeader">
-						<div class="cell medium-2 small-text-center medium-text-left">
-							<!-- Highlight image or silhouette -->
-							<?php $image = $controller->record->displayImage();
-							if ($image || $USE_SILHOUETTE) {
-								echo $controller->record->displayImage();
-							} ?>
-						</div>
-						<div class="cell medium-10">
+						<?php if ($highlightImage) { ?>
+							<div class="cell medium-2 small-text-center medium-text-left">
+								<?php echo $controller->record->displayImage(); ?>
+							</div>
+							<div class="cell medium-10">
+						<?php } else { ?>
+							<div class="cell">
+						<?php } ?>
 							<!-- Name details -->
 							<div class="accordion" data-accordion data-allow-all-closed="true" data-multi-open="false" data-slide-speed="500">
 								<?php foreach ($globalfacts as $key => $value) {
