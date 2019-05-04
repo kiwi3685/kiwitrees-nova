@@ -52,13 +52,16 @@ try {
 	// Perhaps we have already changed this data?
 }
 
-// Delete old WT_SCHEMA_VERSION site setting (replaced by KT_ in earlier schema)
-try {
-	self::exec("ALTER TABLE `##log` CHANGE component component ENUM('auth', 'config', 'debug', 'edit', 'error', 'media', 'search', 'spam')");
-} catch (PDOException $ex) {
-	// Perhaps we have already changed this data?
+// add default image editor setting if not already set
+$rows = KT_DB::prepare("SELECT DISTINCT `gedcom_id` FROM `##gedcom_setting`")->execute()->fetchAll();
+foreach ($rows as $row) {
+	$ged = $row->gedcom_id;
+	try {
+		self::exec("INSERT IGNORE INTO `##gedcom_setting` (`gedcom_id`, `setting_name`, `setting_value`) VALUES ($ged, 'IMAGE_EDITOR', 'https://pixlr.com/x/')");
+	} catch (PDOException $ex) {
+		// Perhaps we have already changed this data?
+	}
 }
-
 
 // Update the version to indicate success
 KT_Site::preference($schema_name, $next_version);
