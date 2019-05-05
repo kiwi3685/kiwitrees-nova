@@ -20,6 +20,7 @@
  * along with Kiwitrees. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/*
 // Specifications for various types of popup edit window.
 // Choose positions to center in the smallest (1000x800) target screen
 var edit_window_specs	= 'width=650,height=600,left=175,top=100,resizable=1,scrollbars=1'; // edit_interface.php, add_media.php, gedrecord.php
@@ -34,7 +35,7 @@ var link_window_specs	= 'width=950,height=750,left=70,top=70,  resizable=1,scrol
 var assist_window_specs	= ''; // edit_interface.php, used for census assistant
 var gmap_window_specs	= 'width=580,height=600,left=200,top=150,resizable=1,scrollbars=1'; // googlemap module place editing
 var pastefield, nameElement, remElement; // Elements to paste to
-
+*/
 //Add help texts to page
 function display_help(title=true) {
 	jQuery(".help-text").each(function() {
@@ -1676,4 +1677,52 @@ function persistent_toggle(checkbox_id, data_selector) {
 			elements[i].style.display = display;
 		}
 	});
+}
+
+/**
+*  Reveal passwords
+**/
+jQuery('.unmask').on('click', function(){
+
+	if(jQuery(this).prev('input').attr('type') == 'password') {
+		changeType(jQuery(this).prev('input'), 'text');
+	} else {
+		changeType(jQuery(this).prev('input'), 'password');
+	}
+
+	return false;
+});
+
+function changeType(x, type) {
+	if(x.prop('type') == type){
+		return x; //That was easy.
+	}
+	try {
+		return x.prop('type', type); //Stupid IE security will not allow this
+	} catch(e) {
+		//Try re-creating the element (yep... this sucks)
+		//jQuery has no html() method for the element, so we have to put into a div first
+		var html = jQuery("<div>").append(x.clone()).html();
+		var regex = /type=(\")?([^\"\s]+)(\")?/; //matches type=text or type="text"
+		//If no match, we add the type attribute to the end; otherwise, we replace
+		var tmp = jQuery(html.match(regex) == null ?
+		html.replace(">", ' type="' + type + '">') :
+		html.replace(regex, 'type="' + type + '"') );
+		//Copy data from old element
+		tmp.data('type', x.data('type') );
+		var events = x.data('events');
+		var cb = function(events) {
+			return function() {
+				//Bind all prior events
+				for(i in events) {
+					var y = events[i];
+					for(j in y)
+					tmp.bind(i, y[j].handler);
+				}
+			}
+		}(events);
+		x.replaceWith(tmp);
+		setTimeout(cb, 10); //Wait a bit to call function
+		return tmp;
+	}
 }

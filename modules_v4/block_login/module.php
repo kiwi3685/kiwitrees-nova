@@ -71,9 +71,14 @@ class block_login_KT_Module extends KT_Module implements KT_Module_Block {
 						<input type="hidden" name="pid" value="'; if (isset($pid)) $content .= htmlspecialchars($pid); $content .= '">
 						<input type="hidden" name="usertime" value="">
 						<label for="username">' . KT_I18N::translate('Username') . '</label>
-						<input type="text" name="username" class="formField">
+						<input type="text" name="username" id="username">
 						<label for="password">' . KT_I18N::translate('Password') . '</label>
-						<input type="password" name="password" class="formField">
+						<div class="input-group">
+							<input class="input-group-field password" type="password" id="password" name="password">
+							<span class="input-group-label unmask" title="' . KT_I18N::translate('Show/Hide password to check content') . '">
+								<i class="' . $iconStyle . ' fa-eye"></i>
+							</span>
+						</div>
 						<button class="button expanded" type="submit" >
 							<i class="' . $iconStyle . ' fa-sign-in-alt"></i>' .
 							KT_I18N::translate('Login') . '

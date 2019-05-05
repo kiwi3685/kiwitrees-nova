@@ -174,9 +174,13 @@ default:
 						</label>
 					</div>
 					<div class="cell medium-8 medium-offset-2">
-						<label for="password" class="h6"><?php echo KT_I18N::translate('Password'); ?>
+						<label for="password" class="h6"><?php echo KT_I18N::translate('Password'); ?></label>
+						<div class="input-group">
 							<input class="input-group-field" type="password" id="password" name="password" placeholder="<?php echo KT_I18N::translate('Password'); ?>" required value="<?php echo htmlspecialchars($username); ?>">
-						</label>
+							<span class="input-group-label unmask" title="<?php echo KT_I18N::translate('Show/Hide password to check content'); ?>">
+								<i class="<?php echo $iconStyle; ?> fa-eye"></i>
+							</span>
+						</div>
 					</div>
 					<div class="cell medium-8 medium-offset-2">
 						<button class="button expanded h6" type="submit" >

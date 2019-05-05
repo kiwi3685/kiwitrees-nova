@@ -130,7 +130,7 @@ class backup_to_dropbox_KT_Module extends KT_Module implements KT_Module_Config 
 					<div class="config_options even">
 						<label><?php echo /* I18N: Dropbox secure access token */ KT_I18N::translate('Dropbox token'); ?></label>
 						<div class="input_group">
-							<input type="password" name="NEW_DB_TOKEN" value="<?php echo $DB_TOKEN; ?>">
+							<input type="text" name="NEW_DB_TOKEN" value="<?php echo $DB_TOKEN; ?>">
 						</div>
 					</div>
 					<?php if ($DB_FOLDER && $DB_FOLDER) { ?>
