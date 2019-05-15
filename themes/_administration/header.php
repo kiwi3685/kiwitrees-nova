@@ -95,8 +95,8 @@ $this
 	->addExternalJavascript(KT_JQUERY_WHEELZOOM_URL)
 	->addExternalJavascript(KT_JQUERY_AUTOSIZE)
 	->addInlineJavascript('
-		display_help();
-		activate_colorbox();
+//		display_help();
+//		activate_colorbox();
 		jQuery.extend(jQuery.colorbox.settings, {
 			title:	function(){
 				var img_title = jQuery(this).data("title");
