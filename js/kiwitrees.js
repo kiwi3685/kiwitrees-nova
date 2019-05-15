@@ -37,7 +37,7 @@ var gmap_window_specs	= 'width=580,height=600,left=200,top=150,resizable=1,scrol
 var pastefield, nameElement, remElement; // Elements to paste to
 */
 //Add help texts to page
-function display_help(title=true) {
+function display_help(title) {
 	jQuery(".help-text").each(function() {
 		var helpID = jQuery(this).attr("id");
 		jQuery("#" + helpID).load("help_text.php?help=" + helpID + "title=" + title);
