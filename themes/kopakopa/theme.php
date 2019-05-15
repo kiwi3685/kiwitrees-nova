@@ -27,7 +27,8 @@ if (!defined('KT_KIWITREES')) {
 }
 
 // Theme name - this needs double quotes, as file is scanned/parsed by script
-$theme_name = "kopakopa"; /* I18N: Name of a theme. */ KT_I18N::translate('Kopakopa');
+$theme_name		= "kopakopa";
+$theme_display	= "Kopakopa"; // Māori language text - not translatable
 
 $headerfile = KT_THEME_DIR . 'header.php';
 

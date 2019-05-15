@@ -27,16 +27,17 @@ if (!defined('KT_KIWITREES')) {
 }
 
 // Theme name - this needs double quotes, as file is scanned/parsed by script
-$theme_name = "kahikatoa"; /* I18N: Name of a theme. */ KT_I18N::translate('Kahikātoa');
+$theme_name		= "kahikatoa";
+$theme_display	= "Kahikātoa"; // Māori language text - not translatable
 
 $headerfile = KT_THEME_DIR . 'header.php';
 
 /**
- * Tell menu constructor they fontawesome style icons required
+ * Tell menu constructor the fontawesome style icons required
  * @ iconStyle type	= string
  * @ fas	= solid
  * @ far	= regular
- * @ fal	 light
+ * @ fal	= light
  */
 $iconStyle	= 'fas';
 

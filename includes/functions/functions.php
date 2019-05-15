@@ -2273,6 +2273,22 @@ function get_theme_names() {
 	return $themes;
 }
 
+/**
+ * get theme display names from theme name
+ *
+ * @return string
+ */
+function get_theme_display($folder) {
+	$themefile = implode('', file(KT_ROOT . KT_THEMES_DIR . $folder . '/theme.php'));
+	if (preg_match('/theme_display\s*=\s*"(.*)";/', $themefile, $match)) {
+		$theme_display = KT_I18N::translate($match[1]);
+	} else {
+		$theme_display = $folder;
+	}
+
+	return $theme_display;
+}
+
 // Function to build an URL querystring from GET variables
 // Optionally, add/replace specified values
 function get_query_url($overwrite = null, $separator = '&') {
