@@ -8469,8 +8469,12 @@ label {
 div[id$="-page"] {
   padding: 1rem; }
 
+/* standard colors as classes */
 .alert {
   color: #ff0000; }
+
+.success {
+  color: #5da423; }
 
 /* Sticky footer settings */
 body {
@@ -8549,11 +8553,11 @@ body {
     #admin-container #admin-content .accordion .accordion-item {
       margin-bottom: 1rem; }
       #admin-container #admin-content .accordion .accordion-item .accordion-title:before {
-        content: "\f329";
-        font-family: "Font Awesome 5 Regular";
+        content: "\f150";
+        font-family: "Font Awesome 5 Solid";
         display: none; }
       #admin-container #admin-content .accordion .accordion-item.is-active > .accordion-title:before {
-        content: "\f32c"; }
+        content: "\f151"; }
       #admin-container #admin-content .accordion .accordion-item .accordion-title {
         background-color: #cacaca;
         font-weight: 600; }
@@ -8588,6 +8592,8 @@ body {
       font-weight: 700; }
     #admin-container #admin-content .tabs-content .callout {
       font-size: 80%; }
+      #admin-container #admin-content .tabs-content .callout .helpcontent {
+        font-size: inherit; }
     #admin-container #admin-content .tabs-content .input-group.tree_xref span {
       width: 86%; }
     #admin-container #admin-content .tabs-content #tree_extend {
@@ -8595,6 +8601,28 @@ body {
       #admin-container #admin-content .tabs-content #tree_extend .tree_extend {
         display: inline;
         width: auto; }
+    #admin-container #admin-content .tabs-content .accordion .accordion-content {
+      background-color: #e6e6e6;
+      margin: 0 2rem; }
+      #admin-container #admin-content .tabs-content .accordion .accordion-content #tree_places {
+        line-height: 3; }
+    #admin-container #admin-content .tabs-content .accordion .accordion-title {
+      background: none;
+      border: none;
+      font-weight: normal;
+      font-size: 1rem;
+      padding: 0 2rem;
+      width: 20rem; }
+      #admin-container #admin-content .tabs-content .accordion .accordion-title svg {
+        position: absolute;
+        left: 0.25rem;
+        margin-top: 0.5rem; }
+    #admin-container #admin-content .tabs-content .accordion .accordion-title:before {
+      content: "\f150";
+      font-family: "Font Awesome 5 Solid";
+      display: none; }
+    #admin-container #admin-content .tabs-content .accordion.is-active > .accordion-title:before {
+      content: "\f151"; }
     #admin-container #admin-content .helpcontent {
       font-size: 80%;
       font-style: italic;
