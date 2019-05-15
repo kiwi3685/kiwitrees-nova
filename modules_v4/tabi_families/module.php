@@ -449,12 +449,16 @@ class tabi_families_KT_Module extends KT_Module implements KT_Module_IndiTab {
 			$families		= $controller->record->getChildFamilies(); ?>
 			<div class="cell tabHeader">
 				<div class="grid-x">
-					<div class="cell">
+					<div class="cell shrink">
 						<input id="checkbox_elder" type="checkbox" checked>
 						<label for="checkbox_elder"><?php echo KT_I18N::translate('Show date differences'); ?></label>
+					</div>
+					<div class="cell shrink">
 						<input id="checkbox_rela" type="checkbox" checked>
 						<label for="checkbox_rela"><?php echo KT_I18N::translate('Show relationships'); ?></label>
-						<?php if (count($families) == 0 && $controller->record->canEdit()) { ?>
+					</div>
+					<?php if (count($families) == 0 && $controller->record->canEdit()) { ?>
+						<div class="cell auto">
 							<a href="#" onclick="return addnewparent('<?php echo $controller->record->getXref(); ?>', 'HUSB');">
 								<i class="<?php echo $iconStyle; ?> fa-mars"></i>
 								<?php echo KT_I18N::translate('Add a father'); ?>
@@ -463,8 +467,8 @@ class tabi_families_KT_Module extends KT_Module implements KT_Module_IndiTab {
 								<i class="<?php echo $iconStyle; ?> fa-venus"></i>
 								<?php echo KT_I18N::translate('Add a mother'); ?>
 							</a>
-						<?php } ?>
-					</div>
+						</div>
+					<?php } ?>
 				</div>
 			</div>
 

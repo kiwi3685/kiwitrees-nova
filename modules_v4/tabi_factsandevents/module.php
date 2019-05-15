@@ -88,21 +88,24 @@ class tabi_factsandevents_KT_Module extends KT_Module implements KT_Module_IndiT
 				echo '<div class="callout alert">', KT_I18N::translate('There are no Facts for this individual.'), '</div>';
 			} ?>
 			<div class="cell tabHeader">
-				<div class="grid-x">
-					<div class="cell">
+				<?php if ($SHOW_RELATIVES_EVENTS || file_exists(KT_Site::preference('INDEX_DIRECTORY') . 'histo.' . KT_LOCALE . '.php')) { ?>
+					<div class="grid-x">
 						<?php if ($SHOW_RELATIVES_EVENTS) { ?>
-							<input id="checkbox_rela_facts" type="checkbox">
-							<label for="checkbox_rela_facts"><?php echo KT_I18N::translate('Events of close relatives'); ?></label>
+							<div class="cell shrink">
+								<input id="checkbox_rela_facts" type="checkbox">
+								<label for="checkbox_rela_facts"><?php echo KT_I18N::translate('Events of close relatives'); ?></label>
+							</div>
 						<?php }
 						if (file_exists(KT_Site::preference('INDEX_DIRECTORY') . 'histo.' . KT_LOCALE . '.php')) { ?>
-							<input id="checkbox_histo" type="checkbox">
-							<label for="checkbox_histo"><?php echo KT_I18N::translate('Historical events'); ?></label>
+							<div class="cell auto">
+								<input id="checkbox_histo" type="checkbox">
+								<label for="checkbox_histo"><?php echo KT_I18N::translate('Historical events'); ?></label>
+							</div>
 						<?php } ?>
 					</div>
-				</div>
+				<?php } ?>
 			</div>
-			<?php
-			foreach ($indifacts as $fact) {
+			<?php foreach ($indifacts as $fact) {
 				if ($fact->getParentObject() instanceof KT_Family) {
 					// Print all family facts
 					print_fact($fact, $controller->record);
@@ -119,8 +122,7 @@ class tabi_factsandevents_KT_Module extends KT_Module implements KT_Module_IndiT
 				print_add_new_fact($controller->record->getXref(), $indifacts, 'INDI');
 			} ?>
 
-		<?php
-		return '
+		<?php return '
 			<div id="' . $this->getName() . '_content" class="grid-x grid-padding-y">' .
 				ob_get_clean() . '
 			</div>

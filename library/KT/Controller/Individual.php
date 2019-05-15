@@ -186,7 +186,7 @@ class KT_Controller_Individual extends KT_Controller_GedcomRecord {
 			</a>
 			<div class="accordion-content" data-tab-content>
 				<div class="grid-x grid-padding-x">
-					<div class=" cell medium-10">
+					<div class="cell medium-9">
 						<div class="grid-x">
 							<div class="cell medium-2">
 								<?php $dummy->setPrimaryName(0); ?>
@@ -248,18 +248,18 @@ class KT_Controller_Individual extends KT_Controller_GedcomRecord {
 
 						</div>
 					</div>
-					<div class="cell medium-2">
+					<div class="cell medium-3 text-right">
 						<?php if ($this->record->canEdit() && !$event->getIsOld()) { ?>
 							<div class="editlink">
 								<a href="edit_interface.php?action=editname&amp;pid=<?php echo $this->record->getXref(); ?>&amp;linenum=<?php echo $linenum; ?>&accesstime=<?php echo KT_TIMESTAMP; ?>&ged=<?php echo KT_GEDCOM; ?>" target="_blank" title="<?php echo KT_I18N::translate('Edit name'); ?>">
 									<i class="<?php echo $iconStyle; ?> fa-edit"></i>
-									<span class="link_text show-for-large"><?php echo KT_I18N::translate('Edit name'); ?></span>
+									<span class="link_text"><?php echo KT_I18N::translate('Edit name'); ?></span>
 								</a>
 							</div>
 							<div class="deletelink">
 								<a href="#" onclick="return delete_fact('<?php echo $this->record->getXref(); ?>', '', <?php echo $linenum; ?>, '<?php echo KT_I18N::translate('Are you sure you want to delete this fact?'); ?>');" title="<?php echo KT_I18N::translate('Delete name'); ?>">
 									<i class="<?php echo $iconStyle; ?> fa-trash-alt"></i>
-									<span class="link_text show-for-large"><?php echo KT_I18N::translate('Delete name'); ?></span>
+									<span class="link_text"><?php echo KT_I18N::translate('Delete name'); ?></span>
 								</a>
 							</div>
 						<?php } ?>

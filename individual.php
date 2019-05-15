@@ -175,12 +175,12 @@ if (KT_Module::getActiveSidebars()) {
 					</div>
 				</div>
 				<div class="cell">
-					<div class="grid-x grid-padding-x indiHeader">
+					<div class="grid-x indiHeader">
 						<?php if ($highlightImage) { ?>
-							<div class="cell medium-2 small-text-center medium-text-left">
+							<div class="cell medium-3 large-2 small-text-center medium-text-left">
 								<?php echo $controller->record->displayImage(); ?>
 							</div>
-							<div class="cell medium-10">
+							<div class="cell medium-9 large-10">
 						<?php } else { ?>
 							<div class="cell">
 						<?php } ?>
@@ -200,7 +200,7 @@ if (KT_Module::getActiveSidebars()) {
 								KT_USER_ID &&
 								get_gedcom_setting(KT_GED_ID, 'TAB_REL_TO_DEFAULT_INDI') > 0
 							) { ?>
-								<div class="cell fam_rela"><?php echo printIndiRelationship(); ?></div>
+								<div class="cell medium-12 text-right fam_rela"><?php echo printIndiRelationship(); ?></div>
 						<?php } ?>
 					</div>
 				</div>

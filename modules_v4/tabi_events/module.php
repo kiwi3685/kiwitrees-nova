@@ -91,13 +91,13 @@ class tabi_events_KT_Module extends KT_Module implements KT_Module_IndiTab {
 					<?php if ($SHOW_RELATIVES_EVENTS || file_exists(KT_Site::preference('INDEX_DIRECTORY') . 'histo.' . KT_LOCALE . '.php')) { ?>
 						<div class="grid-x">
 							<?php if ($SHOW_RELATIVES_EVENTS) { ?>
-								<div class="cell medium-2">
+								<div class="cell shrink">
 									<input id="checkbox_rela_facts" type="checkbox">
 									<label for="checkbox_rela_facts"><?php echo KT_I18N::translate('Events of close relatives'); ?></label>
 								</div>
 							<?php }
 							if (file_exists(KT_Site::preference('INDEX_DIRECTORY') . 'histo.' . KT_LOCALE . '.php')) { ?>
-								<div class="cell medium-2">
+								<div class="cell auto">
 									<input id="checkbox_histo" type="checkbox">
 									<label for="checkbox_histo"><?php echo KT_I18N::translate('Historical events'); ?></label>
 								</div>
