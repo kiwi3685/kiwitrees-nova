@@ -248,7 +248,7 @@ case 'edit':
 					<i class="<?php echo $iconStyle; ?> fa-save"></i>
 					<?php echo KT_I18N::translate('Save'); ?>
 				</button>
-				<button class="button" type="submit" onclick="window.close();">
+				<button class="button secondary" type="submit" onclick="window.close();">
 					<i class="<?php echo $iconStyle; ?> fa-times"></i>
 					<?php echo KT_I18N::translate('Cancel'); ?>
 				</button>

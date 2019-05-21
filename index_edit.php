@@ -333,7 +333,7 @@ $controller
 				<i class="fas fa-save"></i>
 				<?php echo KT_I18N::translate('Save'); ?>
 			</button>
-			<button class="button" type="button"  onclick="window.location.href='index.php'">
+			<button class="button secondary" type="button"  onclick="window.location.href='index.php'">
 				<i class="fas fa-times"></i>
 				<?php echo KT_I18N::translate('Cancel'); ?>
 			</button>
