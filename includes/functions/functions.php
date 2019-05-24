@@ -210,7 +210,7 @@ function file_upload_error_text($error_code) {
 	}
 }
 
-function load_gedcom_settings($ged_id =  KT_GED_ID) {
+function load_gedcom_settings($ged_id = KT_GED_ID) {
 	// Load the configuration settings into global scope
 	// TODO: some of these are used infrequently - just load them when we need them
 	global $ABBREVIATE_CHART_LABELS;      $ABBREVIATE_CHART_LABELS      = get_gedcom_setting($ged_id, 'ABBREVIATE_CHART_LABELS');

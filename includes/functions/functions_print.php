@@ -382,7 +382,7 @@ function logout_link($icon = true) {
 	if ($SEARCH_SPIDER) {
 		return '';
 	} else {
-		$icon ? $icon = '<i class="' . $iconStyle . ' fa-lock-open"></i>' : $icon = '';
+		$icon ? $icon = '<i class="' . $iconStyle . ' fa-lock-open show-for-medium"></i>' : $icon = '';
 		return '<a href="index.php?logout=1">' . $icon . KT_I18N::translate('Logout') . '</a>';
 	}
 }

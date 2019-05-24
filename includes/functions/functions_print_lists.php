@@ -2391,7 +2391,7 @@ function print_events_table($startjd, $endjd, $events='BIRT MARR DEAT', $only_li
 		}
 	}
 	if ($summary!="") {
-		$html .= '<strong>'. $summary. '</strong>';
+		$html .= '<p class="strong">'. $summary. '</p>';
 	}
 
 	return $html;
