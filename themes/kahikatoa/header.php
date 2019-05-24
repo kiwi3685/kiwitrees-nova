@@ -79,7 +79,7 @@
 		<link rel="stylesheet" href="<?php echo KT_DATEPICKER_CSS; ?>">
 		<link rel="stylesheet" href="<?php echo KT_THEME_URL; ?>css/kahikatoa.min.css">
 		<?php if (file_exists(KT_THEME_URL . 'mystyle.css')) { ?>
-			<link rel="stylesheet" href="<?php echo KT_THEME_URL; ?>mystyle.css" type="text/css">';
+			<link rel="stylesheet" href="<?php echo KT_THEME_URL; ?>mystyle.css" type="text/css">
 		<?php } ?>
 	</head>
 	<body>
