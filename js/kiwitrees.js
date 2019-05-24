@@ -1463,7 +1463,7 @@ function activate_colorbox(config) {
 	});
 }
 
-// Initialize autocomplete elements.
+// Initialize autocomplete elements
 function autocomplete(selector) {
 	if (typeof(selector) === "undefined") {
 		selector = "input[data-autocomplete-type]";
@@ -1502,7 +1502,7 @@ function autocomplete(selector) {
 			select: function( event, ui ) {
 				var item_html = jQuery("<p>" + ui.item.label + "</p>").text();
 				jQuery(self).val(item_html);//Display label in input field
-				jQuery("input[id*=selectedValue]").val(ui.item.value);//Saving the selected value in hidden field
+				jQuery("input[id^=selectedValue]").val(ui.item.value);//Saving the selected value in hidden field
 				return false;
 			},
 			html: true
