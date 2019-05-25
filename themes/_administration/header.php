@@ -65,16 +65,17 @@ asort($ft_tools);
 
 /**
  * Array of site administration menu items
- * $site_tools [array]
+ * $custom [array]
  */
 $custom = array(
-	 "admin_site_lang.php"		=> KT_I18N::translate('Custom translation'),
+	 "admin_custom_lang.php"		=> KT_I18N::translate('Custom translation'),
+	 "admin_custom_theme.php"		=> KT_I18N::translate('Custom theme files'),
 );
 arsort($custom);
 
 /**
  * Array of Module menu items
- * $ft_tools [array]
+ * $module_cats [array]
  */
 $module_cats = array(
 	"admin_module_menus.php"		=> KT_I18N::translate('Menus'),
@@ -119,20 +120,20 @@ $this
 	<head>
 		<meta charset="utf-8" />
 		<meta http-equiv="x-ua-compatible" content="ie=edge">
-		<meta name="robots" content="noindex,nofollow">
-		<?php //echo header_links($META_DESCRIPTION, $META_ROBOTS, $META_GENERATOR, $LINK_CANONICAL); ?>
+		<?php echo header_links($META_DESCRIPTION, $META_ROBOTS, $META_GENERATOR, $LINK_CANONICAL); ?>
 		<title><?php echo htmlspecialchars($title); ?></title>
 		<link rel="icon" href="<?php echo KT_THEME_URL; ?>images/kt.png" type="image/png">
 		<link rel="stylesheet" href="<?php echo KT_DATATABLES_CSS; ?>">
 		<link rel="stylesheet" href="<?php echo KT_DATEPICKER_CSS; ?>">
+		<link rel="stylesheet" href="<?php echo KT_CHOSEN_CSS; ?>">
 		<link rel="stylesheet" href="<?php echo KT_THEME_URL; ?>css/administration.min.css">
 		<?php echo $javascript; ?>
 	</head>
 	<body>
-		<div id="admin-head" class="grid-x" >
-			<div class="cell top-bar stacked-for-medium">
+		<nav id="admin-head" class="grid-x">
+			<div class="top-bar first-top-bar">
 				<div class="top-bar-left">
-					<ul class="dropdown menu align-top" data-dropdown-menu>
+					<ul class="dropdown menu" data-dropdown-menu>
 						<li class="show-for-large">
 							<p class="kiwitrees_logo"></p>
 						</li>
@@ -142,7 +143,7 @@ $this
 						<li>
 							<?php if (KT_USER_GEDCOM_ID) { ?>
 								<a href="individual.php?pid=<?php echo KT_USER_GEDCOM_ID; ?>&amp;ged=<?php echo KT_GEDURL; ?>">
-									<i class="<?php echo $iconStyle; ?> fa-male"></i>
+									<i class="<?php echo $iconStyle; ?> fa-male show-for-medium"></i>
 									<?php echo KT_I18N::translate('My individual record'); ?>
 								</a>
 							<?php } ?>
@@ -158,136 +159,143 @@ $this
 						</li>
 						<?php if (KT_USER_CAN_ACCEPT && exists_pending_change()) { ?>
 							<li>
-							 	<p><a href="edit_changes.php" target="_blank" rel="noopener noreferrer" class="alert"><?php echo KT_I18N::translate('Pending changes'); ?></a></p>
+								<p><a href="edit_changes.php" target="_blank" rel="noopener noreferrer" class="alert"><?php echo KT_I18N::translate('Pending changes'); ?></a></p>
 							</li>
 						<?php } ?>
 					</ul>
 				</div>
 				<div class="top-bar-right">
-					<form action="search.php" method="post">
-						<div class="input-group">
-							<input type="hidden" name="action" value="general">
-							<input type="hidden" name="topsearch" value="yes">
-							<input type="search"  name="query" placeholder="<?php echo KT_I18N::translate('Quick search'); ?>" class="input-group-field">
-							<span class="input-group-label"><i class="<?php echo $iconStyle; ?> fa-search"></i></span>
-		                </div>
-					</form>
-				</div>
-				<!-- responsive menu -->
-				<div class="title-bar" data-hide-for="large" data-responsive-toggle="kiwitrees-menu" style="display: none;">
-					<button class="menu-icon" type="button" data-toggle="kiwitrees-menu"></button>
-					<div class="title-bar-title"><?php echo KT_I18N::translate('Menu'); ?></div>
+					<ul class="menu">
+						<li>
+							<form action="search.php" method="post">
+								<div class="input-group">
+									<input type="hidden" name="action" value="general">
+									<input type="hidden" name="topsearch" value="yes">
+									<input type="search"  name="query" placeholder="<?php echo KT_I18N::translate('Quick search'); ?>" class="input-group-field">
+									<span class="input-group-label"><i class="<?php echo $iconStyle; ?> fa-search"></i></span>
+								</div>
+							</form>
+						</li>
+					</ul>
 				</div>
 			</div>
-				<div id="admin-title" class="cell text-center h3">
+			<div class="top-bar second-top-bar">
+				<div id="admin-title" class="top-bar-left text-center h2">
 					<?php echo KT_I18N::translate('Administration'); ?>
 				</div>
+				<div class="top-bar-right">
+					<!-- responsive menu -->
+					<div class="title-bar" data-hide-for="large" data-responsive-toggle="kiwitrees-menu" style="display: none;">
+						<button class="menu-icon" type="button" data-toggle="kiwitrees-menu"></button>
+						<div class="title-bar-title"><?php echo KT_I18N::translate('Menu'); ?></div>
+					</div>
+				</div>
 			</div>
-		</div> <!--  close admin_head -->
+		</nav> <!--  close admin_head -->
 		<div id="admin-container" class="grid-x"> <!--  closed in footer.php -->
 			<!-- normal menu -->
 			<div id="admin-menu" class="cell large-2">
 				<ul id="kiwitrees-menu" class="menu vertical accordion-menu" style="visibility:hidden;" data-accordion-menu data-multi-open="false" data-submenu-toggle="false" data-slide-speed="500">
+					<li>
+					    <a href="#"><i class="<?php echo $iconStyle; ?> fa-tachometer-alt fa-fw"></i><?php echo KT_I18N::translate('Dashboard'); ?></a>
+						<ul class="menu vertical nested">
+							<li><a <?php echo (KT_SCRIPT_NAME == "admin.php" ? 'class="current" ' : ''); ?>href="admin.php"><?php echo KT_I18N::translate('Home'); ?></a></li>
+						</ul>
+					</li>
+					<?php if (KT_USER_IS_ADMIN) { ?>
 						<li>
-						    <a href="#"><i class="<?php echo $iconStyle; ?> fa-tachometer-alt fa-fw"></i><?php echo KT_I18N::translate('Dashboard'); ?></a>
-							<ul class="menu vertical nested">
-								<li><a <?php echo (KT_SCRIPT_NAME == "admin.php" ? 'class="current" ' : ''); ?>href="admin.php"><?php echo KT_I18N::translate('Home'); ?></a></li>
-							</ul>
-						</li>
-						<?php if (KT_USER_IS_ADMIN) { ?>
-							<li>
-					        	<a href="#"><i class="<?php echo $iconStyle; ?> fa-cog fa-fw"></i><?php echo KT_I18N::translate('Site administration'); ?></a>
-							    <ul class="menu vertical nested">
-									<?php foreach ($site_tools as $file=>$title) { ?>
-										<li><a <?php echo (KT_SCRIPT_NAME == $file ? 'class="current" ' : ''); ?>href="<?php echo $file; ?>"><?php echo $title; ?></a></li>
-									<?php } ?>
-								</ul>
-							</li>
-						<?php } ?>
-					    <li>
-					        <a href="#"><i class="<?php echo $iconStyle; ?> fa-tree fa-fw"></i><?php echo KT_I18N::translate('Family trees'); ?></a>
-					        <ul class="menu vertical nested">
-								<?php if (KT_USER_IS_ADMIN) { ?>
-									<li><a <?php echo (KT_SCRIPT_NAME == "admin_trees_manage.php" ? 'class="current" ' : ''); ?>href="admin_trees_manage.php"><?php echo KT_I18N::translate('Manage: <em>All family trees</em>'); ?></a></li>
-								<?php }
-								//-- gedcom list
-								foreach (KT_Tree::getAll() as $tree) {
-									if (userGedcomAdmin(KT_USER_ID, $tree->tree_id)) {
-										// Add a title="" element, since long tree titles are cropped ?>
-										<li>
-											<span>
-												<a <?php echo (KT_SCRIPT_NAME == "admin_trees_config.php" && KT_GED_ID == $tree->tree_id ? 'class="current" ' : ''); ?>href="admin_trees_config.php?ged=<?php echo $tree->tree_name_url; ?>" title="<?php echo htmlspecialchars($tree->tree_title); ?>" dir="auto">
-													<?php echo /* I18N:%s is a tree name */ KT_I18N::translate('Configure: <em>%s</em>', $tree->tree_title_html); ?>
-												</a>
-											</span>
-										</li>
-									<?php }
-								} ?>
-							</ul>
-						</li>
-						<li>
-				        	<a href="#"><i class="<?php echo $iconStyle; ?> fa-wrench fa-fw"></i><?php echo KT_I18N::translate('Family tree tools'); ?></a>
-				        	<ul class="menu vertical nested">
-								<?php foreach ($ft_tools as $file=>$title) { ?>
+				        	<a href="#"><i class="<?php echo $iconStyle; ?> fa-cog fa-fw"></i><?php echo KT_I18N::translate('Site administration'); ?></a>
+						    <ul class="menu vertical nested">
+								<?php foreach ($site_tools as $file=>$title) { ?>
 									<li><a <?php echo (KT_SCRIPT_NAME == $file ? 'class="current" ' : ''); ?>href="<?php echo $file; ?>"><?php echo $title; ?></a></li>
 								<?php } ?>
 							</ul>
 						</li>
-						<?php if (KT_USER_IS_ADMIN) { ?>
-							<li>
-								<a href="#"><i class="<?php echo $iconStyle; ?> fa-users fa-fw"></i><?php echo KT_I18N::translate('Users'); ?></a>
-								<ul class="menu vertical nested">
-									<li><a <?php echo (KT_SCRIPT_NAME == "admin_users.php" && safe_GET('action') != "cleanup" && safe_GET('action')!="edit" ? 'class="current" ' : ''); ?>href="admin_users.php"><?php echo KT_I18N::translate('Manage users'); ?></a></li>
-									<li><a <?php echo (KT_SCRIPT_NAME == "admin_users.php" && safe_GET('action') == "edit" && safe_GET('user_id') == 0  ? 'class="current" ' : ''); ?>href="admin_users.php?action=edit"><?php echo KT_I18N::translate('Add a new user'); ?></a></li>
-									<li><a <?php echo (KT_SCRIPT_NAME == "admin_users_bulk.php" ? 'class="current" ' : ''); ?>href="admin_users_bulk.php"><?php echo KT_I18N::translate('Send broadcast messages'); ?></a></li>
-									<li><a <?php echo (KT_SCRIPT_NAME == "admin_users.php" && safe_GET('action') == "cleanup" ? 'class="current" ' : ''); ?>href="admin_users.php?action=cleanup"><?php echo KT_I18N::translate('Delete inactive users'); ?></a></li>
-								</ul>
-							</li>
-						<?php }
-						if (KT_USER_IS_ADMIN) { ?>
-							<li>
-								<a href="#"><i class="<?php echo $iconStyle; ?> fa-camera-retro fa-fw"></i><?php echo KT_I18N::translate('Media'); ?></a>
-								<ul class="menu vertical nested">
-									<li><a <?php echo (KT_SCRIPT_NAME == "admin_media.php" ? 'class="current" ' : ''); ?>href="admin_media.php"><?php echo KT_I18N::translate('Manage media'); ?></a></li>
-									<li><a <?php echo (KT_SCRIPT_NAME == "admin_media_upload.php" ? 'class="current" ' : ''); ?>href="admin_media_upload.php"><?php echo KT_I18N::translate('Upload media files'); ?></a></li>
-								</ul>
-							</li>
-						<?php }
-						if (KT_USER_IS_ADMIN) { ?>
-							<li>
-								<a href="#"><i class="<?php echo $iconStyle; ?> fa-puzzle-piece fa-fw"></i><?php echo KT_I18N::translate('Modules'); ?></a>
-								<ul class="menu vertical nested">
-									<li><a <?php echo (KT_SCRIPT_NAME == "admin_modules.php" ? 'class="current" ' : ''); ?>href="admin_modules.php"><?php echo KT_I18N::translate('Manage modules'); ?></a></li>
-									<?php foreach ($module_cats as $file=>$title) { ?>
-										<li><a <?php echo (KT_SCRIPT_NAME == $file ? 'class="current" ' : ''); ?>href="<?php echo $file; ?>"><?php echo $title; ?></a></li>
-									<?php } ?>
-								</ul>
-							</li>
-						<?php }
-						if (KT_USER_GEDCOM_ADMIN) { ?>
-							<li>
-								<a href="#"><i class="<?php echo $iconStyle; ?> fa-paint-brush fa-fw"></i><?php echo KT_I18N::translate('Customising'); ?></a>
-								<ul class="menu vertical nested">
-									<?php foreach ($custom as $file=>$title) { ?>
-										<li><a <?php echo (KT_SCRIPT_NAME == $file ? 'class="current" ' : ''); ?>href="<?php echo $file; ?>"><?php echo $title; ?></a></li>
-									<?php } ?>
-									<li><a href="index_edit.php?gedcom_id=-1" onclick="return modalDialog('index_edit.php?gedcom_id=-1, <?php echo  KT_I18N::translate('Set the default blocks for new family trees'); ?>');"><?php echo KT_I18N::translate('Set the default blocks'); ?></a></li>
-								</ul>
-							</li>
-						<?php }
-						if (KT_USER_IS_ADMIN) { ?>
-							<li>
-								<a href="#"><i class="<?php echo $iconStyle; ?> fa-cogs fa-fw"></i><?php echo KT_I18N::translate('Tools'); ?></a>
-								<ul class="menu vertical nested">
-									<?php foreach (KT_Module::getActiveModules(true) as $module) {
-										if ($module instanceof KT_Module_Config) { ?>
-											<li><span><a <?php echo (KT_SCRIPT_NAME == "module.php" && safe_GET('mod') == $module->getName() ? 'class="current" ' : ''); ?>href="<?php echo $module->getConfigLink(); ?>"><?php echo $module->getTitle(); ?></a></span></li>
-										<?php }
-									} ?>
-								</ul>
-							</li>
-						<?php } ?>
-					</ul>
+					<?php } ?>
+				    <li>
+				        <a href="#"><i class="<?php echo $iconStyle; ?> fa-tree fa-fw"></i><?php echo KT_I18N::translate('Family trees'); ?></a>
+				        <ul class="menu vertical nested">
+							<?php if (KT_USER_IS_ADMIN) { ?>
+								<li><a <?php echo (KT_SCRIPT_NAME == "admin_trees_manage.php" ? 'class="current" ' : ''); ?>href="admin_trees_manage.php"><?php echo KT_I18N::translate('Manage: <em>All family trees</em>'); ?></a></li>
+							<?php }
+							//-- gedcom list
+							foreach (KT_Tree::getAll() as $tree) {
+								if (userGedcomAdmin(KT_USER_ID, $tree->tree_id)) {
+									// Add a title="" element, since long tree titles are cropped ?>
+									<li>
+										<span>
+											<a <?php echo (KT_SCRIPT_NAME == "admin_trees_config.php" && KT_GED_ID == $tree->tree_id ? 'class="current" ' : ''); ?>href="admin_trees_config.php?ged=<?php echo $tree->tree_name_url; ?>" title="<?php echo htmlspecialchars($tree->tree_title); ?>" dir="auto">
+												<?php echo /* I18N:%s is a tree name */ KT_I18N::translate('Configure: <em>%s</em>', $tree->tree_title_html); ?>
+											</a>
+										</span>
+									</li>
+								<?php }
+							} ?>
+						</ul>
+					</li>
+					<li>
+			        	<a href="#"><i class="<?php echo $iconStyle; ?> fa-wrench fa-fw"></i><?php echo KT_I18N::translate('Family tree tools'); ?></a>
+			        	<ul class="menu vertical nested">
+							<?php foreach ($ft_tools as $file=>$title) { ?>
+								<li><a <?php echo (KT_SCRIPT_NAME == $file ? 'class="current" ' : ''); ?>href="<?php echo $file; ?>"><?php echo $title; ?></a></li>
+							<?php } ?>
+						</ul>
+					</li>
+					<?php if (KT_USER_IS_ADMIN) { ?>
+						<li>
+							<a href="#"><i class="<?php echo $iconStyle; ?> fa-users fa-fw"></i><?php echo KT_I18N::translate('Users'); ?></a>
+							<ul class="menu vertical nested">
+								<li><a <?php echo (KT_SCRIPT_NAME == "admin_users.php" && safe_GET('action') != "cleanup" && safe_GET('action')!="edit" ? 'class="current" ' : ''); ?>href="admin_users.php"><?php echo KT_I18N::translate('Manage users'); ?></a></li>
+								<li><a <?php echo (KT_SCRIPT_NAME == "admin_users.php" && safe_GET('action') == "edit" && safe_GET('user_id') == 0  ? 'class="current" ' : ''); ?>href="admin_users.php?action=edit"><?php echo KT_I18N::translate('Add a new user'); ?></a></li>
+								<li><a <?php echo (KT_SCRIPT_NAME == "admin_users_bulk.php" ? 'class="current" ' : ''); ?>href="admin_users_bulk.php"><?php echo KT_I18N::translate('Send broadcast messages'); ?></a></li>
+								<li><a <?php echo (KT_SCRIPT_NAME == "admin_users.php" && safe_GET('action') == "cleanup" ? 'class="current" ' : ''); ?>href="admin_users.php?action=cleanup"><?php echo KT_I18N::translate('Delete inactive users'); ?></a></li>
+							</ul>
+						</li>
+					<?php }
+					if (KT_USER_IS_ADMIN) { ?>
+						<li>
+							<a href="#"><i class="<?php echo $iconStyle; ?> fa-camera-retro fa-fw"></i><?php echo KT_I18N::translate('Media'); ?></a>
+							<ul class="menu vertical nested">
+								<li><a <?php echo (KT_SCRIPT_NAME == "admin_media.php" ? 'class="current" ' : ''); ?>href="admin_media.php"><?php echo KT_I18N::translate('Manage media'); ?></a></li>
+								<li><a <?php echo (KT_SCRIPT_NAME == "admin_media_upload.php" ? 'class="current" ' : ''); ?>href="admin_media_upload.php"><?php echo KT_I18N::translate('Upload media files'); ?></a></li>
+							</ul>
+						</li>
+					<?php }
+					if (KT_USER_IS_ADMIN) { ?>
+						<li>
+							<a href="#"><i class="<?php echo $iconStyle; ?> fa-puzzle-piece fa-fw"></i><?php echo KT_I18N::translate('Modules'); ?></a>
+							<ul class="menu vertical nested">
+								<li><a <?php echo (KT_SCRIPT_NAME == "admin_modules.php" ? 'class="current" ' : ''); ?>href="admin_modules.php"><?php echo KT_I18N::translate('Manage modules'); ?></a></li>
+								<?php foreach ($module_cats as $file=>$title) { ?>
+									<li><a <?php echo (KT_SCRIPT_NAME == $file ? 'class="current" ' : ''); ?>href="<?php echo $file; ?>"><?php echo $title; ?></a></li>
+								<?php } ?>
+							</ul>
+						</li>
+					<?php }
+					if (KT_USER_GEDCOM_ADMIN) { ?>
+						<li>
+							<a href="#"><i class="<?php echo $iconStyle; ?> fa-paint-brush fa-fw"></i><?php echo KT_I18N::translate('Customising'); ?></a>
+							<ul class="menu vertical nested">
+								<?php foreach ($custom as $file=>$title) { ?>
+									<li><a <?php echo (KT_SCRIPT_NAME == $file ? 'class="current" ' : ''); ?>href="<?php echo $file; ?>"><?php echo $title; ?></a></li>
+								<?php } ?>
+								<li><a href="index_edit.php?gedcom_id=-1" onclick="return modalDialog('index_edit.php?gedcom_id=-1, <?php echo  KT_I18N::translate('Set the default blocks for new family trees'); ?>');"><?php echo KT_I18N::translate('Set the default blocks'); ?></a></li>
+							</ul>
+						</li>
+					<?php }
+					if (KT_USER_IS_ADMIN) { ?>
+						<li>
+							<a href="#"><i class="<?php echo $iconStyle; ?> fa-cogs fa-fw"></i><?php echo KT_I18N::translate('Tools'); ?></a>
+							<ul class="menu vertical nested">
+								<?php foreach (KT_Module::getActiveModules(true) as $module) {
+									if ($module instanceof KT_Module_Config) { ?>
+										<li><span><a <?php echo (KT_SCRIPT_NAME == "module.php" && safe_GET('mod') == $module->getName() ? 'class="current" ' : ''); ?>href="<?php echo $module->getConfigLink(); ?>"><?php echo $module->getTitle(); ?></a></span></li>
+									<?php }
+								} ?>
+							</ul>
+						</li>
+					<?php } ?>
+				</ul>
 			</div> <!--  close admin-menu -->
 			<div id="admin-content" class="cell large-10"> <!--  closed in footer.php -->
 				<?php
