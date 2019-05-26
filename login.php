@@ -169,14 +169,14 @@ default:
 				<?php } ?>
 				<div class="grid-x grid-margin-x grid-margin-y">
 					<div class="cell medium-8 medium-offset-2">
-						<label for="username" class="h6"><?php echo KT_I18N::translate('User name'); ?>
-							<input type="text" id="username" name="username" required value="<?php echo htmlspecialchars($username); ?>" autofocus>
+						<label for="user_name" class="h6"><?php echo KT_I18N::translate('User name'); ?>
+							<input type="text" id="user_name" name="username" required value="<?php echo htmlspecialchars($username); ?>" autofocus>
 						</label>
 					</div>
 					<div class="cell medium-8 medium-offset-2">
-						<label for="password" class="h6"><?php echo KT_I18N::translate('Password'); ?></label>
+						<label for="pass_word" class="h6"><?php echo KT_I18N::translate('Password'); ?></label>
 						<div class="input-group">
-							<input class="input-group-field" type="password" id="password" name="password" placeholder="<?php echo KT_I18N::translate('Password'); ?>" required value="<?php echo htmlspecialchars($username); ?>">
+							<input class="input-group-field" type="password" id="pass_word" name="password" placeholder="<?php echo KT_I18N::translate('Password'); ?>" required value="<?php echo htmlspecialchars($username); ?>">
 							<span class="input-group-label unmask" title="<?php echo KT_I18N::translate('Show/Hide password to check content'); ?>">
 								<i class="<?php echo $iconStyle; ?> fa-eye"></i>
 							</span>
@@ -184,7 +184,7 @@ default:
 					</div>
 					<div class="cell medium-8 medium-offset-2">
 						<button class="button expanded h6" type="submit" >
-							<i class="<?php echo $iconStyle; ?> fa-sign-in"></i>
+							<i class="<?php echo $iconStyle; ?> fa-sign-in-alt"></i>
 							<?php echo KT_I18N::translate('Login'); ?>
 						</button>
 					</div>
