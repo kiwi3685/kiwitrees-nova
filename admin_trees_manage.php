@@ -258,7 +258,6 @@ switch (KT_Filter::get('action')) {
 				if (userGedcomAdmin(KT_USER_ID, $tree->tree_id)) { ?>
 					<li class="accordion-item" data-accordion-item>
 						<a class="accordion-title" href="#<?php echo $tree->tree_name; ?>">
-							<i class="<?php echo $iconStyle; ?> fa-tree"></i>
 							<?php echo $tree->tree_title_html; ?>&nbsp;<span class="subheader">(<?php echo $tree->tree_name_html; ?>.ged)</span>
 						</a>
 						<div class="accordion-content" id="<?php echo $tree->tree_name; ?>" data-tab-content>
@@ -282,7 +281,6 @@ switch (KT_Filter::get('action')) {
 							<div class="grid-x<?php echo $importing ? ' hide' : ''; ?>" id="actions<?php echo $tree->tree_id; ?>">
 								<div class="button-group expanded stacked-for-small">
 									<a class="button hollow" href="index.php?ged=<?php echo $tree->tree_name_url; ?>">
-										<i class="<?php echo $iconStyle; ?> fa-tree"></i>
 										<?php echo KT_I18N::translate('Go to this family tree'); ?>
 									</a>
 									<a class="button hollow" href="admin_trees_config.php?ged=<?php echo $tree->tree_name_url; ?>">
@@ -344,7 +342,6 @@ switch (KT_Filter::get('action')) {
 				KT_Tree::GetAll() ? $accordionClass = '' : $accordionClass = ' is-active'; ?>
 				<li class="accordion-item<?php echo $accordionClass; ?>" data-accordion-item>
 					<a class="accordion-title" href="#create">
-						<i class="<?php echo $iconStyle; ?> fa-plus-circle"></i>
 						<?php echo KT_I18N::translate('Create a new family tree'); ?>
 					</a>
 					<div class="accordion-content" id="create" data-tab-content>
