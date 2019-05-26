@@ -140,6 +140,7 @@ $changes = KT_DB::prepare(
 )->fetchAssoc();
 ?>
 
+
 <div id="admin" class="cell">
 	<?php // Latest version info
 	if (KT_USER_IS_ADMIN) {
@@ -1841,6 +1842,7 @@ function old_paths() {
 		KT_ROOT . 'modules_v4/privacy',
 		// Other
 		KT_ROOT . 'expand_view.php',
+		KT_ROOT . 'admin_site_lang.php',
 
 	);
 }
