@@ -33,7 +33,8 @@ function faqLink($url) {
 	$link = KT_KIWITREES_URL . '/faqs/' . $url;
 	return '
 		<a
-			class="current faq_link" href="' . $link . '"
+			class="current faq_link show-for-large" 
+			href="' . $link . '"
 			target="_blank"
 			rel="noopener noreferrer"
 			title="' . KT_I18N::translate('View FAQ for this page.') . '"
@@ -153,13 +154,13 @@ function simple_switch($name, $value, $selected) {
 }
 
 /**
-* Create a set of switches for a form
+* Create a set of switches for a form (only one can be "on")
 * @param string $name     - the ID for the form element
 * @param array  $values   - array of value=>display items
 * @param string $selected - the currently selected item (if any)
 *
 */
-function switch_group($name, $values, $selected) {
+function radio_switch_group($name, $values, $selected) {
 	$html = '<div class="grid-x grid-margin-y">';
 		foreach ($values as $key => $value) {
 			$uniqueID = $name . (int)(microtime(true) * 1000000);
@@ -182,6 +183,35 @@ function switch_group($name, $values, $selected) {
 	return $html;
 }
 
+/**
+* Create a set of switches for a form (any can be "on")
+* @param string $name     - the ID for the form element
+* @param array  $values   - array of value=>display items
+* @param string $selected - the currently selected item (if any)
+*
+*/
+function checkbox_switch_group($name, $values, $selected) {
+	$html = '<div class="grid-x grid-margin-y">';
+		foreach ($values as $key => $value) {
+			$uniqueID = $name . (int)(microtime(true) * 1000000);
+			$html .= '
+				<div class="switch cell small-4 medium-2">
+					<label>' . $value . '</label>
+					<input class="switch-input" id="' . $uniqueID . '" type="radio" value="' . htmlspecialchars($key) . '"';
+						if ((string)$key === (string)$selected) {
+							$html .= ' checked';
+						}
+					$html .= '>' . '
+					<label class="switch-paddle" for="' . $uniqueID . '">
+						<span class="show-for-sr">' . $value . '</span>
+					</label>
+				</div>
+			';
+		}
+	$html .= '</div>';
+
+	return $html;
+}
 
 /**
 * Create a set of radio buttons for a form
