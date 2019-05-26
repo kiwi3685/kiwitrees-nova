@@ -34,7 +34,7 @@ $controller
 	->addExternalJavascript(KT_JQUERY_JEDITABLE_URL)
 	->setPageTitle(KT_I18N::translate('Site access rules'));
 
-$action = safe_GET('action');
+$action = KT_Filter::get('action');
 switch ($action) {
 case 'reset':
 	KT_DB::exec("DELETE FROM `##site_access_rule` WHERE rule<>'unknown'");
@@ -52,13 +52,13 @@ case 'purge':
 	KT_DB::exec("DELETE FROM `##site_access_rule` WHERE rule='unknown'");
 	break;
 case 'delete':
-	$user_access_rule_id=safe_GET('site_access_rule_id');
+	$user_access_rule_id=KT_Filter::get('site_access_rule_id');
 	KT_DB::prepare("DELETE FROM `##site_access_rule` WHERE site_access_rule_id=?")->execute(array($user_access_rule_id));
 	break;
 case 'allow':
 case 'deny':
 case 'robot':
-	$user_access_rule_id=safe_GET('site_access_rule_id');
+	$user_access_rule_id = KT_Filter::get('site_access_rule_id');
 	KT_DB::prepare("UPDATE `##site_access_rule` SET rule=? WHERE site_access_rule_id=?")->execute(array($action, $user_access_rule_id));
 	break;
 case 'load_rules':
@@ -69,47 +69,47 @@ case 'load_rules':
 		" INET_NTOA(ip_address_start), ip_address_start, INET_NTOA(ip_address_end), ip_address_end, user_agent_pattern, rule, comment, site_access_rule_id".
 		" FROM `##site_access_rule`".
 		" WHERE rule<>'unknown'";
-	$args=array();
+	$args = array();
 
-	$sSearch=safe_GET('sSearch');
+	$sSearch = KT_Filter::get('sSearch');
 	if ($sSearch) {
-		$sql.=
+		$sql .=
 			" AND (INET_ATON(?) BETWEEN ip_address_start AND ip_address_end".
 			" OR INET_NTOA(ip_address_start) LIKE CONCAT('%', ?, '%')".
 			" OR INET_NTOA(ip_address_end) LIKE CONCAT('%', ?, '%')".
 			" OR user_agent_pattern LIKE CONCAT('%', ?, '%')".
 			" OR comment LIKE CONCAT('%', ?, '%'))";
-		$args[]=$sSearch;
-		$args[]=$sSearch;
-		$args[]=$sSearch;
-		$args[]=$sSearch;
-		$args[]=$sSearch;
+		$args[] = $sSearch;
+		$args[] = $sSearch;
+		$args[] = $sSearch;
+		$args[] = $sSearch;
+		$args[] = $sSearch;
 	}
 
-	$iSortingCols=safe_GET('iSortingCols');
+	$iSortingCols = KT_Filter::get('iSortingCols');
 	if ($iSortingCols) {
-		$sql.=" ORDER BY ";
-		for ($i=0; $i<$iSortingCols; ++$i) {
+		$sql .=" ORDER BY ";
+		for ($i = 0; $i < $iSortingCols; ++$i) {
 			// Datatables numbers columns 0, 1, 2, ...
 			// MySQL numbers columns 1, 2, 3, ...
-			switch (safe_GET('sSortDir_'.$i)) {
+			switch (KT_Filter::get('sSortDir_' . $i)) {
 			case 'asc':
-				$sql.=(1+(int)safe_GET('iSortCol_'.$i)).' ASC ';
+				$sql.=(1+(int)KT_Filter::get('iSortCol_' . $i)).' ASC ';
 				break;
 			case 'desc':
-				$sql.=(1+(int)safe_GET('iSortCol_'.$i)).' DESC ';
+				$sql.=(1+(int)KT_Filter::get('iSortCol_' . $i)).' DESC ';
 				break;
 			}
-			if ($i<$iSortingCols-1) {
-				$sql.=',';
+			if ($i < $iSortingCols - 1) {
+				$sql .= ',';
 			}
 		}
 	} else {
 		$sql .= " ORDER BY updated DESC";
 	}
 
-	$iDisplayStart  = (int)safe_GET('iDisplayStart');
-	$iDisplayLength = (int)safe_GET('iDisplayLength');
+	$iDisplayStart  = (int)KT_Filter::get('iDisplayStart');
+	$iDisplayLength = (int)KT_Filter::get('iDisplayLength');
 	if ($iDisplayLength > 0) {
 		$sql .= " LIMIT " . $iDisplayStart . ',' . $iDisplayLength;
 	}
@@ -129,7 +129,7 @@ case 'load_rules':
 			'robot'=>/* I18N: http://en.wikipedia.org/wiki/Web_crawler */  KT_I18N::translate('robot'),
 		), null, $row[5]);
 		$row[6] = edit_field_inline('site_access_rule-comment-'.$site_access_rule_id, $row[6]);
-		$row[7] = '<i class="icon-delete" onclick="if (confirm(\''.htmlspecialchars(KT_I18N::translate('Are you sure you want to delete “%s”?', strip_tags($user_agent))).'\')) { document.location=\''.KT_SCRIPT_NAME.'?action=delete&amp;site_access_rule_id='.$site_access_rule_id.'\'; }"></i>';
+		$row[7] = '<i class="icon-delete" onclick="if (confirm(\'' . htmlspecialchars(KT_I18N::translate('Are you sure you want to delete “%s”?', strip_tags($user_agent))).'\')) { document.location=\''.KT_SCRIPT_NAME.'?action=delete&amp;site_access_rule_id='.$site_access_rule_id.'\'; }"></i>';
 	}
 
 	// Total filtered rows
@@ -139,7 +139,7 @@ case 'load_rules':
 
 	header('Content-type: application/json');
 	echo json_encode(array( // See http://www.datatables.net/usage/server-side
-		'sEcho'                => (int)safe_GET('sEcho'),
+		'sEcho'                => (int)KT_Filter::get('sEcho'),
 		'iTotalRecords'        => $iTotalRecords,
 		'iTotalDisplayRecords' => $iTotalDisplayRecords,
 		'aaData'               => $aaData
@@ -155,7 +155,7 @@ case 'load_unknown':
 		" WHERE rule='unknown'";
 	$args = array();
 
-	$sSearch = safe_GET('sSearch');
+	$sSearch = KT_Filter::get('sSearch');
 	if ($sSearch) {
 		$sql .=
 			" AND (INET_ATON(ip_address_start) LIKE CONCAT('%', ?, '%')".
@@ -164,18 +164,18 @@ case 'load_unknown':
 		$args[]=$sSearch;
 	}
 
-	$iSortingCols=safe_GET('iSortingCols');
+	$iSortingCols = KT_Filter::get('iSortingCols');
 	if ($iSortingCols) {
 		$sql.=" ORDER BY ";
 		for ($i=0; $i<$iSortingCols; ++$i) {
 			// Datatables numbers columns 0, 1, 2, ...
 			// MySQL numbers columns 1, 2, 3, ...
-			switch (safe_GET('sSortDir_'.$i)) {
+			switch (KT_Filter::get('sSortDir_'.$i)) {
 			case 'asc':
-				$sql .= (1+(int)safe_GET('iSortCol_'.$i)).' ASC ';
+				$sql .= (1+(int)KT_Filter::get('iSortCol_'.$i)).' ASC ';
 				break;
 			case 'desc':
-				$sql .= (1+(int)safe_GET('iSortCol_'.$i)).' DESC ';
+				$sql .= (1+(int)KT_Filter::get('iSortCol_'.$i)).' DESC ';
 				break;
 			}
 			if ($i < $iSortingCols-1) {
@@ -186,8 +186,8 @@ case 'load_unknown':
 		$sql .= " ORDER BY updated DESC";
 	}
 
-	$iDisplayStart  = (int)safe_GET('iDisplayStart');
-	$iDisplayLength = (int)safe_GET('iDisplayLength');
+	$iDisplayStart  = (int)KT_Filter::get('iDisplayStart');
+	$iDisplayLength = (int)KT_Filter::get('iDisplayLength');
 	if ($iDisplayLength > 0) {
 		$sql .= " LIMIT " . $iDisplayStart . ',' . $iDisplayLength;
 	}
@@ -196,7 +196,7 @@ case 'load_unknown':
 	$aaData = KT_DB::prepare($sql)->execute($args)->fetchAll(PDO::FETCH_NUM);
 	// Reformat the data for display
 	foreach ($aaData as &$row) {
-		$site_access_rule_id=$row[3];
+		$site_access_rule_id = $row[3];
 		$row[3] = '<i class="' . $iconStyle . ' fa-check" onclick="document.location=\'' . KT_SCRIPT_NAME.'?action=allow&amp;site_access_rule_id=' . $site_access_rule_id . '\';"></i>';
 		$row[4] = '<i class="' . $iconStyle . ' fa-check" onclick="document.location=\'' . KT_SCRIPT_NAME.'?action=deny&amp;site_access_rule_id=' . $site_access_rule_id . '\';"></i>';
 		$row[5] = '<i class="' . $iconStyle . ' fa-check" onclick="document.location=\'' . KT_SCRIPT_NAME.'?action=robot&amp;site_access_rule_id=' . $site_access_rule_id . '\';"></i>';
@@ -209,7 +209,7 @@ case 'load_unknown':
 
 	header('Content-type: application/json');
 	echo json_encode(array( // See http://www.datatables.net/usage/server-side
-		'sEcho'                => (int)safe_GET('sEcho'),
+		'sEcho'                => (int)KT_Filter::get('sEcho'),
 		'iTotalRecords'        => $iTotalRecords,
 		'iTotalDisplayRecords' => $iTotalDisplayRecords,
 		'aaData'               => $aaData
