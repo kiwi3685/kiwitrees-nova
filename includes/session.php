@@ -83,7 +83,7 @@ define('KT_KIWITREES_ADMIN_JS_URL',			KT_STATIC_URL . 'themes/_administration/js
 
 // external css libraries
 define('KT_DATEPICKER_CSS',					KT_STATIC_URL . 'library/foundation-datepicker/css/foundation-datepicker.min.css');
-define('KT_CHOSEN_CSS',						KT_STATIC_URL . 'library/chosen/chosen.min.css');
+define('KT_CHOSEN_CSS',						KT_STATIC_URL . 'library/chosen/chosen.min.css'); // chosen-package-1.87 from https://github.com/harvesthq/chosen
 
 // Location of our modules and themes.  These are used as URLs and folder paths.
 define('KT_MODULES_DIR', 'modules_v4/'); // Update setup.php when this changes
