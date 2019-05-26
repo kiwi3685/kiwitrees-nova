@@ -71,6 +71,14 @@ switch (KT_Filter::post('action')) {
 		KT_Site::preference('SESSION_TIME',					KT_Filter::post('SESSION_TIME'));
 		KT_Site::preference('SERVER_URL',					KT_Filter::post('SERVER_URL'));
 		KT_Site::preference('MAINTENANCE',					KT_Filter::postBool('MAINTENANCE'));
+		// Reload the page, so that the settings take effect immediately.
+		Zend_Session::writeClose();
+		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '#site');
+		exit;
+	case 'update-mail':
+		if (!KT_Filter::checkCsrf()) {
+			break;
+		}
 		KT_Site::preference('SMTP_ACTIVE',					KT_Filter::post('SMTP_ACTIVE'));
 		KT_Site::preference('MAIL_FORMAT',					KT_Filter::postBool('MAIL_FORMAT'));
 		KT_Site::preference('SMTP_FROM_NAME',				KT_Filter::post('SMTP_FROM_NAME'));
@@ -83,13 +91,19 @@ switch (KT_Filter::post('action')) {
 		if (KT_Filter::post('SMTP_AUTH_PASS')) {
 			KT_Site::preference('SMTP_AUTH_PASS',			KT_Filter::post('SMTP_AUTH_PASS'));
 		}
+		// Reload the page, so that the settings take effect immediately.
+		Zend_Session::writeClose();
+		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '#mail');
+		exit;
+		case 'update-login':
+			if (!KT_Filter::checkCsrf()) {
+				break;
+			}
 		KT_Site::preference('LOGIN_URL',					KT_Filter::post('LOGIN_URL'));
 		KT_Site::preference('WELCOME_TEXT_AUTH_MODE',		KT_Filter::post('WELCOME_TEXT_AUTH_MODE'));
 		KT_Site::preference('WELCOME_TEXT_AUTH_MODE_' .		KT_LOCALE, KT_Filter::post('WELCOME_TEXT_AUTH_MODE_4'));
 		KT_Site::preference('USE_REGISTRATION_MODULE',		KT_Filter::postBool('USE_REGISTRATION_MODULE'));
 		KT_Site::preference('SHOW_REGISTER_CAUTION',		KT_Filter::postBool('SHOW_REGISTER_CAUTION'));
-		KT_Site::preference('LANGUAGES', implode(',',		KT_Filter::postArray('LANGUAGES')));
-
 		if (KT_Filter::post('BLOCKED_EMAIL_ADDRESS_LIST')) {
 			$emails = explode(',', str_replace(array(' ', "\n", "\r"), '', KT_Filter::post('BLOCKED_EMAIL_ADDRESS_LIST')));
 			foreach ($emails as $email) {
@@ -103,12 +117,19 @@ switch (KT_Filter::post('action')) {
 			}
 			KT_Site::preference('BLOCKED_EMAIL_ADDRESS_LIST', str_replace(array(' ', "\n", "\r"), '', KT_Filter::post('BLOCKED_EMAIL_ADDRESS_LIST')));
 		}
-
 		// Reload the page, so that the settings take effect immediately.
 		Zend_Session::writeClose();
-		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME);
+		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '#login');
 		exit;
-
+	case 'update-lang':
+		if (!KT_Filter::checkCsrf()) {
+			break;
+		}
+		KT_Site::preference('LANGUAGES', implode(',',		KT_Filter::postArray('LANGUAGES')));
+		// Reload the page, so that the settings take effect immediately.
+		Zend_Session::writeClose();
+		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '#lang');
+		exit;
 }
 
 $controller
@@ -424,9 +445,7 @@ $controller
 								$blockedEmails = 'youremail@gmail.com';
 							}
 						?>
-						<textarea id="BLOCKED_EMAIL_ADDRESS_LIST" name="BLOCKED_EMAIL_ADDRESS_LIST" rows="3">
-							<?php echo $blockedEmails; ?>
-						</textarea>
+						<textarea id="BLOCKED_EMAIL_ADDRESS_LIST" name="BLOCKED_EMAIL_ADDRESS_LIST" rows="3"><?php echo $blockedEmails; ?></textarea>
 						<div class="cell helpcontent">
 							<?php echo KT_I18N::translate('Add email addresses to this list to prevent them being used to register on this site. Separate each address with a comma. Whenever a visitor tries to use one of these addresses to register, their attempt will be ignored and a message added to the site error log.'); ?>
 						</div>
