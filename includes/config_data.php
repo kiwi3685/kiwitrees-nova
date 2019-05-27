@@ -507,3 +507,11 @@ $REVERSED_NAME_FACTS = array('NAME', 'NPFX', 'SPFX', 'SURN', 'GIVN', 'NSFX');
 /* I18N: language name - Chinese */				KT_I18N::translate('中文');
 /* I18N: language name - Chinese (Simplified) */  KT_I18N::translate('简体中文'); // Simplified Chinese
 /* I18N: language name - Chinese (Traditional) */ KT_I18N::translate('繁體中文'); // Traditional Chinese
+
+// List custom theme files that might exist
+$customFiles = array(
+		'mystyle.css',
+		'mytheme.php',
+		'myheader.php',
+		'myfooter.php'
+	);
