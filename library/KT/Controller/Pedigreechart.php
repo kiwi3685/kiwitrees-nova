@@ -26,7 +26,7 @@ if (!defined('KT_KIWITREES')) {
 	exit;
 }
 
- class KT_Controller_Fanchart extends KT_Controller_Chart {
+ class KT_Controller_Pedigreechart extends KT_Controller_Chart {
 
     /**
      * Minimum number of displayable generations.
@@ -73,14 +73,12 @@ if (!defined('KT_KIWITREES')) {
         $defaultGenerations = get_gedcom_setting(KT_GED_ID, 'DEFAULT_PEDIGREE_GENERATIONS');
 
         // Extract the request parameters
-        $this->fanDegree   = KT_Filter::getInteger('fanDegree', 180, 360, 270);
         $this->generations = KT_Filter::getInteger('generations', self::MIN_GENERATIONS, self::MAX_GENERATIONS, $defaultGenerations);
-        $this->fontScale   = KT_Filter::getInteger('fontScale', 0, 200, 100);
 
 		// Create page title
-        $title = KT_I18N::translate('Fanchart');
+        $title = KT_I18N::translate('Pedigree chart');
         if ($this->root && $this->root->canDisplayName()) {
-            $title = KT_I18N::translate('Fanchart of %s', $this->root->getFullName());
+            $title = KT_I18N::translate('Pedigree chart of %s', $this->root->getFullName());
 		}
 
 		$this->setPageTitle($title);
@@ -105,25 +103,125 @@ if (!defined('KT_KIWITREES')) {
         return $fanChart['bgColor'];
     }
 
-    /**
-     * Get the individual data required for display the chart.
+	/**
+     * Returns the URL of the highlight image of an individual.
      *
-     * @param KT_Person $person Start person
-     * @param int        $generation Generation the person belongs to
+     * @param KT_Person $person The current individual
      *
-     * @return array
+     * @return string
      */
-    public function getIndividualData(KT_Person $person, int $generation) {
+    private function getIndividualImage(KT_Person $person): string {
+		global $SHOW_HIGHLIGHT_IMAGES;
+        if ($person->canDisplayName() && $SHOW_HIGHLIGHT_IMAGES) {
+            $mediaFile = $person->findHighlightedMedia();
+
+            if ($mediaFile !== null) {
+                return $mediaFile->getHtmlUrlDirect('thumb');
+            }
+        }
+
+        return '';
+    }
+
+    /**
+    * Get the individual data required for display the chart.
+    *
+    * @param KT_Person $person Start person
+    * @param int    $generation Generation the person belongs to
+    *
+    * @return array
+    */
+    private function getIndividualData(KT_Person $person, int $generation) {
         return array(
-			'id'         => $person->getXref(),
-            'generation' => $generation,
-            'name'       => KT_Filter::unescapeHtml($person->getShortName()),
-            'sex'        => $person->getSex(),
-            'born'       => $person->getBirthYear(),
-            'died'       => $person->getDeathYear(),
-            'color'      => $this->getColor($person),
+			'id'			=> $person->getXref(),
+			'generation'	=> $generation,
+			'name'			=> $this->getName($person),
+			'thumbnail'		=> $this->getIndividualImage($person),
+			'sex'			=> $person->getSex(),
+			'lifespan'		=> strip_tags($person->getLifespan()),
+			'bplace1'		=> $this->splitPlace1($person, 27),
+			'bplace2'		=> $this->splitPlace2($person, 27),
+			'color'			=> $this->getColor($person),
         );
     }
+
+	public function getName(KT_Person $person = null) {
+		if (!$person instanceof KT_Person) {
+			return array();
+		}
+
+		$shortName	= KT_Filter::unescapeHtml($person->getShortName());
+		$parts		= explode(" ", $shortName);
+
+		if (count($parts) > 2) {
+			for ($i = 1; $i < count($parts) - 1; $i++) {
+				$parts[$i] = substr($parts[$i], 0, 1);
+			}
+
+			return implode(' ', $parts);
+
+		} else {
+
+			return $shortName;
+
+		}
+	}
+
+
+	public function splitPlace1(KT_Person $person = null, int $maxLength) {
+		if (!$person instanceof KT_Person) {
+			return array();
+		}
+
+		$tmp = new KT_Place($person->getBirthPlace(), KT_GED_ID);
+		$placeName = strip_tags($tmp->getShortName());
+
+		if (strlen($placeName) > $maxLength) {
+			$parts = explode(", ", $placeName);
+			$lastComma = strrpos(substr($placeName, 0, $maxLength), ",");
+			$parts1 = substr_count($placeName, ",", 0, $lastComma + 1);
+			$newPlaceName = array();
+			for ($i = 0; $i < $parts1; $i ++) {
+				$newPlaceName[] = $parts[$i];
+			}
+
+			return implode(', ', $newPlaceName) . ',';
+
+		} else {
+
+			return $placeName;
+
+		}
+	}
+
+	public function splitPlace2(KT_Person $person = null, int $maxLength) {
+		if (!$person instanceof KT_Person) {
+            return array();
+        }
+
+		$tmp = new KT_Place($person->getBirthPlace(), KT_GED_ID);
+		$placeName = strip_tags($tmp->getShortName());
+
+		if (strlen($placeName) > $maxLength) {
+			$parts = explode(", ", $placeName);
+			$lastComma = strrpos(substr($placeName, 0, $maxLength), ",");
+			$parts1 = substr_count($placeName, ",", 0, $lastComma + 1);
+			$newPlaceName = array();
+			for ($i = $parts1; $i < count($parts); $i ++) {
+				$newPlaceName[] = $parts[$i];
+			}
+
+			return implode(', ', $newPlaceName);
+
+		} else {
+
+			return '';
+
+		}
+	}
+
+
+
 
     /**
      * Recursively build the data array of the individual ancestors.
@@ -162,23 +260,6 @@ if (!defined('KT_KIWITREES')) {
         }
 
         return $data;
-    }
-
-    /**
-     * A list of options for the chart degrees.
-     *
-     * @return string[]
-     */
-    public function getFanDegrees() {
-        return [
-            180 => /* I18N: configuration option for fan chart */ KT_I18N::translate('180 degree'),
-            210 => /* I18N: configuration option for fan chart */ KT_I18N::translate('210 degree'),
-            240 => /* I18N: configuration option for fan chart */ KT_I18N::translate('240 degree'),
-            270 => /* I18N: configuration option for fan chart */ KT_I18N::translate('270 degree'),
-            300 => /* I18N: configuration option for fan chart */ KT_I18N::translate('300 degree'),
-            330 => /* I18N: configuration option for fan chart */ KT_I18N::translate('330 degree'),
-            360 => /* I18N: configuration option for fan chart */ KT_I18N::translate('360 degree'),
-        ];
     }
 
 	/**
@@ -225,5 +306,15 @@ if (!defined('KT_KIWITREES')) {
 
 		return 'individual.php?' . http_build_query($queryData);
     }
+
+	/**
+     * Returns whether to show empty boxes or not.
+     *
+     * @return bool
+     */
+//    public function getShowEmptyBoxes(): bool
+//    {
+//        return (bool) ($this->request->getQueryParams()['showEmptyBoxes'] ?? false);
+//    }
 
 }

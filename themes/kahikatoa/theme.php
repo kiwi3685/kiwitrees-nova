@@ -77,16 +77,16 @@ $cbwidth = 240;
 $cbheight = 60;
 
 // --  The largest possible area for charts is 300,000 pixels, so the maximum height or width is 1000 pixels
-$KT_STATS_S_CHART_X = 550;
-$KT_STATS_S_CHART_Y = 200;
-$KT_STATS_L_CHART_X = 900;
+//$KT_STATS_S_CHART_X = 550;
+//$KT_STATS_S_CHART_Y = 200;
+//$KT_STATS_L_CHART_X = 900;
 // --  For map charts, the maximum size is 440 pixels wide by 220 pixels high
 $KT_STATS_MAP_X = 440;
 $KT_STATS_MAP_Y = 220;
 
-$KT_STATS_CHART_COLOR1 = "ffffff";
-$KT_STATS_CHART_COLOR2 = "9ca3d4";
-$KT_STATS_CHART_COLOR3 = "e5e6ef";
+$KT_STATS_CHART_COLOR1 = "#0193b7";
+$KT_STATS_CHART_COLOR2 = "#e09798";
+$KT_STATS_CHART_COLOR3 = "#8a8a8a";
 
 // -- fanchart variables
 /*

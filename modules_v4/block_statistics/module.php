@@ -211,7 +211,7 @@ class block_statistics_KT_Module extends KT_Module implements KT_Module_Block {
 		</div>';
 		if ($stat_link) {
 			$content .= '<div class="callout secondary small">
-				<a href="statistics.php?ged=' . KT_GEDURL . '">
+				<a href="module.php?mod=chart_statistics&mod_action=show&amp;ged=' . KT_GEDURL . '">
 					<i class="' . $iconStyle . ' fa-sitemap"></i>
 					<span>' . KT_I18N::translate('View statistics as graphs') . '</span>
 				</a>

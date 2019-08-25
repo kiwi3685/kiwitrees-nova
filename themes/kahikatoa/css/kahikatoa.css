@@ -26,9 +26,12 @@
 .accordion .accordion-item .accordion-content {
   font-size: 1rem; }
 
-.button.dropdown:after {
-  border-color: #eddab6 transparent transparent !important; }
-
+/*.button.dropdown:after {
+    border-color: $secondary-color transparent transparent!important;
+}
+.button {
+	border-color: $primary-color;
+}*/
 div.reveal:focus {
   outline: none !important; }
 
@@ -2907,7 +2910,7 @@ ul.no-bullet, ol.no-bullet {
   vertical-align: middle;
   margin: 0.5em 0.5em 1rem 0.5em;
   padding: 0.65em 0.85em;
-  border: 1px solid transparent;
+  border: 0.125rem solid #ab3334;
   border-radius: 0;
   -webkit-transition: background-color 0.25s ease-out, color 0.25s ease-out;
   -o-transition: background-color 0.25s ease-out, color 0.25s ease-out;
@@ -8624,6 +8627,32 @@ div[id$="-page"]:not(#indi-page) h3 {
         font-size: 0.9rem;
         padding: 0.25rem 1rem; }
 
+#statistics-page div[id^="chart"] {
+  max-height: 20rem;
+  margin: 0 auto;
+  width: 80%; }
+  #statistics-page div[id^="chart"] .legend {
+    padding: 20px; }
+  #statistics-page div[id^="chart"] .bar-m,
+  #statistics-page div[id^="chart"] .bar-d {
+    fill: #0193b7; }
+  #statistics-page div[id^="chart"] .bar-f,
+  #statistics-page div[id^="chart"] .bar-l {
+    fill: #e09798; }
+  #statistics-page div[id^="chart"] .bar-u {
+    fill: #e7e7e7; }
+  #statistics-page div[id^="chart"] .horizontalChart .domain {
+    stroke: #ffffff; }
+
+#statistics-page div.statisticSection {
+  border: 0.125rem solid #ab3334;
+  margin: 1rem; }
+  #statistics-page div.statisticSection .chartTitle {
+    margin-top: 1rem; }
+
+#statistics-page small {
+  font-size: 90%; }
+
 /* Person box template */
 .person_box_template {
   background-color: #fefefe;
@@ -8688,8 +8717,7 @@ div[id$="-page"]:not(#indi-page) h3 {
   .compact_box_template .cell + .cell {
     padding: 0.3125rem !important; }
   .compact_box_template .name {
-    font-weight: 600;
-    font-size: .8rem; }
+    font-weight: 600; }
   .compact_box_template img {
     border-radius: 0;
     height: auto;

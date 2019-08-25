@@ -100,72 +100,68 @@ class chart_fanchart_KT_Module extends KT_Module implements KT_Module_Chart {
 		$xref	= $controller->root->getXref();
 		$person	= KT_Person::getInstance($xref);
 
-		?>
-		<div id="fanchart-page" class="grid-x grid-padding-x">
-			<div class="cell large-10 large-offset-1">
-				<h3><?php echo $controller->getPageTitle(); ?></h3>
-				<form name="people" id="people" method="get" action="?">
-					<input type="hidden" name="mod" value="<?php echo $this->getName(); ?>">
-					<input type="hidden" name="mod_action" value="show">
-					<input type="hidden" name="ged" value="<?php echo KT_GEDURL; ?>">
-					<div class="grid-x grid-margin-x">
-						<div class="cell medium-4">
-							<label class="h5" for="autocompleteInput"><?php echo KT_I18N::translate('Individual'); ?></label>
-							<div class="input-group autocomplete_container">
-								<input data-autocomplete-type="INDI" type="text" id="autocompleteInput" value="<?php echo strip_tags($person->getLifespanName()); ?>">
-								<span class="input-group-label">
-									<button class="clearAutocomplete autocomplete_icon">
-										<i class="<?php echo $iconStyle; ?> fa-times"></i>
-									</button>
-								</span>
-							</div>
-							<input type="hidden" id="selectedValue" name="rootid">
+		echo pageStart($this->getTitle(), $controller->getPageTitle()); ?>
+			<form name="people" id="people" method="get" action="?">
+				<input type="hidden" name="mod" value="<?php echo $this->getName(); ?>">
+				<input type="hidden" name="mod_action" value="show">
+				<input type="hidden" name="ged" value="<?php echo KT_GEDURL; ?>">
+				<div class="grid-x grid-margin-x">
+					<div class="cell medium-4">
+						<label class="h5" for="autocompleteInput"><?php echo KT_I18N::translate('Individual'); ?></label>
+						<div class="input-group autocomplete_container">
+							<input data-autocomplete-type="INDI" type="text" id="autocompleteInput" value="<?php echo strip_tags($person->getLifespanName()); ?>">
+							<span class="input-group-label">
+								<button class="clearAutocomplete autocomplete_icon">
+									<i class="<?php echo $iconStyle; ?> fa-times"></i>
+								</button>
+							</span>
 						</div>
-						<div class="cell medium-4">
-							<label class="h5" for="generations"><?php echo KT_I18N::translate('Generations'); ?></label>
-							<div class="grid-x grid-padding-x">
-								<div class="cell small-9">
-								  <div class="slider" data-slider data-start="2" data-step="1" data-end="10" data-initial-start="<?php echo $controller->generations; ?>">
-								    <span class="slider-handle"  data-slider-handle role="slider" tabindex="1" aria-controls="generations"></span>
-								    <span class="slider-fill" data-slider-fill></span>
-								  </div>
-								</div>
-								<div class="cell small-3">
-								  <input type="number" id="generations" name="generations">
-								</div>
+						<input type="hidden" id="selectedValue" name="rootid">
+					</div>
+					<div class="cell medium-4">
+						<label class="h5" for="generations"><?php echo KT_I18N::translate('Generations'); ?></label>
+						<div class="grid-x grid-padding-x">
+							<div class="cell small-9">
+							  <div class="slider" data-slider data-start="2" data-step="1" data-end="10" data-initial-start="<?php echo $controller->generations; ?>">
+							    <span class="slider-handle"  data-slider-handle role="slider" tabindex="1" aria-controls="generations"></span>
+							    <span class="slider-fill" data-slider-fill></span>
+							  </div>
 							</div>
-						</div>
-						<div class="cell medium-4">
-							<label class="h5" for="fanDegree"><?php echo KT_I18N::translate('Degrees'); ?></label>
-							<div class="grid-x grid-padding-x">
-								<div class="cell small-9">
-								  <div class="slider" data-slider data-start="180" data-step="30" data-end="360" data-initial-start="<?php echo $controller->fanDegree; ?>">
-								    <span class="slider-handle"  data-slider-handle role="slider" tabindex="1" aria-controls="fanDegree"></span>
-								    <span class="slider-fill" data-slider-fill></span>
-								  </div>
-								</div>
-								<div class="cell small-3">
-									<input type="number" id="fanDegree" name="fanDegree">
-								</div>
+							<div class="cell small-3">
+							  <input type="number" id="generations" name="generations">
 							</div>
 						</div>
 					</div>
-					<button class="button" type="submit">
-						<i class="<?php echo $iconStyle; ?> fa-eye"></i>
-						<?php echo KT_I18N::translate('Show'); ?>
-					</button>
-				</form>
-				<hr>
-				<!-- end of form -->
-				<?php if ($controller->error_message) { ?>
-					<p class="callout alert"><?php echo $controller->error_message; ?></p>
-					<?php exit;
-				} else { ?>
-					<div id="fan_chart" class="cell text-center"></div>
-				<?php } ?>
-			</div>
-		</div>
-	<?php }
+					<div class="cell medium-4">
+						<label class="h5" for="fanDegree"><?php echo KT_I18N::translate('Degrees'); ?></label>
+						<div class="grid-x grid-padding-x">
+							<div class="cell small-9">
+							  <div class="slider" data-slider data-start="180" data-step="30" data-end="360" data-initial-start="<?php echo $controller->fanDegree; ?>">
+							    <span class="slider-handle"  data-slider-handle role="slider" tabindex="1" aria-controls="fanDegree"></span>
+							    <span class="slider-fill" data-slider-fill></span>
+							  </div>
+							</div>
+							<div class="cell small-3">
+								<input type="number" id="fanDegree" name="fanDegree">
+							</div>
+						</div>
+					</div>
+				</div>
+				<button class="button" type="submit">
+					<i class="<?php echo $iconStyle; ?> fa-eye"></i>
+					<?php echo KT_I18N::translate('Show'); ?>
+				</button>
+			</form>
+			<hr>
+			<!-- end of form -->
+			<?php if ($controller->error_message) { ?>
+				<p class="callout alert"><?php echo $controller->error_message; ?></p>
+				<?php exit;
+			} else { ?>
+				<div id="fan_chart" class="cell text-center"></div>
+			<?php }
+		echo pageClose();
+	}
 
 	// Implement KT_Module_Chart
 	public function getChartMenus() {

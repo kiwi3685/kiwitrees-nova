@@ -1785,7 +1785,7 @@ function old_paths() {
 		KT_ROOT . 'modules_v4/backup_to_dropbox/dropbox-sdk',
 		KT_ROOT . 'modules_v4/research_links/plugins/rotterdamds.php',
 		// Removed in kiwitrees 3.3.3
-		KT_ROOT . 'js/d3.min.js',
+//		KT_ROOT . 'js/d3.min.js',
 		KT_ROOT . 'modules_v4/research_links/plugins/vlaardingengeschiedenis.php',
 
 		// *********************************************

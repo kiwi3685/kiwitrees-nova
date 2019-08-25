@@ -1,9 +1,6 @@
-/*global
-    window, console, Math, d3, jQuery
-*/
-
 /**
- * Webtrees module.
+ * Converted from webtrees module
+ * by kiwitrees.net
  *
  * Copyright (C) 2017  Rico Sonntag
  *

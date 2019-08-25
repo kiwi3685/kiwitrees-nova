@@ -273,7 +273,7 @@ $controller
 						<td>
 							<select multiple="multiple" id="right_select" name="right[]" size="10" onchange="show_description('right_select');">
 								<?php foreach ($blocks['footer'] as $block_id=>$block_name) { ?>
-									<option value="<?php echo $block_id; ?>"><?php echo $all_blocks[$block_name]->getTitle(); ?></option>
+									<option value="<?php echo $block_id; ?>"><?php echo $all_blocks[$block_name]->getTitle() . ' (id ' . $block_id . ')'; ?></option>
 								<?php } ?>
 							</select>
 						</td>
