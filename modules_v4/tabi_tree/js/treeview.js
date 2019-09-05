@@ -31,7 +31,7 @@ function TreeViewHandler(treeview_instance) {
 	this.boxWidth = 180; // default family box width
 	this.boxExpandedWidth = 250; // default expanded family box width
 	this.cookieDays = 3; // lifetime of preferences memory, in days
-	this.ajaxUrl = "module.php?mod=tree&instance=" + treeview_instance +
+	this.ajaxUrl = "module.php?mod=tabi_album_KT_Moduletree&instance=" + treeview_instance +
 		"&mod_action=";
 
 	this.container = this.treeview.parent(); // Store the container element ("#" + treeview_instance + "_out")

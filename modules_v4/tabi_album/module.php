@@ -64,7 +64,7 @@ class tabi_album_KT_Module extends KT_Module implements KT_Module_IndiTab, KT_Mo
 
 	// Implement KT_Module_Config
 	public function getConfigLink() {
-		return 'module.php?mod='.$this->getName().'&amp;mod_action=admin_config';
+		return 'module.php?mod=' . $this->getName() . '&amp;mod_action=admin_config';
 	}
 
 	// Implement KT_Module_IndiTab
@@ -86,7 +86,7 @@ class tabi_album_KT_Module extends KT_Module implements KT_Module_IndiTab, KT_Mo
 			$ALBUM_GROUPS = 4;
 		}
 
-		require_once KT_ROOT.KT_MODULES_DIR.'album/album_print_media.php';
+		require_once KT_ROOT . KT_MODULES_DIR . $this->getName() . '/album_print_media.php';
 		$html='<div id="'.$this->getName().'_content">';
 			//Show Album header Links
 			if (KT_USER_CAN_EDIT) {
