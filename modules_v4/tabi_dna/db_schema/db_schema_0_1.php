@@ -35,7 +35,7 @@ KT_DB::exec(
 	    seg		int(10) NOT NULL,
 	    source	varchar(20) DEFAULT NULL,
 	    note	varchar(256) DEFAULT NULL,
-	    date	date NOT NULL DEFAULT current_timestamp(),
+	    date	timestamp NOT NULL DEFAULT current_timestamp(),
 	    UNIQUE KEY dna_id (dna_id),
 	    KEY id_a (id_a,id_b)
 	) COLLATE utf8_unicode_ci ENGINE=InnoDB"
