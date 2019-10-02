@@ -90,6 +90,7 @@ switch (KT_Filter::post('action')) {
 			if (isset($_FILES['tree_name'])) {
 				if ($_FILES['tree_name']['error'] == 0 && is_readable($_FILES['tree_name']['tmp_name'])) {
 					KT_Tree::import_gedcom_file($gedcom_id, $_FILES['tree_name']['tmp_name'], $_FILES['tree_name']['name']);
+					KT_FlashMessages::addMessage(/* I18N: %s is the name of a family tree */ KT_I18N::translate('The family tree "%s" has been updated.', KT_Filter::escapeHtml($basename)), 'success');
 				} else {
 					KT_FlashMessages::addMessage(fileUploadErrorText($_FILES['tree_name']['error']), 'warning');
 				}
