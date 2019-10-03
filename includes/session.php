@@ -45,22 +45,22 @@ define ('KT_USE_CDN', false);
 if (KT_USE_CDN) {
 	define('KT_FOUNDATION_JS',				'https://cdn.jsdelivr.net/npm/foundation-sites@6.4.3/dist/js/foundation.min.js" integrity="sha256-mRYlCu5EG+ouD07WxLF8v4ZAZYCA6WrmdIXyn1Bv9Vk= sha384-KzKofw4qqetd3kvuQ5AdapWPqV1ZI+CnfyfEwZQgPk8poOLWaabfgJOfmW7uI+AV sha512-0gHfaMkY+Do568TgjJC2iMAV0dQlY4NqbeZ4pr9lVUTXQzKu8qceyd6wg/3Uql9qA2+3X5NHv3IMb05wb387rA==" crossorigin="anonymous"'); //6.4.3
 	define('KT_JQUERY_JS',					'https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="crossorigin="anonymous"'); //3.3.1
-	define('KT_JQUERYUI_JS',				'https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"'); // 1.12.1
+//	define('KT_JQUERYUI_JS',				'https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"'); // 1.12.1
 	define('KT_DATEPICKER_JS',				'https://cdn.jsdelivr.net/npm/foundation-datepicker@1.5.6/js/foundation-datepicker.min.js'); //1.5.6
 	define('KT_DATATABLES_JS',				'https://cdn.datatables.net/v/zf/dt-1.10.16/b-1.5.1/b-html5-1.5.1/datatables.min.js'); //1.10.16
 	define('KT_DATATABLES_CSS',				'https://cdn.datatables.net/v/zf/dt-1.10.16/b-1.5.1/b-html5-1.5.1/datatables.min.css'); //1.10.16
 } else {
 	define('KT_FOUNDATION_JS',				KT_STATIC_URL . 'library/foundation/js/vendor/foundation.min.js'); // 6.4.3
-	define('KT_JQUERY_JS',					KT_STATIC_URL . 'library/foundation/js/vendor/jquery.js'); //3.3.1
-	define('KT_JQUERYUI_JS',				KT_STATIC_URL . 'js/jquery-ui.min.js');	 // 1.12.1 (all options. Also requires some css in individual theme stylesheets)
+	define('KT_JQUERY_JS',					KT_STATIC_URL . 'library/foundation/js/vendor/jquery.js'); // 3.3.1
+//	define('KT_JQUERYUI_JS',				KT_STATIC_URL . 'js/jquery-ui.min.js');	 // 1.12.1 (all options. Also requires some css in individual theme stylesheets)
 	define('KT_DATEPICKER_JS',				KT_STATIC_URL . 'library/foundation-datepicker/js/foundation-datepicker.min.js'); // 1.5.6
-	define('KT_DATATABLES_JS',				KT_STATIC_URL . 'library/DataTables/DataTables-1.10.16/js/jquery.dataTables.min.js'); // 1.10.16
-	define('KT_DATATABLES_CSS',				KT_STATIC_URL . 'library/DataTables/DataTables-1.10.16/css/dataTables.foundation.min.css');
+	define('KT_DATATABLES_JS',				KT_STATIC_URL . 'library/DataTables/DataTables-1.10.16/js/jquery.dataTables.min.js'); // 1.10.20
+	define('KT_DATATABLES_CSS',				KT_STATIC_URL . 'library/DataTables/DataTables-1.10.16/css/dataTables.foundation.min.css'); // 6.4.3
 }
 
 // other js
-define('KT_FONTAWESOME_JS',					KT_STATIC_URL . 'library/fontawesome/all.js'); 			// fontawesome-pro-5.4.1 Updated 15-10-2018 Pro icons only available via CDN on subscription
-//define('KT_FONTAWESOME_JS',					KT_STATIC_URL . 'library/fontawesome/all.min.js');  // fontawesome-pro-5.4.1 Updated 15-10-2018 Pro icons only available via CDN on subscription
+define('KT_FONTAWESOME_JS',					KT_STATIC_URL . 'library/fontawesome/all.js'); 			// fontawesome-pro-5.4.3 Updated 15-10-2018 Pro icons only available via CDN on subscription
+//define('KT_FONTAWESOME_JS',					KT_STATIC_URL . 'library/fontawesome/all.min.js');  // fontawesome-pro-5.4.3 Updated 15-10-2018 Pro icons only available via CDN on subscription
 define('KT_JQUERY_COLORBOX_URL',			KT_STATIC_URL . 'js/jquery.colorbox-min.js');	   		// 1.6.1	Updated 18-06-2015
 define('KT_JQUERY_JEDITABLE_URL',			KT_STATIC_URL . 'js/jquery.jeditable.js');		    	// 1.7.3
 define('KT_JQUERY_WHEELZOOM_URL',			KT_STATIC_URL . 'js/jquery.wheelzoom.js');		    	// 2.0.0
