@@ -21,7 +21,7 @@
  * along with Kiwitrees. If not, see <http://www.gnu.org/licenses/>.
  */
 
-define('KT_SCRIPT_NAME', 'admin_site_lang.php');
+define('KT_SCRIPT_NAME', 'admin_custom_lang.php');
 require './includes/session.php';
 require KT_ROOT.'includes/functions/functions_edit.php';
 
@@ -31,7 +31,6 @@ $controller = new KT_Controller_Page();
 $controller
 	->restrictAccess(KT_USER_IS_ADMIN)
 	->addExternalJavascript(KT_DATATABLES_JS)
-	->addExternalJavascript(KT_JQUERY_JEDITABLE_URL)
 	->setPageTitle(KT_I18N::translate('Custom translation'))
 	->pageHeader();
 
@@ -53,9 +52,9 @@ if ($new_standard_text || $new_custom_text) {
 }
 
 if ($delete == 'delete_item') {
-	$custom_lang_id	= safe_GET('custom_lang_id');
-	$action			= safe_GET('action');
-	$language		= safe_GET('language');
+	$custom_lang_id	= KT_Filter::get('custom_lang_id');
+	$action			= KT_Filter::get('action');
+	$language		= KT_Filter::get('language');
 	KT_DB::exec("DELETE FROM `##custom_lang` WHERE `custom_lang_id` = {$custom_lang_id}");
 }
 
@@ -83,8 +82,10 @@ function custom_texts($language) {
 		->fetchAll();
 	return	$texts;
 }
+
 $custom_lang = custom_texts($language);
 ?>
+
 <div id="custom_language-page" class="cell">
 	<div class="grid-x grid-margin-x grid-margin-y">
 		<div class="cell">
@@ -199,23 +200,12 @@ $custom_lang = custom_texts($language);
 									<?php } ?>
 								</div>
 							</div>
-							<div class="cell cell small-1">
-
-							</div>
+							<div class="cell cell small-1"></div>
 						</div>
-						<h3></h3>
-						<div class="row">
-							<div class="text-header"></div>
-							<div class="symbol">=></div>
-							<div class="text-header"></div>
-							<div class="trash"></div>
-						</div>
-						<p>
-							<button type="submit">
-								<i class="fas fa-save"></i>
-								<?php echo KT_I18N::translate('Save'); ?>
-							</button>
-						</p>
+						<button class="button" type="submit">
+							<i class="<?php echo $iconStyle; ?> fa-save"></i>
+							<?php echo KT_I18N::translate('Save'); ?>
+						</button>
 					</form>
 				<?php }
 			} ?>
