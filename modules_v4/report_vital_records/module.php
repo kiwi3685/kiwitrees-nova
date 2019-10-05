@@ -190,7 +190,7 @@ class report_vital_records_KT_Module extends KT_Module implements KT_Module_Repo
 						jQuery.fn.dataTableExt.oSort["unicode-asc" ]=function(a,b) {return a.replace(/<[^<]*>/, "").localeCompare(b.replace(/<[^<]*>/, ""))};
 						jQuery.fn.dataTableExt.oSort["unicode-desc"]=function(a,b) {return b.replace(/<[^<]*>/, "").localeCompare(a.replace(/<[^<]*>/, ""))};
 						jQuery("#vital_records").dataTable({
-							dom: \'<"H"pBf<"dt-clear">irl>t<"F"pl>\',
+							dom: \'<"H"pBf<"clear">irl>t<"F"pl>\',
 							' . KT_I18N::datatablesI18N() . ',
 							buttons: [{extend: "csv", exportOptions: {columns: ":visible"}}],
 							autoWidth: false,

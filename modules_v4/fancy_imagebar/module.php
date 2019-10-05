@@ -214,7 +214,7 @@ class fancy_imagebar_KT_Module extends KT_Module implements KT_Module_Config, KT
 
 		$controller->addInlineJavascript('
 			var oTable=jQuery("#image_block").dataTable( {
-				sDom: \'<"H"pf<"dt-clear">irl>t<"F"pl>\',
+				sDom: \'<"H"pf<"clear">irl>t<"F"pl>\',
 				bProcessing: true,
 				bServerSide: true,
 				sAjaxSource: "module.php?mod=' . $this->getName() . '&mod_action=load_json",

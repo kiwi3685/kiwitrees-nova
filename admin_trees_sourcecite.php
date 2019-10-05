@@ -40,7 +40,7 @@ $controller
 	->addExternalJavascript(JQUERY_DT_BUTTONS)
 	->addInlineJavascript('
 		jQuery("#citation_table").dataTable({
-			dom: \'<"H"pBf<"dt-clear">irl>t<"F"pl>\',
+			dom: \'<"H"pBf<"clear">irl>t<"F"pl>\',
 			' . KT_I18N::datatablesI18N() . ',
 			buttons: [{extend: "csv", exportOptions: {columns: ":visible"}}],
 			autoWidth: false,

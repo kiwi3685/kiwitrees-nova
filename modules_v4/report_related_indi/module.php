@@ -139,7 +139,7 @@ class report_related_indi_KT_Module extends KT_Module implements KT_Module_Repor
 					jQuery.fn.dataTableExt.oSort["unicode-asc" ]=function(a,b) {return a.replace(/<[^<]*>/, "").localeCompare(b.replace(/<[^<]*>/, ""))};
 					jQuery.fn.dataTableExt.oSort["unicode-desc"]=function(a,b) {return b.replace(/<[^<]*>/, "").localeCompare(a.replace(/<[^<]*>/, ""))};
 					jQuery("#related_individuals").dataTable({
-						dom: \'<"H"pBf<"dt-clear">irl>t<"F"pl>\',
+						dom: \'<"H"pBf<"clear">irl>t<"F"pl>\',
 						' . KT_I18N::datatablesI18N() . ',
 						buttons: [{extend: "csv", exportOptions: {columns: ":visible"}}],
 						autoWidth: false,

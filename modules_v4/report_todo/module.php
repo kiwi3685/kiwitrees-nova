@@ -88,7 +88,7 @@ class report_todo_KT_Module extends KT_Module implements KT_Module_Report {
 			->addExternalJavascript(KT_DATATABLES_JS)
 			->addInlineJavascript('
 				jQuery("#' .$table_id. '").dataTable( {
-					dom: \'<"H"pf<"dt-clear">irl>t<"F"pl>\',
+					dom: \'<"H"pf<"clear">irl>t<"F"pl>\',
 					' . KT_I18N::datatablesI18N() . ',
 					autoWidth: false,
 					paging: true,

@@ -571,7 +571,7 @@ class stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Module_
 			->pageHeader()
 			->addInlineJavascript('
 				jQuery("#story_table").dataTable({
-					dom: \'<"H"pBf<"dt-clear">irl>t<"F"pl>\',
+					dom: \'<"H"pBf<"clear">irl>t<"F"pl>\',
 					' . KT_I18N::datatablesI18N() . ',
 					buttons: [{extend: "csv"}],
 					jQueryUI: true,

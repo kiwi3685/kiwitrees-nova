@@ -79,9 +79,9 @@ class list_branches_KT_Module extends KT_Module implements KT_Module_List {
 			->restrictAccess(KT_Module::isActiveList(KT_GED_ID, 'list_branches', KT_USER_ACCESS_LEVEL))
 			->pageHeader()
 			->addExternalJavascript(KT_JQUERY_TREEVIEW_JS_URL)
-			->addExternalJavascript(KT_AUTOCOMPLETE_JS_URL)
+//			->addExternalJavascript(KT_AUTOCOMPLETE_JS_URL)
 			->addInlineJavascript('
-				autocomplete();
+//				autocomplete();
 				jQuery("#branch-list").treeview({
 					collapsed: true,
 					animated: "slow",

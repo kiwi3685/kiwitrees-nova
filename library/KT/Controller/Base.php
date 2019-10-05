@@ -78,17 +78,23 @@ class KT_Controller_Base {
 	// Now display them in order.
 	public function getJavascript() {
 		$noscript = '
-		<noscript>
-			<input type="checkbox" class="modal-closing-trick" id="modal-closing-trick">
-		    <div class="noscript-overlay"></div>
-		    <div class="noscript_modal">' .
-				/* I18N: Warning about missing JavaScript. Note capitalisation of JavaScript */ KT_I18N::translate('<h2>Kiwitrees doesn\'t work well without JavaScript, and in your browser it is missing, broken, or disabled.</h2>
-				<p>If you want to know how to enable it click <a href="http://www.enable-javascript.com/" target="_blank">here</a></p>') . '
-				<label class="button" for="modal-closing-trick">' .
-					KT_I18N::translate('Close this message') . '
-				</label>
-			</div>
-		</noscript>';
+			<noscript>
+				<input type="checkbox" class="modal-closing-trick" id="modal-closing-trick">
+			    <div class="noscript-overlay"></div>
+			    <div class="noscript_modal">' .
+					/* I18N: Warning about missing JavaScript. Note capitalisation of JavaScript */ KT_I18N::translate('<h2>Kiwitrees doesn\'t work well without JavaScript, and in your browser it is missing, broken, or disabled.</h2>
+					<p>If you want to know how to enable it click <a href="http://www.enable-javascript.com/" target="_blank">here</a></p>') . '
+					<label class="button" for="modal-closing-trick">' .
+						KT_I18N::translate('Close this message') . '
+					</label>
+				</div>
+			</noscript>
+			<script>
+				window.FontAwesomeConfig = {
+					searchPseudoElements: true
+				}
+			</script>
+		';
 		$javascript1 = '';
 		$javascript2 = '';
 		$javascript3 = '';

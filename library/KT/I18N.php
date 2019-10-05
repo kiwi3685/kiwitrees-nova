@@ -738,7 +738,7 @@ class KT_I18N {
 			' "lengthMenu":     "'.KT_Filter::escapeJs($length_menu).'",'.
 			' "loadingRecords": "'.KT_I18N::translate('Loading…').'",'.
 			' "processing":     "'.KT_I18N::translate('Loading…').'",'.
-			' "search":         "'.KT_I18N::translate('Filter').'",'.
+			' "search":         "'.KT_I18N::translate('Search').'",'.
 			' "url":            "",'.
 			' "zeroRecords":    "'.KT_I18N::translate('No records to display').'"'.
 			'}'.

@@ -296,7 +296,7 @@ class report_fact_KT_Module extends KT_Module implements KT_Module_Report {
 					->addExternalJavascript(KT_JQUERY_DT_BUTTONS)
 					->addInlineJavascript('
 						jQuery("#' .$table_id. '").dataTable( {
-							dom: \'<"H"pBf<"dt-clear">irl>t<"F"pl>\',
+							dom: \'<"H"pBf<"clear">irl>t<"F"pl>\',
 							' . KT_I18N::datatablesI18N() . ',
 							buttons: [{extend: "csv", exportOptions: {columns: ":visible"}}],
 							autoWidth: true,

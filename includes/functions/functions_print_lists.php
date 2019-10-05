@@ -40,23 +40,32 @@ function format_indi_table($datalist, $option='') {
 	if ($option == 'MARR_PLAC') return;
 	$html = '';
 
+	$controller
+		->addExternalJavascript(KT_DATATABLES_JS)
+		->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
+//		->addExternalJavascript(KT_DATATABLES_FOUNDATION_CSS)
+	;
+
 	if (KT_USER_CAN_EDIT) {
+		$controller
+			->addExternalJavascript(KT_JQUERY_DT_BUTTONS)
+			->addExternalJavascript(KT_JQUERY_DT_HTML5)
+		;
 		$buttons = 'B';
 	} else {
 		$buttons = '';
 	}
 
 	$controller
-		->addExternalJavascript(KT_DATATABLES_JS)
 		->addInlineJavascript('
 		jQuery.fn.dataTableExt.oSort["unicode-asc"  ]=function(a,b) {return a.replace(/<[^<]*>/, "").localeCompare(b.replace(/<[^<]*>/, ""))};
 		jQuery.fn.dataTableExt.oSort["unicode-desc" ]=function(a,b) {return b.replace(/<[^<]*>/, "").localeCompare(a.replace(/<[^<]*>/, ""))};
 		jQuery.fn.dataTableExt.oSort["num-html-asc" ]=function(a,b) {a=parseFloat(a.replace(/<[^<]*>/, "")); b=parseFloat(b.replace(/<[^<]*>/, "")); return (a<b) ? -1 : (a>b ? 1 : 0);};
 		jQuery.fn.dataTableExt.oSort["num-html-desc"]=function(a,b) {a=parseFloat(a.replace(/<[^<]*>/, "")); b=parseFloat(b.replace(/<[^<]*>/, "")); return (a>b) ? -1 : (a<b ? 1 : 0);};
 			jQuery("#' . $table_id . '").dataTable({
-				dom: \'<"top"' . $buttons . 'lp<"clear">irf>t<"bottom"pl>\',
+				dom: \'<"top"p' . $buttons . 'f<"clear">irl>t<"bottom"pl>\',
 				' . KT_I18N::datatablesI18N() . ',
-				buttons: [{extend: "csv", exportOptions: {columns: [0,1,4,6,9,11,12,15,17] }}],
+				buttons: [{extend: "csvHtml5", exportOptions: {columns: [0,1,4,6,9,11,12,15,17] }}],
 				autoWidth: false,
 				processing: true,
 				retrieve: true,
@@ -85,7 +94,7 @@ function format_indi_table($datalist, $option='') {
 					/* 12 deat date */ { dataSort: 13, class: "show-for-medium" },
 					/* 13 DEAT:DATE */ { visible: false },
 					/* 14 anniv     */ { dataSort: 13, class: "text-center show-for-medium" },
-					/* 15 age       */ { dataSort: 16, class: "text-center show-for-medium" },
+					/* 15 age       */ { dataSort: 16, class: "show-for-medium" },
 					/* 16 AGE       */ { type: "num", class: "show-for-medium", visible: false },
 					/* 17 deat plac */ { type: "unicode", class: "show-for-medium" },
 					/* 18 CHAN      */ { dataSort: 19, visible: ' . ($SHOW_LAST_CHANGE ? 'true' : 'false') . ' },
@@ -2004,7 +2013,7 @@ function format_story_table($datalist) {
 			jQuery.fn.dataTableExt.oSort["unicode-asc" ]=function(a,b) {return a.replace(/<[^<]*>/, "").localeCompare(b.replace(/<[^<]*>/, ""))};
 			jQuery.fn.dataTableExt.oSort["unicode-desc"]=function(a,b) {return b.replace(/<[^<]*>/, "").localeCompare(a.replace(/<[^<]*>/, ""))};
 			jQuery("#' . $table_id . '").dataTable({
-			"sDom": \'<"H"pBf<"dt-clear">irl>t<"F"pl>\',
+			"sDom": \'<"H"pBf<"clear">irl>t<"F"pl>\',
 			' . KT_I18N::datatablesI18N() . ',
 			buttons: [{extend: "csv"}],
 			jQueryUI: true,

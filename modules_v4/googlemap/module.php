@@ -1540,7 +1540,7 @@ class googlemap_KT_Module extends KT_Module implements KT_Module_Config, KT_Modu
 				->addExternalJavascript(KT_JQUERY_DT_BUTTONS)
 				->addInlineJavascript('
 					jQuery("#' . $table_id . '").dataTable({
-						dom: \'<"H"<"filtersH_' . $table_id . '">T<"dt-clear">pBf<"dt-clear">irl>t<"F"pl<"dt-clear"><"filtersF_' . $table_id.'">>\',
+						dom: \'<"H"<"filtersH_' . $table_id . '">T<"clear">pBf<"clear">irl>t<"F"pl<"clear"><"filtersF_' . $table_id.'">>\',
 						' . KT_I18N::datatablesI18N() . ',
 						buttons: [{extend: "csv"}],
 						jQueryUI: true,

@@ -150,7 +150,7 @@ $true	= '<i class="accepted fa fa-check"></i>';
 				jQuery.fn.dataTableExt.oSort["unicode-asc" ]=function(a,b) {return a.replace(/<[^<]*>/, "").localeCompare(b.replace(/<[^<]*>/, ""))};
 				jQuery.fn.dataTableExt.oSort["unicode-desc"]=function(a,b) {return b.replace(/<[^<]*>/, "").localeCompare(a.replace(/<[^<]*>/, ""))};
 				jQuery("#missing_data").dataTable({
-					dom: \'<"H"pBf<"dt-clear">irl>t<"F"pl>\',
+					dom: \'<"H"pBf<"clear">irl>t<"F"pl>\',
 					' . KT_I18N::datatablesI18N() . ',
 					buttons: [{extend: "csv", exportOptions: {columns: ":visible"}}],
 					autoWidth: false,

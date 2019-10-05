@@ -749,59 +749,63 @@ switch (KT_Filter::get('action')) {
 
 	default:
 		$controller
-		->addExternalJavascript(KT_DATATABLES_JS)
-		->addInlineJavascript('
-			jQuery("#list").dataTable({
-				dom: \'<"top"blp<"clear">irf>t<"bottom"pl>\',
-				' . KT_I18N::datatablesI18N() . ',
-				buttons: [{extend: "csv", exportOptions: {columns: [1,2,3,5,7] }}],
-				autoWidth: false,
-				processing: true,
-				serverSide: true,
-				"sAjaxSource" : " '. KT_SCRIPT_NAME . '?action=loadrows",
-				pagingType: "full_numbers",
-				stateSave: true,
+			->pageHeader()
+			->addExternalJavascript(KT_DATATABLES_JS)
+			->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
+			->addExternalJavascript(KT_DATATABLES_FOUNDATION_CSS)
+			->addExternalJavascript(KT_JQUERY_DT_BUTTONS)
+			->addExternalJavascript(KT_JQUERY_DT_HTML5)
+			->addInlineJavascript('
+				jQuery("#list").dataTable({
+					dom: \'<"top"pBf<"clear">irl>t<"bottom"pl>\',
+					' . KT_I18N::datatablesI18N() . ',
+					buttons: [{extend: "csvHtml5", exportOptions: {columns: [1,2,3,5,7] }}],
+					autoWidth: false,
+					processing: true,
+					serverSide: true,
+					ajax : " '. KT_SCRIPT_NAME . '?action=loadrows",
+					pagingType: "full_numbers",
+					stateSave: true,
 					stateSaveParams: function (settings, data) {
 						data.columns.forEach(function(column) {
 							delete column.search;
 						});
 					},
-				stateDuration: -1,
-				sorting: [[2,"asc"]],
-				columns: [
-					/*  0 edit          	*/ { sortable:false, class:"center" },
-					/*  1 user-id           */ { bVisible:false },
-					/*  2 user_name         */ null,
-					/*  3 real_name         */ null,
-					/*  4 email             */ null,
-					/*  5 language          */ null,
-					/*  6 registered (sort) */ { bVisible:false },
-					/*  7 registered        */ { dataSort:7 },
-					/*  8 last_login (sort) */ { bVisible:false },
-					/*  9 last_login        */ { dataSort:9 },
-					/* 10 verified          */ { class:"center" },
-					/* 11 verified_by_admin */ { class:"center" },
-					/* 12 delete            */ { sortable:false, class:"center" },
-					/* 13 masquerade        */ { sortable:false, class:"center" }
-				],
-			})
-			.fnFilter("' . KT_Filter::get('filter') . '"); // View the details of a newly created user
-		')
-		->pageHeader();
+					stateDuration: -1,
+					sorting: [[2,"asc"]],
+					columns: [
+						/*  0 edit          	*/ { sortable:false },
+						/*  1 user-id           */ { visible:false },
+						/*  2 user_name         */ null,
+						/*  3 real_name         */ null,
+						/*  4 email             */ null,
+						/*  5 language          */ null,
+						/*  6 registered (sort) */ { visible:false },
+						/*  7 registered        */ { orderData: 6 },
+						/*  8 last_login (sort) */ { visible:false },
+						/*  9 last_login        */ { orderData: 8 },
+						/* 10 verified          */ { className:"text-center" },
+						/* 11 verified_by_admin */ { className:"text-center" },
+						/* 12 delete            */ { sortable:false },
+						/* 13 masquerade        */ { sortable:false }
+					],
+				})
+				.fnFilter("' . KT_Filter::get('filter') . '"); // View the details of a newly created user
+			');
 		?>
 		<div id="user-list" class="cell">
 			<table id="list" style="width: 100%;">
 				<thead>
 					<tr>
 						<th><?php echo KT_I18N::translate('Edit'); ?></th>
-						<th>user-id </th>
+						<th>user-id</th>
 						<th><?php echo KT_I18N::translate('Username'); ?></th>
 						<th><?php echo KT_I18N::translate('Real name'); ?></th>
 						<th><?php echo KT_I18N::translate('Email'); ?></th>
 						<th><?php echo KT_I18N::translate('Language'); ?></th>
-						<th>date_registered </th>
+						<th>date_registered</th>
 						<th><?php echo KT_I18N::translate('Date registered'); ?></th>
-						<th>last_login </th>
+						<th>last_login</th>
 						<th><?php echo KT_I18N::translate('Last logged in'); ?></th>
 						<th><?php echo KT_I18N::translate('Verified'); ?></th>
 						<th><?php echo KT_I18N::translate('Approved'); ?></th>

@@ -224,7 +224,7 @@ $controller
 	->addExternalJavascript(KT_JQUERY_DATATABLES_URL)
 	->addInlineJavascript('
 		var oTable=jQuery("#change_list").dataTable( {
-			"sDom": \'<"H"pf<"dt-clear">irl>t<"F"pl>\',
+			"sDom": \'<"H"pf<"clear">irl>t<"F"pl>\',
 			"bProcessing": true,
 			"bServerSide": true,
 			"sAjaxSource": "' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '?action=load_json&from='.$from.'&to='.$to.'&type='.$type.'&oldged='.rawurlencode($oldged).'&newged='.rawurlencode($newged).'&xref='.rawurlencode($xref).'&user='.rawurlencode($user).'&gedc='.rawurlencode($gedc).'",

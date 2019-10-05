@@ -529,7 +529,7 @@ $controller
 	->pageHeader()
 	->addInlineJavascript('
 		jQuery("#media-table-' . $table_id . '").dataTable({
-			dom: \'<"H"pf<"dt-clear">irl>t<"F"pl>\',
+			dom: \'<"H"pf<"clear">irl>t<"F"pl>\',
 			processing: true,
 			serverSide: true,
 			ajaxSource: "' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '?action=load_json&files=' . $files . '&media_folder=' . $media_folder . '&media_path=' . $media_path . '&subfolders=' . $subfolders . '",

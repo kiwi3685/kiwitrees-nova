@@ -8774,87 +8774,76 @@ footer {
 div.dataTables_wrapper div div.clear {
   clear: both; }
 
-div.dataTables_wrapper > div:first-of-type {
-  overflow: hidden;
-  margin-bottom: 0.5rem; }
-
 div.dataTables_wrapper div div.dataTables_info,
-div.dataTables_wrapper div div.dataTables_length {
+div.dataTables_wrapper div div.dataTables_paginate {
   float: left; }
 
-div.dataTables_wrapper div div.dataTables_info {
-  padding-top: 0.875rem; }
-
+div.dataTables_wrapper div div.dataTables_filter,
+div.dataTables_wrapper div div.dataTables_length,
 div.dataTables_wrapper div div.dt-buttons {
-  float: right;
+  float: right; }
+
+div.dataTables_wrapper div div.dataTables_info {
+  font-size: 0.95rem;
   margin: 0 0.5rem; }
 
-table.dataTable {
+div.dataTables_wrapper div div.dataTables_length label,
+div.dataTables_wrapper div div.dataTables_filter label {
+  display: inline-block;
+  padding: 0; }
+  div.dataTables_wrapper div div.dataTables_length label select,
+  div.dataTables_wrapper div div.dataTables_filter label select {
+    margin: 0;
+    width: 5rem; }
+  div.dataTables_wrapper div div.dataTables_length label input,
+  div.dataTables_wrapper div div.dataTables_filter label input {
+    display: inline;
+    margin: 0 0.5rem;
+    width: 15rem; }
+
+div.dataTables_wrapper div div.dt-buttons button {
+  background-color: #1779ba;
+  color: #fefefe;
+  padding: .7rem 1rem; }
+
+div.dataTables_wrapper table.dataTable {
   font-size: 0.9rem; }
-  table.dataTable.surname-list {
+  div.dataTables_wrapper table.dataTable.surname-list {
     margin: 0 auto !important;
     width: auto; }
-
-table.dataTable thead tr {
-  white-space: nowrap; }
-  table.dataTable thead tr.first-row-header {
-    height: 1rem; }
-
-table.dataTable thead th {
-  background-image: none !important;
-  border: 0.125rem solid #e6e6e6;
-  font-weight: 600;
-  position: relative; }
-  table.dataTable thead th.has-tip {
-    display: table-cell; }
-  table.dataTable thead th .button-group {
-    margin-bottom: 0; }
-
-thead th,
-thead td,
-tfoot th,
-tfoot td {
-  padding: 0.5rem; }
-
-thead th .button {
-  margin: 0.5rem 0; }
-
-table.dataTable thead > tr > th.sorting_asc,
-table.dataTable thead > tr > th.sorting_desc,
-table.dataTable thead > tr > th.sorting {
-  padding: 0.7rem 1.5rem; }
-
-table.dataTable thead th.sorting:after,
-table.dataTable thead th.sorting_asc:after,
-table.dataTable thead th.sorting_desc:after {
-  position: absolute;
-  top: 0.45rem;
-  left: 0.5rem;
-  display: block;
-  font-family: FontAwesome; }
-
-#site_access-page table.dataTable thead th.sorting:after,
-#site_access-page table.dataTable thead th.sorting_asc:after,
-#site_access-page table.dataTable thead th.sorting_desc:after {
-  top: 1.6rem; }
-
-table.dataTable thead th.sorting:after {
-  content: "\f0dc";
-  color: #555555;
-  font-size: 1em;
-  padding-top: 0.12em; }
-
-table.dataTable thead th.sorting_asc:after {
-  content: "\f0de"; }
-
-table.dataTable thead th.sorting_desc:after {
-  content: "\f0dd"; }
-
-table.dataTable thead .sorting_disabled:after {
-  content: ""; }
-
-table.dataTable .ui-state-active {
-  background-color: #555555; }
+  div.dataTables_wrapper table.dataTable .ui-state-active {
+    background-color: #555555; }
+  div.dataTables_wrapper table.dataTable thead tr {
+    white-space: nowrap; }
+    div.dataTables_wrapper table.dataTable thead tr.first-row-header {
+      height: 1rem; }
+    div.dataTables_wrapper table.dataTable thead tr th {
+      background-image: none !important;
+      border: 0.125rem solid #e6e6e6;
+      font-weight: 600;
+      padding: 0.5rem;
+      position: relative; }
+      div.dataTables_wrapper table.dataTable thead tr th .button-group {
+        margin-bottom: 0; }
+      div.dataTables_wrapper table.dataTable thead tr th .button {
+        margin: 0.5rem 0; }
+      div.dataTables_wrapper table.dataTable thead tr th.has-tip {
+        display: table-cell; }
+      div.dataTables_wrapper table.dataTable thead tr th.sorting_asc::after, div.dataTables_wrapper table.dataTable thead tr th.sorting_desc::after, div.dataTables_wrapper table.dataTable thead tr th.sorting::after {
+        content: "\f0dc";
+        display: none;
+        font-family: 'Font Awesome 5 Solid';
+        font-weight: 900; }
+      div.dataTables_wrapper table.dataTable thead tr th.sorting_asc::after {
+        content: "\f0de"; }
+      div.dataTables_wrapper table.dataTable thead tr th.sorting_desc::after {
+        content: "\f0dd"; }
+      div.dataTables_wrapper table.dataTable thead tr th.sorting_disabled::after {
+        content: ""; }
+      div.dataTables_wrapper table.dataTable thead tr th svg {
+        position: absolute;
+        right: 0.125rem;
+        top: 0.75rem; }
 
 /* Fix title-bar fuc */
 @media screen and (max-width: 48.06249em) {

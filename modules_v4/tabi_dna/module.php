@@ -79,7 +79,7 @@ class tabi_dna_KT_Module extends KT_Module implements KT_Module_IndiTab {
 		}
 		$controller->addInlineJavascript('
 			jQuery("#dnaTable").dataTable({
-//				"sDom": \'<"H"pBf<"dt-clear">irl>t<"F"pl>\',
+//				"sDom": \'<"H"pBf<"clear">irl>t<"F"pl>\',
 				dom: \'<"top"' . $buttons . 'lp<"clear">irf>t<"bottom"pl>\',
 				' . KT_I18N::datatablesI18N() . ',
 				buttons: [{extend: "csv", exportOptions: {}}],
