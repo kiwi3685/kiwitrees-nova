@@ -57,8 +57,8 @@ if (KT_USE_CDN) {
 	define('KT_DATATABLES_JS',				KT_STATIC_URL . 'library/DataTables/DataTables-1.10.20/js/jquery.dataTables.min.js'); // 1.10.20
 	define('KT_DATATABLES_FOUNDATION_JS',	KT_STATIC_URL . 'library/DataTables/DataTables-1.10.20/js/dataTables.foundation.min.js'); // 1.10.20
 	define('KT_DATATABLES_CSS',				KT_STATIC_URL . 'library/DataTables/DataTables-1.10.20/css/dataTables.foundation.min.css'); // 6.4.3
-	define('KT_JQUERY_DT_BUTTONS',			KT_STATIC_URL . 'library/DataTables/Buttons-1.6.0/js/dataTables.buttons.min.js');	// Updated 12-03-2017
-	define('KT_JQUERY_DT_HTML5',			KT_STATIC_URL . 'library/DataTables/Buttons-1.6.0/js/buttons.html5.min.js');	    	// Updated 12-03-2017
+	define('KT_DATATABLES_BUTTONS',			KT_STATIC_URL . 'library/DataTables/Buttons-1.6.0/js/dataTables.buttons.min.js');	// Updated 12-03-2017
+	define('KT_DATATABLES_HTML5',			KT_STATIC_URL . 'library/DataTables/Buttons-1.6.0/js/buttons.html5.min.js');	    	// Updated 12-03-2017
 }
 
 // other js
