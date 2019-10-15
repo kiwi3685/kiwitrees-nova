@@ -169,7 +169,19 @@ if ($action == "upload") {
 	}
 }
 
-$controller->pageHeader();
+$controller
+	->pageHeader()
+	->addInlineJavascript('
+		// Attach the change event listener to change the label of all input[type=file] elements
+		var els = document.querySelectorAll("input[type=file]"),
+			i;
+		for (i = 0; i < els.length; i++) {
+			els[i].addEventListener("change", function() {
+				var label = this.previousElementSibling.closest("span.fileName");
+				label.innerHTML = this.files[0].name;
+			});
+		}
+	');
 
 $mediaFolders = KT_Query_Media::folderListAll();
 
@@ -177,65 +189,86 @@ $mediaFolders = KT_Query_Media::folderListAll();
 $filesize = detectMaxUploadFileSize();
 if (empty($filesize)) $filesize = "2M";
 
-// Print the form
-echo '<form name="uploadmedia" enctype="multipart/form-data" method="post" action="', KT_SCRIPT_NAME, '">';
-echo '<input type="hidden" name="action" value="upload">';
-echo '<p>', KT_I18N::translate('Upload media files'), ':&nbsp;&nbsp;<span class="accepted">' , KT_I18N::translate('Maximum file size allowed is %s', detectMaxUploadFileSize()) , '</span></p>';
+// Print the form ?>
+<div id="admin_media" class="cell">
+	<h4><?php echo KT_I18N::translate('Upload media files'); ?></h4>
+	<form method="post" name="uploadmedia" enctype="multipart/form-data" action="<?php echo KT_SCRIPT_NAME; ?>">
+		<input type="hidden" name="action" value="upload">
+		<div class="grid-x grid-margin-x grid-margin-y grid-padding-x grid-padding-y">
+			<div class="cell callout alert">
+				<?php echo KT_I18N::translate('Maximum file size allowed is %s', detectMaxUploadFileSize()); ?>
+			</div>
+			<!-- Print 6 forms for uploading images -->
+			<?php for ($i = 1; $i < 7; $i ++) { ?>
+				<div class="cell medium-6 mediaUpload">
+					<h5><?php echo KT_I18N::translate('Media file %s', $i); ?></h5>
+					<div class="grid-x">
+						<div class="cell large-3">
+							<label for="<?php echo 'mediafile' . $i; ?>"><?php echo KT_I18N::translate('Media file to upload'); ?></label>
+						</div>
+						<div class="cell large-9">
+							<label for="<?php echo 'mediafile' . $i; ?>" class="button">
+								<?php echo KT_I18N::translate('Choose File'); ?>
+							</label>
+							<span class="fileName"><?php echo KT_I18N::translate('No file chosen'); ?></span>
+							<input id="<?php echo 'mediafile' . $i; ?>" name="<?php echo 'mediafile' . $i; ?>" class="show-for-sr" type="file">
+						</div>
+						<div class="cell large-3">
+							<label for="<?php echo 'thumbnail' . $i; ?>"><?php echo KT_I18N::translate('Thumbnail to upload'); ?></label>
+						</div>
+						<div class="cell large-9">
+							<label for="<?php echo 'thumbnail' . $i; ?>" class="button">
+								<?php echo KT_I18N::translate('Choose File'); ?>
+							</label>
+							<span class="fileName"><?php echo KT_I18N::translate('No file chosen'); ?></span>
+							<input id="<?php echo 'thumbnail' . $i; ?>" name="<?php echo 'thumbnail' . $i; ?>" class="show-for-sr" type="file">
+						</div>
+						<?php if (KT_USER_GEDCOM_ADMIN) { ?>
+							<div class="cell large-3">
+								<label for="<?php echo 'filename' . $i; ?>"><?php echo KT_I18N::translate('File name on server'); ?></label>
+							</div>
+							<div class="cell large-9">
+								<input id="<?php echo 'filename' . $i; ?>" name="<?php echo 'filename' . $i; ?>" type="text" placeholder="<?php echo KT_I18N::translate('Leave blank to the keep original file name.'); ?>">
+							</div>
+						<?php } else { ?>
+							<div class="cell large-3"></div>
+							<div class="cell large-9">
+								<input type="hidden" name="<?php echo 'filename' . $i; ?>" value="">
+							</div>
+						<?php }
+						if (KT_USER_GEDCOM_ADMIN) {	?>
+							<div class="cell large-3">
+								<label for="tree_title"><?php echo KT_I18N::translate('Folder name on server'); ?></label>
+							</div>
+							<div class="cell large-9">
+								<select name="<?php echo 'folder_list' . $i . '" onchange="document.uploadmedia.folder' . $i . '.value=this.options[this.selectedIndex].value;'; ?>">
+									<option value=""><?php echo KT_I18N::translate('Choose: '); ?></option>
+									<?php foreach ($mediaFolders as $f) { ?>
+										<option value="<?php echo htmlspecialchars($f); ?>"><?php echo htmlspecialchars($f); ?></option>
+									<?php } ?>
+								</select>
+								<?php if (KT_USER_IS_ADMIN) { ?>
+									<input name="<?php echo 'folder' . $i; ?>" type="text" value="" placeholder="<?php echo KT_I18N::translate('Other folder... please type in'); ?>">
+								<?php } else { ?>
+									<input name="<?php echo 'folder' . $i; ?>" type="hidden" value="">
+								<?php } ?>
+							</div>
+						<?php } else { ?>
+							<div class="cell" style="display:none;">
+								<input name="<?php echo 'folder' . $i; ?>" type="hidden" value="">
+							</div>
+						<?php }	?>
+					</div>
 
-// Print 5 forms for uploading images
-for ($i=1; $i<6; $i++) {
-	echo '<table class="upload_media">';
-	echo '<tr><th>', KT_I18N::translate('Media file'), ':&nbsp;&nbsp;', $i, '</th></tr>';
-	echo '<tr><td>';
-	echo KT_I18N::translate('Media file to upload'), help_link('upload_media_file');
-	echo '</td>';
-	echo '<td>';
-	echo '<input name="mediafile', $i, '" type="file" size="40">';
-	echo '</td></tr>';
-	echo '<tr><td>';
-	echo KT_I18N::translate('Thumbnail to upload'), help_link('upload_thumbnail_file');
-	echo '</td>';
-	echo '<td>';
-	echo '<input name="thumbnail', $i, '" type="file" size="40">';
-	echo '</td></tr>';
-
-	if (KT_USER_GEDCOM_ADMIN) {
-		echo '<tr><td>';
-		echo KT_I18N::translate('File name on server'), help_link('upload_server_file');
-		echo '</td>';
-		echo '<td>';
-		echo '<input name="filename', $i, '" type="text" size="40">';
-		if ($i==1) echo "<sub>", KT_I18N::translate('Do not change to keep original file name.'), "</sub>";
-		echo '</td></tr>';
-	} else {
-		echo '<tr style="display:none;"><td><input type="hidden" name="filename', $i, '" value=""></td></tr>';
-	}
-
-	if (KT_USER_GEDCOM_ADMIN) {
-		echo '<tr><td>';
-		echo KT_I18N::translate('Folder name on server'), help_link('upload_server_folder');
-		echo '</td>';
-		echo '<td>';
-
-		echo '<span dir="ltr"><select name="folder_list', $i, '" onchange="document.uploadmedia.folder', $i, '.value=this.options[this.selectedIndex].value;">';
-		echo '<option';
-		echo ' value="/"> ', KT_I18N::translate('Choose: '), ' </option>';
-		if (KT_USER_IS_ADMIN) echo '<option value="other" disabled>', KT_I18N::translate('Other folder... please type in'), "</option>";
-		foreach ($mediaFolders as $f) {
-			echo '<option value="', htmlspecialchars($f), '">', htmlspecialchars($f), "</option>";
-		}
-		echo "</select></span>";
-		if (KT_USER_IS_ADMIN) {
-			echo '<br><span dir="ltr"><input name="folder', $i, '" type="text" size="40" value=""></span>';
-		} else {
-			echo '<input name="folder', $i, '" type="hidden" value="">';
-		}
-		echo '</td></tr>';
-	} else {
-		echo '<tr style="display:none;"><td><input name="folder', $i, '" type="hidden" value=""></td></tr>';
-	}
-	echo '</table>';
-}
-// Print the Submit button for uploading the media
-echo '<input type="submit" value="', KT_I18N::translate('Upload'), '">';
-echo '</form>';
+				</div>
+			<?php } ?>
+			<!-- Print the Submit button for uploading the media -->
+			<div class="cell">
+				<button type="submit" class="button">
+					<i class="<?php echo $iconStyle; ?> fa-save"></i>
+					<?php echo KT_I18N::translate('Upload'); ?>
+				</button>
+			</div>
+		</div>
+	</form>
+</div>
