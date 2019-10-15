@@ -42,7 +42,6 @@ $ALL_EDIT_OPTIONS = array(
 
 // Form actions
 switch (KT_Filter::post('action')) {
-
 	case 'save':
 		if (KT_Filter::checkCsrf()) {
 			$user_id			= KT_Filter::postInteger('user_id');
@@ -132,7 +131,6 @@ switch (KT_Filter::post('action')) {
 }
 
 switch (KT_Filter::get('action')) {
-
 	case 'deleteuser':
 		// Delete a user - but don't delete ourselves!
 		$username	= KT_Filter::get('username');
@@ -158,11 +156,11 @@ switch (KT_Filter::get('action')) {
 
 	case 'loadrows':
 		// Generate an AJAX/JSON response for datatables to load a block of rows
-		$sSearch=safe_GET('sSearch');
-		$WHERE=" WHERE u.user_id>0";
-		$ARGS=array();
+		$sSearch	= KT_Filter::get('sSearch');
+		$WHERE		= " WHERE u.user_id>0";
+		$ARGS		= array();
 		if ($sSearch) {
-			$WHERE.=
+			$WHERE .=
 				" AND (".
 				" user_name LIKE CONCAT('%', ?, '%') OR " .
 				" real_name LIKE CONCAT('%', ?, '%') OR " .
@@ -170,26 +168,26 @@ switch (KT_Filter::get('action')) {
 			$ARGS = array($sSearch, $sSearch, $sSearch);
 		} else {
 		}
-		$iDisplayStart	= (int)safe_GET('iDisplayStart');
-		$iDisplayLength	= (int)safe_GET('iDisplayLength');
+		$iDisplayStart	= KT_Filter::getInteger('iDisplayStart');
+		$iDisplayLength	= KT_Filter::getInteger('iDisplayLength');
 		set_user_setting(KT_USER_ID, 'admin_users_page_size', $iDisplayLength);
 		if ($iDisplayLength>0) {
 			$LIMIT = " LIMIT " . $iDisplayStart . ',' . $iDisplayLength;
 		} else {
 			$LIMIT = "";
 		}
-		$iSortingCols = (int)safe_GET('iSortingCols');
+		$iSortingCols = KT_Filter::getInteger('iSortingCols');
 		if ($iSortingCols) {
 			$ORDER_BY = ' ORDER BY ';
 			for ($i=0; $i<$iSortingCols; ++$i) {
 				// Datatables numbers columns 0, 1, 2, ...
 				// MySQL numbers columns 1, 2, 3, ...
-				switch (safe_GET('sSortDir_'.$i)) {
+				switch (KT_Filter::get('sSortDir_'.$i)) {
 				case 'asc':
-					$ORDER_BY .= (1+(int)safe_GET('iSortCol_'.$i)) . ' ASC ';
+					$ORDER_BY .= (1+KT_Filter::getInteger('iSortCol_'.$i)) . ' ASC ';
 					break;
 				case 'desc':
-					$ORDER_BY .= (1+(int)safe_GET('iSortCol_'.$i)) . ' DESC ';
+					$ORDER_BY .= (1+KT_Filter::getInteger('iSortCol_'.$i)) . ' DESC ';
 					break;
 				}
 				if ($i < $iSortingCols - 1) {
@@ -275,7 +273,7 @@ switch (KT_Filter::get('action')) {
 		Zend_Session::writeClose();
 		header('Content-type: application/json');
 		echo json_encode(array( // See http://www.datatables.net/usage/server-side
-			'sEcho'               => (int)safe_GET('sEcho'),
+			'sEcho'               => KT_Filter::getInteger('sEcho'),
 			'iTotalRecords'       => $iTotalRecords,
 			'iTotalDisplayRecords'=> $iTotalDisplayRecords,
 			'aaData'              => $aaData
@@ -672,8 +670,7 @@ switch (KT_Filter::get('action')) {
 				<table id="clean">
 					<?php
 					// Check for idle users
-					//if (!isset($month)) $month = 1;
-					$month = safe_GET_integer('month', 1, 12, 6);
+					$month = KT_Filter::getInteger('month', 1, 12, 6);
 					echo "<tr><th>", KT_I18N::translate('Number of months since the last login for a user\'s account to be considered inactive: '), "</th>";
 					echo "<td><select onchange=\"document.location=options[selectedIndex].value;\">";
 					for ($i=1; $i<=12; $i++) {
@@ -752,9 +749,8 @@ switch (KT_Filter::get('action')) {
 			->pageHeader()
 			->addExternalJavascript(KT_DATATABLES_JS)
 			->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
-			->addExternalJavascript(KT_DATATABLES_FOUNDATION_CSS)
-			->addExternalJavascript(KT_JQUERY_DT_BUTTONS)
-			->addExternalJavascript(KT_JQUERY_DT_HTML5)
+			->addExternalJavascript(KT_DATATABLES_BUTTONS)
+			->addExternalJavascript(KT_DATATABLES_HTML5)
 			->addInlineJavascript('
 				jQuery("#list").dataTable({
 					dom: \'<"top"pBf<"clear">irl>t<"bottom"pl>\',
@@ -763,7 +759,7 @@ switch (KT_Filter::get('action')) {
 					autoWidth: false,
 					processing: true,
 					serverSide: true,
-					ajax : " '. KT_SCRIPT_NAME . '?action=loadrows",
+					ajax: "' . KT_SCRIPT_NAME . '?action=loadrows",
 					pagingType: "full_numbers",
 					stateSave: true,
 					stateSaveParams: function (settings, data) {
@@ -794,6 +790,7 @@ switch (KT_Filter::get('action')) {
 			');
 		?>
 		<div id="user-list" class="cell">
+			<h4><?php echo KT_I18N::translate('User administration'); ?></h4>
 			<table id="list" style="width: 100%;">
 				<thead>
 					<tr>
