@@ -26,11 +26,11 @@ require './includes/session.php';
 require KT_ROOT . 'includes/functions/functions_edit.php';
 
 // type of file/object to include
-$files = safe_GET('files', array('local', 'external', 'unused'), 'local');
+$files = KT_Filter::get('files', 'local|external|unused', 'local');
 
 // family tree setting MEDIA_DIRECTORY
 $media_folders = all_media_folders();
-$media_folder  = safe_GET('media_folder', KT_REGEX_UNSAFE);
+$media_folder  = KT_Filter::get('media_folder', KT_REGEX_UNSAFE);
 // User folders may contain special characters.  Restrict to actual folders.
 if (!array_key_exists($media_folder, $media_folders)) {
 	$media_folder = reset($media_folders);
@@ -38,15 +38,15 @@ if (!array_key_exists($media_folder, $media_folders)) {
 
 // prefix to filename
 $media_paths = media_paths($media_folder);
-$media_path  = safe_GET('media_path', KT_REGEX_UNSAFE);
+$media_path  = KT_Filter::get('media_path', KT_REGEX_UNSAFE);
 // User paths may contain special characters.  Restrict to actual paths.
 if (!array_key_exists($media_path, $media_paths)) {
 	$media_path = reset($media_paths);
 }
 
 // subfolders within $media_path
-$subfolders = safe_GET('subfolders', array('include', 'exclude'), 'include');
-$action     = safe_GET('action');
+$subfolders = KT_Filter::get('subfolders', 'include|exclude', 'include');
+$action     = KT_Filter::get('action');
 
 ////////////////////////////////////////////////////////////////////////////////
 // POST callback for file deletion
@@ -84,11 +84,11 @@ if ($delete_file) {
 ////////////////////////////////////////////////////////////////////////////////
 
 switch($action) {
-case 'load_json':
+case 'loadrows':
 	Zend_Session::writeClose();
-	$sSearch        = safe_GET('sSearch');
-	$iDisplayStart  = (int)safe_GET('iDisplayStart');
-	$iDisplayLength = (int)safe_GET('iDisplayLength');
+	$sSearch        = KT_Filter::get('sSearch');
+	$iDisplayStart  = KT_Filter::getInteger('iDisplayStart');
+	$iDisplayLength = KT_Filter::getInteger('iDisplayLength');
 
 	switch ($files) {
 	case 'local':
@@ -128,21 +128,21 @@ case 'load_json':
 		} else {
 			$LIMIT = "";
 		}
-		$iSortingCols = safe_GET('iSortingCols');
+		$iSortingCols = KT_Filter::get('iSortingCols');
 		if ($iSortingCols) {
 			$ORDER_BY = " ORDER BY ";
-			for ($i=0; $i<$iSortingCols; ++$i) {
+			for ($i = 0; $i < $iSortingCols; ++$i) {
 				// Datatables numbers columns 0, 1, 2, ...
 				// MySQL numbers columns 1, 2, 3, ...
-				switch (safe_GET('sSortDir_' . $i)) {
+				switch (KT_Filter::get('sSortDir_' . $i)) {
 				case 'asc':
-					$ORDER_BY .= (1+(int)safe_GET('iSortCol_' . $i)).' ASC ';
+					$ORDER_BY .= (1 + KT_Filter::getInteger('iSortCol_' . $i)) .' ASC ';
 					break;
 				case 'desc':
-					$ORDER_BY .= (1+(int)safe_GET('iSortCol_' . $i)).' DESC ';
+					$ORDER_BY .= (1 + KT_Filter::getInteger('iSortCol_' . $i)) .' DESC ';
 					break;
 				}
-				if ($i<$iSortingCols-1) {
+				if ($i < $iSortingCols-1) {
 					$ORDER_BY .= ',';
 				}
 			}
@@ -199,22 +199,22 @@ case 'load_json':
 		} else {
 			$LIMIT = "";
 		}
-		$iSortingCols = safe_GET('iSortingCols');
+		$iSortingCols = KT_Filter::get('iSortingCols');
 		if ($iSortingCols) {
 			$ORDER_BY = " ORDER BY ";
-			for ($i=0; $i<$iSortingCols; ++$i) {
+			for ($i = 0; $i < $iSortingCols; ++$i) {
 				// Datatables numbers columns 0, 1, 2, ...
 				// MySQL numbers columns 1, 2, 3, ...
-				switch (safe_GET('sSortDir_' . $i)) {
+				switch (KT_Filter::get('sSortDir_' . $i)) {
 				case 'asc':
-					$ORDER_BY .= (1+(int)safe_GET('iSortCol_' . $i)).' ASC ';
+					$ORDER_BY .= (1 + KT_Filter::getInteger('iSortCol_' . $i)) .' ASC ';
 					break;
 				case 'desc':
-					$ORDER_BY .= (1+(int)safe_GET('iSortCol_' . $i)).' DESC ';
+					$ORDER_BY .= (1 + KT_Filter::getInteger('iSortCol_' . $i)) .' DESC ';
 					break;
 				}
-				if ($i<$iSortingCols-1) {
-					$ORDER_BY.=',';
+				if ($i < $iSortingCols-1) {
+					$ORDER_BY .= ',';
 				}
 			}
 		} else {
@@ -274,7 +274,7 @@ case 'load_json':
 
 		// Sort files - only option is column 0
 		sort($unused_files);
-		if (safe_GET('sSortDir_0')=='desc') {
+		if (KT_Filter::get('sSortDir_0')=='desc') {
 			$unused_files = array_reverse($unused_files);
 		}
 
@@ -299,9 +299,9 @@ case 'load_json':
 			}
 
 			// Is there a pending record for this file?
-			$exists_pending = KT_DB::prepare(
-				"SELECT 1 FROM `##change` WHERE status='pending' AND new_gedcom LIKE CONCAT('%\n1 FILE ', ?, '\n%')"
-			)->execute(array($unused_file))->fetchOne();
+			$exists_pending = KT_DB::prepare("
+				SELECT 1 FROM `##change` WHERE status='pending' AND new_gedcom LIKE CONCAT('%\n1 FILE ', ?, '\n%')
+			")->execute(array($unused_file))->fetchOne();
 
 			// Form to create new media object in each tree
 			$create_form='';
@@ -341,7 +341,7 @@ case 'load_json':
 
 	header('Content-type: application/json');
 	echo json_encode(array( // See http://www.datatables.net/usage/server-side
-		'sEcho'                => (int)safe_GET('sEcho'),
+		'sEcho'                => KT_Filter::getInteger('sEcho'),
 		'iTotalRecords'        => $iTotalRecords,
 		'iTotalDisplayRecords' => $iTotalDisplayRecords,
 		'aaData'               => $aaData
@@ -523,26 +523,28 @@ $table_id  = md5($files . $media_folder . $media_path . $subfolders);
 
 $controller = new KT_Controller_Page();
 $controller
+	->pageHeader()
 	->restrictAccess(KT_USER_IS_ADMIN)
 	->setPageTitle(KT_I18N::translate('Media'))
 	->addExternalJavascript(KT_DATATABLES_JS)
-	->pageHeader()
+	->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
+	->addExternalJavascript(KT_DATATABLES_BUTTONS)
+	->addExternalJavascript(KT_DATATABLES_HTML5)
 	->addInlineJavascript('
 		jQuery("#media-table-' . $table_id . '").dataTable({
-			dom: \'<"H"pf<"clear">irl>t<"F"pl>\',
+			dom: \'<"top"pBf<"clear">irl>t<"bottom"pl>\',
+			' . KT_I18N::datatablesI18N(array(5, 10, 20, 50, 100, 500, 1000, -1)) . ',
+			buttons: [{extend: "csvHtml5", exportOptions: {columns: [0,1,2,3,4] }}],
+			autoWidth: true,
 			processing: true,
 			serverSide: true,
-			ajaxSource: "' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '?action=load_json&files=' . $files . '&media_folder=' . $media_folder . '&media_path=' . $media_path . '&subfolders=' . $subfolders . '",
-			' . KT_I18N::datatablesI18N(array(5, 10, 20, 50, 100, 500, 1000, -1)) . ',
-			jQueryUI: true,
-			autoWidth:false,
-			pageLength: 10,
+			ajaxSource: " ' . KT_SCRIPT_NAME . '?action=loadrows&files=' . $files . '&media_folder=' . $media_folder . '&media_path=' . $media_path . '&subfolders=' . $subfolders . '",
 			pagingType: "full_numbers",
 			stateSave: true,
 			stateDuration: 300,
 			columns: [
-				/*0 - media file */		{},
-				/*1 - media object */	{sortable: false, class: "center"},
+				/*0 - media file */		{width: "35rem"},
+				/*1 - media object */	{sortable: false, class: "center", width: "8rem"},
 				/*2 - media name */		{sortable: ' . ($files === 'unused' ? 'false' : 'true') . '},
 				/*3 - highlighted? */	{},
 				/*4 - media type */		{}
@@ -550,15 +552,20 @@ $controller
 		});
 	');
 ?>
-
-<form method="get" action="<?php echo KT_SCRIPT_NAME; ?>">
-	<table class="media_items">
-		<tr>
-			<th><?php echo KT_I18N::translate('Media files'); ?></th>
-			<th><?php echo KT_I18N::translate('Media folders'); ?></th>
-		</tr>
-		<tr>
-			<td>
+<div id="admin_media" class="cell">
+	<h4><?php echo KT_I18N::translate('Manage media'); ?></h4>
+	<form method="get" action="<?php echo KT_SCRIPT_NAME; ?>">
+		<div class="grid-x">
+			<div class="cell medium-2">
+				<h5><?php echo KT_I18N::translate('Media files'); ?></h5>
+			</div>
+			<div class="cell medium-8">
+				<h5><?php echo KT_I18N::translate('Media folders'); ?></h5>
+			</div>
+			<div class="cell medium-2">
+				<h5 class="text-right">&nbsp;&nbsp;<?php echo KT_I18N::translate('Media subfolders'); ?>&nbsp;&nbsp;</h5>
+			</div>
+			<div class="cell medium-2">
 				<input type="radio" name="files" value="local"<?php echo $files=='local' ? ' checked="checked"' : ''; ?> onchange="this.form.submit();">
 				<?php echo /* I18N: “Local files” are stored on this computer */ KT_I18N::translate('Local files'); ?>
 				<?php if (externalMedia() > 0){ ?>
@@ -569,61 +576,63 @@ $controller
 				<br>
 				<input type="radio" name="files" value="unused"<?php echo $files=='unused' ? ' checked="checked"' : ''; ?> onchange="this.form.submit();">
 				<?php echo KT_I18N::translate('Unused files'); ?>
-			</td>
-			<td>
-				<?php
-					switch ($files) {
-					case 'local':
-					case 'unused':
-						$extra = 'onchange="this.form.submit();"';
-						echo
-							'<span dir="ltr">', // The full path will be LTR or mixed LTR/RTL.  Force LTR.
-							KT_DATA_DIR;
-						// Don’t show a list of media folders if it just contains one folder
-						if (count($media_folders)>1) {
-							echo '&nbsp;', select_edit_control('media_folder', $media_folders, null, $media_folder, $extra);
-						} else {
-							echo $media_folder, '<input type="hidden" name="media_folder" value="', htmlspecialchars($media_folder), '">';
-						}
-						// Don’t show a list of subfolders if it just contains one subfolder
-						if (count($media_paths)>1) {
-							echo '&nbsp;', select_edit_control('media_path', $media_paths, null, $media_path, $extra);
-						} else {
-							echo $media_path, '<input type="hidden" name="media_path" value="', htmlspecialchars($media_path), '">';
-						}
-						echo
-							'</span>',
-							'<div>',
-							'<input type="radio" name="subfolders" value="include"', ($subfolders=='include' ? ' checked="checked"' : ''), ' onchange="this.form.submit();">',
-							KT_I18N::translate('Include subfolders'),
-							'<br>',
-							'<input type="radio" name="subfolders" value="exclude"', ($subfolders=='exclude' ? ' checked="checked"' : ''), ' onchange="this.form.submit();">',
-							KT_I18N::translate('Exclude subfolders'),
-							'</div>';
+			</div>
+			<div class="cell medium-10">
+				<div class="grid-x">
+					<?php switch ($files) {
+						case 'local':
+						case 'unused': ?>
+							<div class="cell shrink">
+								<label class="middle"><?php echo KT_DATA_DIR; ?></label>
+							</div>
+							<div class="cell auto">
+								<?php // Don’t show a list of media folders if it just contains one folder
+								$extra = 'onchange="this.form.submit();"';
+								if (count($media_folders) > 1) {
+									echo '&nbsp;', select_edit_control('media_folder', $media_folders, null, $media_folder, $extra);
+								} else {
+									echo $media_folder . '<input type="hidden" name="media_folder" value="', htmlspecialchars($media_folder), '">';
+								} ?>
+							</div>
+							<div class="cell auto">
+								<?php // Don’t show a list of subfolders if it just contains one subfolder
+								if (count($media_paths) > 1) { ?>
+									<?php echo select_edit_control('media_path', $media_paths, null, $media_path, $extra);
+								} else {
+									echo $media_path . '<input type="hidden" name="media_path" value="', htmlspecialchars($media_path) . '">';
+								} ?>
+							</div>
+							<div class="cell">
+								<?php echo '<input type="radio" name="subfolders" value="include"', ($subfolders=='include' ? ' checked="checked"' : ''), ' onchange="this.form.submit();">',
+								KT_I18N::translate('Include subfolders'),
+								'<br>',
+								'<input type="radio" name="subfolders" value="exclude"', ($subfolders=='exclude' ? ' checked="checked"' : ''), ' onchange="this.form.submit();">',
+								KT_I18N::translate('Exclude subfolders'); ?>
+							</div>
+							<?php
 						break;
-					case 'external':
-						echo KT_I18N::translate('External media files have a URL instead of a filename.');
-						echo '<input type="hidden" name="media_folder" value="', htmlspecialchars($media_folder), '">';
-						echo '<input type="hidden" name="media_path" value="',   htmlspecialchars($media_path),   '">';
+						case 'external':
+							echo KT_I18N::translate('External media files have a URL instead of a filename.');
+							echo '<input type="hidden" name="media_folder" value="', htmlspecialchars($media_folder), '">';
+							echo '<input type="hidden" name="media_path" value="',   htmlspecialchars($media_path),   '">';
 						break;
-					}
-				?>
-			</td>
-		</tr>
+					} ?>
+				</div>
+			</div>
+		</div>
+	</form>
+	<hr>
+	<table class="media_table" id="media-table-<?php echo $table_id ?>">
+		<thead>
+			<tr>
+				<th><?php echo KT_I18N::translate('Media file'); ?></th>
+				<th><?php echo KT_I18N::translate('Media'); ?></th>
+				<th><?php echo KT_I18N::translate('Media object'); ?></th>
+				<th><?php echo KT_I18N::translate('Highlight'); ?></th>
+				<th><?php echo KT_I18N::translate('Media type'); ?></th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
 	</table>
-</form>
-<br>
-<br>
-<table class="media_table" id="media-table-<?php echo $table_id ?>">
-	<thead>
-		<tr>
-			<th><?php echo KT_I18N::translate('Media file'); ?></th>
-			<th><?php echo KT_I18N::translate('Media'); ?></th>
-			<th><?php echo KT_I18N::translate('Media object'); ?></th>
-			<th><?php echo KT_I18N::translate('Highlight'); ?></th>
-			<th><?php echo KT_I18N::translate('Media type'); ?></th>
-		</tr>
-	</thead>
-	<tbody>
-	</tbody>
-</table>
+</div>
