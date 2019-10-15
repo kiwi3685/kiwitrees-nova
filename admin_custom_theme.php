@@ -43,50 +43,44 @@ require KT_ROOT.'includes/functions/functions_edit.php';
     <link href="library/codemirror/theme/mdn-like.css" rel="stylesheet" type="text/css" />
 
 <?php
-
+global $iconstyles;
 $controller = new KT_Controller_Page();
 $controller
 	->restrictAccess(KT_USER_IS_ADMIN)
-	->addExternalJavascript(KT_DATATABLES_JS)
 	->setPageTitle(KT_I18N::translate('Edit custom theme files'))
-	->pageHeader();
+	->pageHeader()
+;
+$current_themedir = get_gedcom_setting(KT_GED_ID, 'THEME_DIR');
 
 $action		= KT_Filter::post('action');
 $theme		= KT_Filter::post('theme');
 $editfile	= KT_Filter::post('fileOld');
 $addfile	= KT_Filter::post('fileAdd');
+$delete		= KT_Filter::get('delete');
 
-global $iconstyles;
+KT_Filter::post('code') ? $content = KT_Filter::post('code') : $content = '';
 
-$current_themedir = get_gedcom_setting(KT_GED_ID, 'THEME_DIR');
+if ($delete == 'delete_file') {
+	$deleteFile	= KT_Filter::get('filename');
+	fclose($deleteFile);
+	unlink($deleteFile);
+}
 
-$content = '';
 if ($editfile) {
-	$filename = KT_THEMES_DIR . $theme . '/' . $editfile;
-	$fp = fopen($filename, "r") or die("Unable to open file!");
-	$content = fread($fp, filesize($filename));
-	fclose($fp);
+	$filename	= KT_THEMES_DIR . $theme . '/' . $editfile;
+	$content	= file_get_contents($filename);
 }
 
 if ($addfile) {
-	$filename = KT_THEMES_DIR . $theme . '/' . $addfile;
-	$fp = fopen($filename, "wb") or die("Unable to open file!");
-	fwrite($fp, "/* CUSTOM THEME FILE */\n\n");
-	fclose($fp);
-	$fp = fopen($filename, "r") or die("Unable to open file!");
-	$content = fread($fp, filesize($filename));
-	$editfile = $addfile;
-	fclose($fp);
+	$filename	= KT_THEMES_DIR . $theme . '/' . $addfile;
+	$content	= "/* CUSTOM THEME FILE */\n' . $addfile . '\n";
+	file_put_contents($filename, $content);
 }
 
 if ($action == 'save') {
-	$filename = KT_THEMES_DIR . $theme . '/' . KT_Filter::post('file');
-	$fp = fopen($filename, "wb") or die("Unable to open file!");
-	fwrite($fp, $content);
-	fclose($fp);
-	$fp = fopen($filename, "r") or die("Unable to open file!");
-	$content = fread($fp, filesize($filename));
-	fclose($fp);
+	$filename = KT_THEMES_DIR . $theme . '/' . $editfile;
+	file_put_contents($filename, $content);
+	$content = file_get_contents($filename);
 }
 ?>
 
@@ -147,7 +141,6 @@ if ($action == 'save') {
 							} ?>
 						</select>
 					</div>
-				</form>
 			<?php } ?>
 			<?php if ($content) {
 				$controller->addInlineJavascript('
@@ -160,25 +153,35 @@ if ($action == 'save') {
 					});
 				'); ?>
 				<div class="grid-x grid-margin-x grid-margin-y">
-					<div class="cell large-10 large-offset-1" id="textarea">
-						<textarea id="code" name="code">
-							<?php echo $content; ?>
-						</textarea>
-					</div>
-				</div>
-				<div class="grid-x grid-margin-x grid-margin-y">
 					<div class="cell">
 						<form method="post" action="">
 							<input type="hidden" name="action" value="save">
 							<input type="hidden" name="file" value="<?php echo $editfile; ?>">
-							<button type="submit" class="button">
-								<i class="<?php echo $iconStyle; ?> fa-save"></i>
-								<?php echo KT_I18N::translate('Save'); ?>
-							</button>
-							<a class="button secondary" href="<?php echo KT_SCRIPT_NAME; ?>">
-								<i class="<?php echo $iconStyle; ?> fa-times"></i>
-								<?php echo KT_I18N::translate('Cancel'); ?>
-							</a>
+							<div class="grid-x">
+								<div class="cell large-2 large-offset-1">
+									<h5><?php echo $editfile; ?></h5>
+								</div>
+								<div class="cell large-8 text-right">
+									<a href="#" <?php echo 'onclick="if (confirm(\''.htmlspecialchars(KT_I18N::translate('Are you sure you want to delete this translation?')) . '\')) { document.location=\'' . KT_SCRIPT_NAME . '?delete=delete_file&amp;filename=' . KT_THEMES_DIR . $theme . '/' . $editfile . '\'; }"'; ?>>
+										<?php echo KT_I18N::translate('Delete this custom file'); ?>
+										&nbsp;
+										<i class="<?php echo $iconStyle; ?> fa-trash-alt" ></i>
+									</a>
+								</div>
+								<div class="cell large-10 large-offset-1" id="textarea">
+									<textarea id="code" name="code"><?php echo $content; ?></textarea>
+								</div>
+								<div class="cell">
+									<button type="submit" class="button">
+										<i class="<?php echo $iconStyle; ?> fa-save"></i>
+										<?php echo KT_I18N::translate('Save'); ?>
+									</button>
+									<a class="button secondary" href="<?php echo KT_SCRIPT_NAME; ?>">
+										<i class="<?php echo $iconStyle; ?> fa-times"></i>
+										<?php echo KT_I18N::translate('Cancel'); ?>
+									</a>
+								</div>
+							</div>
 						</form>
 					</div>
 				</div>
