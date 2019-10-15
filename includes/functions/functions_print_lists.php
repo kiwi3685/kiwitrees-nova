@@ -43,14 +43,12 @@ function format_indi_table($datalist, $option='') {
 	$controller
 		->addExternalJavascript(KT_DATATABLES_JS)
 		->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
-//		->addExternalJavascript(KT_DATATABLES_FOUNDATION_CSS)
 	;
 
 	if (KT_USER_CAN_EDIT) {
 		$controller
-			->addExternalJavascript(KT_JQUERY_DT_BUTTONS)
-			->addExternalJavascript(KT_JQUERY_DT_HTML5)
-		;
+			->addExternalJavascript(KT_DATATABLES_BUTTONS)
+			->addExternalJavascript(KT_DATATABLES_HTML5);
 		$buttons = 'B';
 	} else {
 		$buttons = '';
@@ -83,18 +81,18 @@ function format_indi_table($datalist, $option='') {
 					/*  1 surn      */ { dataSort: 3 },
 					/*  2 GIVN,SURN */ { type: "unicode", visible: false },
 					/*  3 SURN,GIVN */ { type: "unicode", visible: false },
-					/*  4 sosa      */ { dataSort: 5, class: "text-center", visible: ' . ($option === 'sosa' ? 'true' : 'false') . ' },
+					/*  4 sosa      */ { dataSort: 5, visible: ' . ($option === 'sosa' ? 'true' : 'false') . ' },
 					/*  5 SOSA      */ { type: "num", visible: false },
 					/*  6 birt date */ { dataSort: 7, class: "show-for-medium" },
 					/*  7 BIRT:DATE */ { visible: false },
-					/*  8 anniv     */ { dataSort: 7, class: "text-center show-for-medium" },
+					/*  8 anniv     */ { dataSort: 7, class: "show-for-medium", width: "2.5rem" },
 					/*  9 birt plac */ { type: "unicode", class: "show-for-medium" },
-					/* 10 children  */ { dataSort: 11, class: "text-center show-for-medium" },
+					/* 10 children  */ { dataSort: 11, class: "show-for-medium", width: "2.5rem" },
 					/* 11 CHILDREN  */ { type: "num", visible: false },
 					/* 12 deat date */ { dataSort: 13, class: "show-for-medium" },
 					/* 13 DEAT:DATE */ { visible: false },
-					/* 14 anniv     */ { dataSort: 13, class: "text-center show-for-medium" },
-					/* 15 age       */ { dataSort: 16, class: "show-for-medium" },
+					/* 14 anniv     */ { dataSort: 13, class: "show-for-medium", width: "2.5rem" },
+					/* 15 age       */ { dataSort: 16, class: "show-for-medium", width: "2.5rem" },
 					/* 16 AGE       */ { type: "num", class: "show-for-medium", visible: false },
 					/* 17 deat plac */ { type: "unicode", class: "show-for-medium" },
 					/* 18 CHAN      */ { dataSort: 19, visible: ' . ($SHOW_LAST_CHANGE ? 'true' : 'false') . ' },
@@ -161,7 +159,7 @@ function format_indi_table($datalist, $option='') {
 
 	$html = '
 		<div class="loading-image">&nbsp;</div>
-		<div class="indi-list clearfix">
+		<div class="indi-list clearfix" style="visibility: hidden;">
 			<table id="' . $table_id . '">
 				<thead>
 					<tr>

@@ -563,7 +563,7 @@ class stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Module_
 		$controller->addExternalJavascript(KT_DATATABLES_JS);
 		if (KT_USER_CAN_EDIT) {
 			$controller
-				->addExternalJavascript(KT_JQUERY_DT_HTML5)
+				->addExternalJavascript(KT_DATATABLES_HTML5)
 				->addExternalJavascript(KT_JQUERY_DT_BUTTONS);
 		}
 		$controller

@@ -292,7 +292,7 @@ class report_fact_KT_Module extends KT_Module implements KT_Module_Report {
 
 				$controller
 					->addExternalJavascript(KT_DATATABLES_JS)
-					->addExternalJavascript(KT_JQUERY_DT_HTML5)
+					->addExternalJavascript(KT_DATATABLES_HTML5)
 					->addExternalJavascript(KT_JQUERY_DT_BUTTONS)
 					->addInlineJavascript('
 						jQuery("#' .$table_id. '").dataTable( {

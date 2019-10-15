@@ -30,7 +30,6 @@ global $iconStyle;
 $controller = new KT_Controller_Page();
 $controller
 	->restrictAccess(KT_USER_IS_ADMIN)
-	->addExternalJavascript(KT_DATATABLES_JS)
 	->setPageTitle(KT_I18N::translate('Custom translation'))
 	->pageHeader();
 

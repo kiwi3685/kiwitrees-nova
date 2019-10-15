@@ -133,7 +133,7 @@ class report_related_indi_KT_Module extends KT_Module implements KT_Module_Repor
 			<?php
 			$controller
 				->addExternalJavascript(KT_DATATABLES_JS)
-				->addExternalJavascript(KT_JQUERY_DT_HTML5)
+				->addExternalJavascript(KT_DATATABLES_HTML5)
 				->addExternalJavascript(KT_JQUERY_DT_BUTTONS)
 				->addInlineJavascript('
 					jQuery.fn.dataTableExt.oSort["unicode-asc" ]=function(a,b) {return a.replace(/<[^<]*>/, "").localeCompare(b.replace(/<[^<]*>/, ""))};
