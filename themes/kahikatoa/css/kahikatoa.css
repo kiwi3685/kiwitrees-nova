@@ -9076,6 +9076,9 @@ div.dataTables_wrapper table.dataTable {
         position: absolute;
         right: 0.125rem;
         top: 0.5rem; }
+        div.dataTables_wrapper table.dataTable thead tr th svg.fa-bell, div.dataTables_wrapper table.dataTable thead tr th svg.fa-child {
+          right: auto;
+          left: 0.125rem; }
 
 /*
 div.dataTables_wrapper div div.clear {

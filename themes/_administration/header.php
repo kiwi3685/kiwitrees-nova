@@ -180,7 +180,7 @@ $this
 				</div>
 			</div>
 			<div class="top-bar second-top-bar">
-				<div id="admin-title" class="top-bar-left text-center h2">
+				<div id="admin-title" class="top-bar-left text-center h3">
 					<?php echo KT_I18N::translate('Administration'); ?>
 				</div>
 				<div class="top-bar-right">
