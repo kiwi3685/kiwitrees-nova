@@ -79,6 +79,9 @@ case 'delete_module':
 $controller
 	->pageHeader()
 	->addExternalJavascript(KT_DATATABLES_JS)
+	->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
+	->addExternalJavascript(KT_DATATABLES_BUTTONS)
+	->addExternalJavascript(KT_DATATABLES_HTML5)
 	->addInlineJavascript('
 		function reindexMods(id) {
 			jQuery("#"+id+" input").each(
@@ -88,45 +91,43 @@ $controller
 		}
 
 	  	jQuery("#installed_table").dataTable({
-			dom: \'<"top"Blp<"clear">irf>t<"bottom"pl>\',
+			dom: \'<"top"pBf<"clear">irl>t<"bottom"pl>\',
 			' . KT_I18N::datatablesI18N() . ',
-			buttons: [{extend: "csv", exportOptions: {columns: [0,6,9,12,15,17] }}],
-			jQueryUI: true,
+			buttons: [{extend: "csvHtml5", exportOptions: {columns: [0,6,9,12,15,17] }}],
 			autoWidth: false,
 			processing: true,
-			retrieve: true,
-			sorting: [[ 2, "asc" ]],
-			displayLength: 10,
 			pagingType: "full_numbers",
 			stateSave: true,
 			stateDuration: -1,
+			sorting: [[ 2, "asc" ]],
 			columns : [
-				{ dataSort: 1, sClass: "center" },
-				{ type: "unicode", visible: false },
-				{ sType: "html"},
-				null,
-				{ sClass: "center" },
-				{ sClass: "center" },
-				{ sClass: "center" },
-				{ sClass: "center" },
-				{ sClass: "center" },
-				{ sClass: "center" },
-				{ sClass: "center" },
-				{ sClass: "center" },
-				{ sClass: "center" },
-				{ sClass: "center" }
+				/*  0 enable		*/ { dataSort: 1, sClass: "center" },
+				/*  1 status		*/ { type: "unicode", visible: false },
+				/*  2 name			*/ { sType: "html"},
+				/*  3 description	*/ null,
+				/*  4 block        	*/ { sClass: "center" },
+				/*  5 chart			*/ { sClass: "center" },
+				/*  6 footer		*/ { sClass: "center" },
+				/*  7 list			*/ { sClass: "center" },
+				/*  8 menu			*/ { sClass: "center" },
+				/*  9 report		*/ { sClass: "center" },
+				/* 10 sidebar		*/ { sClass: "center" },
+				/* 11 indi-tab		*/ { sClass: "center" },
+				/* 12 widget		*/ { sClass: "center" },
+				/* 13 fam-tab		*/ { sClass: "center" }
 			]
 		});
 	');
-
 ?>
-<div id="module-admin-page" class="tabs">
+
+<div id="module-admin-page" class="cell">
+	<h4><?php echo KT_I18N::translate('Manage modules'); ?></h4>
 	<form method="post" action="<?php echo KT_SCRIPT_NAME; ?>">
 		<input type="hidden" name="action" value="update_mods">
 		<?php echo KT_Filter::getCsrf(); ?>
 		<div class="grid-x grid-margin-y">
 			<div class="cell">
-				<table id="installed_table">
+				<table id="installed_table" style="width: 100%;">
 					<thead>
 						<tr>
 							<th><?php echo KT_I18N::translate('Enabled'); ?></th>
