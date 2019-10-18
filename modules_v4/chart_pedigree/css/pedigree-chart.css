@@ -1,19 +1,19 @@
 #pedigree-page #pedigree_chart {
-/*    position: relative;
+    position: relative;
     font-size: 0.9rem;
     display: flex;
-    flex: auto;*/
+    flex: auto;
 }
 
 #pedigree-page svg {
-/*    display: block;
+    display: block;
     margin: auto;
     cursor: move;
     cursor: -webkit-grab;
     cursor: -moz-grab;
     cursor: grab;
-    -webkit-filter: drop-shadow(3px 1px 3px rgba(0, 0, 0, 0.4));*/
-    /*filter: drop-shadow(3px 1px 3px rgba(0, 0, 0, 0.4));*/
+    -webkit-filter: drop-shadow(3px 1px 3px rgba(0, 0, 0, 0.4));
+    filter: drop-shadow(3px 1px 3px rgba(0, 0, 0, 0.4));
 }
 
 #pedigree-page .person rect {

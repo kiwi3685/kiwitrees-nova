@@ -30,7 +30,7 @@ class chart_pedigree_KT_Module extends KT_Module implements KT_Module_Chart {
 
 	// Extend class KT_Module
 	public function getTitle() {
-		return /* I18N: Name of a module */ KT_I18N::translate('Pedigree (new)');
+		return /* I18N: Name of a module */ KT_I18N::translate('Pedigree');
 	}
 
 	// Extend class KT_Module
@@ -115,9 +115,6 @@ class chart_pedigree_KT_Module extends KT_Module implements KT_Module_Chart {
 				    .scrollIntoView(true);
 		    ');
 
-		?>
-		<link rel="stylesheet" type="text/css" href="modules_v4/chart_pedigree/css/pedigree-chart.css">
-		<?php
 		require KT_ROOT . 'includes/functions/functions_edit.php';
 		$xref	= $controller->root->getXref();
 		$person	= KT_Person::getInstance($xref);
