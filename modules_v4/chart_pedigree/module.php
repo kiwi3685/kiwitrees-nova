@@ -88,7 +88,6 @@ class chart_pedigree_KT_Module extends KT_Module implements KT_Module_Chart {
 			->pageHeader()
 			->addExternalJavascript(KT_AUTOCOMPLETE_JS_URL)
 			->addExternalJavascript(KT_D3_JS)
-			->addExternalJavascript(KT_STATIC_URL . KT_MODULES_DIR . $this->getName() . '/js/pedigree-chart.js')
 			->addInlineJavascript('
 				autocomplete();
 
@@ -111,10 +110,11 @@ class chart_pedigree_KT_Module extends KT_Module implements KT_Module_Chart {
 
 				new PedigreeChart(' . $chartParams . ');
 
-				document.getElementById("pedigree_chart")
-				    .scrollIntoView(true);
+				document.getElementById("pedigree_chart").scrollIntoView(true);
+
 		    ');
 
+		include_once 'pedigree-chart.js.php';
 		require KT_ROOT . 'includes/functions/functions_edit.php';
 		$xref	= $controller->root->getXref();
 		$person	= KT_Person::getInstance($xref);
@@ -135,7 +135,7 @@ class chart_pedigree_KT_Module extends KT_Module implements KT_Module_Chart {
 								</button>
 							</span>
 						</div>
-						<input type="hidden" id="selectedValue" name="rootid">
+						<input type="hidden" name="rootid" id="selectedValue" value="<?php echo $controller->rootid; ?>">
 					</div>
 					<div class="cell medium-4">
 						<label class="h5" for="generations"><?php echo KT_I18N::translate('Generations'); ?></label>

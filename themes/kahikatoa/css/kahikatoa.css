@@ -8216,6 +8216,9 @@ div[id$="-page"]:not(#indi-page) h3 {
   div[id$="-page"]:not(#indi-page) h3 svg {
     font-size: 1.5rem; }
 
+div[id$="-page"]:not(#indi-page) button[type="submit"] {
+  min-width: 6rem; }
+
 #indi-page h3 {
   margin: 0;
   padding: 0; }
@@ -8594,55 +8597,52 @@ div[id$="-page"]:not(#indi-page) h3 {
   -webkit-box-flex: 1;
   -ms-flex: auto;
   flex: auto; }
-
-#pedigree-page svg {
-  display: block;
-  margin: auto;
-  cursor: move;
-  cursor: -webkit-grab;
-  cursor: -moz-grab;
-  cursor: grab;
-  -webkit-filter: drop-shadow(3px 1px 3px rgba(0, 0, 0, 0.4));
-  filter: drop-shadow(3px 1px 3px rgba(0, 0, 0, 0.4));
-  /* Unset any style from our transition helper classes */ }
-  #pedigree-page svg:active {
-    cursor: grabbing;
-    cursor: -webkit-grabbing; }
-  #pedigree-page svg text {
-    font-weight: bold; }
-    #pedigree-page svg text.lifespan, #pedigree-page svg text.bplace {
-      font-weight: normal;
-      font-size: 0.8rem; }
-  #pedigree-page svg .new,
-  #pedigree-page svg .remove,
-  #pedigree-page svg .update,
-  #pedigree-page svg .old {
-    all: unset; }
-  #pedigree-page svg .person.available {
-    cursor: pointer; }
-  #pedigree-page svg .person .arc path {
-    fill: #f0f0f0;
-    stroke: #afafaf;
-    stroke-width: .25rem; }
-  #pedigree-page svg .person.hover .arc path {
-    fill: #fafafa; }
-  #pedigree-page svg .person.available .arc path {
-    fill: #fafafa; }
-    #pedigree-page svg .person.available .arc path.hover .arc path {
-      fill: #f0f0f0; }
-  #pedigree-page svg .label {
-    font-weight: normal; }
-    #pedigree-page svg .label .alternativeName {
-      fill: #7f7f7f;
-      font-weight: normal;
-      unicode-bidi: normal; }
-    #pedigree-page svg .label .date {
-      fill: #7f7f7f;
-      font-weight: normal;
-      unicode-bidi: plaintext; }
-  #pedigree-page svg rect.background {
-    fill: none;
-    pointer-events: all; }
+  #pedigree-page #pedigree_chart svg {
+    display: block;
+    margin: auto;
+    cursor: move;
+    cursor: -webkit-grab;
+    cursor: -moz-grab;
+    cursor: grab;
+    /* Unset any style from our transition helper classes */ }
+    #pedigree-page #pedigree_chart svg:active {
+      cursor: grabbing;
+      cursor: -webkit-grabbing; }
+    #pedigree-page #pedigree_chart svg text {
+      font-weight: bold; }
+      #pedigree-page #pedigree_chart svg text.lifespan, #pedigree-page #pedigree_chart svg text.bplace {
+        font-weight: normal;
+        font-size: 0.8rem; }
+    #pedigree-page #pedigree_chart svg .new,
+    #pedigree-page #pedigree_chart svg .remove,
+    #pedigree-page #pedigree_chart svg .update,
+    #pedigree-page #pedigree_chart svg .old {
+      all: unset; }
+    #pedigree-page #pedigree_chart svg .person.available {
+      cursor: pointer; }
+    #pedigree-page #pedigree_chart svg .person .arc path {
+      fill: #f0f0f0;
+      stroke: #afafaf;
+      stroke-width: .25rem; }
+    #pedigree-page #pedigree_chart svg .person.hover .arc path {
+      fill: #fafafa; }
+    #pedigree-page #pedigree_chart svg .person.available .arc path {
+      fill: #fafafa; }
+      #pedigree-page #pedigree_chart svg .person.available .arc path.hover .arc path {
+        fill: #f0f0f0; }
+    #pedigree-page #pedigree_chart svg .label {
+      font-weight: normal; }
+      #pedigree-page #pedigree_chart svg .label .alternativeName {
+        fill: #7f7f7f;
+        font-weight: normal;
+        unicode-bidi: normal; }
+      #pedigree-page #pedigree_chart svg .label .date {
+        fill: #7f7f7f;
+        font-weight: normal;
+        unicode-bidi: plaintext; }
+    #pedigree-page #pedigree_chart svg rect.background {
+      fill: none;
+      pointer-events: all; }
 
 #pedigree-page .link {
   fill: none;

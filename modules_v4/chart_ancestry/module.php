@@ -104,7 +104,7 @@ class chart_ancestry_KT_Module extends KT_Module implements KT_Module_Chart {
 								</button>
 							</span>
 						</div>
-						<input type="hidden" id="selectedValue" name="rootid">
+						<input type="hidden" name="rootid" id="selectedValue" value="<?php echo $controller->rootid; ?>">
 					</div>
 					<div class="cell medium-6 large-3">
 						<label class="h5" for="generations"><?php echo KT_I18N::translate('Generations'); ?></label>
