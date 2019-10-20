@@ -4457,10 +4457,10 @@ a.thumbnail {
 
 .accordion-menu .nested.is-accordion-submenu {
   margin-right: 0;
-  margin-left: 0 1rem; }
+  margin-left: 0; }
 
 .accordion-menu.align-right .nested.is-accordion-submenu {
-  margin-right: 0 1rem;
+  margin-right: 0;
   margin-left: 0; }
 
 .is-accordion-submenu-parent {
@@ -8498,9 +8498,6 @@ body {
     /* Use 1 0 auto instead of just 1 for backwards compatibility with other browsers */ }
 
 /* Icons */
-.svg-inline--fa {
-  margin: 0 0.5rem; }
-
 .kiwitrees_logo {
   background: url(../images/kiwtrees-nova_logo_white.png) no-repeat center left;
   background-size: contain;
@@ -8516,6 +8513,8 @@ body {
       margin-bottom: 0; }
     #admin-head .top-bar .top-bar-left .menu a {
       color: #fefefe; }
+      #admin-head .top-bar .top-bar-left .menu a svg {
+        margin: 0 0.25rem; }
     #admin-head .top-bar .top-bar-left .menu .is-dropdown-submenu {
       top: 70%; }
       #admin-head .top-bar .top-bar-left .menu .is-dropdown-submenu a {
@@ -8540,21 +8539,38 @@ body {
     margin: 0; }
 
 #admin-container #admin-menu {
-  background-color: #1779ba;
-  padding: 1rem; }
-  #admin-container #admin-menu .accordion-menu .is-accordion-submenu-item a {
-    color: #fefefe;
-    font-size: 85%; }
-    #admin-container #admin-menu .accordion-menu .is-accordion-submenu-item a.current {
+  background-color: #1779ba; }
+  #admin-container #admin-menu .accordion-menu a {
+    color: #fefefe; }
+    #admin-container #admin-menu .accordion-menu a svg.foreground {
+      color: #1779ba; }
+    #admin-container #admin-menu .accordion-menu a span.admin-menu-title {
+      line-height: 2;
+      vertical-align: middle; }
+    #admin-container #admin-menu .accordion-menu a.current {
       color: #5da423;
       font-weight: 600; }
   #admin-container #admin-menu .accordion-menu .is-accordion-submenu-parent {
-    border-bottom: 0.1rem solid #e6e6e6;
-    padding-bottom: 0.5rem; }
+    border-bottom: 0.0625rem #c9e6f8 solid; }
+    #admin-container #admin-menu .accordion-menu .is-accordion-submenu-parent.expanded a {
+      background-color: #79c0ee; }
     #admin-container #admin-menu .accordion-menu .is-accordion-submenu-parent a {
-      color: #fefefe; }
-      #admin-container #admin-menu .accordion-menu .is-accordion-submenu-parent a i {
-        margin-right: 0.5rem; }
+      background-color: #1779ba;
+      padding: 1rem; }
+      #admin-container #admin-menu .accordion-menu .is-accordion-submenu-parent a:hover {
+        color: #1779ba;
+        background-color: #79c0ee; }
+        #admin-container #admin-menu .accordion-menu .is-accordion-submenu-parent a:hover svg.foreground {
+          color: #fefefe; }
+  #admin-container #admin-menu .accordion-menu .is-accordion-submenu-parent[aria-expanded="true"] a {
+    background-color: #79c0ee; }
+  #admin-container #admin-menu .accordion-menu .is-accordion-submenu a {
+    background-color: #79c0ee;
+    font-size: .9rem;
+    padding: 0.5rem 1rem;
+    text-indent: 2rem; }
+    #admin-container #admin-menu .accordion-menu .is-accordion-submenu a:hover {
+      color: #1779ba; }
 
 #admin-container #admin-content {
   /* Media upload */
@@ -8573,6 +8589,9 @@ body {
   #admin-container #admin-content .accordion .accordion-item .accordion-title {
     color: #fefefe;
     font-weight: 600; }
+    #admin-container #admin-content .accordion .accordion-item .accordion-title .subheader {
+      color: #fefefe;
+      font-style: italic; }
     #admin-container #admin-content .accordion .accordion-item .accordion-title:hover, #admin-container #admin-content .accordion .accordion-item .accordion-title:focus {
       color: #555555; }
     #admin-container #admin-content .accordion .accordion-item .accordion-title svg {
@@ -8790,6 +8809,8 @@ footer {
   height: 4rem; }
   footer .logo {
     padding: 2rem; }
+    footer .logo a {
+      color: #fefefe; }
 
 div.dataTables_wrapper div div.clear {
   clear: both; }
