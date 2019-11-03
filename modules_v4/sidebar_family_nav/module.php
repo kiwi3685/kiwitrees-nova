@@ -130,7 +130,7 @@ class sidebar_family_nav_KT_Module extends KT_Module implements KT_Module_Sideba
 				<td class="facts_label">
 					<?php echo $menu->getMenu(); ?>
 				</td>
-				<td class="text-center <?php echo $controller->getPersonStyle($spouse); ?>">
+				<td class="<?php echo $controller->getPersonStyle($spouse); ?>">
 					<?php if ($spouse->canDisplayName()): ?>
 						<a class="famnav_link" href="<?php echo $spouse->getHtmlUrl(); ?>">
 							<?php echo $spouse->getFullName(); ?>
@@ -154,7 +154,7 @@ class sidebar_family_nav_KT_Module extends KT_Module implements KT_Module_Sideba
 				<td class="facts_label">
 					<?php echo $menu->getMenu(); ?>
 				</td>
-				<td class="text-center <?php echo $controller->getPersonStyle($child); ?>">
+				<td class="<?php echo $controller->getPersonStyle($child); ?>">
 					<?php if ($child->canDisplayName()): ?>
 					<a class="famnav_link" href="<?php echo $child->getHtmlUrl(); ?>">
 						<?php echo $child->getFullName(); ?>
