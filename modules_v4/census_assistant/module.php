@@ -93,7 +93,7 @@ class census_assistant_KT_Module extends KT_Module {
 							<?php } ?>
 						</ul>
 					<?php } else { ?>
-						<p> <?php echo KT_I18N::translate('No results found.'); ?> </p>
+						<p> <?php echo KT_I18N::translate('No results found'); ?> </p>
 					<?php } ?>
 					<button onclick="window.close();">
 						<i class="' . $iconStyle . ' fa-close"></i>
@@ -113,7 +113,7 @@ class census_assistant_KT_Module extends KT_Module {
 	 * @return string
 	 */
 	public static function formatCensusNote(KT_Note $note) {
-		global $KT_TREE;
+		global $KT_TREE, $EXPAND_NOTES;
 
 		if (preg_match('/(.*)((?:\n.*)*)\n\.start_formatted_area\.\n(.+)\n(.+(?:\n.+)*)\n.end_formatted_area\.((?:\n.*)*)/', $note->getNote(), $match)) {
 			// This looks like a census-assistant shared note
@@ -194,13 +194,16 @@ class census_assistant_KT_Module extends KT_Module {
 
 			return
 				'<div class="census_text">
+					<span id="title">' . $title . '</span>
 					<p>' . $preamble . '</p>
 					<table class="ca">
 						<thead>' . $thead . '</thead>
 						<tbody>' . $tbody . '</tbody>
 					</table>
 					<p>' . $postamble . '</p>
-				</div>';
+				</div>
+			';
+
 		} else {
 			// Not a census-assistant shared note - apply default formatting
 			return KT_Filter::formatText($note->getNote());
