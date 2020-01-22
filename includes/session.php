@@ -62,8 +62,8 @@ if (KT_USE_CDN) {
 }
 
 // other js
-//define('KT_FONTAWESOME_JS',					KT_STATIC_URL . 'library/fontawesome/all.js'); 			// fontawesome-pro-5.4.3 Updated 15-10-2018 Pro icons only available via CDN on subscription
-define('KT_FONTAWESOME_JS',					KT_STATIC_URL . 'library/fontawesome/all.min.js');  // fontawesome-pro-5.4.3 Updated 15-10-2018 Pro icons only available via CDN on subscription
+//define('KT_FONTAWESOME_JS',					KT_STATIC_URL . 'library/fontawesome/all.js'); 			// fontawesome-free-5.12.0 Updated 23-01-2020.
+define('KT_FONTAWESOME_JS',					KT_STATIC_URL . 'library/fontawesome/all.min.js');  // fontawesome-free-5.12.0 Updated 23-01-2020.
 define('KT_JQUERY_COLORBOX_URL',			KT_STATIC_URL . 'js/jquery.colorbox-min.js');	   		// 1.6.1	Updated 18-06-2015
 //define('KT_JQUERY_JEDITABLE_URL',			KT_STATIC_URL . 'js/jquery.jeditable.js');		    	// 1.7.3
 define('KT_JQUERY_WHEELZOOM_URL',			KT_STATIC_URL . 'js/jquery.wheelzoom.js');		    	// 2.0.0
