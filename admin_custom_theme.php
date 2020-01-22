@@ -25,24 +25,19 @@ define('KT_SCRIPT_NAME', 'admin_custom_theme.php');
 require './includes/session.php';
 require KT_ROOT.'includes/functions/functions_edit.php';
 ?>
-	<!-- The CodeMirror -->
+	<!-- Load codemirror library files - only used on this page, so not added to session.php -->
+	<!-- The CodeMirror 5.51.0 (2020-01-20) -->
     <script src="library/codemirror/lib/codemirror.js" type="text/javascript"></script>
-    <!-- The CodeMirror Modes - note: for HTML rendering required: xml, css, javasript -->
-<!--     <script src="library/codemirror/mode/xml/xml.js" type="text/javascript"></script>-->
-<!--     <script src="library/codemirror/mode/clike/clike.js" type="text/javascript"></script>-->
-<!--     <script src="library/codemirror/mode/javascript/javascript.js" type="text/javascript"></script>-->
     <script src="library/codemirror/mode/css/css.js" type="text/javascript"></script>
     <script src="library/codemirror/mode/php/php.js" type="text/javascript"></script>
     <script src="library/codemirror/mode/htmlmixed/htmlmixed.js" type="text/javascript"></script>
     <!-- CodeMirror Addons-->
     <script src="library/codemirror/addon/selection/active-line.js"></script>
-<!--     <script src="library/codemirror/addon/lint/lint.js"></script>-->
-<!-- 	<link href="library/codemirror/addon/lint/lint.css" rel="stylesheet" type="text/css" />-->
     <!-- CodeMirror Style & Theme -->
     <link href="library/codemirror/lib/codemirror.css" rel="stylesheet" type="text/css" />
     <link href="library/codemirror/theme/mdn-like.css" rel="stylesheet" type="text/css" />
-
 <?php
+
 global $iconstyles;
 $controller = new KT_Controller_Page();
 $controller
