@@ -40,26 +40,40 @@ $html = $matches[1];
 ?>
 <div id="server-info" class="cell">
 	<h4><?php echo $controller->getPageTitle(); ?></h4>
-	<div class="php-info"><?php echo $html; ?></div>
-	<div class="php-info">
-		<table>
-			<tbody>
-				<tr class="h">
-					<td>
-						<h2><?php echo KT_I18N::translate('MySQL variables'); ?></h2>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-		<table>
-			<tbody>
-				<?php foreach ($variables as $variable => $value): ?>
-					<tr>
-						<td class="e"><?php echo KT_Filter::escapeHtml($variable); ?></td>
-						<td class="v"><?php echo KT_Filter::escapeHtml($value); ?></td>
+	<ul id="server_info_tabs" class="tabs" data-responsive-accordion-tabs="tabs small-accordion medium-tabs">
+		<li class="tabs-title is-active">
+			<a href="#php" aria-selected="true"><?php echo KT_I18N::translate('PHP'); ?></a>
+		</li>
+		<li class="tabs-title">
+			<a href="#sql"><?php echo KT_I18N::translate('SQL'); ?></a>
+		</li>
+	</ul>
+	<div class="tabs-content" data-tabs-content="server_info_tabs">
+		<!-- PHP tab -->
+		<div id="php" class="tabs-panel is-active php-info" >
+			<?php echo $html; ?>
+		</div>
+		<!-- SQL tab -->
+		<div id="sql" class="tabs-panel php-info">
+			<table>
+				<tbody>
+					<tr class="h">
+						<td>
+							<h2><?php echo KT_I18N::translate('MySQL variables'); ?></h2>
+						</td>
 					</tr>
-				<?php endforeach; ?>
-			</tbody>
-		</table>
+				</tbody>
+			</table>
+			<table>
+				<tbody>
+					<?php foreach ($variables as $variable => $value): ?>
+						<tr>
+							<td class="e"><?php echo KT_Filter::escapeHtml($variable); ?></td>
+							<td class="v"><?php echo KT_Filter::escapeHtml($value); ?></td>
+						</tr>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
+		</div>
 	</div>
 </div>

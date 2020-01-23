@@ -198,12 +198,12 @@ $this
 			<div id="admin-menu" class="cell large-2">
 				<ul id="kiwitrees-menu" class="menu vertical accordion-menu" style="visibility:hidden;" data-accordion-menu data-multi-open="false">
 					<li>
-					    <a href="#">
+					    <a href="#" class="admin-menu-title">
 							<span class="fa-stack" style="vertical-align: top;">
 								<i class="<?php echo $iconStyle; ?> background fa-circle fa-stack-2x"></i>
 								<i class="<?php echo $iconStyle; ?> foreground fa-tachometer-alt fa-fw fa-stack-1x"></i>
 							</span>
-							<span class="admin-menu-title"><?php echo KT_I18N::translate('Dashboard'); ?></span>
+							<span><?php echo KT_I18N::translate('Dashboard'); ?></span>
 						</a>
 						<ul class="menu  vertical">
 							<li><a <?php echo (KT_SCRIPT_NAME == "admin.php" ? 'class="current" ' : ''); ?>href="admin.php"><?php echo KT_I18N::translate('Home'); ?></a></li>
@@ -211,12 +211,12 @@ $this
 					</li>
 					<?php if (KT_USER_IS_ADMIN) { ?>
 						<li>
-				        	<a href="#">
+				        	<a href="#" class="admin-menu-title">
 								<span class="fa-stack" style="vertical-align: top;">
 									<i class="<?php echo $iconStyle; ?> background fa-circle fa-stack-2x"></i>
 									<i class="<?php echo $iconStyle; ?> foreground fa-cog fa-fw fa-stack-1x"></i>
 								</span>
-								<span class="admin-menu-title"><?php echo KT_I18N::translate('Site administration'); ?></span>
+								<span><?php echo KT_I18N::translate('Site administration'); ?></span>
 							</a>
 						    <ul class="menu  vertical">
 								<?php foreach ($site_tools as $file=>$title) { ?>
@@ -226,12 +226,12 @@ $this
 						</li>
 					<?php } ?>
 				    <li>
-				        <a href="#">
+				        <a href="#" class="admin-menu-title">
 							<span class="fa-stack" style="vertical-align: top;">
 								<i class="<?php echo $iconStyle; ?> background fa-circle fa-stack-2x"></i>
 								<i class="<?php echo $iconStyle; ?> foreground fa-tree fa-fw fa-stack-1x"></i>
 							</span>
-							<span class="admin-menu-title"><?php echo KT_I18N::translate('Family trees'); ?></span>
+							<span><?php echo KT_I18N::translate('Family trees'); ?></span>
 						</a>
 				        <ul class="menu  vertical">
 							<?php if (KT_USER_IS_ADMIN) { ?>
@@ -253,12 +253,12 @@ $this
 						</ul>
 					</li>
 					<li>
-			        	<a href="#">
+			        	<a href="#" class="admin-menu-title">
 							<span class="fa-stack" style="vertical-align: top;">
 								<i class="<?php echo $iconStyle; ?> background fa-circle fa-stack-2x"></i>
 								<i class="<?php echo $iconStyle; ?> foreground fa-wrench fa-fw fa-stack-1x"></i>
 							</span>
-							<span class="admin-menu-title"><?php echo KT_I18N::translate('Family tree tools'); ?></span>
+							<span><?php echo KT_I18N::translate('Family tree tools'); ?></span>
 						</a>
 			        	<ul class="menu  vertical">
 							<?php foreach ($ft_tools as $file=>$title) { ?>
@@ -268,12 +268,12 @@ $this
 					</li>
 					<?php if (KT_USER_IS_ADMIN) { ?>
 						<li>
-							<a href="#">
+							<a href="#" class="admin-menu-title">
 								<span class="fa-stack" style="vertical-align: top;">
 									<i class="<?php echo $iconStyle; ?> background fa-circle fa-stack-2x"></i>
 									<i class="<?php echo $iconStyle; ?> foreground fa-users fa-fw fa-stack-1x"></i>
 								</span>
-								<span class="admin-menu-title"><?php echo KT_I18N::translate('Users'); ?></span>
+								<span><?php echo KT_I18N::translate('Users'); ?></span>
 							</a>
 							<ul class="menu  vertical">
 								<li><a <?php echo (KT_SCRIPT_NAME == "admin_users.php" && safe_GET('action') != "cleanup" && safe_GET('action')!="edit" ? 'class="current" ' : ''); ?>href="admin_users.php"><?php echo KT_I18N::translate('Manage users'); ?></a></li>
@@ -285,12 +285,12 @@ $this
 					<?php }
 					if (KT_USER_IS_ADMIN) { ?>
 						<li>
-							<a href="#">
+							<a href="#" class="admin-menu-title">
 								<span class="fa-stack" style="vertical-align: top;">
 									<i class="<?php echo $iconStyle; ?> background fa-circle fa-stack-2x"></i>
 									<i class="<?php echo $iconStyle; ?> foreground fa-camera fa-fw fa-stack-1x"></i>
 								</span>
-								<span class="admin-menu-title"><?php echo KT_I18N::translate('Media'); ?></span>
+								<span><?php echo KT_I18N::translate('Media'); ?></span>
 							</a>
 							<ul class="menu  vertical">
 								<li><a <?php echo (KT_SCRIPT_NAME == "admin_media.php" ? 'class="current" ' : ''); ?>href="admin_media.php"><?php echo KT_I18N::translate('Manage media'); ?></a></li>
@@ -300,12 +300,12 @@ $this
 					<?php }
 					if (KT_USER_IS_ADMIN) { ?>
 						<li>
-							<a href="#">
+							<a href="#" class="admin-menu-title">
 								<span class="fa-stack" style="vertical-align: top;">
 									<i class="<?php echo $iconStyle; ?> background fa-circle fa-stack-2x"></i>
 									<i class="<?php echo $iconStyle; ?> foreground fa-puzzle-piece fa-fw fa-stack-1x"></i>
 								</span>
-								<span class="admin-menu-title"><?php echo KT_I18N::translate('Modules'); ?></span>
+								<span><?php echo KT_I18N::translate('Modules'); ?></span>
 							</a>
 							<ul class="menu  vertical">
 								<li><a <?php echo (KT_SCRIPT_NAME == "admin_modules.php" ? 'class="current" ' : ''); ?>href="admin_modules.php"><?php echo KT_I18N::translate('Manage modules'); ?></a></li>
@@ -317,12 +317,12 @@ $this
 					<?php }
 					if (KT_USER_GEDCOM_ADMIN) { ?>
 						<li>
-							<a href="#">
+							<a href="#" class="admin-menu-title">
 								<span class="fa-stack" style="vertical-align: top;">
 									<i class="<?php echo $iconStyle; ?> background fa-circle fa-stack-2x"></i>
 									<i class="<?php echo $iconStyle; ?> foreground fa-paint-brush fa-fw fa-stack-1x"></i>
 								</span>
-								<span class="admin-menu-title"><?php echo KT_I18N::translate('Customizing'); ?></span>
+								<span><?php echo KT_I18N::translate('Customizing'); ?></span>
 							</a>
 							<ul class="menu  vertical">
 								<?php foreach ($custom as $file=>$title) { ?>
@@ -334,12 +334,12 @@ $this
 					<?php }
 					if (KT_USER_IS_ADMIN) { ?>
 						<li>
-							<a href="#">
+							<a href="#" class="admin-menu-title">
 								<span class="fa-stack" style="vertical-align: top;">
 									<i class="<?php echo $iconStyle; ?> background fa-circle fa-stack-2x"></i>
 									<i class="<?php echo $iconStyle; ?> foreground fa-tools fa-fw fa-stack-1x"></i>
 								</span>
-								<span class="admin-menu-title"><?php echo KT_I18N::translate('Tools'); ?></span>
+								<span><?php echo KT_I18N::translate('Tools'); ?></span>
 							</a>
 							<ul class="menu  vertical">
 								<?php foreach (KT_Module::getActiveModules(true) as $module) {

@@ -104,6 +104,20 @@ switch (KT_Filter::post('action')) {
 		KT_Site::preference('WELCOME_TEXT_AUTH_MODE_' .		KT_LOCALE, KT_Filter::post('WELCOME_TEXT_AUTH_MODE_4'));
 		KT_Site::preference('USE_REGISTRATION_MODULE',		KT_Filter::postBool('USE_REGISTRATION_MODULE'));
 		KT_Site::preference('SHOW_REGISTER_CAUTION',		KT_Filter::postBool('SHOW_REGISTER_CAUTION'));
+		// Reload the page, so that the settings take effect immediately.
+		Zend_Session::writeClose();
+		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '#login');
+		exit;
+	case 'update-antispam':
+		if (!KT_Filter::checkCsrf()) {
+			break;
+		}
+		KT_Site::preference('USE_HONEYPOT',					KT_Filter::postBool('USE_HONEYPOT'));
+		KT_Site::preference('USE_RECAPTCHA',				KT_Filter::postBool('USE_RECAPTCHA'));
+		KT_Site::preference('RECAPTCHA_SITE_KEY',			KT_Filter::post('RECAPTCHA_SITE_KEY'));
+		KT_Site::preference('RECAPTCHA_SECRET_KEY',			KT_Filter::post('RECAPTCHA_SECRET_KEY'));
+		KT_Site::preference('VERIFY_DAYS',					KT_Filter::post('VERIFY_DAYS'));
+		KT_Site::preference('REQUIRE_COMMENT',				KT_Filter::postBool('REQUIRE_COMMENT'));
 		if (KT_Filter::post('BLOCKED_EMAIL_ADDRESS_LIST')) {
 			$emails = explode(',', str_replace(array(' ', "\n", "\r"), '', KT_Filter::post('BLOCKED_EMAIL_ADDRESS_LIST')));
 			foreach ($emails as $email) {
@@ -119,7 +133,7 @@ switch (KT_Filter::post('action')) {
 		}
 		// Reload the page, so that the settings take effect immediately.
 		Zend_Session::writeClose();
-		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '#login');
+		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '#spam');
 		exit;
 	case 'update-lang':
 		if (!KT_Filter::checkCsrf()) {
@@ -150,6 +164,23 @@ $controller
 				jQuery("#smtp_options").css({"display":"none"});
 			};
 		});
+
+		var selectRadio = jQuery("#recaptcha_select label input[name=USE_RECAPTCHA]:checked").val();
+		if (selectRadio == "1"){
+			jQuery("#google_recaptcha_details").css({"display":"block"});
+		} else {
+			jQuery("#google_recaptcha_details").css({"display":"none"});
+		};
+
+		jQuery("input[type=radio]").click("input[name=USE_RECAPTCHA]", function() {
+			var clickedRadio = jQuery(this).val();
+			if (clickedRadio == "1") {
+				jQuery("#google_recaptcha_details").css({"display":"block"});
+			} else {
+				jQuery("#google_recaptcha_details").css({"display":"none"});
+			};
+		});
+
 	');
 ?>
 
@@ -164,6 +195,9 @@ $controller
 		</li>
 		<li class="tabs-title">
 			<a href="#login"><?php echo KT_I18N::translate('Login & registration'); ?></a>
+		</li>
+		<li class="tabs-title">
+			<a href="#spam"><?php echo KT_I18N::translate('Anti-spam'); ?></a>
 		</li>
 		<li class="tabs-title">
 			<a href="#lang"><?php echo KT_I18N::translate('Languages'); ?></a>
@@ -435,6 +469,74 @@ $controller
 							<?php echo KT_I18N::translate('When set to <b>Yes</b>, the following message will appear above the input fields on the "Request new user account" page:<div class="list_value_wrap"><div class="largeError">Notice:</div><div class="error">By completing and submitting this form, you agree:<ul><li>to protect the privacy of living people listed on our site;</li><li>and in the text box below, to explain to whom you are related, or to provide us with information on someone who should be listed on our site.</li></ul></div></div>'); ?>
 						</div>
 					</div>
+				</div>
+				<button type="submit" class="button">
+					<i class="<?php echo $iconStyle; ?> fa-save"></i>
+					<?php echo KT_I18N::translate('Save'); ?>
+				</button>
+			</form>
+		</div>
+		<!-- Anti spam configuration tab -->
+		<div class="tabs-panel" id="spam">
+			<form method="post" id="configform" name="configform" action="<?php echo KT_SCRIPT_NAME; ?>#spam" data-abide novalidate>
+				<?php echo KT_Filter::getCsrf(); ?>
+				<input type="hidden" name="action" value="update-spam">
+				<div class="grid-x grid-margin-x">
+					<div data-abide-error class="cell callout alert " style="display: none;">
+						<p><i class="<?php echo $iconStyle; ?> fa-exclamation-triangle"></i><?php echo /* I18N: A general error message for forms */ KT_I18N::translate('There are errors in your form.'); ?></p>
+					</div>
+					<div class="cell large-3">
+						<label for="USE_HONEYPOT"><?php echo KT_I18N::translate('Use secret field'); ?></label>
+					</div>
+					<div class="cell large-9">
+						<?php echo edit_field_yes_no('USE_HONEYPOT', KT_Site::preference('USE_HONEYPOT')); ?>
+						<div class="cell helpcontent">
+							<?php echo  /* I18N: Help text for the “honeypot” site configuration setting */ KT_I18N::translate('This will create a secret field that only internet robots will see and complete. If they do, then their entry will be ignored.'); ?>
+						</div>
+					</div>
+					<div class="cell large-3">
+						<label for="USE_RECAPTCHA"><?php echo KT_I18N::translate('Use Google reCAPTCHA v2'); ?></label>
+					</div>
+					<div class="cell large-9">
+						<?php echo edit_field_yes_no('USE_RECAPTCHA', KT_Site::preference('USE_RECAPTCHA')); ?>
+						<div class="cell helpcontent">
+							<?php echo  /* I18N: Help text for the recaptcha site configuration setting */ KT_I18N::translate('This can help limit the nember of spam attempts to register on your site.<br>It requires a pair of Google rCaptcha v2 API keys. Help to obtian this can be found on this kiwitrees FAQ page: <a href="https://kiwitrees.net/faqs/administration/site_admin/" target="_blank">Google reCaptcha v2</a>'); ?>
+						</div>
+					</div>
+					<div id="google_recaptcha_details"  class="cell" style="display:none;">
+						<div class="grid-x grid-margin-x">
+							<div class="cell large-3">
+								<label><?php echo KT_I18N::translate('Google reCAPTCHA Site Key'); ?></label>
+							</div>
+							<div class="cell large-9">
+								<input type="text" name="RECAPTCHA_SITE_KEY" value="<?php echo KT_Site::preference('RECAPTCHA_SITE_KEY'); ?>" size="50">
+							</div>
+							<div class="cell large-3">
+								<label><?php echo KT_I18N::translate('Google reCAPTCHA Secret Key'); ?></label>
+							</div>
+							<div class="cell large-9">
+								<input type="text" name="RECAPTCHA_SECRET_KEY" value="<?php echo KT_Site::preference('RECAPTCHA_SECRET_KEY'); ?>" size="50">
+							</div>
+						</div>
+					</div>
+					<div class="cell large-3">
+						<label><?php echo KT_I18N::translate('Days allowed for new user to verify email address'); ?></label>
+					</div>
+					<div class="cell large-9">
+							<input type="text" name="VERIFY_DAYS" value="<?php echo KT_Site::preference('VERIFY_DAYS'); ?>" pattern="[0-9]*" placeholder="7" maxlength="3">
+							<div class="helpcontent">
+								<?php echo /* I18N: Help text for the “Days allowed to verify” site configuration setting */ KT_I18N::translate('The number of days a new user has to verify their email address before their request to register is highlighted as an error'); ?>
+							</div>
+					</div>
+					<div class="cell large-3">
+						<label><?php echo KT_I18N::translate('Require comment on registration form entries'); ?></label>
+					</div>
+					<div class="cell large-9">
+							<?php echo edit_field_yes_no('REQUIRE_COMMENT', KT_Site::preference('REQUIRE_COMMENT')); ?>
+							<div class="helpcontent">
+								<?php echo KT_I18N::translate('Require all new registrations to enter a comment in the "Comments" field'); ?>
+							</div>
+					</div>
 					<div class="cell large-3">
 						<label for="blocked"><?php echo KT_I18N::translate('Blocked email address list'); ?></label>
 					</div>
@@ -451,10 +553,6 @@ $controller
 						</div>
 					</div>
 				</div>
-				<button type="submit" class="button">
-					<i class="<?php echo $iconStyle; ?> fa-save"></i>
-					<?php echo KT_I18N::translate('Save'); ?>
-				</button>
 			</form>
 		</div>
 		<!-- Languages configuration tab -->

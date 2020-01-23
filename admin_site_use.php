@@ -50,23 +50,26 @@ $directory_size	= format_size(directory_size());
 $total_size		= format_size(db_size() + directory_size());
 ?>
 
-<div id="size" class="cell">
-	<h4><?php echo KT_I18N::translate('All trees'); ?></h4>
-	<ul class="server_stats">
-		<li>
-			<?php echo KT_I18N::translate('%s Individuals', siteIndividuals()); ?>
-		</li>
-		<li>
-			<?php echo KT_I18N::translate('%s Media objects', siteMedia()); ?>
-		</li>
-		<li>
-			<?php echo KT_I18N::translate('Your database size is currently %s', $db_size); ?>
-		</li>
-		<li>
-			<?php echo KT_I18N::translate('Your files including media items are currently using %s', $directory_size); ?>
-		</li>
-		<li>
-			<?php echo KT_I18N::translate('Total server space used is therefore %s', $total_size); ?>
-		</li>
-	</ul>
+<div id="server-use" class="cell">
+	<h4><?php echo $controller->getPageTitle(); ?></h4>
+	<h5 class="subheader"><?php echo KT_I18N::translate('All trees'); ?></h5>
+	<div class="grid-x">
+		<ul class="cell medium-offset-1">
+			<li>
+				<?php echo KT_I18N::translate('%s Individuals', siteIndividuals()); ?>
+			</li>
+			<li>
+				<?php echo KT_I18N::translate('%s Media objects', siteMedia()); ?>
+			</li>
+			<li>
+				<?php echo KT_I18N::translate('Your database size is currently %s', $db_size); ?>
+			</li>
+			<li>
+				<?php echo KT_I18N::translate('Your files including media items are currently using %s', $directory_size); ?>
+			</li>
+			<li>
+				<?php echo KT_I18N::translate('Total server space used is therefore %s', $total_size); ?>
+			</li>
+		</ul>
+	</div>
 </div>

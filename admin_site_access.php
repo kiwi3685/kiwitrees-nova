@@ -220,13 +220,16 @@ case 'load_unknown':
 $controller
 	->pageHeader()
 	->addExternalJavascript(KT_DATATABLES_JS)
+	->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
+	->addExternalJavascript(KT_DATATABLES_BUTTONS)
+	->addExternalJavascript(KT_DATATABLES_HTML5)
 	->addInlineJavascript('
 		jQuery.fn.dataTableExt.oSort["unicode-asc" ]=function(a,b) {return a.replace(/<[^<]*>/, "").localeCompare(b.replace(/<[^<]*>/, ""))};
 		jQuery.fn.dataTableExt.oSort["unicode-desc"]=function(a,b) {return b.replace(/<[^<]*>/, "").localeCompare(a.replace(/<[^<]*>/, ""))};
 		jQuery("#site_access_rules").dataTable({
-			dom: \'<"top"Blp<"clear">irf>t<"bottom"pl>\',
+			dom: \'<"top"pBf<"clear">irl>t<"bottom"pl>\',
 			' . KT_I18N::datatablesI18N() . ',
-			buttons: [{extend: "csv", exportOptions: {columns: [0,1,4,6,9,11,12,15,17] }}],
+			buttons: [{extend: "csv", exportOptions: {columns: [0,1,2,3,4,5,6] }}],
 			autoWidth: false,
 			processing: true,
 			retrieve: true,
@@ -296,9 +299,10 @@ KT_DB::exec(
 
 ?>
 <div id="site_access-page" class="cell">
+	<h4><?php echo $controller->getPageTitle(); ?></h4>
 	<div class="grid-x grid-margin-y">
 		<div class="cell">
-			<h4 class="inline"><?php echo /* I18N: http://en.wikipedia.org/wiki/User_agent */ KT_I18N::translate('Restrict access to the site, using IP addresses and user-agent strings'); ?></h4>
+			<h5 class="inline"><?php echo /* I18N: http://en.wikipedia.org/wiki/User_agent */ KT_I18N::translate('Restrict access to the site, using IP addresses and user-agent strings'); ?></h5>
 			<?php echo faqLink('general/site-access-rules/'); ?>
 		</div>
 		<div class="cell callout primary">

@@ -75,7 +75,7 @@ foreach (KT_Tree::getAll() as $tree) {
 
 	<form name="delete_form" method="post" action="">
 		<div id="cleanup" class="grid-x">
-			<ul class="cell">
+			<ul class="cell medium-offset-1">
 				<?php
 				$dir	 = dir(KT_DATA_DIR);
 				$entries = array();

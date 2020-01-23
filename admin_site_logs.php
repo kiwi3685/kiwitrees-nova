@@ -174,13 +174,16 @@ switch($action) {
 $controller
 	->pageHeader()
 	->addExternalJavascript(KT_DATATABLES_JS)
+	->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
+	->addExternalJavascript(KT_DATATABLES_BUTTONS)
+	->addExternalJavascript(KT_DATATABLES_HTML5)
 	->addExternalJavascript(KT_DATEPICKER_JS)
 	->addExternalJavascript(KT_DATEPICKER_JS_LOCALE)
 	->addInlineJavascript('
 		jQuery("#log_list").dataTable({
-			dom: \'<"top"Blp<"clear">irf>t<"bottom"pl>\',
+			dom: \'<"top"pBf<"clear">irl>t<"bottom"pl>\',
 			' . KT_I18N::datatablesI18N(array(10,20,50,100,500,1000,-1)) . ',
-			buttons: [{extend: "csv", exportOptions: {columns: [0,1,2,3,4,5] }}],
+			buttons: [{extend: "csvHtml5"}],
 			autoWidth: false,
 			processing: true,
 			displayLength: ' . get_user_setting(KT_USER_ID, 'admin_site_log_page_size', 10) . ',
@@ -189,12 +192,12 @@ $controller
 			"sAjaxSource": "admin_site_logs.php?action=load_json&from='.$from.'&to='.$to.'&type='.$type.'&text='.rawurlencode($text).'&ip='.rawurlencode($ip).'&user='.rawurlencode($user).'&gedc='.rawurlencode($gedc).'",
 			sorting: [[ 0, "desc" ]],
 			columns: [
-			/* 0 - Timestamp   */ { },
-			/* 1 - Type        */ { },
-			/* 2 - message     */ { },
-			/* 3 - IP address  */ { },
-			/* 4 - User        */ { },
-			/* 5 - Family tree */ { }
+				/* 0 - Timestamp   */ { },
+				/* 1 - Type        */ { },
+				/* 2 - message     */ { },
+				/* 3 - IP address  */ { },
+				/* 4 - User        */ { },
+				/* 5 - Family tree */ { }
 			]
 		});
 
