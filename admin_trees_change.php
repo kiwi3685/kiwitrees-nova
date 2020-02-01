@@ -27,87 +27,87 @@ require './includes/session.php';
 $controller = new KT_Controller_Page();
 $controller
 	->requireManagerLogin()
-	->setPageTitle(KT_I18N::translate('Changes'));
+	->setPageTitle(KT_I18N::translate('Family tree changes'));
 
 require KT_ROOT.'includes/functions/functions_edit.php';
 require_once KT_ROOT.'library/php-diff/lib/Diff.php';
 require_once KT_ROOT.'library/php-diff/lib/Diff/Renderer/Html/SideBySide.php';
 
-$statuses=array(
-	''        =>'',
-	'accepted'=>/* I18N: the status of an edit accepted/rejected/pending */ KT_I18N::translate('accepted'),
-	'rejected'=>/* I18N: the status of an edit accepted/rejected/pending */ KT_I18N::translate('rejected'),
-	'pending' =>/* I18N: the status of an edit accepted/rejected/pending */ KT_I18N::translate('pending' ),
+$statuses = array(
+	''			=> KT_I18N::translate('All'),
+	'accepted'	=> /* I18N: the status of an edit accepted/rejected/pending */ KT_I18N::translate('accepted'),
+	'rejected'	=> /* I18N: the status of an edit accepted/rejected/pending */ KT_I18N::translate('rejected'),
+	'pending' 	=> /* I18N: the status of an edit accepted/rejected/pending */ KT_I18N::translate('pending' ),
 );
 
-$earliest=KT_DB::prepare("SELECT DATE(MIN(change_time)) FROM `##change`")->execute(array())->fetchOne();
-$latest  =KT_DB::prepare("SELECT DATE(MAX(change_time)) FROM `##change`")->execute(array())->fetchOne();
+$earliest	= KT_DB::prepare("SELECT DATE(MIN(change_time)) FROM `##change`")->execute(array())->fetchOne();
+$latest		= KT_DB::prepare("SELECT DATE(MAX(change_time)) FROM `##change`")->execute(array())->fetchOne();
 
 // Filtering
-$action=safe_GET('action');
-$from  =safe_GET('from', '\d\d\d\d-\d\d-\d\d', $earliest);
-$to    =safe_GET('to',   '\d\d\d\d-\d\d-\d\d', $latest);
-$type  =safe_GET('type', array_keys($statuses));
-$oldged=safe_GET('oldged');
-$newged=safe_GET('newged');
-$xref  =safe_GET('xref');
-$user  =safe_GET('user');
+$action	= KT_Filter::get('action');
+$from	= KT_Filter::get('from', '\d\d\d\d-\d\d-\d\d', $earliest);
+$to		= KT_Filter::get('to',   '\d\d\d\d-\d\d-\d\d', $latest);
+$type	= KT_Filter::get('type', 'accepted|rejected|pending');
+$oldged	= KT_Filter::get('oldged');
+$newged	= KT_Filter::get('newged');
+$xref	= KT_Filter::get('xref', KT_REGEX_XREF);
+$user	= KT_Filter::get('user');
 if (KT_USER_IS_ADMIN) {
 	// Administrators can see all logs
-	$gedc=safe_GET('gedc');
+	$gedc = KT_Filter::get('gedc');
 } else {
 	// Managers can only see logs relating to this gedcom
-	$gedc=KT_GEDCOM;
+	$gedc = KT_GEDCOM;
 }
 
-$query=array();
-$args =array();
+$query	= array();
+$args	= array();
 if ($from) {
-	$query[]='change_time>=?';
-	$args []=$from;
+	$query[]	= 'change_time>=?';
+	$args[]		= $from;
 }
 if ($to) {
-	$query[]='change_time<TIMESTAMPADD(DAY, 1 , ?)'; // before end of the day
-	$args []=$to;
+	$query[]	= 'change_time<TIMESTAMPADD(DAY, 1 , ?)'; // before end of the day
+	$args []	= $to;
 }
 if ($type) {
-	$query[]='status=?';
-	$args []=$type;
+	$query[]	= 'status=?';
+	$args []	= $type;
 }
 if ($oldged) {
-	$query[]="old_gedcom LIKE CONCAT('%', ?, '%')";
-	$args []=$oldged;
+	$query[]	= "old_gedcom LIKE CONCAT('%', ?, '%')";
+	$args []	= $oldged;
 }
 if ($newged) {
-	$query[]="new_gedcom LIKE CONCAT('%', ?, '%')";
-	$args []=$newged;
+	$query[]	= "new_gedcom LIKE CONCAT('%', ?, '%')";
+	$args []	= $newged;
 }
 if ($xref) {
-	$query[]="xref = ?";
-	$args []=$xref;
+	$query[]	= "xref = ?";
+	$args []	= $xref;
 }
 if ($user) {
-	$query[]="user_name LIKE CONCAT('%', ?, '%')";
-	$args []=$user;
+	$query[]	= "user_name LIKE CONCAT('%', ?, '%')";
+	$args []	= $user;
 }
 if ($gedc) {
-	$query[]="gedcom_name LIKE CONCAT('%', ?, '%')";
-	$args []=$gedc;
+	$query[]	= "gedcom_name LIKE CONCAT('%', ?, '%')";
+	$args []	= $gedc;
 }
 
-$SELECT1=
+$SELECT1 =
 	"SELECT SQL_CACHE SQL_CALC_FOUND_ROWS change_time, status, xref, old_gedcom, new_gedcom, IFNULL(user_name, '<none>') AS user_name, IFNULL(gedcom_name, '<none>') AS gedcom_name".
 	" FROM `##change`".
 	" LEFT JOIN `##user`   USING (user_id)".   // user may be deleted
 	" LEFT JOIN `##gedcom` USING (gedcom_id)"; // gedcom may be deleted
-$SELECT2=
+$SELECT2 =
 	"SELECT COUNT(*) FROM `##change`".
 	" LEFT JOIN `##user`   USING (user_id)".   // user may be deleted
 	" LEFT JOIN `##gedcom` USING (gedcom_id)"; // gedcom may be deleted
 if ($query) {
-	$WHERE=" WHERE ".implode(' AND ', $query);
+	$WHERE = " WHERE ".implode(' AND ', $query);
 } else {
-	$WHERE='';
+	$WHERE = '';
 }
 
 switch($action) {
@@ -142,46 +142,46 @@ case 'export':
 	exit;
 case 'load_json':
 	Zend_Session::writeClose();
-	$iDisplayStart =(int)safe_GET('iDisplayStart');
-	$iDisplayLength=(int)safe_GET('iDisplayLength');
+	$iDisplayStart	= (int) KT_Filter::get('iDisplayStart');
+	$iDisplayLength	= (int) KT_Filter::get('iDisplayLength');
 	set_user_setting(KT_USER_ID, 'admin_site_change_page_size', $iDisplayLength);
 	if ($iDisplayLength>0) {
-		$LIMIT=" LIMIT " . $iDisplayStart . ',' . $iDisplayLength;
+		$LIMIT = " LIMIT " . $iDisplayStart . ',' . $iDisplayLength;
 	} else {
-		$LIMIT="";
+		$LIMIT = "";
 	}
-	$iSortingCols=safe_GET('iSortingCols');
+	$iSortingCols = KT_Filter::get('iSortingCols');
 	if ($iSortingCols) {
-		$ORDER_BY=' ORDER BY ';
-		for ($i=0; $i<$iSortingCols; ++$i) {
+		$ORDER_BY = ' ORDER BY ';
+		for ($i = 0; $i < $iSortingCols; ++$i) {
 			// Datatables numbers columns 0, 1, 2, ...
 			// MySQL numbers columns 1, 2, 3, ...
-			switch (safe_GET('sSortDir_'.$i)) {
+			switch ( KT_Filter::get('sSortDir_' . $i)) {
 			case 'asc':
-				if ((int)safe_GET('iSortCol_'.$i)==0) {
-					$ORDER_BY.='change_id ASC '; // column 0 is "timestamp", using change_id gives the correct order for events in the same second
+				if ((int) KT_Filter::get('iSortCol_' . $i) == 0) {
+					$ORDER_BY .= 'change_id ASC '; // column 0 is "timestamp", using change_id gives the correct order for events in the same second
 				} else {
-					$ORDER_BY.=(1+(int)safe_GET('iSortCol_'.$i)).' ASC ';
+					$ORDER_BY .= (1 + (int) KT_Filter::get('iSortCol_' . $i)) . ' ASC ';
 				}
 				break;
 			case 'desc':
-				if ((int)safe_GET('iSortCol_'.$i)==0) {
-					$ORDER_BY.='change_id DESC ';
+				if ((int) KT_Filter::get('iSortCol_' . $i) == 0) {
+					$ORDER_BY .= 'change_id DESC ';
 				} else {
-					$ORDER_BY.=(1+(int)safe_GET('iSortCol_'.$i)).' DESC ';
+					$ORDER_BY .= (1 + (int) KT_Filter::get('iSortCol_' . $i)) . ' DESC ';
 				}
 				break;
 			}
-			if ($i<$iSortingCols-1) {
-				$ORDER_BY.=',';
+			if ($i < $iSortingCols - 1) {
+				$ORDER_BY .= ',';
 			}
 		}
 	} else {
-		$ORDER_BY='1 DESC';
+		$ORDER_BY = '1 DESC';
 	}
 
 	// This becomes a JSON list, not array, so need to fetch with numeric keys.
-	$aaData=KT_DB::prepare($SELECT1.$WHERE.$ORDER_BY.$LIMIT)->execute($args)->fetchAll(PDO::FETCH_NUM);
+	$aaData = KT_DB::prepare($SELECT1.$WHERE.$ORDER_BY.$LIMIT)->execute($args)->fetchAll(PDO::FETCH_NUM);
 	foreach ($aaData as &$row) {
 
 		$a = explode("\n", htmlspecialchars($row[3]));
@@ -199,54 +199,57 @@ case 'load_json':
 		// Initialize the diff class
 		$diff = new Diff($a, $b, $options);
 
-		$row[1]=KT_I18N::translate($row[1]);
-		$row[2]='<a href="gedrecord.php?pid='.$row[2].'&ged='.$row[6].'" target="_blank" rel="noopener noreferrer">'.$row[2].'</a>';
-		$row[3]=$diff->Render($renderer);
-		$row[4]='';
+		$row[1] = KT_I18N::translate($row[1]);
+		$row[2] = '<a href="gedrecord.php?pid=' . $row[2] . '&ged=' . $row[6] . '" target="_blank" rel="noopener noreferrer">' . $row[2] . '</a>';
+		$row[3] = $diff->Render($renderer);
+		$row[4] = '';
 	}
 
 	// Total filtered/unfiltered rows
-	$iTotalDisplayRecords=KT_DB::prepare("SELECT FOUND_ROWS()")->fetchColumn();
-	$iTotalRecords=KT_DB::prepare($SELECT2.$WHERE)->execute($args)->fetchColumn();
+	$iTotalDisplayRecords	= KT_DB::prepare("SELECT FOUND_ROWS()")->fetchColumn();
+	$iTotalRecords			= KT_DB::prepare($SELECT2.$WHERE)->execute($args)->fetchColumn();
 
 	header('Content-type: application/json');
 	echo json_encode(array( // See http://www.datatables.net/usage/server-side
-		'sEcho'               =>(int)safe_GET('sEcho'),
-		'iTotalRecords'       =>$iTotalRecords,
-		'iTotalDisplayRecords'=>$iTotalDisplayRecords,
-		'aaData'              =>$aaData
+		'sEcho'					=> (int) KT_Filter::get('sEcho'),
+		'iTotalRecords'			=> $iTotalRecords,
+		'iTotalDisplayRecords'	=> $iTotalDisplayRecords,
+		'aaData'				=> $aaData
 	));
 	exit;
 }
 
 $controller
 	->pageHeader()
-	->addExternalJavascript(KT_JQUERY_DATATABLES_URL)
+	->addExternalJavascript(KT_DATATABLES_JS)
+	->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
+	->addExternalJavascript(KT_DATATABLES_BUTTONS)
+	->addExternalJavascript(KT_DATATABLES_HTML5)
 	->addInlineJavascript('
 		var oTable=jQuery("#change_list").dataTable( {
-			"sDom": \'<"H"pf<"clear">irl>t<"F"pl>\',
-			"bProcessing": true,
-			"bServerSide": true,
+			dom: \'<"top"pBf<"clear">irl>t<"bottom"pl>\',
+			buttons: [{extend: "csvHtml5"}],
+			autoWidth: false,
+			processing: true,
+			displayLength: ' . get_user_setting(KT_USER_ID, 'admin_site_log_page_size', 10) . ',
+			serverSide: true,
+			pagingType: "full_numbers",
 			"sAjaxSource": "' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '?action=load_json&from='.$from.'&to='.$to.'&type='.$type.'&oldged='.rawurlencode($oldged).'&newged='.rawurlencode($newged).'&xref='.rawurlencode($xref).'&user='.rawurlencode($user).'&gedc='.rawurlencode($gedc).'",
-			'.KT_I18N::datatablesI18N(array(10,20,50,100,500,1000,-1)).',
-			"bJQueryUI": true,
-			"bAutoWidth":false,
+			' . KT_I18N::datatablesI18N(array(10,20,50,100,500,1000,-1)) . ',
 			"aaSorting": [[ 0, "desc" ]],
-			"iDisplayLength": '.get_user_setting(KT_USER_ID, 'admin_site_change_page_size', 10).',
-			"sPaginationType": "full_numbers",
 			"aoColumns": [
-			/* Timestamp   */ {},
-			/* Status      */ {},
-			/* Record      */ {},
-			/* Old data    */ {"sClass":"raw_gedcom"},
-			/* New data    */ { bVisible:false },
-			/* User        */ {},
-			/* Family tree */ {}
+				/* 0 - Timestamp   */ {},
+				/* 1 - Status      */ {},
+				/* 2 - Record      */ {},
+				/* 3 - Old data    */ {"sClass":"raw_gedcom"},
+				/* 4 - New data    */ { bVisible:false },
+				/* 5 - User        */ {},
+				/* 6 - Family tree */ {}
 			]
 		});
 	');
 
-$url=
+$url =
 	KT_SCRIPT_NAME.'?from='.rawurlencode($from).
 	'&amp;to='.rawurlencode($to).
 	'&amp;type='.rawurlencode($type).
@@ -258,59 +261,86 @@ $url=
 
 $users_array=array_combine(get_all_users(), get_all_users());
 uksort($users_array, 'strnatcasecmp');
+?>
+<div id="tree_changes-page" class="cell">
+	<h4><?php echo $controller->getPageTitle(); ?></h4>
+	<div class="grid-x grid-margin-y">
+		<form class="cell" name="changes" method="get" action="<?php echo KT_SCRIPT_NAME; ?>" data-abide novalidate>
+			<input type="hidden" name="action" value="show">
+			<div class="grid-x grid-margin-x">
+				<div class="cell medium-3 medium-offset-1">
+					<label class="h6"><?php echo KT_I18N::translate('From'); ?></label>
+					<div class="date fdatepicker" id="from" data-date-format="yyyy-mm-dd">
+						<div class="input-group">
+							<input class="input-group-field" type="text" name="from" value="<?php echo htmlspecialchars($from); ?>">
+							<span class="postfix input-group-label"><i class="<?php echo $iconStyle; ?> fa-calendar-alt fa-lg"></i></span>
+						</div>
+					</div>
+				</div>
+				<div class="cell medium-3">
+					<label class="h6"><?php echo KT_I18N::translate('To'); ?></label>
+					<div class="date fdatepicker" id="to" data-date-format="yyyy-mm-dd">
+						<div class="input-group">
+							<input class="input-group-field" type="text" name="to" value="<?php echo htmlspecialchars($to); ?>">
+							<span class="postfix input-group-label"><i class="<?php echo $iconStyle; ?> fa-calendar-alt fa-lg"></i></span>
+						</div>
+					</div>
+				</div>
+				<div class="cell medium-2">
+					<label class="h6"><?php echo KT_I18N::translate('Type'); ?></label>
+					<?php echo select_edit_control('type', $statuses, null, $type, ''); ?>
+				</div>
+				<div class="cell medium-2">
+					<label class="h6"><?php echo KT_I18N::translate('Record'); ?></label>
+					<input class="log-filter" type="text" name="xref" value="<?php echo htmlspecialchars($xref); ?>">
+				</div>
+				<div class="cell medium-3 medium-offset-2">
+					<label class="h6"><?php echo KT_I18N::translate('Old data'); ?></label>
+					<input class="log-filter" type="text" name="oldged" value="<?php echo htmlspecialchars($oldged); ?>">
+				</div>
+				<div class="cell medium-3">
+					<label class="h6"><?php echo KT_I18N::translate('User'); ?></label>
+					<?php echo select_edit_control('user', $users_array, '', $user, ''); ?>
+				</div>
+				<div class="cell medium-2">
+					<label class="h6"><?php echo KT_I18N::translate('Family tree'); ?></label>
+					<?php echo select_edit_control('gedc', KT_Tree::getNameList(), '', $gedc, KT_USER_IS_ADMIN ? '' : 'disabled'); ?>
+				</div>
+				<div class="cell medium-4">
+					<button type="submit" class="button">
+						<i class="<?php echo $iconStyle; ?> fa-search"></i>
+						<?php echo KT_I18N::translate('Search'); ?>
+					</button>
+					<button type="submit" class="button" <?php echo 'onclick="if (confirm(\'' . htmlspecialchars(KT_I18N::translate('Permanently delete these records?')) . '\')) {document.logs.action.value=\'delete\';return true;} else {return false;}"' . ($action=='show' ? '' : 'disabled="disabled"');?> >
+						<i class="<?php echo $iconStyle; ?> fa-trash-alt"></i>
+						<?php echo KT_I18N::translate('Delete'); ?>
+					</button>
+				</div>
+			</div>
+		</form>
+	</div>
+	<hr>
+	<?php if ($action) { ?>
+		<div class="grid-x grid-margin-x">
+			<div class="cell">
+				<table id="change_list">
+					<thead>
+						<tr>
 
-echo
-	'<form name="changes" method="get" action="'.KT_SCRIPT_NAME.'">',
-		'<input type="hidden" name="action", value="show">',
-		'<table class="site_change">',
-			'<tr>',
-				'<td colspan="6">',
-					// I18N: %s are both user-input date fields
-					KT_I18N::translate('From %s to %s', '<input class="log-date" name="from" value="'.htmlspecialchars($from).'">', '<input class="log-date" name="to" value="'.htmlspecialchars($to).'">'),
-				'</td>',
-			'</tr><tr>',
-				'<td>',
-					KT_I18N::translate('Status'), '<br>', select_edit_control('type', $statuses, null, $type, ''),
-				'</td>',
-				'<td>',
-					KT_I18N::translate('Record'), '<br><input class="log-filter" name="xref" value="', htmlspecialchars($xref), '"> ',
-				'</td>',
-				'<td>',
-					KT_I18N::translate('Old data'), '<br><input class="log-filter" name="oldged" value="', htmlspecialchars($oldged), '"> ',
-				'</td>',
-				'<td></td>',
-				'<td>',
-					KT_I18N::translate('User'), '<br>', select_edit_control('user', $users_array, '', $user, ''),
-				'</td>',
-				'<td>',
-					KT_I18N::translate('Family tree'), '<br>',  select_edit_control('gedc', KT_Tree::getNameList(), '', $gedc, KT_USER_IS_ADMIN ? '' : 'disabled'),
-				'</td>',
-			'</tr><tr>',
-				'<td colspan="6">',
-					'<input type="submit" value="', KT_I18N::translate('Filter'), '">',
-					'<input type="submit" value="', KT_I18N::translate('Export'), '" onclick="document.changes.action.value=\'export\';return true;" ', ($action=='show' ? '' : 'disabled="disabled"'),'>',
-					'<input type="submit" value="', KT_I18N::translate('Delete'), '" onclick="if (confirm(\'', htmlspecialchars(KT_I18N::translate('Permanently delete these records?')) , '\')) {document.changes.action.value=\'delete\';return true;} else {return false;}" ', ($action=='show' ? '' : 'disabled="disabled"'),'>',
-				'</td>',
-			'</tr>',
-		'</table>',
-	'</form>';
-
-if ($action) {
-	echo
-		'<br>',
-		'<table id="change_list">',
-			'<thead>',
-				'<tr>',
-					'<th>', KT_I18N::translate('Timestamp'), '</th>',
-					'<th>', KT_I18N::translate('Status'), '</th>',
-					'<th>', KT_I18N::translate('Record'), '</th>',
-					'<th>', KT_I18N::translate('GEDCOM Data'), '</th>',
-					'<th></th>',
-					'<th>', KT_I18N::translate('User'), '</th>',
-					'<th>', KT_I18N::translate('Family tree'), '</th>',
-				'</tr>',
-			'</thead>',
-			'<tbody>',
-	 	'</tbody>',
-		'</table>';
-}
+							<th><?php echo KT_I18N::translate('Timestamp'); ?></th>
+							<th><?php echo KT_I18N::translate('Status'); ?></th>
+							<th><?php echo KT_I18N::translate('Record'); ?></th>
+							<th class="text-center"><?php echo KT_I18N::translate('GEDCOM Data'); ?></th>
+							<th></th>
+							<th><?php echo KT_I18N::translate('User'); ?></th>
+							<th><?php echo KT_I18N::translate('Family tree'); ?></th>
+						</tr>
+					</thead>
+					<tbody>
+			 		</tbody>
+				</table>
+			</div>
+		</div>
+	<?php } ?>
+</div>
+<?php
