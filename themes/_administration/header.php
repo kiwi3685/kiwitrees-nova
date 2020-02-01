@@ -48,10 +48,10 @@ asort($site_tools);
  */
 $ft_tools = array(
 	"admin_trees_check.php"			=> KT_I18N::translate('Check for GEDCOM errors'),
-	"admin_site_change.php"			=> KT_I18N::translate('Changes log'),
+	"admin_trees_change.php"		=> KT_I18N::translate('Changes log'),
 	"admin_trees_addunlinked.php"	=> KT_I18N::translate('Add unlinked records'),
 	"admin_trees_places.php"		=> KT_I18N::translate('Place name editing'),
-	"admin_site_merge.php"			=> KT_I18N::translate('Merge records'),
+	"admin_trees_merge.php"			=> KT_I18N::translate('Merge records'),
 	"admin_trees_renumber.php"		=> KT_I18N::translate('Renumber family tree'),
 	"admin_trees_append.php"		=> KT_I18N::translate('Append family tree'),
 	"admin_trees_duplicates.php"	=> KT_I18N::translate('Find duplicate individuals'),
