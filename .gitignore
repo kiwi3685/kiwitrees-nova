@@ -7,7 +7,7 @@
 npm-debug.log
 /node_modules
 package.json
-prepros-*.config
+prepros.config
 
 /data/cache/
 /data/media/
