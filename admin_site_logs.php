@@ -40,7 +40,7 @@ $latest		= KT_DB::prepare("SELECT DATE(MAX(log_time)) FROM `##log`")->execute(ar
 $action	= KT_Filter::get('action');
 $from	= KT_Filter::get('from', '\d\d\d\d-\d\d-\d\d', $earliest);
 $to		= KT_Filter::get('to',   '\d\d\d\d-\d\d-\d\d', $latest);
-$type	= KT_Filter::get('type', 'auth|change|config|debug|edit|error|media|search');
+$type	= KT_Filter::get('type', 'auth|change|config|debug|edit|error|media|search|spam');
 $text	= KT_Filter::get('text');
 $ip		= KT_Filter::get('ip');
 $user	= KT_Filter::get('user');
@@ -96,7 +96,7 @@ $SELECT2=
 	" LEFT JOIN `##user`   USING (user_id)".   // user may be deleted
 	" LEFT JOIN `##gedcom` USING (gedcom_id)"; // gedcom may be deleted
 if ($query) {
-	$WHERE=" WHERE ".implode(' AND ', $query);
+	$WHERE=" WHERE " . implode(' AND ', $query);
 } else {
 	$WHERE='';
 }
@@ -127,19 +127,19 @@ switch($action) {
 			for ($i = 0; $i < $iSortingCols; ++$i) {
 				// Datatables numbers columns 0, 1, 2, ...
 				// MySQL numbers columns 1, 2, 3, ...
-				switch (safe_GET('sSortDir_'.$i)) {
+				switch (safe_GET('sSortDir_' . $i)) {
 				case 'asc':
-					if ((int)safe_GET('iSortCol_'.$i)==0) {
-						$ORDER_BY.='log_id ASC '; // column 0 is "timestamp", using log_id gives the correct order for events in the same second
+					if ((int)safe_GET('iSortCol_' . $i) == 0) {
+						$ORDER_BY .= 'log_id ASC '; // column 0 is "timestamp", using log_id gives the correct order for events in the same second
 					} else {
-						$ORDER_BY.=(1+(int)safe_GET('iSortCol_'.$i)).' ASC ';
+						$ORDER_BY .= (1 + (int)safe_GET('iSortCol_' . $i)) . ' ASC ';
 					}
 					break;
 				case 'desc':
 					if ((int)safe_GET('iSortCol_'.$i)==0) {
-						$ORDER_BY.='log_id DESC ';
+						$ORDER_BY .= 'log_id DESC ';
 					} else {
-						$ORDER_BY.=(1+(int)safe_GET('iSortCol_'.$i)).' DESC ';
+						$ORDER_BY .= ( 1 + (int)safe_GET('iSortCol_' . $i)) . ' DESC ';
 					}
 					break;
 				}
@@ -152,14 +152,14 @@ switch($action) {
 		}
 
 		// This becomes a JSON list, not array, so need to fetch with numeric keys.
-		$data = KT_DB::prepare($SELECT1.$WHERE.$ORDER_BY.$LIMIT)->execute($args)->fetchAll(PDO::FETCH_NUM);
+		$data = KT_DB::prepare($SELECT1 . $WHERE . $ORDER_BY . $LIMIT)->execute($args)->fetchAll(PDO::FETCH_NUM);
 		foreach ($data as &$row) {
 			$row[2] = htmlspecialchars($row[2]);
 		}
 
 		// Total filtered/unfiltered rows
 		$iTotalDisplayRecords	= KT_DB::prepare("SELECT FOUND_ROWS()")->fetchColumn();
-		$iTotalRecords			= KT_DB::prepare($SELECT2.$WHERE)->execute($args)->fetchColumn();
+		$iTotalRecords			= KT_DB::prepare($SELECT2 . $WHERE)->execute($args)->fetchColumn();
 
 		header('Content-type: application/json');
 		echo json_encode(array( // See http://www.datatables.net/usage/server-side
@@ -238,7 +238,7 @@ uksort($users_array, 'strnatcasecmp');
 				</div>
 				<div class="cell medium-2">
 					<label class="h6"><?php echo KT_I18N::translate('Type'); ?></label>
-					<?php echo select_edit_control('type', array(''=>'', 'auth'=>'auth','config'=>'config','debug'=>'debug','edit'=>'edit','error'=>'error','media'=>'media','search'=>'search'), null, $type, ''); ?>
+					<?php echo select_edit_control('type', array(''=>'', 'auth'=>'auth','config'=>'config','debug'=>'debug','edit'=>'edit','error'=>'error','media'=>'media','search'=>'search', 'spam'=>'spam'), null, $type, ''); ?>
 				</div>
 				<div class="cell medium-2">
 					<label class="h6"><?php echo KT_I18N::translate('IP address'); ?></label>
@@ -261,7 +261,6 @@ uksort($users_array, 'strnatcasecmp');
 						<i class="<?php echo $iconStyle; ?> fa-search"></i>
 						<?php echo KT_I18N::translate('Search'); ?>
 					</button>
-
 					<button type="submit" class="button" <?php echo 'onclick="if (confirm(\'' . htmlspecialchars(KT_I18N::translate('Permanently delete these records?')) . '\')) {document.logs.action.value=\'delete\';return true;} else {return false;}"' . ($action=='show' ? '' : 'disabled="disabled"');?> >
 						<i class="<?php echo $iconStyle; ?> fa-trash-alt"></i>
 						<?php echo KT_I18N::translate('Delete'); ?>
