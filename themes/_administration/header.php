@@ -196,7 +196,7 @@ $this
 		<div id="admin-container" class="grid-x"> <!--  closed in footer.php -->
 			<!-- normal menu -->
 			<div id="admin-menu" class="cell large-2">
-				<ul id="kiwitrees-menu" class="menu vertical accordion-menu" style="visibility:hidden;" data-accordion-menu data-multi-open="false">
+				<ul id="kiwitrees-menu" class="menu vertical accordion-menu" style="visibility:hidden;" data-accordion-menu  data-allow-all-closed="true">
 					<li>
 					    <a href="#" class="admin-menu-title">
 							<span class="fa-stack" style="vertical-align: top;">
