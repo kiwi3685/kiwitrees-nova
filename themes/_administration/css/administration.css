@@ -10996,16 +10996,16 @@ body {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  height: 90vh;
+  height: 100vh;
 }
-body #admin-head, body footer {
+body #admin-head, body #admin-container, body footer {
   -ms-flex-negative: 0;
       flex-shrink: 0;
 }
 body #admin-container {
   -webkit-box-flex: 1;
-      -ms-flex: 1 0 auto;
-          flex: 1 0 auto;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
   /* Use 1 0 auto instead of just 1 for backwards compatibility with other browsers */
 }
 
@@ -11051,10 +11051,15 @@ body #admin-container {
 #admin-head .top-bar .top-bar-left .menu li ul li span {
   color: #555555;
 }
-#admin-head .top-bar .title-bar {
+#admin-head .title-bar {
   /* for responsive menu */
+  background: none;
+  width: 100%;
 }
-#admin-head .top-bar .title-bar .menu-icon {
+#admin-head .title-bar div.reponsiveMenu {
+  margin: auto;
+}
+#admin-head .title-bar .menu-icon {
   margin-left: 1rem;
   margin-right: 1rem;
 }
@@ -11067,68 +11072,68 @@ body #admin-container {
 #admin-container #admin-menu {
   background-color: #87b1ca;
 }
-#admin-container #admin-menu .accordion-menu .admin-menu-title {
+#admin-container #admin-menu.accordion-menu .admin-menu-title {
   border-top: 0.0625rem #e7eff4 solid;
   border-bottom: 0.0625rem #e7eff4 solid;
 }
-#admin-container #admin-menu .accordion-menu .admin-menu-title span {
+#admin-container #admin-menu.accordion-menu .admin-menu-title span {
   font-weight: 600;
   line-height: 2;
   vertical-align: middle;
 }
-#admin-container #admin-menu .accordion-menu .admin-menu-title span svg.fa-stack-1x:hover {
+#admin-container #admin-menu.accordion-menu .admin-menu-title span svg.fa-stack-1x:hover {
   -webkit-transition: all 0.65s linear 0s;
   -o-transition: all 0.65s linear 0s;
   transition: all 0.65s linear 0s;
 }
-#admin-container #admin-menu .accordion-menu .admin-menu-title span svg.fa-stack-1x:hover {
+#admin-container #admin-menu.accordion-menu .admin-menu-title span svg.fa-stack-1x:hover {
   -webkit-transform: rotate(360deg);
       -ms-transform: rotate(360deg);
           transform: rotate(360deg);
 }
-#admin-container #admin-menu .accordion-menu .admin-menu-title svg[data-fa-pseudo-element=":after"] {
+#admin-container #admin-menu.accordion-menu .admin-menu-title svg[data-fa-pseudo-element=":after"] {
   margin-top: 0.35rem;
   position: absolute;
   right: 1rem;
 }
-#admin-container #admin-menu .accordion-menu a {
+#admin-container #admin-menu.accordion-menu a {
   color: #fefefe;
 }
-#admin-container #admin-menu .accordion-menu a svg.foreground {
+#admin-container #admin-menu.accordion-menu a svg.foreground {
   color: #87b1ca;
 }
-#admin-container #admin-menu .accordion-menu a.current {
+#admin-container #admin-menu.accordion-menu a.current {
   color: #5da423 !important;
   font-weight: 600;
 }
-#admin-container #admin-menu .accordion-menu .is-accordion-submenu-parent.expanded a {
+#admin-container #admin-menu.accordion-menu .is-accordion-submenu-parent.expanded a {
   background-color: #c3d8e5;
   color: #878787;
 }
-#admin-container #admin-menu .accordion-menu .is-accordion-submenu-parent a {
+#admin-container #admin-menu.accordion-menu .is-accordion-submenu-parent a {
   background-color: #87b1ca;
   padding: 1rem;
 }
-#admin-container #admin-menu .accordion-menu .is-accordion-submenu-parent a:hover {
+#admin-container #admin-menu.accordion-menu .is-accordion-submenu-parent a:hover {
   color: #87b1ca;
   background-color: #c3d8e5;
 }
-#admin-container #admin-menu .accordion-menu .is-accordion-submenu-parent a:hover svg.foreground {
+#admin-container #admin-menu.accordion-menu .is-accordion-submenu-parent a:hover svg.foreground {
   color: #fefefe;
 }
-#admin-container #admin-menu .accordion-menu .is-accordion-submenu-parent[aria-expanded=true] a {
+#admin-container #admin-menu.accordion-menu .is-accordion-submenu-parent[aria-expanded=true] a {
   background-color: #c3d8e5;
 }
-#admin-container #admin-menu .accordion-menu .is-accordion-submenu a {
+#admin-container #admin-menu.accordion-menu .is-accordion-submenu a {
   background-color: #c3d8e5;
   font-size: 0.9rem;
   padding: 0.5rem 1rem;
   text-indent: 2rem;
 }
-#admin-container #admin-menu .accordion-menu .is-accordion-submenu a:hover {
+#admin-container #admin-menu.accordion-menu .is-accordion-submenu a:hover {
   color: #87b1ca;
 }
-#admin-container #admin-menu .accordion-menu .is-accordion-submenu a svg[data-fa-pseudo-element=":before"] {
+#admin-container #admin-menu.accordion-menu .is-accordion-submenu a svg[data-fa-pseudo-element=":before"] {
   margin-right: 1rem;
 }
 #admin-container #admin-menu .accordion-menu .is-accordion-submenu-parent .admin-menu-title:after {
@@ -11517,7 +11522,7 @@ footer {
   height: 4rem;
 }
 footer .logo {
-  padding: 2rem;
+  padding: 1rem;
 }
 footer .logo a {
   color: #fefefe;
