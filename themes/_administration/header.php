@@ -188,8 +188,10 @@ $this
 			<!-- responsive menu -->
 			<div class="title-bar" data-hide-for="large" data-responsive-toggle="admin-menu" style="display: none;">
 				<div class="reponsiveMenu">
-					<button class="menu-icon" type="button" data-toggle="admin-menu"></button>
-					<div class="title-bar-title"><?php echo KT_I18N::translate('Menu'); ?></div>
+					<button type="button" data-toggle="admin-menu">
+						<i class="menu-icon"></i>
+						<div class="title-bar-title"><?php echo KT_I18N::translate('Menu'); ?></div>
+					</button>
 				<div>
 			</div>
 		</nav> <!--  close admin_head -->

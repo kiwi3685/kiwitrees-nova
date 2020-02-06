@@ -27,6 +27,7 @@ prepros.config
 /library/colorbox/content
 /library/colorbox/example*
 /library/colorbox/jquery.colorbox.js
+/library/colorbox/colorbox.ai
 /library/colorbox/bower.json
 /library/colorbox/LICENSE.md
 /library/colorbox/README.md

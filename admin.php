@@ -1843,6 +1843,7 @@ function old_paths() {
 		// Other
 		KT_ROOT . 'expand_view.php',
 		KT_ROOT . 'admin_site_lang.php',
+		KT_ROOT . 'js/jquery.colorbox-min.js',
 
 	);
 }

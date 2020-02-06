@@ -378,23 +378,23 @@ input[type=search] {
 }
 
 ::-webkit-input-placeholder {
-  color: #cacaca;
+  color: #878787;
 }
 
 ::-moz-placeholder {
-  color: #cacaca;
+  color: #878787;
 }
 
 :-ms-input-placeholder {
-  color: #cacaca;
+  color: #878787;
 }
 
 ::-ms-input-placeholder {
-  color: #cacaca;
+  color: #878787;
 }
 
 ::placeholder {
-  color: #cacaca;
+  color: #878787;
 }
 
 [type=file],
@@ -10971,7 +10971,8 @@ label.radio_inline {
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
   list-style: none;
-  max-height: 12.5rem;
+  max-height: 20rem;
+  overflow: hidden;
 }
 
 div[id$=-page] {
@@ -11059,9 +11060,13 @@ body #admin-container {
 #admin-head .title-bar div.reponsiveMenu {
   margin: auto;
 }
-#admin-head .title-bar .menu-icon {
-  margin-left: 1rem;
-  margin-right: 1rem;
+#admin-head .title-bar div.reponsiveMenu .title-bar-title {
+  display: inline-block;
+  vertical-align: middle;
+  font-weight: bold;
+  font-size: 1.25rem;
+  color: #fefefe;
+  margin: 0 0.5rem;
 }
 #admin-head #admin-title {
   background-color: #87b1ca;
