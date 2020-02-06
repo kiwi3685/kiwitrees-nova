@@ -23,6 +23,15 @@ prepros.config
 /library/swiftmailer/tests
 /library/swiftmailer/doc
 
+#colorbox
+/library/colorbox/content
+/library/colorbox/example*
+/library/colorbox/jquery.colorbox.js
+/library/colorbox/bower.json
+/library/colorbox/LICENSE.md
+/library/colorbox/README.md
+/library/colorbox/package.json
+
 /modules_v4/database_backup/vendor/r23/msd/work
 /modules_v4/gallery/galleria/themes/azur
 /modules_v4/gallery/galleria/themes/folio
