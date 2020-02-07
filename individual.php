@@ -134,121 +134,124 @@ if (KT_Module::getActiveSidebars()) {
 	$class = " large-9";
 } else {
 	$class = "";
+}
+// Check if hightlight image is active
+if ($highlightImage) {
+	$class2 = " medium-9 large-10";
+} else {
+	$class2 = "";
 } ?>
 
+<!-- Start page layout  -->
 <div id="indi-page" class="grid-x grid-margin-x">
-	<div class="cell<?php echo $class; ?>">
-		<?php if ($controller->record->canDisplayDetails()) { ?>
-			<!-- Header area -->
-			<div class="grid-x indiContent">
-				<?php $globalfacts = $controller->getGlobalFacts(); ?>
-				<!-- Preferred name, age etc -->
-				<div class="cell">
-					<div class="grid-x grid-padding-x">
-						<div class="cell medium-8 large-9">
-							<h3 class="text-center medium-text-left"><?php echo $controller->record->getFullName(); ?></h3>
-						</div>
-						<div class="cell medium-4 large-3">
-							<?php
-							$bdate = $controller->record->getBirthDate();
-							$ddate = $controller->record->getDeathDate();
-							?>
-							<h4 class="text-center medium-text-right">
-								<?php foreach ($globalfacts as $key => $value) {
-									$fact = $value->getTag();
-									if ($fact == "SEX") $controller->print_sex_record($value);
-								} ?>
-								<span class="header_age">
-									<?php if ($bdate->isOK() && !$controller->record->isDead()) {
-										// If living display age
-										echo KT_Gedcom_Tag::getLabelValue('AGE', get_age_at_event(KT_Date::GetAgeGedcom($bdate), true), '', 'span');
-									} elseif ($bdate->isOK() && $ddate->isOK()) {
-										// If dead, show age at death
-										echo KT_Gedcom_Tag::getLabelValue('AGE', get_age_at_event(KT_Date::GetAgeGedcom($bdate, $ddate), false), '', 'span');
+	<?php if ($controller->record->canDisplayDetails()) { ?>
+		<div class="cell<?php echo $class; ?>">
+				<!-- Header area -->
+				<div class="grid-x indiContent">
+					<?php $globalfacts = $controller->getGlobalFacts(); ?>
+					<!-- Preferred name, age etc -->
+					<div class="cell">
+						<div class="grid-x grid-padding-x">
+							<div class="cell medium-8 large-9">
+								<h3 class="text-center medium-text-left"><?php echo $controller->record->getFullName(); ?></h3>
+							</div>
+							<div class="cell medium-4 large-3">
+								<?php
+								$bdate = $controller->record->getBirthDate();
+								$ddate = $controller->record->getDeathDate();
+								?>
+								<h4 class="text-center medium-text-right">
+									<?php foreach ($globalfacts as $key => $value) {
+										$fact = $value->getTag();
+										if ($fact == "SEX") $controller->print_sex_record($value);
 									} ?>
-								</span>
-								<span id="dates">
-									<?php echo $controller->record->getLifeSpan(); ?>
-								</span>
-							</h4>
+									<span class="header_age">
+										<?php if ($bdate->isOK() && !$controller->record->isDead()) {
+											// If living display age
+											echo KT_Gedcom_Tag::getLabelValue('AGE', get_age_at_event(KT_Date::GetAgeGedcom($bdate), true), '', 'span');
+										} elseif ($bdate->isOK() && $ddate->isOK()) {
+											// If dead, show age at death
+											echo KT_Gedcom_Tag::getLabelValue('AGE', get_age_at_event(KT_Date::GetAgeGedcom($bdate, $ddate), false), '', 'span');
+										} ?>
+									</span>
+									<span id="dates">
+										<?php echo $controller->record->getLifeSpan(); ?>
+									</span>
+								</h4>
+							</div>
+						</div>
+					</div>
+					<div class="cell">
+						<div class="grid-x indiHeader">
+							<?php if ($highlightImage) { ?>
+								<div class="cell medium-3 large-2 small-text-center medium-text-left">
+									<?php echo $controller->record->displayImage(); ?>
+								</div>
+							<?php } ?>
+							<div class="cell<?php echo $class2; ?>">
+								<!-- Name details -->
+								<div class="accordion" data-accordion data-allow-all-closed="true" data-multi-open="false" data-slide-speed="500">
+									<?php foreach ($globalfacts as $key => $value) {
+										$fact = $value->getTag();
+										if ($fact == "NAME") {
+											$controller->print_name_record($value);
+										}
+									} ?>
+								</div>
+							</div>
+							<?php if (
+								// Relationship to default individual
+								array_key_exists('chart_relationship', KT_Module::getActiveModules()) &&
+									KT_USER_ID &&
+									get_gedcom_setting(KT_GED_ID, 'TAB_REL_TO_DEFAULT_INDI') > 0
+								) { ?>
+									<div class="cell medium-12 text-right fam_rela"><?php echo printIndiRelationship(); ?></div>
+							<?php } ?>
 						</div>
 					</div>
 				</div>
+			<?php // =============== Individual page tabs ======================
+			foreach ($controller->tabs as $tab) {
+				if (substr($tab->getName(), 0, 4) == 'tabi') {
+					echo $tab->getPreLoadContent();
+					$modules[] = $tab;
+				}
+			} ?>
+			<div class="grid-x">
 				<div class="cell">
-					<div class="grid-x indiHeader">
-						<?php if ($highlightImage) { ?>
-							<div class="cell medium-3 large-2 small-text-center medium-text-left">
-								<?php echo $controller->record->displayImage(); ?>
-							</div>
-							<div class="cell medium-9 large-10">
-						<?php } else { ?>
-							<div class="cell">
-						<?php } ?>
-							<!-- Name details -->
-							<div class="accordion" data-accordion data-allow-all-closed="true" data-multi-open="false" data-slide-speed="500">
-								<?php foreach ($globalfacts as $key => $value) {
-									$fact = $value->getTag();
-									if ($fact == "NAME") {
-										$controller->print_name_record($value);
-									}
-								} ?>
-							</div>
-						</div>
-						<?php if (
-							// Relationship to default individual
-							array_key_exists('chart_relationship', KT_Module::getActiveModules()) &&
-								KT_USER_ID &&
-								get_gedcom_setting(KT_GED_ID, 'TAB_REL_TO_DEFAULT_INDI') > 0
-							) { ?>
-								<div class="cell medium-12 text-right fam_rela"><?php echo printIndiRelationship(); ?></div>
-						<?php } ?>
+					<ul class="tabs" id="indiTabs" data-deep-link="true" data-allow-all-closed="true" data-responsive-accordion-tabs="tabs small-accordion medium-tabs" >
+						<?php foreach ($modules as $tab) {
+							if ($tab->isGrayedOut()) {
+								$greyed_out = ' rela';
+							} else {
+								$greyed_out = '';
+							}
+							$ajax = '';
+							if ($tab->hasTabContent()) { ?>
+								<li class="<?php echo $tab->getName(); ?> tabs-title<?php echo $greyed_out; ?>">
+									<a href="#<?php echo $tab->getName(); ?>" title="<?php echo $tab->getDescription(); ?>">
+										<?php echo $tab->getTitle(); ?>
+									</a>
+								</li>
+							<?php }
+						} ?>
+					</ul>
+					<div class="tabs-content" data-tabs-content="indiTabs">
+						<?php foreach ($modules as $tab) {
+							if ($tab->hasTabContent()) { ?>
+								<div class="tabs-panel" id="<?php echo $tab->getName(); ?>">
+									<?php echo $tab->getTabContent(); ?>
+								</div>
+							<?php }
+						} ?>
 					</div>
 				</div>
+			</div>
+		</div>
+		<?php // Check if sidebar active and set widths accordingly
+		if (KT_Module::getActiveSidebars()) { ?>
+			<div class="cell large-3">
+				<?php echo $sidebar_html; ?>
 			</div>
 		<?php }
-		// =============== Individual page tabs ======================
-		foreach ($controller->tabs as $tab) {
-			if (substr($tab->getName(), 0, 4) == 'tabi') {
-				echo $tab->getPreLoadContent();
-				$modules[] = $tab;
-			}
-		} ?>
-		<div class="grid-x">
-			<div class="cell">
-				<ul class="tabs" id="indiTabs" data-deep-link="true" data-allow-all-closed="true" data-responsive-accordion-tabs="tabs small-accordion medium-tabs" >
-					<?php foreach ($modules as $tab) {
-						if ($tab->isGrayedOut()) {
-							$greyed_out = ' rela';
-						} else {
-							$greyed_out = '';
-						}
-						$ajax = '';
-						if ($tab->hasTabContent()) { ?>
-							<li class="<?php echo $tab->getName(); ?> tabs-title<?php echo $greyed_out; ?>">
-								<a href="#<?php echo $tab->getName(); ?>" title="<?php echo $tab->getDescription(); ?>">
-									<?php echo $tab->getTitle(); ?>
-								</a>
-							</li>
-						<?php }
-					} ?>
-				</ul>
-				<div class="tabs-content" data-tabs-content="indiTabs">
-					<?php foreach ($modules as $tab) {
-						if ($tab->hasTabContent()) { ?>
-							<div class="tabs-panel" id="<?php echo $tab->getName(); ?>">
-								<?php echo $tab->getTabContent(); ?>
-							</div>
-						<?php }
-					} ?>
-				</div>
-			</div>
-		</div>
-	</div>
-	<?php // Check if sidebar active and set widths accordingly
-	if (KT_Module::getActiveSidebars()) { ?>
-		<div class="cell large-3">
-			<?php echo $sidebar_html; ?>
-		</div>
-	<?php } ?>
-</div>
-<?php
+	} ?>

@@ -50,7 +50,7 @@ $footer_layout		= $layouts[$ct_footer_blocks];
 $cells				= '1';
 ?>
 
-</div></main><!-- close the main div -->
+</div></div></main><!-- close the main div -->
 <?php if ($view != 'simple') { ?>
 	<footer class="grid-x grid-padding-x">
 		<?php if ($ct_footer_blocks > 0) {

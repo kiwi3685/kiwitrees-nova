@@ -89,12 +89,13 @@ class block_statistics_KT_Module extends KT_Module implements KT_Module_Block {
 			</div>';
 		}
 
-		$content .= '<div class="grid-x">
+		$content .= '
+		<div class="grid-x">
 			<div class="cell large-3">
 				<div class="grid-x grid-padding-x grid-padding-y">';
 					if ($stat_indi) {
 						$content.='<div class="cell small-6">' . KT_I18N::translate('Individuals') . '</div>
-						<div class="cell small-6"><a href="indilist.php?surname_sublist=no&amp;ged="' . KT_GEDURL . '">' . $stats->totalIndividuals() . '</a></div>
+						<div class="cell small-6"><a href="indilist.php?surname_sublist=no&amp;ged=' . KT_GEDURL . '">' . $stats->totalIndividuals() . '</a></div>
 						<div class="cell small-6"><i class="' . $iconStyle . ' fa-male"></i>' . KT_I18N::translate('Males') . '</div>
 						<div class="cell small-6">' . $stats->totalSexMales() . '<br>' . $stats->totalSexMalesPercentage() . '</div>
 						<div class="cell small-6"><i class="' . $iconStyle . ' fa-female"></i>' . KT_I18N::translate('Females') . '</div>
@@ -210,7 +211,8 @@ class block_statistics_KT_Module extends KT_Module implements KT_Module_Block {
 			</div>
 		</div>';
 		if ($stat_link) {
-			$content .= '<div class="callout secondary small">
+			$content .= '
+			<div class="callout secondary small">
 				<a href="module.php?mod=chart_statistics&mod_action=show&amp;ged=' . KT_GEDURL . '">
 					<i class="' . $iconStyle . ' fa-sitemap"></i>
 					<span>' . KT_I18N::translate('View statistics as graphs') . '</span>

@@ -58,7 +58,7 @@ class footer_logo_KT_Module extends KT_Module implements KT_Module_Footer {
 		//list all users for inter-user communication, only when logged in, and there is more than one user -->
 		$content = '
 			<div class="card-divider">
-				<h5><i class="kiwitrees_logo">&nbsp;</i></h5>
+				<h5 class="kiwitrees_logo">&nbsp;</h5>
 			</div>
 			<div class="card-section">
 				<p>
