@@ -297,11 +297,12 @@ class KT_Controller_Individual extends KT_Controller_GedcomRecord {
 		echo '<span id="sex"';
 			echo ' class="';
 			if ($event->getIsOld()) {
-				echo 'namered ';
+				echo 'namered';
 			}
 			if ($event->getIsNew()) {
-				echo 'nameblue ';
+				echo 'nameblue';
 			}
+			echo '"';
 			if ($line != 'new'){
 				switch ($sex) {
 				case 'M':

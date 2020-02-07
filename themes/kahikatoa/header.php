@@ -74,7 +74,6 @@
 		<meta http-equiv="x-ua-compatible" content="ie=edge">
 		<?php echo header_links($META_DESCRIPTION, $META_ROBOTS, $META_GENERATOR, $LINK_CANONICAL); ?>
 		<title><?php echo htmlspecialchars($title); ?></title>
-		<title>Kiwitrees-Nova</title>
 		<link rel="icon" href="<?php echo KT_THEME_URL; ?>images/favicon.png" type="image/png">
 		<link rel="stylesheet" href="<?php echo KT_DATATABLES_CSS; ?>">
 		<link rel="stylesheet" href="<?php echo KT_DATEPICKER_CSS; ?>">
@@ -104,7 +103,7 @@
 							</li>
 							<?php } ?>
 
-							<li class="show-for-large"><span class="kiwitrees_logo"><span></li>
+							<li class="show-for-large"><i class="kiwitrees_logo"></i></li>
 							<?php foreach (KT_MenuBar::getOtherMenus() as $menu) {
 								if (strpos($menu, KT_I18N::translate('Login')) && !KT_USER_ID && (array_key_exists('block_login', KT_Module::getInstalledModules('%')))) {
 									$module	= new block_login_KT_Module; ?>
