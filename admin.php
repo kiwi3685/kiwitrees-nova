@@ -168,7 +168,29 @@ $changes = KT_DB::prepare(
 				</p>
 			</div>
 		<?php }
-	} ?>
+
+		// PHP version info ?>
+		<div class="callout success">
+			<h4><?php echo KT_I18N::translate('You are using PHP version %s.', phpversion()); ?></h4>
+			<?php if (version_compare(phpversion(), '7.4', '<')) {
+				if (version_compare(phpversion(), '5.6', '<')) { ?>
+					<p>
+						<?php echo  KT_I18N::translate('Kiwitrees is no longer compatible with versions of PHP older than 7.0'); ?>
+					</p>
+				<?php } else { ?>
+					<p>
+						<?php echo  KT_I18N::translate('Kiwitrees is compatible with this version.'); ?>
+					</p>
+				<?php }
+			} else { ?>
+				<p>
+					<?php echo  KT_I18N::translate('Kiwitrees is not yet tested for compatibility with your version of PHP. It might work, but if you find any issues please report them on the <a class="current" href="%s" target="_blank">kiwitrees support forum</a>', KT_SUPPORT_URL); ?>
+				</p>
+			<?php } ?>
+		</div>
+
+	<?php } ?>
+
 	<div class="callout secondary">
 		<p><?php echo KT_I18N::translate('These pages provide access to all the configuration settings and management tools for this kiwitrees site.'); ?></p>
 		<p><?php echo /* I18N: %s is a URL/link to the project website */ KT_I18N::translate('Support is available at %s.', ' <a class="current" href="http://kiwitrees.net/forums/">kiwitrees.net forums</a>'); ?></p>
@@ -1785,8 +1807,9 @@ function old_paths() {
 		KT_ROOT . 'modules_v4/backup_to_dropbox/dropbox-sdk',
 		KT_ROOT . 'modules_v4/research_links/plugins/rotterdamds.php',
 		// Removed in kiwitrees 3.3.3
-//		KT_ROOT . 'js/d3.min.js',
-		KT_ROOT . 'modules_v4/research_links/plugins/vlaardingengeschiedenis.php',
+		KT_ROOT . 'modules_v4/research_links/plugins/vlaardingengeschiedenis.php', // archive no longer exists
+		KT_ROOT . 'statistics.php', // moved to modules
+		KT_ROOT . 'js/d3.v4.custom.min.js', //replaced by standard version
 
 		// *********************************************
 		// Removed in kiwitrees-nova 1.0.0
