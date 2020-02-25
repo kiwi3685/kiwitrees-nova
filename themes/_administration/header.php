@@ -33,7 +33,7 @@ global $iconStyle;
  * $site_tools [array]
  */
 $site_tools = array(
-	 "admin_site_config.php"	=> KT_I18N::translate('Site configuration'),
+	 "admin_site_config.php"	=> KT_I18N::translate('Configuration'),
 	 "admin_site_logs.php"		=> KT_I18N::translate('%s logs', KT_KIWITREES),
 	 "admin_site_info.php"		=> KT_I18N::translate('Server information'),
 	 "admin_site_access.php"	=> KT_I18N::translate('Access rules'),

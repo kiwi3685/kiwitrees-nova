@@ -11131,6 +11131,7 @@ body #admin-container {
 }
 #admin-container #admin-menu.accordion-menu .is-accordion-submenu a {
   background-color: #c3d8e5;
+  color: #555555;
   font-size: 0.9rem;
   padding: 0.5rem 1rem;
   text-indent: 2rem;
