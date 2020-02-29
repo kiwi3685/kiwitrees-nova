@@ -165,22 +165,23 @@ $controller
 			};
 		});
 
-		var selectRadio = jQuery("#recaptcha_select label input[name=USE_RECAPTCHA]:checked").val();
+		// set on load
+		var selectRadio = jQuery("[id^=USE_RECAPTCHA]:checked").val();
 		if (selectRadio == "1"){
 			jQuery("#google_recaptcha_details").css({"display":"block"});
 		} else {
 			jQuery("#google_recaptcha_details").css({"display":"none"});
 		};
-
-		jQuery("input[type=radio]").click("input[name=USE_RECAPTCHA]", function() {
+		// reset on change
+		jQuery("[id^=USE_RECAPTCHA]").on("change", function() {
 			var clickedRadio = jQuery(this).val();
+			alert(clickedRadio);
 			if (clickedRadio == "1") {
 				jQuery("#google_recaptcha_details").css({"display":"block"});
 			} else {
 				jQuery("#google_recaptcha_details").css({"display":"none"});
 			};
 		});
-
 	');
 ?>
 
@@ -206,7 +207,7 @@ $controller
 	<div class="tabs-content" data-tabs-content="site_admin_tabs">
 		<!-- Site configuration tab -->
 		<div class="tabs-panel is-active" id="site">
-			<form method="post" id="configform" name="configform" action="<?php echo KT_SCRIPT_NAME; ?>#site" data-abide novalidate>
+			<form method="post" name="configform" action="<?php echo KT_SCRIPT_NAME; ?>#site" data-abide novalidate>
 				<?php echo KT_Filter::getCsrf(); ?>
 				<input type="hidden" name="action" value="update-site">
 				<div class="grid-x grid-margin-x">
@@ -295,7 +296,7 @@ $controller
 		</div>
 		<!-- Mail configuration tab -->
 		<div class="tabs-panel" id="mail">
-			<form method="post" id="configform" name="configform" action="<?php echo KT_SCRIPT_NAME; ?>#mail" data-abide novalidate>
+			<form method="post" name="configform" action="<?php echo KT_SCRIPT_NAME; ?>#mail" data-abide novalidate>
 				<?php echo KT_Filter::getCsrf(); ?>
 				<input type="hidden" name="action" value="update-mail">
 				<div class="grid-x grid-margin-x">
@@ -417,7 +418,7 @@ $controller
 		</div>
 		<!-- Login configuration tab -->
 		<div class="tabs-panel" id="login">
-			<form method="post" id="configform" name="configform" action="<?php echo KT_SCRIPT_NAME; ?>#login" data-abide novalidate>
+			<form method="post" name="configform" action="<?php echo KT_SCRIPT_NAME; ?>#login" data-abide novalidate>
 				<?php echo KT_Filter::getCsrf(); ?>
 				<input type="hidden" name="action" value="update-login">
 				<div class="grid-x grid-margin-x">
@@ -484,7 +485,7 @@ $controller
 		</div>
 		<!-- Anti spam configuration tab -->
 		<div class="tabs-panel" id="spam">
-			<form method="post" id="configform" name="configform" action="<?php echo KT_SCRIPT_NAME; ?>#spam" data-abide novalidate>
+			<form method="post" name="configform" action="<?php echo KT_SCRIPT_NAME; ?>#spam" data-abide novalidate>
 				<?php echo KT_Filter::getCsrf(); ?>
 				<input type="hidden" name="action" value="update-spam">
 				<div class="grid-x grid-margin-x">
@@ -500,7 +501,7 @@ $controller
 							<?php echo  /* I18N: Help text for the “honeypot” site configuration setting */ KT_I18N::translate('This will create a secret field that only internet robots will see and complete. If they do, then their entry will be ignored.'); ?>
 						</div>
 					</div>
-					<div class="cell large-3">
+					<div id="recaptcha_select" class="cell large-3">
 						<label for="USE_RECAPTCHA"><?php echo KT_I18N::translate('Use Google reCAPTCHA v2'); ?></label>
 					</div>
 					<div class="cell large-9">
@@ -559,11 +560,15 @@ $controller
 						</div>
 					</div>
 				</div>
+				<button type="submit" class="button">
+					<i class="<?php echo $iconStyle; ?> fa-save"></i>
+					<?php echo KT_I18N::translate('Save'); ?>
+				</button>
 			</form>
 		</div>
 		<!-- Languages configuration tab -->
 		<div class="tabs-panel" id="lang">
-			<form method="post" id="configform" name="configform" action="<?php echo KT_SCRIPT_NAME; ?>#lang">
+			<form method="post" name="configform" action="<?php echo KT_SCRIPT_NAME; ?>#lang">
 				<?php echo KT_Filter::getCsrf(); ?>
 				<input type="hidden" name="action" value="update-lang">
 				<div class="grid-x grid-margin-x">
