@@ -937,7 +937,7 @@ global $iconstyles;
 							<div class="cell large-9">
 								<?php echo simple_switch('NEW_SHOW_HIGHLIGHT_IMAGES', true, get_gedcom_setting(KT_GED_ID, 'SHOW_HIGHLIGHT_IMAGES')); ?>
 								 <div class="cell helpcontent space">
-									 <a href="http://kiwitrees.net/faqs/general-topics/highlighted-images/" target="_blank" rel="noopener noreferrer">
+									 <a href="<?php echo KT_KIWITREES_URL; ?>/faqs/general-topics/highlighted-images/" target="_blank" rel="noopener noreferrer">
  										<?php echo KT_I18N::translate('Click here to view more information about highlight images on the kiwitrees.net website FAQs'); ?>
  									</a>
 								</div>

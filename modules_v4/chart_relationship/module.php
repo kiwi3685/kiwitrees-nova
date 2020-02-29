@@ -2,13 +2,13 @@
 /**
  * Kiwitrees: Web based Family History software
  * Copyright (C) 2012 to 2020 kiwitrees.net
- * 
+ *
  * Derived from webtrees (www.webtrees.net)
  * Copyright (C) 2010 to 2012 webtrees development team
- * 
+ *
  * Derived from PhpGedView (phpgedview.sourceforge.net)
  * Copyright (C) 2002 to 2010 PGV Development Team
- * 
+ *
  * Kiwitrees is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -193,7 +193,7 @@ class chart_relationship_KT_Module extends KT_Module implements KT_Module_Chart,
 		?>
 
 		<div id="relations_config">
-			<a class="current faq_link" href="http://kiwitrees.net/faqs/general-topics/displaying-relationships/" target="_blank" rel="noopener noreferrer" title="<?php echo KT_I18N::translate('View FAQ for this page.'); ?>"><?php echo KT_I18N::translate('View FAQ for this page.'); ?><i class="' . $iconStyle . ' fa-comments-o"></i></a>
+			<a class="current faq_link" href="<?php echo KT_KIWITREES_URL; ?>/faqs/general-topics/displaying-relationships/" target="_blank" rel="noopener noreferrer" title="<?php echo KT_I18N::translate('View FAQ for this page.'); ?>"><?php echo KT_I18N::translate('View FAQ for this page.'); ?><i class="' . $iconStyle . ' fa-comments-o"></i></a>
 			<h2><?php echo /* I18N: Configuration page title */ KT_I18N::translate('Relationship calculation options'); ?></h2>
 			<form method="post" action="#" name="tree">
 				<div class="config_options">

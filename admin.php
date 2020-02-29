@@ -57,7 +57,7 @@ if (
 	$server_warnings[] = '
 		<span class="warning">' .
 			KT_I18N::translate('Your web server is using PHP version %s, which is no longer receiving security updates.  You should ask your web service provider to upgrade to a later version as soon as possible.', PHP_VERSION) . '
-			<a href="http://php.net/supported-versions.php" target="_blank" rel="noopener noreferrer"><i class="icon-php"></i></a>
+			<a href="https://www.php.net/supported-versions.php" target="_blank" rel="noopener noreferrer"><i class="icon-php"></i></a>
 		<span>';
 } elseif (
 	PHP_VERSION_ID < 50600 ||
@@ -66,7 +66,7 @@ if (
 ) {
 	$server_warnings[] = '
 		<span class="accepted">' . KT_I18N::translate('Your web server is using PHP version %s, which is no longer maintained.  You should should ask your web service provider to upgrade to a later version.', PHP_VERSION) . '
-		<a href="http://php.net/supported-versions.php" target="_blank" rel="noopener noreferrer"><i class="icon-php"></i></a>
+		<a href="https://www.php.net/supported-versions.php" target="_blank" rel="noopener noreferrer"><i class="icon-php"></i></a>
 		<span>';
 }
 
@@ -147,9 +147,9 @@ $changes = KT_DB::prepare(
 		if ($latest_version) {
 			if (version_compare(KT_VERSION, $latest_version) < 0) { ?>
 				<div class="callout alert">
-					<h4><?php echo KT_KIWITREES, ' ', KT_VERSION; ?></h4>
+					<h4><?php echo KT_KIWITREES . ' ' . KT_VERSION; ?></h4>
 					<p>
-						<?php echo /* I18N: %s is a URL/link to the project website */ KT_I18N::translate('Version %s of kiwitrees is now available at %s.', $latest_version, ' <a class="current" href="http://kiwitrees.net/services/downloads/">kiwitrees.net downloads</a>'); ?>
+						<?php echo /* I18N: %s is a URL/link to the project website */ KT_I18N::translate('Version %s of kiwitrees is now available at %s.', $latest_version, ' <a class="current" href="' . KT_KIWITREES_URL . '/services/downloads/">kiwitrees.net downloads</a>'); ?>
 					</p>
 				</div>
 			<?php } else { ?>
@@ -193,7 +193,7 @@ $changes = KT_DB::prepare(
 
 	<div class="callout secondary">
 		<p><?php echo KT_I18N::translate('These pages provide access to all the configuration settings and management tools for this kiwitrees site.'); ?></p>
-		<p><?php echo /* I18N: %s is a URL/link to the project website */ KT_I18N::translate('Support is available at %s.', ' <a class="current" href="http://kiwitrees.net/forums/">kiwitrees.net forums</a>'); ?></p>
+		<p><?php echo /* I18N: %s is a URL/link to the project website */ KT_I18N::translate('Support is available at %s.', ' <a class="current" href="' . KT_KIWITREES_URL . '/forums/">kiwitrees.net forums</a>'); ?></p>
 	</div>
 	<?php // Server warnings
 	if ($server_warnings): ?>

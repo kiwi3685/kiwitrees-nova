@@ -36,8 +36,8 @@ define('KT_KIWITREES_URL',	 'https://kiwitrees.net/');
 define('KT_TRANSLATORS_URL', 'https://kiwitrees.net/forums/forum/support-forum/translation/');
 
 // Optionally, specify a CDN server for static content (e.g. CSS, JS, PNG)
-// For example, http://my.cdn.com/kiwitrees-static-1.3.1/
-define('KT_STATIC_URL', ''); // For example, http://my.cdn.com/kiwitrees-static-1.3.1/
+// For example, https://my.cdn.com/kiwitrees-static-1.3.1/
+define('KT_STATIC_URL', '');
 
 // Optionally, load major JS libraries from a CDN cerver
 define ('KT_USE_CDN', false);

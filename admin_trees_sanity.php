@@ -125,7 +125,7 @@ $controller
 ?>
 
 <div id="sanity_check" class="cell">
-	<a class="current faq_link" href="http://kiwitrees.net/faqs/general/sanity-check/" target="_blank" rel="noopener noreferrer" title="<?php echo KT_I18N::translate('View FAQ for this page.'); ?>"><?php echo KT_I18N::translate('View FAQ for this page.'); ?><i class="<?php echo $iconStyle; ?> fa-comment-dots"></i></a>
+	<a class="current faq_link" href="<?php echo KT_KIWITREES_URL; ?>/faqs/general/sanity-check/" target="_blank" rel="noopener noreferrer" title="<?php echo KT_I18N::translate('View FAQ for this page.'); ?>"><?php echo KT_I18N::translate('View FAQ for this page.'); ?><i class="<?php echo $iconStyle; ?> fa-comment-dots"></i></a>
 	<h3><?php echo $controller->getPageTitle(); ?></h3>
 	<h5><?php echo KT_I18N::translate('%s checks to help you monitor the quality of your family history data', count($checks)); ?></h5>
 	<div class="callout warning">

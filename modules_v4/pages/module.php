@@ -469,7 +469,7 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 			<div class="grid-x grid-margin-y">
 				<div class="cell">
 					<h4 class="inline"><?php $controller->getPageTitle(); ?></h4>
-<!--					<a class="current faq_link" href="http://kiwitrees.net/faqs/modules-faqs/pages/" target="_blank" rel="noopener noreferrer" title="'. KT_I18N::translate('View FAQ for this page.'). '">'. KT_I18N::translate('View FAQ for this page.'). '<i class="' . $iconStyle . ' fa-comments-o"></i></a> -->
+<!--					<a class="current faq_link" href="<?php echo KT_KIWITREES_URL; ?>/faqs/modules-faqs/pages/" target="_blank" rel="noopener noreferrer" title="'. KT_I18N::translate('View FAQ for this page.'). '">'. KT_I18N::translate('View FAQ for this page.'). '<i class="' . $iconStyle . ' fa-comments-o"></i></a> -->
 					<ul>
 						<li><a href="#pages_summary"><span><?php echo KT_I18N::translate('Summary'); ?></span></a></li>
 						<li><a href="#pages_pages"><span><?php echo KT_I18N::translate('Pages'); ?></span></a></li>
