@@ -507,7 +507,7 @@ $controller
 					<div class="cell large-9">
 						<?php echo edit_field_yes_no('USE_RECAPTCHA', KT_Site::preference('USE_RECAPTCHA')); ?>
 						<div class="cell helpcontent">
-							<?php echo  /* I18N: Help text for the recaptcha site configuration setting */ KT_I18N::translate('This can help limit the nember of spam attempts to register on your site.<br>It requires a pair of Google reCaptcha v2 API keys. Help to obtain this can be found on this kiwitrees FAQ page: <a href="https://kiwitrees.net/faqs/administration/site_admin/" target="_blank">Google reCaptcha v2</a>'); ?>
+							<?php echo  /* I18N: Help text for the recaptcha site configuration setting */ KT_I18N::translate('This can help limit the number of spam attempts to register on your site.<br>It requires a pair of Google reCaptcha v2 API keys. Help to obtain this can be found on this kiwitrees FAQ page: <a href="https://kiwitrees.net/faqs/administration/site_admin/" target="_blank">Google reCaptcha v2</a>'); ?>
 						</div>
 					</div>
 					<div id="google_recaptcha_details"  class="cell" style="display:none;">
