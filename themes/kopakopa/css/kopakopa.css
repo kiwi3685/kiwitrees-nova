@@ -7837,7 +7837,7 @@ nav {
     nav .top-bar ul.menu.dropdown {
       background: #e9e9e9; }
       nav .top-bar ul.menu.dropdown .kiwitrees_logo {
-        background: url(../images/kiwtrees-nova_logo_blue.svg) no-repeat center left;
+        background: url(../images/kiwitrees-nova_logo_blue.svg) no-repeat center left;
         background-size: contain;
         display: inline-block;
         height: 1.6rem;
@@ -7909,7 +7909,7 @@ main {
 footer {
   background-color: #428bca; }
   footer .kiwitrees_logo {
-    background: url(../images/kiwtrees-nova_logo_blue.svg) no-repeat center -0.25rem;
+    background: url(../images/kiwitrees-nova_logo_blue.svg) no-repeat center -0.25rem;
     background-size: contain;
     height: 2rem;
     width: 100%; }
