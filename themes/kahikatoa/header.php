@@ -97,25 +97,16 @@
 						<ul class="dropdown menu" data-dropdown-menu>
 							<?php if ($show_widgetbar) { ?>
 								<li>
-								<button class="button clear widget" type="button" data-toggle="widgetBar" title="<?php echo KT_I18N::translate('Widget bar'); ?>">
-									<i class="<?php echo $iconStyle; ?> fa-bars fa-2x"></i>
-								</button>
-							</li>
+									<button class="button clear widget" type="button" data-toggle="widgetBar" title="<?php echo KT_I18N::translate('Widget bar'); ?>">
+										<i class="<?php echo $iconStyle; ?> fa-bars fa-2x"></i>
+									</button>
+								</li>
 							<?php } ?>
-
-							<li class="show-for-large"><i class="kiwitrees_logo"></i></li>
+							<li class="show-for-large">
+								<i class="kiwitrees_logo"></i>
+							</li>
 							<?php foreach (KT_MenuBar::getOtherMenus() as $menu) {
-								if (strpos($menu, KT_I18N::translate('Login')) && !KT_USER_ID && (array_key_exists('block_login', KT_Module::getInstalledModules('%')))) {
-									$module	= new block_login_KT_Module; ?>
-									<li>
-										<a href="#"><?php echo (KT_Site::preference('USE_REGISTRATION_MODULE') ? KT_I18N::translate('Login or Register') : KT_I18N::translate('Login')); ?></a>
-										<ul id="login_popup" class="dropdown" data-dropdown-content>
-											<li><?php echo $module->getBlock('block_login'); ?></li>
-										</ul>
-									</li>
-								<?php } else {
-									echo $menu->getMenuAsList();
-								}
+								echo $menu->getMenuAsList();
 							} ?>
 						</ul>
 					</div>

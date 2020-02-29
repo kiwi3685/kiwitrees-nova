@@ -208,6 +208,24 @@ class KT_MenuBar {
 		}
 	}
 
+	public static function getLoginDropdownMenu() {
+		global $SEARCH_SPIDER;
+
+		if ($SEARCH_SPIDER) {
+			return null;
+		} else {
+			$dropdown	= menu_login_dropdown_KT_Module::login_dropdown();
+			$label		= KT_Site::preference('USE_REGISTRATION_MODULE') ? KT_I18N::translate('Login or Register') : KT_I18N::translate('Login');
+
+			$menu		= new KT_Menu($label,'#', 'menu-login');
+			$submenu	= new KT_Menu($dropdown, null, 'menu-login_popup');
+			$menu->addClass('', '', 'fa-lock');
+			$menu->addSubMenu($submenu);
+
+			return $menu;
+		}
+	}
+
 	public static function getFavoritesMenu() {
 		global $controller, $SEARCH_SPIDER;
 		$iconStyle = '';

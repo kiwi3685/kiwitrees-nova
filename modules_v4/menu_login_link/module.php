@@ -2,13 +2,13 @@
 /**
  * Kiwitrees: Web based Family History software
  * Copyright (C) 2012 to 2020 kiwitrees.net
- * 
+ *
  * Derived from webtrees (www.webtrees.net)
  * Copyright (C) 2010 to 2012 webtrees development team
- * 
+ *
  * Derived from PhpGedView (phpgedview.sourceforge.net)
  * Copyright (C) 2002 to 2010 PGV Development Team
- * 
+ *
  * Kiwitrees is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -26,7 +26,7 @@ if (!defined('KT_KIWITREES')) {
 	exit;
 }
 
-class menu_login_KT_Module extends KT_Module implements KT_Module_Menu {
+class menu_login_link_KT_Module extends KT_Module implements KT_Module_Menu {
 	// Extend KT_Module
 	public function getTitle() {
 		return /* I18N: Name of a module/menu */ KT_I18N::translate('Login menu');
@@ -34,7 +34,7 @@ class menu_login_KT_Module extends KT_Module implements KT_Module_Menu {
 
 	// Extend KT_Module
 	public function getDescription() {
-		return /* I18N: Description of the languages module */ KT_I18N::translate('The Login menu item (other menus)');
+		return /* I18N: Description of the languages module */ KT_I18N::translate('The Login menu item as a simple link (other menus)');
 	}
 
 	// Implement KT_Module_Menu

@@ -504,7 +504,7 @@ abstract class KT_Module {
 			'menu_reports'			=> array('enabled', NULL, 5, NULL, NULL, NULL, NULL),
 			'menu_search'			=> array('enabled', NULL, 6, NULL, NULL, NULL, NULL),
 			// menus - extra menu
-			'menu_login'			=> array('enabled', NULL, 13, NULL, NULL, NULL, NULL),
+			'menu_login_link'			=> array('enabled', NULL, 13, NULL, NULL, NULL, NULL),
 			'menu_favorites'		=> array('enabled', NULL, 14, NULL, NULL, NULL, NULL),
 			'menu_languages'		=> array('enabled', NULL, 15, NULL, NULL, NULL, NULL),
 			// sidebar

@@ -34,7 +34,7 @@ class block_login_KT_Module extends KT_Module implements KT_Module_Block {
 
 	// Extend class KT_Module
 	public function getDescription() {
-		return /* I18N: Description of the “Login” module */ KT_I18N::translate('An alternative way to login and logout.');
+		return /* I18N: Description of the “Login” module */ KT_I18N::translate('Login and logout from a block on the Home page.');
 	}
 
 	// Implement class KT_Module_Block
@@ -84,7 +84,7 @@ class block_login_KT_Module extends KT_Module implements KT_Module_Block {
 							KT_I18N::translate('Login') . '
 						</button>
 						<p>
-							<a href="' . KT_LOGIN_URL . '?action=requestpw">' . KT_I18N::translate('Request new password').'</a>
+							<a href="' . KT_LOGIN_URL . '?action=requestpw">' . KT_I18N::translate('Request new password') . '</a>
 						</p>';
 						if (KT_Site::preference('USE_REGISTRATION_MODULE')) {
 							$content .= '
