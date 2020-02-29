@@ -1864,6 +1864,7 @@ function old_paths() {
 		KT_ROOT . 'modules_v4/individuals',
 		KT_ROOT . 'modules_v4/privacy',
 		KT_ROOT . 'modules_v4/menu_login',
+		KT_ROOT . 'modules_v4/stories',
 		// Other
 		KT_ROOT . 'expand_view.php',
 		KT_ROOT . 'admin_site_lang.php',
