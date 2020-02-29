@@ -205,7 +205,7 @@ if ($highlightImage) {
 									KT_USER_ID &&
 									get_gedcom_setting(KT_GED_ID, 'TAB_REL_TO_DEFAULT_INDI') > 0
 								) { ?>
-									<div class="cell medium-12 text-right fam_rela"><?php echo printIndiRelationship(); ?></div>
+									<div class="cell medium-12 text-right indi_rela"><?php echo printIndiRelationship(); ?></div>
 							<?php } ?>
 						</div>
 					</div>
