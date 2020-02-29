@@ -1,7 +1,7 @@
 # robots.txt file for kiwitrees
 #
 # Kiwitrees-nova: Web based Family History software
-# Copyright (C) 2016 kiwitrees.net
+# Copyright (C) 2020 kiwitrees.net
 #
 # Derived from webtrees
 # Copyright (C) 2012 webtrees development team
@@ -13,7 +13,7 @@
 #e.g. "Disallow: /login.php" becomes "Disallow: /kiwitrees/login.php".
 #
 # These URLs are expensive to generate or duplicate existing content:
-User-Agent: *
+User-agent: *
 Disallow: /ancestry.php
 Disallow: /branches.php
 Disallow: /calendar.php
@@ -26,6 +26,7 @@ Disallow: /hourglass.php
 Disallow: /lifespan.php
 Disallow: /login.php
 Disallow: /medialist.php
+Disallow: /message.php
 Disallow: /notelist.php
 Disallow: /pedigree.php
 Disallow: /placelist.php
@@ -40,4 +41,4 @@ Disallow: /statisticsplot.php
 Disallow: /timeline.php
 
 # Put your sitemap here:
-#Sitemap: http://www.example.com/module.php?mod=sitemap&mod_action=generate&file=sitemap.xml
+#Sitemap: https://www.example.com/module.php?mod=sitemap&mod_action=generate&file=sitemap.xml
