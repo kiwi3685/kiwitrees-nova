@@ -108,7 +108,7 @@ switch (KT_Filter::post('action')) {
 		Zend_Session::writeClose();
 		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '#login');
 		exit;
-	case 'update-antispam':
+	case 'update-spam':
 		if (!KT_Filter::checkCsrf()) {
 			break;
 		}
@@ -175,7 +175,6 @@ $controller
 		// reset on change
 		jQuery("[id^=USE_RECAPTCHA]").on("change", function() {
 			var clickedRadio = jQuery(this).val();
-			alert(clickedRadio);
 			if (clickedRadio == "1") {
 				jQuery("#google_recaptcha_details").css({"display":"block"});
 			} else {
@@ -485,6 +484,10 @@ $controller
 		</div>
 		<!-- Anti spam configuration tab -->
 		<div class="tabs-panel" id="spam">
+			<a class="current faq_link" href="<?php echo KT_KIWITREES_URL; ?>/faqs/administration/site_admin/anti-spam/" target="_blank" rel="noopener noreferrer" title="<?php echo KT_I18N::translate('View FAQ for this page.'); ?>">
+				<?php echo KT_I18N::translate('View FAQ for this page.'); ?>
+				<i class="fa fa-comments"></i>
+			</a>
 			<form method="post" name="configform" action="<?php echo KT_SCRIPT_NAME; ?>#spam" data-abide novalidate>
 				<?php echo KT_Filter::getCsrf(); ?>
 				<input type="hidden" name="action" value="update-spam">
@@ -507,7 +510,7 @@ $controller
 					<div class="cell large-9">
 						<?php echo edit_field_yes_no('USE_RECAPTCHA', KT_Site::preference('USE_RECAPTCHA')); ?>
 						<div class="cell helpcontent">
-							<?php echo  /* I18N: Help text for the recaptcha site configuration setting */ KT_I18N::translate('This can help limit the number of spam attempts to register on your site.<br>It requires a pair of Google reCaptcha v2 API keys. Help to obtain this can be found on this kiwitrees FAQ page: <a href="https://kiwitrees.net/faqs/administration/site_admin/" target="_blank">Google reCaptcha v2</a>'); ?>
+							<?php echo  /* I18N: Help text for the recaptcha site configuration setting */ KT_I18N::translate('This can help limit the number of spam attempts to register on your site.<br>It requires a pair of Google reCaptcha v2 API keys. Help to obtain this can be found on this kiwitrees FAQ page: <a href="<>php echo KT_KIWITREES_URL; ?>/faqs/administration/site_admin/" target="_blank">Google reCaptcha v2</a>'); ?>
 						</div>
 					</div>
 					<div id="google_recaptcha_details"  class="cell" style="display:none;">
