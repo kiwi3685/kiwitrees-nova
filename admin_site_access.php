@@ -31,7 +31,6 @@ require KT_ROOT . 'includes/functions/functions_edit.php';
 $controller = new KT_Controller_Page();
 $controller
 	->restrictAccess(KT_USER_IS_ADMIN)
-	->addExternalJavascript(KT_JQUERY_JEDITABLE_URL)
 	->setPageTitle(KT_I18N::translate('Site access rules'));
 
 $action = KT_Filter::get('action');
@@ -223,13 +222,16 @@ $controller
 	->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
 	->addExternalJavascript(KT_DATATABLES_BUTTONS)
 	->addExternalJavascript(KT_DATATABLES_HTML5)
+	->addExternalJavascript(KT_JQUERY_JEDITABLE_URL)
 	->addInlineJavascript('
 		jQuery.fn.dataTableExt.oSort["unicode-asc" ]=function(a,b) {return a.replace(/<[^<]*>/, "").localeCompare(b.replace(/<[^<]*>/, ""))};
 		jQuery.fn.dataTableExt.oSort["unicode-desc"]=function(a,b) {return b.replace(/<[^<]*>/, "").localeCompare(a.replace(/<[^<]*>/, ""))};
 		jQuery("#site_access_rules").dataTable({
 			dom: \'<"top"pBf<"clear">irl>t<"bottom"pl>\',
 			' . KT_I18N::datatablesI18N() . ',
-			buttons: [{extend: "csv", exportOptions: {columns: [0,1,2,3,4,5,6] }}],
+			serverSide: true,
+			ajax: "' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '?action=load_rules",
+			buttons: [{extend: "csv", exportOptions: {columns: [0,2,4,5,6] }}],
 			autoWidth: false,
 			processing: true,
 			retrieve: true,
@@ -263,7 +265,9 @@ $controller
 		jQuery("#unknown_site_visitors").dataTable({
 			dom: \'<"top"Blp<"clear">irf>t<"bottom"pl>\',
 			' . KT_I18N::datatablesI18N() . ',
-			buttons: [{extend: "csv", exportOptions: {columns: [0,1,4,6,9,11,12,15,17] }}],
+			serverSide: true,
+			ajax: "' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '?action=load_unknown",
+			buttons: [{extend: "csv", exportOptions: {columns: [0,2] }}],
 			autoWidth: false,
 			processing: true,
 			retrieve: true,
@@ -278,11 +282,11 @@ $controller
 			stateDuration: -1,
 			columns: [
 				/* 0 ip_address         */ {dataSort: 1, class: "ip_address"},
-				/* 0 ip_address (sort)  */ {type: "numeric", "bVisible": false},
-				/* 1 user_agent_pattern */ {class: "ua_string"},
-				/* 2 <allowed>          */ {sortable: false, class: "center"},
-				/* 3 <banned>           */ {sortable: false, class: "center"},
-				/* 4 <search-engine>    */ {sortable: false, class: "center"}
+				/* 1 ip_address (sort)  */ {type: "numeric", "bVisible": false},
+				/* 2 user_agent_pattern */ {class: "ua_string"},
+				/* 3 <allowed>          */ {sortable: false, class: "center"},
+				/* 4 <banned>           */ {sortable: false, class: "center"},
+				/* 5 <search-engine>    */ {sortable: false, class: "center"}
 			]
 		});
 	');
@@ -326,7 +330,7 @@ KT_DB::exec(
 		</div>
 		<div class="cell">
 			<button type="submit" class="button" <?php echo 'onclick="if (confirm(\''.htmlspecialchars(KT_I18N::translate('This will delete all your access rules and replace with basic kiwitrees defaults. Are you sure?')).'\')) { document.location=\''.KT_SCRIPT_NAME.'?action=reset\'; }"';?> >
-				<i class="far fa-undo"></i>
+				<i class="<?php echo $iconStyle; ?> fa-undo"></i>
 				<?php echo KT_I18N::translate('Reset'); ?>
 			</button>
 			<hr>
@@ -353,7 +357,7 @@ KT_DB::exec(
 		</div>
 		<div class="cell">
 			<button type="submit" class="button" <?php echo 'onclick="if (confirm(\''.htmlspecialchars(KT_I18N::translate('Are you sure you want to delete all visitors not recognised?')).'\')) { document.location=\''.KT_SCRIPT_NAME.'?action=purge\'; }"';?> >
-				<i class="far fa-trash-alt"></i>
+				<i class="<?php echo $iconStyle; ?> fa-trash-alt"></i>
 				<?php echo KT_I18N::translate('Delete'); ?>
 			</button>
 		</div>
