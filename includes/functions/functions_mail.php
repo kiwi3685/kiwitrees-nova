@@ -82,7 +82,11 @@ function messageForm ($to, $from_name, $from_email, $subject, $body, $url, $to_n
 		$to_user_name_2 = get_user_name($contact_user_id);
 		$to_user_fullname_1 = KT_I18N::translate('Technical help');
 		$to_user_fullname_2 = KT_I18N::translate('Genealogy help');
-	} ?>
+	}
+
+	if (KT_Site::preference('USE_RECAPTCHA') && !KT_USER_ID) { ?>
+		<script src="https://www.google.com/recaptcha/api.js" async defer ></script>
+	<?php } ?>
 
 	<form name="messageform" method="post">
 		<input type="hidden" name="url" value="<?php echo KT_Filter::escapeHtml($url); ?>">
@@ -106,6 +110,21 @@ function messageForm ($to, $from_name, $from_email, $subject, $body, $url, $to_n
 					<label for="from_email"><?php echo KT_I18N::translate('Email address'); ?></label>
 					<input type="email" name="from_email" id="from_email" value="<?php echo $from_email; ?>" required >
 				</div>
+				<?php if (KT_Site::preference('USE_HONEYPOT')) { ?>
+					<div class="option">
+						<label for="termsConditions">
+							<?php echo /* I18N: for security protection only */ KT_I18N::translate('Confirm your agreement to our <a href="https://www.pandadoc.com/website-standard-terms-and-conditions-template/" >Terms and Conditions.'); ?></a>
+						</label>
+						<?php echo checkbox("termsConditions"); ?>
+					</div>
+				<?php } ?>
+				<?php if (KT_Site::preference('USE_RECAPTCHA')) { ?>
+					<div class="option">
+						<label>
+							<div style="margin-left: 160px;" class="g-recaptcha" data-sitekey="<?php echo KT_Site::preference('RECAPTCHA_SITE_KEY'); ?>" data-callback="recaptcha_callback"></div>
+						</label>
+					</div>
+				<?php } ?>
 			<?php } ?>
 		</div>
 		<hr>
