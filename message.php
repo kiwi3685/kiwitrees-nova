@@ -59,6 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$errors = true;
 	} elseif (preg_match('/(?!' . preg_quote(KT_SERVER_NAME, '/') . ')(((?:ftp|http|https):\/\/)[a-zA-Z0-9.-]+)/', $subject . $body, $match)) {
 		KT_FlashMessages::addMessage(KT_I18N::translate('You are not allowed to send messages that contain external links.') . ' ' . /* I18N: e.g. ‘You should delete the “http://” from “http://www.example.com” and try again.’ */ KT_I18N::translate('You should delete the “%1$s” from “%2$s” and try again.', $match[2], $match[1]));
+		AddToLog('Attempt to include external links (' . mb_strimwidth($match[1], 0, 100, "...") . ') by: ' . $from_email, 'spam');
 		$errors = true;
 	} elseif (empty($recipients)) {
 		$errors = true;
