@@ -128,14 +128,14 @@ function messageForm ($to, $from_name, $from_email, $subject, $body, $url, $to_n
 					</div>
 					<p id="save-cancel">
 						<button class="btn btn-primary" type="submit">
-							<i class="' . $iconStyle . ' fa-envelope-o"></i>
+							<i class="<?php echo $iconStyle; ?> fa-envelope-o"></i>
 							<?php echo KT_I18N::translate('Send'); ?>
 						</button>
-						<button class="btn btn-primary" type="button" onclick="window.close();">
-							<i class="' . $iconStyle . ' fa-times"></i>
-							<?php echo KT_I18N::translate('Close'); ?>
+						<button class="btn btn-primary" type="button" onclick="window.close('<?php echo $url; ?>');">
+							<i class="<?php echo $iconStyle; ?> fa-times"></i>
+							<?php echo KT_I18N::translate('Cancel'); ?>
 						</button>
-					</p>
+						</p>
 				</div>
 				<?php if ($style <= 1) {
 					exit;

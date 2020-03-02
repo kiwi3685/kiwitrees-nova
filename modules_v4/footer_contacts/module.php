@@ -67,9 +67,13 @@ class footer_contacts_KT_Module extends KT_Module implements KT_Module_Footer {
 				if (array_key_exists('contact', KT_Module::getActiveModules())) {
 					$content .= '
 					<p>
-						<a href="module.php?mod=contact&amp;mod_action=show&amp;url=' . addslashes(urlencode(get_query_url())) . '">
-							<i class="' . $iconStyle . ' fa-pencil-alt"></i>
-							' . KT_I18N::translate('Contact form') . '
+						<a href="#"
+							onclick="window.open(\'message.php?to=' . KT_Filter::escapeHtml(get_user_name($user_id)) . '&amp;url=' . addslashes(urlencode(get_query_url())) . '\', \'_blank\')"
+							rel="noopener noreferrer"
+							title="' . KT_I18N::translate('Send Message') . '"
+						>' .
+							getUserFullName($user_id) . '
+							<i class="' . $iconStyle . ' fa-envelope"></i>
 						</a>
 					</p>';
 				}
