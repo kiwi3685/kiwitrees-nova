@@ -471,8 +471,8 @@ $controller
 					</div>
 					<div class="cell large-9">
 						<?php echo edit_field_yes_no('SHOW_REGISTER_CAUTION', KT_Site::preference('SHOW_REGISTER_CAUTION')); ?>
-						<div class="cell helpcontent space">
-							<?php echo KT_I18N::translate('When set to <b>Yes</b>, the following message will appear above the input fields on the "Request new user account" page:<div class="callout secondary"><div class="largeError">Notice:</div><div class="error">By completing and submitting this form, you agree:<ul><li>to protect the privacy of living people listed on our site;</li><li>and in the text box below, to explain to whom you are related, or to provide us with information on someone who should be listed on our site.</li></ul></div></div>'); ?>
+						<div class="cell helpcontent shortcontent space">
+							<?php echo KT_I18N::translate('When set to <b>Yes</b>, the following message will appear above the input fields on the "Request new user account" page:<div class="callout secondary"><b>Notice:</b><br>By completing and submitting this form, you agree:</p><ul><li>to protect the privacy of living people listed on our site;</li><li>and in the text box below, to explain  who you are related to, or to provide us with information on someone who should be listed on our site.</li></ul></div>'); ?>
 						</div>
 					</div>
 				</div>
