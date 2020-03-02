@@ -1413,7 +1413,7 @@ case 'update':
 				$fields = explode(' ', $gedlines[$linenum]);
 				$glevel = $fields[0];
 				$i++;
-				while (($i<count($gedlines))&&($gedlines[$i]{0}>$glevel)) {
+				while (($i<count($gedlines))&&($gedlines[$i][0]>$glevel)) {
 					$i++;
 				}
 			}
@@ -1485,7 +1485,7 @@ case 'update':
 					$fields = explode(' ', $gedlines[$editline]);
 					$glevel = $fields[0];
 					$i++;
-					while (($i<count($gedlines))&&($gedlines[$i]{0}>$glevel)) $i++;
+					while (($i<count($gedlines))&&($gedlines[$i][0]>$glevel)) $i++;
 				}
 
 				if (!isset($glevels)) $glevels = array();
@@ -1948,7 +1948,7 @@ case 'editname':
 		$glevel			= $fields[0];
 		$i				= $linenum + 1;
 		$namerec		= $gedlines[$linenum];
-		while (($i < count($gedlines)) && ($gedlines[$i]{0} > $glevel)) {
+		while (($i < count($gedlines)) && ($gedlines[$i][0] > $glevel)) {
 			$namerec .= "\n" . $gedlines[$i];
 			$i++;
 		}
