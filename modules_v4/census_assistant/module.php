@@ -194,7 +194,6 @@ class census_assistant_KT_Module extends KT_Module {
 
 			return
 				'<div class="census_text">
-					<span id="title">' . $title . '</span>
 					<p>' . $preamble . '</p>
 					<table class="ca">
 						<thead>' . $thead . '</thead>
