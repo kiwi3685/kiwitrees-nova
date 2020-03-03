@@ -512,118 +512,98 @@ function contact_links($ged_id = KT_GED_ID) {
  *
  * @return string
  */
-function print_note_record($text, $nlevel, $nrec, $textOnly = false) {
-	global $KT_TREE, $EXPAND_NOTES, $iconStyle;
-	if (strpos($text, "\n")) {
-		$returnChar = "\n";
-	} else {
-		$returnChar = "<br>";
-	}
+ function print_note_record($text, $nlevel, $nrec, $textOnly = false) {
+ 	global $KT_TREE, $EXPAND_NOTES;
+ 	if (strpos($text, "\n")) {
+ 		$returnChar = "\n";
+ 	} else {
+ 		$returnChar = "<br>";
+ 	}
 
-	$text_cont	= get_cont($nlevel, $nrec);
-	$revealText	= '';
-	$noteType	= '';
+ 	$text_cont = get_cont($nlevel, $nrec);
+ 	$first_line = '';
+ 	$expand1 = $expand2 = '';
 
-	// Check if shared note (we have already checked that it exists)
-	if (preg_match('/^0 @(' . KT_REGEX_XREF . ')@ NOTE/', $nrec, $match)) {
-		$note  = KT_Note::getInstance($match[1], $KT_TREE);
-		$label = 'SHARED_NOTE';
-		// If Census assistant installed, allow it to format the note
-		if (KT_Module::getModuleByName('census_assistant')) {
-			$html = census_assistant_KT_Module::formatCensusNote($note);
-		} else {
-			$html = KT_Filter::formatText($note->getNote());
-		}
-	} else {
-		$note	= null;
-		$html	= $text . $text_cont;
-		$label	= 'NOTE';
-	}
-	if ($textOnly) {
-		return strip_tags($html);
-	}
-	if (strpos($text . $text_cont, $returnChar) === false) {
-		// A one-line note? strip the block-level tags, so it displays inline
-		return KT_Gedcom_Tag::getLabelValue($label, strip_tags($html, '<a><strong><em>'));
-	} elseif ($EXPAND_NOTES) {
-		// A multi-line note, and we're expanding notes by default
-		return KT_Gedcom_Tag::getLabelValue($label, $html);
-	} else {
-		// A multi-line note, with an expand/collapse option
-		$element_id = 'N-' . (int)(microtime(true)*1000000);
-		if ($note) {
-			$first_line = '<a href="' . $note->getHtmlUrl() . '">' . $note->getFullName() . '</a>';
-			$revealText		= $note->getFullName();
-		} else {
-			$noteType	= 'standard_expandable';
-			if (strlen($text) > 100) {
-				$first_line = mb_substr($text, 0, 100) . KT_I18N::translate('…');
-			} else {
-				$first_line	= $text;
-			}
-		}
-		if (KT_SCRIPT_NAME === 'note.php') {
-			$noteDisplay = '
-				<div class="fact_NOTE">
-					<span>
-						' . KT_Gedcom_Tag::getLabel($label) . ':
-					</span>
-					<span id="' . $element_id . '-alt">' .
-						$first_line . '
-					</span>
-					<div id="' . $element_id . '">
-					  ' . $html . '
-					</div>
-				</div>
-			';
-		} else {
-			if ($noteType == 'standard_expandable') {
-				// togle display
-				$noteDisplay = '
-					<div class="fact_NOTE">
-						<span>
-							' . KT_Gedcom_Tag::getLabel($label) . ':
-						</span>
-						<span data-toggle="' . $element_id . ' ' . $element_id . '-alt">
-							<span id="' . $element_id . '-alt" class="first-line" data-toggler=".is-shown">' . $first_line . '</span>
-							<i class="' . $iconStyle . ' fa-arrows-alt-v" data-fa-transform="rotate-45" ></i>
-						</span>
-						<div id="' . $element_id . '" class="callout secondary expandable" data-toggler=".is-shown">
-							' . $html . '
-						</div>
-					</div>
-				';
+ 	// Check if shared note (we have already checked that it exists)
+ 	if (preg_match('/^0 @(' . KT_REGEX_XREF . ')@ NOTE/', $nrec, $match)) {
+ 		$note  = KT_Note::getInstance($match[1], $KT_TREE);
+ 		$element_id = $match[1] . '-' . (int)(microtime(true)*1000000);
+ 		$label = 'SHARED_NOTE';
+ 		// If Census assistant installed, allow it to format the note
+ 		if (KT_Module::getModuleByName('census_assistant')) {
+ 			$html	= census_assistant_KT_Module::formatCensusNote($note);
+ 		} else {
+ 			$html	= KT_Filter::formatText($note->getNote());
+ 		}
+ 	} else {
+ 		$note	= null;
+ 		$label	= 'NOTE';
+ 		$html	= KT_Filter::formatText($text . $text_cont);
+ 	}
 
-			} else {
-				// reveal in modal
-				$noteDisplay = '
-					<div class="fact_NOTE">
-						<span>
-							' . KT_Gedcom_Tag::getLabel($label) . ':
-						</span>
-						<span id="' . $element_id . '-alt">
-							<a data-open="' . $element_id . '">
-								' . $revealText . '
-								<i class="' . $iconStyle . ' fa-arrows-alt-v" data-fa-transform="rotate-45" ></i>
-							</a>
-						</span>
-						<div class="reveal" id="' . $element_id . '" data-reveal data-overlay="false">
-							' . $first_line . '<br>' . $html . '
-							<button class="close-button" data-close aria-label="' . KT_I18N::translate('Close') . '" type="button">
-								<span aria-hidden="true">
-									<i class="' . $iconStyle . ' fa-times"></i>
-								</span>
-							</button>
-						</div>
-					</div>
-				';
-			}
-		}
+ 	if ($textOnly) {
+ 		return strip_tags($html);
+ 	}
 
-		return $noteDisplay;
 
-	}
-}
+ 	if (strpos($text . $text_cont, $returnChar) === false) {
+ 		// A one-line note? strip the block-level tags, so it displays inline
+ 		return KT_Gedcom_Tag::getLabelValue($label, strip_tags($html, '<a><strong><em>'));
+ 	} else {
+ 		// A multi-line note, with an expand/collapse option
+ 		if ($note) {
+ 			if (KT_SCRIPT_NAME === 'note.php') {
+ 				$first_line = $note->getFullName();
+ 			} else {
+ 				$first_line = '<a href="' . $note->getHtmlUrl() . '">' . $note->getFullName() . '</a>';
+ 			}
+
+ 			// special case required to display title for census shared notes when expanded by default
+ 			if (preg_match('/<span id="title">.*<\/span>/', $html, $match)) {
+ 				if (KT_SCRIPT_NAME === 'note.php') {
+ 					$first_line = $match[0];
+ 				} else {
+ 					$first_line = '<a href="' . $note->getHtmlUrl() . '">' . $match[0] . '</a>';
+ 				}
+ 				$html = preg_replace('/<span id="title">.*<\/span>/', '', $html);
+ 			}
+
+ 		} else {
+ 			if (strlen($text) > 100) {
+ 				$first_line = mb_substr($text, 0, 100) . KT_I18N::translate('…');
+ 			} else {
+ 				$first_line	= KT_Filter::formatText($text);
+ 				$html		= $text_cont;
+ 			}
+ 		}
+
+ 		if ($EXPAND_NOTES) {
+ 			$plusminus='icon-minus';
+ 		} else {
+ 			$plusminus='icon-plus';
+ 		}
+ 		$expand1 = '
+ 			<a href="#" onclick="return expand_layer(\'' . $element_id . '\');">
+ 				<i id="' . $element_id . '_img" class="' . $plusminus . '"></i>
+ 			</a>
+ 		';
+
+ 		if (!$EXPAND_NOTES && KT_SCRIPT_NAME !== 'note.php') {
+ 			$expand2 = '" style="display:none"';
+ 		}
+
+ 		return
+ 			'<div class="fact_NOTE">
+ 				<span class="label">
+ 					' . KT_Gedcom_Tag::getLabel($label) . ':&nbsp;
+ 				</span>
+ 				<span class="field">' . $first_line . $expand1 . '</span>
+ 				<div class="note_details" id="' . $element_id . '"' . $expand2 . '>' . $html . '</div>
+ 			</div>
+ 		';
+
+ 	}
+ }
 
 /**
 * Print all of the notes in this fact record
