@@ -82,26 +82,29 @@ function edit_text_inline($name, $value, $controller=null) {
 // $extra    - extra markup for field (e.g. tab key sequence)
 function select_edit_control($name, $values, $empty, $selected, $extra='') {
 	if (is_null($empty)) {
-		$html='';
+		$html = '';
 	} else {
 		if (empty($selected)) {
-			$html='<option value="" selected="selected">'.htmlspecialchars($empty).'</option>';
+			$html = '<option value="" selected="selected">'.htmlspecialchars($empty).'</option>';
 		} else {
-			$html='<option value="">'.htmlspecialchars($empty).'</option>';
+			$html = '<option value="">'.htmlspecialchars($empty).'</option>';
 		}
 	}
 	// A completely empty list would be invalid, and break various things
 	if (empty($values) && empty($html)) {
-		$html='<option value=""></option>';
+		$html = '<option value=""></option>';
 	}
 	foreach ($values as $key=>$value) {
 		if ((string)$key === (string)$selected) { // Because "0" != ""
-			$html.='<option value="'.htmlspecialchars($key).'" selected="selected">'.htmlspecialchars($value).'</option>';
+			$html .= '<option value="' . htmlspecialchars($key) . '" selected="selected" dir="auto">' . htmlspecialchars($value) . '</option>';
 		} else {
-			$html.='<option value="'.htmlspecialchars($key).'">'.htmlspecialchars($value).'</option>';
+			$html .= '<option value="' . htmlspecialchars($key) . '" dir="auto">' . htmlspecialchars($value) . '</option>';
 		}
 	}
-	return '<select id="' . $name.'" name="' . $name.'" ' . $extra .'>' . $html.'</select>';
+
+	$element_id = $name . '-' . (int)(microtime(true)*1000000);
+
+	return '<select id="' . $element_id.'" name="' . $name . '" ' . $extra .'>' . $html . '</select>';
 }
 
 // An inline-editing version of select_edit_control()
