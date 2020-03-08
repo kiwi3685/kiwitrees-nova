@@ -69,7 +69,7 @@ asort($ft_tools);
  */
 $custom = array(
 	 "admin_custom_lang.php"		=> KT_I18N::translate('Custom translation'),
-	 "admin_custom_theme.php"		=> KT_I18N::translate('Custom theme files'),
+	 "admin_custom_theme.php"		=> KT_I18N::translate('Custom file editing'),
 );
 arsort($custom);
 

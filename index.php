@@ -78,8 +78,8 @@ $controller
 	->addInlineJavascript('jQuery.ajaxSetup({cache:true});');
 
 // use the home page layout or customised version of it for the currently active theme
-if (file_exists(KT_THEME_URL . 'templates/my_home_page_template.php')) {
-	include KT_THEME_DIR . 'templates/my_home_page_template.php';
+if (file_exists(KT_THEME_URL . 'myhome_page_template.php')) {
+	include KT_THEME_DIR . 'myhome_page_template.php';
 } else {
 	include KT_THEME_DIR . 'templates/home_page_template.php';
 }

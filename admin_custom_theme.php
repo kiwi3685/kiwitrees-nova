@@ -45,13 +45,34 @@ $controller
 	->setPageTitle(KT_I18N::translate('Edit custom theme files'))
 	->pageHeader()
 ;
-$current_themedir = get_gedcom_setting(KT_GED_ID, 'THEME_DIR');
+
+$existsIcon = '<i class="' . $iconStyle . ' fa-certificate></i>';
+
+$otherFiles	= array(
+	'robots.txt'
+);
+
+$nonThemeNames = array (
+	'Other'
+);
+
+foreach (get_theme_names() as $themename) {
+	$themeNames[] = $themename;
+}
+
+$allFiles 	= array_merge($otherFiles, $customFiles);
+$themeNames	= array_merge(get_theme_names(), $nonThemeNames);
 
 $action		= KT_Filter::post('action');
 $theme		= KT_Filter::post('theme');
-$editfile	= KT_Filter::post('fileOld');
-$addfile	= KT_Filter::post('fileAdd');
+$editfile	= KT_Filter::post('editfile');
 $delete		= KT_Filter::get('delete');
+
+if (in_array($editfile, $otherFiles)) {
+	$path	= KT_ROOT . $editfile;
+} else {
+	$path	= KT_ROOT . KT_THEMES_DIR . $theme . '/' . $editfile;
+}
 
 KT_Filter::post('code') ? $content = KT_Filter::post('code') : $content = '';
 
@@ -61,24 +82,77 @@ if ($delete == 'delete_file') {
 	unlink($deleteFile);
 }
 
-if ($editfile) {
-	$filename	= KT_THEMES_DIR . $theme . '/' . $editfile;
-	$content	= file_get_contents($filename);
-}
+if ($editfile && $action != 'save') {
+	switch ($editfile) {
+		case 'robots.txt':
+			$filename = KT_ROOT . $editfile;
 
-if ($addfile) {
-	$filename	= KT_THEMES_DIR . $theme . '/' . $addfile;
-	$content	= "/* CUSTOM THEME FILE */\n' . $addfile . '\n";
-	file_put_contents($filename, $content);
+			if (file_exists($filename)) {
+				$content	= file_get_contents($filename);
+			} elseif (file_exists(KT_ROOT . 'robots-example.txt')) {
+				$content	= file_get_contents(KT_ROOT . 'robots-example.txt');
+			} else { ?>
+				<div class="callout error medium-8 medium-offset-2">
+					<?php echo KT_I18N::translate('Your system is missing both robots.txt and robots-example.txt. You need to create one of these before you can proceed.'); ?>
+				</div>
+				<?php
+				exit;
+			}
+			break;
+		case 'myhome_page_template.php':
+			$filename = KT_THEMES_DIR . $theme . '/' . $editfile;
+
+			if (file_exists($filename)) {
+				$content	= file_get_contents($filename);
+			} else {
+				$basefile = ltrim($editfile,"my");
+				$content= file_get_contents(KT_THEMES_DIR . $theme . '/' . 'templates/' . $basefile);
+
+				file_put_contents($filename, $content);
+				$content = file_get_contents($filename);
+			}
+			break;
+		case 'myheader.php':
+		case 'myfooter.php':
+			$filename = KT_THEMES_DIR . $theme . '/' . $editfile;
+
+			if (file_exists($filename)) {
+				$content	= file_get_contents($filename);
+			} else {
+				$basefile = ltrim($editfile,"my");
+				$content= file_get_contents(KT_THEMES_DIR . $theme . '/' . $basefile);
+
+				file_put_contents($filename, $content);
+				$content = file_get_contents($filename);
+			}
+			break;
+		default:
+			$filename = KT_THEMES_DIR . $theme . '/' . $editfile;
+
+			if (file_exists($filename)) {
+				$content	= file_get_contents($filename);
+			} else {
+				$content	= "/* CUSTOM THEME FILE */\n/* " . $editfile . " */\n";
+				file_put_contents($filename, $content);
+			}
+			break;
+	}
 }
 
 if ($action == 'save') {
-	$filename = KT_THEMES_DIR . $theme . '/' . $editfile;
+	switch ($editfile) {
+		case 'robots.txt':
+			$filename = KT_ROOT . 'robots.txt';
+			break;
+		default:
+			$filename = KT_THEMES_DIR . $theme . '/' . $editfile;
+			break;
+	}
 	file_put_contents($filename, $content);
 	$content = file_get_contents($filename);
 }
-?>
 
+?>
 <div id="custom_theme-page" class="cell">
 	<div class="grid-x grid-margin-x grid-margin-y">
 		<div class="cell">
@@ -88,16 +162,17 @@ if ($action == 'save') {
 		<div class="cell">
 			<form method="post" action="">
 				<input type="hidden" name="action" value="files">
-				<div class="grid-x grid-margin-x">
+				<div class="grid-x">
 					<div class="cell medium-2">
-						<label><?php echo KT_I18N::translate('Select theme'); ?></label>
+						<label><?php echo KT_I18N::translate('Select theme or other files'); ?></label>
 					</div>
 					<select class="cell medium-4" id="theme-select" name="theme" onchange="this.form.submit();">
 						<option value=''></option>
-						<?php foreach (get_theme_names() as $themename => $themedir) {
-							$style = ($themename == $theme ? ' selected=selected ' : '');
-							echo '<option' . $style . ' value="' . $themename . '">' . get_theme_display($themename) . '</option>';
-						} ?>
+						<?php foreach ($themeNames as $themedir) {
+							$name		= (in_array($themedir, $nonThemeNames) ? KT_I18N::translate($nonThemeNames) : get_theme_display($themedir));
+							$selected	= ($theme == $themedir ? ' selected ' : ''); ?>
+							<option <?php echo $selected; ?> value="<?php echo $themedir; ?>"><?php echo $name; ?></option>
+						<?php } ?>
 					</select>
 					<div class="cell medium-6"></div>
 				</div>
@@ -105,38 +180,38 @@ if ($action == 'save') {
 		</div>
 		<div class="cell">
 			<?php if ($action == 'files') { ?>
-				<!-- Select files for chosen theme -->
+				<!-- Select files for chosen theme or other files-->
 				<form method="post" action="">
 					<input type="hidden" name="action" value="files">
 					<input type="hidden" name="theme" value=<?php echo $theme; ?>>
-					<div class="grid-x grid-margin-x">
+					<div class="grid-x">
 						<div class="cell medium-2">
-							<label><?php echo KT_I18N::translate('Select existing file to edit'); ?></label>
+							<label><?php echo KT_I18N::translate('Select file'); ?></label>
 						</div>
-						<select class="cell medium-4" id="file-select" name="fileOld" onchange="this.form.submit();">
+						<select class="cell medium-4" id="file-select" name="editfile" onchange="this.form.submit();">
 							<option value=''></option>
-							<?php foreach ($customFiles as $file) {
-								$path	= KT_ROOT . KT_THEMES_DIR . $theme . '/' . $file;
-								$style	= ($file == $editfile ? ' selected=selected ' : '');
-								if (file_exists($path)) { ?>
-									<option <?php echo $style; ?> value="<?php echo $file; ?>"><?php echo $file; ?></option>
+							<?php if (in_array($theme, get_theme_names())) {
+								foreach ($customFiles as $file) {
+									$selected = ($file == $editfile ? ' selected ' : '');
+									$new = (file_exists(KT_ROOT . KT_THEMES_DIR . $theme . '/' . $file) ? 'new' : ''); ?>
+									<option class="<?php echo $new; ?>" <?php echo $selected; ?> value="<?php echo $file; ?>"><?php echo $file; ?></option>
+								<?php }
+							} else {
+								foreach ($otherFiles as $file) {
+									$selected = ($file == $editfile ? ' selected ' : '');
+									$new = (file_exists(KT_ROOT . KT_THEMES_DIR . $theme . '/' . $file) ? 'new' : ''); ?>
+									<option class="<?php echo $new; ?>" <?php echo $selected; ?> value="<?php echo $file; ?>"><?php echo $file; ?></option>
 								<?php }
 							} ?>
 						</select>
-						<div class="cell medium-2">
-							<label><?php echo KT_I18N::translate('Select new file to add'); ?></label>
+						<div class="cell medium 4 medium-offset-2 helpcontent">
+							<?php /*I18N: Help text for custom theme page */ echo KT_I18N::translate('File names displayed in red indicate these files already exist. Others will be created when you click "Save".'); ?>
 						</div>
-						<select class="cell medium-4" id="file-select" name="fileAdd" onchange="this.form.submit();">
-							<option value=''></option>
-							<?php foreach ($customFiles as $file) {
-								$path = KT_ROOT . KT_THEMES_DIR . $theme . '/' . $file;
-								if (!file_exists($path)) { ?>
-									<option value="<?php echo $file; ?>"><?php echo $file; ?></option>
-								<?php }
-							} ?>
-						</select>
 					</div>
+				</form>
 			<?php } ?>
+		</div>
+		<div class="cell">
 			<?php if ($content) {
 				$controller->addInlineJavascript('
 					var editor = CodeMirror.fromTextArea(code, {
@@ -147,39 +222,36 @@ if ($action == 'save') {
 						viewportMargin: Infinity
 					});
 				'); ?>
-				<div class="grid-x grid-margin-x grid-margin-y">
-					<div class="cell">
-						<form method="post" action="">
-							<input type="hidden" name="action" value="save">
-							<input type="hidden" name="file" value="<?php echo $editfile; ?>">
-							<div class="grid-x">
-								<div class="cell large-2 large-offset-1">
-									<h5><?php echo $editfile; ?></h5>
-								</div>
-								<div class="cell large-8 text-right">
-									<a href="#" <?php echo 'onclick="if (confirm(\''.htmlspecialchars(KT_I18N::translate('Are you sure you want to delete this translation?')) . '\')) { document.location=\'' . KT_SCRIPT_NAME . '?delete=delete_file&amp;filename=' . KT_THEMES_DIR . $theme . '/' . $editfile . '\'; }"'; ?>>
-										<?php echo KT_I18N::translate('Delete this custom file'); ?>
-										&nbsp;
-										<i class="<?php echo $iconStyle; ?> fa-trash-alt" ></i>
-									</a>
-								</div>
-								<div class="cell large-10 large-offset-1" id="textarea">
-									<textarea id="code" name="code"><?php echo $content; ?></textarea>
-								</div>
-								<div class="cell">
-									<button type="submit" class="button">
-										<i class="<?php echo $iconStyle; ?> fa-save"></i>
-										<?php echo KT_I18N::translate('Save'); ?>
-									</button>
-									<a class="button secondary" href="<?php echo KT_SCRIPT_NAME; ?>">
-										<i class="<?php echo $iconStyle; ?> fa-times"></i>
-										<?php echo KT_I18N::translate('Cancel'); ?>
-									</a>
-								</div>
-							</div>
-						</form>
+
+				<form class="cell" method="post" action="">
+					<input type="hidden" name="action" value="save">
+					<input type="hidden" name="editfile" value="<?php echo $editfile; ?>">
+					<div class="grid-x">
+						<div class="cell large-2 large-offset-1">
+							<h5><?php echo $editfile; ?></h5>
+						</div>
+						<div class="cell large-8 text-right">
+							<a href="#" <?php echo 'onclick="if (confirm(\''.htmlspecialchars(KT_I18N::translate('Are you sure you want to delete this translation?')) . '\')) { document.location=\'' . KT_SCRIPT_NAME . '?delete=delete_file&amp;filename=' . $path . '\'; }"'; ?>>
+								<?php echo KT_I18N::translate('Delete this custom file'); ?>
+								&nbsp;
+								<i class="<?php echo $iconStyle; ?> fa-trash-alt" ></i>
+							</a>
+						</div>
+						<div class="cell large-10 large-offset-1" id="textarea">
+							<textarea id="code" name="code"><?php echo $content; ?></textarea>
+						</div>
+						<div class="cell">
+						<button type="submit" class="button">
+							<i class="<?php echo $iconStyle; ?> fa-save"></i>
+							<?php echo KT_I18N::translate('Save'); ?>
+						</button>
+						<a class="button secondary" href="<?php echo KT_SCRIPT_NAME; ?>">
+							<i class="<?php echo $iconStyle; ?> fa-times"></i>
+							<?php echo KT_I18N::translate('Cancel'); ?>
+						</a>
+						</div>
 					</div>
-				</div>
+				</form>
 			<?php } ?>
 		</div>
 	</div>

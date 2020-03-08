@@ -513,5 +513,6 @@ $customFiles = array(
 		'mystyle.css',
 		'mytheme.php',
 		'myheader.php',
-		'myfooter.php'
+		'myfooter.php',
+		'myhome_page_template.php'
 	);

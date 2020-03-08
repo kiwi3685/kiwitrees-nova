@@ -11382,6 +11382,9 @@ body #admin-container {
   float: right;
   margin-top: 0.25rem;
 }
+#admin-container #admin-content #custom_theme-page select option.new {
+  color: #ff0000;
+}
 #admin-container #admin-content #cleanup input[type=checkbox] {
   margin-left: 0.65rem;
   margin-right: 0.8rem;
