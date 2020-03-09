@@ -708,7 +708,7 @@ global $iconstyles;
 							</div>
 							<div class="cell large-2">
 								<div class="input-group">
-									<input type="text" id="tree_maxage" name="MAX_ALIVE_AGE" value="<?php echo get_gedcom_setting(KT_GED_ID, 'MAX_ALIVE_AGE'); ?>" size="5" maxlength="3">
+										<input type="number" id="tree_maxage" name="MAX_ALIVE_AGE" value="<?php echo get_gedcom_setting(KT_GED_ID, 'MAX_ALIVE_AGE'); ?>" max="9999" min="1" required>
 									<span class="input-group-label"><?php echo KT_I18N::translate('years'); ?></span>
 								</div>
 							</div>
