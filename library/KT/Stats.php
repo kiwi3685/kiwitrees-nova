@@ -731,7 +731,7 @@ class KT_Stats {
 					'category'	=> KT_I18N::translate('Living'),
 					'count'		=> $this->_totalLiving(),
 					'percent'	=> KT_I18N::number($this->_totalLiving(), 0),
-				'color'		=> 'l'
+					'color'		=> 'l'
 				),
 				array (
 					'category'	=> KT_I18N::translate('Dead'),
@@ -853,10 +853,10 @@ class KT_Stats {
 
 		foreach ($media as $type=>$count) {
 			$data[] = array (
-				KT_I18N::translate('category')	=> KT_Gedcom_Tag::getFileFormTypeValue($type),
-				KT_I18N::translate('count')		=> $count,
-				KT_I18N::translate('percent')	=> KT_I18N::number($count) . ' (' . KT_I18N::number(100 * $count / $tot, 1) . '%)',
-				KT_I18N::translate('color')		=> 'd'
+				'category'	=> KT_Gedcom_Tag::getFileFormTypeValue($type),
+				'count'		=> $count,
+				'percent'	=> KT_I18N::number($count) . ' (' . KT_I18N::number(100 * $count / $tot, 1) . '%)',
+				'color'		=> 'd'
 			);
 		}
 
@@ -1128,28 +1128,33 @@ class KT_Stats {
 		default:
 			$surn_countries	= array();
 			$a_countries	= $this->_statsPlaces('INDI');
-			// kiwitrees uses 3 letter country codes and localised country names, but google uses 2 letter codes.
-			foreach ($a_countries as $place) {
-				$country = trim($place['country']);
-				if (array_key_exists($country, $country_to_iso3166)) {
-					if (!isset($surn_countries[$country_to_iso3166[$country]])) {
-						$surn_countries[$country_to_iso3166[$country]] = $place['tot'];
-					} else {
-						$surn_countries[$country_to_iso3166[$country]] += $place['tot'];
+			if ($a_countries) {
+				// kiwitrees uses 3 letter country codes and localised country names, but google uses 2 letter codes.
+				foreach ($a_countries as $place) {
+					$country = trim($place['country']);
+					if (array_key_exists($country, $country_to_iso3166)) {
+						if (!isset($surn_countries[$country_to_iso3166[$country]])) {
+							$surn_countries[$country_to_iso3166[$country]] = $place['tot'];
+						} else {
+							$surn_countries[$country_to_iso3166[$country]] += $place['tot'];
+						}
 					}
 				}
 			}
 			break;
 		}
+		if ($surn_countries) {
+			foreach ($surn_countries as $country=>$count) {
+				$data[] = array (
+					'country'	=> $country,
+					'count'		=> $count,
+				);
+			}
 
-		foreach ($surn_countries as $country=>$count) {
-			$data[] = array (
-				KT_I18N::translate('country')	=> $country,
-				KT_I18N::translate('count')		=> $count,
-			);
+			return json_encode($data, JSON_NUMERIC_CHECK);
+		} else {
+			return false;
 		}
-
-		return json_encode($data, JSON_NUMERIC_CHECK);
 
 	}
 
@@ -1295,10 +1300,10 @@ class KT_Stats {
 			} else {
 				foreach ($rows as $values) {
 					$data[] = array (
-						KT_I18N::translate('category')	=> self::_centuryName($values['century']),
-						KT_I18N::translate('count')		=> $values['total'],
-						KT_I18N::translate('percent')	=> KT_I18N::number($values['total']) . ' (' . KT_I18N::number(round(100 * $values['total'] / $tot, 0)) . '%)',
-						KT_I18N::translate('color')		=> 'd'
+						'category'	=> self::_centuryName($values['century']),
+						'count'		=> $values['total'],
+						'percent'	=> KT_I18N::number($values['total']) . ' (' . KT_I18N::number(round(100 * $values['total'] / $tot, 0)) . '%)',
+						'color'		=> 'd'
 					);
 				}
 			}
@@ -1358,10 +1363,10 @@ class KT_Stats {
 			} else {
 				foreach ($rows as $values) {
 					$data[] = array (
-						KT_I18N::translate('category')	=> self::_centuryName($values['century']),
-						KT_I18N::translate('count')		=> $values['total'],
-						KT_I18N::translate('percent')	=> KT_I18N::number($values['total']) . ' (' . KT_I18N::number(round(100 * $values['total'] / $tot, 0)) . '%)',
-						KT_I18N::translate('color')		=> 'd'
+						'category'	=> self::_centuryName($values['century']),
+						'count'		=> $values['total'],
+						'percent'	=> KT_I18N::number($values['total']) . ' (' . KT_I18N::number(round(100 * $values['total'] / $tot, 0)) . '%)',
+						'color'		=> 'd'
 					);
 				}
 			}
@@ -2226,10 +2231,10 @@ class KT_Stats {
 			} else {
 				foreach ($rows as $values) {
 					$data[] = array (
-						KT_I18N::translate('category')	=> self::_centuryName($values['century']),
-						KT_I18N::translate('count')		=> $values['total'],
-						KT_I18N::translate('percent')	=> KT_I18N::number($values['total']) . ' (' . KT_I18N::number(round(100 * $values['total'] / $tot, 0)) . '%)',
-						KT_I18N::translate('color')		=> 'd'
+						'category'	=> self::_centuryName($values['century']),
+						'count'		=> $values['total'],
+						'percent'	=> KT_I18N::number($values['total']) . ' (' . KT_I18N::number(round(100 * $values['total'] / $tot, 0)) . '%)',
+						'color'		=> 'd'
 					);
 				}
 			}
@@ -2292,10 +2297,10 @@ class KT_Stats {
 			} else {
 				foreach ($rows as $values) {
 					$data[] = array (
-						KT_I18N::translate('category')	=> self::_centuryName($values['century']),
-						KT_I18N::translate('count')		=> $values['total'],
-						KT_I18N::translate('percent')	=> KT_I18N::number($values['total']) . ' (' . KT_I18N::number(round(100 * $values['total'] / $tot, 0)) . '%)',
-						KT_I18N::translate('color')		=> 'd'
+						'category'	=> self::_centuryName($values['century']),
+						'count'		=> $values['total'],
+						'percent'	=> KT_I18N::number($values['total']) . ' (' . KT_I18N::number(round(100 * $values['total'] / $tot, 0)) . '%)',
+						'color'		=> 'd'
 					);
 				}
 			}
@@ -2897,10 +2902,10 @@ class KT_Stats {
 			} else {
 				foreach ($rows as $values) {
 					$data[] = array (
-						KT_I18N::translate('category')	=> self::_centuryName($values['century']),
-						KT_I18N::translate('count')		=> $values['num'],
-						KT_I18N::translate('percent')	=> KT_I18N::number($values['num'], 1),
-						KT_I18N::translate('color')		=> 'd'
+						'category'	=> self::_centuryName($values['century']),
+						'count'		=> $values['num'],
+						'percent'	=> KT_I18N::number($values['num'], 1),
+						'color'		=> 'd'
 					);
 				}
 			}
@@ -3043,10 +3048,10 @@ class KT_Stats {
 		} else {
 			foreach ($rows as $values) {
 				$data[] = array (
-					KT_I18N::translate('category')	=> self::_centuryName($values['century']),
-					KT_I18N::translate('count')		=> $values['count'],
-					KT_I18N::translate('percent')	=> KT_I18N::number($values['count']),
-					KT_I18N::translate('color')		=> 'd'
+					'category'	=> self::_centuryName($values['century']),
+					'count'		=> $values['count'],
+					'percent'	=> KT_I18N::number($values['count']),
+					'color'		=> 'd'
 				);
 			}
 		}
@@ -3198,10 +3203,10 @@ class KT_Stats {
 				$top_name=preg_replace(array('/ska$/', '/cka$/', '/dzka$/', '/żka$/'), array('ski', 'cki', 'dzki', 'żki'), $top_name);
 			}
 			$data[] = array (
-				KT_I18N::translate('category')	=> $top_name,
-				KT_I18N::translate('count')		=> $count_per,
-				KT_I18N::translate('percent')	=> KT_I18N::number($count_per) . ' (' . KT_I18N::number(100 * $count_per / $tot, 1) . '%)',
-				KT_I18N::translate('color')		=> 'd'
+				'category'	=> $top_name,
+				'count'		=> $count_per,
+				'percent'	=> KT_I18N::number($count_per) . ' (' . KT_I18N::number(100 * $count_per / $tot, 1) . '%)',
+				'color'		=> 'd'
 			);
 		}
 
@@ -3320,7 +3325,7 @@ class KT_Stats {
 					jQuery("#'.$table_id.'").css("visibility", "visible");
 				');
 				$lookup=array('M'=>KT_I18N::translate('Male'), 'F'=>KT_I18N::translate('Female'), 'U'=>KT_I18N::translate_c('unknown gender', 'Unknown'), 'B'=>KT_I18N::translate('All'));
-				return '<table id="'.$table_id.'" class="givn-list"><thead><tr><th class="ui-state-default" colspan="3">'.$lookup[$sex].'</th></tr><tr><th>'.KT_I18N::translate('Name').'</th><th>'.KT_I18N::translate('Count').'</th><th>COUNT</th></tr></thead><tbody>'.join('', $common).'</tbody></table>';
+				return '<table id="'.$table_id.'" class="givn-list"><thead><tr><th class="ui-state-default" colspan="3">'.$lookup[$sex].'</th></tr><tr><th>'.KT_I18N::translate('Name').'</th><th>'.'count'.'</th><th>COUNT</th></tr></thead><tbody>'.join('', $common).'</tbody></table>';
 			case 'list':
 				return '<ul>'.join('', $common).'</ul>';
 			case 'nolist':
@@ -3368,10 +3373,10 @@ class KT_Stats {
 		}
 		foreach ($given as $givn => $count) {
 			$data[] = array (
-				KT_I18N::translate('category')	=> $givn,
-				KT_I18N::translate('count')		=> $count,
-				KT_I18N::translate('percent')	=> KT_I18N::number($count) . ' (' . KT_I18N::number(100 * $count / $tot_indi, 1) . '%)',
-				KT_I18N::translate('color')		=> 'd'
+				'category'	=> $givn,
+				'count'		=> $count,
+				'percent'	=> KT_I18N::number($count) . ' (' . KT_I18N::number(100 * $count / $tot_indi, 1) . '%)',
+				'color'		=> 'd'
 			);
 		}
 
