@@ -197,7 +197,7 @@ $this
 		</nav> <!--  close admin_head -->
 		<div id="admin-container" class="grid-x"> <!--  closed in footer.php -->
 			<!-- normal menu -->
-			<ul id="admin-menu" class="cell large-2 menu vertical accordion-menu" data-accordion-menu  data-allow-all-closed="true" style="visibility: hidden;">
+			<ul id="admin-menu" class="cell large-2 menu vertical accordion-menu" data-accordion-menu data-multi-open="false" style="visibility: hidden;">
 				<li>
 				    <a href="#" class="admin-menu-title">
 						<span class="fa-stack" style="vertical-align: top;">
@@ -206,7 +206,7 @@ $this
 						</span>
 						<span><?php echo KT_I18N::translate('Dashboard'); ?></span>
 					</a>
-					<ul class="menu  vertical">
+					<ul class="menu vertical">
 						<li><a <?php echo (KT_SCRIPT_NAME == "admin.php" ? 'class="current" ' : ''); ?>href="admin.php"><?php echo KT_I18N::translate('Home'); ?></a></li>
 					</ul>
 				</li>
@@ -219,7 +219,7 @@ $this
 							</span>
 							<span><?php echo KT_I18N::translate('Site administration'); ?></span>
 						</a>
-					    <ul class="menu  vertical">
+					    <ul class="menu vertical">
 							<?php foreach ($site_tools as $file=>$title) { ?>
 								<li><a <?php echo (KT_SCRIPT_NAME == $file ? 'class="current" ' : ''); ?>href="<?php echo $file; ?>"><?php echo $title; ?></a></li>
 							<?php } ?>
@@ -234,7 +234,7 @@ $this
 						</span>
 						<span><?php echo KT_I18N::translate('Family trees'); ?></span>
 					</a>
-			        <ul class="menu  vertical">
+			        <ul class="menu vertical">
 						<?php if (KT_USER_IS_ADMIN) { ?>
 							<li><a <?php echo (KT_SCRIPT_NAME == "admin_trees_manage.php" ? 'class="current" ' : ''); ?>href="admin_trees_manage.php"><?php echo KT_I18N::translate('Manage: <em>All family trees</em>'); ?></a></li>
 						<?php }
@@ -261,7 +261,7 @@ $this
 						</span>
 						<span><?php echo KT_I18N::translate('Family tree tools'); ?></span>
 					</a>
-		        	<ul class="menu  vertical">
+		        	<ul class="menu vertical">
 						<?php foreach ($ft_tools as $file=>$title) { ?>
 							<li><a <?php echo (KT_SCRIPT_NAME == $file ? 'class="current" ' : ''); ?>href="<?php echo $file; ?>"><?php echo $title; ?></a></li>
 						<?php } ?>
@@ -276,7 +276,7 @@ $this
 							</span>
 							<span><?php echo KT_I18N::translate('Users'); ?></span>
 						</a>
-						<ul class="menu  vertical">
+						<ul class="menu vertical">
 							<li><a <?php echo (KT_SCRIPT_NAME == "admin_users.php" && safe_GET('action') != "cleanup" && safe_GET('action')!="edit" ? 'class="current" ' : ''); ?>href="admin_users.php"><?php echo KT_I18N::translate('Manage users'); ?></a></li>
 							<li><a <?php echo (KT_SCRIPT_NAME == "admin_users.php" && safe_GET('action') == "edit" && safe_GET('user_id') == 0  ? 'class="current" ' : ''); ?>href="admin_users.php?action=edit"><?php echo KT_I18N::translate('Add a new user'); ?></a></li>
 							<li><a <?php echo (KT_SCRIPT_NAME == "admin_users_bulk.php" ? 'class="current" ' : ''); ?>href="admin_users_bulk.php"><?php echo KT_I18N::translate('Send broadcast messages'); ?></a></li>
@@ -293,7 +293,7 @@ $this
 							</span>
 							<span><?php echo KT_I18N::translate('Media'); ?></span>
 						</a>
-						<ul class="menu  vertical">
+						<ul class="menu vertical">
 							<li><a <?php echo (KT_SCRIPT_NAME == "admin_media.php" ? 'class="current" ' : ''); ?>href="admin_media.php"><?php echo KT_I18N::translate('Manage media'); ?></a></li>
 							<li><a <?php echo (KT_SCRIPT_NAME == "admin_media_upload.php" ? 'class="current" ' : ''); ?>href="admin_media_upload.php"><?php echo KT_I18N::translate('Upload media files'); ?></a></li>
 						</ul>
@@ -308,7 +308,7 @@ $this
 							</span>
 							<span><?php echo KT_I18N::translate('Modules'); ?></span>
 						</a>
-						<ul class="menu  vertical">
+						<ul class="menu vertical">
 							<li><a <?php echo (KT_SCRIPT_NAME == "admin_modules.php" ? 'class="current" ' : ''); ?>href="admin_modules.php"><?php echo KT_I18N::translate('Manage modules'); ?></a></li>
 							<?php foreach ($module_cats as $file=>$title) { ?>
 								<li><a <?php echo (KT_SCRIPT_NAME == $file ? 'class="current" ' : ''); ?>href="<?php echo $file; ?>"><?php echo $title; ?></a></li>
@@ -325,7 +325,7 @@ $this
 							</span>
 							<span><?php echo KT_I18N::translate('Customizing'); ?></span>
 						</a>
-						<ul class="menu  vertical">
+						<ul class="menu vertical">
 							<?php foreach ($custom as $file=>$title) { ?>
 								<li><a <?php echo (KT_SCRIPT_NAME == $file ? 'class="current" ' : ''); ?>href="<?php echo $file; ?>"><?php echo $title; ?></a></li>
 							<?php } ?>
@@ -342,7 +342,7 @@ $this
 							</span>
 							<span><?php echo KT_I18N::translate('Tools'); ?></span>
 						</a>
-						<ul class="menu  vertical">
+						<ul class="menu vertical">
 							<?php foreach (KT_Module::getActiveModules(true) as $module) {
 								if ($module instanceof KT_Module_Config) { ?>
 									<li><span><a <?php echo (KT_SCRIPT_NAME == "module.php" && safe_GET('mod') == $module->getName() ? 'class="current" ' : ''); ?>href="<?php echo $module->getConfigLink(); ?>"><?php echo $module->getTitle(); ?></a></span></li>

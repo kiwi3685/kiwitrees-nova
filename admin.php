@@ -147,14 +147,14 @@ $changes = KT_DB::prepare(
 		if ($latest_version) {
 			if (version_compare(KT_VERSION, $latest_version) < 0) { ?>
 				<div class="callout alert">
-					<h4><?php echo KT_KIWITREES . ' ' . KT_VERSION; ?></h4>
+					<h5><?php echo KT_KIWITREES . ' ' . KT_VERSION; ?></h5>
 					<p>
 						<?php echo /* I18N: %s is a URL/link to the project website */ KT_I18N::translate('Version %s of kiwitrees is now available at %s.', $latest_version, ' <a class="current" href="' . KT_KIWITREES_URL . '/services/downloads/">kiwitrees.net downloads</a>'); ?>
 					</p>
 				</div>
 			<?php } else { ?>
 				<div class="callout success">
-					<h4><?php echo KT_KIWITREES, ' ', KT_VERSION; ?></h4>
+					<h5><?php echo KT_KIWITREES, ' ', KT_VERSION; ?></h5>
 					<p>
 						<?php echo /* I18N: %s is a URL/link to the project website */ KT_I18N::translate('Your version of kiwitrees is the latest available.'); ?>
 					</p>
@@ -162,7 +162,7 @@ $changes = KT_DB::prepare(
 			<?php }
 		} else { ?>
 			<div class="callout secondary">
-				<h4><?php echo KT_KIWITREES, ' ', KT_VERSION; ?></h4>
+				<h5><?php echo KT_KIWITREES, ' ', KT_VERSION; ?></h5>
 				<p>
 					<?php echo /* I18N: %s is a URL/link to the project website */ KT_I18N::translate('No upgrade information is available.'); ?>
 				</p>
@@ -171,7 +171,7 @@ $changes = KT_DB::prepare(
 
 		// PHP version info ?>
 		<div class="callout success">
-			<h4><?php echo KT_I18N::translate('You are using PHP version %s.', phpversion()); ?></h4>
+			<h5><?php echo KT_I18N::translate('You are using PHP version %s.', phpversion()); ?></h5>
 			<?php if (version_compare(phpversion(), '7.4', '<')) {
 				if (version_compare(phpversion(), '5.6', '<')) { ?>
 					<p>
