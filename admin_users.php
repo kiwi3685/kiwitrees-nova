@@ -244,8 +244,9 @@ switch (KT_Filter::get('action')) {
 			}
 			// $aData[6] is the sortable registration timestamp
 			$aData[7] = $aData[7] ? format_timestamp($aData[7]) : '';
-			if (date("U") - $aData[6] > 604800 && !$aData[10]) {
-				$aData[7] = '<span class="red">' . $aData[7] . '</span>'; // display in red if user does not verify within 7 days (604800 secs)
+
+			if (date("U") - $aData[6] > $time && !$aData[10]) {
+				$aData[7] = '<span class="red">' . $aData[7] . '</span>'; // display in red if user does not verify within the set number of days (converted to secs)					$aData[7] = '<span class="red">' . $aData[7] . '</span>'; // display in red if user does not verify within number of days set at login & registration settings
 			}
 			// $aData[8] is the sortable last-login timestamp
 			if ($aData[8]) {
