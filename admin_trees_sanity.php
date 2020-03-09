@@ -399,7 +399,7 @@ $controller
 					</div>';
 			}
 			if (KT_Filter::post('age')) {
-				$data = invalid_tag('AGE');
+				$data = invalid_age();
 				echo '
 					<div class="accordion-item" data-accordion-item>
 						<a href="#" class="accordion-title">' . KT_I18N::translate('%s individuals or families have age incorrectly recorded', $data['count']) . '
