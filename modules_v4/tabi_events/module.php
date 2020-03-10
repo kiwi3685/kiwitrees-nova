@@ -116,12 +116,14 @@ class tabi_events_KT_Module extends KT_Module implements KT_Module_IndiTab {
 						<div class="cell medium-2 place">
 							<label><?php echo KT_I18N::translate('Place'); ?></label>
 						</div>
-						<div class="cell medium-5 detail">
+						<div class="cell <?php echo (KT_USER_CAN_EDIT ? 'medium-5' : 'auto'); ?> detail">
 							<label><?php echo KT_I18N::translate('Details'); ?></label>
 						</div>
-						<div class="cell medium-1 edit">
-							<label><?php echo KT_I18N::translate('Edit'); ?></label>
-						</div>
+						<?php if (KT_USER_CAN_EDIT) { ?>
+							<div class="cell medium-1 edit">
+								<label><?php echo KT_I18N::translate('Edit'); ?></label>
+							</div>
+						<?php } ?>
 					</div>
 				</div>
 				<?php

@@ -575,7 +575,7 @@ function print_timeline(KT_Event $fact, KT_GedcomRecord $record) {
 
 	<div class="cell indiFact <?php echo $styleadd; ?>">
 		<div class="grid-x">
-			<div class="cell small-10 medium-11">
+			<div class="cell <?php echo (KT_USER_CAN_EDIT ? 'small-10 medium-11' : 'auto'); ?>">
 				<div class="grid-x grid-padding-x">
 					<!-- Date -->
 					<div class="cell small-10 medium-2 small-order-3 medium-order-1 date">
@@ -598,7 +598,7 @@ function print_timeline(KT_Event $fact, KT_GedcomRecord $record) {
 						<?php echo print_address_structure($fact->getGedcomRecord(), 2); ?>
 					</div>
 					<!-- Details -->
-					<div class="cell small-10 medium-5 small-order-5 medium-order-4 detail">
+					<div class="cell <?php echo (KT_USER_CAN_EDIT ? 'small-10 medium-5' : 'auto'); ?> small-order-5 medium-order-4 detail">
 						<?php switch ($fact->getTag()) {
 							case '_BIRT_CHIL':
 								echo '<br>', KT_I18N::translate('#%d', ++$n_chil);
@@ -868,35 +868,37 @@ function print_timeline(KT_Event $fact, KT_GedcomRecord $record) {
 					</div>
 				</div>
 			</div>
-			<div class="cell small-2 medium-1">
-				<div class="grid-x grid-padding-x">
-					<!-- Edit -->
-					<div class="cell edit">
-						<?php if (KT_USER_CAN_EDIT && $styleadd != 'change_old' && $fact->getLineNumber() > 0 && $fact->canEdit()) { ?>
-							<div class="editfacts button-group stacked">
-								<a class="button clear" onclick="return edit_record('<?php echo $pid; ?>', <?php echo $fact->getLineNumber(); ?>);">
-									<i class="<?php echo $iconStyle; ?> fa-edit"></i>
-									<span class="link_text show-for-large" tabindex="1" title="<?php echo KT_I18N::translate('Edit'); ?>">
-										<?php echo KT_I18N::translate('Edit'); ?>
-									</span>
-								</a>
-								<a class="button clear" onclick="jQuery.post('action.php',{action:'copy-fact', type:'<?php echo $fact->getParentObject()->getType(); ?>',factgedcom:'<?php echo rawurlencode($fact->getGedcomRecord()); ?>'},function(){location.reload();})">
-									<i class="<?php echo $iconStyle; ?> fa-copy"></i>
-									<span class="link_text show-for-large" tabindex="2" title="<?php echo KT_I18N::translate('Copy'); ?>">
-										<?php echo KT_I18N::translate('Copy'); ?>
-									</span>
-								</a>
-								<a class="button clear" onclick="return delete_fact('<?php echo $pid; ?>', <?php echo $fact->getLineNumber(); ?>, '', '<?php echo KT_I18N::translate('Are you sure you want to delete this fact?'); ?>');">
-									<i class="<?php echo $iconStyle; ?> fa-trash-alt"></i>
-									<span class="link_text show-for-large" tabindex="3" title="<?php echo KT_I18N::translate('Delete'); ?>">
-										<?php echo KT_I18N::translate('Delete'); ?>
-									</span>
-								</a>
-							</div>
-						<?php } ?>
+			<?php if (KT_USER_CAN_EDIT) { ?>
+				<div class="cell small-2 medium-1">
+					<div class="grid-x grid-padding-x">
+						<!-- Edit -->
+						<div class="cell edit">
+							<?php if (KT_USER_CAN_EDIT && $styleadd != 'change_old' && $fact->getLineNumber() > 0 && $fact->canEdit()) { ?>
+								<div class="editfacts button-group stacked">
+									<a class="button clear" onclick="return edit_record('<?php echo $pid; ?>', <?php echo $fact->getLineNumber(); ?>);">
+										<i class="<?php echo $iconStyle; ?> fa-edit"></i>
+										<span class="link_text show-for-large" tabindex="1" title="<?php echo KT_I18N::translate('Edit'); ?>">
+											<?php echo KT_I18N::translate('Edit'); ?>
+										</span>
+									</a>
+									<a class="button clear" onclick="jQuery.post('action.php',{action:'copy-fact', type:'<?php echo $fact->getParentObject()->getType(); ?>',factgedcom:'<?php echo rawurlencode($fact->getGedcomRecord()); ?>'},function(){location.reload();})">
+										<i class="<?php echo $iconStyle; ?> fa-copy"></i>
+										<span class="link_text show-for-large" tabindex="2" title="<?php echo KT_I18N::translate('Copy'); ?>">
+											<?php echo KT_I18N::translate('Copy'); ?>
+										</span>
+									</a>
+									<a class="button clear" onclick="return delete_fact('<?php echo $pid; ?>', <?php echo $fact->getLineNumber(); ?>, '', '<?php echo KT_I18N::translate('Are you sure you want to delete this fact?'); ?>');">
+										<i class="<?php echo $iconStyle; ?> fa-trash-alt"></i>
+										<span class="link_text show-for-large" tabindex="3" title="<?php echo KT_I18N::translate('Delete'); ?>">
+											<?php echo KT_I18N::translate('Delete'); ?>
+										</span>
+									</a>
+								</div>
+							<?php } ?>
+						</div>
 					</div>
 				</div>
-			</div>
+			<?php } ?>
 		</div>
 	</div>
 	<?php
