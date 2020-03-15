@@ -591,7 +591,7 @@ abstract class KT_Module {
 
 		foreach($default_modules as $module => $order) {
 			KT_DB::prepare(
-				"INSERT INTO `##module` (module_name, status, tabi_order, menu_order, sidebar_order, widget_order, tabf_order, footer_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+				"INSERT IGNORE INTO `##module` (module_name, status, tabi_order, menu_order, sidebar_order, widget_order, tabf_order, footer_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
 			)->execute(array($module, $order[0], $order[1], $order[2], $order[3], $order[4], $order[5], $order[6]));
 		}
 	}
