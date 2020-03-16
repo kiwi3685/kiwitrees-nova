@@ -199,16 +199,13 @@ $this
 			<!-- normal menu -->
 			<ul id="admin-menu" class="cell large-2 menu vertical accordion-menu" data-accordion-menu data-multi-open="false" style="visibility: hidden;">
 				<li>
-				    <a href="#" class="admin-menu-title">
+				    <a href="admin.php" class="admin-menu-title dashboard">
 						<span class="fa-stack" style="vertical-align: top;">
 							<i class="<?php echo $iconStyle; ?> background fa-circle fa-stack-2x"></i>
 							<i class="<?php echo $iconStyle; ?> foreground fa-tachometer-alt fa-fw fa-stack-1x"></i>
 						</span>
-						<span><?php echo KT_I18N::translate('Dashboard'); ?></span>
+						<span <?php echo (KT_SCRIPT_NAME == "admin.php" ? 'class="current" ' : ''); ?>><?php echo KT_I18N::translate('Dashboard'); ?></span>
 					</a>
-					<ul class="menu vertical">
-						<li><a <?php echo (KT_SCRIPT_NAME == "admin.php" ? 'class="current" ' : ''); ?>href="admin.php"><?php echo KT_I18N::translate('Home'); ?></a></li>
-					</ul>
 				</li>
 				<?php if (KT_USER_IS_ADMIN) { ?>
 					<li>
