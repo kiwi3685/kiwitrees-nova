@@ -779,7 +779,7 @@ default:
 	$title = KT_I18N::translate('Help');
 	$text = KT_I18N::translate('The help text has not been written for this item.');
 	// If we've been called from a module, allow the module to provide the help text
-	$mod	=safe_GET('mod', '[A-Za-z0-9_]+');
+	$mod	= KT_Filter::get('mod', '[A-Za-z0-9_]+');
 	if (file_exists(KT_ROOT . KT_MODULES_DIR . $mod . '/help_text.php')) {
 		require KT_ROOT . KT_MODULES_DIR . $mod . '/help_text.php';
 	}
