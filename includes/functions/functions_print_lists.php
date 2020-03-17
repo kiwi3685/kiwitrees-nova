@@ -1238,7 +1238,7 @@ function format_sour_table($datalist) {
 					<input
 						type="button"
 						value = "' . KT_I18N::translate('Delete'). '"
-						class="button small"
+						class="button tiny"
 						onclick="if (confirm(\'' . htmlspecialchars(KT_I18N::translate('Permanently delete these records?')) . '\')) {return checkbox_delete(\'sources\');} else {return false;}"
 						>
 					<input type="checkbox" onclick="toggle_select(this)" style="vertical-align:middle;">
@@ -1426,7 +1426,7 @@ function format_note_table($datalist) {
 					<input
 						type="button"
 						value = "' . KT_I18N::translate('Delete'). '"
-						class="button small"
+						class="button tiny"
 						onclick="if (confirm(\'' . htmlspecialchars(KT_I18N::translate('Permanently delete these records?')) . '\')) {return checkbox_delete(\'notes\');} else {return false;}"
 					>
 					<input type="checkbox" onclick="toggle_select(this)" style="vertical-align:middle;">
