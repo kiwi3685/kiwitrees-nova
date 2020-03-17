@@ -538,9 +538,10 @@ function print_note_record($text, $nlevel, $nrec, $textOnly = false) {
 			$html = KT_Filter::formatText($note->getNote());
 		}
 	} else {
-		$note	= null;
-		$html	= $text . $text_cont;
-		$label	= 'NOTE';
+		$element_id = 'N-' . (int)(microtime(true)*1000000);
+		$note		= null;
+		$html		= $text . $text_cont;
+		$label		= 'NOTE';
 	}
 	if ($textOnly) {
 		return strip_tags($html);
@@ -586,7 +587,7 @@ function print_note_record($text, $nlevel, $nrec, $textOnly = false) {
 						<span>
 							' . KT_Gedcom_Tag::getLabel($label) . ':
 						</span>
-						<span data-toggle="' . $element_id . ' ' . $element_id . '-alt">
+						<span data-toggle="' . $element_id . '">
 							<span id="' . $element_id . '-alt" class="first-line" data-toggler=".is-shown">' . $first_line . '</span>
 							<i class="' . $iconStyle . ' fa-expand-arrows-alt"></i>
 						</span>
@@ -603,7 +604,7 @@ function print_note_record($text, $nlevel, $nrec, $textOnly = false) {
 						<span>
 							' . KT_Gedcom_Tag::getLabel($label) . ':
 						</span>
-						<span id="' . $element_id . '-alt">
+						<span id="' . $element_id . '">
 							<a data-open="' . $element_id . '">
 								' . $revealText . '
 								<i class="' . $iconStyle . ' fa-expand-arrows-alt"></i>
@@ -724,11 +725,17 @@ function help_text($help_topic) {
 }
 
 // Print help as a foundation dropdown
-function helpDropdown($help_topic) {
+function helpDropdown($help_topic, $module = false) {
 	global $controller, $iconStyle;
-	$controller->addInlineJavascript('
-		jQuery("#help-' . $help_topic . '").load("help_text.php?help=' . $help_topic . '&title=true");
-	');
+	if ($module) {
+		$controller->addInlineJavascript('
+			jQuery("#help-' . $help_topic . '").load("help_text.php?help=' . $help_topic . '&title=true&mod=' . $module . '");
+		');
+	} else {
+		$controller->addInlineJavascript('
+			jQuery("#help-' . $help_topic . '").load("help_text.php?help=' . $help_topic . '&title=true");
+		');
+	}
 
 	return '
 		<span class="show-for-medium" data-open="' . $help_topic . '" title="' . KT_I18N::translate('Help') . '">
@@ -1266,9 +1273,9 @@ function print_add_new_fact($id, $usedfacts, $type) {
 				<form method="get" name="newfactform" action="" onsubmit="return false;">
 					<div class="input-group">
 						<div class="input-group-button">
-							<input type="button" class="button" value="<?php echo KT_I18N::translate('Add'); ?>" onclick="add_record('<?php echo $id; ?>', 'newfact');">
+							<input type="button" class="button" value="<?php echo KT_I18N::translate('Add'); ?>" onclick="add_record('<?php echo $id; ?>', 'newfact<?php echo '-' . (int)(microtime(true)*1000000); ?>');">
 						</div>
-						<select id="newfact" class="input-group-field" name="newfact">
+						<select id="newfact<?php echo '-' . (int)(microtime(true)*1000000); ?>" class="input-group-field" name="newfact">
 							<option value="" disabled selected><?php echo KT_I18N::translate('Select'); ?></option>
 							<?php foreach ($translated_addfacts as $fact=>$fact_name) {
 								if ($fact !== 'EVEN' && $fact !== 'FACT') { ?>
