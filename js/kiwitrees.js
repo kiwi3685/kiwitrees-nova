@@ -1512,6 +1512,7 @@ function autocomplete(selector) {
 
 // Clear autocomplete input field.
 jQuery(".clearAutocomplete").click(function() {
+	jQuery("input[id*=selectedValue]").val("");
 	jQuery("input[id*=autocompleteInput]").val("").focus();
 	return false;
 });
