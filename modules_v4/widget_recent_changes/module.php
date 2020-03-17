@@ -66,6 +66,7 @@ class widget_recent_changes_KT_Module extends KT_Module implements KT_Module_Wid
 		$id			= $this->getName();
 		$class		= $this->getName();
 		$title		= /* I18N: title for list of recent changes */ KT_I18N::plural('Changes in the last day', 'Changes in the last %s days', $days, KT_I18N::number($days));
+		$order		= get_widget_order($this->getName());
 		$content	= '';
 		// Print block content
 		if (count($found_facts) == 0) {

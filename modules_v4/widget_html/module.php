@@ -97,6 +97,7 @@ class widget_html_KT_Module extends KT_Module implements KT_Module_Widget {
 		$id		= $this->getName().$widget_id;
 		$class	= $this->getName();
 		$title	= $title_tmp;
+		$order		= get_widget_order($this->getName());
 
 		$content = $html;
 

@@ -42,6 +42,7 @@ class widget_theme_select_KT_Module extends KT_Module implements KT_Module_Widge
 		$id					= $this->getName() . $widget_id;
 		$class				= $this->getName();
 		$title				= $this->getTitle();
+		$order		= get_widget_order($this->getName());
 		$current_themedir	= str_replace(array('themes','/'), '', KT_THEME_DIR);
 
 		if (KT_Filter::post('action') == 'update') {

@@ -54,6 +54,8 @@ class widget_givnnames_KT_Module extends KT_Module implements KT_Module_Widget {
 		$stats	= new KT_Stats(KT_GEDCOM);
 		$id		= $this->getName();
 		$class	= $this->getName();
+		$order		= get_widget_order($this->getName());
+
 		if (KT_USER_GEDCOM_ADMIN) {
 			$title='<i class="icon-admin" title="'.KT_I18N::translate('Configure').'" onclick="modalDialog(\'block_edit.php?block_id='.$widget_id.'\', \''.$this->getTitle().'\');"></i>';
 		} else {

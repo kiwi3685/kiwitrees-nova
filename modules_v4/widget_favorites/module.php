@@ -124,6 +124,7 @@ class widget_favorites_KT_Module extends KT_Module implements KT_Module_Widget {
 		$id		= $this->getName() . $widget_id;
 		$class	= $this->getName() . '_block';
 		$title	= $this->getTitle();
+		$order		= get_widget_order($this->getName());
 
 		if (KT_USER_ID) {
 			$controller

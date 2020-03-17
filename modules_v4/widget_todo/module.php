@@ -55,6 +55,7 @@ class widget_todo_KT_Module extends KT_Module implements KT_Module_Widget {
 		$id		= $this->getName();
 		$class	= $this->getName();
 		$title	= $this->getTitle().help_link('todo', $this->getName());
+		$order		= get_widget_order($this->getName());
 
 		$table_id = 'ID'.(int)(microtime(true)*1000000); // create a unique ID
 		$controller

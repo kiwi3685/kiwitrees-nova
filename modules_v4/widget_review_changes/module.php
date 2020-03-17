@@ -99,6 +99,7 @@ class widget_review_changes_KT_Module extends KT_Module implements KT_Module_Wid
 					$title = '';
 				}
 				$title .= $this->getTitle().help_link('review_changes', $this->getName());
+				$order		= get_widget_order($this->getName());
 
 				$content = '';
 				if (KT_USER_CAN_ACCEPT) {

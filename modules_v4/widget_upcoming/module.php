@@ -65,6 +65,7 @@ class widget_upcoming_KT_Module extends KT_Module implements KT_Module_Widget {
 		$id			= $this->getName();
 		$class		= $this->getName();
 		$title		= $this->getTitle();
+		$order		= get_widget_order($this->getName());
 		$content	= '';
 		switch ($infoStyle) {
 		case "list":

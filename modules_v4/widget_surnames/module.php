@@ -76,6 +76,8 @@ class widget_surnames_KT_Module extends KT_Module implements KT_Module_Widget {
 		if ($i < $num) $num = $i;
 		$id		= $this->getName();
 		$class	= $this->getName();
+		$order		= get_widget_order($this->getName());
+
 		if ($num == 1) {
 			// I18N: i.e. most popular surname.
 			$title .= KT_I18N::translate('Top surname');

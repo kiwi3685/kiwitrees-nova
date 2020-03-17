@@ -28,12 +28,6 @@
 
  global $controller, $iconStyle;
 
- $controller->addInlineJavascript('
- 	// Set the first widget open
-	//	var firstAccordion = jQuery("#widget-bar li:first").attr("id");
-	//	jQuery("#widget-bar").foundation("down", jQuery(".accordion-content." + firstAccordion));
- ');
-
 //get the widgets list
 $widgets = KT_Module::getActiveWidgets();
 ?>
@@ -45,7 +39,7 @@ $widgets = KT_Module::getActiveWidgets();
   <?php echo KT_I18N::translate('Close'); ?>
 </button>
 
-<ul class="accordion" id="widget-bar" data-accordion  data-multi-expand="true">
+<ul class="accordion" id="widget-bar" data-accordion data-multi-expand="true">
 	<?php foreach ($widgets as $module_name => $module) {
 		$class_name = $module_name . '_KT_Module';
 		$module = new $class_name;

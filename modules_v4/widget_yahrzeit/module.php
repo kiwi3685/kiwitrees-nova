@@ -58,6 +58,7 @@ class widget_yahrzeit_KT_Module extends KT_Module implements KT_Module_Widget {
 		$id			= $this->getName();
 		$class		= $this->getName();
 		$title		= $this->getTitle();
+		$order		= get_widget_order($this->getName());
 		$content	= '';
 		// The standard anniversary rules cover most of the Yahrzeit rules, we just
 		// need to handle a few special cases.

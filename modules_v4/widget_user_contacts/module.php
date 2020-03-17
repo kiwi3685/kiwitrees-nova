@@ -52,6 +52,7 @@ class widget_user_contacts_KT_Module extends KT_Module implements KT_Module_Widg
 		$id			= $this->getName();
 		$class		= $this->getName();
 		$title		= $this->getTitle();
+		$order		= get_widget_order($this->getName());
 		$content	= '';
 
 		//list all users for inter-user communication, only when logged in, and there is more than one user -->

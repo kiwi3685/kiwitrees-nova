@@ -1642,7 +1642,7 @@ function get_gedcom_blocks($gedcom_id) {
 function get_block_location($block_id) {
 	return KT_DB::prepare(
 		"SELECT SQL_CACHE location FROM `##block` WHERE block_id=?"
-	)->execute(array($block_id))->fetchOne();;
+	)->execute(array($block_id))->fetchOne();
 }
 
 function get_block_setting($block_id, $setting_name, $default_value = null) {
@@ -1666,12 +1666,16 @@ function set_block_setting($block_id, $setting_name, $setting_value) {
 	}
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// Functions to access the ##MODULE and ##MODULE_SETTING tables
+////////////////////////////////////////////////////////////////////////////////
+
 function get_module_setting($module_name, $setting_name, $default_value=null) {
 	static $statement;
 	if ($statement === null) {
-		$statement = KT_DB::prepare(
-			"SELECT SQL_CACHE setting_value FROM `##module_setting` WHERE module_name=? AND setting_name=?"
-		);
+		$statement = KT_DB::prepare("
+			SELECT SQL_CACHE setting_value FROM `##module_setting` WHERE module_name=? AND setting_name=?
+		");
 	}
 	$setting_value = $statement->execute(array($module_name, $setting_name))->fetchOne();
 	return $setting_value === null ? $default_value : $setting_value;
@@ -1686,6 +1690,13 @@ function set_module_setting($module_name, $setting_name, $setting_value) {
 			->execute(array($module_name, $setting_name, $setting_value));
 	}
 }
+
+function get_widget_order($module_name) {
+	return  KT_DB::prepare("
+		SELECT widget_order FROM `##module` WHERE module_name=? AND status='enabled'
+	")->execute(array($module_name))->fetchOne();
+}
+/////////////////////////////////////////////////
 
 // update favorites after merging records
 function update_favorites($xref_from, $xref_to, $ged_id=KT_GED_ID) {

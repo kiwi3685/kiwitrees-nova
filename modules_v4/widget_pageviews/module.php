@@ -53,6 +53,7 @@ class widget_pageviews_KT_Module extends KT_Module implements KT_Module_Widget {
 		$id			= $this->getName();
 		$class		= $this->getName();
 		$title		= $this->getTitle();
+		$order		= get_widget_order($this->getName());
 
 		$content	= '';
 		// load the lines from the file
