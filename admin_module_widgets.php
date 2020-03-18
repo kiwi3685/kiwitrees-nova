@@ -30,7 +30,7 @@ global $iconStyle;
 $controller = new KT_Controller_Page();
 $controller
 	->restrictAccess(KT_USER_IS_ADMIN)
-	->setPageTitle(KT_I18N::translate('Module administration'))
+	->setPageTitle(KT_I18N::translate('Widget modules administration'))
 	->pageHeader()
 	->addInlineJavascript('
     jQuery("#widgets_table").sortable({items: ".sortme", forceHelperSize: true, forcePlaceholderSize: true, opacity: 0.7, cursor: "move", axis: "y"});
@@ -46,7 +46,6 @@ $controller
 	');
 
 $modules	= KT_Module::getActiveWidgets(KT_GED_ID, KT_PRIV_HIDE);
-
 $action		= KT_Filter::post('action');
 
 if ($action == 'update_mods' && KT_Filter::checkCsrf()) {
@@ -74,14 +73,26 @@ if ($action == 'update_mods' && KT_Filter::checkCsrf()) {
 	<form method="post" action="<?php echo KT_SCRIPT_NAME; ?>">
 		<input type="hidden" name="action" value="update_mods">
 		<?php echo KT_Filter::getCsrf(); ?>
-		<button class="button" type="submit">
-			<i class="<?php echo $iconStyle; ?> fa-save"></i>
-			<?php echo KT_I18N::translate('Save'); ?>
-		</button>
+		<h4><?php echo $controller->getPageTitle(); ?></h4>
+		<div class="grid-x grid-padding-x show-for-medium">
+			<div class="cell medium-10">
+				<p class="help-text">
+					<?php echo KT_I18N::translate('"Drag & drop" each module, or manually adjust the order numbers, to change the order these modules will be displayed in.'); ?>
+					<br>
+					<?php echo KT_I18N::translate('The "Access level" setting "Hide from everyone" means exactly that, including Administrators.'); ?>
+				</p>
+			</div>
+			<div class="cell medium-1 medium-offset-1 vertical">
+				<button class="button" type="submit">
+					<i class="<?php echo $iconStyle; ?> fa-save"></i>
+					<?php echo KT_I18N::translate('Save'); ?>
+				</button>
+			</div>
+		</div>
 		<table id="widgets_table" class="modules_table">
 			<thead>
 				<tr>
-					<th><?php echo KT_I18N::translate('Widget'); ?></th>
+					<th colspan="2"><?php echo KT_I18N::translate('Widget'); ?></th>
 					<th><?php echo KT_I18N::translate('Description'); ?></th>
 					<th><?php echo KT_I18N::translate('Order'); ?></th>
 					<th><?php echo KT_I18N::translate('Access level'); ?></th>
@@ -90,9 +101,11 @@ if ($action == 'update_mods' && KT_Filter::checkCsrf()) {
 			<tbody>
 				<?php
 				$order = 1;
-				foreach ($modules as $module) {
-					?>
+				foreach ($modules as $module) { ?>
 					<tr class="sortme">
+						<td>
+							<i class="<?php echo $iconStyle; ?> fa-bars"></i>
+						</td>
 						<td>
 							<?php
 							if ( $module instanceof KT_Module_Config ) {
@@ -108,7 +121,7 @@ if ($action == 'update_mods' && KT_Filter::checkCsrf()) {
 							<?php echo $module->getDescription(); ?>
 						</td>
 						<td>
-							<input type="text" size="3" value="<?php echo $order; ?>" name="order-<?php echo $module->getName(); ?>">
+							<input type="number" min="1" max="99" value="<?php echo $order; ?>" name="order-<?php echo $module->getName(); ?>">
 						</td>
 						<td>
 							<table class="modules_table2">

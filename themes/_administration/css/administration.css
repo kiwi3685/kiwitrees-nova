@@ -11159,6 +11159,9 @@ body #admin-container {
   color: #5da423 !important;
   font-weight: 600;
 }
+#admin-container #admin-menu .leadItem {
+  font-weight: 900;
+}
 #admin-container #admin-content {
   /* Media upload */
   /* CUSTOM LANG */
@@ -11167,6 +11170,11 @@ body #admin-container {
   /* SITE USAGE */
   /* PHP INFO */
   /* SITE LOGS */
+  /* TREE CHANGES LOG */
+  /* SANITY CHECKS */
+  /* USERS */
+  /* CLEAN UP TABLE */
+  /* MODULE PAGES */
 }
 #admin-container #admin-content .listStyleNone {
   list-style: none;
@@ -11541,6 +11549,18 @@ body #admin-container {
 }
 #admin-container #admin-content table#clean td select {
   margin-top: 1rem;
+}
+#admin-container #admin-content table.modules_table table.modules_table2 {
+  margin: 0;
+}
+#admin-container #admin-content table.modules_table table.modules_table2 td {
+  padding: 0;
+}
+#admin-container #admin-content table.modules_table table.modules_table2 td select {
+  margin: 0;
+  font-size: 85%;
+  height: 1.75rem;
+  padding: 0 0.5rem;
 }
 
 footer {

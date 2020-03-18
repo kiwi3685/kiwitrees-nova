@@ -34,7 +34,7 @@ class tabf_factsandevents_KT_Module extends KT_Module implements KT_Module_FamTa
 
 	// Extend KT_Module
 	public function getDescription() {
-		return /* I18N: Description of the “Facts and events” module */ KT_I18N::translate('A tab showing the facts and events of the individual.');
+		return /* I18N: Description of the “Facts and events” module */ KT_I18N::translate('A tab showing the facts and events of the family.');
 	}
 
 	// Extend class KT_Module_FamTab

@@ -34,7 +34,7 @@ class tabi_census_KT_Module extends KT_Module implements KT_Module_IndiTab {
 
 	// Extend KT_Module
 	public function getDescription() {
-		return /* I18N: Description of the "Facts and events" module */ KT_I18N::translate('A tab summarising census events.');
+		return /* I18N: Description of the "Facts and events" module */ KT_I18N::translate('A tab summarising census events for an individual.');
 	}
 
 	// Implement KT_Module_IndiTab

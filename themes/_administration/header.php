@@ -78,14 +78,14 @@ arsort($custom);
  * $module_cats [array]
  */
 $module_cats = array(
-	"admin_module_menus.php"		=> KT_I18N::translate('Menus'),
+	"admin_module_menus.php"		=> KT_I18N::translate('Top level menu itemss'),
 	"admin_module_tabs_indi.php"	=> KT_I18N::translate('Tabs for individual page'),
-	"admin_module_blocks.php"		=> KT_I18N::translate('Blocks'),
-	"admin_module_widgets.php"		=> KT_I18N::translate('Widgets'),
-	"admin_module_sidebar.php"		=> KT_I18N::translate('Sidebar'),
-	"admin_module_reports.php"		=> KT_I18N::translate('Reports'),
-	"admin_module_charts.php"		=> KT_I18N::translate('Charts'),
-	"admin_module_lists.php"		=> KT_I18N::translate('Lists'),
+	"admin_module_blocks.php"		=> KT_I18N::translate('Home page blocks'),
+	"admin_module_widgets.php"		=> KT_I18N::translate('Widget bar modules'),
+	"admin_module_sidebar.php"		=> KT_I18N::translate('Sidebar modules'),
+	"admin_module_reports.php"		=> KT_I18N::translate('Report menu items'),
+	"admin_module_charts.php"		=> KT_I18N::translate('Chart  menu items'),
+	"admin_module_lists.php"		=> KT_I18N::translate('List  menu items'),
 	"admin_module_footers.php"		=> KT_I18N::translate('Footer blocks'),
 	"admin_module_tabs_fam.php"		=> KT_I18N::translate('Tabs for family page'),
 );
@@ -233,7 +233,7 @@ $this
 					</a>
 			        <ul class="menu vertical">
 						<?php if (KT_USER_IS_ADMIN) { ?>
-							<li><a <?php echo (KT_SCRIPT_NAME == "admin_trees_manage.php" ? 'class="current" ' : ''); ?>href="admin_trees_manage.php"><?php echo KT_I18N::translate('Manage: <em>All family trees</em>'); ?></a></li>
+							<li><a class="leadItem" <?php echo (KT_SCRIPT_NAME == "admin_trees_manage.php" ? 'class="current" ' : ''); ?>href="admin_trees_manage.php"><?php echo KT_I18N::translate('Manage: <em>All family trees</em>'); ?></a></li>
 						<?php }
 						//-- gedcom list
 						foreach (KT_Tree::getAll() as $tree) {
@@ -274,10 +274,10 @@ $this
 							<span><?php echo KT_I18N::translate('Users'); ?></span>
 						</a>
 						<ul class="menu vertical">
-							<li><a <?php echo (KT_SCRIPT_NAME == "admin_users.php" && safe_GET('action') != "cleanup" && safe_GET('action')!="edit" ? 'class="current" ' : ''); ?>href="admin_users.php"><?php echo KT_I18N::translate('Manage users'); ?></a></li>
-							<li><a <?php echo (KT_SCRIPT_NAME == "admin_users.php" && safe_GET('action') == "edit" && safe_GET('user_id') == 0  ? 'class="current" ' : ''); ?>href="admin_users.php?action=edit"><?php echo KT_I18N::translate('Add a new user'); ?></a></li>
+							<li><a class="leadItem" <?php echo (KT_SCRIPT_NAME == "admin_users.php" && KT_Filter::get('action') != "cleanup" && KT_Filter::get('action')!="edit" ? 'class="current" ' : ''); ?>href="admin_users.php"><?php echo KT_I18N::translate('Manage users'); ?></a></li>
+							<li><a <?php echo (KT_SCRIPT_NAME == "admin_users.php" && KT_Filter::get('action') == "edit" && KT_Filter::get('user_id') == 0  ? 'class="current" ' : ''); ?>href="admin_users.php?action=edit"><?php echo KT_I18N::translate('Add a new user'); ?></a></li>
 							<li><a <?php echo (KT_SCRIPT_NAME == "admin_users_bulk.php" ? 'class="current" ' : ''); ?>href="admin_users_bulk.php"><?php echo KT_I18N::translate('Send broadcast messages'); ?></a></li>
-							<li><a <?php echo (KT_SCRIPT_NAME == "admin_users.php" && safe_GET('action') == "cleanup" ? 'class="current" ' : ''); ?>href="admin_users.php?action=cleanup"><?php echo KT_I18N::translate('Delete inactive users'); ?></a></li>
+							<li><a <?php echo (KT_SCRIPT_NAME == "admin_users.php" && KT_Filter::get('action') == "cleanup" ? 'class="current" ' : ''); ?>href="admin_users.php?action=cleanup"><?php echo KT_I18N::translate('Delete inactive users'); ?></a></li>
 						</ul>
 					</li>
 				<?php }
@@ -291,7 +291,7 @@ $this
 							<span><?php echo KT_I18N::translate('Media'); ?></span>
 						</a>
 						<ul class="menu vertical">
-							<li><a <?php echo (KT_SCRIPT_NAME == "admin_media.php" ? 'class="current" ' : ''); ?>href="admin_media.php"><?php echo KT_I18N::translate('Manage media'); ?></a></li>
+							<li><a class="leadItem" <?php echo (KT_SCRIPT_NAME == "admin_media.php" ? 'class="current" ' : ''); ?>href="admin_media.php"><?php echo KT_I18N::translate('Manage media'); ?></a></li>
 							<li><a <?php echo (KT_SCRIPT_NAME == "admin_media_upload.php" ? 'class="current" ' : ''); ?>href="admin_media_upload.php"><?php echo KT_I18N::translate('Upload media files'); ?></a></li>
 						</ul>
 					</li>
@@ -306,7 +306,7 @@ $this
 							<span><?php echo KT_I18N::translate('Modules'); ?></span>
 						</a>
 						<ul class="menu vertical">
-							<li><a <?php echo (KT_SCRIPT_NAME == "admin_modules.php" ? 'class="current" ' : ''); ?>href="admin_modules.php"><?php echo KT_I18N::translate('Manage modules'); ?></a></li>
+							<li><a class="leadItem" <?php echo (KT_SCRIPT_NAME == "admin_modules.php" ? 'class="current" ' : ''); ?>href="admin_modules.php"><?php echo KT_I18N::translate('Manage modules'); ?></a></li>
 							<?php foreach ($module_cats as $file=>$title) { ?>
 								<li><a <?php echo (KT_SCRIPT_NAME == $file ? 'class="current" ' : ''); ?>href="<?php echo $file; ?>"><?php echo $title; ?></a></li>
 							<?php } ?>
@@ -342,7 +342,7 @@ $this
 						<ul class="menu vertical">
 							<?php foreach (KT_Module::getActiveModules(true) as $module) {
 								if ($module instanceof KT_Module_Config) { ?>
-									<li><span><a <?php echo (KT_SCRIPT_NAME == "module.php" && safe_GET('mod') == $module->getName() ? 'class="current" ' : ''); ?>href="<?php echo $module->getConfigLink(); ?>"><?php echo $module->getTitle(); ?></a></span></li>
+									<li><span><a <?php echo (KT_SCRIPT_NAME == "module.php" && KT_Filter::get('mod') == $module->getName() ? 'class="current" ' : ''); ?>href="<?php echo $module->getConfigLink(); ?>"><?php echo $module->getTitle(); ?></a></span></li>
 								<?php }
 							} ?>
 						</ul>

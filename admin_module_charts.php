@@ -30,12 +30,12 @@ global $iconStyle;
 $controller = new KT_Controller_Page();
 $controller
 	->restrictAccess(KT_USER_IS_ADMIN)
-	->setPageTitle(KT_I18N::translate('Module administration'))
+	->setPageTitle(KT_I18N::translate('Chart menu items administration'))
 	->pageHeader();
 
 $modules	= KT_Module::getActiveCharts(KT_GED_ID, KT_PRIV_HIDE);
-
 $action		= KT_Filter::post('action');
+$menuItem	= KT_I18N::translate('Charts');
 
 if ($action == 'update_mods' && KT_Filter::checkCsrf()) {
 	foreach ($modules as $module_name=>$module) {
@@ -53,10 +53,22 @@ if ($action == 'update_mods' && KT_Filter::checkCsrf()) {
 	<form method="post" action="<?php echo KT_SCRIPT_NAME; ?>">
 		<input type="hidden" name="action" value="update_mods">
 		<?php echo KT_Filter::getCsrf(); ?>
-		<button class="button" type="submit">
-			<i class="<?php echo $iconStyle; ?> fa-save"></i>
-			<?php echo KT_I18N::translate('Save'); ?>
-		</button>
+		<h4><?php echo $controller->getPageTitle(); ?></h4>
+		<div class="grid-x grid-padding-x show-for-medium">
+			<div class="cell medium-10">
+				<p class="help-text">
+					<?php echo KT_I18N::translate('The order of these items under the main menu "%s" is fixed at alphabetical, based on the current display language in use.', $menuItem); ?>
+					<br>
+					<?php echo KT_I18N::translate('The "Access level" setting "Hide from everyone" means exactly that, including Administrators.'); ?>
+				</p>
+			</div>
+			<div class="cell medium-1 medium-offset-1 vertical">
+				<button class="button" type="submit">
+					<i class="<?php echo $iconStyle; ?> fa-save"></i>
+					<?php echo KT_I18N::translate('Save'); ?>
+				</button>
+			</div>
+		</div>
 		<table id="charts_table" class="modules_table">
 			<thead>
 				<tr>
