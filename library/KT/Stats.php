@@ -540,7 +540,7 @@ class KT_Stats {
 			}
 		}
 
-		return $count;
+		return KT_I18N::number($count);
 	}
 
 	function totalEventsDeath() {
@@ -565,7 +565,7 @@ class KT_Stats {
 			}
 		}
 
-		return $count;
+		return KT_I18N::number($count);
 	}
 
 	function totalEventsMarriage() {
@@ -588,7 +588,7 @@ class KT_Stats {
 			}
 		}
 
-		return $count;
+		return KT_I18N::number($count);
 	}
 
 	function totalEventsDivorce() {
