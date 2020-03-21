@@ -305,7 +305,7 @@ class tabi_dna_KT_Module extends KT_Module implements KT_Module_IndiTab {
 								</div>
 								<div class="cell small-10 medium-6">
 									<div class="input-group autocomplete_container">
-										<input data-autocomplete-type="INDI" type="text" id="autocompleteInput-dna_id_b" value="">
+										<input data-autocomplete-type="INDI" type="text" id="autocompleteInput-dna_id_b" value="" autofocus>
 										<span class="input-group-label">
 											<button class="clearAutocomplete">
 												<i class="<?php echo $iconStyle; ?> fa-times"></i>
@@ -429,11 +429,12 @@ class tabi_dna_KT_Module extends KT_Module implements KT_Module_IndiTab {
 									<label for="help-dropdown-cms" class="h5">
 										<span data-toggle="help-dropdown-cms">
 											<?php echo KT_I18N::translate('CentiMorgans'); ?>
+											<i class="<?php echo $iconStyle; ?> fa-question-circle alert"></i>
 										</span>
-										<i class="<?php echo $iconStyle; ?> fa-question-circle alert"></i>
 										<div class="dropdown-pane" id="help-dropdown-cms" data-dropdown data-close-on-click="true">
 											<?php echo $this->DNAhelp('cms'); ?>
 										</div>
+									</label>
 								</div>
 								<div class="cell small-10 medium-6">
 									<input class="addDna_form" type="number" name="cms" id="cms" min="1" max="7500" value="<?php echo $cms; ?>" placeholder="<?php echo KT_I18N::translate('A whole number between 1 and 7500'); ?>">
