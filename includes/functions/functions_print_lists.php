@@ -685,7 +685,8 @@ function format_fam_table($datalist, $option = '') {
 	');
 
 	$stats		= new KT_Stats($GEDCOM);
-	$max_age	= max($stats->oldestMarriageMaleAge(), $stats->oldestMarriageFemaleAge())+1;
+	$max_age	= max((int) $stats->oldestMarriageMaleAge(), (int) $stats->oldestMarriageFemaleAge()) + 1;
+
 
 	//-- init chart data
 	for ($age = 0; $age <= $max_age; $age ++) {
