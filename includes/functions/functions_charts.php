@@ -697,7 +697,7 @@ function print_parents($famid, $personcount = 1) {
 		$newparents	= find_parents_in_record($newrec);
 	} ?>
 
-	<div class="grid-x" id="grandparents">
+	<div class="grid-x grid-margin-x" id="grandparents">
 		<!-- husband's parents -->
 		<?php
 		$hfams		= $husb->getChildFamilies();
@@ -710,7 +710,7 @@ function print_parents($famid, $personcount = 1) {
 				$upfamid	= $hfamily->getXref();
 				break;
 			} ?>
-			<div class="cell medium-4 medium-offset-1" id="husb_parents">
+			<div class="cell medium-4 medium-offset-2" id="husb_parents">
 				<div class="grid-x grid-margin-x">
 					<?php
 					$husb_father = KT_Person::getInstance($hparents['HUSB']);
@@ -763,8 +763,8 @@ function print_parents($famid, $personcount = 1) {
 				</div>
 			</div>
 		<?php } else { ?>
-			<div class="cell medium-5 medium-offset-1" id="husb_parents">
-				<div class="grid-x">
+			<div class="cell medium-4" id="husb_parents">
+				<div class="grid-x grid-margin-x">
 					<div class="fam_parent">
 					  	<div class="person_box empty_parent">
 					 		<a href="#" onclick="return addnewparentfamily(\'<?php echo $husb->getXref(); ?>\', \'HUSB\', \'new\');">
@@ -796,7 +796,7 @@ function print_parents($famid, $personcount = 1) {
 				$upfamid = $wfamily->getXref();
 				break;
 			} ?>
-			<div class="cell medium-4 medium-offset-2" id="husb_parents">
+			<div class="cell medium-4" id="wife_parents">
 				<div class="grid-x grid-margin-x">
 					<?php
 					$wife_father = KT_Person::getInstance($wparents['HUSB']);
@@ -874,7 +874,7 @@ function print_parents($famid, $personcount = 1) {
 
 	<!-- lines -->
 	<div class="grid-x" id="family_lines">
-		<div class="cell medium-6 medium-offset-3 parents"></div>
+		<div class="cell medium-4 medium-offset-4 parents"></div>
 		<div class="cell medium-2 medium-offset-5 self"></div>
 	</div>
 
