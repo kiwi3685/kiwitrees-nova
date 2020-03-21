@@ -69,11 +69,12 @@ class tabf_census_KT_Module extends KT_Module implements KT_Module_FamTab {
 
 	// Implement KT_Module_FamTab
 	public function getTabContent() {
-		global $controller, $iconStyle;
+		global $controller, $iconStyle, $MAX_ALIVE_AGE;
 		// $icon styles
-		$nothing	= '<i class="fa-xs ' . $iconStyle . ' fa-minus"></i>';
-		$correct	= '<i class="success ' . $iconStyle . '  fa-check"></i>';
-		$missing	= '<i class="alert ' . $iconStyle . '  fa-times"></i>';
+		$nothing	= '<i class="fa-xs '   . $iconStyle . ' fa-minus"></i>';
+		$correct	= '<i class="success ' . $iconStyle . ' fa-check"></i>';
+		$missing	= '<i class="alert '   . $iconStyle . ' fa-times"></i>';
+		$unknown	= '<i class="warning ' . $iconStyle . ' fa-question"></i>';
 
 		ob_start();
 		?>
@@ -112,13 +113,15 @@ class tabf_census_KT_Module extends KT_Module implements KT_Module_FamTab {
 										$year	= substr($census->censusDate(), -4);
 										$date	= new KT_Date($census->censusDate()); ?>
 										<td>
-											<?php if ($person->getBirthDate()->JD() > $date->JD() || $person->getDeathDate()->JD() < $date->JD()) {
-												echo $nothing;
-											} elseif (in_array($year, $details['cens'])) {
+											<?php if (in_array($year, $details['cens'])) {
 												echo $correct;
+											} elseif (($person->getBirthDate()->JD() > 0 && $person->getBirthDate()->JD() > $date->JD()) || ($person->getDeathDate()->JD() > 0 && $person->getDeathDate()->JD() < $date->JD())) {
+												echo $nothing;
+											} elseif ($person->getBirthDate()->JD() == 0 || $person->getDeathDate()->JD() == 0) {
+												echo $unknown;
 											} else {
 												echo $missing;
-											} ?>
+											}?>
 										</td>
 									<?php } ?>
 								</tr>
@@ -131,6 +134,7 @@ class tabf_census_KT_Module extends KT_Module implements KT_Module_FamTab {
 						<span><?php echo $correct . KT_I18N::translate('Census entry found'); ?> | </span>
 						<span><?php echo $missing . KT_I18N::translate('Census entry missing'); ?> | </span>
 						<span><?php echo $nothing . KT_I18N::translate('No census entry expected'); ?></span>
+						<span><?php echo $unknown . KT_I18N::translate('Birth or death date missing, but census is within expected lifetime'); ?></span>
 					</div>
 			</div>
 		</div>
