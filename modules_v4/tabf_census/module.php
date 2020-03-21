@@ -86,56 +86,53 @@ class tabf_census_KT_Module extends KT_Module implements KT_Module_FamTab {
 			</div>
 		</div>
 		<div class="cell FamFact">
-			<div class="grid-x">
-					<table>
-						<thead>
+			<div class="grid-x grid-padding-x">
+				<table>
+					<thead>
+						<tr>
+							<th><?php echo KT_I18N::translate('Family members'); ?></th>
+							<?php foreach (KT_Census_Census::allCensusPlaces() as $censusPlace) {
+								if ($censusPlace->censusPlace() === $this->getCountry($controller->record->getXref())) {
+									foreach ($censusPlace->allCensusDates() as $census) { ?>
+										<th>
+											<?php echo substr($census->censusDate(), -4); ?>
+										</th>
+									<?php }
+								}
+							} ?>
+						</tr>
+					</thead>
+					<tbody>
+						<?php foreach ($this->familyCensus($controller->record->getXref()) as $details ) {
+							$person	= KT_Person::getInstance($details['xref']); ?>
 							<tr>
-								<th><?php echo KT_I18N::translate('Family members'); ?></th>
-								<?php foreach (KT_Census_Census::allCensusPlaces() as $censusPlace) {
-									if ($censusPlace->censusPlace() === $this->getCountry($controller->record->getXref())) {
-										foreach ($censusPlace->allCensusDates() as $census) { ?>
-											<th>
-												<?php echo substr($census->censusDate(), -4); ?>
-											</th>
-										<?php }
-									}
-								} ?>
-							</tr>
-						</thead>
-						<tbody>
-							<?php foreach ($this->familyCensus($controller->record->getXref()) as $details ) {
-								$person	= KT_Person::getInstance($details['xref']); ?>
-								<tr>
+								<td>
+									<a href="individual.php?pid=<?php echo $details['xref']; ?>&amp;ged=<?php echo KT_GEDURL; ?>#tab_i_census"><?php echo $details['name']; ?></a>
+								</td>
+								<?php foreach ($censusPlace->allCensusDates() as $census) {
+									$year	= substr($census->censusDate(), -4);
+									$date	= new KT_Date($census->censusDate()); ?>
 									<td>
-										<a href="individual.php?pid=<?php echo $details['xref']; ?>&amp;ged=<?php echo KT_GEDURL; ?>#tab_i_census"><?php echo $details['name']; ?></a>
+										<?php if (in_array($year, $details['cens'])) {
+											echo $correct;
+										} elseif (($person->getBirthDate()->JD() > 0 && $person->getBirthDate()->JD() > $date->JD()) || ($person->getDeathDate()->JD() > 0 && $person->getDeathDate()->JD() < $date->JD())) {
+											echo $nothing;
+										} elseif (($person->getBirthDate()->JD() == 0 && $person->getEstimatedBirthDate()->JD() > $date->JD()) || ($person->getDeathDate()->JD() == 0 && $person->getEstimatedBirthDate()->JD() < $date->JD())) {
+											echo $unknown;
+										} else {
+											echo $missing;
+										}?>
 									</td>
-									<?php foreach ($censusPlace->allCensusDates() as $census) {
-										$year	= substr($census->censusDate(), -4);
-										$date	= new KT_Date($census->censusDate()); ?>
-										<td>
-											<?php if (in_array($year, $details['cens'])) {
-												echo $correct;
-											} elseif (($person->getBirthDate()->JD() > 0 && $person->getBirthDate()->JD() > $date->JD()) || ($person->getDeathDate()->JD() > 0 && $person->getDeathDate()->JD() < $date->JD())) {
-												echo $nothing;
-											} elseif ($person->getBirthDate()->JD() == 0 || $person->getDeathDate()->JD() == 0) {
-												echo $unknown;
-											} else {
-												echo $missing;
-											}?>
-										</td>
-									<?php } ?>
-								</tr>
-							<?php } ?>
-						</tbody>
-					</table>
-					<div>
-						<!-- key of symbols used in table -->
-						<span><?php echo KT_I18N::translate('Key to summary'); ?> : </span>
-						<span><?php echo $correct . KT_I18N::translate('Census entry found'); ?> | </span>
-						<span><?php echo $missing . KT_I18N::translate('Census entry missing'); ?> | </span>
-						<span><?php echo $nothing . KT_I18N::translate('No census entry expected'); ?></span>
-						<span><?php echo $unknown . KT_I18N::translate('Birth or death date missing, but census is within expected lifetime'); ?></span>
-					</div>
+								<?php } ?>
+							</tr>
+						<?php } ?>
+					</tbody>
+				</table>
+				<div class="cell medium-1 h6"><?php echo KT_I18N::translate('Key to summary'); ?></div>
+				<div class="cell medium-2"><?php echo $correct . KT_I18N::translate('Census entry found'); ?></div>
+				<div class="cell medium-2"><?php echo $nothing . KT_I18N::translate('No census entry expected'); ?></div>
+				<div class="cell medium-4"><?php echo $unknown . KT_I18N::translate('Birth or death date missing, but census is within expected lifetime'); ?></div>
+				<div class="cell medium-3"><?php echo $missing . KT_I18N::translate('Census entry missing'); ?></div>
 			</div>
 		</div>
 
