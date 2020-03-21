@@ -128,7 +128,7 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 							<div class="grid-x">
 								<div class="cell medium-<?php echo $cells; ?> text-center">
 									<small>
-										<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalIndis&amp;option=female" target="_blank">
+										<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalIndis&amp;option=male" target="_blank">
 											<?php echo KT_I18N::translate('Total males') . ' ' . $stats->totalSexMales(); ?>
 										</a>
 										 (<?php echo $stats->totalSexMalesPercentage(); ?>)
