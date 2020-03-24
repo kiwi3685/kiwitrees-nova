@@ -26,7 +26,7 @@ if (!defined('KT_KIWITREES')) {
 	exit;
 }
 
-require_once KT_ROOT.'includes/functions/functions_print_lists.php';
+require_once KT_ROOT . 'includes/functions/functions_print_lists.php';
 
 class KT_Stats {
 	private $_gedcom;
@@ -147,10 +147,34 @@ class KT_Stats {
 	public function embedTags($text) {
 		if (strpos($text, '#') !== false) {
 			list($new_tags, $new_values) = $this->getTags($text);
-			$text                        = str_replace($new_tags, $new_values, $text);
+			$text						 = str_replace($new_tags, $new_values, $text);
 		}
 
 		return $text;
+	}
+
+///////////////////////////////////////////////////////////////////////////////
+// RELATIONSHIPS                                                             //
+///////////////////////////////////////////////////////////////////////////////
+
+	/**
+	 * Embed a relationship statement in text in the format "xxx is your yyy"
+	 * between a logged in user and any individual added in parameter.
+	 *
+	 * @param string str 'I1234'
+	 *
+	 * @return string str without html tags
+	 */
+	function RelaToMe($params = array())   {
+		if (!empty($params[0]) && array_key_exists('chart_relationship', KT_Module::getActiveModules()) && KT_USER_ID && get_gedcom_setting(KT_GED_ID, 'TAB_REL_TO_DEFAULT_INDI') > 0) {
+			require_once KT_ROOT . 'includes/functions/functions_print_relations.php';
+			$person1 = KT_Person::getInstance(KT_USER_GEDCOM_ID);
+			$person2 = KT_Person::getInstance($params[0]);
+			return printSlcasBetween($person1, $person2, 7, 99, 1, 'INDI', 'html');
+		} else {
+			$person = KT_Person::getInstance($params[0]);
+			return KT_I18N::translate('Your are not closely related to %1$s .', $person->getFullName());
+		}
 	}
 
 ///////////////////////////////////////////////////////////////////////////////

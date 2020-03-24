@@ -60,7 +60,7 @@ function printSlcasWrtDefaultIndividual($mode, $recursion, $showCa, $type) {
 	printSlcasBetween($person1, $person2, $mode, $recursion, $showCa, $type);
 }
 
-function printSlcasBetween($person1, $person2, $mode, $recursion, $showCa, $type) {
+function printSlcasBetween($person1, $person2, $mode, $recursion, $showCa, $type, $html = false) {
 	global $KT_TREE, $GEDCOM_ID_PREFIX;
 	$slcaController = new KT_Controller_Relationship;
 	$caAndPaths = $slcaController->calculateCaAndPaths_123456($person1, $person2, $mode, $recursion);
@@ -76,15 +76,20 @@ function printSlcasBetween($person1, $person2, $mode, $recursion, $showCa, $type
 			// Cannot see one of the families/individuals, due to privacy;
 			continue;
 		}
-		echo '<a href="relationship.php?pid1=' . $person1->getXref() . '&pid2=' . $person2->getXref() . '&ged=' . KT_GEDURL . '&find=4" target="_blank" rel="noopener noreferrer">' .
-			KT_I18N::translate('Relationship:&nbsp;') . '
-		</a>';
-		echo KT_I18N::translate('%1$s is %2$s of %3$s',
-			$person2->getFullName(),
-			get_relationship_name_from_path(implode('', $relationships), $person1, $person2),
-			$type == 'INDI' ? $person1->getLifespanName() : $person1->getFullName()
-		);
-		echo '<br/>';
+		if ($html) { // when relationship used as embedded html
+//			$person2 = KT_Person::getInstance($displayRef);
+			echo KT_I18N::translate('%1$s is your %2$s.', strip_tags($person2->getFullName()), get_relationship_name_from_path(implode('', $relationships), $person1, $person2));
+		} else {
+			echo '<a href="relationship.php?pid1=' . $person1->getXref() . '&pid2=' . $person2->getXref() . '&ged=' . KT_GEDURL . '&find=4" target="_blank" rel="noopener noreferrer">' .
+				KT_I18N::translate('Relationship:&nbsp;') . '
+			</a>';
+			echo KT_I18N::translate('%1$s is %2$s of %3$s',
+				$person2->getFullName(),
+				get_relationship_name_from_path(implode('', $relationships), $person1, $person2),
+				$type == 'INDI' ? $person1->getLifespanName() : $person1->getFullName()
+			);
+			echo '<br/>';
+		}
 
 		if (($slcaKey !== null) && ($showCa)) {
 			//add actual common ancestor(s), unless already mentioned)
