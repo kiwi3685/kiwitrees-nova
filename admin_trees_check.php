@@ -34,7 +34,7 @@ $controller
 
 <div id="check_errors">
 	<a class="current faq_link" href="<?php echo KT_KIWITREES_URL; ?>/faqs/modules-faqs/check-for-errors/" target="_blank" rel="noopener noreferrer" title="<?php echo KT_I18N::translate('View FAQ for this page.'); ?>"><?php echo KT_I18N::translate('View FAQ for this page.'); ?>
-		<i class="fas fa-comments-o"></i>
+		<i class="fas fa-comments"></i>
 	</a>
 	<h2><?php echo $controller->getPageTitle(); ?></h2>
 	<form method="get" action="<?php echo KT_SCRIPT_NAME; ?>">
