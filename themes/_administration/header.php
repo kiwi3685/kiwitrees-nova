@@ -121,7 +121,6 @@ $this
 	<head>
 		<meta charset="utf-8" />
 		<meta http-equiv="x-ua-compatible" content="ie=edge">
-		<?php echo header_links($META_DESCRIPTION, $META_ROBOTS, $META_GENERATOR, $LINK_CANONICAL); ?>
 		<title><?php echo htmlspecialchars($title); ?></title>
 		<link rel="icon" href="<?php echo KT_THEME_URL; ?>images/kt.png" type="image/png">
 		<link rel="stylesheet" href="<?php echo KT_DATATABLES_CSS; ?>">
