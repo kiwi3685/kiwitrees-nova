@@ -54,49 +54,51 @@ class custom_js_KT_Module extends KT_Module implements KT_Module_Config, KT_Modu
 
 	// Extend KT_Module
 	public function modAction($mod_action) {
+		global $iconStyle;
+
 		switch($mod_action) {
-		case 'admin_config':
-			$controller = new KT_Controller_Page;
-			$controller
-				->restrictAccess(KT_USER_IS_ADMIN)
-				->setPageTitle($this->getTitle())
-				->pageHeader()
-				->addInlineJavascript('
-				    function clearFields() {
-					    document.getElementById("new_js").value=""
-					}
-				');
+			case 'admin_config':
+				$controller = new KT_Controller_Page;
+				$controller
+					->restrictAccess(KT_USER_IS_ADMIN)
+					->setPageTitle($this->getTitle())
+					->pageHeader()
+					->addInlineJavascript('
+					    function clearFields() {
+						    document.getElementById("new_js").value=""
+						}
+					');
 
-			$action = KT_Filter::post("action");
+				$action = KT_Filter::post("action");
 
-			if ($action == 'update') {
-				set_module_setting('custom_js', 'CJS_FOOTER',  $_POST['NEW_CJS_FOOTER']);
-				AddToLog($this->getTitle().' config updated', 'config');
-			}
+				if ($action == 'update') {
+					set_module_setting('custom_js', 'CJS_FOOTER',  $_POST['NEW_CJS_FOOTER']);
+					AddToLog($this->getTitle().' config updated', 'config');
+				}
 
-			$CJS_FOOTER=get_module_setting('custom_js', 'CJS_FOOTER');
-                echo '
-					<div id="js_form" style="width:80%; min-width:600px;" >
-						<h3>', KT_I18N::translate('Custom Javascript for Footer'), '</h3>
-						<form style="width:98%;" method="post" name="configform" action="', $this->getConfigLink(), '">
-							<input type="hidden" name="action" value="update">
-							<textarea id="new_js" style="width:100%;" name="NEW_CJS_FOOTER">', $CJS_FOOTER, '</textarea>
-							<button class="btn btn-primary save" type="submit">
-							    <i class="' . $iconStyle . ' fa-save"></i>'.
-							    KT_I18N::translate('Save').'
-							</button>
-							<button class="btn btn-primary reset" type="reset">
-							    <i class="' . $iconStyle . ' fa-sync"></i>'.
-							    KT_I18N::translate('Reset').'
-							</button>
-							<button class="btn btn-primary clear" type="button" onclick="clearFields()">
-							    <i class="' . $iconStyle . ' fa-trash-alt"></i>'.
-							    KT_I18N::translate('clear').'
-							</button>
-						</form>
-					</div>
-				';
-			break;
+				$CJS_FOOTER = get_module_setting('custom_js', 'CJS_FOOTER'); ?>
+				<div class="cell">
+					<h4 class="inline"><?php echo KT_I18N::translate('Custom Javascript for Footer'); ?></h4>
+					<a class="current faq_link" href="<?php echo KT_KIWITREES_URL; ?>/faqs/modules/add-code-for-google-analytics-social-media-piwik-etc/" target="_blank" rel="noopener noreferrer" title="<?php echo KT_I18N::translate('View FAQ for this page.'); ?>"><?php echo KT_I18N::translate('View FAQ for this page.'); ?><i class="<?php echo $iconStyle; ?> fa-comments"></i></a>
+					<form style="width:98%;" method="post" name="configform" action="<?php echo $this->getConfigLink(); ?>">
+						<input type="hidden" name="action" value="update">
+						<textarea id="new_js" style="width:100%;" name="NEW_CJS_FOOTER"><?php echo $CJS_FOOTER; ?></textarea>
+						<button class="button" type="submit">
+						    <i class="<?php echo $iconStyle; ?> fa-save"></i>
+						    <?php echo KT_I18N::translate('Save'); ?>
+						</button>
+						<button class="button" type="reset">
+						    <i class="<?php echo $iconStyle; ?> fa-sync"></i>
+						    <?php echo KT_I18N::translate('Reset'); ?>
+						</button>
+						<button class="button" type="button" onclick="clearFields()">
+						    <i class="<?php echo $iconStyle; ?> fa-trash-alt"></i>
+						    <?php echo KT_I18N::translate('clear'); ?>
+						</button>
+					</form>
+				</div>
+				<?php
+				break;
             default:
                 header('HTTP/1.0 404 Not Found');
 		}

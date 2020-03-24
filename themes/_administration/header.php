@@ -68,10 +68,11 @@ asort($ft_tools);
  * $custom [array]
  */
 $custom = array(
-	 "admin_custom_lang.php"		=> KT_I18N::translate('Custom translation'),
-	 "admin_custom_theme.php"		=> KT_I18N::translate('Custom file editing'),
+	 "admin_custom_lang.php"							=> KT_I18N::translate('Custom translation'),
+	 "admin_custom_theme.php"							=> KT_I18N::translate('Custom file editing'),
+	 "module.php?mod=custom_js&mod_action=admin_config"	=> KT_I18N::translate('Custom javascript'),
 );
-arsort($custom);
+asort($custom);
 
 /**
  * Array of Module menu items
@@ -340,7 +341,7 @@ $this
 						</a>
 						<ul class="menu vertical">
 							<?php foreach (KT_Module::getActiveModules(true) as $module) {
-								if ($module instanceof KT_Module_Config) { ?>
+								if ($module instanceof KT_Module_Config && $module->getName() !== 'custom_js') { ?>
 									<li><span><a <?php echo (KT_SCRIPT_NAME == "module.php" && KT_Filter::get('mod') == $module->getName() ? 'class="current" ' : ''); ?>href="<?php echo $module->getConfigLink(); ?>"><?php echo $module->getTitle(); ?></a></span></li>
 								<?php }
 							} ?>
