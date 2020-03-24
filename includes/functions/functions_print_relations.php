@@ -2,13 +2,13 @@
 /**
  * Kiwitrees: Web based Family History software
  * Copyright (C) 2012 to 2020 kiwitrees.net
- * 
+ *
  * Derived from webtrees (www.webtrees.net)
  * Copyright (C) 2010 to 2012 webtrees development team
- * 
+ *
  * Derived from PhpGedView (phpgedview.sourceforge.net)
  * Copyright (C) 2002 to 2010 PGV Development Team
- * 
+ *
  * Kiwitrees is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -76,7 +76,9 @@ function printSlcasBetween($person1, $person2, $mode, $recursion, $showCa, $type
 			// Cannot see one of the families/individuals, due to privacy;
 			continue;
 		}
-		echo '<a href="relationship.php?pid1=' . $person1->getXref() . '&pid2=' . $person2->getXref() . '&ged=' . KT_GEDURL . '&find=4" target="_blank" rel="noopener noreferrer">' . KT_I18N::translate('Relationship:&nbsp;') . '</a>';
+		echo '<a href="relationship.php?pid1=' . $person1->getXref() . '&pid2=' . $person2->getXref() . '&ged=' . KT_GEDURL . '&find=4" target="_blank" rel="noopener noreferrer">' .
+			KT_I18N::translate('Relationship:&nbsp;') . '
+		</a>';
 		echo KT_I18N::translate('%1$s is %2$s of %3$s',
 			$person2->getFullName(),
 			get_relationship_name_from_path(implode('', $relationships), $person1, $person2),
