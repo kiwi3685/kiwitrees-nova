@@ -122,7 +122,7 @@ if ($action == 'update_mods' && KT_Filter::checkCsrf()) {
 							<?php echo $module->getDescription(); ?>
 						</td>
 						<td>
-							<input type="text" size="3" value="<?php echo $order; ?>" name="order-<?php echo $module->getName(); ?>">
+							<input type="number" value="<?php echo $order; ?>" name="order-<?php echo $module->getName(); ?>">
 						</td>
 						<td>
 							<table class="modules_table2">

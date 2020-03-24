@@ -92,7 +92,7 @@ if ($action == 'update_mods' && KT_Filter::checkCsrf()) {
 		<table id="tabs_table" class="modules_table">
 			<thead>
 				<tr>
-					<th colspan=""><?php echo KT_I18N::translate('Tab'); ?></th>
+					<th colspan="2"><?php echo KT_I18N::translate('Tab'); ?></th>
 					<th><?php echo KT_I18N::translate('Description'); ?></th>
 					<th><?php echo KT_I18N::translate('Order'); ?></th>
 					<th><?php echo KT_I18N::translate('Access level'); ?></th>
@@ -122,7 +122,7 @@ if ($action == 'update_mods' && KT_Filter::checkCsrf()) {
 							<?php echo $module->getDescription(); ?>
 						</td>
 						<td>
-							<input type="text" size="3" value="<?php echo $order; ?>" name="order-<?php echo $module->getName(); ?>">
+							<input type="number" size="3" value="<?php echo $order; ?>" name="order-<?php echo $module->getName(); ?>">
 						</td>
 						<td>
 							<table class="modules_table2">
