@@ -91,17 +91,24 @@ class block_html_KT_Module extends KT_Module implements KT_Module_Block {
 		* Start Of Output
 		*/
 		$id			= $this->getName() . $block_id;
-		$class		= $this->getName() . '_block';
+		$class		= $this->getName();
 		$title		= $title_tmp;
 		$config		= true;
-		$content	= $html;
 
 		if (get_block_setting($block_id, 'show_timestamp', false)) {
 			'<p class="timestamp">' . format_timestamp(get_block_setting($block_id, 'timestamp', KT_TIMESTAMP)) . '</p>';
 		}
 
+		$content = '
+			<div class="grid-x grid-padding-x">
+				<div class="cell">' .
+					$html . '
+				</div>
+			</div>
+		';
+
 		if ($template) {
-			if (get_block_setting($block_id, 'block', false)) {
+			if (get_block_location($block_id) === 'side') {
 				require KT_THEME_DIR . 'templates/block_small_temp.php';
 			} else {
 				require KT_THEME_DIR . 'templates/block_main_temp.php';
