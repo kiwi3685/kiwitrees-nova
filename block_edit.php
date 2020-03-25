@@ -86,12 +86,12 @@ if (array_key_exists('ckeditor', KT_Module::getActiveModules())) {
 			<div class="grid-x grid-margin-y">
 				<?php echo $block->configureBlock($block_id); ?>
 			</div>
-			<button class="button" type="submit">
-				<i class="fas fa-save"></i>
+			<button class="button primary" type="submit">
+				<i class="<?php echo $iconStyle; ?> fa-save"></i>
 				<?php echo KT_I18N::translate('Save'); ?>
 			</button>
-			<button class="button secondary" type="button"  onclick="window.location.href='index.php'">
-				<i class="fas fa-times"></i>
+			<button class="button secondary" type="button" onclick="window.location.href='index.php'">
+				<i class="<?php echo $iconStyle; ?> fa-times"></i>
 				<?php echo KT_I18N::translate('Cancel'); ?>
 			</button>
 		</form>
