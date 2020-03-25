@@ -241,14 +241,14 @@ if ($action == 'save') {
 							<textarea id="code" name="code"><?php echo $content; ?></textarea>
 						</div>
 						<div class="cell">
-						<button type="submit" class="button">
-							<i class="<?php echo $iconStyle; ?> fa-save"></i>
-							<?php echo KT_I18N::translate('Save'); ?>
-						</button>
-						<a class="button secondary" href="<?php echo KT_SCRIPT_NAME; ?>">
-							<i class="<?php echo $iconStyle; ?> fa-times"></i>
-							<?php echo KT_I18N::translate('Cancel'); ?>
-						</a>
+							<button type="submit" class="button">
+								<i class="<?php echo $iconStyle; ?> fa-save"></i>
+								<?php echo KT_I18N::translate('Save'); ?>
+							</button>
+							<a class="button secondary" href="<?php echo KT_SCRIPT_NAME; ?>">
+								<i class="<?php echo $iconStyle; ?> fa-times"></i>
+								<?php echo KT_I18N::translate('Cancel'); ?>
+							</a>
 						</div>
 					</div>
 				</form>
