@@ -26,6 +26,16 @@ if (!defined('KT_KIWITREES')) {
 	exit;
 }
 
+// Add new site setting
+try {
+	self::exec(
+		"INSERT IGNORE INTO `##site_setting` (setting_name, setting_value) VALUES ".
+		"('BLOCKED_EMAIL_ADDRESS_LIST', 'youremail@gmail.com')"
+	);
+} catch (PDOException $ex) {
+	// Perhaps we have already added this data?
+}
+
 // add widgets to module table
 try {
 	self::exec("ALTER TABLE `##module` ADD COLUMN footer_order INTEGER NULL");
