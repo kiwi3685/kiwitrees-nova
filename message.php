@@ -24,23 +24,24 @@
 define('KT_SCRIPT_NAME', 'message.php');
 require './includes/session.php';
 require_once KT_ROOT . 'includes/functions/functions_mail.php';
+require KT_ROOT . 'includes/functions/functions_edit.php';
 
 $controller = new KT_Controller_Page();
-$controller->setPageTitle(KT_I18N::translate('Contact us'));
+$controller->setPageTitle(KT_I18N::translate('Contact'));
 
 if (array_key_exists('ckeditor', KT_Module::getActiveModules()) && KT_Site::preference('MAIL_FORMAT') == "1") {
 	ckeditor_KT_Module::enableBasicEditor($controller);
 }
 
-$to			= KT_Filter::post('to', null, KT_Filter::get('to'));
-$from_name 	= KT_Filter::post('from_name');
-$from_email	= KT_Filter::post('from_email');
-$subject	= KT_Filter::post('subject', null, KT_Filter::get('subject'));
-$body		= KT_Filter::post('body');
-$url		= KT_Filter::postUrl('url', KT_Filter::getUrl('url'));
-
 // Send the message.
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+	$to					= KT_Filter::post('to', null, KT_Filter::get('to'));
+	$from_name			= KT_Filter::post('from_name');
+	$from_email			= KT_Filter::post('from_email');
+	$subject			= KT_Filter::post('subject', null, KT_Filter::get('subject'));
+	$body				= KT_Filter::post('body');
+	$url				= KT_Filter::postUrl('url', KT_Filter::getUrl('url'));
+	$termsConditions	= KT_Filter::post('termsConditions', '1', '0');
 
 	// Only an administration can use the distribution lists.
 	$controller->restrictAccess(!in_array($to, ['all', 'never_logged', 'last_6mo']) || KT_USER_IS_ADMIN);
@@ -48,7 +49,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	$recipients = recipients($to);
 
 	// Different validation for admin/user/visitor.
-	$errors = false;
+	$errors		= false;
+	$urlRegex	= '/(?!' . preg_quote(KT_SERVER_NAME, '/') . ')((?:ftp|http|https|www|\:|\/\/)?(?>[a-z\-0-9]{1,}\.){1,}[a-z]{2,8})/m';
+
 	if (KT_USER_ID) {
 		$from_name  = getUserFullName(KT_USER_ID);
 		$from_email = getUserEmail(KT_USER_ID);
@@ -56,9 +59,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$errors = true;
 	} elseif (!preg_match('/@(.+)/', $from_email, $match) || function_exists('checkdnsrr') && !checkdnsrr($match[1])) {
 		KT_FlashMessages::addMessage(KT_I18N::translate('Please enter a valid email address.'));
+		AddToLog('Invalid email address: ' . $from_email, 'spam');
 		$errors = true;
-	} elseif (preg_match('/(?!' . preg_quote(KT_SERVER_NAME, '/') . ')(((?:ftp|http|https):\/\/)[a-zA-Z0-9.-]+)/', $subject . $body, $match)) {
-		KT_FlashMessages::addMessage(KT_I18N::translate('You are not allowed to send messages that contain external links.') . ' ' . /* I18N: e.g. ‘You should delete the “http://” from “http://www.example.com” and try again.’ */ KT_I18N::translate('You should delete the “%1$s” from “%2$s” and try again.', $match[2], $match[1]));
+	} elseif (in_array($from_email, explode(',', KT_Site::preference('BLOCKED_EMAIL_ADDRESS_LIST')))) {
+		// This type of validation error should not be shown in the client.
+		AddToLog('Blocked email address: ' . $from_email, 'spam');
+		$errors = true;
+	} elseif (preg_match($urlRegex, $subject . $body, $match)) {
+		KT_FlashMessages::addMessage(KT_I18N::translate('You are not allowed to send messages that contain external links.'));
 		AddToLog('Attempt to include external links (' . mb_strimwidth($match[1], 0, 100, "...") . ') by: ' . $from_email, 'spam');
 		$errors = true;
 	} elseif (empty($recipients)) {
@@ -100,29 +108,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			'&url=' . rawurlencode($url)
 		);
 	} else {
-		// No errors.  Send the message.
-		foreach ($recipients as $recipient) {
-			$message         		= array();
-			$message['to']			= $to;
-			$message['from_name']	= $from_name;
-			$message['from_email']	= $from_email;
-			$message['subject']		= $subject;
-			$message['body']		= nl2br($body, false);
-			$message['url']			= $url;
+		if ($termsConditions == '1') {
+			// Robot. Display dummy 'message sent' message and record in log
+			KT_FlashMessages::addMessage(KT_I18N::translate('The message was successfully sent to %s.', KT_Filter::escapeHtml($to)));
+			AddToLog('Robot message caught by checkbox (from: ' . $from_email . ' subject: ' . $subject . ')', 'spam');
+			header('Location: ' . $url);
+		} else {
+			// No errors.  Send the message.
+			foreach ($recipients as $recipient) {
+				$message         		= array();
+				$message['to']   		= $to;
+				$message['from_name']	= $from_name;
+				$message['from_email']	= $from_email;
+				$message['subject']		= $subject;
+				$message['body']		= nl2br($body, false);
+				$message['url']			= $url;
 
-			if (addMessage($message)) {
-				KT_FlashMessages::addMessage(KT_I18N::translate('The message was successfully sent to %s.', KT_Filter::escapeHtml($to)));
-			} else {
-				KT_FlashMessages::addMessage(KT_I18N::translate('The message was not sent.'));
-				AddToLog('Unable to send a message. FROM:' . $from_email . ' TO:' . getUserEmail($recipient), 'error');
+				if (addMessage($message)) {
+					KT_FlashMessages::addMessage(KT_I18N::translate('The message was successfully sent to %s.', KT_Filter::escapeHtml($to)));
+					AddToLog('Message sent FROM:' . $from_email . ' TO:' . getUserEmail($recipient), 'auth');
+				} else {
+					KT_FlashMessages::addMessage(KT_I18N::translate('The message was not sent.'));
+					AddToLog('Unable to send a message. FROM:' . $from_email . ' TO:' . getUserEmail($recipient), 'error');
+				}
 			}
+			header('Location: ' . KT_Filter::unescapeHtml($url));
 		}
-
-		header('Location: ' . KT_Filter::unescapeHtml($url));
-
+		return;
 	}
-
 }
+
+$to			= KT_Filter::post('to', null, KT_Filter::get('to'));
+$from_name 	= KT_Filter::post('from_name');
+$from_email	= KT_Filter::post('from_email');
+$subject	= KT_Filter::post('subject', null, KT_Filter::get('subject'));
+$body		= KT_Filter::post('body');
+$url		= KT_Filter::postUrl('url', KT_Filter::getUrl('url'));
+
 
 // Only an administrator can use the distribution lists.
 $controller->restrictAccess(!in_array($to, ['all', 'never_logged', 'last_6mo']) || KT_USER_IS_ADMIN);
@@ -130,8 +152,8 @@ $controller->pageHeader();
 
 $to_names = implode(KT_I18N::$list_separator, array_map(function($user) { return getUserFullName($user); }, recipients($to))); ?>
 
-<div id="contact_page">
-	<h2><?php echo $controller->getPageTitle(); ?></h2>
+<!-- Start page layout  -->
+<?php echo pageStart('contact', $controller->getPageTitle()); ?>
 	<?php echo messageForm ($to, $from_name, $from_email, $subject, $body, $url, $to_names); ?>
 </div>
 

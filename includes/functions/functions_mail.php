@@ -40,6 +40,17 @@ if (!defined('KT_KIWITREES')) {
  * @return string
  */
 function messageForm ($to, $from_name, $from_email, $subject, $body, $url, $to_names) {
+	global $controller, $iconStyle;
+
+	$controller->addInlineJavascript('
+		jQuery("label[for=termsConditions]").parent().css({
+			"opacity": "0",
+			"position": "absolute",
+			"left": "-2000px",
+		});
+	');
+
+
 	$contact_user_id	= get_gedcom_setting(KT_GED_ID, 'CONTACT_USER_ID');
 	$webmaster_user_id	= get_gedcom_setting(KT_GED_ID, 'WEBMASTER_USER_ID');
 	$supportLink		= user_contact_link($webmaster_user_id);
@@ -52,6 +63,7 @@ function messageForm ($to, $from_name, $from_email, $subject, $body, $url, $to_n
 
 	if ((!$contact_user_id && !$webmaster_user_id) || (!$supportLink && !$contactLink) || $to) {
 		$style = 0;
+		$spacing = 'medium-6 medium-offset-3';
 		$form_title_1 = '';
 		$form_title_2 = '';
 		$to_user_id_1 = get_user_id($to);
@@ -62,8 +74,9 @@ function messageForm ($to, $from_name, $from_email, $subject, $body, $url, $to_n
 		$to_user_fullname_2 = '';
 	} elseif (($supportLink == $contactLink) || ($contact_user_id == '') || ($webmaster_user_id == '')) {
 		$style = 1;
+		$spacing = 'medium-6 medium-offset-3';
 		$to = ($contact_user_id == '' ? $webmaster_user_id : $contact_user_id);
-		$form_title_1 = '<h3>' . KT_I18N::translate('For further information') . '</h3>';
+		$form_title_1 = '<h4>' . KT_I18N::translate('For further information') . '</h4>';
 		$form_title_2 = '';
 		$to_user_id_1 = $to;
 		$to_user_id_2 = '';
@@ -73,9 +86,10 @@ function messageForm ($to, $from_name, $from_email, $subject, $body, $url, $to_n
 		$to_user_fullname_2 = '';
 	} else {
 		$style = 2;
+		$spacing = 'medium-5 medium-offset-1';
 		$to_user_name = '';
-		$form_title_1 = '<h3>' . KT_I18N::translate('For technical support and information') . '</h3>';
-		$form_title_2 = '<h3>' . KT_I18N::translate('For help with genealogy questions') . '</h3>';
+		$form_title_1 = '<h5>' . KT_I18N::translate('For technical support and information') . '</h5>';
+		$form_title_2 = '<h5>' . KT_I18N::translate('For help with genealogy questions') . '</h5>';
 		$to_user_id_1 = $webmaster_user_id;
 		$to_user_id_2 = $contact_user_id;
 		$to_user_name_1 = get_user_name(get_gedcom_setting(KT_GED_ID, 'WEBMASTER_USER_ID'));
@@ -90,86 +104,106 @@ function messageForm ($to, $from_name, $from_email, $subject, $body, $url, $to_n
 
 	<form name="messageform" method="post">
 		<input type="hidden" name="url" value="<?php echo KT_Filter::escapeHtml($url); ?>">
-		<div id="contact_header">
+		<div class="grid-x grid-margin-x" id="contact_header">
 			<?php if (!KT_USER_ID) { ?>
-				<p>
-					<small>
+				<div class="cell medium-10 medium-offset-1">
+					<div class="callout small warning subheader">
 						<?php echo KT_I18N::translate('<b>Please Note:</b> Private information of living individuals will only be given to family relatives and close friends. You will be asked to verify your relationship before you will receive any private data. Sometimes information of dead persons may also be private. If this is the case, it is because there is not enough information known about the person to determine whether they are alive or not and we probably do not have more information on this person.<br /><br />Before asking a question, please verify that you are inquiring about the correct person by checking dates, places, and close relatives. If you are submitting changes to the genealogical data, please include the sources where you obtained the data.'); ?>
-					</small>
-				</p>
-				<div class="option">
-					<label for="from_name"><?php echo KT_I18N::translate('Your name'); ?></label>
-					<input type="text" name="from_name" id="from_name" value="<?php echo KT_Filter::escapeHtml($from_name); ?>" required>
-				</div>
-				<div class="option">
-					<p>
-						<small>
-							<?php echo KT_I18N::translate('Please provide your email address so that we may contact you in response to this message. If you do not provide your email address we will not be able to respond to your inquiry. Your email address will not be used in any other way besides responding to this inquiry.'); ?>
-						</small>
-					</p>
-					<label for="from_email"><?php echo KT_I18N::translate('Email address'); ?></label>
-					<input type="email" name="from_email" id="from_email" value="<?php echo $from_email; ?>" required >
-				</div>
-				<?php if (KT_Site::preference('USE_HONEYPOT')) { ?>
-					<div class="option">
-						<label for="termsConditions">
-							<?php echo /* I18N: for security protection only */ KT_I18N::translate('Confirm your agreement to our <a href="https://www.pandadoc.com/website-standard-terms-and-conditions-template/" >Terms and Conditions.'); ?></a>
-						</label>
-						<?php echo checkbox("termsConditions"); ?>
 					</div>
-				<?php } ?>
-				<?php if (KT_Site::preference('USE_RECAPTCHA')) { ?>
-					<div class="option">
-						<label>
-							<div style="margin-left: 160px;" class="g-recaptcha" data-sitekey="<?php echo KT_Site::preference('RECAPTCHA_SITE_KEY'); ?>" data-callback="recaptcha_callback"></div>
-						</label>
+				</div>
+				<div class="cell medium-10 medium-offset-1">
+					<div class="grid-x">
+						<div class="cell medium-6 medium-offset-3">
+							<label for="from_name" class="h6"><?php echo KT_I18N::translate('Your name'); ?></label>
+							<input type="text" name="from_name" id="from_name" value="<?php echo KT_Filter::escapeHtml($from_name); ?>" required>
+						</div>
+						<div class="cell medium-6 medium-offset-3">
+							<label for="from_email" class="h6"><?php echo KT_I18N::translate('Your email address'); ?></label>
+							<input type="email" name="from_email" id="from_email" value="<?php echo $from_email; ?>" required >
+							<div class="cell help-text">
+								<span><?php echo KT_I18N::translate('Please provide your email address so that we may contact you in response to this message. If you do not provide your email address we will not be able to respond to your inquiry. Your email address will not be used in any other way besides responding to this inquiry.'); ?></span>
+							</div>
+						</div>
 					</div>
-				<?php } ?>
+					<hr>
+				</div>
+			<?php }
+
+			if ($style == 2) { ?>
+				<div class="cell medium-8 medium-offset-2">
+					<h5 class="subheader">
+						<?php echo KT_I18N::translate('Please use the appropriate form from the two below. That way your query will reach the best person to reply.'); ?>
+					</h5>
+					<hr>
+				</div>
 			<?php } ?>
-		</div>
-		<hr>
-		<div id="contact_forms">
+
 			<?php for ($i = 1; $i <= 2; $i++) { ?>
-				<div class="contact_form">
+				<div class="cell <?php echo $spacing; ?>">
 					<?php echo ${'form_title_' . $i}; ?>
-					<div class="option">
-						<label for="to_name"><?php echo KT_I18N::translate('To'); ?></label>
+					<div class="cell">
+						<label for="to_name" class="h6"><?php echo KT_I18N::translate('To'); ?></label>
 						<input type="text" name="to_name" id="to_name" value="<?php echo ${'to_user_fullname_' . $i}; ?>">
 						<input type="hidden" name="to" value="<?php echo KT_Filter::escapeHtml(${'to_user_name_' . $i}); ?>">
 					</div>
-					<div class="option">
-						<label for="subject"><?php echo KT_I18N::translate('Subject'); ?></label>
+					<div class="cell">
+						<label for="subject" class="h6"><?php echo KT_I18N::translate('Subject'); ?></label>
 						<input type="text" name="subject" id="subject" value="<?php echo KT_Filter::escapeHtml($subject); ?>">
 					</div>
-					<div class="option">
-						<label for="body"><?php echo KT_I18N::translate('Body'); ?></label>
+					<div class="cell">
+						<label for="body" class="h6"><?php echo KT_I18N::translate('Body'); ?></label>
 						<textarea class="html-edit" name="body" id="body"><?php echo KT_Filter::escapeHtml($body); ?></textarea>
 					</div>
-					<p id="save-cancel">
-						<button class="btn btn-primary" type="submit">
-							<i class="<?php echo $iconStyle; ?> fa-envelope-o"></i>
+					<?php echo honeypot(); ?>
+					<?php echo recaptcha(); ?>
+					<div class="cell">
+						<button class="button primary" type="submit">
+							<i class="<?php echo $iconStyle; ?> fa-envelope"></i>
 							<?php echo KT_I18N::translate('Send'); ?>
 						</button>
-						<button class="btn btn-primary" type="button" onclick="window.close('<?php echo $url; ?>');">
+						<button class="button secondary" type="button" onclick="window.close('<?php echo $url; ?>');">
 							<i class="<?php echo $iconStyle; ?> fa-times"></i>
 							<?php echo KT_I18N::translate('Cancel'); ?>
 						</button>
-						</p>
+					</div>
 				</div>
 				<?php if ($style <= 1) {
 					exit;
 				}
-			} ?>
+			}
+
+			if (KT_USER_ID && get_user_setting(KT_USER_ID, 'contactmethod') === 'messaging') { ?>
+				<div class="cell medium-6 medium-offset-3">
+					<div class="callout small warning">
+						<?php echo KT_I18N::translate('When you send this message you will receive a copy sent via email to the address you provided.'); ?>
+					</div>
+				</div>
+			<?php } ?>
+
 		</div>
 	</form>
-	<?php if (KT_USER_ID && get_user_setting(KT_USER_ID, 'contactmethod') === 'messaging') { ?>
-		<p>
-			<small>
-				<?php echo KT_I18N::translate('When you send this message you will receive a copy sent via email to the address you provided.'); ?>
-			</small>
-		</p>
-	<?php }
 
+<?php }
+
+function honeypot() {
+	if (KT_Site::preference('USE_HONEYPOT')) {
+		return '<div class="cell">
+			<label for="termsConditions">' .
+				/* I18N: for security protection only */ KT_I18N::translate('Confirm your agreement to our <a href="https://www.pandadoc.com/website-standard-terms-and-conditions-template/" >Terms and Conditions.') . '</a>
+			</label>' .
+			checkbox("termsConditions") .
+		'</div>';
+	}
+}
+
+function recaptcha() {
+	if (KT_Site::preference('USE_RECAPTCHA')) {
+		return '<div class="cell">
+			<label>
+				<div class="g-recaptcha" data-sitekey="' . KT_Site::preference('RECAPTCHA_SITE_KEY') . '" data-callback="recaptcha_callback"></div>
+			</label>
+		</div>';
+	}
 }
 
 /**
@@ -249,7 +283,7 @@ function addMessage($message) {
 
 	// Send a copy of the message back to the sender.
 		if (KT_USER_ID) {
-			// Switch to the senderâ€™s language.
+			// Switch to the sender's language.
 			KT_I18N::init(get_user_setting(KT_USER_ID, 'language'));
 			// Message from a signed-in user
 			$copy_email = KT_I18N::translate('You sent the following message to <b>%1$s</b> at %2$s:', getUserFullName($recipient), strip_tags(KT_TREE_TITLE));
@@ -272,12 +306,12 @@ function addMessage($message) {
 		}
 
 		$success = $success && KT_Mail::send(
-			// â€œFrom:â€ header
+			// From: header
 			$KT_TREE,
-			// â€œTo:â€ header
+			// To: header
 			$sender_email,
 			$sender_real_name,
-			// â€œReply-To:â€ header
+			// Reply-To: header
 			KT_Site::preference('SMTP_FROM_NAME'),
 			$KT_TREE->tree_title,
 			// Message subject
@@ -287,7 +321,7 @@ function addMessage($message) {
 		);
 
 	// Send the message to the recipient.
-		// Switch to the recipientâ€™s language.
+		// Switch to the recipient's language.
 		KT_I18N::init(get_user_setting($recipient, 'language'));
 		if (KT_USER_ID) {
 			$original_email = /* I18N: %s is the family tree title */ KT_I18N::translate('%s sent you the following message.', $sender_real_name);
@@ -299,9 +333,9 @@ function addMessage($message) {
 			KT_Mail::EOL .
 			KT_Mail::EOL;
 		if (KT_USER_ID) {
-			$original_email .= $bold_on . KT_I18N::translate('From') . ':  ' . $bold_off . $sender_real_name . ' (' . $message["from_email"] . ')' . KT_Mail::EOL;
+			$original_email .= $bold_on . KT_I18N::translate('From') . ':  ' . $bold_off . $sender_real_name . ' (' . $sender_email . ')' . KT_Mail::EOL;
 		} else {
-			$original_email .= $bold_on . KT_I18N::translate('From') . ':  ' . $bold_off . $message["from_email"] . KT_Mail::EOL;
+			$original_email .= $bold_on . KT_I18N::translate('From') . ':  ' . $bold_off . $sender_email . KT_Mail::EOL;
 		}
 		$original_email .=
 			$bold_on . KT_I18N::translate('Subject') . ':  ' . $bold_off . $message['subject'] . KT_Mail::EOL .
@@ -315,12 +349,12 @@ function addMessage($message) {
 		}
 
 		$success = $success && KT_Mail::send(
-			// â€œFrom:â€ header
+			// From: header
 			$KT_TREE,
-			// â€œTo:â€ header
+			// To: header
 			getUserEmail($recipient),
 			getUserFullName($recipient),
-			// â€œReply-To:â€ header
+			// Reply-To: header
 			$sender_email,
 			$sender_real_name,
 			// Message subject

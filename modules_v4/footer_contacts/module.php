@@ -61,22 +61,23 @@ class footer_contacts_KT_Module extends KT_Module implements KT_Module_Footer {
 				<h5>' . KT_I18N::translate('Contact Information') . '</h5>
 			</div>
 			<div class="card-section">';
-				if (contact_links()) {
+				if (array_key_exists('contact', KT_Module::getActiveModules()) && KT_USER_ID) {
+					$content .= '
+						<p>
+							<a href="#"
+								onclick="window.open(\'message.php?to=' . KT_Filter::escapeHtml(getUserFullName(KT_USER_ID)) . '&amp;url=' . addslashes(urlencode(get_query_url())) . '\', \'_blank\')"
+								rel="noopener noreferrer"
+								title="' . KT_I18N::translate('Send Message') . '"
+							>' .
+								getUserFullName(KT_USER_ID) . '
+								<i class="' . $iconStyle . ' fa-envelope"></i>
+							</a>
+						</p>
+					';
+				} elseif (contact_links()) {
 					$content .= contact_links();
 				}
-				if (array_key_exists('contact', KT_Module::getActiveModules())) {
-					$content .= '
-					<p>
-						<a href="#"
-							onclick="window.open(\'message.php?to=' . KT_Filter::escapeHtml(get_user_name($user_id)) . '&amp;url=' . addslashes(urlencode(get_query_url())) . '\', \'_blank\')"
-							rel="noopener noreferrer"
-							title="' . KT_I18N::translate('Send Message') . '"
-						>' .
-							getUserFullName($user_id) . '
-							<i class="' . $iconStyle . ' fa-envelope"></i>
-						</a>
-					</p>';
-				}
+
 			$content .= '</div>
 		';
 
