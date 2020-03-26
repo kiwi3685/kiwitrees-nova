@@ -960,7 +960,7 @@ global $iconstyles;
 									 <?php echo KT_I18N::translate('Preferred URL link to an external image editor provided for members use when uploading media images. The default link is %s>', $IMAGE_EDITOR); ?>
 								</div>
 							</div>
-							<div class="cell">
+							<div class="cell padding-bottom padding-left">
 								<button type="button" class="button secondary" data-toggle="watermarkOptions">
 									<?php echo KT_I18N::translate('Show image watermarking options'); ?>
 									<i class="<?php echo $iconStyle; ?> fa-eye"></i>
@@ -972,7 +972,7 @@ global $iconstyles;
 							   </div>
 								<div class="grid-x grid-margin-x">
 									<div class="cell large-3">
-										<label for="NEW_SHOW_NO_WATERMARK"><?php echo KT_I18N::translate('Visibility of images without watermarks'); ?></label>
+										<label for="NEW_SHOW_NO_WATERMARK"><?php echo KT_I18N::translate('Full size images without watermarks'); ?></label>
 									</div>
 									<div class="cell large-9">
 										<?php echo radio_switch_group('NEW_SHOW_NO_WATERMARK', $privacy, get_gedcom_setting(KT_GED_ID, 'SHOW_NO_WATERMARK')); ?>
