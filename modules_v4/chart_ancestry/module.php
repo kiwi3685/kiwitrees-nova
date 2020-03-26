@@ -84,7 +84,7 @@ class chart_ancestry_KT_Module extends KT_Module implements KT_Module_Chart {
 		?>
 
 		<!-- Start page layout  -->
-		<?php echo pageStart($this->getTitle(), $controller->getPageTitle()); ?>
+		<?php echo pageStart('ancestry', $controller->getPageTitle()); ?>
 			<form name="people" id="people" method="get" action="?">
 				<input type="hidden" name="mod" value="<?php echo $this->getName(); ?>">
 				<input type="hidden" name="mod_action" value="show">

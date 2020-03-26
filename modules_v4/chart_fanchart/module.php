@@ -100,7 +100,7 @@ class chart_fanchart_KT_Module extends KT_Module implements KT_Module_Chart {
 		$xref	= $controller->root->getXref();
 		$person	= KT_Person::getInstance($xref);
 
-		echo pageStart($this->getTitle(), $controller->getPageTitle()); ?>
+		echo pageStart('fanchart', $controller->getPageTitle()); ?>
 			<form name="people" id="people" method="get" action="?">
 				<input type="hidden" name="mod" value="<?php echo $this->getName(); ?>">
 				<input type="hidden" name="mod_action" value="show">

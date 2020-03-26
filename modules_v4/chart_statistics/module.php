@@ -85,7 +85,7 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 		include_once 'statistics.js.php'; ?>
 
 		<!-- Start page layout  -->
-		<?php echo pageStart($controller->getPageTitle()); ?>
+		<?php echo pageStart('statistics', $controller->getPageTitle()); ?>
 			<ul class="tabs" id="statistics-tabs" data-tabs data-deep-link="true">
 				<li class="tabs-title is-active">
 					<a href="#stats-indi" aria-selected="true">
