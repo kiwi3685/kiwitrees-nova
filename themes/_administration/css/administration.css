@@ -3810,7 +3810,7 @@ h3 {
 .button {
   display: inline-block;
   vertical-align: middle;
-  margin: 0 0 1rem 0;
+  margin: 0 1rem;
   padding: 0.85em 1em;
   border: 1px solid transparent;
   border-radius: 0;
@@ -11175,6 +11175,7 @@ body #admin-container {
   /* USERS */
   /* CLEAN UP TABLE */
   /* MODULE PAGES */
+  /* PAGES MODULE */
 }
 #admin-container #admin-content .listStyleNone {
   list-style: none;
@@ -11372,6 +11373,9 @@ body #admin-container {
   float: right;
   font-size: 1rem;
 }
+#admin-container #admin-content #custom_theme-page {
+  /* CKEditor */
+}
 #admin-container #admin-content #custom_theme-page ul {
   list-style-type: none;
   margin: 0;
@@ -11561,6 +11565,24 @@ body #admin-container {
   font-size: 85%;
   height: 1.75rem;
   padding: 0 0.5rem;
+}
+#admin-container #admin-content #pages_summary .cke_1 {
+  margin-bottom: 1rem;
+}
+#admin-container #admin-content #pages_summary .cke_contents {
+  max-height: 12rem;
+}
+#admin-container #admin-content #pages_pages input {
+  margin: 0;
+}
+#admin-container #admin-content #pages_pages td {
+  padding: 0.25rem;
+}
+#admin-container #admin-content #pages_pages td:nth-child(1) {
+  width: 2rem;
+}
+#admin-container #admin-content #pages_pages td:nth-child(4), #admin-container #admin-content #pages_pages td:nth-child(5), #admin-container #admin-content #pages_pages td:nth-child(6) {
+  width: 6rem;
 }
 
 footer {

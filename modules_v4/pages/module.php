@@ -89,7 +89,7 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 	// Implement KT_Module_Menu
 	public function getMenu() {
 		global $controller, $SEARCH_SPIDER;
-		$block_id = safe_GET('block_id');
+		$block_id = KT_Filter::get('block_id');
 		$blockId_list = array();
 		foreach ($this->getMenupagesList() as $items) {
 			$languages = get_block_setting($items->block_id, 'languages');
@@ -109,13 +109,13 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 
 		//-- main PAGES menu item
 		$menu = '';
-		$menu = new KT_Menu($this->getMenuTitle(), 'module.php?mod=' . $this->getName().'&amp;mod_action=show&amp;pages_id=' . $default_block, 'menu-my_pages', 'down');
+		$menu = new KT_Menu($this->getMenuTitle(), 'module.php?mod=' . $this->getName().'&amp;mod_action=show#' . $default_block, 'menu-my_pages', 'down');
 		$menu->addClass('menuitem', 'menuitem_hover', '');
 		$menu->addClass('', '', 'fa-book-reader');
 		foreach ($this->getMenupagesList() as $items) {
 			$languages = get_block_setting($items->block_id, 'languages');
 			if ((!$languages || in_array(KT_LOCALE, explode(',', $languages))) && $items->pages_access >= KT_USER_ACCESS_LEVEL) {
-				$path = 'module.php?mod=' . $this->getName() . '&amp;mod_action=show&amp;pages_id=' . $items->block_id;
+				$path = 'module.php?mod=' . $this->getName() . '&amp;mod_action=show#' . $items->block_id;
 				$submenu = new KT_Menu(KT_I18N::translate($items->pages_title), $path, 'menu-my_pages-' . $items->block_id);
 				$menu->addSubmenu($submenu);
 			}
@@ -155,12 +155,200 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 	}
 
 	// Action from the configuration page
+	private function config() {
+		global $iconStyle;
+		require_once KT_ROOT . 'includes/functions/functions_edit.php';
+
+		$controller = new KT_Controller_Page();
+		$controller
+			->restrictAccess(KT_USER_IS_ADMIN)
+			->setPageTitle($this->getTitle())
+			->pageHeader()
+			->addInlineJavascript('
+				jQuery("#pages_module").sortable({
+					items: ".sortme",
+					forceHelperSize: true,
+					forcePlaceholderSize: true,
+					opacity: 0.7,
+					cursor: "move",
+					axis: "y"
+				});
+
+				//-- update the order numbers after drag-n-drop sorting is complete
+				jQuery("#pages_module").bind("sortupdate", function(event, ui) {
+						jQuery("#"+jQuery(this).attr("id")+" input").each(
+							function (index, value) {
+								value.value = index+1;
+							}
+						);
+					});
+			');
+
+		if (array_key_exists('ckeditor', KT_Module::getActiveModules())) {
+			ckeditor_KT_Module::enableEditor($controller);
+		}
+
+		$items = KT_DB::prepare(
+			"SELECT block_id, block_order, gedcom_id, bs1.setting_value AS pages_title, bs2.setting_value AS pages_content".
+			" FROM `##block` b".
+			" JOIN `##block_setting` bs1 USING (block_id)".
+			" JOIN `##block_setting` bs2 USING (block_id)".
+			" WHERE module_name=?".
+			" AND bs1.setting_name='pages_title'".
+			" AND bs2.setting_name='pages_content'".
+			" AND IFNULL(gedcom_id, ?)=?".
+			" ORDER BY block_order"
+		)->execute(array($this->getName(), KT_GED_ID, KT_GED_ID))->fetchAll();
+
+		$action = KT_Filter::post('action');
+
+		switch ($action) {
+			case 'update':
+				set_module_setting($this->getName(), 'HEADER_TITLE', KT_Filter::post('NEW_HEADER_TITLE'));
+				set_module_setting($this->getName(), 'HEADER_DESCRIPTION', KT_Filter::post('NEW_HEADER_DESCRIPTION', KT_REGEX_UNSAFE)); // allow html
+				AddToLog($this->getName() . ' config updated', 'config');
+				break;
+			case 'updatePagesList':
+				foreach ($items as $item) {
+					$order = KT_Filter::post('order-' . $item->block_id);
+					KT_DB::prepare(
+						"UPDATE `##block` SET block_order=? WHERE block_id=?"
+					)->execute(array($order, $item->block_id));
+				}
+				break;
+			default:
+				// code...
+				break;
+		}
+
+		$HEADER_TITLE			= get_module_setting($this->getName(), 'HEADER_TITLE', KT_I18N::translate('Resources'));
+		$HEADER_DESCRIPTION		= get_module_setting($this->getName(), 'HEADER_DESCRIPTION', KT_I18N::translate('These are resources'));
+		?>
+
+		<div id="<?php echo $this->getName(); ?>" class="cell">
+			<h4 class="inline"><?php echo KT_I18N::translate('Module - Pages - Configuration'); ?></h4>
+<!--			<a class="current faq_link" href="<?php echo KT_KIWITREES_URL; ?>/faqs/modules-faqs/pages/" target="_blank" rel="noopener noreferrer" title="<?php echo KT_I18N::translate('View FAQ for this page.'); ?>"><?php echo KT_I18N::translate('View FAQ for this page.'); ?><i class="<?php echo $iconStyle; ?> fa-comments"></i></a>-->
+			<ul id="module_pages_tabs" class="tabs" data-responsive-accordion-tabs="tabs small-accordion medium-tabs" data-deep-link="true">
+				<li class="tabs-title is-active">
+					<a href="#pages_summary"><?php echo KT_I18N::translate('Summary'); ?></a>
+				</li>
+				<li class="tabs-title">
+					<a href="#pages_pages"><?php echo KT_I18N::translate('Pages'); ?></a>
+				</li>
+			</ul>
+			<div class="tabs-content" data-tabs-content="module_pages_tabs">
+				<div id="pages_summary" class="tabs-panel is-active">
+					<form method="post" name="configform" action="module.php?mod=<?php echo$this->getName(); ?>&mod_action=admin_config#pages_pages">
+						<input type="hidden" name="action" value="update">
+						<div class="cell">
+							<label>
+								<?php echo KT_I18N::translate('Main menu and summary page title'); ?>
+							</label>
+							<span class="help-text"><?php echo KT_I18N::translate('This is a brief title. It is displayed in two places.<ol><li> It is used as the main menu item name if your theme uses names, and you have more than one page. If you only have one page, then the title of that page is used. It should be kept short or it might break the menu display.</li><li>It is used as the main title on the display page, above the tabbed list of pages.</li></ol>'); ?></span>
+							<input type="text" name="NEW_HEADER_TITLE" value="<?php echo $HEADER_TITLE; ?>">
+						</div>
+						<div class="cell">
+							<label>
+								<?php echo KT_I18N::translate('Summary page description'); ?>
+							</label>
+							<span class="help-text"><?php echo KT_I18N::translate('This is a sub-heading that will display below the <b>Summary Page title</b>, above the tabbed list of pages. It can contain HTML elements including an image if you wish. Simply ensure there is no content if you do not want to display it.'); ?></span>
+							<textarea name="NEW_HEADER_DESCRIPTION" class="html-edit" rows="5"><?php echo $HEADER_DESCRIPTION; ?></textarea>
+						</div>
+						<button class="button" type="submit">
+							<i class="<?php echo $iconStyle; ?> fa-save"></i>
+							<?php echo KT_I18N::translate('Save'); ?>
+						</button>
+					</form>
+				</div>
+				<div id="pages_pages" class="tabs-panel">
+					<form method="post" name="configform" action="module.php?mod=<?php echo$this->getName(); ?>&mod_action=admin_config">
+						<input type="hidden" name="action" value="updatePagesList">
+						<div class="input-group medium-6">
+							<span class="input-group-label"><?php echo KT_I18N::translate('Family tree'); ?></span>
+							<?php echo select_edit_control('ged', KT_Tree::getNameList(), null, KT_GEDCOM, 'class="input-group-field"'); ?>
+							<div class="input-group-button">
+								<button class="button" type="submit">
+									<i class="<?php echo $iconStyle; ?> fa-save"></i>
+									<?php echo KT_I18N::translate('Show'); ?>
+								</button>
+							</div>
+						</div>
+					</form>
+					<a class="button" href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit">
+						<i class="<?php echo $iconStyle; ?> fa-file-word"></i>
+						&nbsp;
+						<?php echo KT_I18N::translate('Add page'); ?>
+					</a>
+					<hr>
+					<!-- List all pages for selected family tree-->
+					<form class="grid-x" method="post" name="configform" action="module.php?mod=<?php echo$this->getName(); ?>&mod_action=admin_config#pages_pages">
+						<input type="hidden" name="action" value="updatePagesList">
+						<table id="pages_module">
+							<thead>
+								<tr>
+									<th colspan="2"><?php echo KT_I18N::translate('Family tree'); ?></th>
+									<th><?php echo KT_I18N::translate('Page title'); ?></th>
+									<th><?php echo KT_I18N::translate('Order'); ?></th>
+									<th class="text-center"><?php echo KT_I18N::translate('Edit'); ?></th>
+									<th class="text-center"><?php echo KT_I18N::translate('Delete'); ?></th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php
+								if ($items) {
+									$trees = KT_Tree::getAll();
+									foreach ($items as $item) { ?>
+										<tr class="sortme">
+											<td>
+												<i class="<?php echo $iconStyle; ?> fa-bars"></i>
+											</td>
+											<td>
+												<?php if ($item->gedcom_id == null) {
+													echo KT_I18N::translate('All');
+												} else {
+													echo $trees[$item->gedcom_id]->tree_title_html;
+												} ?>
+											</td>
+											<td>
+												<span><?php echo KT_I18N::translate($item->pages_title); ?></span>
+											</td>
+											<td>
+												<input type="number" size="3" value="<?php echo $item->block_order; ?>" name="order-<?php echo $item->block_id; ?>">
+											</td>
+											<td class="text-center">
+												<!--edit--><a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit&amp;block_id=<?php echo $item->block_id; ?>"><i class="<?php echo $iconStyle; ?> fa-edit"></i></a>
+											</td>
+											<td class="text-center">
+												<!--delete--><a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_delete&amp;block_id=<?php echo $item->block_id; ?>" onclick="return confirm(\'<?php echo KT_I18N::translate('Are you sure you want to delete this page?'); ?>\');"><i class="<?php echo $iconStyle; ?> fa-trash-alt"></i></a>
+											</td>
+										</tr>
+									<?php }
+								} else { ?>
+									<tr>
+										<td class="error center" colspan="5">
+											<?php echo KT_I18N::translate('No pages have been created'); ?>
+										</td>
+									</tr>
+								<?php } ?>
+							</tbody>
+						</table>
+						<button class="button" type="submit">
+							<i class="<?php echo $iconStyle; ?> fa-save"></i>
+							<?php echo KT_I18N::translate('Save'); ?>
+						</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	<?php }
+
 	private function edit() {
 		if (KT_USER_IS_ADMIN) {
+			global $iconStyle;
 			require_once KT_ROOT . 'includes/functions/functions_edit.php';
 
 			if (KT_Filter::postBool('save')) {
-				$block_id=KT_Filter::post('block_id');
+				$block_id = KT_Filter::post('block_id');
 				if ($block_id) {
 					KT_DB::prepare(
 						"UPDATE `##block` SET gedcom_id=NULLIF(?, ''), block_order=? WHERE block_id=?"
@@ -177,22 +365,27 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 						$this->getName(),
 						(int)KT_Filter::post('block_order')
 					));
-					$block_id=KT_DB::getInstance()->lastInsertId();
+					$block_id = KT_DB::getInstance()->lastInsertId();
 				}
+
 				set_block_setting($block_id, 'pages_title', KT_Filter::post('pages_title', KT_REGEX_UNSAFE));
 				set_block_setting($block_id, 'pages_content', KT_Filter::post('pages_content', KT_REGEX_UNSAFE)); // allow html
 				set_block_setting($block_id, 'pages_access', KT_Filter::post('pages_access', KT_REGEX_UNSAFE));
-				$languages=array();
+
+				$languages = array();
 				foreach (KT_I18N::used_languages() as $code=>$name) {
-					if (KT_Filter::postBool('lang_'.$code)) {
-						$languages[]=$code;
+					if (KT_Filter::postBool('lang_' . $code)) {
+						$languages[] = $code;
 					}
 				}
 				set_block_setting($block_id, 'languages', implode(',', $languages));
+
 				$this->config();
+
 			} else {
-				$block_id=safe_GET('block_id');
-				$controller=new KT_Controller_Page();
+				$block_id	= KT_Filter::get('block_id');
+				$controller	= new KT_Controller_Page();
+
 				if ($block_id) {
 					$controller->setPageTitle(KT_I18N::translate('Edit pages'));
 					$items_title=get_block_setting($block_id, 'pages_title');
@@ -206,62 +399,85 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 					)->execute(array($block_id))->fetchOne();
 				} else {
 					$controller->setPageTitle(KT_I18N::translate('Add pages'));
-					$items_title='';
-					$items_content='';
-					$items_access=1;
-					$block_order=KT_DB::prepare(
+					$items_title	= '';
+					$items_content	= '';
+					$items_access	= 1;
+					$block_order	= KT_DB::prepare(
 						"SELECT IFNULL(MAX(block_order)+1, 0) FROM `##block` WHERE module_name=?"
 					)->execute(array($this->getName()))->fetchOne();
 					$gedcom_id=KT_GED_ID;
 				}
+
 				$controller->pageHeader();
+
 				if (array_key_exists('ckeditor', KT_Module::getActiveModules())) {
 					ckeditor_KT_Module::enableEditor($controller);
 				}
+				?>
 
-				echo '<div id="' . $this->getName() . '">
-					<form name="pages" method="post" action="#">
+				<div id="<?php echo $this->getName(); ?>" class="cell">
+					<form class="grid-x" name="pages" method="post" action="#">
+						<h4><?php echo KT_I18N::translate('Module - Pages - Add / edit page'); ?></h4>
 						<input type="hidden" name="save" value="1">
-						<input type="hidden" name="block_id" value="', $block_id, '">
-						<table id="faq_module">
-							<tr>
-								<th>', KT_I18N::translate('Title'),'</th>
-							</tr>
-							<tr>
-								<td><input type="text" name="pages_title" size="90" tabindex="1" value="'.htmlspecialchars($items_title).'"></td>
-							</tr>
-							<tr>
-								<th>', KT_I18N::translate('Content'),'</th>
-							</tr>
-							<tr>
-								<td><textarea name="pages_content" class="html-edit" rows="10" cols="90" tabindex="2">', htmlspecialchars($items_content), '</textarea><td>
-							</tr>
-							<tr>
-								<th>', KT_I18N::translate('Access level'),'</th>
-							</tr>
-							<tr>
-								<td>', edit_field_access_level('pages_access', $items_access, 'tabindex="4"'), '</td>
-							</tr>
-						</table>
-						<table id="pages_module">
-							<tr>
-								<th>', KT_I18N::translate('Show this pages for which languages?'), help_link('pages_language', $this->getName()), '</th>
-								<th>', KT_I18N::translate('Pages position'), help_link('pages_position', $this->getName()), '</th>
-								<th>', KT_I18N::translate('Pages visibility'), help_link('pages_visibility', $this->getName()), '</th>
-							</tr>
-							<tr>
-								<td>',	$languages=get_block_setting($block_id, 'languages'); echo edit_language_checkboxes('lang_', $languages), '</td>
-								<td><input type="text" name="block_order" size="3" tabindex="5" value="', $block_order, '"></td>
-								<td>', select_edit_control('gedcom_id', KT_Tree::getIdList(), '', $gedcom_id, 'tabindex="4"'),'</td>
-							</tr>
-						</table>
-						<p>
-							<input type="submit" value="', KT_I18N::translate('Save'), '" tabindex="7">
-							&nbsp;
-							<input type="button" value="', KT_I18N::translate('Cancel'), '" onclick="window.location=\''.$this->getConfigLink().'\';" tabindex="8">
-						</p>
+						<input type="hidden" name="block_id" value="<?php echo $block_id; ?>">
+						<div class="cell">
+							<label class="h5">
+								<?php echo KT_I18N::translate('Title'); ?>
+							</label>
+							<input type="text" name="pages_title" size="90" tabindex="1" value="<?php echo htmlspecialchars($items_title); ?>">
+						</div>
+						<div class="cell">
+							<label class="h5">
+								<?php echo KT_I18N::translate('Content'); ?>
+							</label>
+							<textarea name="pages_content" class="html-edit" rows="10" cols="90" tabindex="2"><?php echo htmlspecialchars($items_content); ?></textarea>
+						</div>
+						<div class="cell medium-4">
+							<label class="h5">
+								<?php echo KT_I18N::translate('Access level'); ?>
+							</label>
+							<?php echo edit_field_access_level('pages_access', $items_access, 'tabindex="3"'); ?>
+						</div>
+						<div class="cell medium-4">
+							<label class="h5">
+								<?php echo KT_I18N::translate('Page position'); ?>
+							</label>
+							<input type="number" name="block_order" size="3" tabindex="4" value="<?php echo $block_order; ?>">
+							<span class="help-text">
+								<?php echo KT_I18N::translate('This field controls the order in which the pages are displayed.') . '<br>' . KT_I18N::translate('You do not have to enter the numbers sequentially. If you leave holes in the numbering scheme, you can insert other pages later. For example, if you use the numbers 1, 6, 11, 16, you can later insert pages with the missing sequence numbers. Negative numbers and zero are allowed, and can be used to insert pages in front of the first one.') . '<br>' . KT_I18N::translate('When more than one page has the same position number, only one of these pages will be visible.'); ?>
+							</span>
+						</div>
+						<div class="cell medium-4">
+							<label class="h5">
+								<?php echo KT_I18N::translate('Page visibility'), help_link('pages_visibility', $this->getName()); ?>
+							</label>
+							<?php echo select_edit_control('gedcom_id', KT_Tree::getIdList(), '', $gedcom_id, 'tabindex="5"'); ?>
+							<span class="help-text">
+								<?php echo KT_I18N::translate('You can determine whether this page will be visible regardless of family tree, or whether it will be visible only to the current family tree.').
+								'<br><ul><li><b>' . KT_I18N::translate('All') . '</b>&nbsp;&nbsp;&nbsp;' . KT_I18N::translate('The page will always appear, regardless of family tree.') . '</li><li><b>' . get_gedcom_setting(KT_GED_ID, 'title') . '</b>&nbsp;&nbsp;&nbsp;' . KT_I18N::translate('The pages will appear only in the currently active family trees\'s pages.') . '</li></ul>'; ?>
+							</span>
+						</div>
+						<div class="cell">
+							<label class="h5">
+								<?php echo KT_I18N::translate('Show this pages for which languages?'); ?>
+							</label>
+							<span class="help-text">
+								<?php echo KT_I18N::translate('Either leave all languages un-ticked to display the page contents in every language, or tick the specific languages you want to display it for.<br>To create translated pages for different languages create multiple copies setting the appropriate language only for each version.'); ?>
+							</span>
+							<?php echo $languages = get_block_setting($block_id, 'languages');
+							echo edit_language_checkboxes('lang_', $languages); ?>
+						</div>
+							<button class="button" type="submit">
+								<i class="<?php echo $iconStyle; ?> fa-save"></i>
+								<?php echo KT_I18N::translate('Save'); ?>
+							</button>
+							<button class="button secondary" type="submit" onclick="window.location='<?php echo $this->getConfigLink(); ?>';">
+								<i class="<?php echo $iconStyle; ?> fa-times"></i>
+								<?php echo KT_I18N::translate('Cancel'); ?>
+							</button>
 					</form>
-				</div>';
+				</div>
+				<?php
 				exit;
 			}
 		} else {
@@ -269,73 +485,12 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 		}
 	}
 
-	private function delete() {
-		$block_id = safe_GET('block_id');
-
-		KT_DB::prepare(
-			"DELETE FROM `##block_setting` WHERE block_id=?"
-		)->execute(array($block_id));
-
-		KT_DB::prepare(
-			"DELETE FROM `##block` WHERE block_id=?"
-		)->execute(array($block_id));
-	}
-
-	private function moveup() {
-		$block_id=safe_GET('block_id');
-
-		$block_order=KT_DB::prepare(
-			"SELECT block_order FROM `##block` WHERE block_id=?"
-		)->execute(array($block_id))->fetchOne();
-
-		$swap_block=KT_DB::prepare(
-			"SELECT block_order, block_id".
-			" FROM `##block`".
-			" WHERE block_order=(".
-			"  SELECT MAX(block_order) FROM `##block` WHERE block_order < ? AND module_name=?".
-			" ) AND module_name=?".
-			" LIMIT 1"
-		)->execute(array($block_order, $this->getName(), $this->getName()))->fetchOneRow();
-		if ($swap_block) {
-			KT_DB::prepare(
-				"UPDATE `##block` SET block_order=? WHERE block_id=?"
-			)->execute(array($swap_block->block_order, $block_id));
-			KT_DB::prepare(
-				"UPDATE `##block` SET block_order=? WHERE block_id=?"
-			)->execute(array($block_order, $swap_block->block_id));
-		}
-	}
-
-	private function movedown() {
-		$block_id=safe_GET('block_id');
-
-		$block_order=KT_DB::prepare(
-			"SELECT block_order FROM `##block` WHERE block_id=?"
-		)->execute(array($block_id))->fetchOne();
-
-		$swap_block=KT_DB::prepare(
-			"SELECT block_order, block_id".
-			" FROM `##block`".
-			" WHERE block_order=(".
-			"  SELECT MIN(block_order) FROM `##block` WHERE block_order>? AND module_name=?".
-			" ) AND module_name=?".
-			" LIMIT 1"
-		)->execute(array($block_order, $this->getName(), $this->getName()))->fetchOneRow();
-		if ($swap_block) {
-			KT_DB::prepare(
-				"UPDATE `##block` SET block_order=? WHERE block_id=?"
-			)->execute(array($swap_block->block_order, $block_id));
-			KT_DB::prepare(
-				"UPDATE `##block` SET block_order=? WHERE block_id=?"
-			)->execute(array($block_order, $swap_block->block_id));
-		}
-	}
-
 	private function show() {
-		global $controller;
+		global $controller, $iconStyle;
 
 		$HEADER_TITLE = KT_I18N::translate(get_module_setting($this->getName(), 'HEADER_TITLE', 'Resources'));
 		$HEADER_DESCRIPTION = KT_I18N::translate(get_module_setting($this->getName(), 'HEADER_DESCRIPTION', 'These are resources'));
+
 		$controller = new KT_Controller_Page();
 		$controller
 			->setPageTitle($HEADER_TITLE)
@@ -369,189 +524,79 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 				});
 			');
 
-		$items_id = safe_GET('pages_id');
-		$items_list = $this->getPagesList();
-		$count_items = 0;
+		$items_list		= $this->getPagesList();
+		$count_items	= 0;
 		foreach ($items_list as $items) {
 			$languages = get_block_setting($items->block_id, 'languages');
 			if ((!$languages || in_array(KT_LOCALE, explode(',', $languages))) && $items->pages_access >= KT_USER_ACCESS_LEVEL) {
-				$count_items = $count_items +1;
+				$count_items = $count_items + 1;
 			}
 		}
 		?>
-		<div id="pages-container">
-			<h2><?php echo $HEADER_TITLE; ?></h2>
-			<?php echo $HEADER_DESCRIPTION; ?>
-			<div class="clearfloat"></div>
-			<div id="pages_tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
-				<?php if ($count_items > 1) { ?>
-					<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
-						<?php
-						foreach ($items_list as $items) {
-							$languages = get_block_setting($items->block_id, 'languages');
-							if ((!$languages || in_array(KT_LOCALE, explode(',', $languages))) && $items->pages_access >= KT_USER_ACCESS_LEVEL) { ?>
-								<li class="ui-state-default ui-corner-top<?php echo ($items_id==$items->block_id ? ' ui-tabs-selected ui-state-active' : ''); ?>">
-									<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=show&amp;pages_id=<?php echo $items->block_id; ?>" class="ui-tabs-anchor">
-										<span title="<?php echo KT_I18N::translate($items->pages_title); ?>"><?php echo KT_I18N::translate($items->pages_title); ?></span>
-									</a>
-								</li>
-							<?php }
-						} ?>
-					</ul>
-				<?php } ?>
-				<div id="outer_pages_container">
-					<?php
-					foreach ($items_list as $items) {
-						$languages = get_block_setting($items->block_id, 'languages');
-						if ((!$languages || in_array(KT_LOCALE, explode(',', $languages))) && $items_id==$items->block_id && $items->pages_access >= KT_USER_ACCESS_LEVEL) {
-							$items_content = $items->pages_content;
-						}
-					}
-					if (empty($items_content)) {
-						$items_content = '<h4>' . KT_I18N::translate('No content') . '</h4>';
-					} else {
-					 echo $items_content;
-				 	} ?>
-				</div><!-- close outer_pages_container -->
-			</div><!-- cclose pages_tabs -->
-		</div><!-- cclose pages-container -->
-	<?php }
-
-	private function config() {
-		global $iconStyle;
-		require_once KT_ROOT . 'includes/functions/functions_edit.php';
-
-		$controller = new KT_Controller_Page();
-		$controller
-			->restrictAccess(KT_USER_IS_ADMIN)
-			->setPageTitle($this->getTitle())
-			->pageHeader()
-			->addInlineJavascript('jQuery("#pages_tabs").tabs();');
-
-		if (array_key_exists('ckeditor', KT_Module::getActiveModules())) {
-			ckeditor_KT_Module::enableEditor($controller);
-		}
-
-		$action = KT_Filter::post('action');
-
-		if ($action == 'update') {
-			set_module_setting($this->getName(), 'HEADER_TITLE',		KT_Filter::post('NEW_HEADER_TITLE'));
-			set_module_setting($this->getName(), 'HEADER_DESCRIPTION',	KT_Filter::post('NEW_HEADER_DESCRIPTION', KT_REGEX_UNSAFE)); // allow html
-
-			AddToLog($this->getName() . ' config updated', 'config');
-		}
-
-		$HEADER_TITLE			= get_module_setting($this->getName(), 'HEADER_TITLE', KT_I18N::translate('Resources'));
-		$HEADER_DESCRIPTION		= get_module_setting($this->getName(), 'HEADER_DESCRIPTION', KT_I18N::translate('These are resources'));
-
-		$items = KT_DB::prepare(
-			"SELECT block_id, block_order, gedcom_id, bs1.setting_value AS pages_title, bs2.setting_value AS pages_content".
-			" FROM `##block` b".
-			" JOIN `##block_setting` bs1 USING (block_id)".
-			" JOIN `##block_setting` bs2 USING (block_id)".
-			" WHERE module_name=?".
-			" AND bs1.setting_name='pages_title'".
-			" AND bs2.setting_name='pages_content'".
-			" AND IFNULL(gedcom_id, ?)=?".
-			" ORDER BY block_order"
-		)->execute(array($this->getName(), KT_GED_ID, KT_GED_ID))->fetchAll();
-
-		$min_block_order = KT_DB::prepare(
-			"SELECT MIN(block_order) FROM `##block` WHERE module_name = ?"
-		)->execute(array($this->getName()))->fetchOne();
-
-		$max_block_order = KT_DB::prepare(
-			"SELECT MAX(block_order) FROM `##block` WHERE module_name=?"
-		)->execute(array($this->getName()))->fetchOne();
-		?>
-
-		<div id="<?php echo $this->getName(); ?>" class="cell">
-			<div class="grid-x grid-margin-y">
-				<div class="cell">
-					<h4 class="inline"><?php $controller->getPageTitle(); ?></h4>
-<!--					<a class="current faq_link" href="<?php echo KT_KIWITREES_URL; ?>/faqs/modules-faqs/pages/" target="_blank" rel="noopener noreferrer" title="'. KT_I18N::translate('View FAQ for this page.'). '">'. KT_I18N::translate('View FAQ for this page.'). '<i class="' . $iconStyle . ' fa-comments-o"></i></a> -->
-					<ul>
-						<li><a href="#pages_summary"><span><?php echo KT_I18N::translate('Summary'); ?></span></a></li>
-						<li><a href="#pages_pages"><span><?php echo KT_I18N::translate('Pages'); ?></span></a></li>
-					</ul>
-					<div id="pages_summary">
-						<form method="post" name="configform" action="module.php?mod=<?php echo$this->getName(); ?>&mod_action=admin_config">
-						<input type="hidden" name="action" value="update">
-						<div class="label"><?php echo KT_I18N::translate('Main menu and summary page title'), help_link('pages_title',$this->getName()); ?></div>
-						<div class="value"><input type="text" name="NEW_HEADER_TITLE" value="<?php echo $HEADER_TITLE; ?>"></div>
-						<div class="label"><?php echo KT_I18N::translate('Summary page description'), help_link('pages_description',$this->getName()); ?></div>
-						<div class="value2">
-							<textarea name="NEW_HEADER_DESCRIPTION" class="html-edit" rows="5" cols="120"><?php echo $HEADER_DESCRIPTION; ?></textarea>
+		<div class="grid-x">
+			<div class="cell medium-10 medium-offset-1" id="pages-page">
+				<h3><?php echo $HEADER_TITLE; ?></h3>
+				<?php echo $HEADER_DESCRIPTION; ?>
+				<div class="clearfix"></div>
+				<?php
+				switch ($count_items) {
+					case '0': ?>
+						<h4><?php echo KT_I18N::translate('No content'); ?></h4>
+						<?php break;
+					case '1':
+						echo $items_content;
+						break;
+					default: ?>
+						<ul id="module_pages_content" class="tabs" data-responsive-accordion-tabs="tabs small-accordion medium-tabs" data-deep-link="true" data-update-history="true">
+							<?php $i = 1;
+							foreach ($items_list as $items) {
+								$i == 1 ? $class = " is-active" : $class = '';
+								$languages = get_block_setting($items->block_id, 'languages');
+								if ((!$languages || in_array(KT_LOCALE, explode(',', $languages))) && $items->pages_access >= KT_USER_ACCESS_LEVEL) { ?>
+									<li class="tabs-title<?php echo $class; ?>">
+										<a data-tabs-target="<?php echo $items->block_id; ?>" href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=show#<?php echo $items->block_id; ?>">
+											<span title="<?php echo KT_I18N::translate($items->pages_title); ?>"><?php echo KT_I18N::translate($items->pages_title); ?></span>
+										</a>
+									</li>
+									<?php $i++;
+								}
+							} ?>
+						</ul>
+						<div class="tabs-content" data-tabs-content="module_pages_content" data-tabs-content="deeplinked-tabs">
+								<?php $i = 1;
+								foreach ($items_list as $items) {
+									$i == 1 ? $class = " is-active" : $class = '';
+									$languages = get_block_setting($items->block_id, 'languages');
+									if ((!$languages || in_array(KT_LOCALE, explode(',', $languages))) && $items->pages_access >= KT_USER_ACCESS_LEVEL) {
+										$items_content = $items->pages_content;
+										if (strpos($items_content, '#') !== false) {
+											$stats			= new KT_Stats(KT_GED_ID);
+											$items_content	= $stats->embedTags($items_content);
+										} ?>
+										<div id="<?php echo $items->block_id; ?>" class="tabs-panel<?php echo $class; ?>">
+											<?php echo $items_content; ?>
+										</div>
+										<?php $i++;
+									}
+								} ?>
 						</div>
-						<div class="save"><input type="submit" value="<?php echo KT_I18N::translate('Save'); ?>"></div>
-						</form>
-					</div>
-					<div id="pages_pages">
-						<form method="get" action="<?php echo KT_SCRIPT_NAME; ?>#pages_pages"><?php echo KT_I18N::translate('Family tree'); ?>
-							<input type="hidden" name="mod", value="<?php echo $this->getName(); ?>">
-							<input type="hidden" name="mod_action", value="admin_config">
-							<?php select_edit_control('ged', KT_Tree::getNameList(), null, KT_GEDCOM); ?>
-							<input type="submit" value="<?php echo KT_I18N::translate('show'); ?>">
-						</form>
-						<div class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><a class="ui-button-text" href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit"><?php echo KT_I18N::translate('Add page'); ?></a></div>
-						<table id="pages_module">
-							<?php
-							if ($items) {
-								$trees = KT_Tree::getAll();
-								foreach ($items as $item) { ?>
-									<tr class="faq_edit_pos">
-										<td>
-											<?php echo KT_I18N::translate('Position item'), ': ', $item->block_order, ', ';
-											if ($item->gedcom_id == null) {
-												echo KT_I18N::translate('All');
-											} else {
-												echo $trees[$item->gedcom_id]->tree_title_html;
-											} ?>
-										</td>
-										<td>
-											<?php if ($item->block_order == $min_block_order) { ?>
-												&nbsp;
-											<?php } else { ?>
-												<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_moveup&amp;block_id=<?php echo $item->block_id; ?> "class="icon-uarrow"></a>';
-											<?php } ?>
-										</td>
-										<td>
-											<?php if ($item->block_order == $max_block_order) { ?>
-												&nbsp;
-											<?php } else { ?>
-												<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_movedown&amp;block_id=<?php echo $item->block_id; ?> "class="icon-darrow"></a>';
-											<?php } ?>
-										</td>
-										<td>
-											<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit&amp;block_id=<?php echo $item->block_id; ?>"><?php echo KT_I18N::translate('Edit'); ?></a>
-										</td>
-										<td>
-											<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_delete&amp;block_id=<?php echo $item->block_id; ?>" onclick="return confirm(\'<?php echo KT_I18N::translate('Are you sure you want to delete this page?'); ?>\');"><?php echo KT_I18N::translate('Delete'); ?></a>
-										</td>
-									</tr>
-									<tr>
-										<td colspan="5">
-											<div class="faq_edit_item">
-												<div class="faq_edit_title"><?php echo KT_I18N::translate($item->pages_title); ?></div>
-												<div class="faq_edit_content"><?php echo substr($item->pages_content, 0, 1)=='<' ? $item->pages_content : nl2br($item->pages_content); ?></div>
-											</div>
-										</td>
-									</tr>
-								<?php }
-							} else { ?>
-								<tr>
-									<td class="error center" colspan="5">
-										<?php echo KT_I18N::translate('No pages have been created'); ?>
-									</td>
-								</tr>
-								</table>
-							<?php } ?>
-						</table>
-					</div>
-				</div>
+					<?php break;
+				} ?>
 			</div>
 		</div>
 	<?php }
+
+	private function delete() {
+		$block_id = KT_Filter::get('block_id');
+
+		KT_DB::prepare(
+			"DELETE FROM `##block_setting` WHERE block_id=?"
+		)->execute(array($block_id));
+
+		KT_DB::prepare(
+			"DELETE FROM `##block` WHERE block_id=?"
+		)->execute(array($block_id));
+	}
 
 	// Return the list of pages
 	private function getPagesList() {
