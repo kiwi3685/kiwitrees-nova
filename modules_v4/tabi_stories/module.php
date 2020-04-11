@@ -233,13 +233,13 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 		global $controller;
 
 		$count_of_stories =
-			KT_DB::prepare(
-				"SELECT COUNT(##block.block_id)" .
-				" FROM ##block, ##block_setting" .
-				" WHERE ##block.module_name=?" .
-				" AND ##block_setting.setting_value REGEXP CONCAT('[[:<:]]', ?, '[[:>:]]')" .
-				" AND gedcom_id=?"
-			)->execute(array(
+			KT_DB::prepare("
+				SELECT COUNT(##block.block_id)
+				 FROM ##block, ##block_setting
+				 WHERE ##block.module_name=?
+				 AND ##block_setting.setting_value REGEXP CONCAT('[[:<:]]', ?, '[[:>:]]')
+				 AND gedcom_id=?
+			")->execute(array(
 				$this->getName(),
 				$xref = $controller->record->getXref(),
 				KT_GED_ID
@@ -454,12 +454,12 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 				});
 			');
 
-		$stories = KT_DB::prepare(
-			"SELECT block_id, xref, block_order" .
-			" FROM ##block" .
-			" WHERE module_name=?" .
-			" AND gedcom_id=?"
-		)->execute(array($this->getName(), KT_GED_ID))->fetchAll();
+		$stories = KT_DB::prepare("
+			SELECT block_id, xref, block_order
+			 FROM ##block
+			 WHERE module_name=?
+			 AND gedcom_id=?
+		")->execute(array($this->getName(), KT_GED_ID))->fetchAll();
 
 		$new_xref = safe_GET('xref', KT_REGEX_XREF);
 
@@ -590,12 +590,12 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 				});
 			');
 
-		$stories = KT_DB::prepare(
-			"SELECT block_id" .
-			" FROM `##block`" .
-			" WHERE module_name=?" .
-			" AND gedcom_id=?"
-		)->execute(array($this->getName(), KT_GED_ID))->fetchAll();
+		$stories = KT_DB::prepare("
+			SELECT block_id
+			 FROM `##block`
+			 WHERE module_name=?
+			 AND gedcom_id=?
+		")->execute(array($this->getName(), KT_GED_ID))->fetchAll();
 
 		echo '<h2 class="center">', KT_I18N::translate('Stories'), '</h2>';
 		if (count($stories)>0) {
@@ -647,17 +647,17 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 		if (KT_USER_CAN_EDIT) {
 			$block_id = safe_GET('block_id');
 
-			$block_order=KT_DB::prepare(
-				"SELECT block_order FROM `##block` WHERE block_id=?"
-			)->execute(array($block_id))->fetchOne();
+			$block_order=KT_DB::prepare("
+				SELECT block_order FROM `##block` WHERE block_id=?
+			")->execute(array($block_id))->fetchOne();
 
-			KT_DB::prepare(
-				"DELETE FROM `##block_setting` WHERE block_id=?"
-			)->execute(array($block_id));
+			KT_DB::prepare("
+				DELETE FROM `##block_setting` WHERE block_id=?
+			")->execute(array($block_id));
 
-			KT_DB::prepare(
-				"DELETE FROM `##block` WHERE block_id=?"
-			)->execute(array($block_id));
+			KT_DB::prepare("
+				DELETE FROM `##block` WHERE block_id=?
+			")->execute(array($block_id));
 
 		} else {
 			header('Location: '. KT_SERVER_NAME . KT_SCRIPT_PATH);
