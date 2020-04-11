@@ -247,7 +247,7 @@ if (KT_Filter::get('continue')) {
 
 		try {
 			KT_DB::prepare(
-				"UPDATE `##favorite` SET xref = ? WHERE xref = ? AND gedcom_id = ?"
+				"UPDATE `##favorites` SET xref = ? WHERE xref = ? AND gedcom_id = ?"
 			)->execute(array($new_xref, $old_xref, KT_GED_ID));
 		} catch (Exception $ex) {
 			// Perhaps the favorites module was not installed?

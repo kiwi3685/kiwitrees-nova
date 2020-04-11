@@ -124,7 +124,7 @@ class block_favorites_KT_Module extends KT_Module implements KT_Module_Block {
 		if (get_block_location($block_id) === 'side') {
 			$style = 1;
 		} else {
-			$style = 2; // 1 means "regular box", 2 means "wide box"
+			$style = 2; // 1 means "regular box", 2 means "wide box", 3 means "vertical box", 4 means "card"
 		}
 
 		if ($favorites) {
@@ -293,7 +293,7 @@ class block_favorites_KT_Module extends KT_Module implements KT_Module_Block {
 	// Delete a favorite from the database
 	public static function deleteFavorite($favorite_id) {
 		return (bool)
-			KT_DB::prepare("DELETE FROM `##favorite` WHERE favorite_id=?")
+			KT_DB::prepare("DELETE FROM `##favorites` WHERE favorite_id=?")
 			->execute(array($favorite_id));
 	}
 
@@ -305,7 +305,7 @@ class block_favorites_KT_Module extends KT_Module implements KT_Module_Block {
 		}
 
 		//-- make sure this is not a duplicate entry
-		$sql = "SELECT SQL_NO_CACHE 1 FROM `##favorite` WHERE";
+		$sql = "SELECT SQL_NO_CACHE 1 FROM `##favorites` WHERE";
 		if (!empty($favorite['gid'])) {
 			$sql	.= " xref=?";
 			$vars	= array($favorite['gid']);
@@ -322,7 +322,7 @@ class block_favorites_KT_Module extends KT_Module implements KT_Module_Block {
 
 		//-- add the favorite to the database
 		return (bool)
-			KT_DB::prepare("INSERT INTO `##favorite` (user_id, gedcom_id, xref, favorite_type, url, title, note) VALUES (? ,? ,? ,? ,? ,? ,?)")
+			KT_DB::prepare("INSERT INTO `##favorites` (user_id, gedcom_id, xref, favorite_type, url, title, note) VALUES (? ,? ,? ,? ,? ,? ,?)")
 				->execute(array(null, $favorite['gedcom_id'], $favorite['gid'], $favorite['type'], $favorite['url'], $favorite['title'], $favorite['note']));
 	}
 
@@ -333,7 +333,7 @@ class block_favorites_KT_Module extends KT_Module implements KT_Module_Block {
 		return
 			KT_DB::prepare(
 				"SELECT SQL_CACHE favorite_id AS id, user_id, gedcom_id, xref AS gid, favorite_type AS type, title, note, url".
-				" FROM `##favorite` WHERE gedcom_id=? AND user_id IS NULL")
+				" FROM `##favorites` WHERE gedcom_id=? AND user_id IS NULL")
 			->execute(array($gedcom_id))
 			->fetchAll(PDO::FETCH_ASSOC);
 	}

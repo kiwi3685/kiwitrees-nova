@@ -1701,7 +1701,7 @@ function get_widget_order($module_name) {
 // update favorites after merging records
 function update_favorites($xref_from, $xref_to, $ged_id=KT_GED_ID) {
 	return
-		KT_DB::prepare("UPDATE `##favorite` SET xref=? WHERE xref=? AND gedcom_id=?")
+		KT_DB::prepare("UPDATE `##favorites` SET xref=? WHERE xref=? AND gedcom_id=?")
 		->execute(array($xref_to, $xref_from, $ged_id))
 		->rowCount();
 }

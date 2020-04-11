@@ -397,4 +397,24 @@ class KT_Family extends KT_GedcomRecord {
 			$this->format_first_major_fact(KT_EVENTS_MARR, 1).
 			$this->format_first_major_fact(KT_EVENTS_DIV, 1);
 	}
+
+	// Display the FIRST image for this Family.
+	// Use an icon if no image is available.
+	public function displayImage($icon = false) {
+		global $iconStyle;
+
+		preg_match('/\n(\d) OBJE @(' . KT_REGEX_XREF . ')@/', $this->getGedcomRecord(), $match);
+		if ($match) {
+			$media = KT_Media::getInstance($match[2]);
+			// Thumbnail exists - use it.
+			return $media->displayImage();
+		} elseif ($icon) {
+			// No thumbnail exists - use an icon
+			return '<i class="' . $iconStyle . ' fa-users fa-8x"></i>';
+		} else {
+			return '';
+		}
+	}
+
+
 }

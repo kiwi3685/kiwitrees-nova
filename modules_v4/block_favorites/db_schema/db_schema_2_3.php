@@ -2,13 +2,13 @@
 /**
  * Kiwitrees: Web based Family History software
  * Copyright (C) 2012 to 2020 kiwitrees.net
- * 
+ *
  * Derived from webtrees (www.webtrees.net)
  * Copyright (C) 2010 to 2012 webtrees development team
- * 
+ *
  * Derived from PhpGedView (phpgedview.sourceforge.net)
  * Copyright (C) 2002 to 2010 PGV Development Team
- * 
+ *
  * Kiwitrees is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -28,7 +28,7 @@ if (!defined('KT_KIWITREES')) {
 
 // Delete any data that might violate the new constraints
 KT_DB::exec(
-	"DELETE FROM `##favorite`".
+	"DELETE FROM `##favorites`".
 	" WHERE user_id   NOT IN (SELECT user_id   FROM `##user`  )".
 	" OR    gedcom_id NOT IN (SELECT gedcom_id FROM `##gedcom`)"
 );
@@ -36,7 +36,7 @@ KT_DB::exec(
 // Add the new constraints
 try {
 	KT_DB::exec(
-		"ALTER TABLE `##favorite`".
+		"ALTER TABLE `##favorites`".
 		" ADD FOREIGN KEY favorite_fk1 (user_id  ) REFERENCES `##user`   (user_id) ON DELETE CASCADE,".
 		" ADD FOREIGN KEY favorite_fk2 (gedcom_id) REFERENCES `##gedcom` (gedcom_id) ON DELETE CASCADE"
 	);

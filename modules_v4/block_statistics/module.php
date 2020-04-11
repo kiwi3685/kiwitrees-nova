@@ -80,7 +80,6 @@ class block_statistics_KT_Module extends KT_Module implements KT_Module_Block {
 		$title 		= $this->getTitle();
 		$config		= true;
 		$content	= '';
-
 		$stats		= new KT_Stats(KT_GEDCOM);
 
 		if ($show_last_update) {
@@ -222,7 +221,7 @@ class block_statistics_KT_Module extends KT_Module implements KT_Module_Block {
 		// NOTE: Print the most common surnames
 		if ($show_common_surnames) {
 			$surnames = get_common_surnames(get_gedcom_setting(KT_GED_ID, 'COMMON_NAMES_THRESHOLD'));
-			if (count($surnames)>0) {
+			if (count($surnames) > 0) {
 				$content .= '<div class="callout secondary small">
 					<h6 class="font-bold">' . KT_I18N::translate('Most Common Surnames') . '</h6>';
 					$i = 0;

@@ -2,13 +2,13 @@
 /**
  * Kiwitrees: Web based Family History software
  * Copyright (C) 2012 to 2020 kiwitrees.net
- * 
+ *
  * Derived from webtrees (www.webtrees.net)
  * Copyright (C) 2010 to 2012 webtrees development team
- * 
+ *
  * Derived from PhpGedView (phpgedview.sourceforge.net)
  * Copyright (C) 2002 to 2010 PGV Development Team
- * 
+ *
  * Kiwitrees is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -28,7 +28,7 @@ if (!defined('KT_KIWITREES')) {
 
 // Add the new constraints
 try {
-	KT_DB::exec("ALTER TABLE `##favorite` CHANGE note note VARCHAR(1000) NULL");
+	KT_DB::exec("ALTER TABLE `##favorites` CHANGE note note VARCHAR(1000) NULL");
 } catch (PDOException $ex) {
 	// Already updated?
 }

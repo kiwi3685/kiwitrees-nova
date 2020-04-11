@@ -34,7 +34,7 @@ if (!defined('KT_KIWITREES')) {
 * @param int $style the style to print the box in, 1 for smaller boxes, 2 for larger boxes, 3 for vertical template
 * @param int $count on some charts it is important to keep a count of how many boxes were printed
 */
-function print_pedigree_person($person, $style = 1, $count = 0, $personcount = "1") {
+function print_pedigree_person($person, $style = 1, $count = 0, $personcount = "1", $favNote = '') {
 	global $HIDE_LIVE_PEOPLE, $SHOW_LIVING_NAMES, $GEDCOM;
 	global $SHOW_HIGHLIGHT_IMAGES, $bwidth, $bheight, $PEDIGREE_FULL_DETAILS, $SHOW_PEDIGREE_PLACES;
 	global $TEXT_DIRECTION, $DEFAULT_PEDIGREE_GENERATIONS, $OLD_PGENS, $talloffset, $PEDIGREE_LAYOUT;
@@ -48,7 +48,7 @@ function print_pedigree_person($person, $style = 1, $count = 0, $personcount = "
 	if (empty($show_full)) {
 		$show_full = 0;
 	}
-	if ($style == 3) {
+	if ($style == 3 || $style == 4) {
 		$show_full = 1;
 	}
 	if (empty($PEDIGREE_FULL_DETAILS)) {
@@ -84,6 +84,7 @@ function print_pedigree_person($person, $style = 1, $count = 0, $personcount = "
 		$genderImage	= '';
 		$BirthDeath		= '';
 		$birthplace		= '';
+		$deathplace		= '';
 		$outBoxAdd		= '';
 		$showid			= '';
 		$iconsStyleAdd	= 'float:right;';
@@ -96,6 +97,7 @@ function print_pedigree_person($person, $style = 1, $count = 0, $personcount = "
 		$boxID			= $pid . '.' . $personcount . '.' . $count . '.' . $uniqueID;
 		$dataToggle		= $pid . '-' . $uniqueID;
 		$mouseAction4	= ' onclick="expandbox(\'' . $boxID . '\', ' . $style . '); return false;"';
+		$displayNote	= $favNote;
 
 		if ($person->canDisplayName()) {
 			if (empty($SEARCH_SPIDER)) {
@@ -121,17 +123,15 @@ function print_pedigree_person($person, $style = 1, $count = 0, $personcount = "
 			}
 		}
 		//-- find the name
-		$name		= $person->getFullName();
-		$shortname	= $person->getShortName();
+		$name		= $person->getFullName(); // standard display of full name
+		$shortname	= $person->getShortName(); // abbreviated version of name for small spaces
+		$addname	= $person->getAddName(); //-- find additional name, e.g. Hebrew
 
 		if ($SHOW_HIGHLIGHT_IMAGES) {
 			$thumbnail = $person->displayImage();
 		} else {
 			$thumbnail = '';
 		}
-
-		//-- find additional name, e.g. Hebrew
-		$addname = $person->getAddName();
 
 		// add optional CSS style for each fact
 		$indirec	= $person->getGedcomRecord();
@@ -167,16 +167,26 @@ function print_pedigree_person($person, $style = 1, $count = 0, $personcount = "
 				}
 			}
 		}
-			// Show optional events (before death)
-			foreach ($opt_tags as $key=>$tag) {
-				if (!preg_match('/^('.KT_EVENTS_DEAT.')$/', $tag)) {
-					$event = $person->getFactByType($tag);
-					if (!is_null($event) && $event->canShow()) {
-						$BirthDeath .= '<p>' . $event->print_simple_fact(true, true);
-						unset ($opt_tags[$key]);
-					}
+		// Show optional events (before death)
+		foreach ($opt_tags as $key=>$tag) {
+			if (!preg_match('/^('.KT_EVENTS_DEAT.')$/', $tag)) {
+				$event = $person->getFactByType($tag);
+				if (!is_null($event) && $event->canShow()) {
+					$BirthDeath .= '<p>' . $event->print_simple_fact(true, true);
+					unset ($opt_tags[$key]);
 				}
 			}
+		}
+		// Find the short death place
+		$opt_tags = preg_split('/\W/', $CHART_BOX_TAGS, 0, PREG_SPLIT_NO_EMPTY);
+		if (!in_array('DEAT', $opt_tags)) {
+			$event = $person->getFactByType('DEAT');
+			if (!is_null($event) && ($event->getDate()->isOK() || $event->getPlace()) && $event->canShow()) {
+				$tmp = new KT_Place($event->getPlace(), KT_GED_ID);
+				$deathplace = $tmp->getShortName();
+			}
+		}
+
 		// Show DEAT or equivalent event
 		if ($show_full) {
 			foreach (explode('|', KT_EVENTS_DEAT) as $deattag) {
@@ -197,7 +207,7 @@ function print_pedigree_person($person, $style = 1, $count = 0, $personcount = "
 				$BirthDeath .= '<p>' . $event->print_simple_fact(true, true) . '</p>';
 			}
 		}
-		// Find the short birth place for compact chart
+		// Find the short birth place
 		$opt_tags = preg_split('/\W/', $CHART_BOX_TAGS, 0, PREG_SPLIT_NO_EMPTY);
 		foreach (explode('|', KT_EVENTS_BIRT) as $birttag) {
 			if (!in_array($birttag, $opt_tags)) {
@@ -229,6 +239,10 @@ function print_pedigree_person($person, $style = 1, $count = 0, $personcount = "
 			break;
 		case '3':
 			require KT_THEME_DIR . 'templates/verticalbox_template.php';
+			break;
+		case '4':
+			require KT_THEME_DIR . 'templates/person_card_template.php';
+			break;
 	}
 }
 

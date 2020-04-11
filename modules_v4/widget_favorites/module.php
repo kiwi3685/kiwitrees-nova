@@ -133,7 +133,7 @@ class widget_favorites_KT_Module extends KT_Module implements KT_Module_Widget {
 		}
 
 		$content = '';
-		$style = 2; // 1 means "regular box", 2 means "wide box"
+		$style = 2; // 1 means "regular box", 2 means "wide box", 3 means "vertical box", 4 means "card"
 		if ($userfavs) {
 			foreach ($userfavs as $key=>$favorite) {
 				if (isset($favorite['id'])) $key=$favorite['id'];
@@ -258,7 +258,7 @@ class widget_favorites_KT_Module extends KT_Module implements KT_Module_Widget {
 	// Delete a favorite from the database
 	public static function deleteFavorite($favorite_id) {
 		return (bool)
-			KT_DB::prepare("DELETE FROM `##favorite` WHERE favorite_id=?")
+			KT_DB::prepare("DELETE FROM `##favorites` WHERE favorite_id=?")
 			->execute(array($favorite_id));
 	}
 
@@ -270,7 +270,7 @@ class widget_favorites_KT_Module extends KT_Module implements KT_Module_Widget {
 		}
 
 		//-- make sure this is not a duplicate entry
-		$sql = "SELECT SQL_NO_CACHE 1 FROM `##favorite` WHERE";
+		$sql = "SELECT SQL_NO_CACHE 1 FROM `##favorites` WHERE";
 		if (!empty($favorite['gid'])) {
 			$sql.=" xref=?";
 			$vars=array($favorite['gid']);
@@ -293,7 +293,7 @@ class widget_favorites_KT_Module extends KT_Module implements KT_Module_Widget {
 
 		//-- add the favorite to the database
 		return (bool)
-			KT_DB::prepare("INSERT INTO `##favorite` (user_id, gedcom_id, xref, favorite_type, url, title, note) VALUES (? ,? ,? ,? ,? ,? ,?)")
+			KT_DB::prepare("INSERT INTO `##favorites` (user_id, gedcom_id, xref, favorite_type, url, title, note) VALUES (? ,? ,? ,? ,? ,? ,?)")
 				->execute(array($favorite['user_id'], $favorite['gedcom_id'], $favorite['gid'], $favorite['type'], $favorite['url'], $favorite['title'], $favorite['note']));
 	}
 
@@ -304,7 +304,7 @@ class widget_favorites_KT_Module extends KT_Module implements KT_Module_Widget {
 		return
 			KT_DB::prepare(
 				"SELECT SQL_CACHE favorite_id AS id, user_id, gedcom_id, xref AS gid, favorite_type AS type, title AS title, note AS note, url AS url".
-				" FROM `##favorite` WHERE user_id=? AND gedcom_id=?")
+				" FROM `##favorites` WHERE user_id=? AND gedcom_id=?")
 			->execute(array($user_id, KT_GED_ID))
 			->fetchAll(PDO::FETCH_ASSOC);
 	}

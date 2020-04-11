@@ -77,4 +77,23 @@ class KT_Source extends KT_GedcomRecord {
 	public function getAllNames() {
 		return parent::_getAllNames('TITL', 1);
 	}
+
+	// Display the FIRST image for this Source record.
+	// Use an icon if no image is available.
+	function displayImage($icon = false) {
+		global $iconStyle;
+
+		preg_match('/\n(\d) OBJE @(' . KT_REGEX_XREF . ')@/', $this->getGedcomRecord(), $match);
+		if ($match) {
+			$media = KT_Media::getInstance($match[2]);
+			// Thumbnail exists - use it.
+			return $media->displayImage();
+		} elseif ($icon) {
+			// No thumbnail exists - use an icon
+			return '<i class="' . $iconStyle . ' fa-book fa-8x"></i>';
+		} else {
+			return '';
+		}
+	}
+
 }

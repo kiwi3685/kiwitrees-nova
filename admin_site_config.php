@@ -278,7 +278,7 @@ $controller
 						</div>
 					</div>
 					<div class="cell large-3">
-						<label for="maintenance"><?php echo KT_I18N::translate('Site maintenance'); ?></label>
+						<label for="MAINTENANCE"><?php echo KT_I18N::translate('Site maintenance'); ?></label>
 					</div>
 					<div class="cell large-9">
 						<?php echo edit_field_yes_no('MAINTENANCE', KT_Site::preference('MAINTENANCE')); ?>
