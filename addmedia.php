@@ -71,6 +71,9 @@ if (!KT_USER_CAN_EDIT || !$disp) {
 
 switch ($action) {
 	case 'create': // Save the information from the “showcreateform” action
+		if (!KT_Filter::get('format')) {
+			$controller->pageHeader();
+		}
 		$controller->setPageTitle(KT_I18N::translate('Create a new media object'));
 
 		// Validate the media folder
@@ -206,7 +209,6 @@ switch ($action) {
 			}
 		}
 
-		$controller->pageHeader();
 		// Build the gedcom record
 		$media_id = get_new_xref('OBJE');
 		if ($media_id) {
@@ -423,10 +425,14 @@ switch ($action) {
 		throw new Exception('Bad $action (' . $action . ') in addmedia.php');
 }
 
-$controller
-		->pageHeader()
-		->getPageTitle();
+	// 'format' used only when this page opeened in administration
+	if (!KT_Filter::get('format')) {
+		$controller->pageHeader();
+	}
+	$controller->getPageTitle();
+
 ?>
+
 <div id="addmedia-page">
 	<h2><?php echo $controller->getPageTitle(); ?></h2>
 	<form method="post" name="newmedia" action="addmedia.php" enctype="multipart/form-data">

@@ -31,47 +31,78 @@ $controller
 	->setPageTitle(KT_I18N::translate('Add unlinked records'))
 	->pageHeader();
 
+global $iconStyle;
+
 ?>
-<div id="other">
-	<h3><?php echo KT_I18N::translate('Add unlinked records'); ?></h3>
-	<form method="post" action="#" name="tree">
-		<?php echo select_edit_control('ged', KT_Tree::getNameList(), null, KT_GEDCOM, ' onchange="tree.submit();"'); ?>
-	</form>
-	<table id="other">
-		<tr>
-			<td>
-				<a href="#" onclick="addnewchild(''); return false;">
+
+<div id="unlinked-records-page" class="cell">
+	<div class="grid-x grid-padding-y">
+		<div class="cell">
+			<h4 class="inline"><?php echo KT_I18N::translate('Add unlinked records'); ?></h4>
+		</div>
+		<form method="post" action="#" name="tree">
+			<?php echo select_edit_control('ged', KT_Tree::getNameList(), null, KT_GEDCOM, ' onchange="tree.submit();"'); ?>
+		</form>
+		<div class="cell grid-x">
+			<div class="cell medium-2">
+				<button class="button expanded" onclick="showAdd('indi');">
 					<?php echo /* I18N: An individual that is not linked to any other record */ KT_I18N::translate('Create a new individual'); ?>
-				</a>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<a href="#" onclick="addnewnote(''); return false;">
+				</button>
+				<button class="button expanded" onclick="showAdd('note');">
 					<?php echo /* I18N: An note that is not linked to any other record */ KT_I18N::translate('Create a new note'); ?>
-				</a>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<a href="#" onclick="addnewsource(''); return false;">
+				</button>
+				<button class="button expanded" onclick="showAdd('sour');">
 					<?php echo /* I18N: A source that is not linked to any other record */ KT_I18N::translate('Create a new source'); ?>
-				</a>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<a href="#" onclick="addnewrepository(''); return false;">
+				</button>
+				<button class="button expanded" onclick="showAdd('repo');">
 					<?php echo /* I18N: A repository that is not linked to any other repository */ KT_I18N::translate('Create a new repository'); ?>
-				</a>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<a href="addmedia.php?action=showmediaform&amp;linktoid=new" target="_blank" rel="noopener noreferrer">
+				</button>
+				<button class="button expanded" onclick="showAdd('obje');">
 					<?php echo /* I18N: A media object that is not linked to any other record */ KT_I18N::translate('Create a new media object'); ?>
-				</a>
-			</td>
-		</tr>
-	</table>
+				</button>
+			</div>
+			<div class="cell medium-9 medium-offset-1 is-hidden" id="showhide">
+				<button class="button small float-right" onclick="showAddClose();">
+					<i class="<?php echo $iconStyle; ?> fa-times"></i>
+					<?php echo KT_I18N::translate('Close'); ?>
+				</button>
+				<div id="unlinked"></div>
+			</div>
+		</div>
+	</div>
 </div>
+
+<script>
+	function showAdd(addtype) {
+		switch(addtype){
+			case "indi":
+				var addUnlinked = 'edit_interface.php?action=addchild&gender=&famid='; // addnewchild
+			break;
+			case "note":
+				var addUnlinked = 'edit_interface.php?action=addnewnote&noteid='; // addnewnote
+			break;
+			case "sour":
+				var addUnlinked = 'edit_interface.php?action=addnewsource&pid='; // addnewsource
+			break;
+			case "repo":
+				var addUnlinked = 'edit_interface.php?action=addnewrepository&pid='; // addnewrepository
+			break;
+			case "obje":
+				var addUnlinked = 'addmedia.php?action=showmediaform&linktoid=new&format=simple';
+			break;
+			default:
+			break;
+		}
+
+		jQuery('#unlinked').load(addUnlinked, function() {
+			jQuery('#unlinked').hide().slideDown('slow');
+		});
+		jQuery("#showhide").removeClass("is-hidden");
+	}
+
+	function showAddClose() {
+		jQuery("#showhide").addClass("is-hidden");
+		jQuery('#unlinked').hide();
+	};
+
+</script>

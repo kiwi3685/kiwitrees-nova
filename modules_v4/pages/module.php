@@ -176,12 +176,12 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 
 				//-- update the order numbers after drag-n-drop sorting is complete
 				jQuery("#pages_module").bind("sortupdate", function(event, ui) {
-						jQuery("#"+jQuery(this).attr("id")+" input").each(
-							function (index, value) {
-								value.value = index+1;
-							}
-						);
-					});
+					jQuery("#"+jQuery(this).attr("id")+" input").each(
+						function (index, value) {
+							value.value = index+1;
+						}
+					);
+				});
 			');
 
 		if (array_key_exists('ckeditor', KT_Module::getActiveModules())) {
@@ -226,117 +226,123 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 		?>
 
 		<div id="<?php echo $this->getName(); ?>" class="cell">
-			<h4 class="inline"><?php echo KT_I18N::translate('Module - Pages - Configuration'); ?></h4>
-<!--			<a class="current faq_link" href="<?php echo KT_KIWITREES_URL; ?>/faqs/modules-faqs/pages/" target="_blank" rel="noopener noreferrer" title="<?php echo KT_I18N::translate('View FAQ for this page.'); ?>"><?php echo KT_I18N::translate('View FAQ for this page.'); ?><i class="<?php echo $iconStyle; ?> fa-comments"></i></a>-->
-			<ul id="module_pages_tabs" class="tabs" data-responsive-accordion-tabs="tabs small-accordion medium-tabs" data-deep-link="true">
-				<li class="tabs-title is-active">
-					<a href="#pages_summary"><?php echo KT_I18N::translate('Summary'); ?></a>
-				</li>
-				<li class="tabs-title">
-					<a href="#pages_pages"><?php echo KT_I18N::translate('Pages'); ?></a>
-				</li>
-			</ul>
-			<div class="tabs-content" data-tabs-content="module_pages_tabs">
-				<div id="pages_summary" class="tabs-panel is-active">
-					<form method="post" name="configform" action="module.php?mod=<?php echo$this->getName(); ?>&mod_action=admin_config#pages_pages">
-						<input type="hidden" name="action" value="update">
-						<div class="cell">
-							<label>
-								<?php echo KT_I18N::translate('Main menu and summary page title'); ?>
-							</label>
-							<span class="help-text"><?php echo KT_I18N::translate('This is a brief title. It is displayed in two places.<ol><li> It is used as the main menu item name if your theme uses names, and you have more than one page. If you only have one page, then the title of that page is used. It should be kept short or it might break the menu display.</li><li>It is used as the main title on the display page, above the tabbed list of pages.</li></ol>'); ?></span>
-							<input type="text" name="NEW_HEADER_TITLE" value="<?php echo $HEADER_TITLE; ?>">
-						</div>
-						<div class="cell">
-							<label>
-								<?php echo KT_I18N::translate('Summary page description'); ?>
-							</label>
-							<span class="help-text"><?php echo KT_I18N::translate('This is a sub-heading that will display below the <b>Summary Page title</b>, above the tabbed list of pages. It can contain HTML elements including an image if you wish. Simply ensure there is no content if you do not want to display it.'); ?></span>
-							<textarea name="NEW_HEADER_DESCRIPTION" class="html-edit" rows="5"><?php echo $HEADER_DESCRIPTION; ?></textarea>
-						</div>
-						<button class="button" type="submit">
-							<i class="<?php echo $iconStyle; ?> fa-save"></i>
-							<?php echo KT_I18N::translate('Save'); ?>
-						</button>
-					</form>
-				</div>
-				<div id="pages_pages" class="tabs-panel">
-					<form method="post" name="configform" action="module.php?mod=<?php echo$this->getName(); ?>&mod_action=admin_config">
-						<input type="hidden" name="action" value="updatePagesList">
-						<div class="input-group medium-6">
-							<span class="input-group-label"><?php echo KT_I18N::translate('Family tree'); ?></span>
-							<?php echo select_edit_control('ged', KT_Tree::getNameList(), null, KT_GEDCOM, 'class="input-group-field"'); ?>
-							<div class="input-group-button">
+			<div class="grid-x grid-margin-x grid-margin-y">
+				<div class="cell">
+					<h4 class="inline"><?php echo KT_I18N::translate('Module - Pages - Configuration'); ?></h4>
+<!--				<a class="current faq_link" href="<?php echo KT_KIWITREES_URL; ?>/faqs/modules-faqs/pages/" target="_blank" rel="noopener noreferrer" title="<?php echo KT_I18N::translate('View FAQ for this page.'); ?>"><?php echo KT_I18N::translate('View FAQ for this page.'); ?><i class="<?php echo $iconStyle; ?> fa-comments"></i></a>-->
+					<ul id="module_pages_tabs" class="tabs" data-responsive-accordion-tabs="tabs small-accordion medium-tabs" data-deep-link="true">
+						<li class="tabs-title is-active">
+							<a href="#pages_summary"><?php echo KT_I18N::translate('Summary'); ?></a>
+						</li>
+						<li class="tabs-title">
+							<a href="#pages_pages"><?php echo KT_I18N::translate('Pages'); ?></a>
+						</li>
+					</ul>
+					<div class="tabs-content" data-tabs-content="module_pages_tabs">
+						<div id="pages_summary" class="tabs-panel is-active">
+							<form method="post" action="module.php?mod=<?php echo$this->getName(); ?>&mod_action=admin_config#pages_pages">
+								<input type="hidden" name="action" value="update">
+								<div class="cell">
+									<label>
+										<?php echo KT_I18N::translate('Main menu and summary page title'); ?>
+									</label>
+									<span class="help-text"><?php echo KT_I18N::translate('This is a brief title. It is displayed in two places.<ol><li> It is used as the main menu item name if your theme uses names, and you have more than one page. If you only have one page, then the title of that page is used. It should be kept short or it might break the menu display.</li><li>It is used as the main title on the display page, above the tabbed list of pages.</li></ol>'); ?></span>
+									<input type="text" name="NEW_HEADER_TITLE" value="<?php echo $HEADER_TITLE; ?>">
+								</div>
+								<div class="cell">
+									<label>
+										<?php echo KT_I18N::translate('Summary page description'); ?>
+									</label>
+									<span class="help-text"><?php echo KT_I18N::translate('This is a sub-heading that will display below the <b>Summary Page title</b>, above the tabbed list of pages. It can contain HTML elements including an image if you wish. Simply ensure there is no content if you do not want to display it.'); ?></span>
+									<textarea name="NEW_HEADER_DESCRIPTION" class="html-edit" rows="5"><?php echo $HEADER_DESCRIPTION; ?></textarea>
+								</div>
 								<button class="button" type="submit">
 									<i class="<?php echo $iconStyle; ?> fa-save"></i>
-									<?php echo KT_I18N::translate('Show'); ?>
+									<?php echo KT_I18N::translate('Save'); ?>
 								</button>
-							</div>
+							</form>
 						</div>
-					</form>
-					<a class="button" href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit">
-						<i class="<?php echo $iconStyle; ?> fa-file-word"></i>
-						&nbsp;
-						<?php echo KT_I18N::translate('Add page'); ?>
-					</a>
-					<hr>
-					<!-- List all pages for selected family tree-->
-					<form class="grid-x" method="post" name="configform" action="module.php?mod=<?php echo$this->getName(); ?>&mod_action=admin_config#pages_pages">
-						<input type="hidden" name="action" value="updatePagesList">
-						<table id="pages_module">
-							<thead>
-								<tr>
-									<th colspan="2"><?php echo KT_I18N::translate('Family tree'); ?></th>
-									<th><?php echo KT_I18N::translate('Page title'); ?></th>
-									<th><?php echo KT_I18N::translate('Order'); ?></th>
-									<th class="text-center"><?php echo KT_I18N::translate('Edit'); ?></th>
-									<th class="text-center"><?php echo KT_I18N::translate('Delete'); ?></th>
-								</tr>
-							</thead>
-							<tbody>
-								<?php
-								if ($items) {
-									$trees = KT_Tree::getAll();
-									foreach ($items as $item) { ?>
-										<tr class="sortme">
-											<td>
-												<i class="<?php echo $iconStyle; ?> fa-bars"></i>
-											</td>
-											<td>
-												<?php if ($item->gedcom_id == null) {
-													echo KT_I18N::translate('All');
-												} else {
-													echo $trees[$item->gedcom_id]->tree_title_html;
-												} ?>
-											</td>
-											<td>
-												<span><?php echo KT_I18N::translate($item->pages_title); ?></span>
-											</td>
-											<td>
-												<input type="number" size="3" value="<?php echo $item->block_order; ?>" name="order-<?php echo $item->block_id; ?>">
-											</td>
-											<td class="text-center">
-												<!--edit--><a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit&amp;block_id=<?php echo $item->block_id; ?>"><i class="<?php echo $iconStyle; ?> fa-edit"></i></a>
-											</td>
-											<td class="text-center">
-												<!--delete--><a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_delete&amp;block_id=<?php echo $item->block_id; ?>" onclick="return confirm(\'<?php echo KT_I18N::translate('Are you sure you want to delete this page?'); ?>\');"><i class="<?php echo $iconStyle; ?> fa-trash-alt"></i></a>
-											</td>
+						<div id="pages_pages" class="tabs-panel">
+							<form class="grid-x" method="post" action="module.php?mod=<?php echo$this->getName(); ?>&mod_action=admin_config">
+								<input type="hidden" name="action" value="updatePagesList">
+								<div class="cell medium-6">
+									<div class="input-group">
+										<span class="input-group-label"><?php echo KT_I18N::translate('Family tree'); ?></span>
+										<?php echo select_edit_control('ged', KT_Tree::getNameList(), null, KT_GEDCOM, 'class="input-group-field"'); ?>
+										<div class="input-group-button">
+											<button class="button" type="submit">
+												<i class="<?php echo $iconStyle; ?> fa-save"></i>
+												<?php echo KT_I18N::translate('Show'); ?>
+											</button>
+										</div>
+									</div>
+								</div>
+							</form>
+							<a class="button" href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit">
+								<i class="<?php echo $iconStyle; ?> fa-file-word"></i>
+								&nbsp;
+								<?php echo KT_I18N::translate('Add page'); ?>
+							</a>
+							<hr>
+							<!-- List all pages for selected family tree-->
+							<form class="grid-x" method="post" action="module.php?mod=<?php echo$this->getName(); ?>&mod_action=admin_config#pages_pages">
+								<input type="hidden" name="action" value="updatePagesList">
+								<table id="pages_module">
+									<thead>
+										<tr>
+											<th colspan="2"><?php echo KT_I18N::translate('Family tree'); ?></th>
+											<th><?php echo KT_I18N::translate('Page title'); ?></th>
+											<th><?php echo KT_I18N::translate('Order'); ?></th>
+											<th class="text-center"><?php echo KT_I18N::translate('Edit'); ?></th>
+											<th class="text-center"><?php echo KT_I18N::translate('Delete'); ?></th>
 										</tr>
-									<?php }
-								} else { ?>
-									<tr>
-										<td class="error center" colspan="5">
-											<?php echo KT_I18N::translate('No pages have been created'); ?>
-										</td>
-									</tr>
-								<?php } ?>
-							</tbody>
-						</table>
-						<button class="button" type="submit">
-							<i class="<?php echo $iconStyle; ?> fa-save"></i>
-							<?php echo KT_I18N::translate('Save'); ?>
-						</button>
-					</form>
+									</thead>
+									<tbody>
+										<?php
+										if ($items) {
+											$trees = KT_Tree::getAll();
+											foreach ($items as $item) { ?>
+												<tr class="sortme">
+													<td>
+														<i class="<?php echo $iconStyle; ?> fa-bars"></i>
+													</td>
+													<td>
+														<?php if ($item->gedcom_id == null) {
+															echo KT_I18N::translate('All');
+														} else {
+															echo $trees[$item->gedcom_id]->tree_title_html;
+														} ?>
+													</td>
+													<td>
+														<span><?php echo KT_I18N::translate($item->pages_title); ?></span>
+													</td>
+													<td>
+														<input type="number" size="3" value="<?php echo $item->block_order; ?>" name="order-<?php echo $item->block_id; ?>">
+													</td>
+													<td class="text-center">
+														<!--edit--><a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit&amp;block_id=<?php echo $item->block_id; ?>"><i class="<?php echo $iconStyle; ?> fa-edit"></i></a>
+													</td>
+													<td class="text-center">
+														<!--delete--><a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_delete&amp;block_id=<?php echo $item->block_id; ?>" onclick="return confirm('<?php echo KT_I18N::translate('Are you sure you want to delete this page?'); ?>');"><i class="<?php echo $iconStyle; ?> fa-trash-alt"></i></a>
+													</td>
+												</tr>
+											<?php }
+										} else { ?>
+											<tr>
+												<td class="error center" colspan="5">
+													<?php echo KT_I18N::translate('No pages have been created'); ?>
+												</td>
+											</tr>
+										<?php } ?>
+									</tbody>
+								</table>
+								<button class="button" type="submit">
+									<i class="<?php echo $iconStyle; ?> fa-save"></i>
+									<?php echo KT_I18N::translate('Save'); ?>
+								</button>
+							</form>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -416,72 +422,78 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 				?>
 
 				<div id="<?php echo $this->getName(); ?>" class="cell">
-					<form class="grid-x" name="pages" method="post" action="#">
-						<h4><?php echo KT_I18N::translate('Module - Pages - Add / edit page'); ?></h4>
-						<input type="hidden" name="save" value="1">
-						<input type="hidden" name="block_id" value="<?php echo $block_id; ?>">
+					<div class="grid-x grid-margin-x grid-margin-y">
 						<div class="cell">
-							<label class="h5">
-								<?php echo KT_I18N::translate('Title'); ?>
-							</label>
-							<input type="text" name="pages_title" size="90" tabindex="1" value="<?php echo htmlspecialchars($items_title); ?>">
+							<h4><?php echo KT_I18N::translate('Module - Pages - Add / edit page'); ?></h4>
+							<form id="pagesform1" method="post">
+								<input type="hidden" name="save" value="1">
+								<input type="hidden" name="block_id" value="<?php echo $block_id; ?>">
+								<div class="grid-x grid-margin-x">
+									<div class="cell">
+										<label class="h5">
+											<?php echo KT_I18N::translate('Title'); ?>
+										</label>
+										<input type="text" name="pages_title" size="90" value="<?php echo htmlspecialchars($items_title); ?>">
+									</div>
+									<div class="cell">
+										<label class="h5">
+											<?php echo KT_I18N::translate('Content'); ?>
+										</label>
+										<textarea name="pages_content" class="html-edit" rows="10" cols="90"><?php echo htmlspecialchars($items_content); ?></textarea>
+									</div>
+									<div class="cell medium-4">
+										<label class="h5">
+											<?php echo KT_I18N::translate('Access level'); ?>
+										</label>
+										<?php echo edit_field_access_level('pages_access', $items_access); ?>
+									</div>
+									<div class="cell medium-4">
+										<label class="h5">
+											<?php echo KT_I18N::translate('Page position'); ?>
+										</label>
+										<input type="number" name="block_order" size="3" value="<?php echo $block_order; ?>">
+										<span class="help-text">
+											<?php echo KT_I18N::translate('This field controls the order in which the pages are displayed.') . '<br>' . KT_I18N::translate('You do not have to enter the numbers sequentially. If you leave holes in the numbering scheme, you can insert other pages later. For example, if you use the numbers 1, 6, 11, 16, you can later insert pages with the missing sequence numbers. Negative numbers and zero are allowed, and can be used to insert pages in front of the first one.') . '<br>' . KT_I18N::translate('When more than one page has the same position number, only one of these pages will be visible.'); ?>
+										</span>
+									</div>
+									<div class="cell medium-4">
+										<label class="h5">
+											<?php echo KT_I18N::translate('Page visibility'), help_link('pages_visibility', $this->getName()); ?>
+										</label>
+										<?php echo select_edit_control('gedcom_id', KT_Tree::getIdList(), '', $gedcom_id); ?>
+										<span class="help-text">
+											<?php echo KT_I18N::translate('You can determine whether this page will be visible regardless of family tree, or whether it will be visible only to the current family tree.').
+											'<br><ul><li><b>' . KT_I18N::translate('All') . '</b>&nbsp;&nbsp;&nbsp;' . KT_I18N::translate('The page will always appear, regardless of family tree.') . '</li><li><b>' . get_gedcom_setting(KT_GED_ID, 'title') . '</b>&nbsp;&nbsp;&nbsp;' . KT_I18N::translate('The pages will appear only in the currently active family trees\'s pages.') . '</li></ul>'; ?>
+										</span>
+									</div>
+									<div class="cell">
+										<label class="h5">
+											<?php echo KT_I18N::translate('Show this pages for which languages?'); ?>
+										</label>
+										<span class="help-text">
+											<?php echo KT_I18N::translate('Either leave all languages un-ticked to display the page contents in every language, or tick the specific languages you want to display it for.<br>To create translated pages for different languages create multiple copies setting the appropriate language only for each version.'); ?>
+										</span>
+										<?php echo $languages = get_block_setting($block_id, 'languages');
+										echo edit_language_checkboxes('lang_', $languages); ?>
+									</div>
+								</div>
+								<button class="button" type="submit">
+									<i class="<?php echo $iconStyle; ?> fa-save"></i>
+									<?php echo KT_I18N::translate('Save'); ?>
+								</button>
+								<button class="button secondary" type="submit" onclick="window.location='<?php echo $this->getConfigLink(); ?>';">
+									<i class="<?php echo $iconStyle; ?> fa-times"></i>
+									<?php echo KT_I18N::translate('Cancel'); ?>
+								</button>
+							</form>
 						</div>
-						<div class="cell">
-							<label class="h5">
-								<?php echo KT_I18N::translate('Content'); ?>
-							</label>
-							<textarea name="pages_content" class="html-edit" rows="10" cols="90" tabindex="2"><?php echo htmlspecialchars($items_content); ?></textarea>
-						</div>
-						<div class="cell medium-4">
-							<label class="h5">
-								<?php echo KT_I18N::translate('Access level'); ?>
-							</label>
-							<?php echo edit_field_access_level('pages_access', $items_access, 'tabindex="3"'); ?>
-						</div>
-						<div class="cell medium-4">
-							<label class="h5">
-								<?php echo KT_I18N::translate('Page position'); ?>
-							</label>
-							<input type="number" name="block_order" size="3" tabindex="4" value="<?php echo $block_order; ?>">
-							<span class="help-text">
-								<?php echo KT_I18N::translate('This field controls the order in which the pages are displayed.') . '<br>' . KT_I18N::translate('You do not have to enter the numbers sequentially. If you leave holes in the numbering scheme, you can insert other pages later. For example, if you use the numbers 1, 6, 11, 16, you can later insert pages with the missing sequence numbers. Negative numbers and zero are allowed, and can be used to insert pages in front of the first one.') . '<br>' . KT_I18N::translate('When more than one page has the same position number, only one of these pages will be visible.'); ?>
-							</span>
-						</div>
-						<div class="cell medium-4">
-							<label class="h5">
-								<?php echo KT_I18N::translate('Page visibility'), help_link('pages_visibility', $this->getName()); ?>
-							</label>
-							<?php echo select_edit_control('gedcom_id', KT_Tree::getIdList(), '', $gedcom_id, 'tabindex="5"'); ?>
-							<span class="help-text">
-								<?php echo KT_I18N::translate('You can determine whether this page will be visible regardless of family tree, or whether it will be visible only to the current family tree.').
-								'<br><ul><li><b>' . KT_I18N::translate('All') . '</b>&nbsp;&nbsp;&nbsp;' . KT_I18N::translate('The page will always appear, regardless of family tree.') . '</li><li><b>' . get_gedcom_setting(KT_GED_ID, 'title') . '</b>&nbsp;&nbsp;&nbsp;' . KT_I18N::translate('The pages will appear only in the currently active family trees\'s pages.') . '</li></ul>'; ?>
-							</span>
-						</div>
-						<div class="cell">
-							<label class="h5">
-								<?php echo KT_I18N::translate('Show this pages for which languages?'); ?>
-							</label>
-							<span class="help-text">
-								<?php echo KT_I18N::translate('Either leave all languages un-ticked to display the page contents in every language, or tick the specific languages you want to display it for.<br>To create translated pages for different languages create multiple copies setting the appropriate language only for each version.'); ?>
-							</span>
-							<?php echo $languages = get_block_setting($block_id, 'languages');
-							echo edit_language_checkboxes('lang_', $languages); ?>
-						</div>
-							<button class="button" type="submit">
-								<i class="<?php echo $iconStyle; ?> fa-save"></i>
-								<?php echo KT_I18N::translate('Save'); ?>
-							</button>
-							<button class="button secondary" type="submit" onclick="window.location='<?php echo $this->getConfigLink(); ?>';">
-								<i class="<?php echo $iconStyle; ?> fa-times"></i>
-								<?php echo KT_I18N::translate('Cancel'); ?>
-							</button>
-					</form>
+					</div>
 				</div>
 				<?php
 				exit;
 			}
 		} else {
-			header('Location: ' . KT_SERVER_NAME.KT_SCRIPT_PATH);
+			header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH);
 		}
 	}
 

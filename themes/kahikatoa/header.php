@@ -83,7 +83,7 @@
 		<?php } ?>
 	</head>
 	<body>
-		<?php if ($view!='simple') { ?>
+		<?php if ($view !='simple') { ?>
 			<?php if ($show_widgetbar) { ?>
 				<div class="widget-bar off-canvas position-left" id="widgetBar" data-off-canvas>
 					<?php include_once 'widget-bar.php'; ?>

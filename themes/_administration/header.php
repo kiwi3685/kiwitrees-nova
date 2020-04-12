@@ -130,7 +130,13 @@ $this
 		<link rel="stylesheet" href="<?php echo KT_THEME_URL; ?>css/administration.min.css">
 		<?php echo $javascript; ?>
 	</head>
-	<body>
+	<?php if ($view != 'simple') { ?>
+		<body id="body">
+	<?php } else { ?>
+		<body id="body_simple">
+	<?php }
+
+	if ($view != 'simple') { ?>
 		<nav id="admin-head" class="grid-x">
 			<div class="top-bar first-top-bar">
 				<div class="top-bar-left">
@@ -195,6 +201,7 @@ $this
 				<div>
 			</div>
 		</nav> <!--  close admin_head -->
+	<?php } ?>
 		<div id="admin-container" class="grid-x"> <!--  closed in footer.php -->
 			<!-- normal menu -->
 			<ul id="admin-menu" class="cell large-2 menu vertical accordion-menu" data-accordion-menu data-multi-open="false" style="visibility: hidden;">

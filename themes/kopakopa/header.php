@@ -84,7 +84,7 @@
 		<?php } ?>
 	</head>
 	<body>
-		<?php if ($view!='simple') { ?>
+		<?php if ($view !='simple') { ?>
 			<nav class="grid-x">
 				<div class="top-bar stack-for-small">
 					<div class="top-bar-left">
