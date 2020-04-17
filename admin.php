@@ -1813,6 +1813,7 @@ function old_paths() {
 		// Removed in kiwitrees 3.3.8
 		KT_ROOT . '/modules_v4/gallery/galleria/galleria-1.5.7.min.js',
 		KT_ROOT . '/modules_v4/gallery/galleria/plugins/picasa', // no longer supported
+		KT_ROOT . 'modules_v4/research_links/plugins/rijnlandsmiddensa.php', // archive replaced
 
 		// *********************************************
 		// Removed in kiwitrees-nova 1.0.0
