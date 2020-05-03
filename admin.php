@@ -36,6 +36,11 @@ $controller
 //Check for updates
 $latest_version = fetch_latest_version();
 
+//$aaData = KT_DB::prepare($SELECT1.$WHERE.$ORDER_BY.$LIMIT)->execute($args)->fetchAll(PDO::FETCH_NUM);
+//$version = $pdo->query('select version()')->fetchColumn();
+$version = KT_DB::prepare("select version()")->fetchColumn();
+
+
 $stats = new KT_Stats(KT_GEDCOM);
 	$totusers	= 0;       // Total number of users
 	$warnusers	= 0;       // Users with warning
@@ -142,63 +147,15 @@ $changes = KT_DB::prepare(
 
 
 <div id="admin" class="cell">
-	<?php // Latest version info
-	if (KT_USER_IS_ADMIN) {
-		if ($latest_version) {
-			if (version_compare(KT_VERSION, $latest_version) < 0) { ?>
-				<div class="callout alert">
-					<h5><?php echo KT_KIWITREES . ' ' . KT_VERSION; ?></h5>
-					<p>
-						<?php echo /* I18N: %s is a URL/link to the project website */ KT_I18N::translate('Version %s of kiwitrees is now available at %s.', $latest_version, ' <a class="current" href="' . KT_KIWITREES_URL . '/services/downloads/">kiwitrees.net downloads</a>'); ?>
-					</p>
-				</div>
-			<?php } else { ?>
-				<div class="callout success">
-					<h5><?php echo KT_KIWITREES, ' ', KT_VERSION; ?></h5>
-					<p>
-						<?php echo /* I18N: %s is a URL/link to the project website */ KT_I18N::translate('Your version of kiwitrees is the latest available.'); ?>
-					</p>
-				</div>
-			<?php }
-		} else { ?>
-			<div class="callout secondary">
-				<h5><?php echo KT_KIWITREES, ' ', KT_VERSION; ?></h5>
-				<p>
-					<?php echo /* I18N: %s is a URL/link to the project website */ KT_I18N::translate('No upgrade information is available.'); ?>
-				</p>
-			</div>
-		<?php }
-
-		// PHP version info ?>
-		<div class="callout success">
-			<h5><?php echo KT_I18N::translate('You are using PHP version %s.', phpversion()); ?></h5>
-			<?php if (version_compare(phpversion(), '7.4', '<')) {
-				if (version_compare(phpversion(), '5.6', '<')) { ?>
-					<p>
-						<?php echo  KT_I18N::translate('Kiwitrees is no longer compatible with versions of PHP older than 7.0'); ?>
-					</p>
-				<?php } else { ?>
-					<p>
-						<?php echo  KT_I18N::translate('Kiwitrees is compatible with this version.'); ?>
-					</p>
-				<?php }
-			} else { ?>
-				<p>
-					<?php echo  KT_I18N::translate('Kiwitrees is not yet tested for compatibility with your version of PHP. It might work, but if you find any issues please report them on the <a class="current" href="%s" target="_blank">kiwitrees support forum</a>', KT_SUPPORT_URL); ?>
-				</p>
-			<?php } ?>
-		</div>
-
-	<?php } ?>
-
-	<div class="callout secondary">
-		<p><?php echo KT_I18N::translate('These pages provide access to all the configuration settings and management tools for this kiwitrees site.'); ?></p>
-		<p><?php echo /* I18N: %s is a URL/link to the project website */ KT_I18N::translate('Support is available at %s.', ' <a class="current" href="' . KT_KIWITREES_URL . '/forums/">kiwitrees.net forums</a>'); ?></p>
-	</div>
+	<h4><?php echo KT_I18N::translate('Dashboard'); ?></h4>
+	<h6 class="subheader">
+		<?php echo KT_I18N::translate('These pages provide access to all the configuration settings and management tools for this kiwitrees site.'); ?><br>
+		<?php echo /* I18N: %s is a URL/link to the project website */ KT_I18N::translate('Support is available at %s.', ' <a class="current" href="' . KT_KIWITREES_URL . '/forums/">kiwitrees.net forums</a>'); ?>
+	</h6>
 	<?php // Server warnings
 	if ($server_warnings): ?>
 		<div class="callout warning">
-			<h3 class=""><?php echo KT_I18N::translate('Server information'); ?></h2>
+			<h5 class=""><?php echo KT_I18N::translate('Server information'); ?></h5>
 			<?php foreach ($server_warnings as $server_warning): ?>
 				<?php echo $server_warning; ?>
 			<?php endforeach; ?>
@@ -217,7 +174,7 @@ $changes = KT_DB::prepare(
 	}
 	if (KT_USER_IS_ADMIN && $old_files_found) { ?>
 		<div class="callout warning">
-			<h3><?php echo KT_I18N::translate('Old files found'); ?></h3>
+			<h5><?php echo KT_I18N::translate('Old files found'); ?></h5>
 			<p>
 				<?php echo KT_I18N::translate('Files have been found from a previous version of kiwitrees.  Old files can sometimes be a security risk.  You should delete them.'); ?>
 			</p>
@@ -235,6 +192,72 @@ $changes = KT_DB::prepare(
 <div class="cell">
 	<div class="grid-x grid-margin-x">
 		<div class="cell accordion" data-accordion data-allow-all-closed="true" data-multi-open="false" data-slide-speed="500">
+			<div class="accordion-item is-active" data-accordion-item>
+				<a href="#" class="accordion-title">
+					<span><?php echo KT_I18N::translate('System status'); ?></span>
+				</a>
+				<div class="accordion-content" data-tab-content>
+					<div  id="system-status" class="grid-x grid-margin-x grid-margin-y">
+						<div class="cell medium-2 large-1">
+							<label class="h6"><?php echo KT_I18N::translate('Website'); ?></label>
+						</div>
+						<div class="cell medium-10 large-11">
+							<p><?php echo KT_I18N::translate('URL'); ?>: <span><?php echo KT_SERVER_NAME; ?></span></p>
+						</div>
+						<div class="cell medium-2 large-1">
+							<label class="h6"><?php echo KT_I18N::translate('Server'); ?></label>
+						</div>
+						<div class="cell medium-10 large-11">
+							<p><?php echo KT_I18N::translate('Server'); ?>: <span><?php echo $_SERVER["SERVER_SOFTWARE"]; ?></span></p>
+							<p><?php echo KT_I18N::translate('Operating System'); ?>: <span><?php echo PHP_OS; ?></span><p>
+							<p><?php echo KT_I18N::translate('Hostname'); ?>: <span><?php echo $_SERVER['SERVER_NAME']; ?></span><p>
+							<p><?php echo KT_I18N::translate('IP and Port'); ?>: <span><?php echo $_SERVER['SERVER_ADDR'] . ' (' . $_SERVER['SERVER_PORT']; ?>)</span><p>
+						</div>
+						<div class="cell medium-2 large-1">
+							<label class="h6"><?php echo KT_I18N::translate('Software'); ?></label>
+						</div>
+						<div class="cell medium-10 large-11">
+							<p><?php echo KT_I18N::translate('PHP Version'); ?>: <span><?php echo phpversion(); ?></span></p>
+							<p><?php echo KT_I18N::translate('SQL Version'); ?>: <span><?php echo $version; ?></span></p>
+							<p><?php echo KT_I18N::translate('Kiwitrees-nova'); ?>: <span><?php echo KT_VERSION; ?></span></p>
+						</div>
+						<?php // Kiwitrees version check
+						if (KT_USER_IS_ADMIN) {
+							if ($latest_version) {
+								if (version_compare(KT_VERSION, $latest_version) < 0) { ?>
+									<div class="callout large-4 alert">
+										<?php echo /* I18N: %s is a URL/link to the project website */ KT_I18N::translate('Version %s of kiwitrees is now available at %s.', $latest_version, ' <a class="current" href="' . KT_KIWITREES_URL . '/services/downloads/">kiwitrees.net downloads</a>'); ?>
+									</div>
+								<?php } else { ?>
+									<div class="callout large-4 success">
+										<?php echo /* I18N: %s is a URL/link to the project website */ KT_I18N::translate('Your version of kiwitrees is the latest available.'); ?>
+									</div>
+								<?php }
+							} else { ?>
+								<div class="callout large-4 warning">
+									<?php echo /* I18N: %s is a URL/link to the project website */ KT_I18N::translate('No kiwitrees upgrade information is available.'); ?>
+								</div>
+							<?php }
+							// PHP version check
+							if (version_compare(phpversion(), '7.4', '<')) {
+								if (version_compare(phpversion(), '5.6', '<')) { ?>
+									<div class="callout large-4 alert">
+										<?php echo  KT_I18N::translate('Kiwitrees is no longer compatible with versions of PHP older than 7.0'); ?>
+									</div>
+								<?php } else { ?>
+									<div class="callout large-4 success">
+										<?php echo  KT_I18N::translate('Kiwitrees is compatible with this version of PHP.'); ?>
+									</div>
+								<?php }
+							} else { ?>
+								<div class="callout large-4 warning">
+									<?php echo  KT_I18N::translate('Kiwitrees is not yet tested for compatibility with your version of PHP. It might work, but if you find any issues please report them on the <a class="current" href="%s" target="_blank">kiwitrees support forum</a>', KT_SUPPORT_URL); ?>
+								</div>
+							<?php }
+						} ?>
+					</div>
+				</div>
+			</div>
 			<div class="accordion-item" data-accordion-item>
 				<a href="#" class="accordion-title">
 					<span><?php echo KT_I18N::translate('Users'); ?></span>

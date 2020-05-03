@@ -5379,7 +5379,7 @@ table.hover:not(.unstriped) tr:nth-of-type(even):hover {
   outline: 0;
 }
 .tabs-title > a:hover {
-  background: #fefefe;
+  background: #e6e6e6;
   color: #2d5986;
 }
 .tabs-title > a:focus, .tabs-title > a[aria-selected=true] {
@@ -10988,6 +10988,13 @@ div[id$=-page] {
   color: #5da423;
 }
 
+.hidden {
+  display: none;
+}
+.hidden.shown {
+  display: block;
+}
+
 /* Sticky footer settings */
 body {
   display: -webkit-box;
@@ -11163,6 +11170,7 @@ body #admin-container {
   font-weight: 900;
 }
 #admin-container #admin-content {
+  /* Dashboard */
   /* Media upload */
   /* TREE configform */
   /* CUSTOM LANG */
@@ -11174,10 +11182,30 @@ body #admin-container {
   /* TREE CHANGES LOG */
   /* SANITY CHECKS */
   /* ADD UNLINKED */
+  /* RESEARCH LINKS */
   /* USERS */
   /* CLEAN UP TABLE */
   /* MODULE PAGES */
   /* PAGES MODULE */
+}
+#admin-container #admin-content #system-status div {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+#admin-container #admin-content #system-status div label.h6,
+#admin-container #admin-content #system-status div p {
+  font-weight: 700;
+  padding: 0;
+}
+#admin-container #admin-content #system-status div p {
+  font-size: 92%;
+  margin: 0;
+}
+#admin-container #admin-content #system-status div p span {
+  font-weight: 400;
+}
+#admin-container #admin-content #system-status .callout {
+  padding: 0.275rem 0.9375rem;
 }
 #admin-container #admin-content .listStyleNone {
   list-style: none;
@@ -11366,6 +11394,12 @@ body #admin-container {
 }
 #admin-container #admin-content #family_tree_config #media .padding-left {
   margin-left: -0.1rem;
+}
+#admin-container #admin-content #family_tree_config ul.accordion {
+  margin: 1rem;
+}
+#admin-container #admin-content #family_tree_config button.privacyOptions {
+  margin: 1rem 0;
 }
 #admin-container #admin-content #custom_language-page .card .card-section {
   padding-top: 0.5rem;
@@ -11556,8 +11590,16 @@ body #admin-container {
   margin: 1rem;
   text-align: left;
 }
-#admin-container #admin-content #unlinked-records-page #unlinked {
-  border: 0.125rem solid #cacaca;
+#admin-container #admin-content #unlinked-records-page #edit_interface-page {
+  background-color: #f7f4d5;
+}
+#admin-container #admin-content #research-links-page button {
+  margin: 1rem;
+  text-align: left;
+}
+#admin-container #admin-content #research-links-page h6,
+#admin-container #admin-content #research-links-page .h6 {
+  font-weight: 600;
 }
 #admin-container #admin-content table#clean {
   width: auto;
@@ -11597,6 +11639,18 @@ body #admin-container {
   width: 2rem;
 }
 #admin-container #admin-content #pages_pages td:nth-child(4), #admin-container #admin-content #pages_pages td:nth-child(5), #admin-container #admin-content #pages_pages td:nth-child(6) {
+  width: 6rem;
+}
+#admin-container #admin-content #tabi_stories input {
+  margin: 0;
+}
+#admin-container #admin-content #tabi_stories td {
+  padding: 0.25rem;
+}
+#admin-container #admin-content #tabi_stories td:nth-child(1) {
+  width: 2rem;
+}
+#admin-container #admin-content #tabi_stories td:nth-child(4), #admin-container #admin-content #tabi_stories td:nth-child(5), #admin-container #admin-content #tabi_stories td:nth-child(6), #admin-container #admin-content #tabi_stories td:nth-child(7) {
   width: 6rem;
 }
 
