@@ -102,7 +102,7 @@ class tabi_cousins_KT_Module extends KT_Module implements KT_Module_IndiTab {
 						<div class="cell medium-2">
 							<form name="cousinsForm" id="cousinsForm" method="post" action="">
 								<input type="hidden" name="cousins" value="<?php echo $cousins == 'second' ? 'first' : 'second'; ?>">
-								<button class="button" type="submit">
+								<button class="button clear" type="submit">
 									<i class="<?php echo $iconStyle; ?> fa-eye"></i>
 									<?php echo $cousins == 'second' ? KT_I18N::translate('Show first cousins') : KT_I18N::translate('Show second cousins'); ?>
 								</button>
