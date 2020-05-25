@@ -4,6 +4,7 @@
 *.ged
 *.sass-cache
 *.yml
+.php_cs
 npm-debug.log
 /node_modules
 package.json
