@@ -89,7 +89,7 @@ if ($controller->record && $controller->record->canDisplayDetails()) {
 	</div>
 	<?php exit;
 } else {
-    header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
+    header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found');
     $controller->pageHeader(); ?>
 	<div class="callout alert">
 		<?php echo KT_I18N::translate('This individual does not exist or you do not have permission to view it.'); ?>
@@ -203,9 +203,7 @@ if ($highlightImage) {
 							</div>
 							<?php if (
                                 // Relationship to default individual
-                                array_key_exists('chart_relationship', KT_Module::getActiveModules()) &&
-                                    KT_USER_ID &&
-                                    get_gedcom_setting(KT_GED_ID, 'TAB_REL_TO_DEFAULT_INDI') > 0
+                                array_key_exists('chart_relationship', KT_Module::getActiveModules()) && KT_USER_ID && get_gedcom_setting(KT_GED_ID, 'TAB_REL_TO_DEFAULT_INDI') > 0
                                 ) { ?>
 									<div class="cell medium-12 text-right indi_rela"><?php echo printIndiRelationship(); ?></div>
 							<?php } ?>
