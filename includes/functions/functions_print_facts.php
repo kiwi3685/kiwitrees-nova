@@ -576,7 +576,7 @@ function print_timeline(KT_Event $fact, KT_GedcomRecord $record) {
 	<div class="cell indiFact <?php echo $styleadd; ?>">
 		<div class="grid-x">
 			<div class="cell <?php echo (KT_USER_CAN_EDIT ? 'small-10 medium-11' : 'auto'); ?>">
-				<div class="grid-x grid-padding-x">
+				<div class="grid-x">
 					<!-- Date -->
 					<div class="cell small-10 medium-2 small-order-3 medium-order-1 date">
 						<?php // Print the date of this fact/event
@@ -590,7 +590,7 @@ function print_timeline(KT_Event $fact, KT_GedcomRecord $record) {
 						echo  '<span class="h6">' . $label . '</span>'; ?>
 					</div>
 					<!-- Place -->
-					<div class="cell small-10 medium-2 small-order-4 medium-order-3 place">
+					<div class="cell small-10 medium-3 small-order-4 medium-order-3 place">
 						<!-- Print the place of this fact/event -->
 						<div class="place">
 							<?php echo format_fact_place($fact, true, true, true); ?>
