@@ -1035,19 +1035,15 @@ function print_media_links($factrec, $level, $pid='') {
 	else $size=25;
 	if (preg_match_all("/$level OBJE @(.*)@/", $factrec, $omatch, PREG_SET_ORDER) == 0) return;
 	$objectNum = 0;
-	$mediaWidth = 'auto';
-	if (count($omatch) > 1) {
-		$mediaWidth = 90 / min(count($omatch), 4) . '%';
-	}
+	count($omatch) < 2 ? $imageClass = ' single' : $imageClass = '';
 
 	while ($objectNum < count($omatch)) {
 		$media_id = $omatch[$objectNum][1];
 		$media=KT_Media::getInstance($media_id);
 		if ($media) {
 			if ($media->canDisplayDetails()) {
-				if ($objectNum > 0) echo '<br class="media-separator" style="clear:both;">';
-				echo '<div class="media-display" style=" width: ' . $mediaWidth . ';"">
-					<div class="media-display-image">';
+				echo '<div class="media-display">
+					<div class="media-display-image' . $imageClass . '">';
 						echo $media->displayImage();
 					echo '</div>'; // close div "media-display-image"
 					echo '<div class="media-display-title">';

@@ -550,34 +550,29 @@ function breakConts($newline) {
  * @param string $nrec the gedcom subrecord to search in
  * @return string a string with all CONT or CONC lines merged
  */
-function get_cont($nlevel, $nrec, $tobr = true) {
-	global $WORD_WRAPPED_NOTES;
-	$text = "";
-	if ($tobr) {
-		$newline = "<br>";
-	} else {
-		$newline = "\n";
-	}
+ function get_cont($nlevel, $nrec) {
+ 	global $WORD_WRAPPED_NOTES;
+ 	$text = "";
 
-	$subrecords = explode("\n", $nrec);
-	foreach ($subrecords as $thisSubrecord) {
-		if (substr($thisSubrecord, 0, 2) !== $nlevel . ' ') {
-			continue;
-		}
-		$subrecordType = substr($thisSubrecord, 2, 4);
-		if ($subrecordType == "CONT") {
-			$text .= $newline;
-		}
-		if ($subrecordType == "CONC" && $WORD_WRAPPED_NOTES) {
-			$text .= " ";
-		}
-		if ($subrecordType == "CONT" || $subrecordType == "CONC") {
-			$text .= rtrim(substr($thisSubrecord, 7));
-		}
-	}
+ 	$subrecords = explode("\n", $nrec);
+ 	foreach ($subrecords as $thisSubrecord) {
+ 		if (substr($thisSubrecord, 0, 2) != $nlevel . " ") {
+ 			continue;
+ 		}
+ 		$subrecordType = substr($thisSubrecord, 2, 4);
+ 		if ($subrecordType == "CONT") {
+ 			$text .= "\n";
+ 		}
+ 		if ($subrecordType == "CONC" && $WORD_WRAPPED_NOTES) {
+ 			$text .= " ";
+ 		}
+ 		if ($subrecordType == "CONT" || $subrecordType == "CONC") {
+ 			$text .= rtrim(substr($thisSubrecord, 7));
+ 		}
+ 	}
 
-	return rtrim($text, " ");
-}
+ 	return rtrim($text, " ");
+ }
 
 /**
  * find the parents in a family

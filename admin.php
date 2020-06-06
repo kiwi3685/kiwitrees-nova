@@ -36,11 +36,10 @@ $controller
 //Check for updates
 $latest_version = fetch_latest_version();
 
-//$aaData = KT_DB::prepare($SELECT1.$WHERE.$ORDER_BY.$LIMIT)->execute($args)->fetchAll(PDO::FETCH_NUM);
-//$version = $pdo->query('select version()')->fetchColumn();
+//Check SQL server version
 $version = KT_DB::prepare("select version()")->fetchColumn();
 
-
+// Prepare statistic variables
 $stats = new KT_Stats(KT_GEDCOM);
 	$totusers	= 0;       // Total number of users
 	$warnusers	= 0;       // Users with warning
@@ -221,8 +220,9 @@ $changes = KT_DB::prepare(
 							<p><?php echo KT_I18N::translate('SQL Version'); ?>: <span><?php echo $version; ?></span></p>
 							<p><?php echo KT_I18N::translate('Kiwitrees-nova'); ?>: <span><?php echo KT_VERSION; ?></span></p>
 						</div>
-						<?php // Kiwitrees version check
+						<?php // Alerts
 						if (KT_USER_IS_ADMIN) {
+							// Kiwitrees version check
 							if ($latest_version) {
 								if (version_compare(KT_VERSION, $latest_version) < 0) { ?>
 									<div class="callout large-4 alert">

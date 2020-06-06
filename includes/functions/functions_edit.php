@@ -197,7 +197,7 @@ function radio_switch_group($name, $values, $selected) {
 function checkbox_switch_group($name, $values, $selected) {
 	$html = '<div class="grid-x grid-margin-y">';
 		foreach ($values as $key => $value) {
-			$uniqueID = $name . (int)(microtime(true) * 1000000);
+			$uniqueID = $key . (int)(microtime(true) * 1000000);
 			$html .= '
 				<div class="switch cell small-4 medium-2">
 					<label>' . $value . '</label>
@@ -2900,14 +2900,14 @@ function surnameDescriptions() {
 }
 
 // Keep the existing CHAN record when editing
-function no_update_chan(KT_GedcomRecord $record) {
+function no_update_chan(KT_GedcomRecord $record = null) {
 	global $NO_UPDATE_CHAN;
 	$checked = $NO_UPDATE_CHAN ? ' checked="checked"' : '';
 	if (KT_USER_IS_ADMIN) { ?>
 		<div class="cell last_change">
 			<div class="grid-x">
 				<div class="cell medium-3">
-					<label class="h5">
+					<label>
 						<?php echo KT_Gedcom_Tag::getLabel('CHAN');
 						if ($record) { ?>
 							<h6 class="subheader"><?php echo KT_Gedcom_Tag::getLabelValue('DATE', $record->LastChangeTimestamp()); ?></h6>
@@ -2924,7 +2924,7 @@ function no_update_chan(KT_GedcomRecord $record) {
 					<span class="checkbox-label">
 						<?php echo KT_I18N::translate('Do not update the “last change” record'); ?>
 					</span>
-					<h6 class="subheader show-for-medium">
+					<h6 class="subheader show-for-medium helpcontent">
 						<?php echo KT_I18N::translate('Administrators sometimes need to clean up and correct the data submitted by users.<br>When Administrators make such corrections information about the original change is replaced.<br>When this option is selected kiwitrees will retain the original change information instead of replacing it.'); ?>
 					</h6>
 				</div>

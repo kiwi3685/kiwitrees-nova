@@ -318,7 +318,7 @@ global $iconstyles;
 ?>
 
 <div id="family_tree_config" class="cell">
-	<div class="grid-x grid-margin-y">
+	<div class="grid-x grid-padding-x grid-padding-y">
 		<div class="cell">
 			<?php echo faqLink('administration/family_tree_config'); ?>
 			<h4 class="inline"><?php echo KT_I18N::translate('Family tree configuration'); ?></h4>
@@ -554,11 +554,11 @@ global $iconstyles;
 									</div>
 								</div>
 							</div>
+							<button type="submit" class="button">
+								<i class="<?php echo $iconStyle; ?> fa-save"></i>
+								<?php echo KT_I18N::translate('Save'); ?>
+							</button>
 						</div>
-						<button type="submit" class="button">
-							<i class="<?php echo $iconStyle; ?> fa-save"></i>
-							<?php echo KT_I18N::translate('Save'); ?>
-						</button>
 					</form>
 				</div>
 				<!-- Contact tab -->
@@ -624,15 +624,15 @@ global $iconstyles;
 									<?php echo KT_I18N::translate('The person to be contacted about technical questions or errors encountered on your site.'); ?>
 								</div>
 							</div>
+							<button type="submit" class="button">
+								<i class="<?php echo $iconStyle; ?> fa-save"></i>
+								<?php echo KT_I18N::translate('Save'); ?>
+							</button>
+							<a class="button secondary" href="<?php echo KT_SCRIPT_NAME . '#general'; ?>">
+								<i class="<?php echo $iconStyle; ?> fa-times"></i>
+								<?php echo KT_I18N::translate('Cancel'); ?>
+							</a>
 						</div>
-						<button type="submit" class="button">
-							<i class="<?php echo $iconStyle; ?> fa-save"></i>
-							<?php echo KT_I18N::translate('Save'); ?>
-						</button>
-						<a class="button secondary" href="<?php echo KT_SCRIPT_NAME . '#general'; ?>">
-							<i class="<?php echo $iconStyle; ?> fa-times"></i>
-							<?php echo KT_I18N::translate('Cancel'); ?>
-						</a>
 					</form>
 				</div>
 				<!-- Metadata tab -->
@@ -662,15 +662,15 @@ global $iconstyles;
 									<?php echo KT_I18N::translate('The value to place in the “meta description” tag in the HTML page header. Leave this field empty to use the name of the currently active family tree.'); ?>
 								</div>
 							</div>
+							<button type="submit" class="button">
+								<i class="<?php echo $iconStyle; ?> fa-save"></i>
+								<?php echo KT_I18N::translate('Save'); ?>
+							</button>
+							<a class="button secondary" href="<?php echo KT_SCRIPT_NAME . '#general'; ?>">
+								<i class="<?php echo $iconStyle; ?> fa-times"></i>
+								<?php echo KT_I18N::translate('Cancel'); ?>
+							</a>
 						</div>
-						<button type="submit" class="button">
-							<i class="<?php echo $iconStyle; ?> fa-save"></i>
-							<?php echo KT_I18N::translate('Save'); ?>
-						</button>
-						<a class="button secondary" href="<?php echo KT_SCRIPT_NAME . '#general'; ?>">
-							<i class="<?php echo $iconStyle; ?> fa-times"></i>
-							<?php echo KT_I18N::translate('Cancel'); ?>
-						</a>
 					</form>
 				</div>
 				<!-- Privacy tab -->
@@ -750,7 +750,7 @@ global $iconstyles;
 								</div>
 							</div>
 							<div class="cell">
-								<button type="button" class="button secondary" data-toggle="privacyOptions">
+								<button type="button" class="button secondary privacyOptions" data-toggle="privacyOptions">
 									<?php echo KT_I18N::translate('Show more detailed privacy options'); ?>
 									<i class="<?php echo $iconStyle; ?> fa-eye"></i>
 								</button>
@@ -866,15 +866,15 @@ global $iconstyles;
 									</div>
 								</div>
 							</div>
+							<button type="submit" class="button">
+								<i class="<?php echo $iconStyle; ?> fa-save"></i>
+								<?php echo KT_I18N::translate('Save'); ?>
+							</button>
+							<a class="button secondary" href="<?php echo KT_SCRIPT_NAME . '#general'; ?>">
+								<i class="<?php echo $iconStyle; ?> fa-times"></i>
+								<?php echo KT_I18N::translate('Cancel'); ?>
+							</a>
 						</div>
-						<button type="submit" class="button">
-							<i class="<?php echo $iconStyle; ?> fa-save"></i>
-							<?php echo KT_I18N::translate('Save'); ?>
-						</button>
-						<a class="button secondary" href="<?php echo KT_SCRIPT_NAME . '#general'; ?>">
-							<i class="<?php echo $iconStyle; ?> fa-times"></i>
-							<?php echo KT_I18N::translate('Cancel'); ?>
-						</a>
 					</form>
 				</div>
 				<!-- Media tab -->
@@ -1009,15 +1009,15 @@ global $iconstyles;
 									</div>
 								</div>
 							</div>
+							<button type="submit" class="button">
+								<i class="<?php echo $iconStyle; ?> fa-save"></i>
+								<?php echo KT_I18N::translate('Save'); ?>
+							</button>
+							<a class="button secondary" href="<?php echo KT_SCRIPT_NAME . '#general'; ?>">
+								<i class="<?php echo $iconStyle; ?> fa-times"></i>
+								<?php echo KT_I18N::translate('Cancel'); ?>
+							</a>
 						</div>
-						<button type="submit" class="button">
-							<i class="<?php echo $iconStyle; ?> fa-save"></i>
-							<?php echo KT_I18N::translate('Save'); ?>
-						</button>
-						<a class="button secondary" href="<?php echo KT_SCRIPT_NAME . '#general'; ?>">
-							<i class="<?php echo $iconStyle; ?> fa-times"></i>
-							<?php echo KT_I18N::translate('Cancel'); ?>
-						</a>
 					</form>
 				</div>
 				<!-- Layout tab -->
@@ -1222,15 +1222,15 @@ global $iconstyles;
 									</div>
 								</li>
 							</ul>
+							<button type="submit" class="button">
+								<i class="<?php echo $iconStyle; ?> fa-save"></i>
+								<?php echo KT_I18N::translate('Save'); ?>
+							</button>
+							<a class="button secondary" href="<?php echo KT_SCRIPT_NAME . '#layout'; ?>">
+								<i class="<?php echo $iconStyle; ?> fa-times"></i>
+								<?php echo KT_I18N::translate('Cancel'); ?>
+							</a>
 						</div>
-						<button type="submit" class="button">
-							<i class="<?php echo $iconStyle; ?> fa-save"></i>
-							<?php echo KT_I18N::translate('Save'); ?>
-						</button>
-						<a class="button secondary" href="<?php echo KT_SCRIPT_NAME . '#layout'; ?>">
-							<i class="<?php echo $iconStyle; ?> fa-times"></i>
-							<?php echo KT_I18N::translate('Cancel'); ?>
-						</a>
 					</form>
 				</div>
 				<!-- Hide & Show tab -->
@@ -1379,15 +1379,15 @@ global $iconstyles;
 									</div>
 								</li>
 							</ul>
+							<button type="submit" class="button">
+								<i class="<?php echo $iconStyle; ?> fa-save"></i>
+								<?php echo KT_I18N::translate('Save'); ?>
+							</button>
+							<a class="button secondary" href="<?php echo KT_SCRIPT_NAME . '#hide'; ?>">
+								<i class="<?php echo $iconStyle; ?> fa-times"></i>
+								<?php echo KT_I18N::translate('Cancel'); ?>
+							</a>
 						</div>
-						<button type="submit" class="button">
-							<i class="<?php echo $iconStyle; ?> fa-save"></i>
-							<?php echo KT_I18N::translate('Save'); ?>
-						</button>
-						<a class="button secondary" href="<?php echo KT_SCRIPT_NAME . '#hide'; ?>">
-							<i class="<?php echo $iconStyle; ?> fa-times"></i>
-							<?php echo KT_I18N::translate('Cancel'); ?>
-						</a>
 					</form>
 				</div>
 				<!-- Edit tab -->
@@ -1428,15 +1428,15 @@ global $iconstyles;
 									</div>
 								</li>
 							</ul>
+							<button type="submit" class="button">
+								<i class="<?php echo $iconStyle; ?> fa-save"></i>
+								<?php echo KT_I18N::translate('Save'); ?>
+							</button>
+							<a class="button secondary" href="<?php echo KT_SCRIPT_NAME . '#edit'; ?>">
+								<i class="<?php echo $iconStyle; ?> fa-times"></i>
+								<?php echo KT_I18N::translate('Cancel'); ?>
+							</a>
 						</div>
-						<button type="submit" class="button">
-							<i class="<?php echo $iconStyle; ?> fa-save"></i>
-							<?php echo KT_I18N::translate('Save'); ?>
-						</button>
-						<a class="button secondary" href="<?php echo KT_SCRIPT_NAME . '#edit'; ?>">
-							<i class="<?php echo $iconStyle; ?> fa-times"></i>
-							<?php echo KT_I18N::translate('Cancel'); ?>
-						</a>
 					</form>
 				</div>
 				<!-- Theme tab -->
@@ -1451,7 +1451,7 @@ global $iconstyles;
 							<?php $current_themedir = get_gedcom_setting(KT_GED_ID, 'THEME_DIR');
 							foreach (get_theme_names() as $themename => $themedir) {
 								$selectClass = ($current_themedir == $themedir ? 'current_theme' : ''); ?>
-								<div class="cell card large-3 theme_box <?php echo $selectClass; ?>">
+								<div class="card large-3 theme_box <?php echo $selectClass; ?>">
 									<div class="card-divider">
 										<p class="h5"><?php echo get_theme_display($themename); ?></p>
 										<p class="select text-right">
@@ -1482,15 +1482,16 @@ global $iconstyles;
 								</div>
 
 							<?php } ?>
+							<div class="cell expand"></div>
+							<button type="submit" class="button">
+								<i class="<?php echo $iconStyle; ?> fa-save"></i>
+								<?php echo KT_I18N::translate('Save'); ?>
+							</button>
+							<a class="button secondary" href="<?php echo KT_SCRIPT_NAME . '#theme'; ?>">
+								<i class="<?php echo $iconStyle; ?> fa-times"></i>
+								<?php echo KT_I18N::translate('Cancel'); ?>
+							</a>
 						</div>
-						<button type="submit" class="button">
-							<i class="<?php echo $iconStyle; ?> fa-save"></i>
-							<?php echo KT_I18N::translate('Save'); ?>
-						</button>
-						<a class="button secondary" href="<?php echo KT_SCRIPT_NAME . '#theme'; ?>">
-							<i class="<?php echo $iconStyle; ?> fa-times"></i>
-							<?php echo KT_I18N::translate('Cancel'); ?>
-						</a>
 					</form>
 				</div>
 

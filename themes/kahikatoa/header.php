@@ -75,12 +75,14 @@
 		<?php echo header_links($META_DESCRIPTION, $META_ROBOTS, $META_GENERATOR, $LINK_CANONICAL); ?>
 		<title><?php echo htmlspecialchars($title); ?></title>
 		<link rel="icon" href="<?php echo KT_THEME_URL; ?>images/favicon.png" type="image/png">
-		<link rel="stylesheet" href="<?php echo KT_DATATABLES_CSS; ?>">
-		<link rel="stylesheet" href="<?php echo KT_DATEPICKER_CSS; ?>">
-		<link rel="stylesheet" href="<?php echo KT_THEME_URL; ?>css/kahikatoa.min.css">
-		<?php if (file_exists(KT_THEME_URL . 'mystyle.css')) { ?>
-			<link rel="stylesheet" href="<?php echo KT_THEME_URL; ?>mystyle.css" type="text/css">
-		<?php } ?>
+		<?php if ($view !='simple') { ?>
+			<link rel="stylesheet" href="<?php echo KT_DATATABLES_CSS; ?>">
+			<link rel="stylesheet" href="<?php echo KT_DATEPICKER_CSS; ?>">
+			<link rel="stylesheet" href="<?php echo KT_THEME_URL; ?>css/kahikatoa.min.css">
+			<?php if (file_exists(KT_THEME_URL . 'mystyle.css')) { ?>
+				<link rel="stylesheet" href="<?php echo KT_THEME_URL; ?>mystyle.css" type="text/css">
+			<?php }
+		}?>
 	</head>
 	<body>
 		<?php if ($view !='simple') { ?>

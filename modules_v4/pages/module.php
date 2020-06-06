@@ -228,8 +228,9 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 		<div id="<?php echo $this->getName(); ?>" class="cell">
 			<div class="grid-x grid-margin-x grid-margin-y">
 				<div class="cell">
-					<h4 class="inline"><?php echo KT_I18N::translate('Module - Pages - Configuration'); ?></h4>
-<!--				<a class="current faq_link" href="<?php echo KT_KIWITREES_URL; ?>/faqs/modules-faqs/pages/" target="_blank" rel="noopener noreferrer" title="<?php echo KT_I18N::translate('View FAQ for this page.'); ?>"><?php echo KT_I18N::translate('View FAQ for this page.'); ?><i class="<?php echo $iconStyle; ?> fa-comments"></i></a>-->
+					<h4 class="inline"><?php echo $this->getTitle(); ?></h4>
+<!--					<a class="current faq_link" href="<?php echo KT_KIWITREES_URL; ?>/faqs/modules-faqs/pages/" target="_blank" rel="noopener noreferrer" title="<?php echo KT_I18N::translate('View FAQ for this page.'); ?>"><?php echo KT_I18N::translate('View FAQ for this page.'); ?><i class="<?php echo $iconStyle; ?> fa-comments"></i></a>-->
+					<h5  class="subheader"><?php echo KT_I18N::translate('Configuration'); ?></h5>
 					<ul id="module_pages_tabs" class="tabs" data-responsive-accordion-tabs="tabs small-accordion medium-tabs" data-deep-link="true">
 						<li class="tabs-title is-active">
 							<a href="#pages_summary"><?php echo KT_I18N::translate('Summary'); ?></a>
@@ -256,7 +257,7 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 									<span class="help-text"><?php echo KT_I18N::translate('This is a sub-heading that will display below the <b>Summary Page title</b>, above the tabbed list of pages. It can contain HTML elements including an image if you wish. Simply ensure there is no content if you do not want to display it.'); ?></span>
 									<textarea name="NEW_HEADER_DESCRIPTION" class="html-edit" rows="5"><?php echo $HEADER_DESCRIPTION; ?></textarea>
 								</div>
-								<button class="button" type="submit">
+								<button class="button margin-0" type="submit">
 									<i class="<?php echo $iconStyle; ?> fa-save"></i>
 									<?php echo KT_I18N::translate('Save'); ?>
 								</button>
@@ -278,69 +279,62 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 									</div>
 								</div>
 							</form>
-							<a class="button" href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit">
+							<a class="button margin-0" href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit">
 								<i class="<?php echo $iconStyle; ?> fa-file-word"></i>
 								&nbsp;
 								<?php echo KT_I18N::translate('Add page'); ?>
 							</a>
 							<hr>
-							<!-- List all pages for selected family tree-->
-							<form class="grid-x" method="post" action="module.php?mod=<?php echo$this->getName(); ?>&mod_action=admin_config#pages_pages">
-								<input type="hidden" name="action" value="updatePagesList">
-								<table id="pages_module">
-									<thead>
-										<tr>
-											<th colspan="2"><?php echo KT_I18N::translate('Family tree'); ?></th>
-											<th><?php echo KT_I18N::translate('Page title'); ?></th>
-											<th><?php echo KT_I18N::translate('Order'); ?></th>
-											<th class="text-center"><?php echo KT_I18N::translate('Edit'); ?></th>
-											<th class="text-center"><?php echo KT_I18N::translate('Delete'); ?></th>
-										</tr>
-									</thead>
-									<tbody>
-										<?php
-										if ($items) {
-											$trees = KT_Tree::getAll();
-											foreach ($items as $item) { ?>
-												<tr class="sortme">
-													<td>
-														<i class="<?php echo $iconStyle; ?> fa-bars"></i>
-													</td>
-													<td>
-														<?php if ($item->gedcom_id == null) {
-															echo KT_I18N::translate('All');
-														} else {
-															echo $trees[$item->gedcom_id]->tree_title_html;
-														} ?>
-													</td>
-													<td>
-														<span><?php echo KT_I18N::translate($item->pages_title); ?></span>
-													</td>
-													<td>
-														<input type="number" size="3" value="<?php echo $item->block_order; ?>" name="order-<?php echo $item->block_id; ?>">
-													</td>
-													<td class="text-center">
-														<!--edit--><a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit&amp;block_id=<?php echo $item->block_id; ?>"><i class="<?php echo $iconStyle; ?> fa-edit"></i></a>
-													</td>
-													<td class="text-center">
-														<!--delete--><a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_delete&amp;block_id=<?php echo $item->block_id; ?>" onclick="return confirm('<?php echo KT_I18N::translate('Are you sure you want to delete this page?'); ?>');"><i class="<?php echo $iconStyle; ?> fa-trash-alt"></i></a>
-													</td>
-												</tr>
-											<?php }
-										} else { ?>
+							<?php if ($items) { ?>
+								<!-- List all pages for selected family tree-->
+								<form class="grid-x" method="post" action="module.php?mod=<?php echo$this->getName(); ?>&mod_action=admin_config#pages_pages">
+									<input type="hidden" name="action" value="updatePagesList">
+									<table id="pages_module">
+										<thead>
 											<tr>
-												<td class="error center" colspan="5">
-													<?php echo KT_I18N::translate('No pages have been created'); ?>
-												</td>
+												<th colspan="2"><?php echo KT_I18N::translate('Family tree'); ?></th>
+												<th><?php echo KT_I18N::translate('Page title'); ?></th>
+												<th><?php echo KT_I18N::translate('Order'); ?></th>
+												<th class="text-center"><?php echo KT_I18N::translate('Edit'); ?></th>
+												<th class="text-center"><?php echo KT_I18N::translate('Delete'); ?></th>
 											</tr>
-										<?php } ?>
-									</tbody>
-								</table>
-								<button class="button" type="submit">
-									<i class="<?php echo $iconStyle; ?> fa-save"></i>
-									<?php echo KT_I18N::translate('Save'); ?>
-								</button>
-							</form>
+										</thead>
+										<tbody>
+											<?php $trees = KT_Tree::getAll();
+												foreach ($items as $item) { ?>
+													<tr class="sortme">
+														<td>
+															<i class="<?php echo $iconStyle; ?> fa-bars"></i>
+														</td>
+														<td>
+															<?php if ($item->gedcom_id == null) {
+																echo KT_I18N::translate('All');
+															} else {
+																echo $trees[$item->gedcom_id]->tree_title_html;
+															} ?>
+														</td>
+														<td>
+															<span><?php echo KT_I18N::translate($item->pages_title); ?></span>
+														</td>
+														<td>
+															<input type="number" size="3" value="<?php echo $item->block_order; ?>" name="order-<?php echo $item->block_id; ?>">
+														</td>
+														<td class="text-center">
+															<!--edit--><a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit&amp;block_id=<?php echo $item->block_id; ?>"><i class="<?php echo $iconStyle; ?> fa-edit"></i></a>
+														</td>
+														<td class="text-center">
+															<!--delete--><a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_delete&amp;block_id=<?php echo $item->block_id; ?>" onclick="return confirm('<?php echo KT_I18N::translate('Are you sure you want to delete this page?'); ?>');"><i class="<?php echo $iconStyle; ?> fa-trash-alt"></i></a>
+														</td>
+													</tr>
+												<?php } ?>
+										</tbody>
+									</table>
+									<button class="button margin-0" type="submit">
+										<i class="<?php echo $iconStyle; ?> fa-save"></i>
+										<?php echo KT_I18N::translate('Save'); ?>
+									</button>
+								</form>
+							<?php } ?>
 						</div>
 					</div>
 				</div>
@@ -353,7 +347,7 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 			global $iconStyle;
 			require_once KT_ROOT . 'includes/functions/functions_edit.php';
 
-			if (KT_Filter::postBool('save')) {
+			if (KT_Filter::postBool('save') && KT_Filter::checkCsrf()) {
 				$block_id = KT_Filter::post('block_id');
 				if ($block_id) {
 					KT_DB::prepare(
@@ -424,8 +418,10 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 				<div id="<?php echo $this->getName(); ?>" class="cell">
 					<div class="grid-x grid-margin-x grid-margin-y">
 						<div class="cell">
-							<h4><?php echo KT_I18N::translate('Module - Pages - Add / edit page'); ?></h4>
+							<h4><?php echo $this->getTitle(); ?></h4>
+							<h5  class="subheader"><?php echo KT_I18N::translate('Add / edit'); ?></h5>
 							<form id="pagesform1" method="post">
+								<?php echo KT_Filter::getCsrf(); ?>
 								<input type="hidden" name="save" value="1">
 								<input type="hidden" name="block_id" value="<?php echo $block_id; ?>">
 								<div class="grid-x grid-margin-x">
@@ -476,15 +472,15 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 										<?php echo $languages = get_block_setting($block_id, 'languages');
 										echo edit_language_checkboxes('lang_', $languages); ?>
 									</div>
+									<button class="button" type="submit">
+										<i class="<?php echo $iconStyle; ?> fa-save"></i>
+										<?php echo KT_I18N::translate('Save'); ?>
+									</button>
+									<button class="button secondary" type="submit" onclick="window.location='<?php echo $this->getConfigLink(); ?>';">
+										<i class="<?php echo $iconStyle; ?> fa-times"></i>
+										<?php echo KT_I18N::translate('Cancel'); ?>
+									</button>
 								</div>
-								<button class="button" type="submit">
-									<i class="<?php echo $iconStyle; ?> fa-save"></i>
-									<?php echo KT_I18N::translate('Save'); ?>
-								</button>
-								<button class="button secondary" type="submit" onclick="window.location='<?php echo $this->getConfigLink(); ?>';">
-									<i class="<?php echo $iconStyle; ?> fa-times"></i>
-									<?php echo KT_I18N::translate('Cancel'); ?>
-								</button>
 							</form>
 						</div>
 					</div>

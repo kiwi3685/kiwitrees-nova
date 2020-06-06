@@ -528,13 +528,8 @@ function contact_links($ged_id = KT_GED_ID) {
  */
 function print_note_record($text, $nlevel, $nrec, $textOnly = false) {
 	global $KT_TREE, $EXPAND_NOTES, $iconStyle;
-	if (strpos($text, "\n")) {
-		$returnChar = "\n";
-	} else {
-		$returnChar = "<br>";
-	}
-
 	$element_id	= '';
+	$first_line	= '';
 	$text_cont	= get_cont($nlevel, $nrec);
 	$revealText	= '';
 	$noteType	= '';
@@ -546,7 +541,7 @@ function print_note_record($text, $nlevel, $nrec, $textOnly = false) {
 		$note  = KT_Note::getInstance($match[1], $KT_TREE);
 		$label = 'SHARED_NOTE';
 		// If Census assistant installed, allow it to format the note
-		if (KT_Module::getModuleByName('census_assistant')) {
+		if (array_key_exists('census_assistant', KT_Module::getActiveModules())) {
 			$html = census_assistant_KT_Module::formatCensusNote($note);
 		} else {
 			$html = KT_Filter::formatText($note->getNote());
@@ -554,31 +549,47 @@ function print_note_record($text, $nlevel, $nrec, $textOnly = false) {
 	} else {
 		$element_id = 'N-' . (int)(microtime(true)*1000000);
 		$note		= null;
-		$html		= $text . $text_cont;
 		$label		= 'NOTE';
+		$html		= KT_Filter::formatText($text . $text_cont);
 	}
+
 	if ($textOnly) {
 		return strip_tags($html);
 	}
-	if (strpos($text . $text_cont, $returnChar) === false) {
+
+	if (strpos($text . $text_cont, "\n") === false) {
 		// A one-line note? strip the block-level tags, so it displays inline
 		return KT_Gedcom_Tag::getLabelValue($label, strip_tags($html, '<a><strong><em>'));
-	} elseif ($EXPAND_NOTES) {
-		// A multi-line note, and we're expanding notes by default
-		return KT_Gedcom_Tag::getLabelValue($label, $html);
 	} else {
 		// A multi-line note, with an expand/collapse option
 		if ($note) {
-			$first_line = '<a href="' . $note->getHtmlUrl() . '">' . $note->getFullName() . '</a>';
-			$revealText		= $note->getFullName();
+			if (KT_SCRIPT_NAME === 'note.php') {
+				$first_line = $note->getFullName();
+			} else {
+				$first_line = '<a href="' . $note->getHtmlUrl() . '">' . $note->getFullName() . '</a>';
+				$revealText		= $note->getFullName();
+			}
+
+			// special case required to display title for census shared notes when expanded by default
+			if (preg_match('/<span id="title">.*<\/span>/', $html, $match)) {
+				if (KT_SCRIPT_NAME === 'note.php') {
+					$first_line = $match[0];
+				} else {
+					$first_line = '<a href="' . $note->getHtmlUrl() . '">' . $match[0] . '</a>';
+				}
+				$html = preg_replace('/<span id="title">.*<\/span>/', '', $html);
+			}
+
 		} else {
 			$noteType	= 'standard_expandable';
 			if (strlen($text) > 100) {
 				$first_line = mb_substr($text, 0, 100) . KT_I18N::translate('…');
 			} else {
-				$first_line	= $text;
+				$first_line	= KT_Filter::formatText($text);
+				$html		= KT_Filter::formatText($text_cont);
 			}
 		}
+
 		if (KT_SCRIPT_NAME === 'note.php') {
 			$noteDisplay = '
 				<div class="fact_NOTE">
@@ -597,7 +608,7 @@ function print_note_record($text, $nlevel, $nrec, $textOnly = false) {
 			if ($noteType == 'standard_expandable') {
 				// togle display
 				$noteDisplay = '
-					<div class="fact_NOTE">
+					<div class="fact_NOTE standard_expandable">
 						<span>
 							' . KT_Gedcom_Tag::getLabel($label) . ':
 						</span>
@@ -614,16 +625,14 @@ function print_note_record($text, $nlevel, $nrec, $textOnly = false) {
 			} else {
 				// reveal in modal
 				$noteDisplay = '
-					<div class="fact_NOTE">
+					<div class="fact_NOTE modal">
 						<span>
 							' . KT_Gedcom_Tag::getLabel($label) . ':
 						</span>
-						<span id="' . $element_id . '">
-							<a data-open="' . $element_id . '">
-								' . $revealText . '
-								<i class="' . $iconStyle . ' fa-expand-arrows-alt"></i>
-							</a>
-						</span>
+						<a data-open="' . $element_id . '">
+							' . $revealText . '
+							<i class="' . $iconStyle . ' fa-expand-arrows-alt"></i>
+						</a>
 						<div class="reveal" id="' . $element_id . '" data-reveal>
 							' . $first_line . '<br>' . $html . '
 							<button class="close-button" data-close aria-label="' . KT_I18N::translate('Close') . '" type="button">

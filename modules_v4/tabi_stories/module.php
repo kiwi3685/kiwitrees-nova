@@ -72,8 +72,8 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 			$this->show_list();
 			break;
 		case 'remove_indi':
-			$indi  = safe_GET('indi_ref');
-			$block_id = safe_GET('block_id');
+			$indi  = KT_Filter::get('indi_ref');
+			$block_id = KT_Filter::get('block_id');
 			if ($indi && $block_id) {
 				self::removeIndi($indi, $block_id);
 			}
@@ -137,17 +137,25 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 		$ids	= array();
 		$count_stories = 0;
 		foreach ($block_ids as $block_id) {
+			$block_order = get_block_order($block_id);
 			// check how many stories can be shown in a language
 			$languages = get_block_setting($block_id, 'languages');
 			if (!$languages || in_array(KT_LOCALE, explode(',', $languages))) {
 				$count_stories ++;
-				$ids[] = $block_id;
+				$ids[] = $block_order;
 			}
 		}
-
+		// establish first story id from lowest block_order
+		$ids ? $first_story = min($ids) : $first_story = '';
+		foreach ($block_ids as $block_id) {
+			$block_order = get_block_order($block_id);
+			if ($block_order == $first_story) {
+				$first_story = $block_id;
+			}
+		}
 		ob_start();
 
-		if (KT_USER_GEDCOM_ADMIN) { // change to KT_USER_CAN_EDIT to allow editors to create first story. ?>
+		if (KT_USER_GEDCOM_ADMIN) { // change this to KT_USER_CAN_EDIT to allow editors to create first story. ?>
 			<div style="border-bottom:thin solid #aaa; margin:-10px; padding-bottom:2px;">
 				<span>
 					<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit&amp;xref=<?php echo $controller->record->getXref(); ?>">
@@ -166,7 +174,6 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 
 		if ($count_stories > 1) {
 			$class = 'story';
-			$first_story = min($ids);
 			$controller->addInlineJavascript('
 				// Start with all stories hidden except the first
 				jQuery("#story_contents div.story").hide();
@@ -188,7 +195,7 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 				});
 			'); ?>
 
-			<h3 class="center"><?php echo KT_I18N::translate('List of stories'); ?></h3>
+			<h4><?php echo KT_I18N::translate('List of stories'); ?></h4>
 			<ol id="contents_list">
 				<?php foreach ($block_ids as $block_id) {
 					$languages = get_block_setting($block_id, 'languages');
@@ -290,7 +297,7 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 					$block_id = KT_DB::getInstance()->lastInsertId();
 				}
 				$xref = array();
-				foreach (safe_Post('xref') as $indi_ref => $name) {
+				foreach (KT_Filter::post('xref') as $indi_ref => $name) {
 					$xref[] = $name;
 				}
 				set_block_setting($block_id, 'xref', implode(',', $xref));
@@ -305,128 +312,146 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 				set_block_setting($block_id, 'languages', implode(',', $languages));
 				$this->config();
 			} else {
-				$block_id=safe_GET('block_id');
 				$controller = new KT_Controller_Page();
-				$controller->addInlineJavascript('
-					jQuery("#newField").click(function(){
-					    jQuery(".add_indi:last").clone().insertAfter(".indi_find:last");
-					    jQuery(".add_indi:last>input").attr("value", "");
-					    jQuery(".add_indi:last>input").removeAttr("id").autocomplete({
-							source: "autocomplete.php?field=INDI",
-							html: !0
-						});
-					})
-				');
+				$controller
+					->pageHeader()
+					->addExternalJavascript(KT_AUTOCOMPLETE_JS_URL)
+					->addInlineJavascript('
+						autocomplete();
 
+						jQuery("#addField").click(function(){
+							jQuery(".add_indi:last").clone().insertAfter(".add_indi:last");
+							jQuery(".add_indi:last>input").attr("value", "");
+						});
+					');
+
+				$block_id	= KT_Filter::get('block_id');
 				if ($block_id) {
 					$controller->setPageTitle(KT_I18N::translate('Edit story'));
-					$title = get_block_setting($block_id, 'title');
-					$story_body = get_block_setting($block_id, 'story_body');
-					$xref = explode(",", get_block_setting($block_id, 'xref'));
-					$count_xref = count($xref);
-					$gedcom_id = KT_DB::prepare(
+					$title		= get_block_setting($block_id, 'title');
+					$story_body	= get_block_setting($block_id, 'story_body');
+					$xref		= explode(",", get_block_setting($block_id, 'xref'));
+					$count_xref	= count($xref);
+					$gedcom_id	= KT_DB::prepare(
 						"SELECT gedcom_id FROM `##block` WHERE block_id=?"
 					)->execute(array($block_id))->fetchOne();
 				} else {
 					$controller->setPageTitle(KT_I18N::translate('Add story'));
-					$title = '';
-					$story_body = '';
-					$gedcom_id = KT_GED_ID;
-					$xref = safe_GET('xref', KT_REGEX_XREF);
-					$count_xref = 1;
+					$title		= '';
+					$story_body	= '';
+					$gedcom_id	= KT_GED_ID;
+					$xref		= KT_Filter::get('xref', KT_REGEX_XREF);
+					$count_xref	= 1;
 				}
-				$controller
-					->pageHeader()
-					->addExternalJavascript(KT_AUTOCOMPLETE_JS_URL)
-					->addInlineJavascript('autocomplete();');
 
 				if (array_key_exists('ckeditor', KT_Module::getActiveModules())) {
 					ckeditor_KT_Module::enableEditor($controller);
 				}
+				?>
 
-				echo '
-					<form name="story" method="post" action="module.php?mod=', $this->getName(), '&amp;mod_action=admin_edit">',
-						KT_Filter::getCsrf(), '
-						<input type="hidden" name="save" value="1">
-						<input type="hidden" name="block_id" value="', $block_id, '">
-						<input type="hidden" name="gedcom_id" value="', KT_GED_ID, '">
-						<table id="faq_module">
-							<tr>
-								<th>', KT_I18N::translate('Story title'), '</th>
-							</tr>
-							<tr>
-								<td><textarea name="title" rows="1" cols="90" tabindex="2">', htmlspecialchars($title), '</textarea></td>
-							</tr>
-							<tr>
-								<th>' ,KT_I18N::translate('Story'), '</th>
-							</tr>
-							<tr>
-								<td><textarea name="story_body" class="html-edit" rows="10" cols="90" tabindex="2">', htmlspecialchars($story_body), '</textarea></td>
-							</tr>
-						</table>
-						<table id="faq_module2">
-							<tr>
-								<th>', KT_I18N::translate('Individual'), '</th>
-								<th>', KT_I18N::translate('Show this block for which languages?'), '</th>
-							</tr>
-							<tr>
-								<td class="optionbox">';
-									if (!$block_id) {
-										echo '<div class="indi_find">
-											<p class="add_indi">
-												<input data-autocomplete-type="INDI" type="text" name="xref[]" id="pid" value="' . $xref . '" placeholder="' . KT_I18N::translate('Enter name or part of name') . '">
-											</p>';
-											if ($xref) {
-												$person = KT_Person::getInstance($xref);
-												if ($person) {
-													echo $person->format_list('span');
-													echo '
-														<p>
-															<a href="module.php?mod=', $this->getName(), '&amp;mod_action=remove_indi&amp;indi_ref='. $xref. '&amp;block_id=' . $block_id. '" class="current" onclick="return confirm(\'' . KT_I18N::translate('Are you sure you want to remove this?') . '\');">' . KT_I18N::translate('Remove') . '</a>
-														</p>
-														<hr style="margin-top: 0;"">
-													';
-												}
-											}
-										echo '</div>';
-									} else {
-										for ($x = 0; $x < $count_xref; $x++) {
-											echo '<div class="indi_find">
-												<p class="add_indi">
-													<input data-autocomplete-type="INDI" type="text" name="xref[]" id="pid', $x, '" value="' . $xref[$x] . '" placeholder="' . KT_I18N::translate('Enter name or part of name') . '">
-												</p>';
-												if ($xref) {
-													$person = KT_Person::getInstance($xref[$x]);
-													if ($person) {
-														echo $person->format_list('span');
-														echo '
-															<p>
-																<a href="module.php?mod=', $this->getName(), '&amp;mod_action=remove_indi&amp;indi_ref='. $xref[$x]. '&amp;block_id='. $block_id. '" class="current" onclick="return confirm(\'' . KT_I18N::translate('Are you sure you want to remove this?') . '\');">' . KT_I18N::translate('Remove') . '</a>
-															</p>
-															<hr style="margin-top: 0;"">
-														';
-													}
-												}
-											}
-										echo '</div>';
-									}
-									echo '<p><a href="#" id="newField" class="current">' . KT_I18N::translate('Add another individual') . '</a></p>
-								</td>';
-								$languages = get_block_setting($block_id, 'languages');
-								echo '<td class="optionbox">',
-									edit_language_checkboxes('lang_', $languages), '
-								</td>
-							</tr>
-						</table>
-						<button class="btn btn-primary save" type="submit" tabindex="5">
-							<i class="' . $iconStyle . ' fa-save"></i>' .
-							KT_I18N::translate('Save'). '
-						</button>
-						<button class="btn btn-primary cancel" type="button" onclick="window.location=\'' . $this->getConfigLink() . '\';" tabindex="6">
-							<i class="' . $iconStyle . ' fa-times"></i>' .
-							KT_I18N::translate('cancel') .'
-						</button>
-					</form>';
+				<div id="<?php echo $this->getName(); ?>" class="cell">
+					<div class="grid-x grid-margin-x grid-margin-y">
+						<div class="cell">
+							<h4><?php echo $this->getTitle(); ?></h4>
+							<h5  class="subheader"><?php echo KT_I18N::translate('Add / edit'); ?></h5>
+							<form id="story" name="story" method="post">
+								<?php echo KT_Filter::getCsrf(); ?>
+								<input type="hidden" name="save" value="1">
+								<input type="hidden" name="block_id" value="<?php echo $block_id; ?>">
+								<input type="hidden" name="gedcom_id" value="<?php echo KT_GED_ID; ?>">
+								<div class="grid-x grid-margin-x grid-margin-y">
+									<div class="cell">
+										<label class="h5">
+											<?php echo KT_I18N::translate('Title'); ?>
+										</label>
+										<input type="text" name="title" size="90" value="<?php echo htmlspecialchars($title); ?>">
+									</div>
+									<div class="cell">
+										<label class="h5">
+											<?php echo KT_I18N::translate('Content'); ?>
+										</label>
+										<textarea name="story_body" class="html-edit" rows="10" cols="90"><?php echo htmlspecialchars($story_body); ?></textarea>
+									</div>
+									<div class="cell">
+										<label class="h5">
+											<?php echo KT_I18N::translate('Linked individuals'); ?>
+										</label>
+										<div class="grid-x">
+											<?php if (!$block_id) { ?>
+												<div class="cell medium-3 indi_find">
+													<?php echo KT_I18N::translate('None'); ?>
+												</div>
+											<?php } else {
+												for ($x = 0; $x < $count_xref; $x++) { ?>
+													<div class="cell medium-3">
+														<?php $person = KT_Person::getInstance($xref[$x]);
+														if ($person) { ?>
+															<p><?php echo $person->getLifespanName() ?></p>
+															<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=remove_indi&amp;indi_ref=<?php echo $xref[$x]; ?>&amp;block_id=<?php echo $block_id; ?>" class="current" onclick="return confirm(\'<?php echo KT_I18N::translate('Are you sure you want to remove this?'); ?>\');">
+																<i class="<?php echo $iconStyle; ?> fa-trash-alt"></i>
+																<?php echo KT_I18N::translate('Remove'); ?>
+															</a>
+														<?php } ?>
+														<hr>
+													</div>
+												<?php }
+											} ?>
+										</div>
+									</div>
+									<?php for ($x = 0; $x < $count_xref; $x++) { ?>
+										<div class="cell medium-6 large-3 add_indi">
+											<div class="input-group autocomplete_container">
+												<input
+													data-autocomplete-type="INDI"
+													type="text"
+													id="autocompleteInput-<?php echo $x; ?>"
+													placeholder="<?php echo KT_I18N::translate('Add an individual'); ?>"
+												>
+												<span class="input-group-label">
+													<button class="clearAutocomplete autocomplete_icon">
+														<i class="<?php echo $iconStyle; ?> fa-times"></i>
+													</button>
+												</span>
+											</div>
+											<input type="hidden" id="selectedValue-<?php echo $x; ?>" name="xref[]">
+										</div>
+										<br>
+									<?php } ?>
+									<div class="cell">
+										<button class="button margin-0" type="button" id="addField">
+											<?php echo KT_I18N::translate('Add another individual'); ?>
+										</button>
+									</div>
+
+
+									<div class="cell">
+										<hr>
+										<label class="h5">
+											<?php echo KT_I18N::translate('Show this pages for which languages?'); ?>
+										</label>
+										<span class="help-text">
+											<?php echo KT_I18N::translate('Either leave all languages un-ticked to display the page contents in every language, or tick the specific languages you want to display it for.<br>To create translated pages for different languages create multiple copies setting the appropriate language only for each version.'); ?>
+										</span>
+										<?php echo $languages = get_block_setting($block_id, 'languages');
+										echo edit_language_checkboxes('lang_', $languages); ?>
+									</div>
+								</div>
+
+
+
+								<button class="button" type="submit">
+									<i class="<?php echo $iconStyle; ?> fa-save"></i>
+									<?php echo KT_I18N::translate('Save'); ?>
+								</button>
+								<button class="button secondary" type="button" onclick="window.location=\'<?php echo $this->getConfigLink(); ?>\';">
+									<i class="<?php echo $iconStyle; ?> fa-times"></i>
+									<?php echo KT_I18N::translate('Cancel'); ?>
+								</button>
+							</form>
+						</div>
+					</div>
+				</div>
+				<?php
 				exit;
 			}
 		} else {
@@ -436,7 +461,9 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 	}
 
 	private function config() {
+		global $iconStyle;
 		require_once KT_ROOT . 'includes/functions/functions_edit.php';
+
 		$controller = new KT_Controller_Page();
 		$controller
 			->restrictAccess(KT_USER_IS_ADMIN)
@@ -461,7 +488,7 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 			 AND gedcom_id=?
 		")->execute(array($this->getName(), KT_GED_ID))->fetchAll();
 
-		$new_xref = safe_GET('xref', KT_REGEX_XREF);
+		$new_xref = KT_Filter::get('xref', KT_REGEX_XREF);
 
 		//transfer old xref in ##block to new xref in ##block_setting
 		foreach ($stories as $story) {
@@ -485,77 +512,117 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 		uasort($stories, function ($x, $y) {
 			return $x->block_order > $y->block_order;
 		});
-
 		?>
-		<div id="<?php echo $this->getName(); ?>">
-			<h2><?php echo $controller->getPageTitle(); ?></h2>
-			<form method="get" action="<?php echo KT_SCRIPT_NAME; ?>">
-				<label><?php echo KT_I18N::translate('Family tree'); ?></label>
-				<input type="hidden" name="mod", value="<?php echo $this->getName(); ?>">
-				<input type="hidden" name="mod_action", value="admin_config">
-				<?php echo select_edit_control('ged', KT_Tree::getNameList(), null, KT_GEDCOM); ?>
-				<button class="btn btn-primary show" type="submit">
-					<i class="' . $iconStyle . ' fa-eye"></i>
-					<?php echo KT_I18N::translate('show'); ?>
-				</button>
-			</form>
-			<?php
-			echo
-				'<button class="btn btn-primary add" onclick="window.location.href=\'module.php?mod=' . $this->getName() . '&amp;mod_action=admin_edit\'">
-					<i class="' . $iconStyle . ' fa-plus"></i>' .
-					KT_I18N::translate('Add story') .'
-				</button>
-				<form name="story_list" method="post" action="module.php?mod=', $this->getName(), '&amp;mod_action=admin_config">';
-					if (count($stories)>0) {
-					echo '<table id="story_table">
-						<thead>
-							<tr>
-								<th>', KT_I18N::translate('Order'), '</th>
-								<th>', KT_I18N::translate('Story title'), '</th>
-								<th>', KT_I18N::translate('Individual'), '</th>
-								<th class="maxwidth">', KT_I18N::translate('Edit'), '</th>
-								<th class="maxwidth">', KT_I18N::translate('Delete'), '</th>';
-								if ($new_xref) echo '<th class="maxwidth">', KT_I18N::translate('Link'), '</th>';
-							echo '</tr>
-						</thead>
-						<tbody>';
-							$order = 1;
-							foreach ($stories as $story) {
-								$story_title = get_block_setting($story->block_id, 'title');
-								$xref = explode(",", get_block_setting($story->block_id, 'xref'));
-								$count_xref = count($xref);
-								echo '
-									<tr class="sortme">
-										<td>
-											<input type="text" value="', $order, '" name="taborder-', $story->block_id, '">
-										</td>
-										<td>', $story_title, '</td>
-										<td>';
-											for ($x = 0; $x < $count_xref; $x++) {
-												$indi[$x] = KT_Person::getInstance($xref[$x]);
-												if ($indi[$x]) {
-														  echo '<p><a href="', $indi[$x]->getHtmlUrl() . '#stories" class="current">' . $indi[$x]->getFullName(), '</a></p>';
-												} else {
-													echo '<p class="error">', $xref[$x], '</p>';
-												}
-											}
-										echo '</td>
-										<td class="center"><a href="module.php?mod=', $this->getName(), '&amp;mod_action=admin_edit&amp;block_id=', $story->block_id, '"><div class="icon-edit">&nbsp;</div></a></td>
-										<td class="center"><a href="module.php?mod=', $this->getName(), '&amp;mod_action=admin_delete&amp;block_id=', $story->block_id, '" onclick="return confirm(\'', KT_I18N::translate('Are you sure you want to delete this story?'), '\');"><div class="icon-delete">&nbsp;</div></a></td>';
-										if ($new_xref) echo '<td class="center"><a href="module.php?mod=', $this->getName(), '&amp;mod_action=story_link&amp;block_id=', $story->block_id, '&amp;xref=', $new_xref, '" onclick="return confirm(\'', KT_I18N::translate('Are you sure you want to link to this story?'), '\');"><div class="icon-link">&nbsp;</div></a></td>';
-									echo '</tr>';
-								$order++;
-							}
-						echo '</tbody>
-					</table>';
-				}
-				echo '<button class="btn btn-primary save" type="submit">
-					<i class="' . $iconStyle . ' fa-save"></i>' .
-					KT_I18N::translate('Save'). '
-				</button>
-			</form>
-		</div>';
-	}
+
+		<div id="<?php echo $this->getName(); ?>" class="cell">
+			<div class="grid-x grid-margin-x grid-margin-y">
+				<div class="cell">
+					<h4 class="inline"><?php echo $this->getTitle(); ?></h4>
+<!--				<a class="current faq_link" href="<?php echo KT_KIWITREES_URL; ?>/faqs/modules-faqs/pages/" target="_blank" rel="noopener noreferrer" title="<?php echo KT_I18N::translate('View FAQ for this page.'); ?>"><?php echo KT_I18N::translate('View FAQ for this page.'); ?><i class="<?php echo $iconStyle; ?> fa-comments"></i></a>-->
+					<h5  class="subheader"><?php echo KT_I18N::translate('Configuration'); ?></h5>
+					<div class="grid-x grid-margin-y">
+						<div class="cell medium-6">
+							<form method="get" action="<?php echo KT_SCRIPT_NAME; ?>">
+								<label><?php echo KT_I18N::translate('Family tree'); ?></label>
+								<input type="hidden" name="mod", value="<?php echo $this->getName(); ?>">
+								<input type="hidden" name="mod_action", value="admin_config">
+								<div class="input-group">
+									<?php echo select_edit_control('ged', KT_Tree::getNameList(), null, KT_GEDCOM); ?>
+									<div class="input-group-button">
+										<button class="button" type="submit">
+											<i class="<?php echo $iconStyle; ?> fa-eye"></i>
+											<?php echo KT_I18N::translate('Show'); ?>
+										</button>
+									</div>
+								</div>
+							</form>
+						</div>
+						<div class="cell">
+							<button class="button margin-0" onclick="window.location.href='module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit'">
+								<i class="<?php echo $iconStyle; ?> fa-plus"></i>
+								<?php echo KT_I18N::translate('Add story'); ?>
+							</button>
+							<hr>
+						</div>
+						<?php if (count($stories) > 0) { ?>
+							<div class="cell">
+								<form name="story_list" method="post" action="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_config">
+									<table id="story_table">
+										<thead>
+											<tr>
+												<th></th>
+												<th><?php echo KT_I18N::translate('Story title'); ?></th>
+												<th><?php echo KT_I18N::translate('Individual'); ?></th>
+												<th><?php echo KT_I18N::translate('Order'); ?></th>
+												<th><?php echo KT_I18N::translate('Edit'); ?></th>
+												<th><?php echo KT_I18N::translate('Delete'); ?></th>
+												<?php if ($new_xref) { ?>
+													<th><?php echo KT_I18N::translate('Link'); ?></th>
+												<?php } ?>
+											</tr>
+										</thead>
+										<tbody>
+											<?php
+											$order = 1;
+											foreach ($stories as $story) {
+												$story_title	= get_block_setting($story->block_id, 'title');
+												$xref			= explode(",", get_block_setting($story->block_id, 'xref'));
+												$count_xref		= count($xref); ?>
+												<tr class="sortme">
+													<td>
+														<i class="<?php echo $iconStyle; ?> fa-bars"></i>
+													</td>
+													<td><?php echo $story_title; ?></td>
+													<td>
+														<?php for ($x = 0; $x < $count_xref; $x++) {
+															$indi[$x] = KT_Person::getInstance($xref[$x]);
+															if ($indi[$x]) { ?>
+																<a href="<?php echo $indi[$x]->getHtmlUrl(); ?>#stories" class="current">
+																	<?php echo $indi[$x]->getFullName(); ?>
+																</a>
+															<?php } else { ?>
+																<span class="error"><?php echo $xref[$x]; ?></span>
+															<?php }
+														} ?>
+													</td>
+													<td>
+														<input type="text" value="<?php echo $order; ?>" name="taborder-<?php echo $story->block_id; ?>">
+													</td>
+													<td class="text-center">
+														<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit&amp;block_id=<?php echo $story->block_id; ?>">
+															<i class="<?php echo $iconStyle; ?> fa-edit"></i>
+														</a>
+													</td>
+													<td class="text-center">
+														<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_delete&amp;block_id=<?php echo $story->block_id; ?>" onclick="return confirm(\'<?php echo KT_I18N::translate('Are you sure you want to delete this story?'); ?>\');">
+															<i class="<?php echo $iconStyle; ?> fa-trash-alt"></i>
+														</a>
+													</td>
+													<?php if ($new_xref) { ?>
+														<td class="text-center">
+															<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=story_link&amp;block_id=<?php echo $story->block_id; ?>&amp;xref=<?php echo $new_xref; ?>" onclick="return confirm(\'<?php echo KT_I18N::translate('Are you sure you want to link to this story?'); ?>\');">
+																<i class="<?php echo $iconStyle; ?> fa-link"></i>
+															</a>
+														</td>
+													<?php } ?>
+												</tr>
+												<?php
+												$order++; ?>
+											<?php } ?>
+										</tbody>
+									</table>
+									<button class="button margin-0" type="submit">
+										<i class="<?php echo $iconStyle; ?> fa-save"></i>
+										<?php echo KT_I18N::translate('Save'); ?>
+									</button>
+								</form>
+							</div>
+						<?php } ?>
+					</div>
+				</div>
+			</div>
+		</div>
+	<?php }
 
 	private function show_list() {
 		global $controller;
@@ -595,57 +662,62 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 			 FROM `##block`
 			 WHERE module_name=?
 			 AND gedcom_id=?
-		")->execute(array($this->getName(), KT_GED_ID))->fetchAll();
+		")->execute(array($this->getName(), KT_GED_ID))->fetchAll(); ?>
 
-		echo '<h2 class="center">', KT_I18N::translate('Stories'), '</h2>';
-		if (count($stories)>0) {
-			echo '<table id="story_table" class="width100">
+		<h4><?php echo KT_I18N::translate('Stories'); ?></h4>
+		<?php if (count($stories) > 0) { ?>
+			<table id="story_table" class="width100">
 				<thead>
 					<tr>
-						<th>', KT_I18N::translate('Story title'), '</th>
-						<th>', KT_I18N::translate('Individual'), '</th>
+						<th><?php echo KT_I18N::translate('Story title'); ?></th>
+						<th><?php echo KT_I18N::translate('Individual'); ?></th>
 					</tr>
 				</thead>
-				<tbody>';
-				foreach ($stories as $story) {
-					$story_title = get_block_setting($story->block_id, 'title');
-					$xref = explode(",", get_block_setting($story->block_id, 'xref'));
-					$count_xref = count($xref);
-					// if one indi is private, the whole story is private.
-						$private = 0;
-						for ($x = 0; $x < $count_xref; $x++) {
-							$indi[$x] = KT_Person::getInstance($xref[$x]);
-							if ($indi[$x] && !$indi[$x]->canDisplayDetails()) {
-								$private = $x+1;
+				<tbody>
+					<?php foreach ($stories as $story) {
+						$story_title = get_block_setting($story->block_id, 'title');
+						$xref = explode(",", get_block_setting($story->block_id, 'xref'));
+						$count_xref = count($xref);
+						// if one indi is private, the whole story is private.
+							$private = 0;
+							for ($x = 0; $x < $count_xref; $x++) {
+								$indi[$x] = KT_Person::getInstance($xref[$x]);
+								if ($indi[$x] && !$indi[$x]->canDisplayDetails()) {
+									$private = $x+1;
+								}
 							}
+						if ($private == 0) {
+							$languages=get_block_setting($story->block_id, 'languages');
+							if (!$languages || in_array(KT_LOCALE, explode(',', $languages))) { ?>
+								<tr>
+									<td><?php echo $story_title; ?></td>
+									<td>
+										<?php for ($x = 0; $x < $count_xref; $x++) {
+											$indi[$x] = KT_Person::getInstance($xref[$x]);
+											if (!$indi[$x]){ ?>
+												<p class="error"><?php echo $xref[$x]; ?></p>
+											<?php } else { ?>
+												<p>
+													<a href="<?php echo $indi[$x]->getHtmlUrl(); ?>#stories" class="current">
+														<?php echo $indi[$x]->getFullName(); ?>
+													</a>
+												</p>
+											<?php }
+										} ?>
+									</td>
+								</tr>
+							<?php }
 						}
-					if ($private == 0) {
-						$languages=get_block_setting($story->block_id, 'languages');
-						if (!$languages || in_array(KT_LOCALE, explode(',', $languages))) {
-							echo '<tr>
-								<td>', $story_title, '</td>
-								<td>';
-									for ($x = 0; $x < $count_xref; $x++) {
-										$indi[$x] = KT_Person::getInstance($xref[$x]);
-										if (!$indi[$x]){
-											echo '<p class="error">', $xref[$x], '</p>';
-										} else {
-											echo '<p><a href="', $indi[$x]->getHtmlUrl() . '#stories" class="current">' . $indi[$x]->getFullName(), '</a></p>';
-										}
-									}
-								echo '</td>
-							</tr>';
-						}
-					}
-				}
-			echo '</tbody></table>';
-		}
+					} ?>
+				</tbody>
+			</table>
+		<?php }
 	}
 
 	// Delete a story from the database
 	private function delete() {
 		if (KT_USER_CAN_EDIT) {
-			$block_id = safe_GET('block_id');
+			$block_id = KT_Filter::get('block_id');
 
 			$block_order=KT_DB::prepare("
 				SELECT block_order FROM `##block` WHERE block_id=?
@@ -668,12 +740,12 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 	// Link an individual to an existing story directly
 	private function story_link() {
 		if (KT_USER_GEDCOM_ADMIN) {
-			$block_id = safe_GET('block_id');
-			$new_xref = safe_GET('xref', KT_REGEX_XREF);
+			$block_id = KT_Filter::get('block_id');
+			$new_xref = KT_Filter::get('xref', KT_REGEX_XREF);
 			$xref = explode(",", get_block_setting($block_id, 'xref'));
 			$xref[] = $new_xref;
 			set_block_setting($block_id, 'xref', implode(',', $xref));
-			header('Location: '. KT_SERVER_NAME . KT_SCRIPT_PATH. 'individual.php?pid='. $new_xref);
+			header('Location: '. KT_SERVER_NAME . KT_SCRIPT_PATH. 'individual.php?pid=' . $new_xref);
 		} else {
 			header('Location: '. KT_SERVER_NAME . KT_SCRIPT_PATH);
 			exit;
@@ -685,7 +757,7 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 		$xref = explode(",", get_block_setting($block_id, 'xref'));
 		$xref = array_diff($xref, array($indi));
 		set_block_setting($block_id, 'xref', implode(',', $xref));
-		header('Location: '. KT_SERVER_NAME . KT_SCRIPT_PATH. 'module.php?mod='. $this->getName(). '&mod_action=admin_edit&block_id='. $block_id);
+		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH. 'module.php?mod=' . $this->getName() . '&mod_action=admin_edit&block_id=' . $block_id);
 	}
 
 	// Implement KT_Module_Menu
