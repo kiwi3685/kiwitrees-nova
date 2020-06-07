@@ -60,8 +60,8 @@ class report_vital_records_KT_Module extends KT_Module implements KT_Module_Repo
 
 		$indi_xref = $controller->getSignificantIndividual()->getXref();
 
-		$menus	= array();
-		$menu	= new KT_Menu(
+		$menus = array();
+		$menu  = new KT_Menu(
 			$this->getTitle(),
 			'module.php?mod=' . $this->getName() . '&amp;mod_action=show&amp;ged=' . KT_GEDURL,
 			'menu-report-' . $this->getName()
@@ -74,7 +74,7 @@ class report_vital_records_KT_Module extends KT_Module implements KT_Module_Repo
 	// Implement class KT_Module_Report
 	public function show() {
 		global $controller;
-		require KT_ROOT.'includes/functions/functions_resource.php';
+		require KT_ROOT . 'includes/functions/functions_resource.php';
 		require KT_ROOT . 'includes/functions/functions_edit.php';
 
 		$controller = new KT_Controller_Individual();
@@ -86,7 +86,7 @@ class report_vital_records_KT_Module extends KT_Module implements KT_Module_Repo
 				autocomplete();
 				// check that at least one filter has been used
 				function checkform() {
-				    if (
+					if (
 						document.resource.name.value == "" &&
 						document.resource.place.value == "" &&
 						document.resource.b_from.value == "" &&
@@ -95,40 +95,40 @@ class report_vital_records_KT_Module extends KT_Module implements KT_Module_Repo
 						document.resource.d_to.value == ""
 					) {
 						if (confirm("' . KT_I18N::translate('You have not set any filters. Kiwitrees will try to list records for every individual in your tree. Is this what you want to do?') . '")){
-						    document.resource.submit(); // OK
+							document.resource.submit(); // OK
 						} else {
-						    return false; // Cancel
+							return false; // Cancel
 						}
-				    }
+					}
 				}
 			');
 
 		//Configuration settings ===== //
-	    $action	= KT_Filter::post('action');
-		$reset	= KT_Filter::post('reset');
-		$name	= KT_Filter::post('name', '');
-	    $b_from	= KT_Filter::post('b_from', '');
-	    $b_to	= KT_Filter::post('b_to', '');
-		$d_from	= KT_Filter::post('d_from', '');
-	    $d_to	= KT_Filter::post('d_to', '');
-		$place	= KT_Filter::post('place', '');
+		$action = KT_Filter::post('action');
+		$reset  = KT_Filter::post('reset');
+		$name   = KT_Filter::post('name', '');
+		$b_from = KT_Filter::post('b_from', '');
+		$b_to   = KT_Filter::post('b_to', '');
+		$d_from = KT_Filter::post('d_from', '');
+		$d_to   = KT_Filter::post('d_to', '');
+		$place  = KT_Filter::post('place', '');
 
 		// dates for calculations
 		$b_fromJD = (new KT_Date($b_from))->minJD();
-		$b_toJD = (new KT_Date($b_to))->minJD();
+		$b_toJD   = (new KT_Date($b_to))->minJD();
 		$d_fromJD = (new KT_Date($d_from))->minJD();
-		$d_toJD = (new KT_Date($d_to))->minJD();
+		$d_toJD   = (new KT_Date($d_to))->minJD();
 
 		// reset all variables
-	    if ($reset == 'reset') {
-			$action	= '';
-			$name	= '';
-		    $b_from	= '';
-		    $b_to	= '';
-			$d_from	= '';
-		    $d_to	= '';
-			$place	= '';
-	    }
+		if ($reset == 'reset') {
+			$action = '';
+			$name   = '';
+			$b_from = '';
+			$b_to   = '';
+			$d_from = '';
+			$d_to   = '';
+			$place  = '';
+		}
 
 		?>
 		<div id="page" class="vital_records">
@@ -154,29 +154,29 @@ class report_vital_records_KT_Module extends KT_Module implements KT_Module_Repo
 						<input data-autocomplete-type="PLAC" type="text" name="place" id="PLAC" value="<?php echo KT_Filter::escapeHtml($place); ?>" dir="auto" placeholder="<?php echo /*I18N:placeholder for a place selection field */ KT_I18N::translate('Enter all or part of any place'); ?>">
 					</div>
 					<div class="chart_options">
-		              <label for = "DATE1"><?php echo KT_I18N::translate('Birth date - from'); ?></label>
-		              <input type="text" name="b_from" id="DATE1" value="<?php echo $b_from; ?>" onblur="valid_date(this);" onmouseout="valid_date(this);"><?php echo print_calendar_popup("DATE1"); ?>
-		            </div>
-		            <div class="chart_options">
-		              <label for = "DATE2"><?php echo KT_I18N::translate('Birth date - to'); ?></label>
-		              <input type="text" name="b_to" id="DATE2" value="<?php echo $b_to; ?>" onblur="valid_date(this);" onmouseout="valid_date(this);"><?php echo print_calendar_popup("DATE2"); ?>
-		            </div>
+					  <label for = "DATE1"><?php echo KT_I18N::translate('Birth date - from'); ?></label>
+					  <input type="text" name="b_from" id="DATE1" value="<?php echo $b_from; ?>" onblur="valid_date(this);" onmouseout="valid_date(this);"><?php echo print_calendar_popup("DATE1"); ?>
+					</div>
 					<div class="chart_options">
-		              <label for = "DATE3"><?php echo KT_I18N::translate('Death date - from'); ?></label>
-		              <input type="text" name="d_from" id="DATE3" value="<?php echo $d_from; ?>" onblur="valid_date(this);" onmouseout="valid_date(this);"><?php echo print_calendar_popup("DATE3"); ?>
-		            </div>
-		            <div class="chart_options">
-		              <label for = "DATE4"><?php echo KT_I18N::translate('Death date - to'); ?></label>
-		              <input type="text" name="d_to" id="DATE4" value="<?php echo $d_to; ?>" onblur="valid_date(this);" onmouseout="valid_date(this);"><?php echo print_calendar_popup("DATE4"); ?>
-		            </div>
-	 				<button class="btn btn-primary" type="submit" value="<?php echo KT_I18N::translate('show'); ?>" onclick="return checkform()">
+					  <label for = "DATE2"><?php echo KT_I18N::translate('Birth date - to'); ?></label>
+					  <input type="text" name="b_to" id="DATE2" value="<?php echo $b_to; ?>" onblur="valid_date(this);" onmouseout="valid_date(this);"><?php echo print_calendar_popup("DATE2"); ?>
+					</div>
+					<div class="chart_options">
+					  <label for = "DATE3"><?php echo KT_I18N::translate('Death date - from'); ?></label>
+					  <input type="text" name="d_from" id="DATE3" value="<?php echo $d_from; ?>" onblur="valid_date(this);" onmouseout="valid_date(this);"><?php echo print_calendar_popup("DATE3"); ?>
+					</div>
+					<div class="chart_options">
+					  <label for = "DATE4"><?php echo KT_I18N::translate('Death date - to'); ?></label>
+					  <input type="text" name="d_to" id="DATE4" value="<?php echo $d_to; ?>" onblur="valid_date(this);" onmouseout="valid_date(this);"><?php echo print_calendar_popup("DATE4"); ?>
+					</div>
+					<button class="btn btn-primary" type="submit" value="<?php echo KT_I18N::translate('show'); ?>" onclick="return checkform()">
 						<i class="' . $iconStyle . ' fa-eye"></i>
 						<?php echo KT_I18N::translate('show'); ?>
 					</button>
 					<button class="btn btn-primary" type="submit" name="reset" value="reset">
-		                <i class="' . $iconStyle . ' fa-sync"></i>
+						<i class="' . $iconStyle . ' fa-sync"></i>
 						<?php echo KT_I18N::translate('Reset'); ?>
-		            </button>
+					</button>
 				</form>
 			</div>
 			<hr class="noprint" style="clear:both;">
@@ -215,154 +215,159 @@ class report_vital_records_KT_Module extends KT_Module implements KT_Module_Repo
 						jQuery(".loading-image").css("display", "none");
 					');
 
-				($name) ? $filter1 = '<p>' . /* I18N: A filter on the Vital records report page */ KT_I18N::translate('Names containing <span>%1s</span>', $name) . '</p>' : $filter1 = '';
-				($place) ? $filter2 = '<p>' . /* I18N: A filter on the Vital records report page */ KT_I18N::translate('Place names containing <span>%1s</span>', $place) . '</p>' : $filter2 = '';
+				($name) ? $filter1             = '<p>' . /* I18N: A filter on the Vital records report page */ KT_I18N::translate('Names containing <span>%1s</span>', $name) . '</p>' : $filter1             = '';
+				($place) ? $filter2            = '<p>' . /* I18N: A filter on the Vital records report page */ KT_I18N::translate('Place names containing <span>%1s</span>', $place) . '</p>' : $filter2            = '';
 				($b_from && !$b_to) ? $filter3 = '<p>' . /* I18N: A filter on the Vital records report page */ KT_I18N::translate('Births from <span>%1s</span>', $b_from) . '</p>' : $filter3 = '';
 				(!$b_from && $b_to) ? $filter4 = '<p>' . /* I18N: A filter on the Vital records report page */ KT_I18N::translate('Births to <span>%1s</span>', $b_to) . '</p>' : $filter4 = '';
-				($b_from && $b_to) ? $filter5 = '<p>' . /* I18N: A filter on the Vital records report page */ KT_I18N::translate('Births between <span>%1s</span> and <span>%2s</span> ', $b_from, $b_to) . '</p>' : $filter5 = '';
+				($b_from && $b_to) ? $filter5  = '<p>' . /* I18N: A filter on the Vital records report page */ KT_I18N::translate('Births between <span>%1s</span> and <span>%2s</span> ', $b_from, $b_to) . '</p>' : $filter5  = '';
 				($d_from && !$d_to) ? $filter6 = '<p>' . /* I18N: A filter on the Vital records report page */ KT_I18N::translate('Deaths from <span>%1s</span>', $d_from) . '</p>' : $filter6 = '';
 				(!$d_from && $d_to) ? $filter7 = '<p>' . /* I18N: A filter on the Vital records report page */ KT_I18N::translate('Deaths to <span>%1s</span>', $d_to) . '</p>' : $filter7 = '';
-				($d_from && $d_to) ? $filter8 = '<p>' . /* I18N: A filter on the Vital records report page */ KT_I18N::translate('Deaths between <span>%1s</span> and <span>%2s</span> ', $d_from, $d_to) . '</p>' : $filter8 = '';
+				($d_from && $d_to) ? $filter8  = '<p>' . /* I18N: A filter on the Vital records report page */ KT_I18N::translate('Deaths between <span>%1s</span> and <span>%2s</span> ', $d_from, $d_to) . '</p>' : $filter8  = '';
 
 				$filter_list = $filter1 . $filter2 . $filter3 . $filter4 . $filter5 . $filter6 . $filter7 . $filter8;
 
 				$list = report_vital_records($name, $place, $b_fromJD, $b_toJD, $d_fromJD, $d_toJD, KT_GED_ID);
 
 				// output display
-				?>
-				<div id="report_header">
-					<h4><?php echo KT_I18N::translate('Listing individuals based on these filters'); ?></h4>
-					<p><?php echo $filter_list; ?></p>
-				</div>
-				<div class="loading-image">&nbsp;</div>
-				<table id="vital_records" class="width100" style="visibility:hidden;">
-					<thead>
-						<tr>
-							<th><?php echo KT_I18N::translate('Name'); ?></th>
-							<th><?php echo KT_I18N::translate('Birth'); ?></th>
-							<th><?php //SORT_BIRT ?></th>
-							<th><?php echo KT_I18N::translate('Marriage'); ?></th>
-							<th><?php echo KT_I18N::translate('Death'); ?></th>
-							<th><?php //SORT_DEAT ?></th>
-						</tr>
-					</thead>
-					<tbody>
-						<?php
-						foreach ($list as $person) {
-							if ($person && $person->canDisplayDetails()) {
-								$person->add_family_facts();
-								$indifacts = $person->getIndiFacts();
-								?>
-								<tr>
-									<td>
-										<div>
-											<p class="first">
-												<a href="<?php echo $person->getHtmlUrl(); ?>"><?php echo $person->getFullName(); ?></a>
-											</p>
-											<?php if ($person->getPrimaryChildFamily() && $person->getPrimaryChildFamily()->getHusband()) { ?>
-												<p>
-													<?php echo KT_I18N::translate('Father') . ': ' . $person->getPrimaryChildFamily()->getHusband()->getLifespanName(); ?>
+				if ($list) { ?>
+					<div id="report_header">
+						<h4><?php echo KT_I18N::translate('Listing individuals based on these filters'); ?></h4>
+						<p><?php echo $filter_list; ?></p>
+					</div>
+					<div class="loading-image">&nbsp;</div>
+					<table id="vital_records" class="width100" style="visibility:hidden;">
+						<thead>
+							<tr>
+								<th><?php echo KT_I18N::translate('Name'); ?></th>
+								<th><?php echo KT_I18N::translate('Birth'); ?></th>
+								<th><?php //SORT_BIRT ?></th>
+								<th><?php echo KT_I18N::translate('Marriage'); ?></th>
+								<th><?php echo KT_I18N::translate('Death'); ?></th>
+								<th><?php //SORT_DEAT ?></th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php
+							foreach ($list as $person) {
+								if ($person && $person->canDisplayDetails()) {
+									$person->add_family_facts();
+									$indifacts = $person->getIndiFacts();
+									?>
+									<tr>
+										<td>
+											<div>
+												<p class="first">
+													<a href="<?php echo $person->getHtmlUrl(); ?>"><?php echo $person->getFullName(); ?></a>
 												</p>
-											<?php }
-											if ($person->getPrimaryChildFamily() && $person->getPrimaryChildFamily()->getWife()) { ?>
-												<p>
-													<?php echo KT_I18N::translate('Mother') . ': ' . $person->getPrimaryChildFamily()->getWife()->getLifespanName(); ?>
-												</p>
-											<?php } ?>
-										</div>
-									</td>
-									<td>
-										<div>
-											<?php foreach ($indifacts as $fact) {
-												if ($fact->getTag() == 'BIRT') { ?>
-													<p class="first">
-														<?php echo ($person->getBirthDate() ? KT_I18N::translate('Date') . ': ' . format_fact_date($fact, $person, true, true, false) . '<br>' : '') .
-														($person->getBirthPlace() ? KT_I18N::translate('Place') . ': ' . format_fact_place($fact, true, true, true) : ''); ?>
+												<?php if ($person->getPrimaryChildFamily() && $person->getPrimaryChildFamily()->getHusband()) { ?>
+													<p>
+														<?php echo KT_I18N::translate('Father') . ': ' . $person->getPrimaryChildFamily()->getHusband()->getLifespanName(); ?>
 													</p>
-													<?php $ct = preg_match_all("/(2 SOUR (.+))/", $fact->getGedcomRecord(), $match, PREG_SET_ORDER);
-													for ($j=0; $j<$ct; $j++) {
-														$sid = trim($match[$j][2], '@');
-														$source = KT_Source::getInstance($sid);
-														if ($source->canDisplayDetails()) {
-															echo '<p>' . KT_I18N::translate('Source') . ': ' . $source->getFullName() . '</p>';
+												<?php }
+												if ($person->getPrimaryChildFamily() && $person->getPrimaryChildFamily()->getWife()) { ?>
+													<p>
+														<?php echo KT_I18N::translate('Mother') . ': ' . $person->getPrimaryChildFamily()->getWife()->getLifespanName(); ?>
+													</p>
+												<?php } ?>
+											</div>
+										</td>
+										<td>
+											<div>
+												<?php foreach ($indifacts as $fact) {
+													if ($fact->getTag() == 'BIRT') { ?>
+														<p class="first">
+															<?php echo ($person->getBirthDate() ? KT_I18N::translate('Date') . ': ' . format_fact_date($fact, $person, true, true, false) . '<br>' : '') .
+															($person->getBirthPlace() ? KT_I18N::translate('Place') . ': ' . format_fact_place($fact, true, true, true) : ''); ?>
+														</p>
+														<?php $ct = preg_match_all("/(2 SOUR (.+))/", $fact->getGedcomRecord(), $match, PREG_SET_ORDER);
+														for ($j = 0; $j < $ct; $j++) {
+															$sid    = trim($match[$j][2], '@');
+															$source = KT_Source::getInstance($sid);
+															if ($source->canDisplayDetails()) {
+																echo '<p>' . KT_I18N::translate('Source') . ': ' . $source->getFullName() . '</p>';
+															}
 														}
 													}
 												}
-											}
-											?>
-										</div>
-									</td>
-									<td><?php echo $person->getBirthDate()->JD(); ?></td><!-- used for sorting only -->
-									<td>
-										<div>
-											<?php foreach ($indifacts as $fact) {
-												if ($fact->getParentObject() instanceof KT_Family && ($fact->getTag() == 'MARR' || $fact->getTag() == '_NMR')) {
-													foreach ($fact->getParentObject() as $family_fact) {
-														$sex = $person->getSex();
-														switch ($sex) {
-															case 'M':
-																$spouse = $fact->getParentObject()->getWife();
-																break;
-															case 'F':
-																$spouse = $fact->getParentObject()->getHusband();
-																break;
-															default:
-																$spouse = '';
-																break;
-														} ?>
-														<?php
-														if ($spouse) { ?>
-															<div>
-																<p class="first">
-																	<?php echo KT_I18N::translate('Spouse'); ?>: <a href="<?php echo $spouse->getHtmlUrl(); ?>"><?php echo $spouse->getFullName(); ?></a>
-																</p>
-																<p class="first">
-																	<?php echo ($fact->getParentObject()->getMarriageDate() ? KT_I18N::translate('Date') . ': ' . format_fact_date($fact, $spouse, true, true, false) . '<br>' : '') .
-																	($fact->getParentObject()->getMarriagePlace() ? KT_I18N::translate('Place') . ': ' . format_fact_place($fact, true, true, true) : ''); ?>
-																</p>
-																<?php $ct = preg_match_all("/(2 SOUR (.+))/", $fact->getGedcomRecord(), $match, PREG_SET_ORDER);
-																for ($j=0; $j<$ct; $j++) {
-																	$sid = trim($match[$j][2], '@');
-																	$source = KT_Source::getInstance($sid);
-																	if ($source->canDisplayDetails()) {
-																		echo '<p>' . KT_I18N::translate('Source') . ': ' . $source->getFullName() . '</p>';
-																	}
-																} ?>
-															</div>
-														<?php }
+												?>
+											</div>
+										</td>
+										<td><?php echo $person->getBirthDate()->JD(); ?></td><!-- used for sorting only -->
+										<td>
+											<div>
+												<?php foreach ($indifacts as $fact) {
+													if ($fact->getParentObject() instanceof KT_Family && ($fact->getTag() == 'MARR' || $fact->getTag() == '_NMR')) {
+														foreach ($fact->getParentObject() as $family_fact) {
+															$sex = $person->getSex();
+															switch ($sex) {
+																case 'M':
+																	$spouse = $fact->getParentObject()->getWife();
+																	break;
+																case 'F':
+																	$spouse = $fact->getParentObject()->getHusband();
+																	break;
+																default:
+																	$spouse = '';
+																	break;
+															} ?>
+															<?php
+															if ($spouse) { ?>
+																<div>
+																	<p class="first">
+																		<?php echo KT_I18N::translate('Spouse'); ?>: <a href="<?php echo $spouse->getHtmlUrl(); ?>"><?php echo $spouse->getFullName(); ?></a>
+																	</p>
+																	<p class="first">
+																		<?php echo ($fact->getParentObject()->getMarriageDate() ? KT_I18N::translate('Date') . ': ' . format_fact_date($fact, $spouse, true, true, false) . '<br>' : '') .
+																		($fact->getParentObject()->getMarriagePlace() ? KT_I18N::translate('Place') . ': ' . format_fact_place($fact, true, true, true) : ''); ?>
+																	</p>
+																	<?php $ct = preg_match_all("/(2 SOUR (.+))/", $fact->getGedcomRecord(), $match, PREG_SET_ORDER);
+																	for ($j = 0; $j < $ct; $j++) {
+																		$sid    = trim($match[$j][2], '@');
+																		$source = KT_Source::getInstance($sid);
+																		if ($source->canDisplayDetails()) {
+																			echo '<p>' . KT_I18N::translate('Source') . ': ' . $source->getFullName() . '</p>';
+																		}
+																	} ?>
+																</div>
+															<?php }
+														}
 													}
-												}
-											} ?>
-										</div>
-									</td>
-									<td>
-										<div>
-											<?php foreach ($indifacts as $fact) {
-												if ($fact->getTag() == 'DEAT') { ?>
-													<p class="first">
-														<?php echo ($person->getDeathDate() ? KT_I18N::translate('Date') . ': ' . format_fact_date($fact, $person, true, true, false) . '<br>' : '') .
-														($person->getDeathPlace() ? KT_I18N::translate('Place') . ': ' . format_fact_place($fact, true, true, true) : ''); ?>
-													</p>
-													<?php $ct = preg_match_all("/(2 SOUR (.+))/", $fact->getGedcomRecord(), $match, PREG_SET_ORDER);
-													for ($j=0; $j<$ct; $j++) {
-														$sid = trim($match[$j][2], '@');
-														$source = KT_Source::getInstance($sid);
-														if ($source->canDisplayDetails()) {
-															echo '<p>' . KT_I18N::translate('Source') . ': ' . $source->getFullName() . '</p>';
+												} ?>
+											</div>
+										</td>
+										<td>
+											<div>
+												<?php foreach ($indifacts as $fact) {
+													if ($fact->getTag() == 'DEAT') { ?>
+														<p class="first">
+															<?php echo ($person->getDeathDate() ? KT_I18N::translate('Date') . ': ' . format_fact_date($fact, $person, true, true, false) . '<br>' : '') .
+															($person->getDeathPlace() ? KT_I18N::translate('Place') . ': ' . format_fact_place($fact, true, true, true) : ''); ?>
+														</p>
+														<?php $ct = preg_match_all("/(2 SOUR (.+))/", $fact->getGedcomRecord(), $match, PREG_SET_ORDER);
+														for ($j = 0; $j < $ct; $j++) {
+															$sid    = trim($match[$j][2], '@');
+															$source = KT_Source::getInstance($sid);
+															if ($source->canDisplayDetails()) {
+																echo '<p>' . KT_I18N::translate('Source') . ': ' . $source->getFullName() . '</p>';
+															}
 														}
 													}
 												}
-											}
-											?>
-										</div>
-									</td>
-									<td><?php echo $person->getDeathDate()->JD(); ?></td><!-- used for sorting only -->
-								</tr>
-							<?php }
-						}
-						?>
-			 		</tbody>
-				</table>
-			<?php }
+												?>
+											</div>
+										</td>
+										<td><?php echo $person->getDeathDate()->JD(); ?></td><!-- used for sorting only -->
+									</tr>
+								<?php }
+							}
+							?>
+						</tbody>
+					</table>
+				<?php } else { ?>
+					<div id="noresult">
+						<?php echo KT_I18N::translate('Nothing found'); ?>
+					</div>
+				<?php }
+			}
 		}
 }
