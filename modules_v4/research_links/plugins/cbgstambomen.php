@@ -19,7 +19,7 @@ class cbgstambomen_plugin extends research_base_plugin {
 	}
 
 	static function create_link($fullname, $givn, $first, $middle, $prefix, $surn, $surname, $birth_year, $death_year, $gender) {
-		return $link = 'https://www.stamboomnederland.nl/start';
+		return false;
 	}
 
 	static function create_sublink($fullname, $givn, $first, $middle, $prefix, $surn, $surname, $birth_year, $death_year, $gender) {
@@ -27,7 +27,7 @@ class cbgstambomen_plugin extends research_base_plugin {
 	}
 
 	static function createLinkOnly() {
-		return false;
+		return 'https://www.stamboomnederland.nl/start';
 	}
 
 	static function createSubLinksOnly() {
@@ -35,6 +35,7 @@ class cbgstambomen_plugin extends research_base_plugin {
 	}
 
 	static function encode_plus() {
-		return true;
+		return false;
 	}
+
 }

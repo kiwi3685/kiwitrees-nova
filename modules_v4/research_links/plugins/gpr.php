@@ -5,9 +5,9 @@ if (!defined('KT_KIWITREES')) {
 	exit;
 }
 
-class digitalestamboom_plugin extends research_base_plugin {
+class gpr_plugin extends research_base_plugin {
 	static function getName() {
-		return 'Digitale Stamboom';
+		return 'Gravestone Photographic Resource';
 	}
 
 	static function getPaySymbol() {
@@ -15,11 +15,22 @@ class digitalestamboom_plugin extends research_base_plugin {
 	}
 
 	static function getSearchArea() {
-		return 'NLD';
+		return 'INT';
 	}
 
 	static function create_link($fullname, $givn, $first, $middle, $prefix, $surn, $surname, $birth_year, $death_year, $gender) {
-		return $link = 'http://www.digitalestamboom.nl/search.aspx?lang=nl&verder=' . $givn . urlencode('||') . $prefix . urlencode('|') . $surn;
+		// This is a post form, so it will be sent with Javascript
+		$url	 	= 'https://www.gravestonephotos.com/search/search.php';
+		$params	 	= array(
+			'forename'		=> $first,
+			'exactforename'	=> 'no',
+			'surname'		=> $surn,
+			'exactsurname'	=> 'no',
+			'country'		=> '',
+			'area'			=> '',
+			'search'		=> 'Full name'
+		);
+		return "postresearchform('" . $url . "'," . json_encode($params) . ")";
 	}
 
 	static function create_sublink($fullname, $givn, $first, $middle, $prefix, $surn, $surname, $birth_year, $death_year, $gender) {
@@ -37,4 +48,5 @@ class digitalestamboom_plugin extends research_base_plugin {
 	static function encode_plus() {
 		return false;
 	}
+
 }
