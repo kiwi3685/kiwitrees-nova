@@ -23,20 +23,19 @@
 
 define('KT_SCRIPT_NAME', 'addmedia.php');
 require './includes/session.php';
-require_once KT_ROOT . 'includes/functions/functions_print_lists.php';
 require KT_ROOT . 'includes/functions/functions_edit.php';
 
-$pid			= KT_Filter::get('pid', KT_REGEX_XREF, KT_Filter::post('pid', KT_REGEX_XREF)); // edit this media object
-$linktoid		= KT_Filter::get('linktoid', KT_REGEX_XREF, KT_Filter::post('linktoid', KT_REGEX_XREF)); // create a new media object, linked to this record
-$action			= KT_Filter::get('action', null, KT_Filter::post('action'));
-$type			= KT_Filter::get('type');
-$filename		= KT_Filter::get('filename', null, KT_Filter::post('filename'));
-$text			= KT_Filter::postArray('text');
-$tag			= KT_Filter::postArray('tag', KT_REGEX_TAG);
-$islink			= KT_Filter::postArray('islink');
-$glevels		= KT_Filter::postArray('glevels', '[0-9]');
-$folder			= KT_Filter::post('folder');
-$update_CHAN	= !KT_Filter::postBool('preserve_last_changed');
+$pid         = KT_Filter::get('pid', KT_REGEX_XREF, KT_Filter::post('pid', KT_REGEX_XREF)); // edit this media object
+$linktoid    = KT_Filter::get('linktoid', KT_REGEX_XREF, KT_Filter::post('linktoid', KT_REGEX_XREF)); // create a new media object, linked to this record
+$action      = KT_Filter::get('action', null, KT_Filter::post('action'));
+$type        = KT_Filter::get('type');
+$filename    = KT_Filter::get('filename', null, KT_Filter::post('filename'));
+$text        = KT_Filter::postArray('text');
+$tag         = KT_Filter::postArray('tag', KT_REGEX_TAG);
+$islink      = KT_Filter::postArray('islink');
+$glevels     = KT_Filter::postArray('glevels', '[0-9]');
+$folder      = KT_Filter::post('folder');
+$update_CHAN = !KT_Filter::postBool('preserve_last_changed');
 
 $controller = new KT_Controller_Page();
 $controller
@@ -47,14 +46,13 @@ $controller
 	')
 	->requireMemberLogin();
 
-$disp = true;
+$disp  = true;
 $media = KT_Media::getInstance($pid);
 if ($media) {
 	$disp = $media->canDisplayDetails();
 }
 if ($action == 'update' || $action == 'create') {
-	if (!isset($linktoid) || $linktoid == 'new') $linktoid = '';
-	if (!empty($linktoid)) {
+	if ($linktoid) {
 		$disp = KT_GedcomRecord::getInstance($linktoid)->canDisplayDetails();
 	}
 }
@@ -63,17 +61,14 @@ if (!KT_USER_CAN_EDIT || !$disp) {
 	$controller
 		->pageHeader()
 		->addInlineJavascript('closePopupAndReloadParent();');
-	exit;
+
+	return;
 }
 
-// TODO - there is a lot of common code in the create and update cases....
+// There is a lot of common code in the create and update cases....
 // .... and also in the admin_media_upload.php script
-
 switch ($action) {
 	case 'create': // Save the information from the “showcreateform” action
-		if (!KT_Filter::get('format')) {
-			$controller->pageHeader();
-		}
 		$controller->setPageTitle(KT_I18N::translate('Create a new media object'));
 
 		// Validate the media folder
@@ -131,6 +126,13 @@ switch ($action) {
 			unset($_FILES['thumbnail']);
 		}
 
+		// Check for image having 0 bytes (corrupted)  or too large to import
+		if (!empty($_FILES['mediafile']) && $_FILES['mediafile']['size'] && ($_FILES['mediafile']['size'] === 0 || $_FILES['mediafile']['size'] > int_from_bytestring(detectMaxUploadFileSize()))) {
+			KT_FlashMessages::addMessage(KT_I18N::translate('The media file you selected either has a size of zero bytes or is too large to be uploaded.'));
+			unset($_FILES['mediafile']);
+			break;
+		}
+
 		// Thumbnails must be images.
 		if (!empty($_FILES['thumbnail']['name']) && !preg_match('/^image/', $_FILES['thumbnail']['type'])) {
 			KT_FlashMessages::addMessage(KT_I18N::translate('Thumbnails must be images.'));
@@ -138,7 +140,7 @@ switch ($action) {
 		}
 
 		// User-specified filename?
-		if ($tag[0]=='FILE' && $text[0]) {
+		if ($tag[0] == 'FILE' && $text[0]) {
 			$filename = $text[0];
 		}
 		// Use the name of the uploaded file?
@@ -196,12 +198,12 @@ switch ($action) {
 				// Thumbnails have either
 				// (a) the same filename as the main image
 				// (b) the same filename as the main image - but with a .png extension
-				if ($match[1]=='png' && !preg_match('/\.(png)$/i', $fileName)) {
+				if ($match[1] == 'png' && !preg_match('/\.(png)$/i', $fileName)) {
 					$thumbFile = preg_replace('/\.[a-z0-9]{3,5}$/', '.png', $fileName);
 				} else {
 					$thumbFile = $fileName;
 				}
-				$serverFileName = KT_DATA_DIR . $MEDIA_DIRECTORY . 'thumbs/' . $folderName .  $thumbFile;
+				$serverFileName = KT_DATA_DIR . $MEDIA_DIRECTORY . 'thumbs/' . $folderName . $thumbFile;
 				if (move_uploaded_file($_FILES['thumbnail']['tmp_name'], $serverFileName)) {
 					chmod($serverFileName, KT_PERM_FILE);
 					AddToLog('Thumbnail file ' . $serverFileName . ' uploaded', 'media');
@@ -213,7 +215,7 @@ switch ($action) {
 		$media_id = get_new_xref('OBJE');
 		if ($media_id) {
 			$newged = '0 @' . $media_id . "@ OBJE\n";
-			if ($tag[0]=='FILE') {
+			if ($tag[0] == 'FILE') {
 				// The admin has an edit field to change the file name
 				$text[0] = $folderName . $fileName;
 			} else {
@@ -221,7 +223,7 @@ switch ($action) {
 				$newged .= '1 FILE ' . $folderName . $fileName;
 			}
 
-			$newged  = handle_updates($newged);
+			$newged = handle_updates($newged);
 
 			if (append_gedrec($newged, KT_GED_ID)) {
 				if ($linktoid) {
@@ -234,7 +236,6 @@ switch ($action) {
 				}
 			}
 		}
-	//	$controller->addInlineJavascript('closePopupAndReloadParent("");');
 	?>
 		<div style="margin: 20px 50px">
 			<button class="btn btn-primary" type="button"  onclick="closePopupAndReloadParent();">
@@ -244,7 +245,7 @@ switch ($action) {
 			<p class="warning"><?php echo KT_I18N::translate('Click the close button to return to the manage media page.'); ?></p>
 		</div>
 	<?php
-		exit;
+		return;
 
 	case 'update': // Save the information from the “editmedia” action
 		$controller->setPageTitle(KT_I18N::translate('Edit media object'));
@@ -258,7 +259,7 @@ switch ($action) {
 		if ($folderName) {
 			$folderName .= '/';
 			// Not allowed to use “../”
-			if (strpos('/' . $folderName, '/../')!==false) {
+			if (strpos('/' . $folderName, '/../') !== false) {
 				KT_FlashMessages::addMessage('Folder names are not allowed to include “../”');
 				break;
 			}
@@ -325,7 +326,7 @@ switch ($action) {
 
 		// Cannot rename local to external or vice-versa
 		if (isFileExternal($oldFilename) != isFileExternal($filename)) {
-			KT_FlashMessages::addMessage(KT_I18N::translate('Media file %1$s could not be renamed to %2$s.', '<span class="filename">'.$oldFilename.'</span>', '<span class="filename">'.$newFilename.'</span>'));
+			KT_FlashMessages::addMessage(KT_I18N::translate('Media file %1$s could not be renamed to %2$s.', '<span class="filename">' . $oldFilename . '</span>', '<span class="filename">' . $newFilename . '</span>'));
 			break;
 		}
 
@@ -335,7 +336,7 @@ switch ($action) {
 			$oldServerFile  = $media->getServerFilename('main');
 			$oldServerThumb = $media->getServerFilename('thumb');
 
-			$newmedia = new KT_Media("0 @xxx@ OBJE\n1 FILE " . $newFilename);
+			$newmedia       = new KT_Media("0 @xxx@ OBJE\n1 FILE " . $newFilename);
 			$newServerFile  = $newmedia->getServerFilename('main');
 			$newServerThumb = $newmedia->getServerFilename('thumb');
 
@@ -343,46 +344,46 @@ switch ($action) {
 			if ($oldServerFile != $newServerFile) {
 				//-- check if the file is used in more than one gedcom
 				//-- do not allow it to be moved or renamed if it is
-				$multi_gedcom=!$media->isExternal() && is_media_used_in_other_gedcom($media->getFilename(), KT_GED_ID);
+				$multi_gedcom = !$media->isExternal() && is_media_used_in_other_gedcom($media->getFilename(), KT_GED_ID);
 				if ($multi_gedcom) {
 					KT_FlashMessages::addMessage(KT_I18N::translate('This file is linked to another genealogical database on this server.  It cannot be deleted, moved, or renamed until these links have been removed.'));
 					break;
 				}
 
-				if (!file_exists($newServerFile) || @md5_file($oldServerFile)==md5_file($newServerFile)) {
+				if (!file_exists($newServerFile) || @md5_file($oldServerFile) == md5_file($newServerFile)) {
 					if (@rename($oldServerFile, $newServerFile)) {
-						KT_FlashMessages::addMessage(KT_I18N::translate('Media file %1$s successfully renamed to %2$s.', '<span class="filename">'.$oldFilename.'</span>', '<span class="filename">'.$newFilename.'</span>'));
+						KT_FlashMessages::addMessage(KT_I18N::translate('Media file %1$s successfully renamed to %2$s.', '<span class="filename">' . $oldFilename . '</span>', '<span class="filename">' . $newFilename . '</span>'));
 					} else {
-						KT_FlashMessages::addMessage(KT_I18N::translate('Media file %1$s could not be renamed to %2$s.', '<span class="filename">'.$oldFilename.'</span>', '<span class="filename">'.$newFilename.'</span>'));
+						KT_FlashMessages::addMessage(KT_I18N::translate('Media file %1$s could not be renamed to %2$s.', '<span class="filename">' . $oldFilename . '</span>', '<span class="filename">' . $newFilename . '</span>'));
 					}
 					$messages = true;
 				}
 				if (!file_exists($newServerFile)) {
-					KT_FlashMessages::addMessage(KT_I18N::translate('Media file %s does not exist.', '<span class="filename">'.$newFilename.'</span>'));
+					KT_FlashMessages::addMessage(KT_I18N::translate('Media file %s does not exist.', '<span class="filename">' . $newFilename . '</span>'));
 					$messages = true;
 				}
 			}
 			if ($oldServerThumb != $newServerThumb) {
-				if (!file_exists($newServerThumb) || @md5_file($oldServerFile)==md5_file($newServerThumb)) {
+				if (!file_exists($newServerThumb) || @md5_file($oldServerFile) == md5_file($newServerThumb)) {
 					if (@rename($oldServerThumb, $newServerThumb)) {
-						KT_FlashMessages::addMessage(KT_I18N::translate('Thumbnail file %1$s successfully renamed to %2$s.', '<span class="filename">'.$oldFilename.'</span>', '<span class="filename">'.$newFilename.'</span>'));
+						KT_FlashMessages::addMessage(KT_I18N::translate('Thumbnail file %1$s successfully renamed to %2$s.', '<span class="filename">' . $oldFilename . '</span>', '<span class="filename">' . $newFilename . '</span>'));
 					} else {
-						KT_FlashMessages::addMessage(KT_I18N::translate('Thumbnail file %1$s could not be renamed to %2$s.', '<span class="filename">'.$oldFilename.'</span>', '<span class="filename">'.$newFilename.'</span>'));
+						KT_FlashMessages::addMessage(KT_I18N::translate('Thumbnail file %1$s could not be renamed to %2$s.', '<span class="filename">' . $oldFilename . '</span>', '<span class="filename">' . $newFilename . '</span>'));
 					}
 					$messages = true;
 				}
 				if (!file_exists($newServerThumb)) {
-					KT_FlashMessages::addMessage(KT_I18N::translate('Thumbnail file %s does not exist.', '<span class="filename">'.$newFilename.'</span>'));
+					KT_FlashMessages::addMessage(KT_I18N::translate('Thumbnail file %s does not exist.', '<span class="filename">' . $newFilename . '</span>'));
 					$messages = true;
 				}
 			}
 		}
 
 		// Insert the 1 FILE xxx record into the arrays used by function handle_updates()
-		$glevels	= array_merge(array('1'), $glevels);
-		$tag		= array_merge(array('FILE'), $tag);
-		$islink		= array_merge(array(0), $islink);
-		$text		= array_merge(array($newFilename), $text);
+		$glevels = array_merge(array('1'), $glevels);
+		$tag     = array_merge(array('FILE'), $tag);
+		$islink  = array_merge(array(0), $islink);
+		$text    = array_merge(array($newFilename), $text);
 
 		if (!empty($pid)) {
 			$gedrec = find_gedcom_record($pid, KT_GED_ID, true);
@@ -437,8 +438,8 @@ switch ($action) {
 	<h2><?php echo $controller->getPageTitle(); ?></h2>
 	<form method="post" name="newmedia" action="addmedia.php" enctype="multipart/form-data">
 		<input type="hidden" name="action" value="<?php echo $action; ?>">
-		<input type="hidden" name="ged" value="<?php echo  KT_GEDCOM; ?>">
-		<input type="hidden" name="pid" value="<?php echo  $pid; ?>">
+		<input type="hidden" name="ged" value="<?php echo KT_GEDCOM; ?>">
+		<input type="hidden" name="pid" value="<?php echo $pid; ?>">
 		<?php if ($linktoid) { ?>
 			<input type="hidden" name="linktoid" value="<?php echo $linktoid; ?>">
 		<?php } ?>
@@ -458,26 +459,38 @@ switch ($action) {
 					</div>
 				</div>
 			<?php }
+
 			$gedrec = find_gedcom_record($pid, KT_GED_ID, true);
-			// 0 OBJE
+
 			// 1 FILE
-			if ($gedrec == '') {
+			if (preg_match('/\n\d (FILE.*)/', $gedrec, $match)) {
+				$gedfile = $match[1];
+			} elseif ($filename) {
+				$gedfile = 'FILE ' . $filename;
+			} else {
 				$gedfile = 'FILE';
-				if ($filename != '')
-					$gedfile = 'FILE ' . $filename;
-			} else {
-				$gedfile = get_first_tag(1, 'FILE', $gedrec);
-				if (empty($gedfile))
-					$gedfile = 'FILE';
 			}
-			if ($gedfile != 'FILE') {
-				$gedfile = 'FILE ' . substr($gedfile, 5);
-				$readOnly = 'READONLY';
-			} else {
-				$readOnly = '';
-			}
-			if ($gedfile == 'FILE') {
-				// Box for user to choose to upload file from local computer ?>
+
+			if ($gedfile == 'FILE') { ?>
+
+				<!-- Option to use editing tool before uploading image -->
+				<div id="MEDIA_factdiv">
+					<label>
+						<?php echo KT_I18N::translate('External image editor'); ?>
+					</label>
+					<div class="input">
+						<?php echo '<a href="' . $IMAGE_EDITOR . '" target="_blank">' . $IMAGE_EDITOR . '</a>'; ?>
+					</div>
+					<div class="help_text">
+						<span class="help_content">
+							<?php echo KT_I18N::translate('You can use this editor to adjust your media images before uploading. It can help to resize, modify colours, change rotation etc. Please remember %s is not part of this %s website. The link is provided for your convenience, with no guarantees. For assistance using the software please contact its developers directly.', $IMAGE_EDITOR, KT_TREE_TITLE); ?>
+						</span>
+					</div>
+				</div>
+
+				<hr>
+
+				<!--  Box for user to choose to upload file from local computer -->
 				<div id="MEDIA-UP_factdiv">
 					<label>
 						<?php echo  KT_I18N::translate('Media file to upload'); ?>
@@ -501,7 +514,11 @@ switch ($action) {
 						<div class="input">
 							<input type="file" name="thumbnail">
 						</div>
-						<span id="upload_thumbnail_file" class="help_text"></span>
+						<div class="help_text">
+							<span class="help_content">
+								<?php echo KT_I18N::translate('Choose the thumbnail image that you want to upload.  Although thumbnails can be generated automatically for images, you may wish to generate your own thumbnail, especially for other media types.  For example, you can provide a still image from a video, or a photograph of the person who made an audio recording.'); ?>
+							</span>
+						</div>
 					</div>
 				<?php }
 			}
@@ -511,28 +528,27 @@ switch ($action) {
 			if ($gedfile == 'FILE') {
 				if (KT_USER_GEDCOM_ADMIN) { ?>
 					<div id="FILE_factdiv">
-						<?php add_simple_tag("1 $gedfile",'',KT_I18N::translate('File name on server'),'','NOCLOSE'); ?>
+						<?php add_simple_tag("1 $gedfile",'',KT_I18N::translate('File name on server')); ?>
 					</div>
 					<div class="help_text">
 						<span class="help_content">
 							<?php echo
 								KT_I18N::translate('Do not change to keep original file name.') .
-								KT_I18N::translate('You may enter a URL, beginning with &laquo;http://&raquo;.');
+								KT_I18N::translate('You may enter a URL, beginning with "http://".');
 							?>
 						</span>
 					</div>
 				<?php }
-				$fileName = '';
 				$folder = '';
 			} else {
 				if ($isExternal) {
-					$fileName	= substr($gedfile, 5);
-					$folder		= '';
+					$fileName = substr($gedfile, 5);
+					$folder   = '';
 				} else {
-					$tmp		=substr($gedfile, 5);
-					$fileName	= basename($tmp);
-					$folder		= dirname($tmp);
-					if ($folder == '.') {
+					$tmp      = substr($gedfile, 5);
+					$fileName = basename($tmp);
+					$folder   = dirname($tmp);
+					if ($folder === '.') {
 						$folder = '';
 					}
 				} ?>
@@ -542,11 +558,13 @@ switch ($action) {
 					</label>
 					<div class="input">
 						<?php if (KT_USER_GEDCOM_ADMIN) { ?>
-						    <input name="filename" type="text" value="<?php echo htmlspecialchars($fileName); ?>"
-						    <?php if ($isExternal) {
-						        echo '>';
-						    } else {
-						        echo '>'; ?>
+						    <input name="filename" type="text" value="<?php echo htmlspecialchars($fileName); ?>" >
+						    <?php if ($isExternal) { ?>
+								<div class="help_text">
+									<span class="help_content">
+										<?php echo KT_I18N::translate('Do not change to keep original file name.'); ?>
+									</span>
+								</div>
 						    <?php } ?>
 						<?php } else { ?>
 						    <?php echo $fileName; ?>
@@ -580,7 +598,7 @@ switch ($action) {
 										echo ' value=""> ' . KT_I18N::translate('Choose: ') . '
 									</option>';
 									if (KT_USER_IS_ADMIN) {
-										echo ' <option value="other" disabled>'.
+										echo ' <option value="other" disabled>' .
 											KT_I18N::translate('Other folder... please type in') . '
 										</option>';
 									}
@@ -635,7 +653,7 @@ switch ($action) {
 			}
 			add_simple_tag("2 $gedtitl");
 
-			if (strstr($ADVANCED_NAME_FACTS, '_HEB')!==false) {
+			if (strstr($ADVANCED_NAME_FACTS, '_HEB') !== false) {
 				// 3 _HEB
 				if ($gedrec == '') {
 					$gedtitl = '_HEB';
@@ -648,7 +666,7 @@ switch ($action) {
 				add_simple_tag("3 $gedtitl");
 			}
 
-			if (strstr($ADVANCED_NAME_FACTS, 'ROMN')!==false) {
+			if (strstr($ADVANCED_NAME_FACTS, 'ROMN') !== false) {
 				// 3 ROMN
 				if ($gedrec == '') {
 					$gedtitl = 'ROMN';
@@ -690,7 +708,7 @@ switch ($action) {
 			if ($gedrec == '')
 				$gedtype = 'TYPE photo'; // default to ‘Photo’ unless told otherwise
 			else {
-				$temp = str_replace("\r\n", "\n", $gedrec) . "\n";
+				$temp  = str_replace("\r\n", "\n", $gedrec) . "\n";
 				$types = preg_match("/3 TYPE(.*)\n/", $temp, $matches);
 				if (empty($matches[0]))
 					$gedtype = 'TYPE photo'; // default to ‘Photo’ unless told otherwise
@@ -698,7 +716,6 @@ switch ($action) {
 					$gedtype = 'TYPE ' . trim($matches[1]);
 			}
 			add_simple_tag("3 $gedtype");
-
 
 			// 2 _PRIM
 			if ($gedrec == '') {
@@ -709,15 +726,14 @@ switch ($action) {
 					$gedprim = '_PRIM';
 				}
 			}
-			add_simple_tag(
-				"1 $gedprim",
-				'',
-				'',
-				''
-			); ?>
+			add_simple_tag("1 $gedprim",'','',''); ?>
 			<div class="help_text">
-				<span id="<?php echo $gedprim; ?>" class="help_text"></span>
+				<span class="help_content">
+					<?php echo KT_I18N::translate('Use this field to signal that this media item is the highlighted or primary item for the person it is attached to.  The highlighted image is the one that will be used on charts and on the Individual page.'); ?>
+				</span>
 			</div>
+			<br>
+
 			<?php
 			//-- print out editing fields for any other data in the media record
 			$sourceSOUR = '';
@@ -729,33 +745,33 @@ switch ($action) {
 						$ft = preg_match("/(\d) (\w+)(.*)/", $piece, $match);
 						if ($ft == 0) continue;
 						$subLevel = $match[1];
-						$fact = trim($match[2]);
-						$event = trim($match[3]);
-						if ($fact=='NOTE' || $fact=='TEXT') {
-							$event .= get_cont(($subLevel +1), $subrec, false);
+						$fact     = trim($match[2]);
+						$event    = trim($match[3]);
+						if ($fact == 'NOTE' || $fact == 'TEXT') {
+							$event .= get_cont(($subLevel + 1), $subrec, false);
 						}
-						if ($sourceSOUR!='' && $subLevel<=$sourceLevel) {
+						if ($sourceSOUR != '' && $subLevel <= $sourceLevel) {
 							// Get rid of all saved Source data
-							add_simple_tag($sourceLevel .' SOUR '. $sourceSOUR);
-							add_simple_tag(($sourceLevel+1) .' PAGE '. $sourcePAGE);
-							add_simple_tag(($sourceLevel+2) .' TEXT '. $sourceTEXT);
-							add_simple_tag(($sourceLevel+2) .' DATE '. $sourceDATE, '', KT_Gedcom_Tag::getLabel('DATA:DATE'));
-							add_simple_tag(($sourceLevel+1) .' QUAY '. $sourceQUAY);
+							add_simple_tag($sourceLevel . ' SOUR ' . $sourceSOUR);
+							add_simple_tag(($sourceLevel + 1) . ' PAGE ' . $sourcePAGE);
+							add_simple_tag(($sourceLevel + 2) . ' TEXT ' . $sourceTEXT);
+							add_simple_tag(($sourceLevel + 2) . ' DATE ' . $sourceDATE, '', KT_Gedcom_Tag::getLabel('DATA:DATE'));
+							add_simple_tag(($sourceLevel + 1) . ' QUAY ' . $sourceQUAY);
 							$sourceSOUR = '';
 						}
 
-						if ($fact=='SOUR') {
+						if ($fact == 'SOUR') {
 							$sourceLevel = $subLevel;
-							$sourceSOUR = $event;
-							$sourcePAGE = '';
-							$sourceTEXT = '';
-							$sourceDATE = '';
-							$sourceQUAY = '';
+							$sourceSOUR  = $event;
+							$sourcePAGE  = '';
+							$sourceTEXT  = '';
+							$sourceDATE  = '';
+							$sourceQUAY  = '';
 							continue;
 						}
 
 						// Save all incoming data about this source reference
-						if ($sourceSOUR!='') {
+						if ($sourceSOUR != '') {
 							if ($fact == 'PAGE') {
 								$sourcePAGE = $event;
 								continue;
@@ -784,11 +800,11 @@ switch ($action) {
 
 				if ($sourceSOUR != '') {
 					// Get rid of all saved Source data
-					add_simple_tag($sourceLevel .' SOUR '. $sourceSOUR);
-					add_simple_tag(($sourceLevel+1) .' PAGE '. $sourcePAGE);
-					add_simple_tag(($sourceLevel+2) .' TEXT '. $sourceTEXT);
-					add_simple_tag(($sourceLevel+2) .' DATE '. $sourceDATE, '', KT_Gedcom_Tag::getLabel('DATA:DATE'));
-					add_simple_tag(($sourceLevel+1) .' QUAY '. $sourceQUAY);
+					add_simple_tag($sourceLevel . ' SOUR ' . $sourceSOUR);
+					add_simple_tag(($sourceLevel + 1) . ' PAGE ' . $sourcePAGE);
+					add_simple_tag(($sourceLevel + 2) . ' TEXT ' . $sourceTEXT);
+					add_simple_tag(($sourceLevel + 2) . ' DATE ' . $sourceDATE, '', KT_Gedcom_Tag::getLabel('DATA:DATE'));
+					add_simple_tag(($sourceLevel + 1) . ' QUAY ' . $sourceQUAY);
 				}
 			}
 
