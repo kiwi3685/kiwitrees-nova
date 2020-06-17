@@ -1292,7 +1292,7 @@ function print_add_new_fact($id, $usedfacts, $type) {
 			<div class="cell medium-3 fact-title">
 				<label class="h6"><?php echo KT_I18N::translate('Add fact or event'); ?></label>
 			</div>
-			<div class="cell medium-9 fact-detail">
+			<div class="cell medium-8 fact-detail">
 				<form method="get" name="newfactform" action="" onsubmit="return false;">
 					<div class="input-group">
 						<div class="input-group-button">
