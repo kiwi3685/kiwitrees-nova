@@ -161,7 +161,7 @@ function messageForm ($to, $from_name, $from_email, $subject, $body, $url, $to_n
 							<i class="<?php echo $iconStyle; ?> fa-envelope"></i>
 							<?php echo KT_I18N::translate('Send'); ?>
 						</button>
-						<button class="button secondary" type="button" onclick="window.close('<?php echo $url; ?>');">
+						<button class="button secondary" type="button" onclick="window.location='<?php echo $url; ?>';">
 							<i class="<?php echo $iconStyle; ?> fa-times"></i>
 							<?php echo KT_I18N::translate('Cancel'); ?>
 						</button>
