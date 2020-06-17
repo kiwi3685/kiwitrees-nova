@@ -259,7 +259,12 @@ switch (KT_Filter::get('action')) {
 				if (userGedcomAdmin(KT_USER_ID, $tree->tree_id)) { ?>
 					<li class="accordion-item" data-accordion-item>
 						<a class="accordion-title" href="#<?php echo $tree->tree_name; ?>">
-							<?php echo $tree->tree_title_html; ?>&nbsp;<span class="subheader">(<?php echo $tree->tree_name_html; ?>.ged)</span>
+                            <?php if ($tree->tree_name_url === KT_Site::preference('DEFAULT_GEDCOM')) { ?>
+                                <i class="default <?php echo $iconStyle; ?> fa-star" title="<?php echo KT_I18N::translate('Default family tree'); ?>"></i>
+                            <?php } ?>
+							<?php echo $tree->tree_title_html; ?>
+                            &nbsp;
+                            <span class="subheader">(<?php echo $tree->tree_name_html; ?>)</span>
 						</a>
 						<div class="accordion-content" id="<?php echo $tree->tree_name; ?>" data-tab-content>
 							<?php // An optional progress bar and a list of maintenance options
@@ -292,12 +297,12 @@ switch (KT_Filter::get('action')) {
 										<div class="button hollow">
 											<?php if ($tree->tree_name_url === KT_Site::preference('DEFAULT_GEDCOM')) { ?>
 												<span>
-													<i class="fas fa-star"></i>
+													<i class="<?php echo $iconStyle; ?> fa-star"></i>
 													<?php echo KT_I18N::translate('Default family tree'); ?>
 												</span>
 											<?php } else { ?>
 												<a href="#" onclick="document.defaultform<?php echo $tree->tree_id; ?>.submit();">
-													<i class="far fa-star"></i>
+													<i class="<?php echo $iconStyle; ?> fa-star"></i>
 													<?php echo KT_I18N::translate('Set as default') ?>
 													<span class="sr-only">
 														<?php echo $tree->tree_name_url; ?>

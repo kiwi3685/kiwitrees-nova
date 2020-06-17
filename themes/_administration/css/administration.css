@@ -867,7 +867,7 @@ kbd {
   margin-bottom: 0.5rem;
   font-weight: 400;
   line-height: 1.4;
-  color: #878787;
+  color: inherit;
 }
 
 .lead {
@@ -11223,13 +11223,16 @@ body #admin-container {
   font-weight: 600;
 }
 #admin-container #admin-content .accordion .accordion-item .accordion-title .subheader {
-  color: #fefefe;
+  font-size: 85%;
   font-style: italic;
+}
+#admin-container #admin-content .accordion .accordion-item .accordion-title .subheader:hover, #admin-container #admin-content .accordion .accordion-item .accordion-title .subheader:focus {
+  color: #555555;
 }
 #admin-container #admin-content .accordion .accordion-item .accordion-title:hover, #admin-container #admin-content .accordion .accordion-item .accordion-title:focus {
   color: #555555;
 }
-#admin-container #admin-content .accordion .accordion-item .accordion-title svg {
+#admin-container #admin-content .accordion .accordion-item .accordion-title svg:not(.default) {
   position: absolute;
   right: 1rem;
   margin-top: 0.35rem;
