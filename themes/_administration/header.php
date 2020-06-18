@@ -59,7 +59,7 @@ $ft_tools = array(
 	"admin_trees_sanity.php"		=> KT_I18N::translate('Sanity check'),
 	"admin_trees_source.php"		=> KT_I18N::translate('Sources - review'),
 	"admin_trees_sourcecite.php"	=> KT_I18N::translate('Sources - review citations'),
-	"admin_trees_missing.php"		=> KT_I18N::translate('Missing data'),
+	"admin_trees_missing.php"		=> KT_I18N::translate('Missing fact or event details'),
 );
 asort($ft_tools);
 

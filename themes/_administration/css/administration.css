@@ -11172,7 +11172,7 @@ body #admin-container {
 #admin-container #admin-content {
   /* Dashboard */
   /* Media upload */
-  /* TREE configform */
+  /* TREE config */
   /* CUSTOM LANG */
   /* CUSTOM THEME */
   /* SITE CLEAN */
@@ -11182,6 +11182,7 @@ body #admin-container {
   /* TREE CHANGES LOG */
   /* SANITY CHECKS */
   /* ADD UNLINKED */
+  /* MISSING DATA */
   /* RESEARCH LINKS */
   /* USERS */
   /* CLEAN UP TABLE */
@@ -11595,6 +11596,21 @@ body #admin-container {
 }
 #admin-container #admin-content #unlinked-records-page #edit_interface-page {
   background-color: #f7f4d5;
+}
+#admin-container #admin-content #missing_data-page .callout.primary {
+  font-size: 85%;
+  font-style: italic;
+  padding: 0.5rem 1rem;
+}
+#admin-container #admin-content #missing_data-page h5.subheader {
+  font-size: 1rem;
+}
+#admin-container #admin-content #missing_data-page button.button {
+  margin-top: 2rem;
+}
+#admin-container #admin-content #missing_data-page .input-group.autocomplete_container .ui-autocomplete-input,
+#admin-container #admin-content #missing_data-page .input-group.autocomplete_container .input-group-label {
+  height: 2.4375rem;
 }
 #admin-container #admin-content #research-links-page button {
   margin: 1rem;
