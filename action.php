@@ -129,6 +129,13 @@ switch (KT_Filter::post('action')) {
 		}
 		break;
 
+    case 'delete-dna':
+		$dna_id = KT_Filter::post('dna_id');
+		$sql = "DELETE FROM `##dna` WHERE dna_id IN ('$dna_id')";
+		KT_DB::prepare($sql)->execute();
+		KT_FlashMessages::addMessage(KT_I18N::translate('DNA data deleted'));
+		break;
+
 	case 'delete-user':
 		$user_id = KT_Filter::post('user_id');
 

@@ -161,12 +161,12 @@ class tabi_dna_KT_Module extends KT_Module implements KT_Module_IndiTab {
 								<?php //-- Select & delete
 								if (KT_USER_GEDCOM_ADMIN) { ?>
 									<th>
-										<div class="delete_dna">
-											<button type="submit" class="button tiny" <?php echo 'onclick="if (confirm(\''. htmlspecialchars(KT_I18N::translate('Permanently delete these records?')). '\')) {return checkbox_delete(\'dna\', \'' . $xref . '\');} else {return false;}"';?> >
-												<?php echo KT_I18N::translate('Delete'); ?>
-											</button>
-											<input type="checkbox" onClick="toggle_select(this)">
-										</div>
+                                        <div class="delete_dna">
+                                            <button type="submit" class="button tiny" onclick="if (confirm('<?php echo htmlspecialchars(KT_I18N::translate('Permanently delete these records?')); ?>')) {return checkbox_delete('dna');} else {return false;}">
+                                                <?php echo KT_I18N::translate('Delete'); ?>
+                                            </button>
+                                            <input type="checkbox" onclick="toggle_select(this)">
+    									</div>
 									</th>
 								<?php } ?>
 							</tr>
@@ -516,7 +516,7 @@ class tabi_dna_KT_Module extends KT_Module implements KT_Module_IndiTab {
 	public function getData($xref = false, $id = false) {
 		global $controller;
 
-		self::updateSchema(); // make sure the favorites table has been created
+		self::updateSchema(); // make sure the dna table has been created
 
 		if (!$xref) {
 			$xref = $controller->record->getXref();
