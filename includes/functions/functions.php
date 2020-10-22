@@ -2623,9 +2623,9 @@ function detectMaxUploadFileSize(){
 	$base = log($maxFileSize) / log(1024);
 	$suffixes = array('', 'k', 'M', 'G', 'T');
 
-	$display_maxsize = round(pow(1024, $base - floor($base)), $precision) . $suffixes[floor($base)];
+//	$display_maxsize = round(pow(1024, $base - floor($base)), $precision) . $suffixes[floor($base)];
 
-	return $display_maxsize;
+    return $maxFileSize;
 
 }
 

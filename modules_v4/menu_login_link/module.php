@@ -29,7 +29,7 @@ if (!defined('KT_KIWITREES')) {
 class menu_login_link_KT_Module extends KT_Module implements KT_Module_Menu {
 	// Extend KT_Module
 	public function getTitle() {
-		return /* I18N: Name of a module/menu */ KT_I18N::translate('Login menu');
+		return /* I18N: Name of a module/menu */ KT_I18N::translate('Login link');
 	}
 
 	// Extend KT_Module

@@ -50,6 +50,7 @@ require 'includes/functions/functions_db.php'; // for get/setSiteSetting()
 define('KT_DATA_DIR',    'data/');
 define('KT_DEBUG_SQL',   false);
 define('KT_REQUIRED_MYSQL_VERSION', '5.0.13'); // For: prepared statements within stored procedures
+define('KT_REQUIRED_MARIADB_VERSION', '10.1.21'); // For: prepared statements within stored procedures
 define('KT_MODULES_DIR', 'modules_v4/');
 define('KT_ROOT', '');
 define('KT_GED_ID', null);
@@ -269,11 +270,14 @@ try {
 		$_POST['dbuser'],
 		$_POST['dbpass']
 	);
+
 	KT_DB::exec("SET NAMES 'utf8'");
 	$row = KT_DB::prepare("SHOW VARIABLES LIKE 'VERSION'")->fetchOneRow();
 	if (version_compare($row->value, KT_REQUIRED_MYSQL_VERSION, '<')) {
 		echo '<p class="callout alert">' . KT_I18N::translate('This database is only running MySQL version %s.  You cannot install Kiwitrees-nova here.', $row->value) . '</p>';
-	} else {
+	} elseif (version_compare($row->value, KT_REQUIRED_MARIADB_VERSION, '<')) {
+        echo '<p class="callout alert">' . KT_I18N::translate('This database is only running MariaDB version %s.  You cannot install Kiwitrees-nova here.', $row->value) . '</p>';
+    } else {
 		$db_version_ok = true;
 	}
 } catch (PDOException $ex) {
@@ -292,7 +296,7 @@ try {
 
 if (empty($_POST['dbuser']) || !KT_DB::isConnected() || !$db_version_ok) { ?>
 	<h4><?php echo KT_I18N::translate('4 - Checking the connection to your database server'); ?></h4>
-	<p><?php echo KT_I18N::translate('Kiwitrees-nova needs a MySQL database, version %s or later.', KT_REQUIRED_MYSQL_VERSION); ?></p>
+    <p><?php echo KT_I18N::translate('Kiwitrees needs a database. MySQL version %1$s or later, or MariaDB version %2$s or later.', KT_REQUIRED_MYSQL_VERSION, KT_REQUIRED_MARIADB_VERSION); ?></p>
 	<p><?php echo KT_I18N::translate('Your server\'s administrator will provide you with the connection details.'); ?></p>
 	<h5><?php echo KT_I18N::translate('Database connection'); ?></h5>
 	<div class="grid-x grid-margin-y">

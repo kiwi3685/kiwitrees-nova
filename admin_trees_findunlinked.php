@@ -25,7 +25,7 @@ define('KT_SCRIPT_NAME', 'admin_trees_findunlinked.php');
 
 require './includes/session.php';
 require KT_ROOT . 'includes/functions/functions_edit.php';
-global $NOTE_ID_PREFIX, $REPO_ID_PREFIX;
+global $NOTE_ID_PREFIX, $REPO_ID_PREFIX, $iconStyle;;
 
 $controller = new KT_Controller_Page();
 $controller
@@ -138,7 +138,7 @@ $sql_REPO = "
 			</div>
 			<p>
 				<button type="submit" class="btn btn-primary">
-					<i class="fas fa-eye"></i>
+                    <i class="<?php echo $iconStyle; ?> fa-eye"></i>
 					<?php echo KT_I18N::translate('View'); ?>
 				</button>
 			</p>

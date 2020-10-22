@@ -39,7 +39,31 @@ $headerfile = KT_THEME_DIR . 'header.php';
  * @ far	= regular
  * @ fal	= light
  */
-$iconStyle	= 'fas';
+$iconStyle	= 'fas'; // fontawesome style set
+
+//- main icons
+$KT_IMAGES = array(
+	// used to draw charts
+	'dline'          =>KT_THEME_URL.'images/dline.png',
+	'dline2'         =>KT_THEME_URL.'images/dline2.png',
+	'hline'          =>KT_THEME_URL.'images/hline.png',
+	'spacer'         =>KT_THEME_URL.'images/spacer.png',
+	'vline'          =>KT_THEME_URL.'images/vline.png',
+	'minus'          =>KT_THEME_URL.'images/minus.png',
+	'plus'           =>KT_THEME_URL.'images/plus.png',
+
+	/* used in button images and javascript
+	'add'            =>KT_THEME_URL.'images/add.png',
+	'button_family'  =>KT_THEME_URL.'images/buttons/family.png',
+	'remove'         =>KT_THEME_URL.'images/remove.png',
+	'search'         =>KT_THEME_URL.'images/search.png',
+
+	// need different sizes before moving to CSS
+	'default_image_M'=>KT_THEME_URL.'images/silhouette_male.png',
+	'default_image_F'=>KT_THEME_URL.'images/silhouette_female.png',
+	'default_image_U'=>KT_THEME_URL.'images/silhouette_unknown.png',
+	*/
+);
 
 /**
  * Icon notes

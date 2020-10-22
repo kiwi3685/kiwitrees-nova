@@ -218,8 +218,17 @@ class KT_Controller_Page extends KT_Controller_Base {
 
 			// Initialise foundation
 			jQuery(document).foundation();
+
 		');
 
+        // Prevent dropdown login block from closing when entry fields clicked.
+        if(KT_Module::getModuleByName('menu_login_dropdown')) {
+            $this->addInlineJavascript ('
+                jQuery(".is-dropdown-submenu-item .login-form input").click(function(e) {
+                    e.stopPropagation();
+                });
+            ');
+        }
 
 		header('Content-Type: text/html; charset=UTF-8');
 		require KT_ROOT . $headerfile;

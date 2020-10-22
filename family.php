@@ -124,41 +124,31 @@ if (KT_USER_ID){
 	<?php foreach ($controller->tabs as $tab) {
 		echo $tab->getPreLoadContent();
 	} ?>
-	<?php if (count($controller->tabs) > 1) { ?>
-		<ul class="tabs" id="famTabs" data-deep-link="true" data-allow-all-closed="true" data-responsive-accordion-tabs="tabs small-accordion medium-tabs" >
-			<?php foreach ($controller->tabs as $tab) {
-				if ($tab->isGrayedOut()) {
-					$greyed_out = ' rela';
-				} else {
-					$greyed_out = '';
-				}
-				$ajax = '';
-				if ($tab->hasTabContent()) { ?>
-					<li class="<?php echo $tab->getName(); ?> tabs-title<?php echo $greyed_out; ?>">
-						<a href="#<?php echo $tab->getName(); ?>" title="<?php echo $tab->getDescription(); ?>">
-							<?php echo $tab->getTitle(); ?>
-						</a>
-					</li>
-				<?php }
-			} ?>
-		</ul>
-		<div class="tabs-content" data-tabs-content="famTabs">
-			<?php foreach ($controller->tabs as $tab) {
-				if ($tab->hasTabContent()) { ?>
-					<div class="tabs-panel" id="<?php echo $tab->getName(); ?>">
-						<?php echo $tab->getTabContent(); ?>
-					</div>
-				<?php }
-			} ?>
-		</div>
-	<?php } else { ?>
+	<ul class="tabs" id="famTabs" data-deep-link="true" data-allow-all-closed="true" data-responsive-accordion-tabs="tabs small-accordion medium-tabs" >
+		<?php foreach ($controller->tabs as $tab) {
+			if ($tab->isGrayedOut()) {
+				$greyed_out = ' rela';
+			} else {
+				$greyed_out = '';
+			}
+			$ajax = '';
+			if ($tab->hasTabContent()) { ?>
+				<li class="<?php echo $tab->getName(); ?> tabs-title<?php echo $greyed_out; ?>">
+					<a href="#<?php echo $tab->getName(); ?>" title="<?php echo $tab->getDescription(); ?>">
+						<?php echo $tab->getTitle(); ?>
+					</a>
+				</li>
+			<?php }
+		} ?>
+	</ul>
+	<div class="tabs-content" data-tabs-content="famTabs">
 		<?php foreach ($controller->tabs as $tab) {
 			if ($tab->hasTabContent()) { ?>
-				<div class="cell" id="<?php echo $tab->getName(); ?>">
+				<div class="tabs-panel" id="<?php echo $tab->getName(); ?>">
 					<?php echo $tab->getTabContent(); ?>
 				</div>
 			<?php }
 		} ?>
-	<?php } ?>
+	</div>
 </div>
 <?php

@@ -53,20 +53,27 @@ $stats = new KT_Stats(KT_GEDCOM);
 // Note that security support for 5.6 ends after security support for 7.0
 $server_warnings = array();
 if (
-	PHP_VERSION_ID < 50500 ||
-	PHP_VERSION_ID < 50600 && date('Y-m-d') >= '2016-07-10' ||
-	PHP_VERSION_ID < 70000 && date('Y-m-d') >= '2018-12-31' ||
-	PHP_VERSION_ID >= 70000 && PHP_VERSION_ID < 70100 && date('Y-m-d') >= '2018-12-03'
+    // security
+    PHP_VERSION_ID < 50600 ||
+    PHP_VERSION_ID < 70000 && date('Y-m-d') >= '2018-12-31' ||
+    PHP_VERSION_ID >= 70000 && PHP_VERSION_ID < 70100 && date('Y-m-d') >= '2018-12-03' ||
+    PHP_VERSION_ID < 70200 && date('Y-m-d') >= '2019-12-01' ||
+    PHP_VERSION_ID < 70300 && date('Y-m-d') >= '2020-11-30' ||
+    PHP_VERSION_ID < 70400 && date('Y-m-d') >= '2021-12-06'
 ) {
 	$server_warnings[] = '
 		<span class="warning">' .
-			KT_I18N::translate('Your web server is using PHP version %s, which is no longer receiving security updates.  You should ask your web service provider to upgrade to a later version as soon as possible.', PHP_VERSION) . '
+			KT_I18N::translate('Your web server is using PHP version %s, which is no longer receiving security updates.  You should insist your web service provider upgrades to a later version as soon as possible.', PHP_VERSION) . '
 			<a href="https://www.php.net/supported-versions.php" target="_blank" rel="noopener noreferrer"><i class="icon-php"></i></a>
 		<span>';
 } elseif (
+    // active support
 	PHP_VERSION_ID < 50600 ||
 	PHP_VERSION_ID < 70000 && date('Y-m-d') >= '2016-12-31' ||
-	PHP_VERSION_ID < 70100 && date('Y-m-d') >= '2017-12-03'
+	PHP_VERSION_ID < 70100 && date('Y-m-d') >= '2017-12-31' ||
+    PHP_VERSION_ID < 70200 && date('Y-m-d') >= '2018-12-31' ||
+    PHP_VERSION_ID < 70300 && date('Y-m-d') >= '2019-11-30' ||
+    PHP_VERSION_ID < 70400 && date('Y-m-d') >= '2020-12-06'
 ) {
 	$server_warnings[] = '
 		<span class="accepted">' . KT_I18N::translate('Your web server is using PHP version %s, which is no longer maintained.  You should should ask your web service provider to upgrade to a later version.', PHP_VERSION) . '
@@ -239,7 +246,7 @@ $changes = KT_DB::prepare(
 								</div>
 							<?php }
 							// PHP version check
-							if (version_compare(phpversion(), '7.4', '<')) {
+							if (version_compare(phpversion(), '8.0', '<')) {
 								if (version_compare(phpversion(), '5.6', '<')) { ?>
 									<div class="callout large-4 alert">
 										<?php echo  KT_I18N::translate('Kiwitrees is no longer compatible with versions of PHP older than 7.0'); ?>

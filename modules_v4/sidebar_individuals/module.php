@@ -88,7 +88,7 @@ class sidebar_individuals_KT_Module extends KT_Module implements KT_Module_Sideb
 
     // Implement KT_Module_Sidebar
     public function getSidebarContent() {
-        global $KT_IMAGES, $UNKNOWN_NN, $controller;
+        global $KT_IMAGES, $UNKNOWN_NN, $controller, $iconStyle;
 
         // Fetch a list of the initial letters of all surnames in the database
         $initials = KT_Query_Name::surnameAlpha(true, false, KT_GED_ID, false);

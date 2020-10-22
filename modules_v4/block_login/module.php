@@ -29,7 +29,7 @@ if (!defined('KT_KIWITREES')) {
 class block_login_KT_Module extends KT_Module implements KT_Module_Block {
 	// Extend class KT_Module
 	public function getTitle() {
-		return /* I18N: Name of a module */ KT_I18N::translate('Login');
+		return /* I18N: Name of a module */ KT_I18N::translate('Login block');
 	}
 
 	// Extend class KT_Module

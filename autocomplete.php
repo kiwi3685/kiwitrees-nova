@@ -74,7 +74,7 @@ switch ($type) {
 				} else {
 					$label .= ', <i>' . $person->getLifeSpan() . '</i>';
 				}
-				$data[] = array('value'=>$row['xref'], 'label'=>$label);
+				$data[] = array('value' => $row['xref'], 'label' => $label);
 			}
 		}
 
@@ -98,7 +98,7 @@ switch ($type) {
 		// Filter for privacy
 		foreach ($rows as $row) {
 			$person = KT_Person::getInstance($row);
-			if (preg_match('/\n2 CAUS (.*'.preg_quote($term, '/').'.*)/i', $person->getGedcomRecord(), $match)) {
+			if (preg_match('/\n2 CAUS (.*'.preg_quote($term, '/') . '.*)/i', $person->getGedcomRecord(), $match)) {
 				if (!in_array($match[1], $data)) {
 					$data[] = $match[1];
 				}
@@ -125,7 +125,7 @@ switch ($type) {
 		// Filter for privacy
 		foreach ($rows as $row) {
 			$person = KT_Person::getInstance($row);
-			if (preg_match('/\n2 CEME (.*'.preg_quote($term, '/').'.*)/i', $person->getGedcomRecord(), $match)) {
+			if (preg_match('/\n2 CEME (.*'.preg_quote($term, '/') . '.*)/i', $person->getGedcomRecord(), $match)) {
 				if (!in_array($match[1], $data)) {
 					$data[] = $match[1];
 				}
@@ -152,7 +152,7 @@ switch ($type) {
 		// Filter for privacy
 		foreach ($rows as $row) {
 			$person = KT_Person::getInstance($row);
-			if (preg_match('/\n2 TYPE (.*'.preg_quote($term, '/').'.*)/i', $person->getGedcomRecord(), $match)) {
+			if (preg_match('/\n2 TYPE (.*'.preg_quote($term, '/') . '.*)/i', $person->getGedcomRecord(), $match)) {
 				if (!in_array($match[1], $data)) {
 					$data[] = $match[1];
 				}
@@ -179,7 +179,7 @@ switch ($type) {
 		// Filter for privacy
 		foreach ($rows as $row) {
 			$person = KT_Person::getInstance($row);
-			if (preg_match('/\n2 TYPE (.*'.preg_quote($term, '/').'.*)/i', $person->getGedcomRecord(), $match)) {
+			if (preg_match('/\n2 TYPE (.*'.preg_quote($term, '/') . '.*)/i', $person->getGedcomRecord(), $match)) {
 				if (!in_array($match[1], $data)) {
 					$data[] = $match[1];
 				}
@@ -206,7 +206,7 @@ switch ($type) {
 		// Filter for privacy
 		foreach ($rows as $row) {
 			$person = KT_Person::getInstance($row);
-			if (preg_match('/\n2 TYPE (.*'.preg_quote($term, '/').'.*)/i', $person->getGedcomRecord(), $match)) {
+			if (preg_match('/\n2 TYPE (.*'.preg_quote($term, '/') . '.*)/i', $person->getGedcomRecord(), $match)) {
 				if (!in_array($match[1], $data)) {
 					$data[] = $match[1];
 				}
@@ -227,9 +227,9 @@ switch ($type) {
 			if ($family->canDisplayName()) {
 				$marriage_year = $family->getMarriageYear();
 				if ($marriage_year) {
-					$data[] = array('value'=>$family->getXref(), 'label'=>$family->getFullName().', <i>'.$marriage_year.'</i>');
+					$data[] = array('value' => $family->getXref(), 'label' => $family->getFullName() . ', <i>' . $marriage_year . '</i>');
 				} else {
-					$data[] = array('value'=>$family->getXref(), 'label'=>$family->getFullName());
+					$data[] = array('value' => $family->getXref(), 'label' => $family->getFullName());
 				}
 			}
 		}
@@ -317,7 +317,7 @@ switch ($type) {
 		foreach ($rows as $row) {
 			$person = KT_Person::getInstance($row);
 			if ($person->canDisplayName()) {
-				$data[] = array('value'=>$row['xref'], 'label'=>str_replace(array('@N.N.', '@P.N.'), array($UNKNOWN_NN, $UNKNOWN_PN), $row['n_full']).', <i>'.$person->getLifeSpan().'</i>');
+				$data[] = array('value' => $row['xref'], 'label'=>str_replace(array('@N.N.', '@P.N.'), array($UNKNOWN_NN, $UNKNOWN_PN), $row['n_full']) . ', <i>' . $person->getLifeSpan() . '</i>');
 			}
 		}
 
@@ -333,7 +333,7 @@ switch ($type) {
 		foreach ($rows as $row) {
 			$note = KT_Note::getInstance($row);
 			if ($note->canDisplayName()) {
-				$data[] = array('value'=>$row['xref'], 'label'=>$note->getFullName());
+				$data[] = array('value' => $row['xref'], 'label' => $note->getFullName());
 			}
 		}
 
@@ -366,7 +366,7 @@ switch ($type) {
 		foreach ($rows as $row) {
 			$media = KT_Media::getInstance($row);
 			if ($media->canDisplayName()) {
-				$data[] = array('value'=>$row['xref'], 'label'=>'<img src="' . $media->getHtmlUrlDirect().'" width="25"> ' . $media->getFullName());
+				$data[] = array('value' => $row['xref'], 'label'=>'<img src="' . $media->getHtmlUrlDirect() . '" width="25"> ' . $media->getFullName());
 			}
 		}
 
@@ -390,7 +390,7 @@ switch ($type) {
 		// Filter for privacy
 		foreach ($rows as $row) {
 			$person = KT_Person::getInstance($row);
-			if (preg_match('/\n1 OCCU (.*'.preg_quote($term, '/').'.*)/i', $person->getGedcomRecord(), $match)) {
+			if (preg_match('/\n1 OCCU (.*'.preg_quote($term, '/') . '.*)/i', $person->getGedcomRecord(), $match)) {
 				if (!in_array($match[1], $data)) {
 					$data[] = $match[1];
 				}
@@ -484,7 +484,7 @@ switch ($type) {
 		foreach ($rows as $row) {
 			$repository = KT_Repository::getInstance($row);
 			if ($repository->canDisplayName()) {
-				$data[] = array('value'=>$row['xref'], 'label'=>$row['n_full']);
+				$data[] = array('value' => $row['xref'], 'label' => $row['n_full']);
 			}
 		}
 
@@ -520,7 +520,7 @@ switch ($type) {
 		foreach ($rows as $row) {
 			$source = KT_Source::getInstance($row);
 			if ($source->canDisplayName()) {
-				$data[] = array('value'=>$row['xref'], 'label'=>$row['n_full']);
+				$data[] = array('value' => $row['xref'], 'label' => $row['n_full']);
 			}
 		}
 
@@ -545,10 +545,10 @@ switch ($type) {
 		// Filter for privacy
 		foreach ($rows as $row) {
 			$person = KT_Person::getInstance($row);
-			if (preg_match('/\n1 SOUR @'.$sid.'@(?:\n[2-9].*)*\n2 PAGE (.*'.str_replace(' ', '.+', preg_quote($term, '/')).'.*)/i', $person->getGedcomRecord(), $match)) {
+			if (preg_match('/\n1 SOUR @' . $sid . '@(?:\n[2-9].*)*\n2 PAGE (.*'.str_replace(' ', '.+', preg_quote($term, '/')) . '.*)/i', $person->getGedcomRecord(), $match)) {
 				$data[] = $match[1];
 			}
-			if (preg_match('/\n2 SOUR @'.$sid.'@(?:\n[3-9].*)*\n3 PAGE (.*'.str_replace(' ', '.+', preg_quote($term, '/')).'.*)/i', $person->getGedcomRecord(), $match)) {
+			if (preg_match('/\n2 SOUR @' . $sid . '@(?:\n[3-9].*)*\n3 PAGE (.*'.str_replace(' ', '.+', preg_quote($term, '/')) . '.*)/i', $person->getGedcomRecord(), $match)) {
 				$data[] = $match[1];
 			}
 		}
@@ -566,11 +566,31 @@ switch ($type) {
 		// Filter for privacy
 		foreach ($rows as $row) {
 			$family = KT_Family::getInstance($row);
-			if (preg_match('/\n1 SOUR @'.$sid.'@(?:\n[2-9].*)*\n2 PAGE (.*'.str_replace(' ', '.+', preg_quote($term, '/')).'.*)/i', $family->getGedcomRecord(), $match)) {
+			if (preg_match('/\n1 SOUR @' . $sid . '@(?:\n[2-9].*)*\n2 PAGE (.*'.str_replace(' ', '.+', preg_quote($term, '/')) . '.*)/i', $family->getGedcomRecord(), $match)) {
 				$data[] = $match[1];
 			}
-			if (preg_match('/\n2 SOUR @'.$sid.'@(?:\n[3-9].*)*\n3 PAGE (.*'.str_replace(' ', '.+', preg_quote($term, '/')).'.*)/i', $family->getGedcomRecord(), $match)) {
+			if (preg_match('/\n2 SOUR @' . $sid . '@(?:\n[3-9].*)*\n3 PAGE (.*'.str_replace(' ', '.+', preg_quote($term, '/')) . '.*)/i', $family->getGedcomRecord(), $match)) {
 				$data[] = $match[1];
+			}
+		}
+
+        // Fetch all data, regardless of privacy
+		$rows=
+			KT_DB::prepare("
+				SELECT SQL_CACHE 'OBJE' AS type, m_id AS xref, m_file AS ged_id, m_gedcom AS gedrec
+				 FROM `##media`
+				 WHERE m_gedcom LIKE CONCAT('%\n_ SOUR @', ?, '@%', REPLACE(?, ' ', '%'), '%') AND m_file=?
+			")
+			->execute(array($sid, $term, KT_GED_ID))
+			->fetchAll(PDO::FETCH_ASSOC);
+
+		// Filter for privacy
+		foreach ($rows as $row) {
+			if (preg_match('/\n1 SOUR @' . $sid . '@(?:\n[2-9].*)*\n2 PAGE (.*'.str_replace(' ', '.+', preg_quote($term, '/')) . '.*)/i', $row['gedrec'], $match)) {
+				$data[] = $match[1];
+			}
+			if (preg_match('/\n2 SOUR @' . $sid . '@(?:\n[3-9].*)*\n3 PAGE (.*'.str_replace(' ', '.+', preg_quote($term, '/')) . '.*)/i', $row['gedrec'], $match)) {
+				$data[] = $match[0];
 			}
 		}
 
@@ -633,7 +653,7 @@ switch ($type) {
 		foreach ($rows as $row) {
 			$person = KT_Person::getInstance($row);
 			if ($person->canDisplayName()) {
-				$data[] = array('value'=>$row['xref'], 'label'=>str_replace(array('@N.N.', '@P.N.'), array($UNKNOWN_NN, $UNKNOWN_PN), $row['n_full']).', <i>'.$person->getLifeSpan().'</i>');
+				$data[] = array('value' => $row['xref'], 'label'=>str_replace(array('@N.N.', '@P.N.'), array($UNKNOWN_NN, $UNKNOWN_PN), $row['n_full']) . ', <i>' . $person->getLifeSpan() . '</i>');
 			}
 		}
 
@@ -644,7 +664,7 @@ switch ($type) {
 		foreach ($rows as $row) {
 			$source = KT_Source::getInstance($row);
 			if ($source->canDisplayName()) {
-				$data[] = array('value'=>$row['xref'], 'label'=>$row['n_full']);
+				$data[] = array('value' => $row['xref'], 'label' => $row['n_full']);
 			}
 		}
 
@@ -655,7 +675,7 @@ switch ($type) {
 		foreach ($rows as $row) {
 			$repository = KT_Repository::getInstance($row);
 			if ($repository->canDisplayName()) {
-				$data[] = array('value'=>$row['xref'], 'label'=>$row['n_full']);
+				$data[] = array('value' => $row['xref'], 'label' => $row['n_full']);
 			}
 		}
 
@@ -666,7 +686,7 @@ switch ($type) {
 		foreach ($rows as $row) {
 			$media = KT_Media::getInstance($row);
 			if ($media->canDisplayName()) {
-				$data[] = array('value'=>$row['xref'], 'label'=>'<img src="'.$media->getHtmlUrlDirect().'" width="25"> '.$media->getFullName());
+				$data[] = array('value' => $row['xref'], 'label'=>'<img src="' . $media->getHtmlUrlDirect() . '" width="25"> ' . $media->getFullName());
 			}
 		}
 
@@ -679,9 +699,9 @@ switch ($type) {
 			if ($family->canDisplayName()) {
 				$marriage_year = $family->getMarriageYear();
 				if ($marriage_year) {
-					$data[] = array('value'=>$family->getXref(), 'label'=>$family->getFullName().', <i>'.$marriage_year.'</i>');
+					$data[] = array('value' => $family->getXref(), 'label' => $family->getFullName() . ', <i>' . $marriage_year . '</i>');
 				} else {
-					$data[] = array('value'=>$family->getXref(), 'label'=>$family->getFullName());
+					$data[] = array('value' => $family->getXref(), 'label' => $family->getFullName());
 				}
 			}
 		}
@@ -693,7 +713,7 @@ switch ($type) {
 		foreach ($rows as $row) {
 			$note = KT_Note::getInstance($row);
 			if ($note->canDisplayName()) {
-				$data[] = array('value'=>$row['xref'], 'label'=>$note->getFullName());
+				$data[] = array('value' => $row['xref'], 'label' => $note->getFullName());
 			}
 		}
 
@@ -711,7 +731,7 @@ switch ($type) {
 		foreach ($rows as $row) {
 			$person = KT_Person::getInstance($row);
 			if ($person->canDispLayname()) {
-				$data[] = array('value'=>$row['xref'], 'label'=>'<i class="icon-button_indi"></i>'. str_replace(array('@N.N.', '@P.N.'), array($UNKNOWN_NN, $UNKNOWN_PN), $row['n_full']).', <i>'.$person->getLifeSpan().'</i>');
+				$data[] = array('value' => $row['xref'], 'label'=>'<i class="icon-button_indi"></i>'. str_replace(array('@N.N.', '@P.N.'), array($UNKNOWN_NN, $UNKNOWN_PN), $row['n_full']) . ', <i>' . $person->getLifeSpan() . '</i>');
 			}
 		}
 
@@ -722,7 +742,7 @@ switch ($type) {
 		foreach ($rows as $row) {
 			$source = KT_Source::getInstance($row);
 			if ($source->canDispLayname()) {
-				$data[] = array('value'=>$row['xref'], 'label'=>'<i class="icon-button_source"></i>'. $row['n_full']);
+				$data[] = array('value' => $row['xref'], 'label'=>'<i class="icon-button_source"></i>'. $row['n_full']);
 			}
 		}
 
@@ -735,9 +755,9 @@ switch ($type) {
 			if ($family->canDispLayname()) {
 				$marriage_year = $family->getMarriageYear();
 				if ($marriage_year) {
-					$data[] = array('value'=>$family->getXref(), 'label'=>'<i class="icon-button_family"></i>'. $family->getFullName().', <i>'.$marriage_year.'</i>');
+					$data[] = array('value' => $family->getXref(), 'label'=>'<i class="icon-button_family"></i>'. $family->getFullName() . ', <i>' . $marriage_year . '</i>');
 				} else {
-					$data[] = array('value'=>$family->getXref(), 'label'=>'<i class="icon-button_family"></i>'. $family->getFullName());
+					$data[] = array('value' => $family->getXref(), 'label'=>'<i class="icon-button_family"></i>'. $family->getFullName());
 				}
 			}
 		}

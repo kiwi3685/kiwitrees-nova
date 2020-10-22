@@ -39,8 +39,8 @@ $headerfile = KT_THEME_DIR . 'header.php';
  * @top			= icon above label
  * @bottom		= icons below label
  */
-//$iconStyle	= 'fas'; // fontawesome style set
-$iconStyle	= 'fal'; // fontawesome style set
+ $iconStyle	= 'fas'; // fontawesome style set
+ //$iconStyle	= 'fal';
 
 //- main icons
 $KT_IMAGES = array(
@@ -50,12 +50,12 @@ $KT_IMAGES = array(
 	'hline'          =>KT_THEME_URL.'images/hline.png',
 	'spacer'         =>KT_THEME_URL.'images/spacer.png',
 	'vline'          =>KT_THEME_URL.'images/vline.png',
+	'minus'          =>KT_THEME_URL.'images/minus.png',
+	'plus'           =>KT_THEME_URL.'images/plus.png',
 
 	/* used in button images and javascript
 	'add'            =>KT_THEME_URL.'images/add.png',
 	'button_family'  =>KT_THEME_URL.'images/buttons/family.png',
-	'minus'          =>KT_THEME_URL.'images/minus.png',
-	'plus'           =>KT_THEME_URL.'images/plus.png',
 	'remove'         =>KT_THEME_URL.'images/remove.png',
 	'search'         =>KT_THEME_URL.'images/search.png',
 

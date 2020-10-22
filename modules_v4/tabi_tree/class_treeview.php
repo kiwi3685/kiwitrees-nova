@@ -56,7 +56,7 @@ class TreeView {
 				<div id="tv_tools" class="noprint">
 					<ul>
 						<li id="tvbCompact" class="tv_button">
-							<img src="' . KT_STATIC_URL . KT_MODULES_DIR . 'tree/images/compact.png" alt="' . KT_I18N::translate('Use compact layout') . '" title="' . KT_I18N::translate('Use compact layout') . '">
+							<img src="' . KT_STATIC_URL . KT_MODULES_DIR . 'tabi_tree/images/compact.png" alt="' . KT_I18N::translate('Use compact layout') . '" title="' . KT_I18N::translate('Use compact layout') . '">
 						</li>
 						<li id="tvbAllPartners" class="tv_button' . ($this->all_partners === 'true' ? ' tvPressed' : '') . '">
 							<a class="icon-sfamily" href="#" title="' . KT_I18N::translate('Show all spouses and ancestors') . '"></a>
