@@ -29,6 +29,7 @@ if (!defined('KT_KIWITREES')) {
 // Actions from the configuration page
 require KT_ROOT . 'includes/functions/functions_edit.php';
 $ftv = new KT_Controller_FancyTreeView();
+global $iconStyle;
 
 $controller = new KT_Controller_Page;
 $controller
