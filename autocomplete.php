@@ -412,8 +412,8 @@ switch ($type) {
 		}
 
 		foreach (KT_Place::findPlaces($term, KT_GED_ID) as $place) {
-			$newPlace = ucfirst(strtolower($newPlace));
 			if ($newPlace) {
+				$newPlace = ucwords(strtolower($newPlace));
 				$data[] = $newPlace . ', ' . $place->getGedcomName();
 			} else {
 				$data[] = $place->getGedcomName();
@@ -528,7 +528,7 @@ switch ($type) {
 
 	exit;
 
-	case 'SOUR_PAGE': // Citation details, for a given source, that contain the search term
+	case 'SOUR_PAGE': // Citation details, for a given source, that contain the search term, in INDI, FAM and OBJE records
 		$data = array();
 		$sid  = KT_Filter::get('extra', KT_REGEX_XREF);
 

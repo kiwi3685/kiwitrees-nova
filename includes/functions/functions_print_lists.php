@@ -77,24 +77,24 @@ function format_indi_table($datalist, $option='') {
 				},
 				stateDuration: -1,
 				columns: [
-					/*  0 givn      */ { dataSort: 2 },
-					/*  1 surn      */ { dataSort: 3 },
+					/*  0 givn      */ { dataSort: 2, class: "indiListGivn"},
+					/*  1 surn      */ { dataSort: 3, class: "indiListSurn"},
 					/*  2 GIVN,SURN */ { type: "unicode", visible: false },
 					/*  3 SURN,GIVN */ { type: "unicode", visible: false },
 					/*  4 sosa      */ { dataSort: 5, visible: ' . ($option === 'sosa' ? 'true' : 'false') . ' },
 					/*  5 SOSA      */ { type: "num", visible: false },
-					/*  6 birt date */ { dataSort: 7, class: "show-for-medium" },
+					/*  6 birt date */ { dataSort: 7, class: "show-for-medium indiListDate" },
 					/*  7 BIRT:DATE */ { visible: false },
-					/*  8 anniv     */ { dataSort: 7, class: "show-for-medium", width: "2.5rem" },
+					/*  8 anniv     */ { dataSort: 7, class: "show-for-medium indiListAnniv" },
 					/*  9 birt plac */ { type: "unicode", class: "show-for-medium" },
-					/* 10 children  */ { dataSort: 11, class: "show-for-medium", width: "2.5rem" },
+					/* 10 children  */ { dataSort: 11, class: "show-for-medium indiListAnniv" },
 					/* 11 CHILDREN  */ { type: "num", visible: false },
-					/* 12 deat date */ { dataSort: 13, class: "show-for-medium" },
+					/* 12 deat date */ { dataSort: 13, class: "show-for-medium indiListDate" },
 					/* 13 DEAT:DATE */ { visible: false },
-					/* 14 anniv     */ { dataSort: 13, class: "show-for-medium", width: "2.5rem" },
-					/* 15 age       */ { dataSort: 16, class: "show-for-medium", width: "2.5rem" },
+					/* 14 anniv     */ { dataSort: 13, class: "show-for-medium indiListAnniv" },
+					/* 15 age       */ { dataSort: 16, class: "show-for-medium indiListAnniv" },
 					/* 16 AGE       */ { type: "num", class: "show-for-medium", visible: false },
-					/* 17 deat plac */ { type: "unicode", class: "show-for-medium" },
+					/* 17 deat plac */ { type: "unicode", class: "show-for-medium indiListAnniv" },
 					/* 18 CHAN      */ { dataSort: 19, visible: ' . ($SHOW_LAST_CHANGE ? 'true' : 'false') . ' },
 					/* 19 CHAN_sort */ { visible: false },
 					/* 20 SEX       */ { visible: false },
@@ -143,7 +143,7 @@ function format_indi_table($datalist, $option='') {
 
 	// Bad data can cause "longest life" to be huge, blowing memory limits
 	if ($stats->LongestLifeAge()) {
-		$max_age = min($MAX_ALIVE_AGE, $stats->LongestLifeAge()) + 1;
+		$max_age = min($MAX_ALIVE_AGE, (int) $stats->LongestLifeAge()) + 1;
 	} else {
 		$max_age = 0;
 	}
