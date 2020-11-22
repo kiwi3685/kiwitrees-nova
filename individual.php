@@ -221,29 +221,28 @@ if ($highlightImage) {
 				<div class="cell">
 					<ul class="tabs" id="indiTabs" data-deep-link="true" data-allow-all-closed="true" data-responsive-accordion-tabs="tabs small-accordion medium-tabs" >
 						<?php foreach ($modules as $tab) {
-                if ($tab->isGrayedOut()) {
-                    $greyed_out = ' rela';
-                } else {
-                    $greyed_out = '';
-                }
-                $ajax = '';
-                if ($tab->hasTabContent()) { ?>
+                            if ($tab->isGrayedOut()) {
+                                $greyed_out = ' rela';
+                            } else {
+                                $greyed_out = '';
+                            }
+                            if ($tab->hasTabContent()) { ?>
 								<li class="<?php echo $tab->getName(); ?> tabs-title<?php echo $greyed_out; ?>">
 									<a href="#<?php echo $tab->getName(); ?>" title="<?php echo $tab->getDescription(); ?>">
 										<?php echo $tab->getTitle(); ?>
 									</a>
 								</li>
 							<?php }
-            } ?>
+                        } ?>
 					</ul>
 					<div class="tabs-content" data-tabs-content="indiTabs">
 						<?php foreach ($modules as $tab) {
-                if ($tab->hasTabContent()) { ?>
+                            if ($tab->hasTabContent()) { ?>
 								<div class="tabs-panel" id="<?php echo $tab->getName(); ?>">
 									<?php echo $tab->getTabContent(); ?>
 								</div>
 							<?php }
-            } ?>
+                        } ?>
 					</div>
 				</div>
 			</div>
