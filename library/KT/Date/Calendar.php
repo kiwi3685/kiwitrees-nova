@@ -64,6 +64,15 @@ class KT_Date_Calendar {
 			return;
 		}
 
+        // Not all dates can be converted
+        if (!$this->inValidRange()) {
+            $this->y = 0;
+            $this->m = 0;
+            $this->d = 0;
+
+            return;
+        }
+
 		// ...else construct an inequivalent xxxxDate object
 		if ($date->y == 0) {
 			// Incomplete date - convert on basis of anniversary in current year
