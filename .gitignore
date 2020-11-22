@@ -39,6 +39,9 @@ prepros.config
 #lightGallery
 /library/lightGallery
 
+#php=diff
+/library/php-diff/example
+
 /modules_v4/database_backup/vendor/r23/msd/work
 /modules_v4/gallery/galleria/themes/azur
 /modules_v4/gallery/galleria/themes/folio
