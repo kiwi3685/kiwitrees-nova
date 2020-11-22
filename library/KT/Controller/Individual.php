@@ -188,13 +188,6 @@ class KT_Controller_Individual extends KT_Controller_GedcomRecord {
 				<div class="grid-x grid-padding-x">
 					<div class="cell medium-9">
 						<div class="grid-x">
-							<div class="cell medium-2">
-								<?php $dummy->setPrimaryName(0); ?>
-								<label><?php echo KT_I18N::translate('Name'); ?></label>
-							</div>
-							<div class="cell medium-10">
-								<?php echo $dummy->getFullName(); ?>
-							</div>
 							<?php $ct = preg_match_all('/\n2 (\w+) (.*)/', $factrec, $nmatch, PREG_SET_ORDER);
 							for ($i = 0; $i < $ct; $i ++) { ?>
 								<?php $fact = $nmatch[$i][1];
