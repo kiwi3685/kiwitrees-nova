@@ -364,7 +364,7 @@ class KT_Stats {
 			);
 		}
 
-		return json_encode($data, JSON_NUMERIC_CHECK);
+		return json_encode($data);
 
 	}
 
@@ -418,7 +418,7 @@ class KT_Stats {
 			);
 		}
 
-		return json_encode($data, JSON_NUMERIC_CHECK);
+		return json_encode($data);
 
 	}
 
@@ -706,7 +706,7 @@ class KT_Stats {
 			);
 		}
 
-		return json_encode($data, JSON_NUMERIC_CHECK);
+		return json_encode($data);
 	}
 
 	// The totalLiving/totalDeceased queries assume that every dead person will
@@ -766,7 +766,7 @@ class KT_Stats {
 			);
 		}
 
-		return json_encode($data, JSON_NUMERIC_CHECK);
+		return json_encode($data);
 
 	}
 
@@ -884,7 +884,7 @@ class KT_Stats {
 			);
 		}
 
-		return json_encode($data, JSON_NUMERIC_CHECK);
+		return json_encode($data);
 
 	}
 
@@ -1175,7 +1175,7 @@ class KT_Stats {
 				);
 			}
 
-			return json_encode($data, JSON_NUMERIC_CHECK);
+			return json_encode($data);
 		} else {
 			return false;
 		}
@@ -1332,7 +1332,7 @@ class KT_Stats {
 				}
 			}
 
-			return json_encode($data, JSON_NUMERIC_CHECK);
+			return json_encode($data);
 
 		}
 
@@ -1395,7 +1395,7 @@ class KT_Stats {
 				}
 			}
 
-			return json_encode($data, JSON_NUMERIC_CHECK);
+			return json_encode($data);
 
 		}
 
@@ -1718,7 +1718,7 @@ class KT_Stats {
 				);
 			}
 
-			return json_encode($data, JSON_NUMERIC_CHECK);
+			return json_encode($data);
 
 		} else {
 			$sex_search = '';
@@ -2263,7 +2263,7 @@ class KT_Stats {
 				}
 			}
 
-			return json_encode($data, JSON_NUMERIC_CHECK);
+			return json_encode($data);
 
 		}
 
@@ -2329,7 +2329,7 @@ class KT_Stats {
 				}
 			}
 
-			return json_encode($data, JSON_NUMERIC_CHECK);
+			return json_encode($data);
 
 		}
 
@@ -2425,7 +2425,7 @@ class KT_Stats {
 				);
 			}
 
-			return json_encode($data, JSON_NUMERIC_CHECK);
+			return json_encode($data);
 
 		} else {
 			if ($year1>=0 && $year2>=0) {
@@ -2934,7 +2934,7 @@ class KT_Stats {
 				}
 			}
 
-			return json_encode($data, JSON_NUMERIC_CHECK);
+			return json_encode($data);
 
 		} else {
 			if ($sex=='M') {
@@ -3080,7 +3080,7 @@ class KT_Stats {
 			}
 		}
 
-		return json_encode($data, JSON_NUMERIC_CHECK);
+		return json_encode($data);
 
 	}
 
@@ -3234,7 +3234,7 @@ class KT_Stats {
 			);
 		}
 
-		return json_encode($data, JSON_NUMERIC_CHECK);
+		return json_encode($data);
 
 	}
 
@@ -3404,7 +3404,7 @@ class KT_Stats {
 			);
 		}
 
-		return json_encode($data, JSON_NUMERIC_CHECK);
+		return json_encode($data);
 
 	}
 
