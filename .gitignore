@@ -5,6 +5,7 @@
 *.sass-cache
 *.yml
 .php_cs
+.DS_Store
 npm-debug.log
 /node_modules
 package.json
