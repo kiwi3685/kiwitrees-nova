@@ -1029,13 +1029,26 @@ function print_media_links($factrec, $level, $pid='') {
 	global $THUMBNAIL_WIDTH;
 	global $GEDCOM, $HIDE_GEDCOM_ERRORS;
 
-	$ged_id=get_id_from_gedcom($GEDCOM);
+	$ged_id = get_id_from_gedcom($GEDCOM);
 	$nlevel = $level+1;
-	if ($level==1) $size=50;
-	else $size=25;
-	if (preg_match_all("/$level OBJE @(.*)@/", $factrec, $omatch, PREG_SET_ORDER) == 0) return;
-	$objectNum = 0;
-	count($omatch) < 2 ? $imageClass = ' single' : $imageClass = '';
+
+ 	if ($level == 1) {
+		$size = 50;
+	} else {
+		$size = 25;
+	}
+
+ 	if (preg_match_all("/$level OBJE @(.*)@/", $factrec, $omatch, PREG_SET_ORDER) == 0) return;
+
+ 	$objectNum  = 0;
+ 	$mediaWidth = 'width: auto';
+
+ 	if (count($omatch) > 1) {
+ 		$mediaWidth = ' width: ' . 90 / min(count($omatch), 4) . '%;';
+         if (count($omatch) > 4) {
+            $mediaWidth .= ' min-height: 210px;';
+        }
+	}
 
 	while ($objectNum < count($omatch)) {
 		$media_id = $omatch[$objectNum][1];
