@@ -107,26 +107,32 @@ if ($image || $USE_SILHOUETTE) {
 $linkToID = $controller->record->getXref(); // -- Tell addmedia.php what to link to
 
 $controller->addInlineJavascript('
-	// open specified tab, previously saved tab, or the first one
-	if (window.location.hash) {
-		var hash = window.location.hash;
-	} else if (sessionStorage.getItem("indi-tab")) {
-		var hash = sessionStorage.getItem("indi-tab");
-	} else {
-		var hash = jQuery("#indiTabs li:first a").attr("href");
-	};
-	var openhash = hash.substr(1);
-	jQuery("#indiTabs li." + openhash).addClass("is-active");
-	jQuery("div#" + openhash).addClass("is-active");
-	jQuery("#indiTabs li." + openhash + " a").attr("aria-selected","true");
-	jQuery("#indiTabs").on("change.zf.tabs", function() {
-		sessionStorage.setItem("indi-tab", window.location.hash);
-	});
+    // Foundation tabs need help to load with Ajax
+//    jQuery("[data-tabs]").on("change.zf.tabs", function()
+//        jQuery(".tabs-content .is-active").html(data);
+//    });
 
-	// make modal / reveal items draggable
-	jQuery(".reveal").draggable({
-		 cursor: "move"
-	});
+	// open specified tab, previously saved tab, or the first one
+    	if (window.location.hash) {
+    		var hash = window.location.hash;
+    	} else if (sessionStorage.getItem("indi-tab")) {
+    		var hash = sessionStorage.getItem("indi-tab");
+    	} else {
+    		var hash = jQuery("#indiTabs li:first a").attr("href");
+    	};
+    	var openhash = hash.substr(1);
+    	jQuery("#indiTabs li." + openhash).addClass("is-active");
+    	jQuery("div#" + openhash).addClass("is-active");
+    	jQuery("#indiTabs li." + openhash + " a").attr("aria-selected","true");
+    	jQuery("#indiTabs").on("change.zf.tabs", function() {
+    		sessionStorage.setItem("indi-tab", window.location.hash);
+    	});
+
+    	// make modal / reveal items draggable
+    	jQuery(".reveal").draggable({
+    		 cursor: "move"
+    	});
+
 ');
 
 // Check if sidebar active and set widths accordingly
@@ -219,7 +225,7 @@ if ($highlightImage) {
             } ?>
 			<div class="grid-x">
 				<div class="cell">
-					<ul class="tabs" id="indiTabs" data-deep-link="true" data-allow-all-closed="true" data-responsive-accordion-tabs="tabs small-accordion medium-tabs" >
+					<ul class="tabs" data-tabs id="indiTabs" data-deep-link="true" data-allow-all-closed="true" data-responsive-accordion-tabs="tabs small-accordion medium-tabs" >
 						<?php foreach ($modules as $tab) {
                             if ($tab->isGrayedOut()) {
                                 $greyed_out = ' rela';
@@ -228,8 +234,13 @@ if ($highlightImage) {
                             }
                             if ($tab->hasTabContent()) { ?>
 								<li class="<?php echo $tab->getName(); ?> tabs-title<?php echo $greyed_out; ?>">
-									<a href="#<?php echo $tab->getName(); ?>" title="<?php echo $tab->getDescription(); ?>">
-										<?php echo $tab->getTitle(); ?>
+                                    <?php if ($tab->canLoadAjax()) { ?>
+    									<!-- AJAX tabs load only when selected -->
+    									<a href="<?php echo $controller->record->getHtmlUrl(); ?>&amp;action=ajax&amp;module=<?php echo $tab->getName(); ?>" title="<?php echo $tab->getDescription(); ?>" rel="nofollow">
+								    <?php } else { ?>
+    									<a href="#<?php echo $tab->getName(); ?>" title="<?php echo $tab->getDescription(); ?> rel="nofollow">
+                                    <?php } ?>
+										<span><?php echo $tab->getTitle(); ?></span>
 									</a>
 								</li>
 							<?php }
@@ -239,7 +250,9 @@ if ($highlightImage) {
 						<?php foreach ($modules as $tab) {
                             if ($tab->hasTabContent()) { ?>
 								<div class="tabs-panel" id="<?php echo $tab->getName(); ?>">
-									<?php echo $tab->getTabContent(); ?>
+                                    <?php if (!$tab->canLoadAjax()) {
+    									echo $tab->getTabContent();
+                                    } ?>
 								</div>
 							<?php }
                         } ?>

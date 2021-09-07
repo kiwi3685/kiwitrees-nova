@@ -140,9 +140,10 @@ class tabi_notes_KT_Module extends KT_Module implements KT_Module_IndiTab {
 	}
 	// Implement KT_Module_IndiTab
 	public function canLoadAjax() {
-		global $SEARCH_SPIDER;
+//		global $SEARCH_SPIDER;
 
-		return !$SEARCH_SPIDER; // Search engines cannot use AJAX
+//		return !$SEARCH_SPIDER; // Search engines cannot use AJAX
+        return false;
 	}
 
 	// Implement KT_Module_IndiTab

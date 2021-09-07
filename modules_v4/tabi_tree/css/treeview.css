@@ -20,14 +20,17 @@
  * along with Kiwitrees. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#tree-title {display:none;}
 #tree-page #tree-title {display: block; text-align: initial; margin:10px;}
 .tv_out {
 	position: relative;
 	overflow: hidden;
 	height: 100%;
 	width: 99%;
+	border: 3px inset #e6e6e6; /* customizable */
 	min-height: 350px; /* customizable, not mandatory, but should be set to always have something to display */
 	max-height: 10000px; /* customizable, not mandatory, but should be set not too high to limit the size of ajax requests and not too low to enable whole big trees printing */
+	background: #E6E6E6; /* customizable */
 }
 .tv_out img {
 	border: 0;
@@ -51,7 +54,7 @@
 	padding: 0;
 	margin: 0;
 	background: none;
-	font-size: 11px;
+	font-size: 14px;
 }
 .tv_in table.tv_tree {
 	border-collapse: collapse;
@@ -155,22 +158,24 @@ table#tvTreeBorder td,
 	margin-top: 2px;
 	margin-bottom: 2px;
 	padding: 0;
-	width: 180px; /* customizable:initial box width */
+	width: 280px; /* customizable:initial box width */
 	cursor: help; /* customizable */
 	border-collapse: collapse; /* required */
 	border-radius: 4px; /* customizable */
 	box-shadow: 1px 1px 2px #cfcfdf; /* customizable */
 }
 #tv_tree div.boxExpanded {
-	width: 250px; /* customizable:initial expanded box width */
+	width: 280px; /* customizable:initial expanded box width */
 }
 #tv_tree div.tv_box div.tvM {
 	background: #f5fdff; /* customizable */
 	color: #220000; /* customizable */
+    padding: 5px;
 }
 #tv_tree div.tv_box div.tvF {
 	background: #fff8f5; /* customizable */
 	color: #000022; /* customizable */
+    padding: 5px;
 }
 #tv_tree div.tv_box span.tvSexSymbol {
 	font-weight: bold;
@@ -343,7 +348,7 @@ table#tvTreeBorder td,
 
 /* New css for fullscreen view */
 .tvfs-switch-full-screen:before {
-  content: '\2191';
+  content: "\2191";
 }
 .tvfs-full-screen {
   position: fixed;
@@ -355,5 +360,10 @@ table#tvTreeBorder td,
   width: 100%;
 }
 .tvfs-full-screen .tvfs-switch-full-screen:before {
-  content: '\2193';
+  content: "\2193";
+}
+
+#tv_tree div.tv_box.rootPerson {
+	border-width: medium!important;
+    font-weight: 600!important;
 }

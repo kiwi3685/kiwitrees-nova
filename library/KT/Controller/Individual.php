@@ -106,7 +106,7 @@ class KT_Controller_Individual extends KT_Controller_GedcomRecord {
 	}
 
 	// Handle AJAX requests - to generate the tab content
-	public function ajaxRequest($tab) {
+	public function ajaxRequest() {
 		global $SEARCH_SPIDER;
 
 		// Search engines should not make AJAX requests

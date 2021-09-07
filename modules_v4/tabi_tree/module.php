@@ -55,30 +55,36 @@ class tabi_tree_KT_Module extends KT_Module implements KT_Module_IndiTab {
 		return false;
 	}
 
+    // Implement KT_Module_IndiTab
+	public function canLoadAjax() {
+		return false;
+	}
+
 	// Implement KT_Module_IndiTab
 	public function getTabContent() {
-		global $controller;
-
+        global $controller;
 		require_once KT_MODULES_DIR . $this->getName() . '/class_treeview.php';
 		$tv = new TreeView('tvTab');
-		list($html, $js) = $tv->drawViewport($controller->record, 3);
+
+        ob_start();
+		[$html, $js] = $tv->drawViewport($controller->record, 3);
+
 		return
-			'<script src="' . $this->js() . '"></script>' .
+            '<script src="' . KT_JQUERY_JS . '"></script>' .
+			'<script src="' . KT_INTERACTIVETREE_JS_URL . '"></script>' .
 			'<script src="' . KT_JQUERYUI_TOUCH_PUNCH . '"></script>' .
 			'<script>' . $js . '</script>' .
-			$html;
+			$html .
+            ob_get_clean();
+
 	}
+
 
 	// Implement KT_Module_IndiTab
 	public function hasTabContent() {
 		global $SEARCH_SPIDER;
 
 		return !$SEARCH_SPIDER;
-	}
-
-	// Implement KT_Module_IndiTab
-	public function canLoadAjax() {
-		return false;
 	}
 
 	// Implement KT_Module_IndiTab
@@ -100,33 +106,33 @@ class tabi_tree_KT_Module extends KT_Module implements KT_Module_IndiTab {
 
 	// Extend KT_Module
 	// We define here actions to proceed when called, either by Ajax or not
-	public function modAction($mod_action) {
+/*	public function getTabContent() {
 		require_once KT_MODULES_DIR . $this->getName() . '/class_treeview.php';
-		switch ($mod_action) {
-		case 'treeview':
-			global $controller;
-			$controller = new KT_Controller_Chart();
-			$tv = new TreeView('tv');
-			ob_start();
-			$person = $controller->getSignificantIndividual();
-			list($html, $js) = $tv->drawViewport($person, 4);
-			$html = '<div id="tree-page">' . $html . '</div>';
+//		switch ($mod_action) {
+//		case 'treeview':
+        global $controller;
+        $controller = new KT_Controller_Chart();
+        $tv = new TreeView('tv');
+        ob_start();
+        $person = $controller->getSignificantIndividual();
+        list($html, $js) = $tv->drawViewport($person, 4);
+        $html = '<div id="tree-page">' . $html . '</div>';
 
-			$controller
-				->setPageTitle(KT_I18N::translate('Interactive tree of %s', $person->getFullName()))
-				->pageHeader()
-				->addExternalJavascript($this->js())
-				->addExternalJavascript(KT_JQUERYUI_TOUCH_PUNCH)
-				->addInlineJavascript($js)
-				->addInlineJavascript('
-					if (document.createStyleSheet) {
-						document.createStyleSheet("' . $this->css() . '"); // For Internet Explorer
-					} else {
-						jQuery("head").append(\'<link rel="stylesheet" type="text/css" href="' . $this->css() . '">\');
-					}
-				');
+        $controller
+            ->setPageTitle(KT_I18N::translate('Interactive tree of %s', $person->getFullName()))
+            ->pageHeader()
+            ->addExternalJavascript($this->js())
+            ->addExternalJavascript(KT_JQUERYUI_TOUCH_PUNCH)
+            ->addInlineJavascript($js)
+            ->addInlineJavascript('
+                if (document.createStyleSheet) {
+                    document.createStyleSheet("' . $this->css() . '"); // For Internet Explorer
+                } else {
+                    jQuery("head").append(\'<link rel="stylesheet" type="text/css" href="' . $this->css() . '">\');
+                }
+            ');
 
-			echo $html;
+        echo $html;
 			break;
 
 		case 'getDetails':
@@ -159,13 +165,13 @@ class tabi_tree_KT_Module extends KT_Module implements KT_Module_IndiTab {
 			break;
 		}
 	}
-
+*/
 	public function css() {
 		return KT_STATIC_URL . KT_MODULES_DIR . $this->getName() . '/css/treeview.css';
 	}
 
-	public function js() {
-		return KT_STATIC_URL . KT_MODULES_DIR . $this->getName() . '/js/treeview.js';
-	}
+//	public function js() {
+//   		return KT_STATIC_URL . KT_MODULES_DIR . $this->getName() . '/js/treeview.js';
+//	}
 
 }

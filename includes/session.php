@@ -80,8 +80,9 @@ define('KT_CHOSEN_JS',						KT_STATIC_URL . 'library/chosen/chosen.jquery.min.js
 define('KT_KIWITREES_JS_URL',				KT_STATIC_URL . 'js/kiwitrees.js');						// used system wide, via Pages WT class
 //define('KT_AUTOCOMPLETE_JS_URL',			KT_STATIC_URL . 'js/autocomplete.min.js');				// used system wide
 define('KT_AUTOCOMPLETE_JS_URL',			KT_STATIC_URL . 'js/autocomplete.js');					// used system wide
-define('KT_JQUERY_TREEVIEW_JS_URL',			KT_STATIC_URL . 'js/jquery.treeview.js');				// used in branches.php
+define('KT_JQUERY_TREEVIEW_JS_URL',			KT_STATIC_URL . 'js/jquery.treeview.js');				// used only in branches.php
 define('KT_FANCY_TREEVIEW_JS_URL',			KT_STATIC_URL . 'js/fancytreeview.js');					// used in fancy_treeview_descendants & fancy_treeview_ancestors
+define('KT_INTERACTIVETREE_JS_URL',			KT_STATIC_URL . 'js\interactivetree.js');				// used in the interctive tree tab
 define('KT_KIWITREES_ADMIN_JS_URL',			KT_STATIC_URL . 'themes/_administration/js/kiwitrees-admin.js');		// used on some admin pages
 //define('KT_KIWITREES_ADMIN_JS_URL',		KT_STATIC_URL . 'themes/_administration/js/kiwitrees-admin.min.js');	// used on some admin pages
 
