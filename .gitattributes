@@ -16,10 +16,11 @@ text=auto
 # Exclude the following files when we build kiwitrees
 
 .git*                       export-ignore
+.DS_Store                   export-ignore
 Makefile                    export-ignore
 build/                      export-ignore
-js/kiwitrees.js				export-ignore
-js/autocomplete.js			export-ignore
+js/kiwitrees.js	      			export-ignore
+js/autocomplete.js		    	export-ignore
 library/foundation-sites/	export-ignore
 library/foundation/.travis.yml	export-ignore
 library/Zend/Acl/           export-ignore
@@ -28,7 +29,7 @@ library/Zend/Application/   export-ignore
 library/Zend/Auth/          export-ignore
 library/Zend/Barcode/       export-ignore
 library/Zend/Captcha/       export-ignore
-library/Zend/Cloud/			export-ignore
+library/Zend/Cloud/			   export-ignore
 library/Zend/CodeGenerator/ export-ignore
 library/Zend/Console/       export-ignore
 library/Zend/Config/        export-ignore
