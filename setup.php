@@ -273,11 +273,11 @@ try {
 
 	KT_DB::exec("SET NAMES 'utf8'");
 	$row = KT_DB::prepare("SHOW VARIABLES LIKE 'VERSION'")->fetchOneRow();
-	if (version_compare($row->value, KT_REQUIRED_MYSQL_VERSION, '<')) {
-		echo '<p class="callout alert">' . KT_I18N::translate('This database is only running MySQL version %s.  You cannot install Kiwitrees-nova here.', $row->value) . '</p>';
-	} elseif (version_compare($row->value, KT_REQUIRED_MARIADB_VERSION, '<')) {
-        echo '<p class="callout alert">' . KT_I18N::translate('This database is only running MariaDB version %s.  You cannot install Kiwitrees-nova here.', $row->value) . '</p>';
-    } else {
+	if ($row->value < 10 && version_compare($row->value, KT_REQUIRED_MYSQL_VERSION, '<')) {
+		echo '<p class="callout alert">' . KT_I18N::translate('This database is only running MySQL version %s.  You cannot install kiwitrees here.', $row->value) . '</p>';
+	} elseif ($row->value > 10 && version_compare($row->value, KT_REQUIRED_MARIADB_VERSION, '<')) {
+		 echo '<p class="callout alert">' . KT_I18N::translate('This database is only running MariaDB version %s.  You cannot install Kiwitrees-nova here.', $row->value) . '</p>';
+  } else {
 		$db_version_ok = true;
 	}
 } catch (PDOException $ex) {
