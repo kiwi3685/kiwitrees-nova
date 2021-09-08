@@ -107,9 +107,22 @@
 							<li class="show-for-large">
 								<i class="kiwitrees_logo"></i>
 							</li>
-							<?php foreach (KT_MenuBar::getOtherMenus() as $menu) {
-								echo $menu->getMenuAsList();
-							} ?>
+              <?php foreach (KT_MenuBar::getOtherMenus() as $menu) {
+      					if (strpos($menu, KT_I18N::translate('Login')) && !KT_USER_ID && KT_Module::getModuleByName('login_block')) {
+      						$class_name	= 'login_block_KT_Module';
+      						$module		= new $class_name; ?>
+      						<li>
+      							<a href="#">
+      								<?php echo (KT_Site::preference('USE_REGISTRATION_MODULE') ? KT_I18N::translate('Login or Register') : KT_I18N::translate('Login')); ?>
+      							</a>
+      							<ul id="login_popup">
+      								<li><?php echo $module->getBlock('login_block'); ?></li>
+      							</ul>
+      						</li>
+      					<?php } else {
+      						echo $menu->getMenuAsList();
+      					}
+      				} ?>
 						</ul>
 					</div>
 					<div class="top-bar-right">

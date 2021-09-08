@@ -39,25 +39,29 @@ class ckeditor_KT_Module extends KT_Module {
 
 	// Convert <textarea class="html-edit"> fields to CKEditor fields
 	public static function enableEditor($controller) {
-		$rand = rand(); // generate random prefix for footnotes
+        $themedir = 'themes/' . get_gedcom_setting(KT_GED_ID, 'THEME_DIR'); // get current theme dir for css
+        $mystyles = file_exists($themedir . '/mystyle.css') ? $themedir . '/mystyle.css' : '';
+		$rand     = rand(); // generate random prefix for footnotes
 		$controller
-			->addExternalJavascript(KT_MODULES_DIR . 'ckeditor/ckeditor.js')
-			->addExternalJavascript(KT_MODULES_DIR . 'ckeditor/adapters/jquery.js')
 			// Need to specify the path before we load the libary
 			->addInlineJavascript('var CKEDITOR_BASEPATH="' . KT_MODULES_DIR . 'ckeditor/";', KT_Controller_Base::JS_PRIORITY_HIGH)
+			->addExternalJavascript(KT_MODULES_DIR . 'ckeditor/ckeditor.js')
+			->addExternalJavascript(KT_MODULES_DIR . 'ckeditor/adapters/jquery.js')
 			// Activate the editor
 			->addInlineJavascript('
 				jQuery(".html-edit").ckeditor(function(){}, {
-					contentsCss: "' . KT_MODULES_DIR . 'ckeditor/kt_ckeditor.css",
-					skin : "moono-lisa",
+                    extraPlugins: "slideshow,footnotes",
+                    contentsCss: ["' . $themedir . '/style.css", "' . $mystyles . '"],
+					skin: "moonocolor",
 					allowedContent: true,
 					width: "100%",
 					height: "400px",
-					filebrowserImageBrowseUrl:	"' . KT_MODULES_DIR . 'ckeditor/kcfinder/browse.php?opener=ckeditor&type=images",
-					filebrowserImageUploadUrl:	"' . KT_MODULES_DIR . 'ckeditor/kcfinder/upload.php?opener=ckeditor&type=images",
-					extraPlugins: "slideshow,footnotes",
 					scayt_autoStartup: true,
 					footnotesPrefix: "' . $rand . '",
+					removePlugins: "emoji",
+                    filebrowserBrowseUrl:"' . KT_MODULES_DIR . 'ckeditor/fileman/index.html",
+                    filebrowserImageBrowseUrl:"' . KT_MODULES_DIR . 'ckeditor/fileman/index.html?type=image",
+                    removeDialogTabs: "link:upload;image:upload",
 					toolbarGroups: [
 						{ name: "document", groups: [ "mode", "document", "doctools" ] },
 						{ name: "clipboard", groups: [ "clipboard", "undo" ] },
@@ -88,7 +92,7 @@ class ckeditor_KT_Module extends KT_Module {
 			// Activate the editor
 			->addInlineJavascript('
 				jQuery(".html-edit").ckeditor(function(){}, {
-					skin : "moono-lisa",
+					skin : "moonocolor",
 					width: "100%",
 					height: "150px",
 					enterMode: CKEDITOR.ENTER_BR,
