@@ -1056,7 +1056,7 @@ function print_media_links($factrec, $level, $pid='') {
 		if ($media) {
 			if ($media->canDisplayDetails()) {
 				echo '<div class="media-display">
-					<div class="media-display-image' . $imageClass . '">';
+					<div class="media-display-image' . $mediaWidth . '">';
 						echo $media->displayImage();
 					echo '</div>'; // close div "media-display-image"
 					echo '<div class="media-display-title">';
