@@ -60,8 +60,8 @@ class KT_MenuBar {
 		$menu = new KT_Menu(getUserFullName(KT_USER_ID), '#', 'menu-mylogout');
 
 		//-- edit account submenu
-			$submenu = new KT_Menu(KT_I18N::translate('My account'), 'edituser.php', 'menu-myaccount');
-			$menu->addSubmenu($submenu);
+		$submenu = new KT_Menu(KT_I18N::translate('My account'), 'edituser.php', 'menu-myaccount');
+		$menu->addSubmenu($submenu);
 
 		if (KT_USER_GEDCOM_ID) {
 			//-- my_pedigree submenu
@@ -76,22 +76,28 @@ class KT_MenuBar {
 			$menu->addSubmenu($submenu);
 		}
 
-		if (KT_USER_GEDCOM_ADMIN) {
-			//-- admin submenu (only if not already included in main or other menu)
-			if (!(array_key_exists('menu_admin_main', KT_Module::getActiveMenus()) || array_key_exists('menu_admin_other', KT_Module::getActiveMenus()))) {
+		//-- admin submenu (only if not already included in main or other menu)
+		if (
+			KT_USER_GEDCOM_ADMIN
+			&& !(
+				array_key_exists('menu_admin_main', KT_Module::getActiveMenus()) ||
+				array_key_exists('menu_admin_other', KT_Module::getActiveMenus())
+			)
+		) {
 				$submenu = new KT_Menu(KT_I18N::translate('Administration'), 'admin.php', 'menu-admin');
 				$menu->addSubmenu($submenu);
-			}
-			//-- change home page blocks submenu
-			if (KT_SCRIPT_NAME === 'index.php') {
-				$submenu = new KT_Menu(KT_I18N::translate('Change the home page blocks'), 'index_edit.php?gedcom_id=' . KT_GED_ID,'menu-change-blocks');
-				$menu->addSubmenu($submenu);
-			}
-			//-- change footer blocks submenu
-			if (KT_SCRIPT_NAME === 'index.php') {
-				$submenu = new KT_Menu(KT_I18N::translate('Change the footer blocks'), 'footer_edit.php?gedcom_id=' . KT_GED_ID,'menu-change-blocks');
-				$menu->addSubmenu($submenu);
-			}
+		}
+
+		//-- change home page blocks submenu
+		if (KT_SCRIPT_NAME === 'index.php') {
+			$submenu = new KT_Menu(KT_I18N::translate('Change the home page blocks'), 'index_edit.php?gedcom_id=' . KT_GED_ID,'menu-change-blocks');
+			$menu->addSubmenu($submenu);
+		}
+
+		//-- change footer blocks submenu
+		if (KT_SCRIPT_NAME === 'index.php') {
+			$submenu = new KT_Menu(KT_I18N::translate('Change the footer blocks'), 'footer_edit.php?gedcom_id=' . KT_GED_ID,'menu-change-blocks');
+			$menu->addSubmenu($submenu);
 		}
 
 		//-- logout
