@@ -1453,11 +1453,11 @@ function print_main_notes(KT_Event $fact, $level) {
 			$nid	= $nmatch[1];
 			$note	= KT_Note::getInstance($nid);
 			if ($note) {
-				$noterec = $note->getGedcomRecord();
-				$nt		 = preg_match("/^0 @[^@]+@ NOTE (.*)/", $noterec, $n1match);
-				$line1	 = $n1match[1];
-				$text	 = get_cont(1, $noterec);
-				// If Census assistant installed,
+				$noterec	= $note->getGedcomRecord();
+				$nt		= preg_match("/^0 @[^@]+@ NOTE (.*)/", $noterec, $n1match);
+				$line1		= $n1match[1];
+				$text		= get_cont(1, $noterec);
+				// If Census assistant installed, allow it to format the note
 				if (array_key_exists('census_assistant', KT_Module::getActiveModules())) {
 					$text = census_assistant_KT_Module::formatCensusNote($note);
 
