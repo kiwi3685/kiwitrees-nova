@@ -133,9 +133,10 @@ class KT_Controller_Individual extends KT_Controller_GedcomRecord {
 
 		echo $module->getTabContent();
 
-//		if (KT_DEBUG_SQL) {
+		if (KT_DEBUG_SQL) {
 			echo KT_DB::getQueryLog();
-//		}
+		}
+
 	}
 
 	/**

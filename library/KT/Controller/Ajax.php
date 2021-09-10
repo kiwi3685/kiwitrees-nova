@@ -31,20 +31,23 @@ class KT_Controller_Ajax extends KT_Controller_Base {
 	public function pageHeader() {
 		// We have finished writing session data, so release the lock
 		Zend_Session::writeClose();
+
 		// Ajax responses are always UTF8
 		header('Content-Type: text/html; charset=UTF-8');
 		$this->page_header = true;
+
 		return $this;
 	}
 
 	public function pageFooter() {
 		// Ajax responses may have Javascript
 		echo $this->getJavascript();
+
 		return $this;
 	}
 
 	// Restrict access
-	public function requireManagerLogin($ged_id=KT_GED_ID) {
+	public function requireManagerLogin($ged_id = KT_GED_ID) {
 		if (
 			$ged_id == KT_GED_ID && !KT_USER_GEDCOM_ADMIN ||
 			$ged_id != KT_GED_ID && userGedcomAdmin(KT_USER_ID, $gedcom_id)
@@ -52,6 +55,7 @@ class KT_Controller_Ajax extends KT_Controller_Base {
 			header('HTTP/1.0 403 Access Denied');
 			exit;
 		}
+
 		return $this;
 	}
 }

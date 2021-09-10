@@ -32,6 +32,7 @@ $locale = KT_LOCALE;
 if (strpos(KT_LOCALE, "_")) {
 	$locale = str_replace('_', '-', KT_LOCALE);
 }
+
 define('KT_DATEPICKER_JS_LOCALE', KT_STATIC_URL . 'library/foundation-datepicker/js/locales/foundation-datepicker.' . $locale . '.js');
 
 class KT_Controller_Page extends KT_Controller_Base {
@@ -82,6 +83,7 @@ class KT_Controller_Page extends KT_Controller_Base {
 	// Should robots index this page?
 	public function setMetaRobots($meta_robots) {
 		$this->meta_robots = $meta_robots;
+
 		return $this;
 	}
 
@@ -98,6 +100,7 @@ class KT_Controller_Page extends KT_Controller_Base {
 			header('Location: ' . KT_LOGIN_URL . '?url=' . rawurlencode(get_query_url()));
 			exit;
 		}
+
 		return $this;
 	}
 
@@ -108,6 +111,7 @@ class KT_Controller_Page extends KT_Controller_Base {
 			header('Location: ' . KT_LOGIN_URL . '?url=' . rawurlencode(get_query_url()));
 			exit;
 		}
+
 		return $this;
 	}
 
@@ -121,6 +125,7 @@ class KT_Controller_Page extends KT_Controller_Base {
 			header('Location: '.KT_LOGIN_URL.'?url='.rawurlencode(get_query_url()));
 			exit;
 		}
+
 		return $this;
 	}
 
@@ -131,6 +136,7 @@ class KT_Controller_Page extends KT_Controller_Base {
 			header('Location: '.KT_LOGIN_URL.'?url='.rawurlencode(get_query_url()));
 			exit;
 		}
+
 		return $this;
 	}
 
@@ -151,6 +157,7 @@ class KT_Controller_Page extends KT_Controller_Base {
 			header('Location: ' . KT_LOGIN_URL . '?url=' . rawurlencode(get_query_url()));
 			exit;
 		}
+
 		return $this;
 	}
 
@@ -158,6 +165,7 @@ class KT_Controller_Page extends KT_Controller_Base {
 	public function pageHeader($maintenance = false) {
 		// Import global variables into the local scope, for the theme's header.php
 		global $SEARCH_SPIDER, $TEXT_DIRECTION, $headerfile, $view;
+
 		// Maintenance mode
 		// Note: $maintenance is 'true' on login.php so admin can always log in.
 		if (KT_Site::preference('MAINTENANCE') == 1 && !KT_USER_IS_ADMIN && $maintenance != true) {
@@ -171,13 +179,16 @@ class KT_Controller_Page extends KT_Controller_Base {
 
 		// Initialise variables for the theme's header.php
 		$LINK_CANONICAL		= $this->canonical_url;
+
 		$META_ROBOTS		= $this->meta_robots;
 		$META_DESCRIPTION	= KT_GED_ID ? get_gedcom_setting(KT_GED_ID, 'META_DESCRIPTION') : '';
 		if (!$META_DESCRIPTION) {
 			$META_DESCRIPTION = strip_tags(KT_TREE_TITLE);
 		}
+
 		$META_GENERATOR		= KT_KIWITREES . '-' . KT_VERSION_TEXT . ' - ' . KT_KIWITREES_URL;
 		$META_TITLE			= KT_GED_ID ? get_gedcom_setting(KT_GED_ID, 'META_TITLE') : '';
+
 		if ($META_TITLE) {
 			$title .= ' - ' . $META_TITLE;
 		}
@@ -185,7 +196,6 @@ class KT_Controller_Page extends KT_Controller_Base {
 		// This javascript needs to be loaded in the header, *before* the CSS.
 		// All other javascript should be defered until the end of the page
 		$javascript = '';
-
 
 		// Give Javascript access to some PHP constants
 		$this->addInlineJavascript('
@@ -245,6 +255,7 @@ class KT_Controller_Page extends KT_Controller_Base {
 
 		// We've displayed the header - display the footer automatically
 		$this->page_header = true;
+
 		return $this;
 	}
 
@@ -284,12 +295,15 @@ class KT_Controller_Page extends KT_Controller_Base {
 		if (!$individual && KT_USER_ROOT_ID) {
 			$individual = KT_Person::getInstance(KT_USER_ROOT_ID);
 		}
+
 		if (!$individual && KT_USER_GEDCOM_ID) {
 			$individual = KT_Person::getInstance(KT_USER_GEDCOM_ID);
 		}
+
 		if (!$individual) {
 			$individual = KT_Person::getInstance(get_gedcom_setting(KT_GED_ID, 'PEDIGREE_ROOT_ID'));
 		}
+
 		if (!$individual) {
 			$individual = KT_Person::getInstance(
 				KT_DB::prepare(
@@ -297,26 +311,36 @@ class KT_Controller_Page extends KT_Controller_Base {
 				)->execute(array(KT_GED_ID))->fetchOne()
 			);
 		}
+
 		if (!$individual) {
 			// always return a record
 			$individual = new KT_Person('0 @I@ INDI');
 		}
+
 		return $individual;
 	}
+
 	public function getSignificantFamily() {
 		$individual = $this->getSignificantIndividual();
+
 		if ($individual) {
 			foreach ($individual->getChildFamilies() as $family) {
 				return $family;
 			}
+
 			foreach ($individual->getSpouseFamilies() as $family) {
 				return $family;
 			}
+
 		}
 		// always return a record
+
 		return new KT_Family('0 @F@ FAM');
 	}
+
 	public function getSignificantSurname() {
+
 		return '';
 	}
+
 }
