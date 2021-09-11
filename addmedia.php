@@ -236,15 +236,6 @@ switch ($action) {
 				}
 			}
 		}
-	?>
-		<div style="margin: 20px 50px">
-			<button class="btn btn-primary" type="button"  onclick="closePopupAndReloadParent();">
-				<i class="' . $iconStyle . ' fa-times"></i>
-				<?php echo KT_I18N::translate('close'); ?>
-			</button>
-			<p class="warning"><?php echo KT_I18N::translate('Click the close button to return to the manage media page.'); ?></p>
-		</div>
-	<?php
 		return;
 
 	case 'update': // Save the information from the “editmedia” action
