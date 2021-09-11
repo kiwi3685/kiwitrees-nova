@@ -107,31 +107,21 @@ if ($image || $USE_SILHOUETTE) {
 $linkToID = $controller->record->getXref(); // -- Tell addmedia.php what to link to
 
 $controller->addInlineJavascript('
-    // Foundation tabs need help to load with Ajax
-//    jQuery("[data-tabs]").on("change.zf.tabs", function()
-//        jQuery(".tabs-content .is-active").html(data);
-//    });
-
-	// open specified tab, previously saved tab, or the first one
-    	if (window.location.hash) {
-    		var hash = window.location.hash;
-    	} else if (sessionStorage.getItem("indi-tab")) {
-    		var hash = sessionStorage.getItem("indi-tab");
-    	} else {
-    		var hash = jQuery("#indiTabs li:first a").attr("href");
-    	};
-    	var openhash = hash.substr(1);
-    	jQuery("#indiTabs li." + openhash).addClass("is-active");
-    	jQuery("div#" + openhash).addClass("is-active");
-    	jQuery("#indiTabs li." + openhash + " a").attr("aria-selected","true");
-    	jQuery("#indiTabs").on("change.zf.tabs", function() {
-    		sessionStorage.setItem("indi-tab", window.location.hash);
-    	});
-
-    	// make modal / reveal items draggable
-    	jQuery(".reveal").draggable({
-    		 cursor: "move"
-    	});
+    // Open specified tab, previously saved tab, or the first one
+    if (window.location.hash) {
+        var hash = window.location.hash;
+    } else if (sessionStorage.getItem("indi-tab")) {
+        var hash = sessionStorage.getItem("indi-tab");
+    } else {
+        var hash = jQuery("#indiTabs li:first a").attr("href");
+    };
+    var openhash = hash.substr(1);
+    jQuery("#indiTabs li." + openhash).addClass("is-active");
+    jQuery("div#" + openhash).addClass("is-active");
+    jQuery("#indiTabs li." + openhash + " a").attr("aria-selected","true");
+    jQuery("#indiTabs").on("change.zf.tabs", function() {
+        sessionStorage.setItem("indi-tab", window.location.hash);
+    });
 
 ');
 
@@ -244,7 +234,7 @@ if ($highlightImage) {
 									</a>
 								</li>
 							<?php }
-                        } ?>
+						} ?>
 					</ul>
 					<div class="tabs-content" data-tabs-content="indiTabs">
 						<?php foreach ($modules as $tab) {
