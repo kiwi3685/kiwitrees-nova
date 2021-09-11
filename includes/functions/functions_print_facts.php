@@ -585,7 +585,7 @@ function print_timeline(KT_Event $fact, KT_GedcomRecord $record) {
 					<!-- Event name -->
 					<div class="cell small-10 medium-2 small-order-1 medium-order-2 event">
 						<?php if ($SHOW_FACT_ICONS) {
-							echo $fact->Icon() . '&nbsp;';
+	//						echo $fact->Icon() . '&nbsp;';
 						}
 						echo  '<span class="h6">' . $label . '</span>'; ?>
 					</div>
