@@ -178,7 +178,6 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 				set_block_setting($block_id, 'gallery_description', safe_POST('gallery_description',KT_REGEX_UNSAFE)); // allow html
 				set_block_setting($block_id, 'gallery_folder_w',	safe_POST('gallery_folder_w',	KT_REGEX_UNSAFE));
 				set_block_setting($block_id, 'gallery_folder_f',	safe_POST('gallery_folder_f',	KT_REGEX_UNSAFE));
-				set_block_setting($block_id, 'gallery_folder_p',	safe_POST('gallery_folder_p',	KT_REGEX_UNSAFE));
 				set_block_setting($block_id, 'gallery_access',	 	safe_POST('gallery_access',		KT_REGEX_UNSAFE));
 				set_block_setting($block_id, 'plugin',			 	safe_POST('plugin',				KT_REGEX_UNSAFE));
 				$languages=array();
@@ -197,7 +196,6 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 					$item_description=get_block_setting($block_id, 'gallery_description');
 					$item_folder_w=get_block_setting($block_id, 'gallery_folder_w');
 					$item_folder_f=get_block_setting($block_id, 'gallery_folder_f');
-					$item_folder_p=get_block_setting($block_id, 'gallery_folder_p');
 					$item_access=get_block_setting($block_id, 'gallery_access');
 					$plugin=get_block_setting($block_id, 'plugin');
 					$block_order=KT_DB::prepare(
@@ -211,7 +209,6 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 					$item_description='';
 					$item_folder_w=$MEDIA_DIRECTORY;
 					$item_folder_f='';
-					$item_folder_p='';
 					$item_access=1;
 					$plugin='kiwitrees';
 					$block_order=KT_DB::prepare(
@@ -371,12 +368,12 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 		)->execute(array($block_id))->fetchOne();
 
 		$swap_block=KT_DB::prepare(
-			"SELECT block_order, block_id".
-			" FROM `##block`".
-			" WHERE block_order=(".
-			"  SELECT MAX(block_order) FROM `##block` WHERE block_order < ? AND module_name=?".
-			" ) AND module_name=?".
-			" LIMIT 1"
+			"SELECT block_order, block_id
+			FROM `##block`
+			WHERE block_order=(
+			 SELECT MAX(block_order) FROM `##block` WHERE block_order < ? AND module_name=?
+			) AND module_name=?
+			LIMIT 1"
 		)->execute(array($block_order, $this->getName(), $this->getName()))->fetchOneRow();
 		if ($swap_block) {
 			KT_DB::prepare(
@@ -396,12 +393,12 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 		)->execute(array($block_id))->fetchOne();
 
 		$swap_block=KT_DB::prepare(
-			"SELECT block_order, block_id".
-			" FROM `##block`".
-			" WHERE block_order=(".
-			"  SELECT MIN(block_order) FROM `##block` WHERE block_order>? AND module_name=?".
-			" ) AND module_name=?".
-			" LIMIT 1"
+			"SELECT block_order, block_id
+			FROM `##block`
+			WHERE block_order=(
+			 SELECT MIN(block_order) FROM `##block` WHERE block_order>? AND module_name=?
+			) AND module_name=?
+			LIMIT 1"
 		)->execute(array($block_order, $this->getName(), $this->getName()))->fetchOneRow();
 		if ($swap_block) {
 			KT_DB::prepare(
@@ -439,15 +436,15 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 		$themenames			= $this->galleria_theme_names();
 
 		$items = KT_DB::prepare(
-			"SELECT block_id, block_order, gedcom_id, bs1.setting_value AS gallery_title, bs2.setting_value AS gallery_description".
-			" FROM `##block` b".
-			" JOIN `##block_setting` bs1 USING (block_id)".
-			" JOIN `##block_setting` bs2 USING (block_id)".
-			" WHERE module_name=?".
-			" AND bs1.setting_name='gallery_title'".
-			" AND bs2.setting_name='gallery_description'".
-			" AND IFNULL(gedcom_id, ?)=?".
-			" ORDER BY block_order"
+			"SELECT block_id, block_order, gedcom_id, bs1.setting_value AS gallery_title, bs2.setting_value AS gallery_description
+			FROM `##block` b
+			JOIN `##block_setting` bs1 USING (block_id)
+			JOIN `##block_setting` bs2 USING (block_id)
+			WHERE module_name=?
+			AND bs1.setting_name='gallery_title'
+			AND bs2.setting_name='gallery_description'
+			AND IFNULL(gedcom_id, ?)=?
+			ORDER BY block_order"
 		)->execute(array($this->getName(), KT_GED_ID, KT_GED_ID))->fetchAll();
 
 		$min_block_order=KT_DB::prepare(
@@ -459,7 +456,7 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 		)->execute(array($this->getName()))->fetchOne();
 		?>
 		<div id="<?php echo $this->getName();?>">
-			<a class="current faq_link" href="<?php echo KT_KIWITREES_URL; ?>/faqs/modules/gallery/" target="_blank" rel="noopener noreferrer" title="<?php echo KT_I18N::translate('View FAQ for this page.'); ?>"><?php echo KT_I18N::translate('View FAQ for this page.'); ?><i class="fa fa-comments"></i></a>
+			<a class="current faq_link" href="<?php echo KT_KIWITREES_URL; ?>/faqs/modules/gallery/" target="_blank" rel="noopener noreferrer" title="<?php echo KT_I18N::translate('View FAQ for this page.'); ?>"><?php echo KT_I18N::translate('View FAQ for this page.'); ?><i class="fa fa-comments-o"></i></a>
 			<h2><?php echo $controller->getPageTitle(); ?></h2>
 			<div id="gallery_tabs">
 				<ul>
@@ -643,39 +640,36 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 				bs2.setting_value AS gallery_access,
 				bs3.setting_value AS gallery_description,
 				bs4.setting_value AS gallery_folder_w,
-				bs5.setting_value AS gallery_folder_f,
-				bs6.setting_value AS gallery_folder_p".
-			" FROM `##block` b".
-			" JOIN `##block_setting` bs1 USING (block_id)".
-			" JOIN `##block_setting` bs2 USING (block_id)".
-			" JOIN `##block_setting` bs3 USING (block_id)".
-			" JOIN `##block_setting` bs4 USING (block_id)".
-			" JOIN `##block_setting` bs5 USING (block_id)".
-			" JOIN `##block_setting` bs6 USING (block_id)".
-			" WHERE module_name=?".
-			" AND bs1.setting_name='gallery_title'".
-			" AND bs2.setting_name='gallery_access'".
-			" AND bs3.setting_name='gallery_description'".
-			" AND bs4.setting_name='gallery_folder_w'".
-			" AND bs5.setting_name='gallery_folder_f'".
-			" AND bs6.setting_name='gallery_folder_p'".
-			" AND (gedcom_id IS NULL OR gedcom_id=?)".
-			" ORDER BY block_order"
+				bs5.setting_value AS gallery_folder_f
+			FROM `##block` b
+			JOIN `##block_setting` bs1 USING (block_id)
+			JOIN `##block_setting` bs2 USING (block_id)
+			JOIN `##block_setting` bs3 USING (block_id)
+			JOIN `##block_setting` bs4 USING (block_id)
+			JOIN `##block_setting` bs5 USING (block_id)
+			WHERE module_name=?
+			AND bs1.setting_name='gallery_title'
+			AND bs2.setting_name='gallery_access'
+			AND bs3.setting_name='gallery_description'
+			AND bs4.setting_name='gallery_folder_w'
+			AND bs5.setting_name='gallery_folder_f'
+			AND (gedcom_id IS NULL OR gedcom_id=?)
+			ORDER BY block_order"
 		)->execute(array($this->getName(), KT_GED_ID))->fetchAll();
 	}
 
 	// Return the list of gallerys for menu
 	private function getMenuAlbumList() {
 		return KT_DB::prepare(
-			"SELECT block_id, bs1.setting_value AS gallery_title, bs2.setting_value AS gallery_access".
-			" FROM `##block` b".
-			" JOIN `##block_setting` bs1 USING (block_id)".
-			" JOIN `##block_setting` bs2 USING (block_id)".
-			" WHERE module_name=?".
-			" AND bs1.setting_name='gallery_title'".
-			" AND bs2.setting_name='gallery_access'".
-			" AND (gedcom_id IS NULL OR gedcom_id=?)".
-			" ORDER BY block_order"
+			"SELECT block_id, bs1.setting_value AS gallery_title, bs2.setting_value AS gallery_access
+			FROM `##block` b
+			JOIN `##block_setting` bs1 USING (block_id)
+			JOIN `##block_setting` bs2 USING (block_id)
+			WHERE module_name=?
+			AND bs1.setting_name='gallery_title'
+			AND bs2.setting_name='gallery_access'
+			AND (gedcom_id IS NULL OR gedcom_id=?)
+			ORDER BY block_order"
 		)->execute(array($this->getName(), KT_GED_ID))->fetchAll();
 	}
 
@@ -757,13 +751,13 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 		$media_links 	= '';
 		// Get the related media items
 		$sub_folder	= str_replace($MEDIA_DIRECTORY, "",$sub_folder);
-		$sql		= "SELECT * FROM ##media WHERE m_filename LIKE '%" . $sub_folder . "%' ORDER BY m_filename";
+		$sql		= "SELECT * FROM ##media WHERE m_filename LIKE '" . $sub_folder . "%' ORDER BY m_filename";
 		$rows		= KT_DB::prepare($sql)->execute()->fetchAll(PDO::FETCH_ASSOC);
 		if ($plugin == 'kiwitrees') {
 			foreach ($rows as $rowm) {
 				// Get info on how to handle this media file
 				$media	= KT_Media::getInstance($rowm['m_id']);
-				if ($media->canDisplayDetails()) {
+				if ($media && $media->canDisplayDetails()) {
 					$links = array_merge(
 						$media->fetchLinkedIndividuals(),
 						$media->fetchLinkedFamilies(),
@@ -806,8 +800,8 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 			}
 			if (KT_USER_CAN_ACCESS || $media_links != '') {
 				$html =
-					'<div id="links_bar"></div>'.
-					'<div id="galleria" style="width:80%;">';
+					'<div id="links_bar"  style="width:14%;"></div>'.
+					'<div id="galleria" style="width:85%; height: 720px;">';
 			} else {
 				$html =
 					'<div id="galleria" style="width:100%;">';
@@ -819,7 +813,7 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 		if ($images) {
 			$html .= $images.
 				'</div>'.// close #galleria
-				'<a id="copy" href="http://galleria.io/" target="_blank" rel="noopener noreferrer">' . /* I18N: Copyright statement in gallery module */ KT_I18N::translate('Display by Galleria (%1s)', $version) . '</a>'.// gallery.io attribution
+				'<a id="copy" href="https://galleriajs.github.io/" target="_blank" rel="noopener noreferrer">' . /* I18N: Copyright statement in gallery module */ KT_I18N::translate('Display by Galleria (%1s)', $version) . '</a>'.// gallery.io attribution
 				'</div>'.// close #page
 				'<div style="clear: both;"></div>';
 		} else {
