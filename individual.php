@@ -228,7 +228,7 @@ if ($highlightImage) {
     									<!-- AJAX tabs load only when selected -->
     									<a href="<?php echo $controller->record->getHtmlUrl(); ?>&amp;action=ajax&amp;module=<?php echo $tab->getName(); ?>" title="<?php echo $tab->getDescription(); ?>" rel="nofollow">
 								    <?php } else { ?>
-    									<a href="#<?php echo $tab->getName(); ?>" title="<?php echo $tab->getDescription(); ?> rel="nofollow">
+    									<a href="#<?php echo $tab->getName(); ?>" title="<?php echo $tab->getDescription(); ?>" rel="nofollow">
                                     <?php } ?>
 										<span><?php echo $tab->getTitle(); ?></span>
 									</a>

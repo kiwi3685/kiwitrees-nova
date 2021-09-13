@@ -59,7 +59,8 @@ class tabi_census_KT_Module extends KT_Module implements KT_Module_IndiTab {
 		$xref		= $controller->record->getXref();
 		$facts		= $this->getCensFacts();
 
-		ob_start();?>
+		ob_start();
+		?>
 			<div class="cell tabHeader">
 				<div class="grid-x">
 					<?php if (KT_USER_CAN_EDIT) { ?>
