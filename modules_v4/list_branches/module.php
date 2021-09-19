@@ -76,7 +76,7 @@ class list_branches_KT_Module extends KT_Module implements KT_Module_List {
 
 		$controller = new KT_Controller_Branches();
 		$controller
-			->restrictAccess(KT_Module::isActiveList(KT_GED_ID, 'list_branches', KT_USER_ACCESS_LEVEL))
+			->restrictAccess(KT_Module::isActiveList(KT_GED_ID, $this->getName(), KT_USER_ACCESS_LEVEL))
 			->pageHeader()
 			->addExternalJavascript(KT_JQUERY_TREEVIEW_JS_URL)
 //			->addExternalJavascript(KT_AUTOCOMPLETE_JS_URL)
