@@ -841,7 +841,7 @@ function update_dates($xref, $ged_id, $gedrec) {
 	static $sql_insert_date=null;
 	if (!$sql_insert_date) {
 		$sql_insert_date=KT_DB::prepare(
-			"INSERT INTO `##dates` (d_day,d_month,d_mon,d_year,d_julianday1,d_julianday2,d_fact,d_gid,d_file,d_type) VALUES (?,?,?,?,?,?,?,?,?,?)"
+			"INSERT IGNORE INTO `##dates` (d_day,d_month,d_mon,d_year,d_julianday1,d_julianday2,d_fact,d_gid,d_file,d_type) VALUES (?,?,?,?,?,?,?,?,?,?)"
 		);
 	}
 
