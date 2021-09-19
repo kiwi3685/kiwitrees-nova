@@ -67,14 +67,13 @@ class tabi_dna_KT_Module extends KT_Module implements KT_Module_IndiTab {
 
 		self::updateSchema(); // make sure the favorites table has been created
 
-		$person			= $controller->getSignificantIndividual();
-		$fullname		= $controller->record->getFullName();
-		$xref			= $controller->record->getXref();
+		$person		= $controller->getSignificantIndividual();
+		$fullname	= $controller->record->getFullName();
+		$xref		= $controller->record->getXref();
 
 		$controller
 			->addExternalJavascript(KT_DATATABLES_JS)
-			->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
-		;
+			->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS);
 
 		if (KT_USER_CAN_EDIT) {
 			$controller
@@ -113,136 +112,140 @@ class tabi_dna_KT_Module extends KT_Module implements KT_Module_IndiTab {
 					],
 					sorting: [[2,"desc"]],
 				});
-			')
-		;
-		?>
+			');
 
-		<div id="tabi_dna_content" class="grid-x grid-padding-y">
-			<?php if (KT_USER_CAN_EDIT) { ?>
-				<div class="cell tabHeader">
-					<div class="grid-x">
-						<div class="cell">
-							<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=add-dna&amp;pid=<?php echo $xref; ?>&amp;ged=<?php echo KT_GEDCOM; ?>" target="_blank">
-								<i class="<?php echo $iconStyle; ?> fa-dna"></i>
-								<?php echo KT_I18N::translate('Add DNA data'); ?>
-							</a>
-						</div>
+		ob_start();
+
+		if (KT_USER_CAN_EDIT) { ?>
+			<div class="cell tabHeader">
+				<div class="grid-x">
+					<div class="cell">
+						<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=add-dna&amp;pid=<?php echo $xref; ?>&amp;ged=<?php echo KT_GEDCOM; ?>" target="_blank">
+							<i class="<?php echo $iconStyle; ?> fa-dna"></i>
+							<?php echo KT_I18N::translate('Add DNA data'); ?>
+						</a>
 					</div>
 				</div>
-			<?php } ?>
-			<?php if ($person && $person->canDisplayDetails()) { ?>
-				<div class="cell indiFact">
-					<h5><?php echo KT_I18N::translate('Recorded DNA connections for %s', $fullname); ?></h5>
-					<p data-toggle="help-dropdown">
-						<?php echo $this->getDescription(); ?>
-						<i class="<?php echo $iconStyle; ?> fa-question-circle alert"></i>
-					</p>
-					<div class="dropdown-pane" id="help-dropdown" data-dropdown data-close-on-click="true">
-						<?php echo $this->DNAhelp('cms'); ?>
-						<br><br>
-						<?php echo $this->DNAhelp('seg'); ?>
-						<br><br>
-						<?php echo $this->DNAhelp('pdna'); ?>
-					</div>
-					<hr>
-					<table id="dnaTable">
-						<thead>
+			</div>
+		<?php } ?>
+		<?php if ($person && $person->canDisplayDetails()) { ?>
+			<div class="cell indiFact">
+				<h5><?php echo KT_I18N::translate('Recorded DNA connections for %s', $fullname); ?></h5>
+				<p data-toggle="help-dropdown">
+					<?php echo $this->getDescription(); ?>
+					<i class="<?php echo $iconStyle; ?> fa-question-circle alert"></i>
+				</p>
+				<div class="dropdown-pane" id="help-dropdown" data-dropdown data-close-on-click="true">
+					<?php echo $this->DNAhelp('cms'); ?>
+					<br><br>
+					<?php echo $this->DNAhelp('seg'); ?>
+					<br><br>
+					<?php echo $this->DNAhelp('pdna'); ?>
+				</div>
+				<hr>
+				<table id="dnaTable">
+					<thead>
+						<tr>
+							<th><?php echo KT_I18N::translate('Name'); ?></th>
+							<th><?php echo KT_I18N::translate('Relationship'); ?></th>
+							<th><?php echo KT_I18N::translate('cMs'); ?></th>
+							<th><?php echo KT_I18N::translate('Segments'); ?></th>
+							<th><?php echo KT_I18N::translate('%% DNA'); ?></th>
+							<th><?php echo KT_I18N::translate('Common ancestors'); ?></th>
+							<th><?php echo KT_I18N::translate('Source'); ?></th>
+							<th><?php echo KT_I18N::translate('Note'); ?></th>
+							<th><?php echo KT_I18N::translate('Date added'); ?></th>
+							<th><?php echo KT_I18N::translate('Edit'); ?></th>
+							<?php //-- Select & delete
+							if (KT_USER_GEDCOM_ADMIN) { ?>
+								<th>
+                                    <div class="delete_dna">
+                                        <button type="submit" class="button tiny" onclick="if (confirm('<?php echo htmlspecialchars(KT_I18N::translate('Permanently delete these records?')); ?>')) {return checkbox_delete('dna');} else {return false;}">
+                                            <?php echo KT_I18N::translate('Delete'); ?>
+                                        </button>
+                                        <input type="checkbox" onclick="toggle_select(this)">
+									</div>
+								</th>
+							<?php } ?>
+						</tr>
+					</thead>
+					<tbody>
+						<?php $rows = $this->getData($xref);
+						foreach ($rows as $row) {
+							$relationship = '';
+							($xref == $row->id_a) ? $xrefA = $row->id_b : $xrefA = $row->id_a;
+							$personA = KT_Person::getInstance($xrefA); ?>
 							<tr>
-								<th><?php echo KT_I18N::translate('Name'); ?></th>
-								<th><?php echo KT_I18N::translate('Relationship'); ?></th>
-								<th><?php echo KT_I18N::translate('cMs'); ?></th>
-								<th><?php echo KT_I18N::translate('Segments'); ?></th>
-								<th><?php echo KT_I18N::translate('%% DNA'); ?></th>
-								<th><?php echo KT_I18N::translate('Common ancestors'); ?></th>
-								<th><?php echo KT_I18N::translate('Source'); ?></th>
-								<th><?php echo KT_I18N::translate('Note'); ?></th>
-								<th><?php echo KT_I18N::translate('Date added'); ?></th>
-								<th><?php echo KT_I18N::translate('Edit'); ?></th>
+								<td>
+									<?php if ($personA) { ?>
+										<a href="<?php echo $personA->getHtmlUrl(); ?>" target="_blank">
+											<?php echo $personA->getFullName(); ?>
+										</a>
+									<?php } else { ?>
+										<span class="error" title="<?php echo KT_I18N::translate('Invalid reference'); ?>"><?php echo $xrefA; ?></span>
+									<?php } ?>
+								</td>
+								<td>
+									<?php $relationship = $this->findRelationship($person, $personA);
+									if ($relationship) { ?>
+										<a href="relationship.php?pid1=<?php echo $person->getXref(); ?>&amp;pid2=<?php echo $personA->getXref(); ?>&amp;ged=<?php echo KT_GEDCOM; ?>&amp;find=1" target="_blank">
+											<?php echo ucfirst($relationship); ?>
+										</a>
+									<?php } else {
+										echo KT_I18N::translate('No relationship found');
+									} ?>
+								</td>
+								<td><?php echo $row->cms ? KT_I18N::number($row->cms) : ''; ?></td>
+								<td><?php echo $row->seg ? KT_I18N::number($row->seg) : ''; ?></td>
+								<td><?php echo $row->percent ? KT_I18N::percentage($row->percent / 100, 2) : ''; ?></td>
+								<td>
+									<?php if ($relationship == KT_I18N::translate('father') || $relationship == KT_I18N::translate('mother') || $relationship == KT_I18N::translate('parent')) {
+										echo KT_I18N::translate('Not applicable');
+									} else {
+										echo $this->findCommonAncestor($person, $personA);
+									} ?>
+								<td>
+									<?php $source = KT_Source::getInstance($row->source);
+									if ($source) { ?>
+										<a href="<?php echo $source->getHtmlUrl(); ?>" target="_blank">
+											<?php echo $source->getFullName(); ?>
+										</a>
+									<?php } else { ?>
+										<span class="error" title="<?php echo KT_I18N::translate('Invalid reference'); ?>"><?php echo $row->source; ?></span>
+									<?php } ?>
+								</td>
+								<td class="italic"><?php echo $row->note; ?></td>
+								<td>
+									<?php echo timestamp_to_gedcom_date(strtotime($row->date))->Display(); ?>
+								</td>
+								<td>
+									<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=edit-dna&amp;pid=<?php echo $xref; ?>&amp;ged=<?php echo KT_GEDCOM; ?>&amp;dna-id=<?php echo $row->dna_id; ?>" target="_blank" title="<?php echo KT_I18N::translate('Edit DNA data'); ?>">
+										<i class="<?php echo $iconStyle; ?> fa-edit fa-lg"></i>
+									</a>
+								</td>
 								<?php //-- Select & delete
 								if (KT_USER_GEDCOM_ADMIN) { ?>
-									<th>
-                                        <div class="delete_dna">
-                                            <button type="submit" class="button tiny" onclick="if (confirm('<?php echo htmlspecialchars(KT_I18N::translate('Permanently delete these records?')); ?>')) {return checkbox_delete('dna');} else {return false;}">
-                                                <?php echo KT_I18N::translate('Delete'); ?>
-                                            </button>
-                                            <input type="checkbox" onclick="toggle_select(this)">
-    									</div>
-									</th>
+									<td>
+										<div class="delete_src">
+											<input type="checkbox" name="del_places[]" class="check" value="<?php echo $row->dna_id; ?>" title="<?php echo KT_I18N::translate('Delete'); ?>">
+										</div>
+									</td>
 								<?php } ?>
 							</tr>
-						</thead>
-						<tbody>
-							<?php $rows = $this->getData($xref);
-							foreach ($rows as $row) {
-								$relationship = '';
-								($xref == $row->id_a) ? $xrefA = $row->id_b : $xrefA = $row->id_a;
-								$personA = KT_Person::getInstance($xrefA); ?>
-								<tr>
-									<td>
-										<?php if ($personA) { ?>
-											<a href="<?php echo $personA->getHtmlUrl(); ?>" target="_blank">
-												<?php echo $personA->getFullName(); ?>
-											</a>
-										<?php } else { ?>
-											<span class="error" title="<?php echo KT_I18N::translate('Invalid reference'); ?>"><?php echo $xrefA; ?></span>
-										<?php } ?>
-									</td>
-									<td>
-										<?php $relationship = $this->findRelationship($person, $personA);
-										if ($relationship) { ?>
-											<a href="relationship.php?pid1=<?php echo $person->getXref(); ?>&amp;pid2=<?php echo $personA->getXref(); ?>&amp;ged=<?php echo KT_GEDCOM; ?>&amp;find=1" target="_blank">
-												<?php echo ucfirst($relationship); ?>
-											</a>
-										<?php } else {
-											echo KT_I18N::translate('No relationship found');
-										} ?>
-									</td>
-									<td><?php echo $row->cms ? KT_I18N::number($row->cms) : ''; ?></td>
-									<td><?php echo $row->seg ? KT_I18N::number($row->seg) : ''; ?></td>
-									<td><?php echo $row->percent ? KT_I18N::percentage($row->percent / 100, 2) : ''; ?></td>
-									<td>
-										<?php if ($relationship == KT_I18N::translate('father') || $relationship == KT_I18N::translate('mother') || $relationship == KT_I18N::translate('parent')) {
-											echo KT_I18N::translate('Not applicable');
-										} else {
-											echo $this->findCommonAncestor($person, $personA);
-										} ?>
-									<td>
-										<?php $source = KT_Source::getInstance($row->source);
-										if ($source) { ?>
-											<a href="<?php echo $source->getHtmlUrl(); ?>" target="_blank">
-												<?php echo $source->getFullName(); ?>
-											</a>
-										<?php } else { ?>
-											<span class="error" title="<?php echo KT_I18N::translate('Invalid reference'); ?>"><?php echo $row->source; ?></span>
-										<?php } ?>
-									</td>
-									<td class="italic"><?php echo $row->note; ?></td>
-									<td>
-										<?php echo timestamp_to_gedcom_date(strtotime($row->date))->Display(); ?>
-									</td>
-									<td>
-										<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=edit-dna&amp;pid=<?php echo $xref; ?>&amp;ged=<?php echo KT_GEDCOM; ?>&amp;dna-id=<?php echo $row->dna_id; ?>" target="_blank" title="<?php echo KT_I18N::translate('Edit DNA data'); ?>">
-											<i class="<?php echo $iconStyle; ?> fa-edit fa-lg"></i>
-										</a>
-									</td>
-									<?php //-- Select & delete
-									if (KT_USER_GEDCOM_ADMIN) { ?>
-										<td>
-											<div class="delete_src">
-												<input type="checkbox" name="del_places[]" class="check" value="<?php echo $row->dna_id; ?>" title="<?php echo KT_I18N::translate('Delete'); ?>">
-											</div>
-										</td>
-									<?php } ?>
-								</tr>
-							<?php } ?>
-						</tbody>
-					</table>
-				</div>
-			<?php } else {
-				echo KT_I18N::translate('No results found');
-			} ?>
-		</div>
-		<?php
+						<?php } ?>
+					</tbody>
+				</table>
+			</div>
+		<?php } else {
+			echo KT_I18N::translate('No results found');
+		}
+
+		return '
+			<div id="' . $this->getName() . '_content" class="grid-x grid-padding-y">' .
+				ob_get_clean() . '
+			</div>
+		';
+
 	}
 
 	// Implement KT_Module_Tab
