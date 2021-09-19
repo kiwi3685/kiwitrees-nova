@@ -310,6 +310,11 @@ abstract class KT_Module {
 		return array_key_exists($module, self::getActiveModulesByComponent('sidebar', $ged_id, $access_level));
 	}
 
+	// Check module (a) provides a report and (b) we have permission to see.
+	public static function isActiveReport($ged_id = KT_GED_ID, $module, $access_level) {
+		return array_key_exists($module, self::getActiveModulesByComponent('report', $ged_id, $access_level));
+	}
+
 	/**
 	 * Find a specified module, if it is currently active.
 	 *

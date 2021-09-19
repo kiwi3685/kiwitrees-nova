@@ -727,3 +727,94 @@ function personDetails($person) {
 
 	return $birth . $death;
 }
+
+/**
+ * Get count of ancestors for tree completeness report
+ * Based on function add_ancestors() in functions.
+ *
+ * @return array
+ */
+ function count_ancestors($rootid, $maxgen) {
+	 $treesize	= pow(2, $maxgen);
+	 $treeid		= array();
+	 $treeid[0]	= "";
+	 $treeid[1]	= $rootid;
+
+	 // -- fill in the id array
+	 for ($i = 1; $i < ($treesize / 2); $i++) {
+		 $treeid[($i * 2)] = false; // -- father
+		 $treeid[($i * 2) + 1] = false; // -- mother
+		 if (!empty($treeid[$i])) {
+			 $person = KT_Person::getInstance($treeid[$i]);
+			 $family = $person->getPrimaryChildFamily();
+			 if ($family) {
+				 if ($family->getHusband()) {
+					 $treeid[$i * 2] = $family->getHusband()->getXref();
+				 }
+				 if ($family->getWife()) {
+					 $treeid[$i * 2 + 1] = $family->getWife()->getXref();
+				 }
+			 }
+		 }
+	 }
+
+	 // count records by generation
+	 $curgen		= 1;
+	 $count			= 0;
+	 $countArray	= [];
+	 $xrefArray		= [];
+	 $duplicates	= [];
+
+	 for ($i = 0; $i < $treesize / 2; $i++) {
+		 // -- check to see if we have moved to the next generation
+		 if ($i + 1 >= pow(2, $curgen)) {
+			 $curgen++;
+			 $count = 0;
+		 }
+
+		 $person = KT_Person::getInstance($treeid[$i + 1]);
+
+		 if (!empty($person)) {
+			 $count++;
+			 $xrefArray[] = $person->getXref();
+		 }
+
+		 $countArray[$curgen - 1] = $count;
+
+	 }
+
+	 foreach (array_count_values($xrefArray) as $val => $c) {
+		 if($c > 1) {
+			 $duplicates[] = $val;
+		 }
+	 }
+
+	 return array(
+		 'counts'		=> $countArray,
+		 'duplicates'	=> $duplicates
+	 );
+
+ }
+
+ /**
+  * Check relationship between two individuals
+  * for tree completeness report.
+  *
+  * @return link
+  */
+ function findRelationship($person, $personA) {
+	 if ($person && $personA) {
+		 $controller	 = new KT_Controller_Relationship();
+		 $paths		 = $controller->calculateRelationships_123456($person, $personA, 1, 0);
+		 foreach ($paths as $path) {
+			 $relationships = $controller->oldStyleRelationshipPath($path);
+			 if (empty($relationships)) {
+				 // Cannot see one of the families/individuals, due to privacy;
+				 continue;
+			 }
+			 return get_relationship_name_from_path(implode('', $relationships), $person, $personA);
+		 }
+	 } else {
+		 return false;
+	 }
+ }

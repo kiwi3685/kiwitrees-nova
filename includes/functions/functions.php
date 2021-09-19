@@ -2234,6 +2234,27 @@ class Functions {
 	public static $relationshipsCache = array();
 }
 
+/**
+ * Relationship names for generations
+ *
+ * function to get the names of each generation of ancestors from parents upwards
+ * Used in the "Tree completness report / tab"
+ *
+ */
+function get_generation_names($generation) {
+	switch ($generation) {
+		case 1:
+			return KT_I18N::translate('self');
+		case 2:
+			return KT_I18N::translate('parents');
+		case 3:
+			return KT_I18N::translate('grandparents');
+		case 4:
+			return KT_I18N::translate('great grandparents');
+		case $generation:
+			return KT_I18N::translate('%dx great grandparents', $generation - 2);
+		}
+}
 
 /**
  * get theme names
