@@ -197,7 +197,7 @@ class chart_ancestry_KT_Module extends KT_Module implements KT_Module_Chart {
 				case 0:
 					// List
 					$pidarr = array(); ?>
-					<div class="cell large-10 large-offset-1">
+					<div class="cell">
 						<ul>
 							<?php echo $controller->print_child_ascendancy($controller->root, 1, $controller->generations - 1); ?>
 						</ul>
@@ -207,7 +207,7 @@ class chart_ancestry_KT_Module extends KT_Module implements KT_Module_Chart {
 				case 1:
 					// Booklet
 					$show_cousins = $controller->show_cousins; ?>
-					<div class="cell large-10 large-offset-1">
+					<div class="cell">
 						<?php echo print_pedigree_person($controller->root, 1, 1);
 						$treeid = ancestry_array($controller->root->getXref(), $controller->generations - 1);
 						foreach ($treeid as $i => $pid) {
@@ -227,7 +227,7 @@ class chart_ancestry_KT_Module extends KT_Module implements KT_Module_Chart {
 					// Individual list
 					require_once KT_ROOT.'includes/functions/functions_print_lists.php';
 					$treeid = ancestry_array($controller->root->getXref(), $controller->generations); ?>
-					<div class="cell large-10 large-offset-1">
+					<div class="cell">
 						<?php echo format_indi_table($treeid, 'sosa'); ?>
 					</div>
 					<?php
@@ -246,7 +246,7 @@ class chart_ancestry_KT_Module extends KT_Module implements KT_Module_Chart {
 							$famlist[$famc->getXref()] = $famc;
 						}
 					} ?>
-					<div class="cell large-10 large-offset-1">
+					<div class="cell">
 						<?php echo format_fam_table($famlist, $controller->getPageTitle()); ?>
 					</div>
 					<?php
