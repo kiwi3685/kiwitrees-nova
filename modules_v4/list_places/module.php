@@ -195,7 +195,7 @@ class list_places_KT_Module extends KT_Module implements KT_Module_List {
 						//calculate column requirements, based on 2-cols out of 12 grid per item
 						$numfound		= count($child_places);
 						if ($child_places) {
-							$colItems	= ceil(count($child_places)/6); // max number places displayed per page column
+							$colItems	= ceil(count($child_places) / 6); // max number places displayed per page column
 							$columns	= array_chunk($child_places, $colItems); // arrays for each column
 						} else {
 							$columns	= array();
@@ -253,7 +253,7 @@ class list_places_KT_Module extends KT_Module implements KT_Module_List {
 									<?php echo /* I18N: %s is a country or region */ KT_I18N::translate('Places in %s', $place->getPlaceName()); ?>
 								</h5>
 							<?php } ?>
-							<div class="cell large-8 large-offset-2">
+							<div class="cell">
 								<div class="places grid-x grid-margin-y grid-padding-x medium-up-<?php echo $numColumns; ?>">
 									<?php foreach ($columns as $child_places) { ?>
 									    <div class="cell">
