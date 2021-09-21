@@ -94,12 +94,6 @@ class report_tree_completeness_KT_Module extends KT_Module implements KT_Module_
 		?>
 		<!-- Start page layout  -->
 		<?php echo pageStart('tree_completeness', KT_I18N::translate('%1s for %2s', $this->getTitle(), $person->getFullName())); ?>
-
-			<style>
-				table tbody td:first-child {text-transform: capitalize;}
-				form button.button {margin: 0em;}
-			</style>
-
 			<form name="complete" id="complete" method="post" action="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=show&amp;rootid=<?php echo $rootid; ?>&amp;ged=<?php echo KT_GEDURL; ?>">
 				<div class="grid-x grid-margin-x">
 					<div class="cell medium-4">
