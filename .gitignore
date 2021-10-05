@@ -43,6 +43,11 @@ prepros.config
 #php-diff
 /library/php-diff/example
 
+#Mobile-Detect
+!/library/Mobile-Detect/
+/library/Mobile-Detect/*
+!library/Mobile-Detect/Mobile_Detect.php
+
 /modules_v4/database_backup/vendor/r23/msd/work
 /modules_v4/gallery/galleria/themes/azur
 /modules_v4/gallery/galleria/themes/folio

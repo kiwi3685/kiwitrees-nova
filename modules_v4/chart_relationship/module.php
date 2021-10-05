@@ -57,6 +57,12 @@ class chart_relationship_KT_Module extends KT_Module implements KT_Module_Chart,
 		return KT_PRIV_PUBLIC;
 	}
 
+	// Implement KT_Module_Chart
+	public function getChartMobile() {
+		// exclude this module from mobile displays
+		return false;
+	}
+
 	// Implement KT_Module_Config
 	public function getConfigLink() {
 		return 'module.php?mod='.$this->getName().'&amp;mod_action=admin_config';

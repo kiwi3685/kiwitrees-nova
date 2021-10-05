@@ -36,6 +36,7 @@ interface KT_Module_Block {
 
 interface KT_Module_Chart {
 	public function getChartMenus();
+	public function getChartMobile();
 }
 
 interface KT_Module_Config {

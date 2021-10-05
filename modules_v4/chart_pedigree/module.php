@@ -64,6 +64,12 @@ class chart_pedigree_KT_Module extends KT_Module implements KT_Module_Chart {
 		return KT_PRIV_PUBLIC;
 	}
 
+	// Implement KT_Module_Chart
+	public function getChartMobile() {
+		// exclude this module from mobile displays
+		return false;
+	}
+
 	private function show(){
 		global $controller, $iconStyle;
 		$controller	= new KT_Controller_Pedigreechart();

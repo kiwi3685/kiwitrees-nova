@@ -134,8 +134,10 @@ class KT_MenuBar {
 			});
 
 			foreach ($active_charts as $chart) {
-				foreach ($chart->getChartMenus() as $submenu) {
-					$menu->addSubmenu($submenu);
+				if (!$chart->getChartMobile()) {
+					foreach ($chart->getChartMenus() as $submenu) {
+						$menu->addSubmenu($submenu);
+					}
 				}
 			}
 			return $menu;
