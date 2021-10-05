@@ -113,26 +113,26 @@ class list_branches_KT_Module extends KT_Module implements KT_Module_List {
 						</div>
 						<div class="cell medium-4">
 							<label class="h5"><?php echo KT_I18N::translate('Phonetic search'); ?></label>
-								<div class="grid-x grid-margin-x">
-									<label class="cell small-4 text-right" for="soundex_std"><?php echo KT_I18N::translate('Russell'); ?></label>
-									<div class="switch">
-										<input class="switch-input" id="soundex_std" type="checkbox" name="soundex_std" value="1" <?php echo $controller->soundex_std ? ' checked="checked"' : ''; ?>>
-										<label class="switch-paddle" for="soundex_std">
-											<span class="show-for-sr"><?php echo KT_I18N::translate('Russell'); ?></span>
-										    <span class="switch-active" aria-hidden="true"><?php echo KT_I18N::translate('on'); ?></span>
-										    <span class="switch-inactive" aria-hidden="true"><?php echo KT_I18N::translate('off'); ?></span>
-										</label>
-									</div>
-									<label class="cell small-4 text-right" for="soundex_dm"><?php echo KT_I18N::translate('Daitch-Mokotoff'); ?></label>
-									<div class="switch auto">
-										<input class="switch-input" id="soundex_dm" type="checkbox" name="soundex_dm" value="1" <?php echo $controller->soundex_dm ? ' checked="checked"' : ''; ?>>
-										<label class="switch-paddle" for="soundex_dm">
-											<span class="show-for-sr"><?php echo KT_I18N::translate('Daitch-Mokotoff'); ?></span>
-										    <span class="switch-active" aria-hidden="true"><?php echo KT_I18N::translate('on'); ?></span>
-										    <span class="switch-inactive" aria-hidden="true"><?php echo KT_I18N::translate('off'); ?></span>
-										</label>
-									</div>
+							<div class="grid-x grid-margin-x">
+								<label class="cell small-4 text-right" for="soundex_std"><?php echo KT_I18N::translate('Russell'); ?></label>
+								<div class="switch">
+									<input class="switch-input" id="soundex_std" type="checkbox" name="soundex_std" value="1" <?php echo $controller->soundex_std ? ' checked="checked"' : ''; ?>>
+									<label class="switch-paddle" for="soundex_std">
+										<span class="show-for-sr"><?php echo KT_I18N::translate('Russell'); ?></span>
+									    <span class="switch-active" aria-hidden="true"><?php echo KT_I18N::translate('on'); ?></span>
+									    <span class="switch-inactive" aria-hidden="true"><?php echo KT_I18N::translate('off'); ?></span>
+									</label>
 								</div>
+								<label class="cell small-4 text-right" for="soundex_dm"><?php echo KT_I18N::translate('Daitch-Mokotoff'); ?></label>
+								<div class="switch auto">
+									<input class="switch-input" id="soundex_dm" type="checkbox" name="soundex_dm" value="1" <?php echo $controller->soundex_dm ? ' checked="checked"' : ''; ?>>
+									<label class="switch-paddle" for="soundex_dm">
+										<span class="show-for-sr"><?php echo KT_I18N::translate('Daitch-Mokotoff'); ?></span>
+									    <span class="switch-active" aria-hidden="true"><?php echo KT_I18N::translate('on'); ?></span>
+									    <span class="switch-inactive" aria-hidden="true"><?php echo KT_I18N::translate('off'); ?></span>
+									</label>
+								</div>
+							</div>
 						</div>
 					</div>
 					<button class="button" type="submit">
