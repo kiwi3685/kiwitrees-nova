@@ -59,7 +59,7 @@ class chart_compact_KT_Module extends KT_Module implements KT_Module_Chart {
 		// exclude this module from mobile displays
 		require_once KT_ROOT . 'library/Mobile-Detect/Mobile_Detect.php';
 		$detect = new Mobile_Detect;
-		if (!$detect->isMobile() ) {
+		if ($detect->isMobile() ) {
 			return true;
 		} else {
 			return false;
@@ -84,7 +84,7 @@ class chart_compact_KT_Module extends KT_Module implements KT_Module_Chart {
 
 	// Display chart
 	public function show() {
-		global $controller, $iconStyle;
+		global $SHOW_HIGHLIGHT_IMAGES, $controller, $iconStyle;
 
 		$controller = new KT_Controller_Compact();
 		$controller
@@ -103,7 +103,7 @@ class chart_compact_KT_Module extends KT_Module implements KT_Module_Chart {
 				<input type="hidden" name="mod" value="<?php echo $this->getName(); ?>">
 				<input type="hidden" name="mod_action" value="show">
 				<div class="grid-x grid-margin-x">
-					<div class="cell medium-6 large-3">
+					<div class="cell medium-6 large-4">
 						<label class="h5" for="autocompleteInput"><?php echo KT_I18N::translate('Individual'); ?></label>
 						<div class="input-group autocomplete_container">
 							<input
@@ -120,6 +120,21 @@ class chart_compact_KT_Module extends KT_Module implements KT_Module_Chart {
 						</div>
 						<input type="hidden" name="rootid" id="selectedValue" value="<?php echo $controller->rootid; ?>">
 					</div>
+					<?php if ($SHOW_HIGHLIGHT_IMAGES) { ?>
+						<div class="cell medium-6 large-4">
+							<label class="h5" for="show_thumbs">
+								<?php echo KT_I18N::translate('Show photo in people boxes'); ?>
+							</label>
+							<div class="switch">
+							  <input class="switch-input" id="show_thumbs" type="checkbox" name="show_thumbs" <?php echo $controller->show_thumbs ? 'checked="checked"' : ''; ?>>
+							  <label class="switch-paddle" for="show_thumbs">
+								  <span class="show-for-sr"><?php echo KT_I18N::translate('Show thumbs'); ?></span>
+							      <span class="switch-active" aria-hidden="true"><?php echo KT_I18N::translate('Yes'); ?></span>
+							      <span class="switch-inactive" aria-hidden="true"><?php echo KT_I18N::translate('No'); ?></span>
+							  </label>
+							</div>
+						</div>
+					<?php } ?>
 				</div>
 				<button class="button" type="submit">
 					<i class="<?php echo $iconStyle; ?> fa-eye"></i>
@@ -132,8 +147,162 @@ class chart_compact_KT_Module extends KT_Module implements KT_Module_Chart {
 				echo '<div class="callout alert">', $controller->error_message, '</div>';
 				exit;
 			} ?>
-			<div class="grid-x grid-margin-x">
-				<div class="cell medium-2">
+
+			<div class="grid-x grid-padding-x grid-padding-y">
+				<div class="cell">
+					<table class="unstriped">
+					    <tr>
+					        <?php echo $controller->sosa_person(16); ?>
+					        <td></td>
+					        <td></td>
+					        <td></td>
+					        <?php echo $controller->sosa_person(18); ?>
+					        <td></td>
+					        <?php echo $controller->sosa_person(24); ?>
+					        <td></td>
+					        <td></td>
+					        <td></td>
+					        <?php echo $controller->sosa_person(26); ?>
+					    </tr>
+					    <tr>
+					        <?php echo $controller->sosa_arrow(16, 'up'); ?>
+					        <td></td>
+					        <td></td>
+					        <td></td>
+					        <?php echo $controller->sosa_arrow(18, 'up'); ?>
+					        <td></td>
+					        <?php echo $controller->sosa_arrow(24, 'up'); ?>
+					        <td></td>
+					        <td></td>
+					        <td></td>
+					        <?php echo $controller->sosa_arrow(26, 'up'); ?>
+					    </tr>
+					    <tr>
+					        <?php echo $controller->sosa_person(8); ?>
+					        <?php echo $controller->sosa_arrow(8, 'left'); ?>
+					        <?php echo $controller->sosa_person(4); ?>
+					        <?php echo $controller->sosa_arrow(9, 'right'); ?>
+					        <?php echo $controller->sosa_person(9); ?>
+					        <td></td>
+					        <?php echo $controller->sosa_person(12); ?>
+					        <?php echo $controller->sosa_arrow(12, 'left'); ?>
+					        <?php echo $controller->sosa_person(6); ?>
+					        <?php echo $controller->sosa_arrow(13, 'right'); ?>
+					        <?php echo $controller->sosa_person(13); ?>
+					    </tr>
+					    <tr>
+					        <?php echo $controller->sosa_arrow(17, 'down'); ?>
+					        <td></td>
+					        <td></td>
+					        <td></td>
+					        <?php echo $controller->sosa_arrow(19, 'down'); ?>
+					        <td></td>
+					        <?php echo $controller->sosa_arrow(25, 'down'); ?>
+					        <td></td>
+					        <td></td>
+					        <td></td>
+					        <?php echo $controller->sosa_arrow(27, 'down'); ?>
+					    </tr>
+					    <tr>
+					        <?php echo $controller->sosa_person(17); ?>
+					        <td></td>
+					        <?php echo $controller->sosa_arrow(4, 'up'); ?>
+					        <td></td>
+					        <?php echo $controller->sosa_person(19); ?>
+					        <td></td>
+					        <?php echo $controller->sosa_person(25); ?>
+					        <td></td>
+					        <?php echo $controller->sosa_arrow(6, 'up'); ?>
+					        <td></td>
+					        <?php echo $controller->sosa_person(27); ?>
+					    </tr>
+						<tr>
+							<td></td>
+							<td></td>
+							<?php echo $controller->sosa_person(2); ?>
+							<td></td>
+							<td colspan="3">
+								<table class="sosa123 unstriped">
+									<tr>
+										<?php echo $controller->sosa_arrow(2, 'left'); ?>
+										<?php echo $controller->sosa_person(1); ?>
+										<?php echo $controller->sosa_arrow(3, 'right'); ?>
+									</tr>
+								</table>
+							</td>
+							<td></td>
+							<?php echo $controller->sosa_person(3); ?>
+							<td></td>
+							<td></td>
+						</tr>
+					    <tr>
+					        <?php echo $controller->sosa_person(20); ?>
+					        <td></td>
+					        <?php echo $controller->sosa_arrow(5, 'down'); ?>
+					        <td></td>
+					        <?php echo $controller->sosa_person(22); ?>
+					        <td></td>
+					        <?php echo $controller->sosa_person(28); ?>
+					        <td></td>
+					        <?php echo $controller->sosa_arrow(7, 'down'); ?>
+					        <td></td>
+					        <?php echo $controller->sosa_person(30); ?>
+					    </tr>
+					    <tr>
+					        <?php echo $controller->sosa_arrow(20, 'up'); ?>
+					        <td></td>
+					        <td></td>
+					        <td></td>
+					        <?php echo $controller->sosa_arrow(22, 'up'); ?>
+					        <td></td>
+					        <?php echo $controller->sosa_arrow(28, 'up'); ?>
+					        <td></td>
+					        <td></td>
+					        <td></td>
+					        <?php echo $controller->sosa_arrow(30, 'up'); ?>
+					    </tr>
+					    <tr>
+					        <?php echo $controller->sosa_person(10); ?>
+					        <?php echo $controller->sosa_arrow(10, 'left'); ?>
+					        <?php echo $controller->sosa_person(5); ?>
+					        <?php echo $controller->sosa_arrow(11, 'right'); ?>
+					        <?php echo $controller->sosa_person(11); ?>
+					        <td></td>
+					        <?php echo $controller->sosa_person(14); ?>
+					        <?php echo $controller->sosa_arrow(14, 'left'); ?>
+					        <?php echo $controller->sosa_person(7); ?>
+					        <?php echo $controller->sosa_arrow(15, 'right'); ?>
+					        <?php echo $controller->sosa_person(15); ?>
+					    </tr>
+					    <tr>
+					        <?php echo $controller->sosa_arrow(21, 'down'); ?>
+					        <td></td>
+					        <td></td>
+					        <td></td>
+					        <?php echo $controller->sosa_arrow(23, 'down'); ?>
+					        <td></td>
+					        <?php echo $controller->sosa_arrow(29, 'down'); ?>
+					        <td></td>
+					        <td></td>
+					        <td></td>
+					        <?php echo $controller->sosa_arrow(31, 'down'); ?>
+					    </tr>
+					    <tr>
+					        <?php echo $controller->sosa_person(21); ?>
+					        <td></td>
+					        <td></td>
+					        <td></td>
+					        <?php echo $controller->sosa_person(23); ?>
+					        <td></td>
+					        <?php echo $controller->sosa_person(29); ?>
+					        <td></td>
+					        <td></td>
+					        <td></td>
+					        <?php echo $controller->sosa_person(31); ?>
+					    </tr>
+					</table>
+				</div>
+			</div>
 
 		<?php echo pageClose();
 

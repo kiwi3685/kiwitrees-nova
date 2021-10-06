@@ -8682,14 +8682,17 @@ nav .top-bar.first-top-bar ul.menu ul {
     list-style: none;
 }
 nav .top-bar.first-top-bar ul.menu ul a {
-    color: #331919;
+    color: #eddab6;
     font-size: 0.875rem;
     padding: 0.25rem;
     white-space: nowrap;
 }
-nav .top-bar.first-top-bar ul.menu ul .is-dropdown-submenu-item a:hover {
+nav .top-bar.first-top-bar ul.menu ul.is-dropdown-submenu {
     background-color: #331919;
-    color: #eddab6;
+    border: none;
+}
+nav .top-bar.first-top-bar ul.menu ul .is-dropdown-submenu-item a:hover {
+    color: #f7efdf;
 }
 nav .top-bar.first-top-bar ul.menu ul #login-popup {
     width: 20rem;
@@ -9445,6 +9448,51 @@ div[id$=-page]:not(#indi-page) button[type=submit] {
 }
 #calendar_utilities-page #days h6 {
     margin-top: 0.5rem;
+}
+
+#compact-page table.unstriped {
+    width: 100%;
+    text-align: center;
+}
+#compact-page table.unstriped tbody {
+    background-color: transparent;
+    border: none;
+}
+#compact-page table.unstriped tbody tr {
+    background-color: transparent;
+    border: none;
+}
+#compact-page table.unstriped tbody tr td {
+    width: 1rem;
+}
+#compact-page table.unstriped tbody tr td.person_box_template {
+    display: inline-block;
+    width: 12rem;
+}
+#compact-page table.unstriped tbody tr td.person_box_template.sosa1 {
+    background-color: #e7e7e7;
+}
+#compact-page table.unstriped tbody tr td.person_box_template table.sosa123 {
+    width: 100%;
+}
+#compact-page table.unstriped tbody tr td.person_box_template table.sosa123 td.arrow {
+    width: 25%;
+}
+#compact-page table.unstriped tbody tr td.arrow {
+    padding: 0;
+    width: 0.25rem;
+}
+#compact-page table.unstriped tbody tr td i[class^=icon-silhouette-] {
+    float: left;
+    height: 3rem;
+    width: 2.5rem;
+}
+#compact-page table.unstriped tbody tr td img {
+    float: left;
+    margin: 0 0.125rem 0 0;
+    height: 3rem;
+    width: auto;
+    max-width: 5rem;
 }
 
 #edit_interface-page .add_layer {
@@ -10363,6 +10411,9 @@ div.dataTables_wrapper table.dataTable {
 div.dataTables_wrapper table.dataTable.surname-list {
     margin: 0 auto !important;
     width: auto;
+}
+div.dataTables_wrapper table.dataTable.surname-list th {
+    min-width: 8rem;
 }
 div.dataTables_wrapper table.dataTable .ui-state-active {
     background-color: #331919;

@@ -2,13 +2,13 @@
 /**
  * Kiwitrees: Web based Family History software
  * Copyright (C) 2012 to 2021 kiwitrees.net
- * 
+ *
  * Derived from webtrees (www.webtrees.net)
  * Copyright (C) 2010 to 2012 webtrees development team
- * 
+ *
  * Derived from PhpGedView (phpgedview.sourceforge.net)
  * Copyright (C) 2002 to 2010 PGV Development Team
- * 
+ *
  * Kiwitrees is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -28,16 +28,16 @@ if (!defined('KT_KIWITREES')) {
 
 class KT_Controller_Compact extends KT_Controller_Chart {
 	// Data for the view
-	public $show_thumbs=false;
+	public $show_thumbs = false;
 
 	// Date for the controller
-	private $treeid=array();
+	private $treeid = array();
 
 	public function __construct() {
 		parent::__construct();
 
 		// Extract the request parameters
-		$this->show_thumbs=safe_GET_bool('show_thumbs');
+		$this->show_thumbs = safe_GET_bool('show_thumbs');
 
 		if ($this->root && $this->root->canDisplayName()) {
 			$this->setPageTitle(
@@ -47,31 +47,33 @@ class KT_Controller_Compact extends KT_Controller_Chart {
 		} else {
 			$this->setPageTitle(KT_I18N::translate('Compact tree'));
 		}
-		$this->treeid=ancestry_array($this->rootid, 5);
+		$this->treeid = ancestry_array($this->rootid, 5);
 	}
-	
+
 	function sosa_person($n) {
 		global $SHOW_HIGHLIGHT_IMAGES;
 
-		$indi=KT_Person::getInstance($this->treeid[$n]);
+		$indi = KT_Person::getInstance($this->treeid[$n]);
 
 		if ($indi && $indi->canDisplayName()) {
-			$name=$indi->getFullName();
-			$addname=$indi->getAddName();
+			$name = $indi->getShortName(30);
+			$addname = $indi->getAddName();
 
 			if ($this->show_thumbs && $SHOW_HIGHLIGHT_IMAGES) {
-				$html=$indi->displayImage();
+				$html = $indi->displayImage();
 			} else {
 				$html='';
 			}
 
-			$html .= '<a class="name1" href="'.$indi->getHtmlUrl().'">';
+			$html .= '<a class="name1" href="' . $indi->getHtmlUrl().'">';
 			$html .= $name;
-			if ($addname) $html .= '<br>' . $addname;
+			if ($addname) {
+				$html .= '<br>' . $addname;
+			}
 			$html .= '</a>';
 			$html .= '<br>';
 			if ($indi->canDisplayDetails()) {
-				$html.='<div class="details1">'.$indi->getLifeSpan().'</div>';
+				$html .= '<div>' . $indi->getLifeSpan() . '</div>';
 			}
 		} else {
 			// Empty box
@@ -79,47 +81,60 @@ class KT_Controller_Compact extends KT_Controller_Chart {
 		}
 
 		// -- box color
-		$isF='';
-		if ($n==1) {
-			if ($indi && $indi->getSex()=='F') {
-				$isF='F';
+		$sosa1	= '';
+		$isF	= 'M';
+
+		if ($n == 1) {
+			if ($indi && $indi->getSex() == 'F') {
+				$isF = 'F';
 			}
+			$sosa1 = 'sosa1';
 		} elseif ($n%2) {
-			$isF='F';
+			$isF = 'F';
 		}
 
-		// -- box size
-		if ($n==1) {
-			return '<td class="person_box'.$isF.' person_box_template" style="text-align:center; vertical-align:top;">'.$html.'</td>';
+		// -- box layout
+		if ($n == 1) {
+			return '<td class="' . $sosa1 . ' person_box_template '. $isF .'">'.$html.'</td>';
 		} else {
-			return '<td class="person_box'.$isF.' person_box_template" style="text-align:center; vertical-align:top;" width="15%">'.$html.'</td>';
+			return '<td class="person_box_template '. $isF .'">'.$html.'</td>';
 		}
 	}
 
 	function sosa_arrow($n, $arrow_dir) {
-		global $TEXT_DIRECTION;
+		global $TEXT_DIRECTION, $iconStyle;
 
 		$pid = $this->treeid[$n];
 
-		$arrow_dir = substr($arrow_dir,0,1);
 		if ($TEXT_DIRECTION == "rtl") {
-			if ($arrow_dir == "l") {
-				$arrow_dir = "r";
-			} elseif ($arrow_dir == "r") {
-				$arrow_dir = "l";
+			if ($arrow_dir == "left") {
+				$arrow_dir = "right";
+			} elseif ($arrow_dir == "right") {
+				$arrow_dir = "left";
 			}
 		}
 
 		if ($pid) {
-			$indi = KT_Person::getInstance($pid);
+			$indi  = KT_Person::getInstance($pid);
 			$title = KT_I18N::translate('Compact tree of %s', $indi->getFullName());
-			$text = '<a class="icon-' . $arrow_dir.'arrow" title="'.strip_tags($title).'" href="?rootid=' . $pid;
-			if ($this->show_thumbs) {
-				$text .= "&amp;show_thumbs=".$this->show_thumbs;
-			}
-			$text .= "\"></a>";
+			$text  = '
+				<td class="arrow">
+					<a href="?mod=chart_compact&mod_action=show&rootid=' . $pid;
+
+						if ($this->show_thumbs) {
+							$text .= '&amp;show_thumbs=' . $this->show_thumbs;
+						}
+
+						$text .= '" title="' . strip_tags($title) . '"
+					>
+						<i class="' . $iconStyle . ' fa-arrow-' . $arrow_dir . '"></i>
+					</a>
+				</td>';
 		} else {
-			$text = '<i class="icon-' . $arrow_dir.'arrow"></i>';
+			$text = '
+				<td class="arrow">
+					<i class="' . $iconStyle . ' fa-arrow-' . $arrow_dir . '"></i>
+				</td>';
 		}
 
 		return $text;

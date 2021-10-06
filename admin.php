@@ -1881,6 +1881,7 @@ function old_paths() {
 		KT_ROOT . 'modules_v4/yahrzeit',
 		// Charts
 		KT_ROOT . 'ancestry.php',
+		KT_ROOT . 'compact.php',
 		// tabs
 		KT_ROOT . 'modules_v4/album',
 		KT_ROOT . 'modules_v4/census',

@@ -1906,18 +1906,11 @@ class KT_Person extends KT_GedcomRecord {
     }
 
     // create a short name for compact display on charts
-    public function getShortName() {
+    public function getShortName($char = 50) {
         global $bwidth, $SHOW_HIGHLIGHT_IMAGES, $UNKNOWN_NN, $UNKNOWN_PN;
         // Estimate number of characters that can fit in box. Calulates to 28 characters in kiwitrees theme, or 34 if no thumbnail used.
         if ($SHOW_HIGHLIGHT_IMAGES) {
-//            $char = intval(($bwidth-40)/6.5);
-            $char = intval((270 - 40) / 6.5); // TEMP FIX
-        } else {
-            $char = ($bwidth / 6.5);
-        }
-
-        if (KT_SCRIPT_NAME == 'family.php') {
-            $char = 30;
+            $char = $char - 12;
         }
 
         if ($this->canDisplayName()) {
