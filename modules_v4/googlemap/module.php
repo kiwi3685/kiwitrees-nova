@@ -93,6 +93,12 @@ class googlemap_KT_Module extends KT_Module implements KT_Module_Config, KT_Modu
 	}
 
 	// Implement KT_Module_Chart
+	public function getChartMobile() {
+		// exclude this module from mobile displays
+		return false;
+	}
+
+	// Implement KT_Module_Chart
 	public function getChartMenus() {
 		global $controller;
 		$indi_xref = $controller->getSignificantIndividual()->getXref();
