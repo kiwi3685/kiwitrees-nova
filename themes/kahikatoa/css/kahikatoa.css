@@ -9351,9 +9351,15 @@ div[id$=-page]:not(#indi-page) button[type=submit] {
 #branches-page ul li {
     counter-increment: section;
     line-height: 2;
+    margin-left: 2.175rem;
+}
+#branches-page ul li.expandable, #branches-page ul li.collapsable {
+    margin-left: 1rem;
 }
 #branches-page ul li::before {
     content: counters(section, ".") ". ";
+    display: inline-block;
+    width: 3rem;
 }
 #branches-page ul li ul {
     margin-top: 0.5rem;
