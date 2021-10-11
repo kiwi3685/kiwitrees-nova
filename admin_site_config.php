@@ -139,7 +139,7 @@ switch (KT_Filter::post('action')) {
 		if (!KT_Filter::checkCsrf()) {
 			break;
 		}
-		KT_Site::preference('LANGUAGES', implode(',',		KT_Filter::postArray('LANGUAGES')));
+		KT_Site::preference('LANGUAGES', implode(',',  KT_Filter::postArray('LANGUAGES')));
 		// Reload the page, so that the settings take effect immediately.
 		Zend_Session::writeClose();
 		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '#lang');
@@ -571,7 +571,7 @@ $controller
 		</div>
 		<!-- Languages configuration tab -->
 		<div class="tabs-panel" id="lang">
-			<form method="post" name="configform" action="<?php echo KT_SCRIPT_NAME; ?>#lang">
+			<form method="post" name="configform" action="<?php echo KT_SCRIPT_NAME; ?>#lang" data-abide novalidate>
 				<?php echo KT_Filter::getCsrf(); ?>
 				<input type="hidden" name="action" value="update-lang">
 				<div class="grid-x grid-margin-x">
@@ -587,9 +587,9 @@ $controller
 							$languages = explode(',', $code_list);
 						} else {
 							$languages = array(
-								'ar', 'bg', 'ca', 'cs', 'da', 'de', 'el', 'en_GB', 'en_US', 'es',
-								'et', 'fi', 'fr', 'he', 'hr', 'hu', 'is', 'it', 'ka', 'lt', 'nb',
-								'nl', 'nn', 'pl', 'pt', 'ru', 'sk', 'sv', 'tr', 'uk', 'vi', 'zh',
+								'ar', 'bg', 'ca', 'cs', 'da', 'de', 'el', 'en_AU', 'en_GB', 'en_US', 'es',
+								'et', 'fi', 'fr', 'he', 'hr', 'hu', 'is', 'it', 'ka', 'lt', 'nb', 'nl',
+								'nn', 'pl', 'pt', 'pt_BR', 'ru', 'sk', 'sv', 'tr', 'uk', 'vi', 'zh',
 							);
 						}
 						$installed = KT_I18N::installed_languages();
@@ -604,9 +604,10 @@ $controller
 									<li>
 										<input class="check" type="checkbox" name="LANGUAGES[]" id="lang_' . $code . '"';
 											if (in_array($code, $languages)) {
-												echo 'checked="checked"';
+												echo 'checked=" checked"';
 											}
-										echo ' value="' . $code . '">
+											echo ' value="' . $code . '"
+										>
 										<label for="lang_' . $code . '"> '. KT_I18N::translate($name) . '</label>
 									</li>
 								';
