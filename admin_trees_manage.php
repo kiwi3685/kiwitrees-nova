@@ -121,7 +121,7 @@ switch (KT_Filter::post('action')) {
 			}
 		}
 		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '#' . basename($basename, ".ged"));
-		break;
+		return;
 }
 
 $controller->pageHeader();
@@ -138,9 +138,9 @@ switch (KT_Filter::get('action')) {
 		$gedcom_filename = get_gedcom_setting($gedcom_id, 'gedcom_filename');
 		?>
 		<div id="trees_import" class="cell">
-			<h4><?php echo $tree->tree_title_html; ?> — <?php echo KT_I18N::translate('Import a GEDCOM file'); ?></h3>
+			<h4><?php echo KT_TREE_TITLE; ?> — <?php echo KT_I18N::translate('Import a GEDCOM file'); ?></h3>
 			<div class="callout alert small">
-				<?php echo /* I18N: %s is the name of a family tree */ KT_I18N::translate('This will delete all the genealogy data from "%s" and replace it with data from a GEDCOM file.', $tree->tree_title_html); ?>
+				<?php echo /* I18N: %s is the name of a family tree */ KT_I18N::translate('This will delete all the genealogy data from "%s" and replace it with data from a GEDCOM file.', KT_TREE_TITLE); ?>
 			</div>
 			<form name="gedcomimportform" method="post" enctype="multipart/form-data" onsubmit="return checkGedcomImportForm('<?php echo KT_Filter::escapeHtml(KT_I18N::translate('You have selected a GEDCOM file with a different name. Is this correct?')) ?>');">
 				<input type="hidden" name="gedcom_id" value="<?php echo $gedcom_id; ?>">
