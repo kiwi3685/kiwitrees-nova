@@ -177,7 +177,6 @@ class KT_Stats {
 		}
 	}
 
-///////////////////////////////////////////////////////////////////////////////
 // GEDCOM                                                                    //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -518,11 +517,11 @@ class KT_Stats {
 
 	}
 
-	function totalEvents($params = array()) {
-		$sql="SELECT SQL_CACHE COUNT(*) AS tot FROM `##dates` WHERE d_file=?";
+	function totalEvents($params = array(), $list = false) {
 		$vars=array($this->_ged_id);
 
 		$no_types=array('HEAD', 'CHAN');
+		$list ? $sql = 'SELECT SQL_CACHE d_gid AS xref' : $sql = 'SELECT COUNT(*) AS tot FROM `##dates` WHERE d_file=?';
 		if ($params) {
 			$types=array();
 			foreach ($params as $type) {
@@ -539,80 +538,121 @@ class KT_Stats {
 		}
 		$sql.=' AND d_fact NOT IN ('.implode(', ', array_fill(0, count($no_types), '?')).')';
 		$vars=array_merge($vars, $no_types);
+		if ($list) {
+			$rows	= KT_DB::prepare($sql)->execute($vars)->fetchAll(PDO::FETCH_ASSOC);
+			$list	= array();
+			foreach ($rows as $row) {
+				$family = KT_Family::getInstance($row['xref']);
+					$list[] = clone $family;
+			}
+			return $list;
+		} else {
 		return KT_I18N::number(KT_DB::prepare($sql)->execute($vars)->fetchOne());
-	}
+	  }
 
-	function totalEventsBirth() {
-		return $this->totalEvents(explode('|',KT_EVENTS_BIRT));
 	}
 
 	function totalBirths() {
 		$rows = KT_DB::prepare("
-			SELECT SQL_CACHE i_id AS xref, i_gedcom AS gedrec
-				FROM `##individuals` WHERE `i_file` = ?
-			")->execute(array($this->_ged_id))
+            SELECT SQL_CACHE DISTINCT i_id
+            FROM `##individuals`
+            WHERE `i_file`=?
+            AND (`i_gedcom` REGEXP '\n1 BIRT Y\n1' OR `i_gedcom` REGEXP '\n1 BIRT(.)*(\n[2-9].+)*\n2 (DATE|PLAC|SOUR)')
+            ORDER BY i_id
+        ")
+        ->execute(array($this->_ged_id))
 			->fetchAll();
 
-		$count = count($rows);
 
 		foreach ($rows as $row) {
-			preg_match('/\n1 BIRT/', $row->gedrec, $match);
-			preg_match('/\n1 BIRT Y\n1/', $row->gedrec, $match1);
-			preg_match('/\n(1 BIRT.*\n([2-9] (?!DATE|PLAC|SOUR).*\n)+)1/', $row->gedrec, $match2);
-			if (!$match || $match1 || $match2) {
-				$count --;
+            $list[] = $row->i_id;
+        }
+
+		return array('list' => $list, 'count' => count($list));
 			}
+    function totalDatedBirths() {
+        $rows = KT_DB::prepare("
+            SELECT SQL_CACHE DISTINCT d_gid
+            FROM `##dates`
+            WHERE d_file=?
+            AND d_year > 0
+            AND d_fact='BIRT'
+            AND d_type IN ('@#DGREGORIAN@', '@#DJULIAN@')
+            ORDER BY d_gid
+		")->execute(array($this->_ged_id))
+		->fetchAll();
+        foreach($rows as $row) {
+            $list[] = $row->d_gid;
 		}
 
-		return KT_I18N::number($count);
+		return array('list' => $list, 'count' => count($list));
 	}
 
-	function totalEventsDeath() {
-		return $this->totalEvents(explode('|',KT_EVENTS_DEAT));
+    function totalUndatedBirths() {
+        $total = $this->totalBirths();
+        $dated = $this->totalDatedBirths();
+        $undated = array_diff($total['list'], $dated['list']);
+		return array('list' => $undated, 'count' => count($undated));
 	}
 
 	function totalDeaths() {
 		$rows = KT_DB::prepare("
-			SELECT SQL_CACHE i_id AS xref, i_gedcom AS gedrec
-				FROM `##individuals` WHERE `i_file` = ?
+            SELECT SQL_CACHE DISTINCT i_id
+            FROM `##individuals`
+            WHERE `i_file`=?
+            AND (`i_gedcom` REGEXP '\n1 DEAT Y\n1' OR `i_gedcom` REGEXP '\n1 DEAT(.)*(\n[2-9].+)*\n2 (DATE|PLAC|SOUR)')
+            ORDER BY i_id
+        ")
+        ->execute(array($this->_ged_id))
+			->fetchAll();
+
+
+		foreach ($rows as $row) {
+            $list[] = $row->i_id;
+			}
+
+		return array('list' => $list, 'count' => count($list));
+	}
+
+    function totalDatedDeaths() {
+
+		$rows = KT_DB::prepare("
+            SELECT SQL_CACHE DISTINCT d_gid
+            FROM `##dates`
+            WHERE d_file=?
+            AND d_year > 0
+            AND d_fact='DEAT'
+            AND d_type IN ('@#DGREGORIAN@', '@#DJULIAN@')
+            ORDER BY d_gid
 			")->execute(array($this->_ged_id))
 			->fetchAll();
 
-		$count = count($rows);
 
 		foreach ($rows as $row) {
-			preg_match('/\n1 DEAT/', $row->gedrec, $match);
-			preg_match('/\n1 DEAT Y\n1/', $row->gedrec, $match1);
-			preg_match('/\n(1 DEAT.*\n([2-9] (?!DATE|PLAC|SOUR).*\n)+)1/', $row->gedrec, $match2);
-			if (!$match || $match1 || $match2) {
-				$count --;
+            $list[] = $row->d_gid;
+        }
+		return array('list' => $list, 'count' => count($list));
+	}
+    function totalUndatedDeaths() {
+        $total = $this->totalDeaths();
+        $dated = $this->totalDatedDeaths();
+        $list  = array();
+        $undated = array_diff($total['list'], $dated['list']);
+
+		return array('list'=>$undated, 'count'=>count($undated));
 			}
+    function totalEventsBirth() {
+		return $this->totalEvents(explode('|', KT_EVENTS_BIRT));
 		}
 
-		return KT_I18N::number($count);
+	function totalEventsDeath() {
+		return $this->totalEvents(explode('|',KT_EVENTS_DEAT));
 	}
-
 	function totalEventsMarriage() {
 		return $this->totalEvents(explode('|',KT_EVENTS_MARR));
 	}
-
 	function totalMarriages() {
-		$rows = KT_DB::prepare("
-			SELECT SQL_CACHE f_id AS xref, f_gedcom AS gedrec
-				FROM `##families` WHERE `f_file` = ?
-			")->execute(array($this->_ged_id))
-			->fetchAll();
-
-		$count = count($rows);
-
-		foreach ($rows as $row) {
-			preg_match('/\n1 MARR.*(?:\n[2-9](?:.*))*\n2 (DATE|PLAC|SOUR).*/', $row->gedrec, $match);
-			if (!$match) {
-				$count --;
-			}
-		}
-
-		return KT_I18N::number($count);
+		return $this->totalEvents(array('MARR'));
 	}
 
 	function totalEventsDivorce() {
@@ -880,7 +920,8 @@ class KT_Stats {
 				'category'	=> KT_Gedcom_Tag::getFileFormTypeValue($type),
 				'count'		=> $count,
 				'percent'	=> KT_I18N::number($count) . ' (' . KT_I18N::number(100 * $count / $tot, 1) . '%)',
-				'color'		=> 'd'
+				'color'		=> 'd',
+				'type'		=> $type
 			);
 		}
 
@@ -1079,7 +1120,7 @@ class KT_Stats {
 			$surn_countries	= array();
 			$indis			= KT_Query_Name::individuals(utf8_strtoupper($surname), '', '', false, false, KT_GED_ID);
 			foreach ($indis as $person) {
-				if (preg_match_all('/^2 PLAC (?:.*, *)*(.*)/m', $person->getGedcomRecord(), $matches)) {
+				if (preg_match_all('/^2 PLAC (.*, *)*(.*)/m', $person->getGedcomRecord(), $matches)) {
 					// kiwitrees uses 3 letter country codes and localised country names, but google uses 2 letter codes.
 					foreach ($matches[1] as $country) {
 						$country = trim($country);
@@ -1280,16 +1321,19 @@ class KT_Stats {
 
 	function _statsBirth($simple = true, $sex = false, $year1 = -1, $year2 = -1, $params = array()) {
 		if ($simple) {
-			$sql =
-			 	"SELECT SQL_CACHE FLOOR(d_year/100+1) AS century, COUNT(*) AS total FROM `##dates` ".
-				"WHERE ".
-				"d_file={$this->_ged_id} AND ".
-				"d_year<>0 AND ".
-				"d_fact='BIRT' AND ".
-				"d_type IN ('@#DGREGORIAN@', '@#DJULIAN@')";
+            KT_DB::exec("CREATE TEMPORARY TABLE tempdates1
+                SELECT * FROM `##dates`
+                WHERE
+                d_file={$this->_ged_id} AND
+                d_year<>0 AND
+                d_fact='BIRT' AND
+                d_type IN ('@#DGREGORIAN@', '@#DJULIAN@')
+                GROUP BY d_gid"
+            );
+            $sql = "SELECT FLOOR(d_year/100+1) AS century, COUNT(*) AS total FROM `tempdates1` ";
 		} else if ($sex) {
 			$sql =
-				"SELECT SQL_CACHE d_month, i_sex, COUNT(*) AS total FROM `##dates` ".
+				"SELECT SQL_CACHE d_gid, d_month, i_sex, COUNT(*) AS total FROM `##dates` ".
 				"JOIN `##individuals` ON d_file = i_file AND d_gid = i_id ".
 				"WHERE ".
 				"d_file={$this->_ged_id} AND ".
@@ -1297,7 +1341,7 @@ class KT_Stats {
 				"d_type IN ('@#DGREGORIAN@', '@#DJULIAN@')";
 		} else {
 			$sql =
-				"SELECT SQL_CACHE d_month, COUNT(*) AS total FROM `##dates` ".
+				"SELECT SQL_CACHE d_gid, d_month, COUNT(*) AS total FROM `##dates` ".
 				"WHERE ".
 				"d_file={$this->_ged_id} AND ".
 				"d_fact='BIRT' AND ".
@@ -1327,7 +1371,8 @@ class KT_Stats {
 						'category'	=> self::_centuryName($values['century']),
 						'count'		=> $values['total'],
 						'percent'	=> KT_I18N::number($values['total']) . ' (' . KT_I18N::number(round(100 * $values['total'] / $tot, 0)) . '%)',
-						'color'		=> 'd'
+						'color'		=> 'd',
+						'type'		=> $values['century']
 					);
 				}
 			}
@@ -1343,16 +1388,19 @@ class KT_Stats {
 
 	function _statsDeath($simple = true, $sex = false, $year1 = -1, $year2 = -1) {
 		if ($simple) {
-			$sql =
-				"SELECT SQL_CACHE FLOOR(d_year/100+1) AS century, COUNT(*) AS total FROM `##dates` ".
-				"WHERE ".
-				"d_file={$this->_ged_id} AND ".
-				'd_year<>0 AND '.
-				"d_fact='DEAT' AND ".
-				"d_type IN ('@#DGREGORIAN@', '@#DJULIAN@')";
+            KT_DB::exec("CREATE TEMPORARY TABLE tempdates2
+                SELECT * FROM `##dates`
+                WHERE
+                d_file={$this->_ged_id} AND
+                d_year<>0 AND
+                d_fact='DEAT' AND
+                d_type IN ('@#DGREGORIAN@', '@#DJULIAN@')
+                GROUP BY d_gid"
+            );
+            $sql = "SELECT FLOOR(d_year/100+1) AS century, COUNT(*) AS total FROM `tempdates2` ";
 		} else if ($sex) {
 			$sql =
-				"SELECT SQL_CACHE d_month, i_sex, COUNT(*) AS total FROM `##dates` ".
+				"SELECT SQL_CACHE d_gid, d_month, i_sex, COUNT(*) AS total FROM `##dates` ".
 				"JOIN `##individuals` ON d_file = i_file AND d_gid = i_id ".
 				"WHERE ".
 				"d_file={$this->_ged_id} AND ".
@@ -1360,7 +1408,7 @@ class KT_Stats {
 				"d_type IN ('@#DGREGORIAN@', '@#DJULIAN@')";
 		} else {
 			$sql =
-				"SELECT SQL_CACHE d_month, COUNT(*) AS total FROM `##dates` ".
+				"SELECT SQL_CACHE d_gid, d_month, COUNT(*) AS total FROM `##dates` ".
 				"WHERE ".
 				"d_file={$this->_ged_id} AND ".
 				"d_fact='DEAT' AND ".
@@ -1390,7 +1438,8 @@ class KT_Stats {
 						'category'	=> self::_centuryName($values['century']),
 						'count'		=> $values['total'],
 						'percent'	=> KT_I18N::number($values['total']) . ' (' . KT_I18N::number(round(100 * $values['total'] / $tot, 0)) . '%)',
-						'color'		=> 'd'
+						'color'		=> 'd',
+						'type'		=> $values['century']
 					);
 				}
 			}
@@ -2206,14 +2255,18 @@ class KT_Stats {
 
 	function _statsMarr($simple = true, $first = false, $year1 = -1, $year2 = -1) {
 		if ($simple) {
-			$sql =
-				"SELECT SQL_CACHE FLOOR(d_year / 100 + 1) AS century, COUNT(*) AS total".
-				" FROM `##dates`".
-				" WHERE d_file={$this->_ged_id} AND d_year<>0 AND d_fact='MARR' AND d_type IN ('@#DGREGORIAN@', '@#DJULIAN@')";
+			$sql = "
+				SELECT SQL_CACHE FLOOR(d_year/100+1) AS century, COUNT(*) AS total
+					FROM (
+						SELECT * FROM `##dates`
+						 WHERE d_file=" . $this->_ged_id . " AND d_year<>0 AND d_fact = 'MARR' AND d_type IN ('@#DGREGORIAN@', '@#DJULIAN@')
+						 GROUP BY d_gid";
 			if ($year1 >= 0 && $year2 >= 0) {
-				$sql .= " AND d_year BETWEEN '{$year1}' AND '{$year2}'";
+							$sql .= " AND d_year BETWEEN '" . $year1 . "' AND '" . $year2 . "'";
 			}
-			$sql .= " GROUP BY century ORDER BY century";
+					$sql .= ") AS t1
+				 GROUP BY century ORDER BY century
+			";
 		} else if ($first) {
 			$years = '';
 			if ($year1 >= 0 && $year2 >= 0) {
@@ -2258,7 +2311,8 @@ class KT_Stats {
 						'category'	=> self::_centuryName($values['century']),
 						'count'		=> $values['total'],
 						'percent'	=> KT_I18N::number($values['total']) . ' (' . KT_I18N::number(round(100 * $values['total'] / $tot, 0)) . '%)',
-						'color'		=> 'd'
+						'color'		=> 'd',
+						'type'		=> $values['century']
 					);
 				}
 			}
@@ -2274,14 +2328,18 @@ class KT_Stats {
 
 	function _statsDiv($simple=true, $first=false, $year1=-1, $year2=-1, $params = array()) {
 		if ($simple) {
-			$sql =
-				"SELECT SQL_CACHE FLOOR(d_year/100+1) AS century, COUNT(*) AS total".
-				" FROM `##dates`".
-				" WHERE d_file={$this->_ged_id} AND d_year<>0 AND d_fact = 'DIV' AND d_type IN ('@#DGREGORIAN@', '@#DJULIAN@')";
+			$sql = "
+				SELECT SQL_CACHE FLOOR(d_year/100+1) AS century, COUNT(*) AS total
+					FROM (
+						SELECT * FROM `##dates`
+						 WHERE d_file=" . $this->_ged_id . " AND d_year<>0 AND d_fact = 'DIV' AND d_type IN ('@#DGREGORIAN@', '@#DJULIAN@')
+						 GROUP BY d_gid";
 				if ($year1>=0 && $year2>=0) {
-					$sql .= " AND d_year BETWEEN '{$year1}' AND '{$year2}'";
+							$sql .= " AND d_year BETWEEN '" . $year1 . "' AND '" . $year2 . "'";
 				}
-				$sql .= " GROUP BY century ORDER BY century";
+					$sql .= ") AS t1
+				 GROUP BY century ORDER BY century
+			";
 		} else if ($first) {
 			$years = '';
 			if ($year1>=0 && $year2>=0) {
@@ -2324,7 +2382,8 @@ class KT_Stats {
 						'category'	=> self::_centuryName($values['century']),
 						'count'		=> $values['total'],
 						'percent'	=> KT_I18N::number($values['total']) . ' (' . KT_I18N::number(round(100 * $values['total'] / $tot, 0)) . '%)',
-						'color'		=> 'd'
+						'color'		=> 'd',
+						'type'		=> $values['century']
 					);
 				}
 			}
@@ -4093,7 +4152,7 @@ class KT_Stats {
 	}
 
 	// century name, English => 21st, Polish => XXI, etc.
-	private static function _centuryName($century) {
+	public static function _centuryName($century) {
 		if ($century<0) {
 			return str_replace(-$century, KT_Stats::_centuryName(-$century), /* I18N: BCE=Before the Common Era, for Julian years < 0.  See http://en.wikipedia.org/wiki/Common_Era */ KT_I18N::translate('%s BCE', KT_I18N::number(-$century)));
 		}
