@@ -85,11 +85,11 @@ class contact_KT_Module extends KT_Module implements KT_Module_Menu {
 		if ((!$contact_user_id && !$webmaster_user_id) || (!$supportLink && !$contactLink)) {
 			return '';
 		} else {
-			$menu = new KT_Menu($this->getMenuTitle(), '#', 'menu-contact', 'down');
-			$menu->addOnclick("window.open('module.php?mod=" . $this->getName() . "&amp;mod_action=show&amp;url=" . KT_SERVER_NAME . KT_SCRIPT_PATH . addslashes(urlencode(get_query_url())) . "', '_blank')");
-			$menu->addClass('menuitem', 'menuitem_hover', '');
-			$menu->addClass('', '', 'fa-envelope');
-
+			$menu = new KT_Menu(
+                $this->getMenuTitle(),
+                'module.php?mod=' . $this->getName() . '&amp;mod_action=show&amp;url=' . KT_SERVER_NAME . KT_SCRIPT_PATH . addslashes(urlencode(get_query_url())),
+                'menu-contact'
+            );
 			return $menu;
 		}
 	}
@@ -100,7 +100,15 @@ class contact_KT_Module extends KT_Module implements KT_Module_Menu {
 		require KT_ROOT . 'includes/functions/functions_edit.php';
 
 		$controller = new KT_Controller_Page();
-		$controller->setPageTitle($this->getTitle());
+		$controller
+			->setPageTitle($this->getTitle())
+			->addInlineJavascript('
+				jQuery("label[for=termsConditions]").parent().css({
+					"opacity": "0",
+					"position": "absolute",
+					"left": "-2000px",
+				});
+			');
 
 		if (array_key_exists('ckeditor', KT_Module::getActiveModules()) && KT_Site::preference('MAIL_FORMAT') == "1") {
 			ckeditor_KT_Module::enableBasicEditor($controller);
@@ -157,10 +165,11 @@ class contact_KT_Module extends KT_Module implements KT_Module_Menu {
 					// Decode json data
 					$responseData = json_decode($verifyResponse);
 
-					// If reCAPTCHA response is not validated
-					if (!$responseData->success) {
-						$responseData->error-codes ? $errors = $responseData->error-codes : $errors = '';
-						AddToLog('Failed Google reCaptcha response from "' . $user_name . '"/"' . $user_email . '", error="' . $errors . '"', 'spam');
+                    // Check reCAPTCHA response
+                    if ($responseData->success) {
+                        AddToLog('Google reCaptcha valid response from "' . $from_name . '"/"' . $from_email . '", response ="' . $responseData->success . '"', 'auth');
+                    } else {
+                        AddToLog('Failed Google reCaptcha response from "' . $from_name . '"/"' . $from_email . '"', 'spam');
 						KT_FlashMessages::addMessage(KT_I18N::translate('Google reCaptcha robot verification failed, please try again.'));
 						header('Location: ' . KT_Filter::unescapeHtml($url));
 						$captcha = false;

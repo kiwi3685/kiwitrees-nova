@@ -64,8 +64,8 @@ class footer_contacts_KT_Module extends KT_Module implements KT_Module_Footer {
 				if (array_key_exists('contact', KT_Module::getActiveModules()) && KT_USER_ID) {
 					$content .= '
 						<p>
-							<a href="#"
-								onclick="window.open(\'message.php?to=' . KT_Filter::escapeHtml(getUserFullName(KT_USER_ID)) . '&amp;url=' . addslashes(urlencode(get_query_url())) . '\', \'_blank\')"
+							<a
+								href="message.php?url=<?php echo KT_SERVER_NAME . KT_SCRIPT_PATH . addslashes(rawurlencode(get_query_url())); ?>"
 								rel="noopener noreferrer"
 								title="' . KT_I18N::translate('Send Message') . '"
 							>' .
