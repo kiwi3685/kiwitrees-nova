@@ -1,6 +1,6 @@
 /**
  * Galleria Simpl_galleria Theme 20-05-2013
- * https://kiwitrees.net
+ * http://kiwitrees.net
  *
  * With thanks to Galleria Classic Theme 2012-08-07 | https://raw.github.com/aino/galleria/master/LICENSE | (c) Aino
  *
