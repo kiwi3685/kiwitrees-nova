@@ -8992,6 +8992,9 @@ button.widget .svg-inline--fa {
     font-size: 0.75rem;
     padding: 0.5rem;
 }
+#sidebarAccordion .accordion-content #sb_family_nav_content .nav_content .submenu span.NAME:hover {
+    opacity: 0.4;
+}
 #sidebarAccordion .accordion-content #sb_content_research_links .currency {
     font-weight: 700;
 }
