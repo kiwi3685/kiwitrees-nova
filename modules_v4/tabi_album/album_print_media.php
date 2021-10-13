@@ -128,11 +128,12 @@ function album_print_media($pid, $level=1, $related=false, $kind=0, $noedit=fals
 	$media_found = false;
 
 	// Get the related media items
-	$sqlmm =
-		"SELECT DISTINCT m_id, m_ext, m_filename, m_titl, m_file, m_gedcom, l_from AS pid" .
-		" FROM `##media`" .
-		" JOIN `##link` ON (m_id=l_to AND m_file=l_file AND l_type='OBJE')" .
-		" WHERE m_file=? AND l_from IN (";
+	$sqlmm = "
+        SELECT DISTINCT m_id, m_ext, m_filename, m_titl, m_file, m_gedcom, l_from AS pid
+		FROM `##media`
+		JOIN `##link` ON (m_id=l_to AND m_file=l_file AND l_type='OBJE')
+		WHERE m_file=? AND l_from IN (
+    ";
 	$i=0;
 	$vars = array(KT_GED_ID);
 	foreach ($ids as $media_id) {
@@ -148,7 +149,7 @@ function album_print_media($pid, $level=1, $related=false, $kind=0, $noedit=fals
 		for ($i = 0; $i < $ALBUM_GROUPS; $i++) {
 			if ($i == $kind) {
 				$tt = $ALBUM_TITLES[$i];
-				$sqlmm .= " AND (";
+				$sqlmm .= ' AND (';
 				foreach ($ALBUM_OPTIONS as $key=>$value) {
 					if ($value == $tt) {
 						$sqlmm .= "m_gedcom LIKE '%TYPE " .strtolower($key). "%' OR ";
@@ -176,7 +177,7 @@ function album_print_media($pid, $level=1, $related=false, $kind=0, $noedit=fals
 		if ($ALBUM_GROUPS != 0) {
 			echo '<table class="facts_table">
 				<tr>
-					<td class="descriptionbox" style="width:120px; text-align:center; vertical-align:middle;">
+					<td class="descriptionbox" style="width:150px; text-align:center; vertical-align:middle;">
 						<span style="font-weight:900;">', KT_I18N::translate($tt),'</span>
 					</td>
 					<td class="optionbox">';
@@ -331,9 +332,9 @@ function album_print_media_row($rtype, $rowm, $pid) {
 			$menu->addSubMenu($submenu);
 			// Manage Links
 			if (KT_USER_IS_ADMIN) {
-				$submenu = new KT_Menu(KT_I18N::translate('Manage links'), 'inverselink.php?mediaid=' . $rowm['m_id'] . '&linkto=manage&ged=' . KT_GEDCOM);
+				$submenu = new KT_Menu(KT_I18N::translate('Manage links'));
+               			$submenu->addOnclick("window.open('inverselink.php?mediaid=" . $rowm['m_id'] . "&linkto=manage&ged=" . KT_GEDCOM . "', '_blank', null)");
 				$submenu->addClass('submenuitem');
-				$submenu->addTarget('_blank');
 				$menu->addSubmenu($submenu);
 				// Unlink Media
 				$submenu = new KT_Menu(KT_I18N::translate('Unlink Media'));
