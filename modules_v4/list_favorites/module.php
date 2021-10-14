@@ -198,8 +198,13 @@ class list_favorites_KT_Module extends KT_Module implements KT_Module_List {
 									<div class="switch">
 										<input class="switch-input" id="switchIndi" type="radio" checked name="favSwitchGroup">
 										<label class="switch-paddle" for="switchIndi">
+<<<<<<< HEAD
 											<span class="show-for-sr"><?php echo KT_I18N::translate('Add an individual'); ?></span>
 											</label>
+=======
+											<span class="show-for-sr"><?php echo KT_I18N::translate('Add an individual'); ?></span><
+											/label>
+>>>>>>> f1315a7adcc7db1149dadca1ffa5beec3195b80a
 									</div>
 									<label class="h6"><?php echo KT_I18N::translate('Add an individual'); ?></label>
 									<div class="grid-x radioCheck" id="indi">
