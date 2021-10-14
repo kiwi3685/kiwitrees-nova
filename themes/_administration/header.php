@@ -55,7 +55,7 @@ $ft_tools = array(
 	"admin_trees_renumber.php"		=> KT_I18N::translate('Renumber family tree'),
 	"admin_trees_append.php"		=> KT_I18N::translate('Append family tree'),
 	"admin_trees_duplicates.php"	=> KT_I18N::translate('Find duplicate individuals'),
-	"admin_trees_findunlinked.php"		=> KT_I18N::translate('Find unlinked records'),
+	"admin_trees_findunlinked.php"	=> KT_I18N::translate('Find unlinked records'),
 	"admin_trees_sanity.php"		=> KT_I18N::translate('Sanity check'),
 	"admin_trees_source.php"		=> KT_I18N::translate('Sources - review'),
 	"admin_trees_sourcecite.php"	=> KT_I18N::translate('Sources - review citations'),
@@ -79,14 +79,14 @@ asort($custom);
  * $module_cats [array]
  */
 $module_cats = array(
-	"admin_module_menus.php"		=> KT_I18N::translate('Top level menu itemss'),
+	"admin_module_menus.php"		=> KT_I18N::translate('Top level menu items'),
 	"admin_module_tabs_indi.php"	=> KT_I18N::translate('Tabs for individual page'),
 	"admin_module_blocks.php"		=> KT_I18N::translate('Home page blocks'),
 	"admin_module_widgets.php"		=> KT_I18N::translate('Widget bar modules'),
 	"admin_module_sidebar.php"		=> KT_I18N::translate('Sidebar modules'),
-	"admin_module_reports.php"		=> KT_I18N::translate('Report menu items'),
-	"admin_module_charts.php"		=> KT_I18N::translate('Chart  menu items'),
-	"admin_module_lists.php"		=> KT_I18N::translate('List  menu items'),
+	"admin_module_reports.php"		=> KT_I18N::translate('Menu - Report items'),
+	"admin_module_charts.php"		=> KT_I18N::translate('Menu - Chart items'),
+	"admin_module_lists.php"		=> KT_I18N::translate('Menu - List  items'),
 	"admin_module_footers.php"		=> KT_I18N::translate('Footer blocks'),
 	"admin_module_tabs_fam.php"		=> KT_I18N::translate('Tabs for family page'),
 );
