@@ -197,7 +197,9 @@ class list_favorites_KT_Module extends KT_Module implements KT_Module_List {
 									<input type="hidden" name="ged" value="<?php echo KT_GEDCOM; ?>">
 									<div class="switch">
 										<input class="switch-input" id="switchIndi" type="radio" checked name="favSwitchGroup">
-										<label class="switch-paddle" for="switchIndi"><span class="show-for-sr"><?php echo KT_I18N::translate('Add an individual'); ?></span></label>
+										<label class="switch-paddle" for="switchIndi">
+											<span class="show-for-sr"><?php echo KT_I18N::translate('Add an individual'); ?></span>
+											</label>
 									</div>
 									<label class="h6"><?php echo KT_I18N::translate('Add an individual'); ?></label>
 									<div class="grid-x radioCheck" id="indi">
@@ -237,7 +239,9 @@ class list_favorites_KT_Module extends KT_Module implements KT_Module_List {
 									<input type="hidden" name="ged" value="<?php echo KT_GEDCOM; ?>">
 									<div class="switch">
 										<input class="switch-input" id="switchFam" type="radio" name="favSwitchGroup">
-										<label class="switch-paddle" for="switchFam"><span class="show-for-sr"><?php echo KT_I18N::translate('Add a family'); ?></span></label>
+										<label class="switch-paddle" for="switchFam">
+											<span class="show-for-sr"><?php echo KT_I18N::translate('Add a family'); ?></span>
+										</label>
 									</div>
 									<label class="h6"><?php echo KT_I18N::translate('Add a family'); ?></label>
 									<div class="grid-x radioCheck is-hidden" id="fam">
@@ -257,8 +261,10 @@ class list_favorites_KT_Module extends KT_Module implements KT_Module_List {
 										<input type="hidden" id="selectedValue-fam" name="gid">
 										<div class="cell">
 											<label class="h6"><?php echo KT_I18N::translate('Select type of favorite'); ?></label>
-											<input type="radio" name="fam" value=1 id="favTypeFamily2" required<?php echo $favType ? ' checked' : ''; ?>><label for="favTypeFamily2"><?php echo KT_I18N::translate('Family tree favorite'); ?></label>
-											<input type="radio" name="fam" value=0 id="favTypePersonal2" <?php echo !$favType ? ' checked' : ''; ?>><label for="favTypePersonal2"><?php echo KT_I18N::translate('My favorite'); ?></label>
+											<input type="radio" name="fam" value=1 id="favTypeFamily2" required<?php echo $favType ? ' checked' : ''; ?>>
+											<label for="favTypeFamily2"><?php echo KT_I18N::translate('Family tree favorite'); ?></label>
+											<input type="radio" name="fam" value=0 id="favTypePersonal2" <?php echo !$favType ? ' checked' : ''; ?>>
+											<label for="favTypePersonal2"><?php echo KT_I18N::translate('My favorite'); ?></label>
 										</div>
 										<div class="cell">
 											<label class="h6"><?php echo KT_I18N::translate('Enter an optional note about this favorite'); ?></label>
@@ -277,7 +283,9 @@ class list_favorites_KT_Module extends KT_Module implements KT_Module_List {
 									<input type="hidden" name="ged" value="<?php echo KT_GEDCOM; ?>">
 									<div class="switch">
 										<input class="switch-input" id="switchSour" type="radio" name="favSwitchGroup">
-										<label class="switch-paddle" for="switchSour"><span class="show-for-sr"><?php echo KT_I18N::translate('Add a source'); ?></span></label>
+										<label class="switch-paddle" for="switchSour">
+											<span class="show-for-sr"><?php echo KT_I18N::translate('Add a source'); ?></span>
+										</label>
 									</div>
 									<label class="h6"><?php echo KT_I18N::translate('Add a source'); ?></label>
 									<div class="grid-x radioCheck is-hidden" id="sour">
@@ -297,8 +305,10 @@ class list_favorites_KT_Module extends KT_Module implements KT_Module_List {
 										<input type="hidden" id="selectedValue-sour" name="gid">
 										<div class="cell">
 											<label class="h6"><?php echo KT_I18N::translate('Select type of favorite'); ?></label>
-											<input type="radio" name="sour" value=1 id="favTypeFamily3" required<?php echo $favType ? ' checked' : ''; ?>><label for="favTypeFamily3"><?php echo KT_I18N::translate('Family tree favorite'); ?></label>
-											<input type="radio" name="sour" value=0 id="favTypePersonal3"<?php echo !$favType ? ' checked' : ''; ?>><label for="favTypePersonal3"><?php echo KT_I18N::translate('My favorite'); ?></label>
+											<input type="radio" name="sour" value=1 id="favTypeFamily3" required<?php echo $favType ? ' checked' : ''; ?>>
+											<label for="favTypeFamily3"><?php echo KT_I18N::translate('Family tree favorite'); ?></label>
+											<input type="radio" name="sour" value=0 id="favTypePersonal3"<?php echo !$favType ? ' checked' : ''; ?>>
+											<label for="favTypePersonal3"><?php echo KT_I18N::translate('My favorite'); ?></label>
 										</div>
 										<div class="cell">
 											<label class="h6"><?php echo KT_I18N::translate('Enter an optional note about this favorite'); ?></label>
@@ -317,7 +327,9 @@ class list_favorites_KT_Module extends KT_Module implements KT_Module_List {
 									<input type="hidden" name="ged" value="<?php echo KT_GEDCOM; ?>">
 									<div class="switch">
 										<input class="switch-input" id="switchUrl" type="radio" name="favSwitchGroup">
-										<label class="switch-paddle" for="switchUrl"><span class="show-for-sr"><?php echo KT_I18N::translate('Add a URL'); ?></span></label>
+										<label class="switch-paddle" for="switchUrl">
+											<span class="show-for-sr"><?php echo KT_I18N::translate('Add a URL'); ?></span>
+										</label>
 									</div>
 									<label class="h6"><?php echo KT_I18N::translate('Add a URL'); ?></label>
 									<div class="grid-x radioCheck is-hidden" id="favurl">
@@ -337,8 +349,10 @@ class list_favorites_KT_Module extends KT_Module implements KT_Module_List {
 										>
 										<div class="cell">
 											<label class="h6"><?php echo KT_I18N::translate('Select type of favorite'); ?></label>
-											<input type="radio" name="url" value=1 id="favTypeFamily4" required<?php echo $favType ? ' checked' : ''; ?>><label for="favTypeFamily4"><?php echo KT_I18N::translate('Family tree favorite'); ?></label>
-											<input type="radio" name="url" value=0 id="favTypePersonal4"<?php echo !$favType ? ' checked' : ''; ?>><label for="favTypePersonal4"><?php echo KT_I18N::translate('My favorite'); ?></label>
+											<input type="radio" name="url" value=1 id="favTypeFamily4" required<?php echo $favType ? ' checked' : ''; ?>>
+											<label for="favTypeFamily4"><?php echo KT_I18N::translate('Family tree favorite'); ?></label>
+											<input type="radio" name="url" value=0 id="favTypePersonal4"<?php echo !$favType ? ' checked' : ''; ?>>
+											<label for="favTypePersonal4"><?php echo KT_I18N::translate('My favorite'); ?></label>
 										</div>
 										<div class="cell">
 											<label class="h6"><?php echo KT_I18N::translate('Enter an optional note about this favorite'); ?></label>
