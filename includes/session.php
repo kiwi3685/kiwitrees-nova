@@ -76,15 +76,15 @@ define('KT_D3_JS',							KT_STATIC_URL . 'js/d3.min.js');						// Installed from
 define('KT_CHOSEN_JS',						KT_STATIC_URL . 'library/chosen/chosen.jquery.min.js'); // chosen-package-1.87 from https://github.com/harvesthq/chosen
 
 // kiwitrees own javascript libraries
-//define('KT_KIWITREES_JS_URL',				KT_STATIC_URL . 'js/kiwitrees.min.js');					// used system wide, via Pages WT class
-define('KT_KIWITREES_JS_URL',				KT_STATIC_URL . 'js/kiwitrees.js');						// used system wide, via Pages WT class
+define('KT_KIWITREES_JS_URL',				KT_STATIC_URL . 'js/kiwitrees.min.js');					// used system wide, via Pages WT class
+//define('KT_KIWITREES_JS_URL',				KT_STATIC_URL . 'js/kiwitrees.js');						// used system wide, via Pages WT class
 //define('KT_AUTOCOMPLETE_JS_URL',			KT_STATIC_URL . 'js/autocomplete.min.js');				// used system wide
 define('KT_AUTOCOMPLETE_JS_URL',			KT_STATIC_URL . 'js/autocomplete.js');					// used system wide
 define('KT_JQUERY_TREEVIEW_JS_URL',			KT_STATIC_URL . 'js/jquery.treeview.js');				// used only in branches.php
 define('KT_FANCY_TREEVIEW_JS_URL',			KT_STATIC_URL . 'js/fancytreeview.js');					// used in fancy_treeview_descendants & fancy_treeview_ancestors
-define('KT_INTERACTIVETREE_JS_URL',			KT_STATIC_URL . 'js\interactivetree.js');				// used in the interctive tree tab
-define('KT_KIWITREES_ADMIN_JS_URL',			KT_STATIC_URL . 'themes/_administration/js/kiwitrees-admin.js');		// used on some admin pages
-//define('KT_KIWITREES_ADMIN_JS_URL',		KT_STATIC_URL . 'themes/_administration/js/kiwitrees-admin.min.js');	// used on some admin pages
+define('KT_INTERACTIVETREE_JS_URL',			KT_STATIC_URL . 'js/interactivetree.js');				// used in the interctive tree tab
+//define('KT_KIWITREES_ADMIN_JS_URL',			KT_STATIC_URL . 'themes/_administration/js/kiwitrees-admin.js');		// used on some admin pages
+define('KT_KIWITREES_ADMIN_JS_URL',	    	KT_STATIC_URL . 'themes/_administration/js/kiwitrees-admin.min.js');	// used on some admin pages
 
 // external css libraries
 define('KT_DATEPICKER_CSS',					KT_STATIC_URL . 'library/foundation-datepicker/css/foundation-datepicker.min.css');
