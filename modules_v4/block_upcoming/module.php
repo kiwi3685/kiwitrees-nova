@@ -38,8 +38,8 @@ class block_upcoming_KT_Module extends KT_Module implements KT_Module_Block {
 	}
 
 	// Implement class KT_Module_Block
-	public function getBlock($block_id, $template=true, $cfg=null) {
-		global $ctype;
+	public function getBlock($block_id, $template = true, $config = null) {
+		global $KT_TREE, $iconStyle;
 
 		require_once KT_ROOT.'includes/functions/functions_print_lists.php';
 
@@ -49,10 +49,10 @@ class block_upcoming_KT_Module extends KT_Module implements KT_Module_Block {
 		$infoStyle	= get_block_setting($block_id, 'infoStyle', 'table');
 		$sortStyle	= get_block_setting($block_id, 'sortStyle', 'alpha');
 		$block		= get_block_setting($block_id, 'block',     true);
-		if ($cfg) {
+		if ($config) {
 			foreach (array('days', 'filter', 'onlyBDM', 'infoStyle', 'sortStyle', 'block') as $name) {
-				if (array_key_exists($name, $cfg)) {
-					$$name=$cfg[$name];
+				if (array_key_exists($name, $config)) {
+					$$name = $config[$name];
 				}
 			}
 		}
@@ -70,18 +70,18 @@ class block_upcoming_KT_Module extends KT_Module implements KT_Module_Block {
 		switch ($infoStyle) {
 		case "list":
 			// Output style 1:  Old format, no visible tables, much smaller text.  Better suited to right side of page.
-			$content.=print_events_list($startjd, $endjd, $onlyBDM?'BIRT MARR DEAT':'', $filter, $sortStyle);
+			$content .= print_events_list($startjd, $endjd, $onlyBDM?'BIRT MARR DEAT':'', $filter, $sortStyle);
 			break;
 		case "table":
 			// Style 2: New format, tables, big text, etc.  Not too good on right side of page
 			ob_start();
-			$content.=print_events_table($startjd, $endjd, $onlyBDM?'BIRT MARR DEAT':'', $filter, $sortStyle);
-			$content.=ob_get_clean();
+			$content .= print_events_table($startjd, $endjd, $onlyBDM?'BIRT MARR DEAT':'', $filter, $sortStyle);
+			$content .= ob_get_clean();
 			break;
 		}
 
 		if ($template) {
-			if ($block) {
+			if (get_block_location($block_id) === 'side') {
 				require KT_THEME_DIR . 'templates/block_small_temp.php';
 			} else {
 				require KT_THEME_DIR . 'templates/block_main_temp.php';

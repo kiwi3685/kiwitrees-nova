@@ -3388,7 +3388,7 @@ class KT_Stats {
 			global $controller;
 				$table_id = 'ID'.(int)(microtime(true)*1000000); // lists requires a unique ID in case there are multiple lists per page
 				$controller
-				->addExternalJavascript(KT_JQUERY_DATATABLES_URL)
+				->addExternalJavascript(KT_DATATABLES_JS)
 				->addInlineJavascript('
 					jQuery("#'.$table_id.'").dataTable({
 						"sDom": \'t\',

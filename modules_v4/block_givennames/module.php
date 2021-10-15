@@ -38,17 +38,17 @@ class block_givennames_KT_Module extends KT_Module implements KT_Module_Block {
 	}
 
 	// Implement class KT_Module_Block
-	public function getBlock($block_id, $template = true, $cfg = null) {
+	public function getBlock($block_id, $template = true, $config = null) {
 		global $controller, $KT_TREE, $TEXT_DIRECTION, $iconStyle;
 
 		$num		= get_block_setting($block_id, 'num', 10);
 		$infoStyle	= get_block_setting($block_id, 'infoStyle', 'table');
 		$block		= get_block_setting($block_id, 'block', false);
 
-		if ($cfg) {
+		if ($config) {
 			foreach (array('num', 'infoStyle', 'block') as $name) {
-				if (array_key_exists($name, $cfg)) {
-					$$name = $cfg[$name];
+				if (array_key_exists($name, $config)) {
+					$$name = $config[$name];
 				}
 			}
 		}
@@ -56,7 +56,7 @@ class block_givennames_KT_Module extends KT_Module implements KT_Module_Block {
 		$stats	= new KT_Stats(KT_GEDCOM);
 		$id		= $this->getName() . $block_id;
 		$class	= $this->getName();
-		$config		= true;
+		$config	= true;
 
 		if ($num == 1) {
 			// I18N: i.e. most popular given name.

@@ -43,7 +43,7 @@ class block_welcome_KT_Module extends KT_Module implements KT_Module_Block {
 	}
 
 	// Implement class KT_Module_Block
-	public function getBlock($block_id, $template = true, $cfg = null) {
+	public function getBlock($block_id, $template = true, $config = null) {
 		global $KT_TREE, $controller, $iconStyle;
 
 		$indi_xref		= $controller->getSignificantIndividual()->getXref();

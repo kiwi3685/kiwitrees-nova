@@ -38,7 +38,7 @@ class block_charts_KT_Module extends KT_Module implements KT_Module_Block {
 	}
 
 	// Implement class KT_Module_Block
-	public function getBlock($block_id, $template = true, $cfg = null) {
+	public function getBlock($block_id, $template = true, $config = null) {
 		global $KT_TREE, $PEDIGREE_FULL_DETAILS, $show_full, $bwidth, $bheight, $iconStyle;
 
 		$PEDIGREE_ROOT_ID = get_gedcom_setting(KT_GED_ID, 'PEDIGREE_ROOT_ID');
@@ -47,10 +47,10 @@ class block_charts_KT_Module extends KT_Module implements KT_Module_Block {
 		$pid		= get_block_setting($block_id, 'pid', KT_USER_ID ? (KT_USER_GEDCOM_ID ? KT_USER_GEDCOM_ID : $PEDIGREE_ROOT_ID) : $PEDIGREE_ROOT_ID);
 		$block		= get_block_setting($block_id, 'block');
 
-		if ($cfg) {
+		if ($config) {
 			foreach (array('details', 'type', 'pid', 'block') as $name) {
-				if (array_key_exists($name, $cfg)) {
-					$$name = $cfg[$name];
+				if (array_key_exists($name, $config)) {
+					$name = $config[$name];
 				}
 			}
 		}
@@ -76,7 +76,8 @@ class block_charts_KT_Module extends KT_Module implements KT_Module_Block {
 
 		$id		= $this->getName() . $block_id;
 		$class	= $this->getName();
-		$config		= true;
+		$config	= true;
+		$title	= KT_I18N::translate('Title required');
 
 		if ($person) {
 			switch($type) {
@@ -123,9 +124,9 @@ class block_charts_KT_Module extends KT_Module implements KT_Module_Block {
 							if ($type == 'treenav') {
 								require_once KT_MODULES_DIR.'tabi_tree/module.php';
 								require_once KT_MODULES_DIR.'tabi_tree/class_treeview.php';
-								$mod	= new tabi_tree_KT_Module;
-								$tv		= new TreeView;
-								$content .= '
+								$mod		= new tabi_tree_KT_Module;
+								$tv			= new TreeView;
+								$content 	.= '
 									<td>
 										<script>jQuery("head").append(\'<link rel="stylesheet" href="' . $mod->css() . '" type="text/css" />\');</script>
 										<script src="' . $mod->js() . '"></script>';
@@ -138,9 +139,10 @@ class block_charts_KT_Module extends KT_Module implements KT_Module_Block {
 				</div>
 			</div>';
 		} else {
-			$content = '<div class="callout alert">' .
-				KT_I18N::translate('You must select an individual and chart type in the block configuration settings.') .
-			'</div>';
+			$content =
+				'<div class="callout alert">' .
+					KT_I18N::translate('You must select an individual and chart type in the block configuration settings.') .
+				'</div>';
 		}
 
 		if ($template) {

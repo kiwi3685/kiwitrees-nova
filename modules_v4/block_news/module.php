@@ -46,8 +46,7 @@ class block_news_KT_Module extends KT_Module implements KT_Module_Block {
 	}
 
 	// Implement class KT_Module_Block
-	public function getBlock($block_id, $template = true, $cfg = null) {
-		global $ctype;
+	public function getBlock($block_id, $template = true, $config = null) {
 
 		switch (KT_Filter::get('action')) {
 		case 'deletenews':
@@ -70,10 +69,10 @@ class block_news_KT_Module extends KT_Module implements KT_Module_Block {
 				$limit = get_block_setting($block_id, 'limit', 'nolimit');
 			}
 		}
-		if ($cfg) {
+		if ($config) {
 			foreach (array('limit', 'flag') as $name) {
-				if (array_key_exists($name, $cfg)) {
-					$$name = $cfg[$name];
+				if (array_key_exists($name, $config)) {
+					$name = $config[$name];
 				}
 			}
 		}
@@ -116,7 +115,7 @@ class block_news_KT_Module extends KT_Module implements KT_Module_Block {
 			if (KT_USER_GEDCOM_ADMIN) {
 				$content .= '<hr>'
 				. "<a href=\"#\" onclick=\"window.open('editnews.php?news_id='+".$news['id'].", '_blank', news_window_specs); return false;\">" . KT_I18N::translate('Edit')."</a> | "
-				. "<a href=\"index.php?action=deletenews&amp;news_id=".$news['id']."&amp;ctype={$ctype}\" onclick=\"return confirm('" . KT_I18N::translate('Are you sure you want to delete this News entry?')."');\">" . KT_I18N::translate('Delete')."</a><br>";
+				. "<a href=\"index.php?action=deletenews&amp;news_id=".$news['id']." onclick=\"return confirm('" . KT_I18N::translate('Are you sure you want to delete this News entry?')."');\">" . KT_I18N::translate('Delete')."</a><br>";
 			}
 			$content .= "</div>";
 		}
@@ -127,7 +126,7 @@ class block_news_KT_Module extends KT_Module implements KT_Module_Block {
 		}
 		if ($limit =='date' || $limit == 'count') {
 			if ($printedAddLink) $content .= "&nbsp;&nbsp;|&nbsp;&nbsp;";
-			$content .= "<a href=\"index.php?gedcom_news_archive=yes&amp;ctype={$ctype}\">" . KT_I18N::translate('View archive')."</a>";
+			$content .= '<a href="index.php?gedcom_news_archive=yes">' . KT_I18N::translate('View archive') . '</a>';
 			$content .= help_link('gedcom_news_archive').'<br>';
 		}
 

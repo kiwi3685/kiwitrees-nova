@@ -38,7 +38,7 @@ class block_todo_KT_Module extends KT_Module implements KT_Module_Block {
 	}
 
 	// Implement class KT_Module_Block
-	public function getBlock($block_id, $template = true, $cfg = null) {
+	public function getBlock($block_id, $template = true, $config = null) {
 		global $KT_TREE, $controller, $iconStyle;
 
 		$show_unassigned	= get_block_setting($block_id, 'show_unassigned', true);
@@ -46,10 +46,10 @@ class block_todo_KT_Module extends KT_Module implements KT_Module_Block {
 		$show_future		= get_block_setting($block_id, 'show_future',     true);
 		$block				= get_block_setting($block_id, 'block',           true);
 
-		if ($cfg) {
+		if ($config) {
 			foreach (array('show_unassigned', 'show_other', 'show_future', 'block') as $name) {
-				if (array_key_exists($name, $cfg)) {
-					$$name=$cfg[$name];
+				if (array_key_exists($name, $config)) {
+					$$name=$config[$name];
 				}
 			}
 		}
