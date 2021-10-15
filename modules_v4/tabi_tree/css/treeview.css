@@ -27,11 +27,10 @@
 	overflow: hidden;
 	height: 100%;
 	width: 99%;
-	border: 3px inset #e6e6e6; /* customizable */
-	min-height: 350px; /* customizable, not mandatory, but should be set to always have something to display */
-	max-height: 10000px; /* customizable, not mandatory, but should be set not too high to limit the size of ajax requests and not too low to enable whole big trees printing */
-	background: #E6E6E6; /* customizable */
+	min-height: 350px;
+	max-height: 10000px;
 }
+
 .tv_out img {
 	border: 0;
 }
@@ -145,7 +144,7 @@ table#tvTreeBorder td,
 #tv_tree td.tv_hline,
 #tv_tree div.tv_hline {
 	overflow: hidden; /* required for IE */
-	width: 8px; /* customizable */
+	width: 8px;
 }
 #tv_tree div.tv_hline {
 	height: 1px;
@@ -153,28 +152,28 @@ table#tvTreeBorder td,
 
 /* Person or couple(s) box style */
 #tv_tree div.tv_box {
-	border: thin outset #81A9CB; /* customizable */
-	background: #fffdfd; /* customizable */
+	border: thin outset #81A9CB;
+	background: #fffdfd;
 	margin-top: 2px;
 	margin-bottom: 2px;
 	padding: 0;
 	width: 280px; /* customizable:initial box width */
-	cursor: help; /* customizable */
+	cursor: help;
 	border-collapse: collapse; /* required */
-	border-radius: 4px; /* customizable */
-	box-shadow: 1px 1px 2px #cfcfdf; /* customizable */
+	border-radius: 4px;
+	box-shadow: 1px 1px 2px #cfcfdf;
 }
 #tv_tree div.boxExpanded {
 	width: 280px; /* customizable:initial expanded box width */
 }
 #tv_tree div.tv_box div.tvM {
-	background: #f5fdff; /* customizable */
-	color: #220000; /* customizable */
+	background: #f5fdff;
+	color: #220000;
     padding: 5px;
 }
 #tv_tree div.tv_box div.tvF {
-	background: #fff8f5; /* customizable */
-	color: #000022; /* customizable */
+	background: #fff8f5;
+	color: #000022;
     padding: 5px;
 }
 #tv_tree div.tv_box span.tvSexSymbol {
@@ -184,10 +183,10 @@ table#tvTreeBorder td,
 	margin: 1px;
 }
 #tv_tree div.tv_box span.tvM {
-	color: #8f8fdf; /* customizable */
+	color: #8f8fdf;
 }
 #tv_tree div.tv_box span.tvF {
-	color: #df8f8f; /* customizable */
+	color: #df8f8f;
 }
 
 #tv_tree div.tv_box div.tvM,
@@ -196,7 +195,7 @@ table#tvTreeBorder td,
 	border: 0;
 	margin: 0;
 	padding: 1px 4px;
-	border-radius: 4px; /* customizable */
+	border-radius: 4px;
 }
 #tv_tree div.tv_box i.dates {
 	float: right;
@@ -250,13 +249,13 @@ table#tvTreeBorder td,
 	position: absolute;
 	left: 0;
 	top: 0;
-	padding: 0;
-	margin: 0; /* required */
-	z-index: 90; /* should be < 100 because 100 is the z-index of WT menus */
-	background-color: #efefef; /* customizable */
-	border: 1px outset #dfdfdf; /* customizable */
-	border-radius: 4px; /* customizable */
-	box-shadow: 1px 1px 2px #cfcfdf; /* customizable */
+	padding: 0.125rem;
+	margin: 1rem;
+	z-index: 90;
+	background-color: #efefef;
+	border: 1px outset #dfdfdf;
+	border-radius: 4px;
+	box-shadow: 1px 1px 2px #cfcfdf;
 }
 
 /* styles submenu */
@@ -281,8 +280,8 @@ table#tvTreeBorder td,
 	height: 24px;
 	text-align: center;
 	vertical-align: middle;
-	border: thin solid #efefef; /* customizable */
-	background-color: #efefef; /* customizable */
+	border: thin solid #efefef;
+	background-color: #efefef;
 	border-radius: 4px;
 }
 #tvStylesSubmenu li.tv_button {
@@ -293,12 +292,12 @@ table#tvTreeBorder td,
 	display: block;
 }
 #tv_tools li.tv_button:hover {
-	background: #fffdfd; /* customizable */
-	border: thin outset #fdfffd; /* customizable */
+	background: #fffdfd;
+	border: thin outset #fdfffd;
 	cursor: pointer;
 }
 #tv_tools li.tvPressed {
-	border: thin inset #ffffff; /* customizable */
+	border: thin inset #ffffff;
 }
 #tv_tools ul li img {
 	border: none;
@@ -322,13 +321,13 @@ table#tvTreeBorder td,
 	cursor: move;
 	height: 22px;
 	width: 2px;
-	border: thin inset #f6f6f6; /* customizable */
+	border: thin inset #f6f6f6;
 	margin: 2px;
 	overflow: hidden; /* required for IE */
 }
 
 #tvToolsHandler:hover {
-	border: thin outset #f6f6f6; /* customizable */
+	border: thin outset #f6f6f6;
 }
 
 

@@ -170,8 +170,8 @@ class tabi_tree_KT_Module extends KT_Module implements KT_Module_IndiTab {
 		return KT_STATIC_URL . KT_MODULES_DIR . $this->getName() . '/css/treeview.css';
 	}
 
-//	public function js() {
-//   		return KT_STATIC_URL . KT_MODULES_DIR . $this->getName() . '/js/treeview.js';
-//	}
+	public function js() {
+   		return KT_STATIC_URL . KT_MODULES_DIR . $this->getName() . '/js/treeview.js';
+	}
 
 }
