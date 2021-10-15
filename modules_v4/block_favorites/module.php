@@ -133,6 +133,7 @@ class block_favorites_KT_Module extends KT_Module implements KT_Module_Block {
 					$key = $favorite['id'];
 				}
 				$removeFavourite = '<a href="index.php?action=deletefav&amp;favorite_id=' . $key . '"
+					class="removeFavourite"
 					onclick="return confirm(\'' . KT_I18N::translate('Are you sure you want to remove this?') . '\');">
 					<small>
 						<i class="' . $iconStyle . ' fa-trash-alt"></i>' . KT_I18N::translate('Remove') . '
@@ -153,7 +154,7 @@ class block_favorites_KT_Module extends KT_Module implements KT_Module_Block {
 					$record = KT_GedcomRecord::getInstance($favorite['gid']);
 					if ($record && $record->canDisplayDetails()) {
 						if ($record->getType() == 'INDI') {
-							$content .= '<div id="box' . $favorite["gid"] . '.0" class="grid-x">
+							$content .= '<div id="box' . $favorite["gid"] . '.0" class="grid-x grid-margin-x grid-padding-x">
 								<div class="cell">';
 									if (KT_USER_ID || KT_USER_GEDCOM_ADMIN) {
 										$content .= $removeFavourite;
