@@ -8598,10 +8598,6 @@ button .svg-inline--fa {
     display: none;
 }
 
-form select {
-    background-position: right 1rem center;
-}
-
 .lang-active {
     background-color: #e7e7e7;
     color: #3adb76;

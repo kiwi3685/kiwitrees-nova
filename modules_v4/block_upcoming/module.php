@@ -115,50 +115,65 @@ class block_upcoming_KT_Module extends KT_Module implements KT_Module_Block {
 
 		require_once KT_ROOT . 'includes/functions/functions_edit.php';
 
-		$days=get_block_setting($block_id, 'days', 7);
-		echo '<tr><td class="descriptionbox wrap width33">';
-		echo KT_I18N::translate('Number of days to show');
-		echo '</td><td class="optionbox">';
-		echo '<input type="text" name="days" size="2" value="', $days, '">';
-		echo ' <em>', KT_I18N::plural('maximum %d day', 'maximum %d days', 30, 30) ,'</em>';
-		echo '</td></tr>';
+		$days		= get_block_setting($block_id, 'days', 7);
+		$filter		= get_block_setting($block_id, 'filter',     true);
+		$onlyBDM	= get_block_setting($block_id, 'onlyBDM',    false);
+		$infoStyle	= get_block_setting($block_id, 'infoStyle', 'table');
+		$sortStyle	= get_block_setting($block_id, 'sortStyle',  'alpha');
+		$block		= get_block_setting($block_id, 'block', true);
 
-		$filter=get_block_setting($block_id, 'filter',     true);
-		echo '<tr><td class="descriptionbox wrap width33">';
-		echo KT_I18N::translate('Show only events of living people?');
-		echo '</td><td class="optionbox">';
-		echo edit_field_yes_no('filter', $filter);
-		echo '</td></tr>';
+		?>
 
-		$onlyBDM=get_block_setting($block_id, 'onlyBDM',    false);
-		echo '<tr><td class="descriptionbox wrap width33">';
-		echo KT_I18N::translate('Show only Births, Deaths, and Marriages?');
-		echo '</td><td class="optionbox">';
-		echo edit_field_yes_no('onlyBDM', $onlyBDM);
-		echo '</td></tr>';
+		<div class="cell medium-5">
+			 <label><?php echo KT_I18N::translate('Number of days to show'); ?></label>
+		</div>
+		<div class="cell medium-7">
+			<input type="text" name="days" size="2" value="<?php echo $days; ?>">
+			<div class="help"><?php echo KT_I18N::plural('maximum %d day', 'maximum %d days', 30, 30); ?></div>
+		</div>
+		<div class="cell medium-5">
+			 <label><?php echo KT_I18N::translate('Show only events of living people?'); ?></label>
+		</div>
+		<div class="cell medium-7">
+			<?php echo edit_field_yes_no('filter', $filter); ?>
+		</div>
+		<div class="cell medium-5">
+			 <label><?php echo KT_I18N::translate('Show only Births, Deaths, and Marriages?'); ?></label>
+		</div>
+		<div class="cell medium-7">
+			<?php echo edit_field_yes_no('onlyBDM', $onlyBDM); ?>
+		</div>
+		<div class="cell medium-5">
+			 <label><?php echo KT_I18N::translate('Presentation style'); ?></label>
+		</div>
+		<div class="cell medium-7">
+			<?php echo select_edit_control(
+				'infoStyle',
+				array(
+					'list'=>KT_I18N::translate('list'),
+					'table'=>KT_I18N::translate('table')),
+					null,
+					$infoStyle,
+					''
+				)
+			; ?>
+		</div>
+		<div class="cell medium-5">
+			 <label><?php echo KT_I18N::translate('Sort order'); ?></label>
+		</div>
+		<div class="cell medium-7">
+			<?php echo select_edit_control('sortStyle', array(
+				/* I18N: An option in a list-box */ 'alpha'=>KT_I18N::translate('sort by name'),
+				/* I18N: An option in a list-box */ 'anniv'=>KT_I18N::translate('sort by date')
+			), null, $sortStyle, ''); ?>
+		</div>
+		<div class="cell medium-5">
+			 <label><?php echo /* I18N: label for a yes/no option */ KT_I18N::translate('Add a scrollbar when block contents grow'); ?></label>
+		</div>
+		<div class="cell medium-7">
+			<?php echo edit_field_yes_no('block', $block); ?>
+		</div>
 
-		$infoStyle=get_block_setting($block_id, 'infoStyle', 'table');
-		echo '<tr><td class="descriptionbox wrap width33">';
-		echo KT_I18N::translate('Presentation style');
-		echo '</td><td class="optionbox">';
-		echo select_edit_control('infoStyle', array('list'=>KT_I18N::translate('list'), 'table'=>KT_I18N::translate('table')), null, $infoStyle, '');
-		echo '</td></tr>';
-
-		$sortStyle=get_block_setting($block_id, 'sortStyle',  'alpha');
-		echo '<tr><td class="descriptionbox wrap width33">';
-		echo KT_I18N::translate('Sort order');
-		echo '</td><td class="optionbox">';
-		echo select_edit_control('sortStyle', array(
-			/* I18N: An option in a list-box */ 'alpha'=>KT_I18N::translate('sort by name'),
-			/* I18N: An option in a list-box */ 'anniv'=>KT_I18N::translate('sort by date')
-		), null, $sortStyle, '');
-		echo '</td></tr>';
-
-		$block=get_block_setting($block_id, 'block', true);
-		echo '<tr><td class="descriptionbox wrap width33">';
-		echo /* I18N: label for a yes/no option */ KT_I18N::translate('Add a scrollbar when block contents grow');
-		echo '</td><td class="optionbox">';
-		echo edit_field_yes_no('block', $block);
-		echo '</td></tr>';
+		<?php
 	}
 }
