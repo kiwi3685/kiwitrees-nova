@@ -8567,6 +8567,23 @@ html.is-reveal-open body {
 }
 
 /* General */
+/* color classes */
+.warning {
+    color: #ffae00;
+}
+
+.success {
+    color: #3adb76;
+}
+
+.alert {
+    color: #ab3334;
+}
+
+.information {
+    color: #0193b7;
+}
+
 .shadow {
     -moz-box-shadow: 0.5rem 0.5rem 1rem -0.25rem #331919;
     -webkit-box-shadow: 0.5rem 0.5rem 1rem -0.25rem #331919;
@@ -8610,10 +8627,6 @@ button .svg-inline--fa {
     flex-wrap: wrap;
     list-style: none;
     max-height: 12.5rem;
-}
-
-.warning {
-    color: #ffae00;
 }
 
 /* Sticky footer settings */

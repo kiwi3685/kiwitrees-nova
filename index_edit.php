@@ -43,9 +43,9 @@ if (
 $action = KT_Filter::get('action');
 
 if (KT_Filter::post('default') === '1') {
-	$defaults = get_gedcom_blocks(-1);
-	$main  = $defaults['main'];
-	$right = $defaults['side'];
+	$defaults	= get_gedcom_blocks(-1);
+	$main  		= $defaults['main'];
+	$right		= $defaults['side'];
 } else {
 	if (isset($_REQUEST['main'])) {
 		$main = $_REQUEST['main'];
@@ -62,7 +62,7 @@ if (KT_Filter::post('default') === '1') {
 // Define all the icons we're going to use
 $IconUarrow			= 'fa fa-angle-up fa-2x';
 $IconDarrow			= 'fa fa-angle-down fa-2x';
-if($TEXT_DIRECTION == 'ltr') {
+if($TEXT_DIRECTION	== 'ltr') {
 	$IconRarrow		= 'fa fa-angle-right fa-2x';
 	$IconLarrow		= 'fa fa-angle-left fa-2x';
 	$IconRDarrow	= 'fa fa-angle-double-right fa-2x';
@@ -75,9 +75,9 @@ if($TEXT_DIRECTION == 'ltr') {
 }
 
 $all_blocks = array();
-foreach (KT_Module::getActiveBlocks() as $name => $block) {
+foreach (KT_Module::getActiveBlocks(KT_GED_ID, KT_PRIV_HIDE) as $blockname => $block) {
 	if ($gedcom_id && $block->isGedcomBlock()) {
-		$all_blocks[$name] = $block;
+		$all_blocks[$blockname] = $block;
 	}
 }
 
@@ -244,10 +244,24 @@ $controller
 		'block_descr["advice1"] = "' . KT_I18N::translate('Highlight a block name and then click on one of the arrow icons to move that highlighted block in the indicated direction.') . '";'
 	);
 
+	$accessColor = array(
+		2   => 'information',
+		1	=> 'success',
+		0	=> 'warning',
+		-1	=> 'alert'
+	);
+
 ?>
 <div class="grid-x">
 	<div class="cell large-6 large-offset-3">
 		<h3 class="text-center"><?php echo $controller->getPageTitle(); ?></h3>
+		<div id="accessTip" class="callout secondary">
+			<?php echo KT_I18N::translate('
+				Colour of items under "All available blocks" indicate current access setting, controlling who can see these blocks.<br>
+				<span class="strong alert">Red = No-one</span> | <span class="strong warning">Orange= Managers / admin only</span> | <span class="success">Green = All members</span> | <span class="strong information">Blue = Visitors</span><br>
+				These settings can be changed at <a href="admin_module_blocks.php" target="_blank">at this link <i class="' . $iconStyle . ' fa-link"></i></a>'); ?>
+		</div>
+
 		<form name="config_setup" method="post" action="index_edit.php?action=update" onsubmit="select_options();" >
 			<input type="hidden" name="gedcom_id" value="<?php echo $gedcom_id; ?>">
 			<table id="change_blocks">
@@ -276,7 +290,7 @@ $controller
 						<!-- NOTE: Row 2 column 2: Left (Main) block list -->
 						<td>
 							<select multiple="multiple" id="main_select" name="main[]" size="10" onchange="show_description('main_select');">
-								<?php foreach ($blocks['main'] as $block_id=>$block_name) { ?>
+								<?php foreach ($blocks['main'] as $block_id => $block_name) { ?>
 									<option value="<?php echo $block_id; ?>"><?php echo $all_blocks[$block_name]->getTitle() . ' (id ' . $block_id . ')'; ?></option>
 								<?php } ?>
 							</select>
@@ -291,9 +305,16 @@ $controller
 						</td>
 						<!-- NOTE: Row 2 column 4: Middle (Available) block list -->
 						<td>
-							<select id="available_select" name="available[]" size="10" onchange="show_description('available_select');">
-								<?php foreach ($all_blocks as $block_name=>$block) { ?>
-									<option value="<?php echo $block_name; ?>"><?php echo $block->getTitle(); ?></option>
+							<select class="strong" id="available_select" name="available[]" size="10" onchange="show_description('available_select');">
+								<?php
+								 foreach ($all_blocks as $blockname => $block) {
+									 $access_level = KT_DB::prepare(
+										 "SELECT access_level FROM `##module_privacy` WHERE gedcom_id=? AND module_name=? AND component='block'"
+									 )->execute(array($gedcom_id, $blockname))->fetchOne();
+									 if ($access_level === null) {
+										 $access_level = $block->defaultAccessLevel();
+									 } ?>
+									<option class="<?php echo $accessColor[$access_level]; ?>" value="<?php echo $blockname; ?>"><?php echo $all_blocks[$blockname]->getTitle(); ?></option>
 								<?php } ?>
 							</select>
 						</td>

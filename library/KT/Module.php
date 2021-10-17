@@ -120,8 +120,8 @@ abstract class KT_Module {
 
 	// This is the default for the module and all its components.
 	public function defaultAccessLevel() {
-		// Returns one of: KT_PRIV_HIDE, KT_PRIV_PUBLIC, KT_PRIV_USER, KT_PRIV_ADMIN
-		return KT_PRIV_HIDE;
+		// Returns one of: KT_PRIV_HIDE, KT_PRIV_PUBLIC, KT_PRIV_USER, KT_PRIV_NONE
+		return KT_PRIV_NONE;
 	}
 
 	// This is an internal name, used to generate identifiers
