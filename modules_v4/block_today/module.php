@@ -154,13 +154,6 @@ class block_today_KT_Module extends KT_Module implements KT_Module_Block {
 		</div>
 		<hr>
 		<div class="cell medium-5">
-			 <label><?php echo KT_I18N::translate('Show only Births, Deaths, and Marriages?'); ?></label>
-		</div>
-		<div class="cell medium-7">
-			<?php echo edit_field_yes_no('onlyBDM', $onlyBDM); ?>
-		</div>
-		<hr>
-		<div class="cell medium-5">
 			 <label><?php echo KT_I18N::translate('Presentation style'); ?></label>
 		</div>
 		<div class="cell medium-7">

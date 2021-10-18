@@ -61,7 +61,7 @@ class block_welcome_KT_Module extends KT_Module implements KT_Module_Block {
 					</p>
 				</div>
 				<div class="cell small-4 text-center">
-					<a href="pedigree.php?rootid=' . $indi_xref . '&amp;ged=' . KT_GEDURL . '">
+					<a href="module.php?mod=chart_pedigree&mod_action=show&rootid=' . $indi_xref . '&amp;ged=' . KT_GEDURL . '">
 						<i class="' . $iconStyle . ' fa-sitemap fa-2x"></i>
 						<p>' . KT_I18N::translate('Default chart') . '</p>
 					</a>
