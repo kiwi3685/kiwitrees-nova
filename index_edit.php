@@ -344,7 +344,11 @@ $controller
 				</tbody>
 			</table>
 			<div id="instructions" class="callout primary">
-				<?php echo KT_I18N::translate('Highlight a block name and then click on one of the arrow icons to move that highlighted block in the indicated direction.'); ?>
+				<p>
+					<?php echo KT_I18N::translate('Highlight a block name and then click on one of the arrow icons to move that highlighted block in the indicated direction.'); ?>
+				</p><p>
+					<?php echo KT_I18N::translate('Note that small and large blocks can be displayed either to screen left or right, depending on the theme used. The above settings do not therefore specify left ot right.'); ?>
+				</p>
 			</div>
 			<div class="cell text-center">
 				<input id="default" type="checkbox" name="default" value="1">
