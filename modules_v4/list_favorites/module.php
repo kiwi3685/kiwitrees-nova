@@ -187,7 +187,7 @@ class list_favorites_KT_Module extends KT_Module implements KT_Module_List {
 										<div class="input-group autocomplete_container">
 											<?php $record ? $person = KT_Person::getInstance($record->getXref()) : $person = ''; ?>
 											<input
-												data-autocomplete-type="IFSRO"
+												data-autocomplete-type="IFS"
 												type="text"
 												id="autocompleteInput-favIndi"
 											>
