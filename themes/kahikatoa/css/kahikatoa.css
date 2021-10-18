@@ -9789,17 +9789,26 @@ div[id$=-page]:not(#indi-page) button[type=submit] {
     margin: 0 0.5rem;
 }
 
-#favoriteslist-page .switch {
-    display: inline-block;
+#favoriteslist-page form {
+    border: 0.125rem solid #ab3334;
+    padding: 0.75rem;
 }
-#favoriteslist-page .switch + label.h6 {
-    display: inline-block;
-    vertical-align: top;
-    font-size: 1rem;
-    padding: 0.25rem 0.5rem;
+#favoriteslist-page form div.favInput {
+    height: 24rem;
 }
-#favoriteslist-page .switch + label .radio_inline {
-    display: inline-block !important;
+#favoriteslist-page form div.favType {
+    border: 0.125rem solid #ab3334;
+    margin-top: 3rem;
+    padding: 0.5rem;
+}
+#favoriteslist-page form #favurl {
+    margin: 0;
+}
+#favoriteslist-page form #favurl div.favType {
+    margin-top: -0.5rem;
+}
+#favoriteslist-page form button {
+    margin-bottom: 0;
 }
 
 label {
