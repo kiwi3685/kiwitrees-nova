@@ -26,6 +26,7 @@
 	exit;
 }
 
+get_gedcom_setting(KT_GED_ID, 'COMMON_TYPES_THRESHOLD') ? $minMediaTypes = get_gedcom_setting(KT_GED_ID, 'COMMON_TYPES_THRESHOLD') : $minMediaTypes = 6;
 ?>
 
 <script>
@@ -33,6 +34,7 @@
 	// VERTICAL BAR CHART
 	function barChart(element) {
 		var element	= "#" + element;
+		var linkUrl = "";
 		switch(element) {
 			case "#chartStatsBirth":
 				try {var data	= JSON.parse(`<?php echo $stats->statsBirth(); ?>`);}
@@ -40,6 +42,7 @@
 				var width	= 500;
 				var height	= 200;
 				var viewportSize = "0 0 500 200";
+				var linkUrl = "statisticsTables.php?ged=<?php echo $GEDCOM; ?>&table=century&tag=birt&option=";
 			break;
 			case "#chartStatsDeath":
 				try {var data	= JSON.parse(`<?php echo $stats->statsDeath(); ?>`);}
@@ -47,6 +50,7 @@
 				var width	= 500;
 				var height	= 200;
 				var viewportSize = "0 0 500 200";
+				var linkUrl = "statisticsTables.php?ged=<?php echo $GEDCOM; ?>&table=century&tag=deat&option=";
 			break;
 			case "#chartMarr":
 				try {var data	= JSON.parse(`<?php echo $stats->statsMarr(); ?>`);}
@@ -54,6 +58,7 @@
 				var width	= 500;
 				var height	= 200;
 				var viewportSize = "0 0 500 200";
+				var linkUrl = "statisticsTables.php?ged=<?php echo $GEDCOM; ?>&table=century&tag=marr&option=";
 			break;
 			case "#chartDiv":
 				try {var data	= JSON.parse(`<?php echo $stats->statsDiv(); ?>`);}
@@ -61,13 +66,15 @@
 				var width	= 500;
 				var height	= 200;
 				var viewportSize = "0 0 500 200";
+				var linkUrl = "statisticsTables.php?ged=<?php echo $GEDCOM; ?>&table=century&tag=div&option=";
 			break;
 			case "#chartMedia":
-				try {var data	= JSON.parse(`<?php echo $stats->chartMedia(5); ?>`);}
+				try {var data	= JSON.parse(`<?php echo $stats->chartMedia($minMediaTypes); ?>`);}
 				catch(e){break;}
 				var width	= 960;
 				var height	= 200;
 				var viewportSize = "0 0 960 200";
+				var linkUrl = "medialist.php?action=filter&search=yes&folder=&subdirs=on&sortby=title&max=20&filter=&apply_filter=apply_filter&form_type=";
 			break;
 			case "#chartChild":
 				try {var data	= JSON.parse(`<?php echo $stats->statsChildren(); ?>`);}
@@ -124,11 +131,15 @@
 			svg.selectAll(".text")
 				.data(data)
 					.enter().append("text")
-						.style("text-anchor", "middle")
-						.style("font-size", "10px")
 						.attr("x", (function(d) { return x(d.category) + (x.bandwidth() / 2) ; }))
 						.attr("y", function(d) { return y(d.count) - 5; })
-						.text(function(d) { return d.percent; });
+						.style("text-anchor", "middle")
+						.style("font-size", "10px")
+						.append("a")
+							.attr("xlink:href", function(d){ return linkUrl + d.type })
+							.attr("target", "blank")
+							.html(function(d) { return d.percent; })
+							.style("fill", "#3383bb");
 
 			// Add the X Axis
 			svg.append("g")
@@ -370,11 +381,10 @@
 
 		if (data) {
 			var color = d3.scaleOrdinal(d3.schemeCategory20);
-//			var margin = {top: 0, right: 30, bottom: 0, left: 10},
-			var margin = {top: 20, right: 20, bottom: -20, left: 20},
+			var margin = {top: 0, right: 30, bottom: 0, left: 10},
 				w = width - margin.left - margin.right,
 				h = height - margin.top - margin.bottom;
-			var padding		= 30;
+			var padding		= 50;
 			var radius		= Math.min(width - padding, height - padding) / 2;
 
 			var svg = d3.select(element)
@@ -384,7 +394,7 @@
 					.attr("viewBox", viewportSize);
 
 			var g = svg.append("g")
-				.attr("transform", "translate(" + (w / 2) + "," + (h / 2) + ")");
+				.attr("transform", "translate(" + (w / 2) + "," + (h / 2 - 10) + ")");
 
 			var arc = d3.arc()
 				.innerRadius(0)
@@ -402,31 +412,55 @@
 						.attr("class", function(d){ return "bar-" +  d.data.color; }) // css over-rides fill color if d.data.color exists
 						.attr("d", arc);
 
-			//Legend code
+			//new legend code
 			var legendCircRad	= 5;
-			var legendSpacing	= 4;
-			var legendRowSpace	= 15;
+			var legendSpacing	= 6;
 
-			var legend = svg.selectAll('.legend')
+			var legendWrap = svg.append('g')
+			.attr('class', 'legendwrap')
+			.attr("transform", function (d,i) { return "translate(" + (0) + "," + (h - 20) + ")";});
+
+			var legend = svg.select('.legendwrap').selectAll('.legend')
 				.data(pie(data))
 				.enter()
 				.append('g')
 				.attr('class', 'legend');
 
 			legend.append('circle')
-				.attr("cx", w)
-    			.attr("cy", function(d,i){ return 20 + i * legendRowSpace}) // 100 is where the first dot appears. 25 is the distance between dots
+				.attr("cx", 0)
+				.attr("cy", 0)
 				.attr("r", legendCircRad)
 				.attr("fill", function(d, i) { return color(i); } )
 				.attr("class", function(d){ return "bar-" +  d.data.color; }); // css over-rides fill color if d.data.color exists
 
 			legend.append('text')
-				.attr('x', w + legendCircRad + legendSpacing)
-				.attr("y", function(d,i){ return 22 + i * legendRowSpace}) // 100 is where the first dot appears. 15 is the distance between dots
+				.attr('x', legendCircRad + legendSpacing)
+				.attr('y', legendCircRad - legendSpacing + 2)
 				.style("text-anchor", "start")
 				.style("font-size", "8px")
 				.text(function(d){ return d.data.category + " (" + d.data.percent + ")"; });
 
+			var ypos = 0, newxpos = 0, rowOffsets = [];
+			var legendItemsCount = svg.selectAll('.legend').size();
+			legend.attr("transform", function (d, index) {
+			var length = d3.select(this).select("text").node().getComputedTextLength() + (legendCircRad + legendSpacing * 3);
+			if (width < newxpos + length) {
+				rowOffsets.push((width - newxpos) / 2);
+				newxpos = 0;
+				ypos += 15;
+			}
+			d.x = newxpos;
+			d.y = ypos;
+			d.rowNo = rowOffsets.length;
+			newxpos += length;
+			if (index === legendItemsCount - 1)
+				rowOffsets.push((width - newxpos) / 2);
+			});
+			legend.attr("transform", function (d, i) {
+				var x = d.x + rowOffsets[d.rowNo];
+                var y = d.y - 1;
+				return 'translate(' + x + ',' + y + ')';
+			});
 		}
 	}
 

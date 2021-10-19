@@ -75,7 +75,7 @@ div.reveal {
 
 /**
  * Foundation for Sites
- * Version 6.7.1
+ * Version 6.7.3
  * https://get.foundation
  * Licensed under MIT Open Source
  */
@@ -281,10 +281,6 @@ html {
 body {
     margin: 0;
     padding: 0;
-    padding-top: env(safe-area-inset-top);
-    padding-right: env(safe-area-inset-right);
-    padding-bottom: env(safe-area-inset-bottom);
-    padding-left: env(safe-area-inset-left);
     background: #eddab6;
     font-family: "Taviraj", serif;
     font-weight: 400;
@@ -9755,16 +9751,36 @@ div[id$=-page]:not(#indi-page) button[type=submit] {
     text-align: center;
 }
 
-#indilist-page .dataTables_wrapper .dataTable thead tr th.indiListGivn {
+#indilist-page .dataTables_wrapper .dataTable thead tr th.indiListGivn,
+#indilist-page .dataTables_wrapper .dataTable thead tr th.famListGivn,
+#famlist-page .dataTables_wrapper .dataTable thead tr th.indiListGivn,
+#famlist-page .dataTables_wrapper .dataTable thead tr th.famListGivn,
+#statTables-page .dataTables_wrapper .dataTable thead tr th.indiListGivn,
+#statTables-page .dataTables_wrapper .dataTable thead tr th.famListGivn {
     min-width: 7rem;
 }
-#indilist-page .dataTables_wrapper .dataTable thead tr th.indiListSurn {
+#indilist-page .dataTables_wrapper .dataTable thead tr th.indiListSurn,
+#indilist-page .dataTables_wrapper .dataTable thead tr th.famListSurn,
+#famlist-page .dataTables_wrapper .dataTable thead tr th.indiListSurn,
+#famlist-page .dataTables_wrapper .dataTable thead tr th.famListSurn,
+#statTables-page .dataTables_wrapper .dataTable thead tr th.indiListSurn,
+#statTables-page .dataTables_wrapper .dataTable thead tr th.famListSurn {
     min-width: 5rem;
 }
-#indilist-page .dataTables_wrapper .dataTable thead tr th.indiListDate {
+#indilist-page .dataTables_wrapper .dataTable thead tr th.indiListDate,
+#indilist-page .dataTables_wrapper .dataTable thead tr th.famListDate,
+#famlist-page .dataTables_wrapper .dataTable thead tr th.indiListDate,
+#famlist-page .dataTables_wrapper .dataTable thead tr th.famListDate,
+#statTables-page .dataTables_wrapper .dataTable thead tr th.indiListDate,
+#statTables-page .dataTables_wrapper .dataTable thead tr th.famListDate {
     width: 11rem;
 }
-#indilist-page .dataTables_wrapper .dataTable thead tr th.indiListAnniv {
+#indilist-page .dataTables_wrapper .dataTable thead tr th.indiListAnniv,
+#indilist-page .dataTables_wrapper .dataTable thead tr th.famListAnniv,
+#famlist-page .dataTables_wrapper .dataTable thead tr th.indiListAnniv,
+#famlist-page .dataTables_wrapper .dataTable thead tr th.famListAnniv,
+#statTables-page .dataTables_wrapper .dataTable thead tr th.indiListAnniv,
+#statTables-page .dataTables_wrapper .dataTable thead tr th.famListAnniv {
     min-width: 2.5rem;
 }
 
@@ -9851,13 +9867,8 @@ label.radio_inline {
     padding: 0.25rem 1rem;
 }
 
-#statistics-page div[id^=chart] {
-    max-height: 20rem;
-    margin: 0 auto;
-    width: 80%;
-}
 #statistics-page div[id^=chart] .legend {
-    padding: 20px;
+    margin: 20px;
 }
 #statistics-page div[id^=chart] .bar-m,
 #statistics-page div[id^=chart] .bar-d {
@@ -9872,6 +9883,23 @@ label.radio_inline {
 }
 #statistics-page div[id^=chart] .horizontalChart .domain {
     stroke: #ffffff;
+}
+#statistics-page div#chartSex,
+#statistics-page div#chartMortality,
+#statistics-page div#chartIndisWithSources,
+#statistics-page div#chartFamsWithSources,
+#statistics-page div#chartMarr,
+#statistics-page div#chartDiv {
+    display: inline-grid;
+    max-height: 24rem;
+}
+#statistics-page div#chartStatsBirth,
+#statistics-page div#chartStatsDeath {
+    padding: 20px;
+}
+#statistics-page div#chartDistribution {
+    display: inline-grid;
+    max-height: 30rem;
 }
 #statistics-page div.statisticSection {
     border: 0.125rem solid #ab3334;

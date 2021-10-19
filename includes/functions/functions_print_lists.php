@@ -595,21 +595,28 @@ function format_fam_table($datalist, $option = '') {
 	if ($option=='BIRT_PLAC' || $option=='DEAT_PLAC') return;
 	$html = '';
 
+	$controller
+		->addExternalJavascript(KT_DATATABLES_JS)
+		->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
+	;
+
 	if (KT_USER_CAN_EDIT) {
+		$controller
+			->addExternalJavascript(KT_DATATABLES_BUTTONS)
+			->addExternalJavascript(KT_DATATABLES_HTML5);
 		$buttons = 'B';
 	} else {
 		$buttons = '';
 	}
 
 	$controller
-		->addExternalJavascript(KT_DATATABLES_JS)
 		->addInlineJavascript('
 			jQuery.fn.dataTableExt.oSort["unicode-asc" ]=function(a,b) {return a.replace(/<[^<]*>/, "").localeCompare(b.replace(/<[^<]*>/, ""))};
 			jQuery.fn.dataTableExt.oSort["unicode-desc"]=function(a,b) {return b.replace(/<[^<]*>/, "").localeCompare(a.replace(/<[^<]*>/, ""))};
 			jQuery("#' . $table_id . '").dataTable( {
-				dom: \'<"top"' . $buttons . 'lp<"clear">irf>t<"bottom"pl>\',
+				dom: \'<"top"p' . $buttons . 'f<"clear">irl>t<"bottom"pl>\',
 				' . KT_I18N::datatablesI18N() . ',
-				buttons: [{extend: "csv", exportOptions: {columns: [0,1,4,6,7,10,12,15,16] }}],
+				buttons: [{extend: "csvHtml5", exportOptions: {columns: [0,1,4,6,7,10,12,15,16] }}],
 				autoWidth: false,
 				processing: true,
 				retrieve: true,
@@ -623,23 +630,23 @@ function format_fam_table($datalist, $option = '') {
 				},
 				stateDuration: -1,
 				columns: [
-					/*  0 husb givn */ {dataSort: 2},
-					/*  1 husb surn */ {dataSort: 3},
+					/*  0 husb givn */ {dataSort: 2, class: "famListGivn"},
+					/*  1 husb surn */ {dataSort: 3, class: "famListSurn"},
 					/*  2 GIVN,SURN */ {type: "unicode", visible: false},
 					/*  3 SURN,GIVN */ {type: "unicode", visible: false},
-					/*  4 age       */ {dataSort: 5, class: "text-center"},
+					/*  4 age       */ {dataSort: 5, class: "text-center famListAnniv"},
 					/*  5 AGE       */ {type: "num", visible: false},
 					/*  6 wife givn */ {dataSort: 8},
 					/*  7 wife surn */ {dataSort: 9},
 					/*  8 GIVN,SURN */ {type: "unicode", visible: false},
 					/*  9 SURN,GIVN */ {type: "unicode", visible: false},
-					/* 10 age       */ {dataSort: 11, class: "text-center"},
+					/* 10 age       */ {dataSort: 11, class: "text-center famListAnniv"},
 					/* 11 AGE       */ {type: "num", visible: false},
-					/* 12 marr date */ {dataSort: 13},
+					/* 12 marr date */ {dataSort: 13, class: "famListDate"},
 					/* 13 MARR:DATE */ {visible: false},
-					/* 14 anniv     */ {dataSort: 13, class: "text-center"},
+					/* 14 anniv     */ {dataSort: 13, class: "text-center famListAnniv"},
 					/* 15 marr plac */ {type: "unicode"},
-					/* 16 children  */ {dataSort: 17, class: "text-center"},
+					/* 16 children  */ {dataSort: 17, class: "text-center famListAnniv"},
 					/* 17 NCHI      */ {type: "num", visible: false},
 					/* 18 CHAN      */ {dataSort: 19, visible: ' . ($SHOW_LAST_CHANGE ? 'true' : 'false') . '},
 					/* 19 CHAN_sort */ {visible: false},
@@ -704,8 +711,8 @@ function format_fam_table($datalist, $option = '') {
 				<thead>
 					<tr>
 						<th colspan="23">
-							<div class="grid-x grid-margin-x">
-								<div class="cell medium-5 expanded button-group show-for-medium">
+							<div class="grid-x">
+								<div class="cell medium-4 expanded button-group show-for-medium">
 									<button
 										class="button ui-state-default has-tip top"
 										data-tooltip
@@ -759,7 +766,7 @@ function format_fam_table($datalist, $option = '') {
 										' . KT_I18N::translate('Both dead') . '
 									</button>
 								</div>
-								<div class="cell medium-2 expanded button-group show-for-medium">
+								<div class="cell medium-3 expanded button-group show-for-medium">
 									<button
 										class="button ui-state-default has-tip top"
 										data-tooltip
@@ -872,18 +879,22 @@ function format_fam_table($datalist, $option = '') {
 						<th>AGE</th>
 						<th>'. KT_Gedcom_Tag::getLabel('MARR'). '</th>
 						<th>MARR:DATE</th>
-						<th><i class="icon-reminder" title="'. KT_I18N::translate('Anniversary'). '"></i></th>
+						<th data-tooltip aria-haspopup="true" class="has-tip top" data-disable-hover="false" title="' . KT_I18N::translate('Years since marriage') . '">
+							<i class="' . $iconStyle . ' fa-bell"></i>
+						</th>
 						<th>'. KT_Gedcom_Tag::getLabel('PLAC'). '</th>
-						<th><i class="icon-children" title="'. KT_I18N::translate('Children'). '"></i></th>
-					<th>NCHI</th>
-					<th' .($SHOW_LAST_CHANGE?'':''). '>'. KT_Gedcom_Tag::getLabel('CHAN'). '</th>
-					<th' .($SHOW_LAST_CHANGE?'':''). '>CHAN</th>
-					<th>MARR</th>
-					<th>DEAT</th>
-					<th>TREE</th>
-				</tr>
-			</thead>
-			<tbody>';
+						<th data-tooltip aria-haspopup="true" class="has-tip top" data-disable-hover="false" title="' . KT_I18N::translate('Number of children') . '">
+							<i class="' . $iconStyle . ' fa-child"></i>
+						</th>
+						<th>NCHI</th>
+						<th' .($SHOW_LAST_CHANGE?'':''). '>'. KT_Gedcom_Tag::getLabel('CHAN'). '</th>
+						<th' .($SHOW_LAST_CHANGE?'':''). '>CHAN</th>
+						<th>MARR</th>
+						<th>DEAT</th>
+						<th>TREE</th>
+					</tr>
+				</thead>
+				<tbody>';
 
 	$d100y = new KT_Date(date('Y')-100);  // 100 years ago
 	foreach ($datalist as $family) {

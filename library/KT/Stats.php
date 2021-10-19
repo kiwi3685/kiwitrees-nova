@@ -1322,13 +1322,13 @@ class KT_Stats {
 	function _statsBirth($simple = true, $sex = false, $year1 = -1, $year2 = -1, $params = array()) {
 		if ($simple) {
             KT_DB::exec("CREATE TEMPORARY TABLE tempdates1
-                SELECT * FROM `##dates`
+                SELECT d_file, d_year, d_fact, d_type, d_gid FROM `##dates`
                 WHERE
                 d_file={$this->_ged_id} AND
                 d_year<>0 AND
                 d_fact='BIRT' AND
                 d_type IN ('@#DGREGORIAN@', '@#DJULIAN@')
-                GROUP BY d_gid"
+                GROUP BY d_file, d_year, d_fact, d_type, d_gid"
             );
             $sql = "SELECT FLOOR(d_year/100+1) AS century, COUNT(*) AS total FROM `tempdates1` ";
 		} else if ($sex) {
@@ -1389,13 +1389,13 @@ class KT_Stats {
 	function _statsDeath($simple = true, $sex = false, $year1 = -1, $year2 = -1) {
 		if ($simple) {
             KT_DB::exec("CREATE TEMPORARY TABLE tempdates2
-                SELECT * FROM `##dates`
+                SELECT d_file, d_year, d_fact, d_type, d_gid FROM `##dates`
                 WHERE
                 d_file={$this->_ged_id} AND
                 d_year<>0 AND
                 d_fact='DEAT' AND
                 d_type IN ('@#DGREGORIAN@', '@#DJULIAN@')
-                GROUP BY d_gid"
+                GROUP BY d_file, d_year, d_fact, d_type, d_gid"
             );
             $sql = "SELECT FLOOR(d_year/100+1) AS century, COUNT(*) AS total FROM `tempdates2` ";
 		} else if ($sex) {
@@ -2253,50 +2253,48 @@ class KT_Stats {
 		return $result;
 	}
 
-	function _statsMarr($simple = true, $first = false, $year1 = -1, $year2 = -1) {
+	function _statsMarr($simple=true, $first=false, $year1=-1, $year2=-1, $params = array()) {
 		if ($simple) {
 			$sql = "
 				SELECT SQL_CACHE FLOOR(d_year/100+1) AS century, COUNT(*) AS total
 					FROM (
-						SELECT * FROM `##dates`
+						SELECT d_file, d_year, d_fact, d_type, d_gid FROM `##dates`
 						 WHERE d_file=" . $this->_ged_id . " AND d_year<>0 AND d_fact = 'MARR' AND d_type IN ('@#DGREGORIAN@', '@#DJULIAN@')
-						 GROUP BY d_gid";
-			if ($year1 >= 0 && $year2 >= 0) {
+						 GROUP BY d_file, d_year, d_fact, d_type, d_gid";
+				if ($year1>=0 && $year2>=0) {
 							$sql .= " AND d_year BETWEEN '" . $year1 . "' AND '" . $year2 . "'";
-			}
+				}
 					$sql .= ") AS t1
 				 GROUP BY century ORDER BY century
 			";
 		} else if ($first) {
 			$years = '';
-			if ($year1 >= 0 && $year2 >= 0) {
+			if ($year1>=0 && $year2>=0) {
 				$years = " married.d_year BETWEEN '{$year1}' AND '{$year2}' AND";
 			}
 			$sql=
-				" SELECT SQL_CACHE fam.f_id AS fams, fam.f_husb, fam.f_wife, married.d_julianday2 AS age, married.d_month AS month, indi.i_id AS indi".
-				" FROM `##families` AS fam".
-				" LEFT JOIN `##dates` AS married ON married.d_file = {$this->_ged_id}".
-				" LEFT JOIN `##individuals` AS indi ON indi.i_file = {$this->_ged_id}".
-				" WHERE".
-				" married.d_gid = fam.f_id AND".
-				" fam.f_file = {$this->_ged_id} AND".
-				" married.d_fact = 'MARR' AND".
-				" married.d_julianday2 <> 0 AND".
-				$years.
-				" (indi.i_id = fam.f_husb OR indi.i_id = fam.f_wife)".
-				" ORDER BY fams, indi, age ASC";
+			" SELECT SQL_CACHE fam.f_id AS fams, fam.f_husb, fam.f_wife, married.d_julianday2 AS age, married.d_month AS month, indi.i_id AS indi".
+			" FROM `##families` AS fam".
+			" LEFT JOIN `##dates` AS married ON married.d_file = {$this->_ged_id}".
+			" LEFT JOIN `##individuals` AS indi ON indi.i_file = {$this->_ged_id}".
+			" WHERE".
+			" married.d_gid = fam.f_id AND".
+			" fam.f_file = {$this->_ged_id} AND".
+			" married.d_fact = 'MARR' AND".
+			" married.d_julianday2 <> 0 AND".
+			$years.
+			" (indi.i_id = fam.f_husb OR indi.i_id = fam.f_wife)".
+			" ORDER BY fams, indi, age ASC";
 		} else {
 			$sql =
-				"SELECT SQL_CACHE d_month, COUNT(*) AS total".
-				" FROM `##dates`".
-				" WHERE d_file={$this->_ged_id} AND d_fact='MARR'";
+				"SELECT SQL_CACHE d_month, COUNT(*) AS total FROM `##dates` ".
+				"WHERE d_file={$this->_ged_id} AND d_fact = 'MARR'";
 				if ($year1>=0 && $year2>=0) {
 					$sql .= " AND d_year BETWEEN '{$year1}' AND '{$year2}'";
 				}
 			$sql .= " GROUP BY d_month";
 		}
-		$rows = self::_runSQL($sql);
-
+		$rows=self::_runSQL($sql);
 		if ($simple) {
 			$tot = 0;
 			foreach ($rows as $values) {
@@ -2331,9 +2329,9 @@ class KT_Stats {
 			$sql = "
 				SELECT SQL_CACHE FLOOR(d_year/100+1) AS century, COUNT(*) AS total
 					FROM (
-						SELECT * FROM `##dates`
+						SELECT d_file, d_year, d_fact, d_type, d_gid FROM `##dates`
 						 WHERE d_file=" . $this->_ged_id . " AND d_year<>0 AND d_fact = 'DIV' AND d_type IN ('@#DGREGORIAN@', '@#DJULIAN@')
-						 GROUP BY d_gid";
+						 GROUP BY d_file, d_year, d_fact, d_type, d_gid";
 				if ($year1>=0 && $year2>=0) {
 							$sql .= " AND d_year BETWEEN '" . $year1 . "' AND '" . $year2 . "'";
 				}

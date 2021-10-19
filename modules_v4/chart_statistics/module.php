@@ -67,7 +67,7 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 		$menus		= array();
 		$menu		= new KT_Menu(
 			$this->getTitle(),
-			'module.php?mod=' . $this->getName() . '&amp;mod_action=show&amp;ged=' . KT_GEDURL . '#stats-indi',
+			'module.php?mod=' . $this->getName() . '&amp;mod_action=show&amp;ged=' . KT_GEDURL,
 			'menu-chart-statistics'
 		);
 		$menus[] = $menu;
@@ -135,7 +135,7 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 								<div class="cell medium-<?php echo $cells; ?> text-center">
 									<small>
 										<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalIndis&amp;option=male" target="_blank">
-											<?php echo KT_I18N::translate('Total males') . ' ' . $stats->totalSexMales(); ?>
+                                        <?php echo $stats->totalSexMales(); ?>
 										</a>
 										 (<?php echo $stats->totalSexMalesPercentage(); ?>)
 									</small>
@@ -143,7 +143,7 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 								<div class="cell medium-<?php echo $cells; ?> text-center">
 									<small>
 										<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalIndis&amp;option=female" target="_blank">
-											<?php echo KT_I18N::translate('Total females') . ' ' . $stats->totalSexFemales(); ?>
+                                        <?php echo $stats->totalSexFemales(); ?>
 										</a>
 										 (<?php echo $stats->totalSexFemalesPercentage(); ?>)
 									</small>
@@ -152,7 +152,7 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 									<div class="cell medium-<?php echo $cells; ?> text-center">
 										<small>
 											<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalIndis&amp;option=unknown" target="_blank">
-												<?php echo KT_I18N::translate('Total unknown') . ' ' . $stats->totalSexUnknown(); ?>
+                                        <?php echo $stats->totalSexUnknown(); ?>
 											</a>
 											 (<?php echo $stats->totalSexUnknownPercentage(); ?>)
 										 </small>
@@ -167,7 +167,7 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 								<div class="cell medium-6 text-center">
 									<small>
 										<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalIndis&amp;option=living" target="_blank">
-											<?php echo KT_I18N::translate('Total living') . ' ' . $stats->totalLiving(); ?>
+											<?php echo KT_I18N::translate('Total living'); ?>&nbsp;<?php echo $stats->totalLiving(); ?>
 										</a>
 										 (<?php echo $stats->totalLivingPercentage(); ?>)
 									</small>
@@ -175,7 +175,7 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 								<div class="cell medium-6 text-center">
 									<small>
 										<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalIndis&amp;option=deceased" target="_blank">
-											<?php echo KT_I18N::translate('Total deceased') . ' ' . $stats->totalDeceased(); ?>
+											<?php echo KT_I18N::translate('Total deceased'); ?>&nbsp;<?php echo $stats->totalDeceased(); ?>
 										</a>
 										 (<?php echo $stats->totalDeceasedPercentage(); ?>)
 									</small>
@@ -188,12 +188,42 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 					<h5><?php echo KT_I18N::translate('Events'); ?></h5>
 					<div class="grid-x grid-margin-x grid-margin-y statisticSection">
 						<div class="cell medium-6">
-							<label class="h6"><?php echo KT_I18N::translate('Total births') . '&nbsp;' . $stats->totalBirths(); ?></label>
+							<label class="h6"><?php echo KT_I18N::translate('Total births'); ?>
+								<?php
+	                            $totals      = $stats->totalBirths();
+	                            $dated       = $stats->totalDatedBirths();
+	                            $undated     = $stats->totalUndatedBirths();
+	                            $totalsLink  = '<a href="statisticsTables.php?ged=' . $GEDCOM . '&amp;table=totalBirths" target="_blank">' .
+	                                KT_I18n::number($totals['count']) . '
+	                            </a>';
+	                            $datedLink   = '<a href="statisticsTables.php?ged=' . $GEDCOM . '&amp;table=datedBirths" target="_blank">' .
+	                                KT_I18n::number($dated['count']) . '
+	                            </a>';
+	                            $undatedLink = '<a href="statisticsTables.php?ged=' . $GEDCOM . '&amp;table=undatedBirths" target="_blank">' .
+	                                KT_I18n::number($undated['count']) . '
+	                            </a>'; ?>
+	                            <?php echo KT_I18N::translate('%1s (%2s with a birth date and %3s without)', $totalsLink, $datedLink, $undatedLink); ?>
+							</label>
 							<div class="cell text-center"><?php echo KT_I18N::translate('Number of births in each century'); ?></div>
 							<div class="cell" id="chartStatsBirth"></div>
 						</div>
 						<div class="cell medium-6">
-							<label class="h6"><?php echo KT_I18N::translate('Total deaths') . '&nbsp;' . $stats->totalDeaths(); ?></label>
+							<label class="h6"><?php echo KT_I18N::translate('Total deaths'); ?>
+								<?php
+                                $totals      = $stats->totalDeaths();
+                                $dated       = $stats->totalDatedDeaths();
+                                $undated     = $stats->totalUndatedDeaths();
+                                $totalsLink  = '<a href="statisticsTables.php?ged=' . $GEDCOM . '&amp;table=totalDeaths" target="_blank">' .
+                                    KT_I18n::number($totals['count']) . '
+                                </a>';
+                                $datedLink   = '<a href="statisticsTables.php?ged=' . $GEDCOM . '&amp;table=datedDeaths" target="_blank">' .
+                                    KT_I18n::number($dated['count']) . '
+                                </a>';
+                                $undatedLink = '<a href="statisticsTables.php?ged=' . $GEDCOM . '&amp;table=undatedDeaths" target="_blank">' .
+                                    KT_I18n::number($undated['count']) . '
+                                </a>'; ?>
+                                <?php echo KT_I18N::translate('%1s (%2s with a death date and %3s without)', $totalsLink, $datedLink, $undatedLink); ?>
+							</label>
 							<div class="cell text-center"><?php echo KT_I18N::translate('Number of deaths in each century'); ?></div>
 							<div class="cell" id="chartStatsDeath"></div>
 						</div>
@@ -217,13 +247,13 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 					<h5><?php echo KT_I18N::translate('Lifespan'); ?></h5>
 					<div class="grid-x grid-margin-x grid-margin-y statisticSection">
 						<div class="cell medium-4 text-center">
-							<?php echo KT_I18N::translate('Average age at death') . ' ' . $stats->averageLifespan(true); ?>
+							<?php echo KT_I18N::translate('Average age at death'); ?>&nbsp;<?php echo $stats->averageLifespan(true); ?>
 						</div>
 						<div class="cell medium-4 text-center">
-							<?php echo KT_I18N::translate('Males') . ' ' . $stats->averageLifespanMale(true); ?>
+							<?php echo KT_I18N::translate('Males'); ?>&nbsp;<?php echo $stats->averageLifespanMale(true); ?>
 						</div>
 						<div class="cell medium-4 text-center">
-							<?php echo KT_I18N::translate('Females') . ' ' . $stats->averageLifespanFemale(true); ?>
+							<?php echo KT_I18N::translate('Females'); ?>&nbsp;<?php echo $stats->averageLifespanFemale(true); ?>
 						</div>
 						<div class="cell text-center"><?php echo KT_I18N::translate('Average age at death date, by century'); ?></div>
 						<div class="cell" id="chartStatsAge"></div>
@@ -255,10 +285,10 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 					<h5><?php echo KT_I18N::translate('Names'); ?></h5>
 					<div class="grid-x grid-margin-x grid-margin-y statisticSection">
 						<div class="cell medium-6">
-							<label class="h6"><?php echo KT_I18N::translate('Total surnames') . ' ' . $stats->totalSurnames(); ?></label>
+							<label class="h6"><?php echo KT_I18N::translate('Total surnames'); ?>&nbsp;<?php echo $stats->totalSurnames(); ?></label>
 						</div>
 						<div class="cell medium-6">
-							<label class="h6"><?php echo KT_I18N::translate('Total given names') . ' ' . $stats->totalGivennames(); ?></label>
+							<label class="h6"><?php echo KT_I18N::translate('Total given names'); ?>&nbsp;<?php echo $stats->totalGivennames(); ?></label>
 						</div>
 						<div class="cell medium-6">
 							<div class="cell" id="chartCommonSurnames"></div>
@@ -284,12 +314,12 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 					<h5><?php echo KT_I18N::translate('Events'); ?></h5>
 					<div class="grid-x grid-margin-x grid-margin-y statisticSection">
 						<div class="cell medium-6">
-							<label class="h6"><?php echo KT_I18N::translate('Total marriages') . '&nbsp;' . $stats->totalMarriages(); ?></label>
+							<label class="h6"><?php echo KT_I18N::translate('Total marriages'); ?>&nbsp;<?php echo $stats->totalMarriages(); ?></label>
 							<div class="cell text-center"><?php echo KT_I18N::translate('Number of marriages in each century'); ?></div>
 							<div class="cell" id="chartMarr"></div>
 						</div>
 						<div class="cell medium-6">
-							<label class="h6"><?php echo KT_I18N::translate('Total divorces') . '&nbsp;' . $stats->totalDivorces(); ?></label>
+							<label class="h6"><?php echo KT_I18N::translate('Total divorces'); ?>&nbsp;<?php echo $stats->totalDivorces(); ?></label>
 							<div class="cell text-center"><?php echo KT_I18N::translate('Number of divorces in each century'); ?></div>
 							<div class="cell" id="chartDiv"></div>
 						</div>
@@ -313,10 +343,10 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 					<h5><?php echo KT_I18N::translate('Length of marriage'); ?></h5>
 					<div class="grid-x grid-margin-x grid-margin-y statisticSection">
 						<div class="cell medium-6">
-							<?php echo KT_I18N::translate('Longest marriage'), ' ', $stats->topAgeOfMarriage(); ?>
+							<?php echo KT_I18N::translate('Longest marriage'); ?>&nbsp;<?php echo $stats->topAgeOfMarriage(); ?>
 						</div>
 						<div class="cell medium-6">
-							<?php echo KT_I18N::translate('Shortest marriage'), ' ', $stats->minAgeOfMarriage(); ?>
+							<?php echo KT_I18N::translate('Shortest marriage'); ?>&nbsp;<?php echo $stats->minAgeOfMarriage(); ?>
 						</div>
 						<div class="cell medium-6">
 							<div><?php echo $stats->topAgeOfMarriageFamily(); ?></div>
@@ -328,19 +358,19 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 					<h5><?php echo KT_I18N::translate('Age in year of marriage'); ?></h5>
 					<div class="grid-x grid-margin-x grid-margin-y statisticSection">
 						<div class="cell medium-6">
-							<?php echo KT_I18N::translate('Youngest male'), ' ', $stats->youngestMarriageMaleAge(true); ?>
+							<?php echo KT_I18N::translate('Youngest male'); ?>&nbsp;<?php echo $stats->youngestMarriageMaleAge(true); ?>
 							<div><?php echo $stats->youngestMarriageMale(); ?></div>
 						</div>
 						<div class="cell medium-6">
-							<?php echo KT_I18N::translate('Youngest female'), ' ', $stats->youngestMarriageFemaleAge(true); ?>
+							<?php echo KT_I18N::translate('Youngest female'); ?>&nbsp;<?php echo $stats->youngestMarriageFemaleAge(true); ?>
 							<div><?php echo $stats->youngestMarriageFemale(); ?></div>
 						</div>
 						<div class="cell medium-6">
-							<div><?php echo KT_I18N::translate('Oldest male'), ' ', $stats->oldestMarriageMaleAge(true); ?></div>
+							<div><?php echo KT_I18N::translate('Oldest male'); ?>&nbsp;<?php echo $stats->oldestMarriageMaleAge(true); ?></div>
 							<div><?php echo $stats->oldestMarriageMale(); ?></div>
 						</div>
 						<div class="cell medium-6">
-							<div><?php echo KT_I18N::translate('Oldest female'), ' ', $stats->oldestMarriageFemaleAge(true); ?></div>
+							<div><?php echo KT_I18N::translate('Oldest female'); ?>&nbsp;<?php echo $stats->oldestMarriageFemaleAge(true); ?></div>
 							<div><?php echo $stats->oldestMarriageFemale(); ?></div>
 						</div>
 						<div class="cell">
@@ -351,47 +381,47 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 					<h5><?php echo KT_I18N::translate('Age at birth of child'); ?></h5>
 					<div class="grid-x grid-margin-x grid-margin-y statisticSection">
 						<div class="cell medium-6">
-							<?php echo KT_I18N::translate('Youngest father'), ' ', $stats->youngestFatherAge(true); ?>
+							<?php echo KT_I18N::translate('Youngest father'); ?>&nbsp;<?php echo $stats->youngestFatherAge(true); ?>
 							<div><?php echo $stats->youngestFather(); ?></div>
 						</div>
 						<div class="cell medium-6">
-							<?php echo KT_I18N::translate('Youngest mother'), ' ', $stats->youngestMotherAge(true); ?>
+							<?php echo KT_I18N::translate('Youngest mother'); ?>&nbsp;<?php echo $stats->youngestMotherAge(true); ?>
 							<div><?php echo $stats->youngestMarriageFemale(); ?></div>
 						</div>
 						<div class="cell medium-6">
-							<div><?php echo KT_I18N::translate('Oldest male'), ' ', $stats->oldestMarriageMaleAge(true); ?></div>
+							<div><?php echo KT_I18N::translate('Oldest male'); ?>&nbsp;<?php echo $stats->oldestMarriageMaleAge(true); ?></div>
 							<div><?php echo $stats->youngestMother(); ?></div>
 						</div>
 						<div class="cell medium-6">
-							<div><?php echo KT_I18N::translate('Oldest female'), ' ', $stats->oldestMarriageFemaleAge(true); ?></div>
+							<div><?php echo KT_I18N::translate('Oldest female'); ?>&nbsp;<?php echo $stats->oldestMarriageFemaleAge(true); ?></div>
 							<div><?php echo $stats->oldestMarriageFemale(); ?></div>
 						</div>
 						<div class="cell medium-6">
-							<div><?php echo KT_I18N::translate('Oldest father'), ' ', $stats->oldestFatherAge(true); ?></div>
+							<div><?php echo KT_I18N::translate('Oldest father'); ?>&nbsp;<?php echo $stats->oldestFatherAge(true); ?></div>
 							<div><?php echo $stats->oldestFather(); ?></div>
 						</div>
 						<div class="cell medium-6">
-							<div><?php echo KT_I18N::translate('Oldest mother'), ' ', $stats->oldestMotherAge(true); ?></div>
+							<div><?php echo KT_I18N::translate('Oldest mother'); ?>&nbsp;<?php echo $stats->oldestMotherAge(true); ?></div>
 							<div><?php echo $stats->oldestMother(); ?></div>
 						</div>
 					</div>
 					<h5><?php echo KT_I18N::translate('Children in family'); ?></h5>
 					<div class="grid-x grid-margin-x grid-margin-y statisticSection">
 						<div class="cell medium-6">
-							<div><?php echo KT_I18N::translate('Average number of children per family'), ' ', $stats->averageChildren(); ?></div>
+							<div><?php echo KT_I18N::translate('Average number of children per family'); ?>&nbsp;<?php echo $stats->averageChildren(); ?></div>
 							<div class="cell text-center"><?php echo KT_I18N::translate('Number of children per family, by century'); ?></div>
 							<div class="cell" id="chartChild"></div>
 						</div>
 						<div class="cell medium-6">
-							<div><?php echo KT_I18N::translate('Number of families without children'), ' ', $stats->noChildrenFamilies(); ?></div>
+							<div><?php echo KT_I18N::translate('Number of families without children'); ?>&nbsp;<?php echo $stats->noChildrenFamilies(); ?></div>
 							<div class="cell text-center"><?php echo KT_I18N::translate('Number of families without children, by century'); ?></div>
 							<div class="cell" id="chartNoChild"></div>
 						</div>
 						<div class="cell medium-6">
-							<div><?php echo KT_I18N::translate('Largest families'), ' ', $stats->topTenLargestFamilyList(); ?></div>
+							<div><?php echo KT_I18N::translate('Largest families'); ?>&nbsp;<?php echo $stats->topTenLargestFamilyList(); ?></div>
 						</div>
 						<div class="cell medium-6">
-							<div><?php echo KT_I18N::translate('Largest number of grandchildren'), ' ', $stats->topTenLargestGrandFamilyList(); ?></div>
+							<div><?php echo KT_I18N::translate('Largest number of grandchildren'); ?>&nbsp;<?php echo $stats->topTenLargestGrandFamilyList(); ?></div>
 						</div>
 					</div>
 					<h5><?php echo KT_I18N::translate('Age difference'); ?></h5>
