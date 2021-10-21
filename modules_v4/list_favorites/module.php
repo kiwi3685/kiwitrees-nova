@@ -107,7 +107,7 @@ class list_favorites_KT_Module extends KT_Module implements KT_Module_List {
 				$gid		= KT_Filter::post('gid');
 				$favnote	= KT_Filter::post('favnote');
 				$url		= KT_Filter::post('listurl', KT_REGEX_URL);
-				$favtitle	= KT_Filter::post('listfavtitle');
+				$favtitle	= KT_Filter::post('listurltitle');
 				$favType	= KT_Filter::postBool('favType');
 
 				if ($gid) {
@@ -165,11 +165,17 @@ class list_favorites_KT_Module extends KT_Module implements KT_Module_List {
 				->addInlineJavascript('autocomplete();');
 		}
 
-		echo pageStart('favoriteslist', $controller->getPageTitle());
-			if (KT_USER_ID || KT_USER_GEDCOM_ADMIN) {
-				$uniqueID = (int)(microtime(true) * 1000000); // This block can theoretically appear multiple times, so use a unique ID.
-				?>
+		if ((KT_USER_ID || KT_USER_GEDCOM_ADMIN) && !$favorites) {
+			$favPageTitle = KT_I18N::translate('Add Favourite');
+		} else {
+			$favPageTitle =	$controller->getPageTitle();
+		}
+		echo pageStart('favoriteslist', $includeTitle = 'n');
+			if (KT_USER_ID || KT_USER_GEDCOM_ADMIN) { ?>
 				<div class="grid-x is-hidden" id="add_favorite" data-toggler=".is-hidden">
+					<div class="cell">
+						<h3><?php echo KT_I18N::translate('Add Favourite'); ?></h3>
+					</div>
 					<div class="cell">
 						<button class="button" data-toggle="add_favorite display_favorites">
 							<i class="<?php echo $iconStyle; ?> fa-plus"></i>
@@ -178,19 +184,15 @@ class list_favorites_KT_Module extends KT_Module implements KT_Module_List {
 					</div>
 					<div class="cell">
 						<div class="grid-x grid-margin-x">
-							<div class="cell medium-4">
-								<label class="h5"><?php echo KT_I18N::translate('Add an individual, Family, or Source'); ?></label>
+							<!-- Individual -->
+							<div class="cell medium-6 large-3">
+								<label class="h5"><?php echo KT_I18N::translate('Individual'); ?></label>
 								<form method="post" action="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=show&amp;ged=<?php echo KT_GEDURL; ?>">
 									<input type="hidden" name="action" value="addfav">
 									<input type="hidden" name="ged" value="<?php echo KT_GEDCOM; ?>">
 									<div class="grid-x favInput" id="indi">
 										<div class="input-group autocomplete_container">
-											<?php $record ? $person = KT_Person::getInstance($record->getXref()) : $person = ''; ?>
-											<input
-												data-autocomplete-type="IFS"
-												type="text"
-												id="autocompleteInput-favIndi"
-											>
+											<input data-autocomplete-type="INDI" type="text" id="autocompleteInput-favIndi" placeholder="<?php echo KT_I18N::translate('Individual name'); ?>">
 											<span class="input-group-label">
 												<button class="clearAutocomplete autocomplete_icon">
 													<i class="<?php echo $iconStyle; ?> fa-times"></i>
@@ -210,7 +212,7 @@ class list_favorites_KT_Module extends KT_Module implements KT_Module_List {
 											</label>
 										</div>
 										<div class="cell">
-											<label class="h6"><?php echo KT_I18N::translate('Enter an optional note about this favorite'); ?></label>
+											<label class="h6"><?php echo KT_I18N::translate('Enter an optional note'); ?></label>
 											<textarea name="favnote" rows="6" cols="50"></textarea>
 										</div>
 									</div>
@@ -220,26 +222,91 @@ class list_favorites_KT_Module extends KT_Module implements KT_Module_List {
 									</button>
 								</form>
 							</div>
-							<div class="cell medium-4 auto">
+							<!-- Family -->
+							<div class="cell medium-6 large-3">
+								<label class="h5"><?php echo KT_I18N::translate('Family'); ?></label>
+								<form method="post" action="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=show&amp;ged=<?php echo KT_GEDURL; ?>">
+									<input type="hidden" name="action" value="addfav">
+									<input type="hidden" name="ged" value="<?php echo KT_GEDCOM; ?>">
+									<div class="grid-x favInput" id="fam">
+										<div class="input-group autocomplete_container">
+											<input data-autocomplete-type="FAM" type="text" id="autocompleteInput-favFam" placeholder="<?php echo KT_I18N::translate('Names of husband & wife'); ?>">
+											<span class="input-group-label">
+												<button class="clearAutocomplete autocomplete_icon">
+													<i class="<?php echo $iconStyle; ?> fa-times"></i>
+												</button>
+											</span>
+										</div>
+										<input type="hidden" id="selectedValue-fam" name="gid">
+										<div class="cell favType">
+											<label class="h6 bold"><?php echo KT_I18N::translate('Select type of favorite'); ?></label>
+											<label for="favTypeFamily1">
+												<input type="radio" name="fam" value=1 id="favTypeFamily1" required<?php echo $favType ? ' checked' : ''; ?><?php echo $favType ? ' checked' : ''; ?>>
+												<?php echo KT_I18N::translate('Family tree favorite'); ?>
+											</label>
+											<label for="favTypePersonal1">
+												<input type="radio" name="fam" value=0 id="favTypePersonal1"<?php echo !$favType ? ' checked' : ''; ?>>
+												<?php echo KT_I18N::translate('My favorite'); ?>
+											</label>
+										</div>
+										<div class="cell">
+											<label class="h6"><?php echo KT_I18N::translate('Enter an optional note'); ?></label>
+											<textarea name="favnote" rows="6" cols="50"></textarea>
+										</div>
+									</div>
+									<button class="button" type="submit">
+										<i class="<?php echo $iconStyle; ?> fa-save"></i>
+										<?php echo KT_I18N::translate('Save'); ?>
+									</button>
+								</form>
+							</div>
+							<!-- Source -->
+							<div class="cell medium-6 large-3">
+								<label class="h5"><?php echo KT_I18N::translate('Source'); ?></label>
+								<form method="post" action="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=show&amp;ged=<?php echo KT_GEDURL; ?>">
+									<input type="hidden" name="action" value="addfav">
+									<input type="hidden" name="ged" value="<?php echo KT_GEDCOM; ?>">
+									<div class="grid-x favInput" id="sour">
+										<div class="input-group autocomplete_container">
+											<input data-autocomplete-type="SOUR" type="text" id="autocompleteInput-favSOUR" placeholder="<?php echo KT_I18N::translate('Source title'); ?>">
+											<span class="input-group-label">
+												<button class="clearAutocomplete autocomplete_icon">
+													<i class="<?php echo $iconStyle; ?> fa-times"></i>
+												</button>
+											</span>
+										</div>
+										<input type="hidden" id="selectedValue-sour" name="gid">
+										<div class="cell favType">
+											<label class="h6 bold"><?php echo KT_I18N::translate('Select type of favorite'); ?></label>
+											<label for="favTypeFamily1">
+												<input type="radio" name="sour" value=1 id="favTypeFamily1" required<?php echo $favType ? ' checked' : ''; ?><?php echo $favType ? ' checked' : ''; ?>>
+												<?php echo KT_I18N::translate('Family tree favorite'); ?>
+											</label>
+											<label for="favTypePersonal1">
+												<input type="radio" name="sour" value=0 id="favTypePersonal1"<?php echo !$favType ? ' checked' : ''; ?>>
+												<?php echo KT_I18N::translate('My favorite'); ?>
+											</label>
+										</div>
+										<div class="cell">
+											<label class="h6"><?php echo KT_I18N::translate('Enter an optional note'); ?></label>
+											<textarea name="favnote" rows="6" cols="50"></textarea>
+										</div>
+									</div>
+									<button class="button" type="submit">
+										<i class="<?php echo $iconStyle; ?> fa-save"></i>
+										<?php echo KT_I18N::translate('Save'); ?>
+									</button>
+								</form>
+							</div>
+							<!-- URL -->
+							<div class="cell medium-3 large-3">
 								<label class="h5"><?php echo KT_I18N::translate('Add a URL'); ?></label>
 								<form method="post" action="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=show&amp;ged=<?php echo KT_GEDURL; ?>">
 									<input type="hidden" name="action" value="addfav">
 									<input type="hidden" name="ged" value="<?php echo KT_GEDCOM; ?>">
 									<div class="grid-x favInput" id="favurl">
-										<input
-											type="text"
-											name="listurl"
-											id="listurl"
-											value=""
-											placeholder="<?php echo KT_Gedcom_Tag::getLabel('URL'); ?>"
-										>
-										<input
-											type="text"
-											name="listurltitle"
-											id="listurltitle"
-											value=""
-											placeholder="<?php echo KT_I18N::translate('Title'); ?>"
-										>
+										<input type="text" name="listurl" id="listurl" value="" placeholder="<?php echo KT_Gedcom_Tag::getLabel('URL'); ?>">
+										<input type="text" name="listurltitle" id="listurltitle" value="" placeholder="<?php echo KT_I18N::translate('Title'); ?>">
 										<div class="cell favType">
 											<label class="h6"><?php echo KT_I18N::translate('Select type of favorite'); ?></label>
 											<label for="favTypeFamily4">
@@ -268,6 +335,9 @@ class list_favorites_KT_Module extends KT_Module implements KT_Module_List {
 			<?php }
 			if ($favorites) { ?>
 				<div class="grid-x grid-margin-x grid-margin-y" id="display_favorites" data-toggler=".is-hidden">
+					<div class="cell">
+						<h3><?php echo $controller->getPageTitle(); ?>
+					</div>
 					<div class="cell">
 						<?php if (KT_USER_ID || KT_USER_GEDCOM_ADMIN) { ?>
 							<button class="button" data-toggle="add_favorite display_favorites">
@@ -360,11 +430,12 @@ class list_favorites_KT_Module extends KT_Module implements KT_Module_List {
 	public static function print_url($favorite) {
 		global $iconStyle;
 
-		$name			= '<a class="h6" href="' . $favorite['url'] . '" target="_blank"><span dir="auto">' . $favorite['title'] . '</span></a>';
-		$thumbnail		= '<a href="' . $favorite['url'] . '"><i class="' . $iconStyle . ' fa-external-link-alt fa-8x"></i></a>';;
+		$name			= '<a class="h6" style="overflow-wrap: break-word;" href="' . $favorite['url'] . '" target="_blank"><span dir="auto">' . $favorite['title'] . '</span></a>';
+		$thumbnail		= '<a href="' . $favorite['url'] . '"><i class="' . $iconStyle . ' fa-external-link fa-6x"></i></a>';;
 		$displayNote	= $favorite['note'];
 		$detailedView	= '';
 		$recordYear		= '';
+		$dataToggle		= '';
 
 		require KT_THEME_DIR . 'templates/person_card_template.php';
 
@@ -396,7 +467,7 @@ class list_favorites_KT_Module extends KT_Module implements KT_Module_List {
 		//-- add the favorite to the database
 		return (bool)
 			KT_DB::prepare("INSERT INTO `##favorites` (user_id, gedcom_id, xref, favorite_type, url, title, note) VALUES (? ,? ,? ,? ,? ,? ,?)")
-				->execute(array(null, $favorite['gedcom_id'], $favorite['gid'], $favorite['type'], $favorite['url'], $favorite['title'], $favorite['note']));
+				->execute(array($favorite['user_id'], $favorite['gedcom_id'], $favorite['gid'], $favorite['type'], $favorite['url'], $favorite['title'], $favorite['note']));
 	}
 
 	// Get favorites for a user or family tree

@@ -90,7 +90,7 @@ class KT_Source extends KT_GedcomRecord {
 			return $media->displayImage();
 		} elseif ($icon) {
 			// No thumbnail exists - use an icon
-			return '<i class="' . $iconStyle . ' fa-book fa-8x"></i>';
+			return '<i class="' . $iconStyle . ' fa-book fa-6x"></i>';
 		} else {
 			return '';
 		}

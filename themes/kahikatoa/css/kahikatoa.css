@@ -8530,9 +8530,6 @@ html.is-reveal-open body {
 .input-group.autocomplete_container .input-group-label .svg-inline--fa:hover {
     color: #ab3334;
 }
-.input-group.autocomplete_container .ui-autocomplete-loading {
-    background: url("../images/ui-anim_loading.gif") calc(100% - 2rem) center no-repeat;
-}
 
 .ui-autocomplete {
     background-color: #fefefe !important;
@@ -8546,6 +8543,7 @@ html.is-reveal-open body {
     padding: 0.125rem 0.875rem;
     position: absolute;
     top: 0;
+    z-index: 999;
 }
 .ui-autocomplete .autocomplete-highlight {
     color: #331919;
@@ -8876,19 +8874,55 @@ footer .card .card-section .contact_links {
 .block form.login-form button {
     margin-bottom: 1rem;
 }
-.block .compact_box_template {
+.block .block_favorites .dropdown-pane button.close-button {
+    bottom: 0.5rem;
+    font-size: 1.5em;
+    top: auto;
+}
+.block .block_favorites div[id^=box] small {
+    margin-left: 0.5rem;
+}
+.block .block_favorites div[id^=box].favAdd {
+    background-color: #e7e7e7;
+    line-height: 2.5;
+    padding: 0.5rem 0.5rem 0.25rem;
+}
+.block .block_favorites div[id^=box] .favInnerCell {
+    border-bottom: 0.125rem solid #e7e7e7;
+    margin-bottom: 0.25rem;
+}
+.block .block_favorites div[id^=box] .favInnerCell.Url {
+    border-top: 0.125rem solid #e7e7e7;
+    border-left: 0.125rem solid #e7e7e7;
+    border-right: 0.125rem solid #e7e7e7;
+    font-size: 1rem;
+    padding: 0.5rem;
+}
+.block .block_favorites div[id^=box] .favInnerCell.Url .person_box_template {
+    border: none;
+}
+.block .block_favorites div[id^=box] .favInnerCell .FamSour {
+    margin-left: -1rem;
+    margin-right: -1rem;
+    font-size: 1.0125rem;
+    padding: 0.5rem;
+}
+.block .block_favorites .compact_box_template {
     font-size: inherit;
     margin-bottom: 0.25rem;
     width: auto;
 }
-.block .compact_box_template img {
+.block .block_favorites .compact_box_template img {
     max-height: 4rem;
 }
-.block .compact_box_template .button.tiny {
+.block .block_favorites .compact_box_template .button.tiny {
     font-size: inherit;
 }
-.block a.removeFavourite {
+.block .block_favorites a.removeFavourite {
     margin-left: -1.5rem;
+}
+.block .block_favorites .button-group {
+    margin-bottom: 0.25rem;
 }
 
 .small-block {

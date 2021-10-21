@@ -31,13 +31,20 @@ if (!defined('KT_KIWITREES')) {
  *
  * @param string $title name of page
  */
-function pageStart($title, $pageTitle = '') {
+function pageStart($title, $pageTitle = '', $includeTitle = 'y') {
 	$pageTitle ? $pageTitle = $pageTitle : $pageTitle = $title;
-	echo '
+
+	if ($includeTitle = 'n') {
+		$pageTitle = '';
+	} else {
+		$pageTitle = '<h3>' . $pageTitle . '</h3>';
+	}
+
+	return '
 		<div id="' . strtolower($title) . '-page" class="grid-x grid-padding-x">
-			<div class="cell large-10 large-offset-1">
-				<h3>' . $pageTitle . '</h3>
-	';
+			<div class="cell large-10 large-offset-1">' .
+				$pageTitle;
+		// function pageClose() must be added after content to close this div element
 }
 
 /**
