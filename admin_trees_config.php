@@ -792,7 +792,7 @@ global $iconstyles;
 													<td>
 														<div class="input-group autocomplete_container">
 															<input
-																data-autocomplete-type="IFSRO"
+																data-autocomplete-type="IFSRON"
 																type="text"
 																id="autocompleteInput-priv"
 																maxlength="20"

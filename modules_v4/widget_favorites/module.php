@@ -193,7 +193,7 @@ class widget_favorites_KT_Module extends KT_Module implements KT_Module_Widget {
 						<div class="add_fav_ref">
 							<input type="radio" name="fav_category" value="record" checked="checked" onclick="jQuery(\'#gid'.$uniqueID.'\').removeAttr(\'disabled\'); jQuery(\'#url, #favtitle\').attr(\'disabled\',\'disabled\').val(\'\');">
 							<label for="gid">'.KT_I18N::translate('Enter a Person, Family, or Source ID').'</label><br>
-							<input data-autocomplete-type="IFSRO" type="text" name="gid" id="gid'.$uniqueID.'" size="5" value="">'
+							<input data-autocomplete-type="IFSRON" type="text" name="gid" id="gid'.$uniqueID.'" size="5" value="">'
 							. print_findindi_link('gid'.$uniqueID)
 							. print_findfamily_link('gid'.$uniqueID)
 							. print_findsource_link('gid'.$uniqueID)

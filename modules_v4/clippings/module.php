@@ -198,7 +198,7 @@ class clippings_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module
 								<tr>
 									<td class="optionbox">
 										<input type="hidden" name="action" value="add">
-										<input type="text" data-autocomplete-type="IFSRO" name="id" id="cart_item_id">
+										<input type="text" data-autocomplete-type="IFSRON" name="id" id="cart_item_id">
 									</td>
 									<td class="optionbox">
 										<button class="btn btn-primary submit" type="submit">
@@ -317,7 +317,7 @@ class clippings_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module
 								<tr>
 									<td class="optionbox">
 										<input type="hidden" name="action" value="add">
-										<input type="text" data-autocomplete-type="IFSRO" name="id" id="cart_item_id" size="8">
+										<input type="text" data-autocomplete-type="IFSRON" name="id" id="cart_item_id" size="8">
 									</td>
 									<td class="optionbox">
 										<input type="submit" value="<?php echo KT_I18N::translate('Add'); ?>">
