@@ -301,17 +301,21 @@ switch ($type) {
 	exit;
 
 	case 'INDI': // Individuals, whose name contains the search terms
+		global $GEDCOM_ID_PREFIX;
+
 		$data = array();
-		// Fetch all data, regardless of privacy
-		$rows =
-			KT_DB::prepare("
-				SELECT 'INDI' AS type, i_id AS xref, i_file AS ged_id, i_gedcom AS gedrec, n_full
-				 FROM `##individuals`
-				 JOIN `##name` ON (i_id=n_id AND i_file=n_file)
-				 WHERE (n_full LIKE CONCAT('%', REPLACE(?, ' ', '%'), '%') OR n_surn LIKE CONCAT('%', REPLACE(?, ' ', '%'), '%')) AND i_file=? ORDER BY n_full COLLATE '" . KT_I18N::$collation . "'
-			")
-			->execute(array($term, $term, KT_GED_ID))
-			->fetchAll(PDO::FETCH_ASSOC);
+
+		// Don't search until a minimum number of characters are entered or search uses an id number
+		if (strlen($term) >= 2) {
+		    if (substr($term,0,1) === $GEDCOM_ID_PREFIX && is_numeric(substr($term,1,1))) {
+//				$id = true;
+		        $rows = get_INDI_rows($term, true);
+		    }
+		}
+		if (strlen($term) >= 3) {
+		    // Fetch all data, regardless of privacy
+		    $rows = get_INDI_rows($term);
+		}
 
 		// Filter for privacy
 		foreach ($rows as $row) {
@@ -795,16 +799,30 @@ function get_FAM_rows($term) {
 		->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function get_INDI_rows($term) {
-	return
-		KT_DB::prepare("
-			SELECT 'INDI' AS type, i_id AS xref, i_file AS ged_id, i_gedcom AS gedrec, n_full
-			 FROM `##individuals`
-			 JOIN `##name` ON (i_id=n_id AND i_file=n_file)
-			 WHERE n_full LIKE CONCAT('%', REPLACE(?, ' ', '%'), '%') AND i_file=? ORDER BY n_full COLLATE '" . KT_I18N::$collation . "'
+function get_INDI_rows($term, $id = false) {
+
+	if ($id) {
+		return
+			KT_DB::prepare("
+				SELECT 'INDI' AS type, i_id AS xref, i_file AS ged_id, i_gedcom AS gedrec, n_full
+				 FROM `##individuals`
+				 JOIN `##name` ON (i_id=n_id AND i_file=n_file)
+				 WHERE i_id LIKE CONCAT('%', REPLACE(?, ' ', '%'), '%') AND i_file = ?
 		")
 		->execute(array($term, KT_GED_ID))
 		->fetchAll(PDO::FETCH_ASSOC);
+	} else {
+		return
+			KT_DB::prepare("
+				SELECT 'INDI' AS type, i_id AS xref, i_file AS ged_id, i_gedcom AS gedrec, n_full
+				 FROM `##individuals`
+				 JOIN `##name` ON (i_id=n_id AND i_file=n_file)
+				 WHERE n_full LIKE CONCAT('%', REPLACE(?, ' ', '%'), '%') AND i_file=? ORDER BY n_full COLLATE '" . KT_I18N::$collation . "'
+			")
+			->execute(array($term, KT_GED_ID))
+			->fetchAll(PDO::FETCH_ASSOC);
+	}
+
 }
 
 function get_NOTE_rows($term) {
