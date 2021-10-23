@@ -9901,6 +9901,9 @@ label.radio_inline {
     padding: 0.25rem 1rem;
 }
 
+#statistics-page .callout button {
+    font-size: 1rem;
+}
 #statistics-page div[id^=chart] .legend {
     margin: 20px;
 }

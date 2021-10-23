@@ -76,7 +76,7 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 
 	// Display list
 	public function show() {
-		global $controller, $GEDCOM, $iconStyle, $KT_STATS_CHART_COLOR1, $KT_STATS_CHART_COLOR2, $KT_STATS_CHART_COLOR3;
+		global $controller, $GEDCOM, $iconStyle, $KT_STATS_CHART_COLOR1, $KT_STATS_CHART_COLOR2, $KT_STATS_CHART_COLOR3, $iconStyle;
 		$controller	= new KT_Controller_Page;
 		$stats		= new KT_Stats($GEDCOM);
 		$tab		= KT_Filter::get('tab', KT_REGEX_NOSCRIPT, 0);
@@ -86,12 +86,30 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 			->setPageTitle($this->getTitle())
 			->pageHeader()
 			->addExternalJavascript(KT_AUTOCOMPLETE_JS_URL)
-			->addExternalJavascript(KT_D3_JS);
+			->addExternalJavascript(KT_D3_JS)
+			->addInlineJavascript('
+				// force PDF Files to open in new window
+   				jQuery("a[href]").attr("target", "_blank");
+
+			');
 
 		include_once 'statistics.js.php'; ?>
 
 		<!-- Start page layout  -->
 		<?php echo pageStart('statistics', $controller->getPageTitle()); ?>
+			<div class="callout alert small"  data-closable>
+				<div class="grid-x">
+					<button class="close-button" aria-label="Dismiss alert" type="button" data-close>
+						<span aria-hidden="true"><i class="<?php echo $iconStyle; ?> fa-times"></i></span>
+					</button>
+					<div class="medium-6">
+						<?php echo KT_I18N::translate('Click on links to see more details for each statistic.'); ?>
+					</div>
+					<div class="medium-5 text-right">
+						<?php echo KT_I18N::translate('Note: Large numbers can be very slow to load.'); ?>
+					</div>
+				</div>
+			</div>
 			<ul class="tabs" id="statistics-tabs" data-tabs data-deep-link="true">
 				<li class="tabs-title is-active">
 					<a href="#stats-indi" aria-selected="true">
@@ -124,7 +142,7 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 
 				<div class="tabs-panel is-active" id="stats-indi">
 					<h5>
-						<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalIndis" target="_blank">
+						<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalIndis">
 							<?php echo KT_I18N::translate('Total individuals: %s', $stats->totalIndividuals()); ?>
 						</a>
 					</h5>
@@ -134,7 +152,7 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 							<div class="grid-x">
 								<div class="cell medium-<?php echo $cells; ?> text-center">
 									<small>
-										<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalIndis&amp;option=male" target="_blank">
+										<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalIndis&amp;option=male">
                                         <?php echo $stats->totalSexMales(); ?>
 										</a>
 										 (<?php echo $stats->totalSexMalesPercentage(); ?>)
@@ -142,7 +160,7 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 								</div>
 								<div class="cell medium-<?php echo $cells; ?> text-center">
 									<small>
-										<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalIndis&amp;option=female" target="_blank">
+										<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalIndis&amp;option=female">
                                         <?php echo $stats->totalSexFemales(); ?>
 										</a>
 										 (<?php echo $stats->totalSexFemalesPercentage(); ?>)
@@ -151,7 +169,7 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 								<?php if ($stats->totalSexUnknown() > 0) { ?>
 									<div class="cell medium-<?php echo $cells; ?> text-center">
 										<small>
-											<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalIndis&amp;option=unknown" target="_blank">
+											<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalIndis&amp;option=unknown">
                                         <?php echo $stats->totalSexUnknown(); ?>
 											</a>
 											 (<?php echo $stats->totalSexUnknownPercentage(); ?>)
@@ -166,7 +184,7 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 							<div class="grid-x">
 								<div class="cell medium-6 text-center">
 									<small>
-										<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalIndis&amp;option=living" target="_blank">
+										<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalIndis&amp;option=living">
 											<?php echo KT_I18N::translate('Total living'); ?>&nbsp;<?php echo $stats->totalLiving(); ?>
 										</a>
 										 (<?php echo $stats->totalLivingPercentage(); ?>)
@@ -174,7 +192,7 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 								</div>
 								<div class="cell medium-6 text-center">
 									<small>
-										<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalIndis&amp;option=deceased" target="_blank">
+										<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalIndis&amp;option=deceased">
 											<?php echo KT_I18N::translate('Total deceased'); ?>&nbsp;<?php echo $stats->totalDeceased(); ?>
 										</a>
 										 (<?php echo $stats->totalDeceasedPercentage(); ?>)
@@ -193,13 +211,13 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 	                            $totals      = $stats->totalBirths();
 	                            $dated       = $stats->totalDatedBirths();
 	                            $undated     = $stats->totalUndatedBirths();
-	                            $totalsLink  = '<a href="statisticsTables.php?ged=' . $GEDCOM . '&amp;table=totalBirths" target="_blank">' .
+	                            $totalsLink  = '<a href="statisticsTables.php?ged=' . $GEDCOM . '&amp;table=totalBirths">' .
 	                                KT_I18n::number($totals['count']) . '
 	                            </a>';
-	                            $datedLink   = '<a href="statisticsTables.php?ged=' . $GEDCOM . '&amp;table=datedBirths" target="_blank">' .
+	                            $datedLink   = '<a href="statisticsTables.php?ged=' . $GEDCOM . '&amp;table=datedBirths">' .
 	                                KT_I18n::number($dated['count']) . '
 	                            </a>';
-	                            $undatedLink = '<a href="statisticsTables.php?ged=' . $GEDCOM . '&amp;table=undatedBirths" target="_blank">' .
+	                            $undatedLink = '<a href="statisticsTables.php?ged=' . $GEDCOM . '&amp;table=undatedBirths">' .
 	                                KT_I18n::number($undated['count']) . '
 	                            </a>'; ?>
 	                            <?php echo KT_I18N::translate('%1s (%2s with a birth date and %3s without)', $totalsLink, $datedLink, $undatedLink); ?>
@@ -213,13 +231,13 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
                                 $totals      = $stats->totalDeaths();
                                 $dated       = $stats->totalDatedDeaths();
                                 $undated     = $stats->totalUndatedDeaths();
-                                $totalsLink  = '<a href="statisticsTables.php?ged=' . $GEDCOM . '&amp;table=totalDeaths" target="_blank">' .
+                                $totalsLink  = '<a href="statisticsTables.php?ged=' . $GEDCOM . '&amp;table=totalDeaths">' .
                                     KT_I18n::number($totals['count']) . '
                                 </a>';
-                                $datedLink   = '<a href="statisticsTables.php?ged=' . $GEDCOM . '&amp;table=datedDeaths" target="_blank">' .
+                                $datedLink   = '<a href="statisticsTables.php?ged=' . $GEDCOM . '&amp;table=datedDeaths">' .
                                     KT_I18n::number($dated['count']) . '
                                 </a>';
-                                $undatedLink = '<a href="statisticsTables.php?ged=' . $GEDCOM . '&amp;table=undatedDeaths" target="_blank">' .
+                                $undatedLink = '<a href="statisticsTables.php?ged=' . $GEDCOM . '&amp;table=undatedDeaths">' .
                                     KT_I18n::number($undated['count']) . '
                                 </a>'; ?>
                                 <?php echo KT_I18N::translate('%1s (%2s with a death date and %3s without)', $totalsLink, $datedLink, $undatedLink); ?>
@@ -455,22 +473,22 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 					<h5><?php echo KT_I18N::translate('Total records: %s', $stats->totalRecords()); ?></h5>
 					<div class="grid-x grid-margin-x grid-margin-y statisticSection">
 						<div class="cell medium-3">
-							<a href="module.php?action=filter&search=yes&mod=list_media&mod_action=show&folder=&subdirs=on&sortby=title&form_type=&max=18&filter=&ged=<?php echo $GEDCOM; ?>" target="_blank">
+							<a href="module.php?action=filter&search=yes&mod=list_media&mod_action=show&folder=&subdirs=on&sortby=title&form_type=&max=18&filter=&ged=<?php echo $GEDCOM; ?>">
 								<?php echo KT_I18N::translate('Media objects: %s', $stats->totalMedia()); ?>
 							</a>
 						</div>
 						<div class="cell medium-3">
-							<a href="module.php?mod=list_sources&mod_action=show&ged=<?php echo $GEDCOM; ?>" target="_blank">
+							<a href="module.php?mod=list_sources&mod_action=show&ged=<?php echo $GEDCOM; ?>">
 								<?php echo KT_I18N::translate('Sources: %s', $stats->totalSources()); ?>
 							</a>
 						</div>
 						<div class="cell medium-3">
-							<a href="module.php?mod=list_shared_notes&mod_action=show&ged=<?php echo $GEDCOM; ?>" target="_blank">
+							<a href="module.php?mod=list_shared_notes&mod_action=show&ged=<?php echo $GEDCOM; ?>">
 								<?php echo KT_I18N::translate('Shared notes: %s', $stats->totalNotes()); ?>
 							</a>
 						</div>
 						<div class="cell medium-3">
-							<a href="module.php?mod=list_repositories&mod_action=show&ged=<?php echo $GEDCOM; ?>" target="_blank">
+							<a href="module.php?mod=list_repositories&mod_action=show&ged=<?php echo $GEDCOM; ?>">
 								<?php echo KT_I18N::translate('Repositories: %s', $stats->totalRepositories()); ?>
 							</a>
 						</div>
@@ -499,7 +517,7 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 							<div class="grid-x">
 								<div class="cell text-center">
 									<?php echo KT_I18N::translate('Individuals with sources'); ?>
-									<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalIndis&amp;option=male" target="_blank">
+									<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalIndis&amp;option=male">
 										<?php echo $stats->totalIndisWithSources(); ?>
 									</a>
 									 (<?php echo $stats->totalIndividualsPercentage(); ?>)
@@ -511,7 +529,7 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 							<div class="grid-x">
 								<div class="cell text-center">
 									<?php echo KT_I18N::translate('Families with sources'); ?>
-									<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalIndis&amp;option=male" target="_blank">
+									<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalIndis&amp;option=male">
 										<?php echo $stats->totalFamsWithSources(); ?>
 									</a>
 									 (<?php echo $stats->totalFamiliesPercentage(); ?>)
