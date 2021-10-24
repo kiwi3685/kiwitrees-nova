@@ -25,8 +25,26 @@
 	header('HTTP/1.0 403 Forbidden');
 	exit;
 }
+global $THEME_DIR;
 
 get_gedcom_setting(KT_GED_ID, 'COMMON_TYPES_THRESHOLD') ? $minMediaTypes = get_gedcom_setting(KT_GED_ID, 'COMMON_TYPES_THRESHOLD') : $minMediaTypes = 6;
+
+switch($THEME_DIR) {
+    case 'kahikatoa':
+        $linkColor = '#ab3334';
+    break;
+    case 'kaponga':
+        $linkColor = '#aaaaaa';
+    break;
+    case 'kopakopa':
+        $linkColor = '#428bca';
+    break;
+    case '_administration':
+    default:
+        $linkColor = '#34689c';
+    break;
+}
+
 ?>
 
 <script>
@@ -140,7 +158,7 @@ get_gedcom_setting(KT_GED_ID, 'COMMON_TYPES_THRESHOLD') ? $minMediaTypes = get_g
 							.attr("xlink:href", function(d){ return linkUrl + d.type })
 							.attr("target", "blank")
 							.html(function(d) { return d.percent; })
-							.style("fill", "#3383bb");
+							.style("fill", "<?php echo $linkColor; ?>");
 
 			// Add the X Axis
 			svg.append("g")
