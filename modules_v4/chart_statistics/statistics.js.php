@@ -89,6 +89,7 @@ get_gedcom_setting(KT_GED_ID, 'COMMON_TYPES_THRESHOLD') ? $minMediaTypes = get_g
 				var width	= 500;
 				var height	= 200;
 				var viewportSize = "0 0 500 200";
+                var linkUrl = "statisticsTables.php?ged=<?php echo $GEDCOM; ?>&table=totalFams&tag=nochildrenbycentury&option=";
 			break;
 		}
 		if (data) {

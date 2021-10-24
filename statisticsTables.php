@@ -126,6 +126,31 @@ switch ($table) {
 				$title 		= KT_I18N::translate('Total divorces');
 				$content	= format_fam_table($stats->totalEvents(array('DIV'), true));
 			break;
+			case 'nochildren' :
+				$list       = $stats->totalNoChildrenTable();
+				$title 		= KT_I18N::translate('Total families with no children recorded');
+				$content	= format_fam_table($list);
+			break;
+			case 'nochildrenbycentury' :
+				$rows = KT_DB::prepare("
+					SELECT fam.* FROM `##families` AS fam
+					JOIN `##dates` AS married ON (married.d_file = fam.f_file AND married.d_gid = fam.f_id)
+					WHERE
+						f_numchil = 0 AND
+					    fam.f_file = ? AND
+						married.d_fact = 'MARR' AND
+					    married.d_type IN ('@#DGREGORIAN@', '@#DJULIAN@') AND
+					    FLOOR(married.d_year/100+1) = ?
+					GROUP BY fam.f_id, married.d_year
+				")->execute(array($ged_id, $option))->fetchAll(PDO::FETCH_ASSOC);
+				foreach ($rows as $row) {
+					$family = KT_Family::getInstance($row['f_id']);
+						$list[] = clone $family;
+				}
+				$title 		= KT_I18N::translate('Number of families with no children in the %s century', $stats->_centuryName($option));
+				$content	= format_fam_table($list);
+			break;
+
 		}
 	break;
     case 'totalBirths' :
@@ -164,16 +189,18 @@ switch ($table) {
 	break;
 }
 
-?>
-<div id="statTables-page">
-	<?php pageStart($title); ?>
-	<?php if (!KT_USER_ID) { ?>
-		<h4 class="center">
-			<em>
-				<?php echo KT_I18N::translate('Due to privacy settings the number of items in this list may be less than the number on the statistics chart'); ?>
-			</em>
-		</h4>
+	echo pageStart('statistics_tables', $controller->getPageTitle()); ?>
+		<?php if (!KT_USER_ID) { ?>
+		<div class="callout alert small"  data-closable>
+			<div class="grid-x">
+				<button class="close-button" aria-label="Dismiss alert" type="button" data-close>
+					<span aria-hidden="true"><i class="<?php echo $iconStyle; ?> fa-times"></i></span>
+				</button>
+				<div class="cell">
+					<?php echo KT_I18N::translate('Due to privacy settings the number of items in this list may be less than the number on the statistics chart'); ?>
+				</div>
+			</div>
+		</div>
 	<?php }
 	echo $content;
 	pageClose(); ?>
-</div>

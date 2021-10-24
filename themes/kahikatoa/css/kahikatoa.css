@@ -9946,6 +9946,10 @@ label.radio_inline {
     font-size: 90%;
 }
 
+#statistics_tables-page .callout button {
+    font-size: 1rem;
+}
+
 /* Person box template */
 .person_box_template {
     background-color: #fefefe;

@@ -102,10 +102,10 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 					<button class="close-button" aria-label="Dismiss alert" type="button" data-close>
 						<span aria-hidden="true"><i class="<?php echo $iconStyle; ?> fa-times"></i></span>
 					</button>
-					<div class="medium-6">
+					<div class="cell medium-6">
 						<?php echo KT_I18N::translate('Click on links to see more details for each statistic.'); ?>
 					</div>
-					<div class="medium-5 text-right">
+					<div class="cell medium-5 text-right">
 						<?php echo KT_I18N::translate('Note: Large numbers can be very slow to load.'); ?>
 					</div>
 				</div>
@@ -404,15 +404,7 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 						</div>
 						<div class="cell medium-6">
 							<?php echo KT_I18N::translate('Youngest mother'); ?>&nbsp;<?php echo $stats->youngestMotherAge(true); ?>
-							<div><?php echo $stats->youngestMarriageFemale(); ?></div>
-						</div>
-						<div class="cell medium-6">
-							<div><?php echo KT_I18N::translate('Oldest male'); ?>&nbsp;<?php echo $stats->oldestMarriageMaleAge(true); ?></div>
 							<div><?php echo $stats->youngestMother(); ?></div>
-						</div>
-						<div class="cell medium-6">
-							<div><?php echo KT_I18N::translate('Oldest female'); ?>&nbsp;<?php echo $stats->oldestMarriageFemaleAge(true); ?></div>
-							<div><?php echo $stats->oldestMarriageFemale(); ?></div>
 						</div>
 						<div class="cell medium-6">
 							<div><?php echo KT_I18N::translate('Oldest father'); ?>&nbsp;<?php echo $stats->oldestFatherAge(true); ?></div>
@@ -426,12 +418,22 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 					<h5><?php echo KT_I18N::translate('Children in family'); ?></h5>
 					<div class="grid-x grid-margin-x grid-margin-y statisticSection">
 						<div class="cell medium-6">
-							<div><?php echo KT_I18N::translate('Average number of children per family'); ?>&nbsp;<?php echo $stats->averageChildren(); ?></div>
+							<div class="strong"><?php echo KT_I18N::translate('Average number of children per family'); ?>&nbsp;<?php echo $stats->averageChildren(); ?></div>
+							<hr>
 							<div class="cell text-center"><?php echo KT_I18N::translate('Number of children per family, by century'); ?></div>
 							<div class="cell" id="chartChild"></div>
 						</div>
 						<div class="cell medium-6">
-							<div><?php echo KT_I18N::translate('Number of families without children'); ?>&nbsp;<?php echo $stats->noChildrenFamilies(); ?></div>
+							<div class="strong">
+								<?php echo KT_I18N::translate('Number of families without children'); ?>
+								<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalFams&amp;tag=nochildren">
+									<?php echo $stats->noChildrenFamilies(); ?>
+								</a>
+								<span data-tooltip class="strong top" data-click-open="false" data-alignment="center" title="<?php echo KT_I18N::translate('Total families with no children may not match Totals by Century. The latter can only include those with recorded date of marriage.'); ?>">
+									<i class="<?php echo $iconStyle; ?> fa-exclamation-circle"></i>
+								</span>
+							</div>
+							<hr>
 							<div class="cell text-center"><?php echo KT_I18N::translate('Number of families without children, by century'); ?></div>
 							<div class="cell" id="chartNoChild"></div>
 						</div>

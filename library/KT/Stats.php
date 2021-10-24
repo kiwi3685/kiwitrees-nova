@@ -261,7 +261,7 @@ class KT_Stats {
 
 	function gedcomUpdated() {
 		$row=
-			KT_DB::prepare("SELECT SQL_CACHE d_year, d_month, d_day FROM `##dates` WHERE d_julianday1 = ( SELECT max( d_julianday1 ) FROM `##dates` WHERE d_file =? AND d_fact=? ) LIMIT 1")
+			KT_DB::prepare("SELECT d_year, d_month, d_day FROM `##dates` WHERE d_julianday1 = ( SELECT max( d_julianday1 ) FROM `##dates` WHERE d_file =? AND d_fact=? ) LIMIT 1")
 			->execute(array($this->_ged_id, 'CHAN'))
 			->fetchOneRow();
 		if ($row) {
@@ -319,7 +319,7 @@ class KT_Stats {
 
 	function _totalIndividuals() {
 		return
-			KT_DB::prepare("SELECT SQL_CACHE COUNT(*) FROM `##individuals` WHERE i_file=?")
+			KT_DB::prepare("SELECT COUNT(*) FROM `##individuals` WHERE i_file=?")
 			->execute(array($this->_ged_id))
 			->fetchOne();
 	}
@@ -329,7 +329,7 @@ class KT_Stats {
 	}
 
 	function _totalIndisWithSources() {
-		$rows=self::_runSQL("SELECT SQL_CACHE COUNT(DISTINCT i_id) AS tot FROM `##link`, `##individuals` WHERE i_id=l_from AND i_file=l_file AND l_file=".$this->_ged_id." AND l_type='SOUR'");
+		$rows=self::_runSQL("SELECT COUNT(DISTINCT i_id) AS tot FROM `##link`, `##individuals` WHERE i_id=l_from AND i_file=l_file AND l_file=".$this->_ged_id." AND l_type='SOUR'");
 		return $rows[0]['tot'];
 	}
 
@@ -373,7 +373,7 @@ class KT_Stats {
 
 	function _totalFamilies() {
 		return
-			KT_DB::prepare("SELECT SQL_CACHE COUNT(*) FROM `##families` WHERE f_file=?")
+			KT_DB::prepare("SELECT COUNT(*) FROM `##families` WHERE f_file=?")
 			->execute(array($this->_ged_id))
 			->fetchOne();
 	}
@@ -383,7 +383,7 @@ class KT_Stats {
 	}
 
 	function _totalFamsWithSources() {
-		$rows=self::_runSQL("SELECT SQL_CACHE COUNT(DISTINCT f_id) AS tot FROM `##link`, `##families` WHERE f_id=l_from AND f_file=l_file AND l_file=".$this->_ged_id." AND l_type='SOUR'");
+		$rows=self::_runSQL("SELECT COUNT(DISTINCT f_id) AS tot FROM `##link`, `##families` WHERE f_id=l_from AND f_file=l_file AND l_file=".$this->_ged_id." AND l_type='SOUR'");
 		return $rows[0]['tot'];
 	}
 
@@ -427,7 +427,7 @@ class KT_Stats {
 
 	function _totalSources() {
 		return
-			KT_DB::prepare("SELECT SQL_CACHE COUNT(*) FROM `##sources` WHERE s_file=?")
+			KT_DB::prepare("SELECT COUNT(*) FROM `##sources` WHERE s_file=?")
 			->execute(array($this->_ged_id))
 			->fetchOne();
 	}
@@ -442,7 +442,7 @@ class KT_Stats {
 
 	function _totalNotes() {
 		return
-			KT_DB::prepare("SELECT SQL_CACHE COUNT(*) FROM `##other` WHERE o_type='NOTE' AND o_file=?")
+			KT_DB::prepare("SELECT COUNT(*) FROM `##other` WHERE o_type='NOTE' AND o_file=?")
 			->execute(array($this->_ged_id))
 			->fetchOne();
 	}
@@ -457,7 +457,7 @@ class KT_Stats {
 
 	function _totalRepositories() {
 		return
-			KT_DB::prepare("SELECT SQL_CACHE COUNT(*) FROM `##other` WHERE o_type='REPO' AND o_file=?")
+			KT_DB::prepare("SELECT COUNT(*) FROM `##other` WHERE o_type='REPO' AND o_file=?")
 			->execute(array($this->_ged_id))
 			->fetchOne();
 	}
@@ -488,7 +488,7 @@ class KT_Stats {
 		$params[] = $this->_ged_id;
 		$total =
 			KT_DB::prepare(
-				"SELECT SQL_CACHE COUNT({$distinct} n_surn COLLATE '" . KT_I18N::$collation . "')" .
+				"SELECT COUNT({$distinct} n_surn COLLATE '" . KT_I18N::$collation . "')" .
 				" FROM `##name`" .
 				" WHERE n_surn COLLATE '" . KT_I18N::$collation . "' {$opt} AND n_file=?"
 			)->execute(
@@ -503,12 +503,12 @@ class KT_Stats {
 			$qs       = implode(',', array_fill(0, count($params), '?'));
 			$params[] = $this->_ged_id;
 			$total    =
-				KT_DB::prepare("SELECT SQL_CACHE COUNT( n_givn) FROM `##name` WHERE n_givn IN ({$qs}) AND n_file=?")
+				KT_DB::prepare("SELECT COUNT( n_givn) FROM `##name` WHERE n_givn IN ({$qs}) AND n_file=?")
 					->execute($params)
 					->fetchOne();
 		} else {
 			$total =
-				KT_DB::prepare("SELECT SQL_CACHE COUNT(DISTINCT n_givn) FROM `##name` WHERE n_givn IS NOT NULL AND n_file=?")
+				KT_DB::prepare("SELECT COUNT(DISTINCT n_givn) FROM `##name` WHERE n_givn IS NOT NULL AND n_file=?")
 					->execute(array($this->_ged_id))
 					->fetchOne();
 		}
@@ -518,10 +518,10 @@ class KT_Stats {
 	}
 
 	function totalEvents($params = array(), $list = false) {
-		$vars=array($this->_ged_id);
+		$vars = array($this->_ged_id);
 
 		$no_types=array('HEAD', 'CHAN');
-		$list ? $sql = 'SELECT SQL_CACHE d_gid AS xref' : $sql = 'SELECT COUNT(*) AS tot FROM `##dates` WHERE d_file=?';
+		$list ? $sql = 'SELECT d_gid AS xref' : $sql = 'SELECT COUNT(*) AS tot FROM `##dates` WHERE d_file=?';
 		if ($params) {
 			$types=array();
 			foreach ($params as $type) {
@@ -554,7 +554,7 @@ class KT_Stats {
 
 	function totalBirths() {
 		$rows = KT_DB::prepare("
-            SELECT SQL_CACHE DISTINCT i_id
+            SELECT DISTINCT i_id
             FROM `##individuals`
             WHERE `i_file`=?
             AND (`i_gedcom` REGEXP '\n1 BIRT Y\n1' OR `i_gedcom` REGEXP '\n1 BIRT(.)*(\n[2-9].+)*\n2 (DATE|PLAC|SOUR)')
@@ -572,7 +572,7 @@ class KT_Stats {
 			}
     function totalDatedBirths() {
         $rows = KT_DB::prepare("
-            SELECT SQL_CACHE DISTINCT d_gid
+            SELECT DISTINCT d_gid
             FROM `##dates`
             WHERE d_file=?
             AND d_year > 0
@@ -597,7 +597,7 @@ class KT_Stats {
 
 	function totalDeaths() {
 		$rows = KT_DB::prepare("
-            SELECT SQL_CACHE DISTINCT i_id
+            SELECT DISTINCT i_id
             FROM `##individuals`
             WHERE `i_file`=?
             AND (`i_gedcom` REGEXP '\n1 DEAT Y\n1' OR `i_gedcom` REGEXP '\n1 DEAT(.)*(\n[2-9].+)*\n2 (DATE|PLAC|SOUR)')
@@ -617,7 +617,7 @@ class KT_Stats {
     function totalDatedDeaths() {
 
 		$rows = KT_DB::prepare("
-            SELECT SQL_CACHE DISTINCT d_gid
+            SELECT DISTINCT d_gid
             FROM `##dates`
             WHERE d_file=?
             AND d_year > 0
@@ -675,7 +675,7 @@ class KT_Stats {
 
 	function _totalSexMales() {
 		return
-			KT_DB::prepare("SELECT SQL_CACHE COUNT(*) FROM `##individuals` WHERE i_file=? AND i_sex=?")
+			KT_DB::prepare("SELECT COUNT(*) FROM `##individuals` WHERE i_file=? AND i_sex=?")
 			->execute(array($this->_ged_id, 'M'))
 			->fetchOne();
 	}
@@ -690,7 +690,7 @@ class KT_Stats {
 
 	function _totalSexFemales() {
 		return
-			KT_DB::prepare("SELECT SQL_CACHE COUNT(*) FROM `##individuals` WHERE i_file=? AND i_sex=?")
+			KT_DB::prepare("SELECT COUNT(*) FROM `##individuals` WHERE i_file=? AND i_sex=?")
 			->execute(array($this->_ged_id, 'F'))
 			->fetchOne();
 	}
@@ -705,7 +705,7 @@ class KT_Stats {
 
 	function _totalSexUnknown() {
 		return
-			KT_DB::prepare("SELECT SQL_CACHE COUNT(*) FROM `##individuals` WHERE i_file=? AND i_sex=?")
+			KT_DB::prepare("SELECT COUNT(*) FROM `##individuals` WHERE i_file=? AND i_sex=?")
 			->execute(array($this->_ged_id, 'U'))
 			->fetchOne();
 	}
@@ -756,7 +756,7 @@ class KT_Stats {
 	// However, SQL cannot provide the same logic used by Person::isDead().
 	function _totalLiving() {
 		return
-			KT_DB::prepare("SELECT SQL_CACHE COUNT(*) FROM `##individuals` WHERE i_file=? AND i_gedcom NOT REGEXP '\\n1 (".KT_EVENTS_DEAT.")'")
+			KT_DB::prepare("SELECT COUNT(*) FROM `##individuals` WHERE i_file=? AND i_gedcom NOT REGEXP '\\n1 (".KT_EVENTS_DEAT.")'")
 			->execute(array($this->_ged_id))
 			->fetchOne();
 	}
@@ -771,7 +771,7 @@ class KT_Stats {
 
 	function _totalDeceased() {
 		return
-			KT_DB::prepare("SELECT SQL_CACHE COUNT(*) FROM `##individuals` WHERE i_file=? AND i_gedcom REGEXP '\\n1 (".KT_EVENTS_DEAT.")'")
+			KT_DB::prepare("SELECT COUNT(*) FROM `##individuals` WHERE i_file=? AND i_gedcom REGEXP '\\n1 (".KT_EVENTS_DEAT.")'")
 			->execute(array($this->_ged_id))
 			->fetchOne();
 	}
@@ -831,7 +831,7 @@ class KT_Stats {
 		if (!in_array($type, self::$_media_types) && $type != 'all' && $type != 'unknown') {
 			return 0;
 		}
-		$sql="SELECT SQL_CACHE COUNT(*) AS tot FROM `##media` WHERE m_file=?";
+		$sql="SELECT COUNT(*) AS tot FROM `##media` WHERE m_file=?";
 		$vars=array($this->_ged_id);
 
 		if ($type != 'all') {
@@ -952,7 +952,7 @@ class KT_Stats {
 			$life_dir	= 'DESC';
 		}
 		$rows = self::_runSQL("
-			SELECT SQL_CACHE d_year, d_type, d_fact, d_gid
+			SELECT d_year, d_type, d_fact, d_gid
 			 FROM `##dates`
 			 WHERE d_file=" . $this->_ged_id . " AND d_fact IN (" . $query_field . ") AND d_julianday1=(
 			 	SELECT " . $dmod . "( d_julianday1 )
@@ -1038,7 +1038,7 @@ class KT_Stats {
 				$join = "";
 			}
 			$rows=self::_runSQL(
-				" SELECT SQL_CACHE".
+				" SELECT".
 				" p_place AS place,".
 				" COUNT(*) AS tot".
 				" FROM".
@@ -1064,7 +1064,7 @@ class KT_Stats {
 				$join = "";
 			}
 			$rows=self::_runSQL(
-					" SELECT SQL_CACHE".
+					" SELECT".
 					" p_place AS country,".
 					" COUNT(*) AS tot".
 					" FROM".
@@ -1083,7 +1083,7 @@ class KT_Stats {
 
 	function _totalPlaces() {
 		return
-			KT_DB::prepare("SELECT SQL_CACHE COUNT(*) FROM `##places` WHERE p_file=?")
+			KT_DB::prepare("SELECT COUNT(*) FROM `##places` WHERE p_file=?")
 			->execute(array($this->_ged_id))
 			->fetchOne();
 	}
@@ -1333,7 +1333,7 @@ class KT_Stats {
             $sql = "SELECT FLOOR(d_year/100+1) AS century, COUNT(*) AS total FROM `tempdates1` ";
 		} else if ($sex) {
 			$sql =
-				"SELECT SQL_CACHE d_gid, d_month, i_sex, COUNT(*) AS total FROM `##dates` ".
+				"SELECT d_gid, d_month, i_sex, COUNT(*) AS total FROM `##dates` ".
 				"JOIN `##individuals` ON d_file = i_file AND d_gid = i_id ".
 				"WHERE ".
 				"d_file={$this->_ged_id} AND ".
@@ -1341,7 +1341,7 @@ class KT_Stats {
 				"d_type IN ('@#DGREGORIAN@', '@#DJULIAN@')";
 		} else {
 			$sql =
-				"SELECT SQL_CACHE d_gid, d_month, COUNT(*) AS total FROM `##dates` ".
+				"SELECT d_gid, d_month, COUNT(*) AS total FROM `##dates` ".
 				"WHERE ".
 				"d_file={$this->_ged_id} AND ".
 				"d_fact='BIRT' AND ".
@@ -1400,7 +1400,7 @@ class KT_Stats {
             $sql = "SELECT FLOOR(d_year/100+1) AS century, COUNT(*) AS total FROM `tempdates2` ";
 		} else if ($sex) {
 			$sql =
-				"SELECT SQL_CACHE d_gid, d_month, i_sex, COUNT(*) AS total FROM `##dates` ".
+				"SELECT d_gid, d_month, i_sex, COUNT(*) AS total FROM `##dates` ".
 				"JOIN `##individuals` ON d_file = i_file AND d_gid = i_id ".
 				"WHERE ".
 				"d_file={$this->_ged_id} AND ".
@@ -1408,7 +1408,7 @@ class KT_Stats {
 				"d_type IN ('@#DGREGORIAN@', '@#DJULIAN@')";
 		} else {
 			$sql =
-				"SELECT SQL_CACHE d_gid, d_month, COUNT(*) AS total FROM `##dates` ".
+				"SELECT d_gid, d_month, COUNT(*) AS total FROM `##dates` ".
 				"WHERE ".
 				"d_file={$this->_ged_id} AND ".
 				"d_fact='DEAT' AND ".
@@ -1498,7 +1498,7 @@ class KT_Stats {
 		}
 
 		$rows=self::_runSQL(
-			" SELECT SQL_CACHE".
+			" SELECT".
 			" death.d_gid AS id,".
 			" death.d_julianday2-birth.d_julianday1 AS age".
 			" FROM".
@@ -1554,7 +1554,7 @@ class KT_Stats {
 		if ($params !== null && isset($params[0])) {$total = $params[0];} else {$total = 10;}
 		$total=(int)$total;
 		$rows=self::_runSQL(
-			"SELECT SQL_CACHE ".
+			"SELECT ".
 			" MAX(death.d_julianday2-birth.d_julianday1) AS age, ".
 			" death.d_gid AS deathdate ".
 			"FROM ".
@@ -1625,7 +1625,7 @@ class KT_Stats {
 		if ($params !== null && isset($params[0])) {$total = $params[0];} else {$total = 10;}
 		$total=(int)$total;
 		$rows=self::_runSQL(
-			"SELECT SQL_CACHE".
+			"SELECT".
 			" birth.d_gid AS id,".
 			" MIN(birth.d_julianday1) AS age".
 			" FROM".
@@ -1685,7 +1685,7 @@ class KT_Stats {
 			$sex_search = '';
 		}
 		$rows=self::_runSQL(
-			"SELECT SQL_CACHE ".
+			"SELECT ".
 			" AVG(death.d_julianday2-birth.d_julianday1) AS age ".
 			"FROM ".
 			" `##dates` AS death, ".
@@ -1725,7 +1725,7 @@ class KT_Stats {
 			if (isset($params[0]) && $params[0] != '') {$size = strtolower($params[0]);} else {$size = '230x250';}
 			$sizes = explode('x', $size);
 			$rows=self::_runSQL(
-				"SELECT SQL_CACHE".
+				"SELECT".
 				" ROUND(AVG(death.d_julianday2-birth.d_julianday1)/365.25,1) AS age,".
 				" FLOOR(death.d_year/100+1) AS century,".
 				" i_sex AS sex".
@@ -1786,7 +1786,7 @@ class KT_Stats {
 				}
 			}
 			$rows = self::_runSQL(
-				"SELECT SQL_CACHE".
+				"SELECT".
 				" death.d_julianday2-birth.d_julianday1 AS age".
 				" FROM".
 				" `##dates` AS death,".
@@ -1874,7 +1874,7 @@ class KT_Stats {
 
 		if ($direction != 'ASC') {$direction = 'DESC';}
 		$rows=self::_runSQL(''
-			.' SELECT SQL_CACHE'
+			.' SELECT'
 				.' d_gid AS id,'
 				.' d_year AS year,'
 				.' d_fact AS fact,'
@@ -1969,7 +1969,7 @@ class KT_Stats {
 		if ($sex == 'F') {$sex_field = 'f_wife';} else {$sex_field = 'f_husb';}
 		if ($age_dir != 'ASC') {$age_dir = 'DESC';}
 		$rows=self::_runSQL(
-			" SELECT SQL_CACHE fam.f_id AS famid, fam.{$sex_field}, married.d_julianday2-birth.d_julianday1 AS age, indi.i_id AS i_id".
+			" SELECT fam.f_id AS famid, fam.{$sex_field}, married.d_julianday2-birth.d_julianday1 AS age, indi.i_id AS i_id".
 			" FROM `##families` AS fam".
 			" LEFT JOIN `##dates` AS birth ON birth.d_file = {$this->_ged_id}".
 			" LEFT JOIN `##dates` AS married ON married.d_file = {$this->_ged_id}".
@@ -2027,7 +2027,7 @@ class KT_Stats {
 		if ($params !== null && isset($params[0])) {$total = $params[0];} else {$total = 10;}
 		if ($age_dir != 'ASC') {$age_dir = 'DESC';}
 		$hrows=self::_runSQL(
-			" SELECT SQL_CACHE DISTINCT fam.f_id AS family, MIN(husbdeath.d_julianday2-married.d_julianday1) AS age".
+			" SELECT DISTINCT fam.f_id AS family, MIN(husbdeath.d_julianday2-married.d_julianday1) AS age".
 			" FROM `##families` AS fam".
 			" LEFT JOIN `##dates` AS married ON married.d_file = {$this->_ged_id}".
 			" LEFT JOIN `##dates` AS husbdeath ON husbdeath.d_file = {$this->_ged_id}".
@@ -2042,7 +2042,7 @@ class KT_Stats {
 			" GROUP BY family".
 			" ORDER BY age {$age_dir}");
 		$wrows=self::_runSQL(
-			" SELECT SQL_CACHE DISTINCT fam.f_id AS family, MIN(wifedeath.d_julianday2-married.d_julianday1) AS age".
+			" SELECT DISTINCT fam.f_id AS family, MIN(wifedeath.d_julianday2-married.d_julianday1) AS age".
 			" FROM `##families` AS fam".
 			" LEFT JOIN `##dates` AS married ON married.d_file = {$this->_ged_id}".
 			" LEFT JOIN `##dates` AS wifedeath ON wifedeath.d_file = {$this->_ged_id}".
@@ -2057,7 +2057,7 @@ class KT_Stats {
 			" GROUP BY family".
 			" ORDER BY age {$age_dir}");
 		$drows=self::_runSQL(
-			" SELECT SQL_CACHE DISTINCT fam.f_id AS family, MIN(divorced.d_julianday2-married.d_julianday1) AS age".
+			" SELECT DISTINCT fam.f_id AS family, MIN(divorced.d_julianday2-married.d_julianday1) AS age".
 			" FROM `##families` AS fam".
 			" LEFT JOIN `##dates` AS married ON married.d_file = {$this->_ged_id}".
 			" LEFT JOIN `##dates` AS divorced ON divorced.d_file = {$this->_ged_id}".
@@ -2145,7 +2145,7 @@ class KT_Stats {
 		}
 		$total=(int)$total;
 		$rows=self::_runSQL(
-			" SELECT SQL_CACHE fam.f_id AS family," .$query1.
+			" SELECT fam.f_id AS family," .$query1.
 			" FROM `##families` AS fam".
 			" LEFT JOIN `##dates` AS wifebirth ON wifebirth.d_file = {$this->_ged_id}".
 			" LEFT JOIN `##dates` AS husbbirth ON husbbirth.d_file = {$this->_ged_id}".
@@ -2195,68 +2195,83 @@ class KT_Stats {
 		return $top10;
 	}
 
-	function _parentsQuery($type='full', $age_dir='ASC', $sex='F', $show_years=false) {
-		if ($sex == 'F') {$sex_field = 'WIFE';} else {$sex_field = 'HUSB';}
-		if ($age_dir != 'ASC') {$age_dir = 'DESC';}
-		$rows=self::_runSQL(
-			" SELECT SQL_CACHE".
-			" parentfamily.l_to AS id,".
-			" childbirth.d_julianday2-birth.d_julianday1 AS age".
-			" FROM `##link` AS parentfamily".
-			" JOIN `##link` AS childfamily ON childfamily.l_file = {$this->_ged_id}".
-			" JOIN `##dates` AS birth ON birth.d_file = {$this->_ged_id}".
-			" JOIN `##dates` AS childbirth ON childbirth.d_file = {$this->_ged_id}".
-			" WHERE".
-			" birth.d_gid = parentfamily.l_to AND".
-			" childfamily.l_to = childbirth.d_gid AND".
-			" childfamily.l_type = 'CHIL' AND".
-			" parentfamily.l_type = '{$sex_field}' AND".
-			" childfamily.l_from = parentfamily.l_from AND".
-			" parentfamily.l_file = {$this->_ged_id} AND".
-			" birth.d_fact = 'BIRT' AND".
-			" childbirth.d_fact = 'BIRT' AND".
-			" birth.d_julianday1 <> 0 AND".
-			" childbirth.d_julianday2 > birth.d_julianday1".
-			" ORDER BY age {$age_dir} LIMIT 1"
-		);
-		if (!isset($rows[0])) {return '';}
-		$row=$rows[0];
-		if (isset($row['id'])) $person=KT_Person::getInstance($row['id']);
+	function _parentsQuery($type = 'full', $age_dir = 'ASC', $sex = 'F', $show_years = false) {
+		if ($sex == 'F') {
+			$sex_field = 'WIFE';} else {$sex_field = 'HUSB';
+		}
+		if ($age_dir != 'ASC') {
+			$age_dir = 'DESC';
+		}
+
+		$rows = self::_runSQL("
+			SELECT
+			parentfamily.l_to AS id,
+			childbirth.d_julianday2-birth.d_julianday1 AS age
+			FROM `##link` AS parentfamily
+				JOIN `##link` AS childfamily ON childfamily.l_file = {$this->_ged_id}
+				JOIN `##dates` AS birth ON birth.d_file = {$this->_ged_id}
+				JOIN `##dates` AS childbirth ON childbirth.d_file = {$this->_ged_id}
+			WHERE
+				birth.d_gid = parentfamily.l_to AND
+				childfamily.l_to = childbirth.d_gid AND
+				childfamily.l_type = 'CHIL' AND
+				parentfamily.l_type = '{$sex_field}' AND
+				childfamily.l_from = parentfamily.l_from AND
+				parentfamily.l_file = {$this->_ged_id} AND
+				birth.d_fact = 'BIRT' AND
+				childbirth.d_fact = 'BIRT' AND
+				birth.d_julianday1 <> 0 AND
+				childbirth.d_julianday2 > birth.d_julianday1
+			ORDER BY age {$age_dir}
+			LIMIT 1
+		");
+
+		if (!isset($rows[0])) {
+			return '';
+		}
+
+		$row = $rows[0];
+		if (isset($row['id'])) {
+			$person = KT_Person::getInstance($row['id']);
+		}
+
 		switch($type) {
 			default:
 			case 'full':
 				if ($person->canDisplayDetails()) {
-					$result=$person->format_list('span', false, $person->getFullName());
+					$result = $person->format_list('span', false, $person->getFullName());
 				} else {
-					$result=KT_I18N::translate('This information is private and cannot be shown.');
+					$result = KT_I18N::translate('This information is private and cannot be shown.');
 				}
-				break;
+			break;
 			case 'name':
-				$result='<a href="'.$person->getHtmlUrl().'">'.$person->getFullName().'</a>';
-				break;
+				$result = '<a href="'.$person->getHtmlUrl() . '">' . $person->getFullName() . '</a>';
+			break;
 			case 'age':
 				$age = $row['age'];
 				if ($show_years) {
-					if ((int)($age/365.25)>0) {
-						$age = (int)($age/365.25).'y';
-					} else if ((int)($age/30.4375)>0) {
-						$age = (int)($age/30.4375).'m';
+					if ((int)($age / 365.25) > 0) {
+						$age = (int)($age / 365.25) . 'y';
+					} else if ((int)($age / 30.4375) > 0) {
+						$age = (int)($age / 30.4375) . 'm';
 					} else {
 						$age = $age.'d';
 					}
 					$result = get_age_at_event($age, true);
 				} else {
-					$result = (int)($age/365.25);
+					$result = (int)($age / 365.25);
 				}
-				break;
+			break;
 		}
+
 		return $result;
+
 	}
 
 	function _statsMarr($simple=true, $first=false, $year1=-1, $year2=-1, $params = array()) {
 		if ($simple) {
 			$sql = "
-				SELECT SQL_CACHE FLOOR(d_year/100+1) AS century, COUNT(*) AS total
+				SELECT FLOOR(d_year/100+1) AS century, COUNT(*) AS total
 					FROM (
 						SELECT d_file, d_year, d_fact, d_type, d_gid FROM `##dates`
 						 WHERE d_file=" . $this->_ged_id . " AND d_year<>0 AND d_fact = 'MARR' AND d_type IN ('@#DGREGORIAN@', '@#DJULIAN@')
@@ -2273,7 +2288,7 @@ class KT_Stats {
 				$years = " married.d_year BETWEEN '{$year1}' AND '{$year2}' AND";
 			}
 			$sql=
-			" SELECT SQL_CACHE fam.f_id AS fams, fam.f_husb, fam.f_wife, married.d_julianday2 AS age, married.d_month AS month, indi.i_id AS indi".
+			" SELECT fam.f_id AS fams, fam.f_husb, fam.f_wife, married.d_julianday2 AS age, married.d_month AS month, indi.i_id AS indi".
 			" FROM `##families` AS fam".
 			" LEFT JOIN `##dates` AS married ON married.d_file = {$this->_ged_id}".
 			" LEFT JOIN `##individuals` AS indi ON indi.i_file = {$this->_ged_id}".
@@ -2287,7 +2302,7 @@ class KT_Stats {
 			" ORDER BY fams, indi, age ASC";
 		} else {
 			$sql =
-				"SELECT SQL_CACHE d_month, COUNT(*) AS total FROM `##dates` ".
+				"SELECT d_month, COUNT(*) AS total FROM `##dates` ".
 				"WHERE d_file={$this->_ged_id} AND d_fact = 'MARR'";
 				if ($year1>=0 && $year2>=0) {
 					$sql .= " AND d_year BETWEEN '{$year1}' AND '{$year2}'";
@@ -2327,7 +2342,7 @@ class KT_Stats {
 	function _statsDiv($simple=true, $first=false, $year1=-1, $year2=-1, $params = array()) {
 		if ($simple) {
 			$sql = "
-				SELECT SQL_CACHE FLOOR(d_year/100+1) AS century, COUNT(*) AS total
+				SELECT FLOOR(d_year/100+1) AS century, COUNT(*) AS total
 					FROM (
 						SELECT d_file, d_year, d_fact, d_type, d_gid FROM `##dates`
 						 WHERE d_file=" . $this->_ged_id . " AND d_year<>0 AND d_fact = 'DIV' AND d_type IN ('@#DGREGORIAN@', '@#DJULIAN@')
@@ -2344,7 +2359,7 @@ class KT_Stats {
 				$years = " divorced.d_year BETWEEN '{$year1}' AND '{$year2}' AND";
 			}
 			$sql=
-			" SELECT SQL_CACHE fam.f_id AS fams, fam.f_husb, fam.f_wife, divorced.d_julianday2 AS age, divorced.d_month AS month, indi.i_id AS indi".
+			" SELECT fam.f_id AS fams, fam.f_husb, fam.f_wife, divorced.d_julianday2 AS age, divorced.d_month AS month, indi.i_id AS indi".
 			" FROM `##families` AS fam".
 			" LEFT JOIN `##dates` AS divorced ON divorced.d_file = {$this->_ged_id}".
 			" LEFT JOIN `##individuals` AS indi ON indi.i_file = {$this->_ged_id}".
@@ -2358,7 +2373,7 @@ class KT_Stats {
 			" ORDER BY fams, indi, age ASC";
 		} else {
 			$sql =
-				"SELECT SQL_CACHE d_month, COUNT(*) AS total FROM `##dates` ".
+				"SELECT d_month, COUNT(*) AS total FROM `##dates` ".
 				"WHERE d_file={$this->_ged_id} AND d_fact = 'DIV'";
 				if ($year1>=0 && $year2>=0) {
 					$sql .= " AND d_year BETWEEN '{$year1}' AND '{$year2}'";
@@ -2429,7 +2444,7 @@ class KT_Stats {
 			if (isset($params[0]) && $params[0] != '') {$size = strtolower($params[0]);} else {$size = '200x250';}
 			$sizes = explode('x', $size);
 			$rows=self::_runSQL(
-				"SELECT SQL_CACHE ".
+				"SELECT ".
 				" ROUND(AVG(married.d_julianday2-birth.d_julianday1-182.5)/365.25,1) AS age, ".
 				" FLOOR(married.d_year/100+1) AS century, ".
 				" 'M' AS sex ".
@@ -2491,7 +2506,7 @@ class KT_Stats {
 				$years='';
 			}
 			$rows=self::_runSQL(
-				"SELECT SQL_CACHE ".
+				"SELECT ".
 				" fam.f_id, ".
 				" birth.d_gid, ".
 				" married.d_julianday2-birth.d_julianday1 AS age ".
@@ -2581,14 +2596,14 @@ class KT_Stats {
 	function oldestFatherAge($show_years=false)   { return $this->_parentsQuery('age',  'DESC', 'M', $show_years); }
 
 	function totalMarriedMales() {
-		$n=KT_DB::prepare("SELECT SQL_CACHE COUNT(DISTINCT f_husb) FROM `##families` WHERE f_file=? AND f_gedcom LIKE '%\\n1 MARR%'")
+		$n=KT_DB::prepare("SELECT COUNT(DISTINCT f_husb) FROM `##families` WHERE f_file=? AND f_gedcom LIKE '%\\n1 MARR%'")
 			->execute(array($this->_ged_id))
 			->fetchOne();
 		return KT_I18N::number($n);
 	}
 
 	function totalMarriedFemales() {
-		$n=KT_DB::prepare("SELECT SQL_CACHE COUNT(DISTINCT f_wife) FROM `##families` WHERE f_file=? AND f_gedcom LIKE '%\\n1 MARR%'")
+		$n=KT_DB::prepare("SELECT COUNT(DISTINCT f_wife) FROM `##families` WHERE f_file=? AND f_gedcom LIKE '%\\n1 MARR%'")
 			->execute(array($this->_ged_id))
 			->fetchOne();
 		return KT_I18N::number($n);
@@ -2600,7 +2615,7 @@ class KT_Stats {
 
 	function _familyQuery($type='full') {
 		$rows=self::_runSQL(
-			" SELECT SQL_CACHE f_numchil AS tot, f_id AS id".
+			" SELECT f_numchil AS tot, f_id AS id".
 			" FROM `##families`".
 			" WHERE".
 			" f_file={$this->_ged_id}".
@@ -2638,7 +2653,7 @@ class KT_Stats {
 		if ($params !== null && isset($params[0])) {$total = $params[0];} else {$total = 10;}
 		$total=(int)$total;
 		$rows=self::_runSQL(
-			"SELECT SQL_CACHE f_numchil AS tot, f_id AS id".
+			"SELECT f_numchil AS tot, f_id AS id".
 			" FROM `##families`".
 			" WHERE".
 			" f_file={$this->_ged_id}".
@@ -2683,7 +2698,7 @@ class KT_Stats {
 		if (isset($params[1])) {$one = $params[1];} else {$one = false;} // each family only once if true
 		$total=(int)$total;
 		$rows=self::_runSQL(
-			" SELECT SQL_CACHE DISTINCT".
+			" SELECT DISTINCT".
 			" link1.l_from AS family,".
 			" link1.l_to AS ch1,".
 			" link2.l_to AS ch2,".
@@ -2719,7 +2734,7 @@ class KT_Stats {
 					$return = '<a href="'.$child2->getHtmlUrl().'">'.$child2->getFullName().'</a> ';
 					$return .= KT_I18N::translate('and').' ';
 					$return .= '<a href="'.$child1->getHtmlUrl().'">'.$child1->getFullName().'</a>';
-					$return .= ' <a href="'.$family->getHtmlUrl().'">['.KT_USER_CAN_EDIT ? KT_I18N::translate('Edit family') : KT_I18N::translate('View family').']</a>';
+					$return .= ' <a href="'.$family->getHtmlUrl().'">['.KT_I18N::translate('View family').']</a>';
 				} else {
 					$return = KT_I18N::translate('This information is private and cannot be shown.');
 				}
@@ -2745,7 +2760,7 @@ class KT_Stats {
 						$return .= KT_I18N::translate('and').' ';
 						$return .= '<a href="' . $child1->getHtmlUrl() . '">' . $child1->getFullName() . '</a>';
 						$return .= ' (' . $age . ') ';
-						$return .= '<a href="' . $family->getHtmlUrl() . '"><small>' . (KT_USER_CAN_EDIT ? KT_I18N::translate('Edit family') : KT_I18N::translate('View family')) . '</small></a>';
+						$return .= '<a href="' . $family->getHtmlUrl() . '">' . (KT_I18N::translate('View family')) . '</a>';
 						$return .= '</li>';
 						$top10[] = $return;
 						$dist[] = $fam['family'];
@@ -2756,7 +2771,7 @@ class KT_Stats {
 					$return .= KT_I18N::translate('and').' ';
 					$return .= '<a href="' . $child1->getHtmlUrl() . '">' . $child1->getFullName() . '</a>';
 					$return .= ' (' . $age . ') ';
-					$return .= '<a href="' . $family->getHtmlUrl() . '"><small>' . (KT_USER_CAN_EDIT ? KT_I18N::translate('Edit family') : KT_I18N::translate('View family')) . '</small></a>';
+					$return .= '<a href="' . $family->getHtmlUrl() . '">' . (KT_I18N::translate('View family')) . '</a>';
 					$return .= '</li>';
 					$top10[] = $return;
 				}
@@ -2765,7 +2780,7 @@ class KT_Stats {
 					$return = $child2->format_list('span', false, $child2->getFullName());
 					$return .= '<br>' . KT_I18N::translate('and') . '<br>';
 					$return .= $child1->format_list('span', false, $child1->getFullName());
-					$return .= '<br><a href="' . $family->getHtmlUrl() . '"><small>' . (KT_USER_CAN_EDIT ? KT_I18N::translate('Edit family') : KT_I18N::translate('View family')) . '</small></a>';
+					$return .= '<br><a href="' . $family->getHtmlUrl() . '">' . (KT_I18N::translate('View family')) . '</a>';
 					return $return;
 				} else {
 					return KT_I18N::translate('This information is private and cannot be shown.');
@@ -2803,7 +2818,7 @@ class KT_Stats {
 			$sql_sex2 = '';
 		}
 		$sql =
-			"SELECT SQL_CACHE d_month{$sql_sex1}, COUNT(*) AS total ".
+			"SELECT d_month{$sql_sex1}, COUNT(*) AS total ".
 			"FROM (".
 			" SELECT family{$sql_sex1}, MIN(date) AS d_date, d_month".
 			" FROM (".
@@ -2912,7 +2927,7 @@ class KT_Stats {
 		$sizes = explode('x', $size);
 		$total=(int)$total;
 		$rows=self::_runSQL(
-			" SELECT SQL_CACHE f_numchil AS tot, f_id AS id".
+			" SELECT f_numchil AS tot, f_id AS id".
 			" FROM `##families`".
 			" WHERE f_file={$this->_ged_id}".
 			" ORDER BY tot DESC".
@@ -2942,13 +2957,13 @@ class KT_Stats {
 	}
 
 	function totalChildren() {
-		$rows=self::_runSQL("SELECT SQL_CACHE SUM(f_numchil) AS tot FROM `##families` WHERE f_file={$this->_ged_id}");
+		$rows=self::_runSQL("SELECT SUM(f_numchil) AS tot FROM `##families` WHERE f_file={$this->_ged_id}");
 		$row=$rows[0];
 		return KT_I18N::number($row['tot']);
 	}
 
 	function averageChildren() {
-		$rows=self::_runSQL("SELECT SQL_CACHE AVG(f_numchil) AS tot FROM `##families` WHERE f_file={$this->_ged_id}");
+		$rows=self::_runSQL("SELECT AVG(f_numchil) AS tot FROM `##families` WHERE f_file={$this->_ged_id}");
 		$row=$rows[0];
 		return KT_I18N::number($row['tot'], 2);
 	}
@@ -2959,7 +2974,7 @@ class KT_Stats {
 			$sizes = explode('x', $size);
 			$max = 0;
 			$rows=self::_runSQL(
-				" SELECT SQL_CACHE ROUND(AVG(f_numchil),2) AS num, FLOOR(married.d_year / 100 + 1) AS century".
+				" SELECT ROUND(AVG(f_numchil),2) AS num, FLOOR(married.d_year / 100 + 1) AS century".
 				" FROM `##families` AS fam".
 				" LEFT JOIN `##dates` AS married ON married.d_file = {$this->_ged_id}".
 				" WHERE".
@@ -2996,7 +3011,7 @@ class KT_Stats {
 		} else {
 			if ($sex=='M') {
 				$sql =
-					"SELECT SQL_CACHE num, COUNT(*) AS total FROM ".
+					"SELECT num, COUNT(*) AS total FROM ".
 					"(SELECT count(i_sex) AS num FROM `##link` ".
 					"LEFT OUTER JOIN `##individuals` ".
 					"ON l_from=i_id AND l_file=i_file AND i_sex='M' AND l_type='FAMC' ".
@@ -3006,7 +3021,7 @@ class KT_Stats {
 					" ORDER BY num";
 			} elseif ($sex=='F') {
 				$sql =
-					"SELECT SQL_CACHE num, COUNT(*) AS total FROM ".
+					"SELECT num, COUNT(*) AS total FROM ".
 					"(SELECT count(i_sex) AS num FROM `##link` ".
 					"LEFT OUTER JOIN `##individuals` ".
 					"ON l_from=i_id AND l_file=i_file AND i_sex='F' AND l_type='FAMC' ".
@@ -3015,7 +3030,7 @@ class KT_Stats {
 					" GROUP BY num".
 					" ORDER BY num";
 			} else {
-				$sql = "SELECT SQL_CACHE f_numchil, COUNT(*) AS total FROM `##families` ";
+				$sql = "SELECT f_numchil, COUNT(*) AS total FROM `##families` ";
 				if ($year1>=0 && $year2>=0) {
 					$sql .=
 						"AS fam LEFT JOIN `##dates` AS married ON married.d_file = {$this->_ged_id}"
@@ -3043,15 +3058,14 @@ class KT_Stats {
 	function topAgeBetweenSiblingsList    ($params = array()) { return $this->_ageBetweenSiblingsQuery($type='list',   $params = array()); }
 
 	function noChildrenFamilies() {
-		$rows=self::_runSQL(
-			" SELECT SQL_CACHE".
-			" COUNT(*) AS tot".
-			" FROM".
-			" `##families` AS fam".
-			" WHERE".
-			" f_numchil = 0 AND".
-			" fam.f_file = {$this->_ged_id}");
-		$row=$rows[0];
+		$rows=self::_runSQL("
+			SELECT COUNT(*) AS tot
+			FROM `##families` AS fam
+			WHERE
+				f_numchil = 0 AND
+				fam.f_file = {$this->_ged_id}
+		");
+		$row = $rows[0];
 		return $row['tot'];
 	}
 
@@ -3060,7 +3074,7 @@ class KT_Stats {
 		global $TEXT_DIRECTION;
 		if (isset($params[0]) && $params[0] != '') {$type = strtolower($params[0]);} else {$type = 'list';}
 		$rows=self::_runSQL(
-			" SELECT SQL_CACHE f_id AS family".
+			" SELECT f_id AS family".
 			" FROM `##families` AS fam".
 			" WHERE f_numchil = 0 AND fam.f_file = {$this->_ged_id}");
 		if (!isset($rows[0])) {return '';}
@@ -3100,22 +3114,24 @@ class KT_Stats {
 		}
 		$max = 0;
 		$tot = 0;
-		$rows=self::_runSQL(
-			"SELECT SQL_CACHE".
-			" COUNT(*) AS count,".
-			" FLOOR(married.d_year/100+1) AS century".
-			" FROM".
-			" `##families` AS fam".
-			" JOIN".
-			" `##dates` AS married ON (married.d_file = fam.f_file AND married.d_gid = fam.f_id)".
-			" WHERE".
-			" f_numchil = 0 AND".
-			" fam.f_file = {$this->_ged_id} AND".
-			$years.
-			" married.d_fact = 'MARR' AND".
-			" married.d_type IN ('@#DGREGORIAN@', '@#DJULIAN@')".
-			" GROUP BY century ORDER BY century"
-		);
+		KT_DB::exec("
+			CREATE TEMPORARY TABLE family_dates
+			SELECT fam.*, FLOOR(married.d_year/100+1) AS century
+			FROM `##families` AS fam
+			JOIN `##dates` AS married ON (married.d_file = fam.f_file AND married.d_gid = fam.f_id)
+			WHERE
+				f_numchil = 0 AND
+				fam.f_file = {$this->_ged_id} AND
+				$years.
+				married.d_fact = 'MARR' AND
+				married.d_type IN ('@#DGREGORIAN@', '@#DJULIAN@')
+			GROUP BY fam.f_id, married.d_year ;
+		");
+		$rows = self::_runSQL("
+			SELECT count(*) AS count, century
+			FROM family_dates
+			GROUP BY century;
+		");
 
 		if (empty($rows)) return '';
 
@@ -3132,7 +3148,8 @@ class KT_Stats {
 					'category'	=> self::_centuryName($values['century']),
 					'count'		=> $values['count'],
 					'percent'	=> KT_I18N::number($values['count']),
-					'color'		=> 'd'
+					'color'		=> 'd',
+					'type'		=> $values['century']
 				);
 			}
 		}
@@ -3141,12 +3158,32 @@ class KT_Stats {
 
 	}
 
+	function totalNoChildrenTable() {
+		$rows = self::_runSQL("
+			Select *
+			FROM `##families` AS fam
+			WHERE
+				f_numchil = 0 AND
+				fam.f_file = {$this->_ged_id};
+		");
+
+		if (empty($rows)) return '';
+
+		foreach ($rows as $row) {
+			$family = KT_Family::getInstance($row['f_id']);
+				$list[] = clone $family;
+		}
+
+		return $list;
+
+	}
+
 	function _topTenGrandFamilyQuery($type='list', $params = array()) {
 		global $TEXT_DIRECTION;
 		if ($params !== null && isset($params[0])) {$total = $params[0];} else {$total = 10;}
 		$total=(int)$total;
 		$rows=self::_runSQL(
-			"SELECT SQL_CACHE COUNT(*) AS tot, f_id AS id".
+			"SELECT COUNT(*) AS tot, f_id AS id".
 			" FROM `##families`".
 			" JOIN `##link` AS children ON children.l_file = {$this->_ged_id}".
 			" JOIN `##link` AS mchildren ON mchildren.l_file = {$this->_ged_id}".
@@ -3329,7 +3366,7 @@ class KT_Stats {
 		$ged_id = get_id_from_gedcom($GEDCOM);
 
 		$rows = KT_DB::prepare("
-			SELECT SQL_CACHE n_givn, COUNT(*) AS num
+			SELECT n_givn, COUNT(*) AS num
 			 FROM `##name`
 			  JOIN `##individuals` ON (n_id = i_id AND n_file = i_file)
 			 WHERE n_file = {$ged_id}
