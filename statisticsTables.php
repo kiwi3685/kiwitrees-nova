@@ -31,12 +31,13 @@ $controller
 	->pageHeader();
 
 global $GEDCOM;
-$ged_id	= get_id_from_gedcom($GEDCOM);
-$stats	= new KT_Stats($GEDCOM);
-$table	= KT_Filter::get('table');
-$option	= KT_Filter::get('option');
-$tag	= KT_Filter::get('tag');
 
+$ged_id		= get_id_from_gedcom($GEDCOM);
+$stats		= new KT_Stats($GEDCOM);
+$table		= KT_Filter::get('table');
+$option		= KT_Filter::get('option');
+$tag		= KT_Filter::get('tag');
+$subtitle 	= '';
 
 switch ($table) {
 	case 'totalIndis':
@@ -126,10 +127,38 @@ switch ($table) {
 				$title 		= KT_I18N::translate('Total divorces');
 				$content	= format_fam_table($stats->totalEvents(array('DIV'), true));
 			break;
+			case 'withchildren' :
+				$list       = $stats->totalChildrenTable();
+				$title 		= KT_I18N::translate('All families with children recorded');
+				$content	= format_fam_table($list, 'sort_children');
+			break;
 			case 'nochildren' :
 				$list       = $stats->totalNoChildrenTable();
-				$title 		= KT_I18N::translate('Total families with no children recorded');
+				$title 		= KT_I18N::translate('All families with no children recorded');
 				$content	= format_fam_table($list);
+			break;
+			case 'withchildrenbycentury' :
+				$sumChildren = 0;
+				$rows = KT_DB::prepare("
+					SELECT fam.*
+					FROM `##families` AS fam
+					JOIN `##dates` AS married ON (married.d_file = fam.f_file AND married.d_gid = fam.f_id)
+					WHERE
+						f_numchil > 0 AND
+					    fam.f_file = ? AND
+						married.d_fact IN ('MARR', '_NMR') AND
+					    married.d_type IN ('@#DGREGORIAN@', '@#DJULIAN@') AND
+					    FLOOR(married.d_year/100+1) = ?
+					GROUP BY fam.f_id, FLOOR(married.d_year/100+1)
+				")->execute(array($ged_id, $option))->fetchAll(PDO::FETCH_ASSOC);
+				foreach ($rows as $row) {
+					$family = KT_Family::getInstance($row['f_id']);
+					$list[] = clone $family;
+					$sumChildren += $row['f_numchil'];
+				}
+				$title 		= KT_I18N::translate('Families with children in the %s century', $stats->_centuryName($option));
+				$subtitle	= KT_I18N::translate('Average = %s per family', KT_I18N::number($sumChildren / count($rows), 1));
+				$content	= format_fam_table($list, 'sort_children');
 			break;
 			case 'nochildrenbycentury' :
 				$rows = KT_DB::prepare("
@@ -138,7 +167,7 @@ switch ($table) {
 					WHERE
 						f_numchil = 0 AND
 					    fam.f_file = ? AND
-						married.d_fact = 'MARR' AND
+						married.d_fact IN ('MARR', '_NMR') AND
 					    married.d_type IN ('@#DGREGORIAN@', '@#DJULIAN@') AND
 					    FLOOR(married.d_year/100+1) = ?
 					GROUP BY fam.f_id, married.d_year
@@ -147,7 +176,7 @@ switch ($table) {
 					$family = KT_Family::getInstance($row['f_id']);
 						$list[] = clone $family;
 				}
-				$title 		= KT_I18N::translate('Number of families with no children in the %s century', $stats->_centuryName($option));
+				$title 		= KT_I18N::translate('Families with no children in the %s century', $stats->_centuryName($option));
 				$content	= format_fam_table($list);
 			break;
 
@@ -201,6 +230,8 @@ switch ($table) {
 				</div>
 			</div>
 		</div>
-	<?php }
-	echo $content;
-	pageClose(); ?>
+	<?php } ?>
+	<h5 class="text-center"><?php echo $title; ?></h5>
+	<h6 class="text-center"><?php echo $subtitle; ?></h6>
+	<?php echo $content;
+	pageClose();

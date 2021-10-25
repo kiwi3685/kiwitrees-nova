@@ -592,8 +592,19 @@ function format_fam_table($datalist, $option = '') {
 		$table_id = 'famTable';
 	}
 
-	if ($option=='BIRT_PLAC' || $option=='DEAT_PLAC') return;
+	if ($option=='BIRT_PLAC' || $option=='DEAT_PLAC') {
+		return;
+	}
+
+	if ($option=='sort_children') {
+		$sorting = 'sorting: [[16, "desc"]]';
+	} else {
+		$sorting = 'sorting: [[1, "asc"]]';
+	}
+
 	$html = '';
+
+
 
 	$controller
 		->addExternalJavascript(KT_DATATABLES_JS)
@@ -654,7 +665,7 @@ function format_fam_table($datalist, $option = '') {
 					/* 21 DEAT      */ {visible: false},
 					/* 22 TREE      */ {visible: false}
 				],
-				sorting: [[1, "asc"]],
+				' . $sorting . ',
 		   });
 
 			jQuery("#buttons-' . $table_id . '")

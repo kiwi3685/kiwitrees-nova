@@ -2973,18 +2973,18 @@ class KT_Stats {
 			if (isset($params[0]) && $params[0] != '') {$size = strtolower($params[0]);} else {$size = '220x200';}
 			$sizes = explode('x', $size);
 			$max = 0;
-			$rows=self::_runSQL(
-				" SELECT ROUND(AVG(f_numchil),2) AS num, FLOOR(married.d_year / 100 + 1) AS century".
-				" FROM `##families` AS fam".
-				" LEFT JOIN `##dates` AS married ON married.d_file = {$this->_ged_id}".
-				" WHERE".
-				" married.d_gid = fam.f_id AND".
-				" fam.f_file = {$this->_ged_id} AND".
-				" d_julianday1<>0 AND".
-				" married.d_fact = 'MARR' AND".
-				" married.d_type IN ('@#DGREGORIAN@', '@#DJULIAN@')".
-				" GROUP BY century".
-				" ORDER BY century");
+			$rows=self::_runSQL("
+				SELECT ROUND(AVG(f_numchil),1) AS num, FLOOR(married.d_year / 100 + 1) AS century
+				FROM `##families` AS fam
+				JOIN `##dates` AS married ON (married.d_file = fam.f_file AND married.d_gid = fam.f_id)
+				WHERE
+					f_numchil > 0  AND
+					fam.f_file = {$this->_ged_id} AND
+					married.d_fact IN ('MARR', '_NMR') AND
+					married.d_type IN ('@#DGREGORIAN@', '@#DJULIAN@')
+				GROUP BY century
+				ORDER BY century;
+			");
 
 			if (empty($rows)) return '';
 
@@ -3001,7 +3001,8 @@ class KT_Stats {
 						'category'	=> self::_centuryName($values['century']),
 						'count'		=> $values['num'],
 						'percent'	=> KT_I18N::number($values['num'], 1),
-						'color'		=> 'd'
+						'color'		=> 'd',
+						'type'		=> $values['century']
 					);
 				}
 			}
@@ -3155,6 +3156,26 @@ class KT_Stats {
 		}
 
 		return json_encode($data);
+
+	}
+
+	function totalChildrenTable() {
+		$rows = self::_runSQL("
+			Select *
+			FROM `##families` AS fam
+			WHERE
+				f_numchil > 0 AND
+				fam.f_file = {$this->_ged_id};
+		");
+
+		if (empty($rows)) return '';
+
+		foreach ($rows as $row) {
+			$family = KT_Family::getInstance($row['f_id']);
+				$list[] = clone $family;
+		}
+
+		return $list;
 
 	}
 

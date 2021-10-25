@@ -100,6 +100,7 @@ switch($THEME_DIR) {
 				var width	= 500;
 				var height	= 200;
 				var viewportSize = "0 0 500 200";
+                var linkUrl = "statisticsTables.php?ged=<?php echo $GEDCOM; ?>&table=totalFams&tag=withchildrenbycentury&option=";
 		break;
 			case "#chartNoChild":
 				try {var data	= JSON.parse(`<?php echo $stats->chartNoChildrenFamilies(); ?>`);}

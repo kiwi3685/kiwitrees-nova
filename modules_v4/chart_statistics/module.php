@@ -418,7 +418,10 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 					<h5><?php echo KT_I18N::translate('Children in family'); ?></h5>
 					<div class="grid-x grid-margin-x grid-margin-y statisticSection">
 						<div class="cell medium-6">
-							<div class="strong"><?php echo KT_I18N::translate('Average number of children per family'); ?>&nbsp;<?php echo $stats->averageChildren(); ?></div>
+							<div class="strong"><?php echo KT_I18N::translate('Average number of children per family'); ?>
+								<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalFams&amp;tag=withchildren">
+									<?php echo $stats->averageChildren(); ?></div>
+								</a>
 							<hr>
 							<div class="cell text-center"><?php echo KT_I18N::translate('Number of children per family, by century'); ?></div>
 							<div class="cell" id="chartChild"></div>
