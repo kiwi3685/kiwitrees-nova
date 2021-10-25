@@ -9789,33 +9789,33 @@ div[id$=-page]:not(#indi-page) button[type=submit] {
 #indilist-page .dataTables_wrapper .dataTable thead tr th.famListGivn,
 #famlist-page .dataTables_wrapper .dataTable thead tr th.indiListGivn,
 #famlist-page .dataTables_wrapper .dataTable thead tr th.famListGivn,
-#statTables-page .dataTables_wrapper .dataTable thead tr th.indiListGivn,
-#statTables-page .dataTables_wrapper .dataTable thead tr th.famListGivn {
+#statistics_tables-page .dataTables_wrapper .dataTable thead tr th.indiListGivn,
+#statistics_tables-page .dataTables_wrapper .dataTable thead tr th.famListGivn {
     min-width: 7rem;
 }
 #indilist-page .dataTables_wrapper .dataTable thead tr th.indiListSurn,
 #indilist-page .dataTables_wrapper .dataTable thead tr th.famListSurn,
 #famlist-page .dataTables_wrapper .dataTable thead tr th.indiListSurn,
 #famlist-page .dataTables_wrapper .dataTable thead tr th.famListSurn,
-#statTables-page .dataTables_wrapper .dataTable thead tr th.indiListSurn,
-#statTables-page .dataTables_wrapper .dataTable thead tr th.famListSurn {
+#statistics_tables-page .dataTables_wrapper .dataTable thead tr th.indiListSurn,
+#statistics_tables-page .dataTables_wrapper .dataTable thead tr th.famListSurn {
     min-width: 5rem;
 }
 #indilist-page .dataTables_wrapper .dataTable thead tr th.indiListDate,
 #indilist-page .dataTables_wrapper .dataTable thead tr th.famListDate,
 #famlist-page .dataTables_wrapper .dataTable thead tr th.indiListDate,
 #famlist-page .dataTables_wrapper .dataTable thead tr th.famListDate,
-#statTables-page .dataTables_wrapper .dataTable thead tr th.indiListDate,
-#statTables-page .dataTables_wrapper .dataTable thead tr th.famListDate {
+#statistics_tables-page .dataTables_wrapper .dataTable thead tr th.indiListDate,
+#statistics_tables-page .dataTables_wrapper .dataTable thead tr th.famListDate {
     width: 11rem;
 }
 #indilist-page .dataTables_wrapper .dataTable thead tr th.indiListAnniv,
 #indilist-page .dataTables_wrapper .dataTable thead tr th.famListAnniv,
 #famlist-page .dataTables_wrapper .dataTable thead tr th.indiListAnniv,
 #famlist-page .dataTables_wrapper .dataTable thead tr th.famListAnniv,
-#statTables-page .dataTables_wrapper .dataTable thead tr th.indiListAnniv,
-#statTables-page .dataTables_wrapper .dataTable thead tr th.famListAnniv {
-    min-width: 2.5rem;
+#statistics_tables-page .dataTables_wrapper .dataTable thead tr th.indiListAnniv,
+#statistics_tables-page .dataTables_wrapper .dataTable thead tr th.famListAnniv {
+    min-width: 3.5rem;
 }
 
 #placelist-page #place-list div.places {
@@ -10024,8 +10024,12 @@ label.radio_inline {
 .compact_box_template .cell {
     padding: 0 !important;
 }
-.compact_box_template .cell p {
+.compact_box_template .cell p.dates,
+.compact_box_template .cell p.places {
     margin: 0;
+}
+.compact_box_template .cell p.places {
+    line-height: 1;
 }
 .compact_box_template .cell + .cell {
     padding: 0.3125rem !important;

@@ -38,8 +38,8 @@ if ($missing) { ?>
 			<button class="float-right clear tiny button show-for-medium" type="button" data-toggle="<?php echo $dataToggle; ?>">
 				<i class="<?php echo $iconStyle; ?> fa-search-plus fa-lg"></i>
 			</button>
-			<p><small><?php echo $person->getLifeSpan(); ?></small></p>
-			<p><small><?php echo $birthplace; ?></small></p>
+			<p class="dates"><small><?php echo $person->getLifeSpan(); ?></small></p>
+			<p class="places"><small><?php echo $birthplace; ?></small></p>
 		</div>
 	</div>
 	<!-- details for details view -->
