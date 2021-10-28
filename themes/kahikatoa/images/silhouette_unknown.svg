@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1900px" height="1900px" viewBox="0 0 1900 1900" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Silhouette - unknown</title>
+    <defs>
+        <linearGradient x1="29.7497388%" y1="105.541621%" x2="67.7500201%" y2="-2.90014241%" id="linearGradient-1">
+            <stop stop-color="#000000" stop-opacity="0.0164718094" offset="0%"></stop>
+            <stop stop-color="#000000" offset="99.9371722%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Silhouettes" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" opacity="0.7">
+        <g id="Silhouette---unknown">
+            <circle id="Oval" fill="#8A8A8A" cx="950" cy="950" r="950"></circle>
+            <g id="user-svgrepo-com" transform="translate(290.838615, 132.000000)" fill="url(#linearGradient-1)" fill-rule="nonzero">
+                <path d="M1288.04477,1386.36145 C1113.75341,1524.52048 892.72186,1600 658.834502,1600 C424.989766,1600 203.995514,1524.54458 29.7201299,1386.43855 C6.14492346,1367.75904 -4.51053705,1339.04578 1.77618465,1311.27229 C61.9795366,1045.27229 249.286549,835.489157 487.713134,766.46747 C363.294649,699.845783 277.901789,562.973494 277.901789,404.819277 C277.901789,181.243373 448.45309,0 658.834502,0 C869.215914,0 1039.76722,181.243373 1039.76722,404.819277 C1039.76722,562.949398 954.400994,699.80241 830.019803,766.433735 C1068.44106,835.440964 1255.7534,1045.21928 1315.97806,1311.19518 C1322.25946,1338.93012 1311.58269,1367.7012 1288.04477,1386.36145 Z" id="Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>
