@@ -131,7 +131,7 @@ class chart_pedigree_KT_Module extends KT_Module implements KT_Module_Chart {
 				<input type="hidden" name="mod_action" value="show">
 				<input type="hidden" name="ged" value="<?php echo KT_GEDURL; ?>">
 				<div class="grid-x grid-margin-x">
-					<div class="cell medium-4 large-offset-2">
+					<div class="cell medium-4 large-offset-1">
 						<label class="h5" for="autocompleteInput"><?php echo KT_I18N::translate('Individual'); ?></label>
 						<div class="input-group autocomplete_container">
 							<input data-autocomplete-type="INDI" type="text" id="autocompleteInput" value="<?php echo strip_tags($person->getLifespanName()); ?>">
@@ -157,11 +157,13 @@ class chart_pedigree_KT_Module extends KT_Module implements KT_Module_Chart {
 							</div>
 						</div>
 					</div>
+					<div class="cell medium-1 buttonRow">
+						<button class="button" type="submit">
+							<i class="<?php echo $iconStyle; ?> fa-eye"></i>
+							<?php echo KT_I18N::translate('Show'); ?>
+						</button>
+					</div>
 				</div>
-				<button class="button" type="submit">
-					<i class="<?php echo $iconStyle; ?> fa-eye"></i>
-					<?php echo KT_I18N::translate('Show'); ?>
-				</button>
 			</form>
 			<hr>
 			<!-- end of form -->

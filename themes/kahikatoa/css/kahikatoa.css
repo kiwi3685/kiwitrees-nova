@@ -9660,6 +9660,9 @@ div[id$=-page]:not(#indi-page) button[type=submit] {
     font-weight: 400;
 }
 
+#pedigree-page .buttonRow {
+    padding-top: 2.25rem;
+}
 #pedigree-page #pedigree_chart {
     position: relative;
     font-size: 0.9rem;

@@ -3651,7 +3651,7 @@
 				 n.filter(t => "" !== t.data.xref)
 				 .append("text")
 				 .attr("dx", -this.boxWidth / 2 + 80)
-				 .attr("dy", "-1.125rem")
+				 .attr("dy", "-20")
 				 .attr("text-anchor", "start")
 				 .attr("class", "name")
 				 .text(t => t.data.name),
@@ -3665,14 +3665,14 @@
 				  n.filter(t => "" !== t.data.xref)
 				  .append("text")
 				  .attr("dx", -this.boxWidth / 2 + 80)
-				  .attr("dy", "1rem")
+				  .attr("dy", "16")
 				  .attr("text-anchor", "start")
 				  .attr("class", "bplace")
 				  .text(t => t.data.bplace1)
 				  n.filter(t => "" !== t.data.xref)
 				  .append("text")
 				  .attr("dx", -this.boxWidth / 2 + 80)
-				  .attr("dy", "1.8rem")
+				  .attr("dy", "28")
 				  .attr("text-anchor", "start")
 				  .attr("class", "bplace")
 				  .text(t => t.data.bplace2)
@@ -3681,11 +3681,11 @@
 			 addImage(t) {
 				t.append("svg:image")
 					.attr("xlink:href",
-					t => t.data.thumbnail ? t.data.thumbnail : t.data.sex === Zi ? theme + "images/silhouette_female.png" : t.data.sex === Wi ? theme + "images/silhouette_male.png" : theme + "images/silhouette_unknown.png")
+					t => t.data.thumbnail ? t.data.thumbnail : t.data.sex === Zi ? theme + "images/silhouette_female.svg" : t.data.sex === Wi ? theme + "images/silhouette_male.svg" : theme + "images/silhouette_unknown.svg")
 					.attr("x", -this.boxWidth / 2 + 5)
 					.attr("y", -this.boxHeight / 2 + 5)
-					.attr("height", 70)
-					.attr("width", 70)
+					.attr("height", 60)
+					.attr("width", 60)
 	         }
 			 //================  end modified  ================//
 
