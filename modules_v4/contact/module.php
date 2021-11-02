@@ -90,6 +90,8 @@ class contact_KT_Module extends KT_Module implements KT_Module_Menu {
                 'module.php?mod=' . $this->getName() . '&amp;mod_action=show&amp;url=' . KT_SERVER_NAME . KT_SCRIPT_PATH . addslashes(urlencode(get_query_url())),
                 'menu-contact'
             );
+			$menu->addClass('', '', 'fa-envelope');
+
 			return $menu;
 		}
 	}
