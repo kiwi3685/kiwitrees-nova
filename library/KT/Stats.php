@@ -1280,17 +1280,23 @@ class KT_Stats {
 				$percent = $result['count'] / $total;
 				foreach ($this->iso3166() as $key=>$value) {
 					if($value == $result['country']){
-						if($value == 'GB'){$key = 'GBR';} // combining WLS,ENG,SCI,NIR
 						$countries	 = $this->get_all_countries();
 						if (array_key_exists($key, $countries)) {
 							$countryName = $countries[$key];
+							$tmp	= new KT_Place($countryName, $this->_ged_id);
+							$place	= '<a href="' . $tmp->getURL() . '" class="list_item">' . $countries[$key] . '</a>';
+
 						}
 					}
 				}
+
+
+
+
 				if ($percent >= 0.80) {
-					$htmlHigh .= '<li>' . $countryName . '&nbsp;<small>(' . KT_I18N::number($result['count']) . ')&nbsp;' . KT_I18N::percentage($percent, 1) . '</small></li>';
+					$htmlHigh .= '<li>' . $place . '&nbsp;<small>(' . KT_I18N::number($result['count']) . ')&nbsp;' . KT_I18N::percentage($percent, 1) . '</small></li>';
 				} elseif ($percent < 0.80 && $percent > 0) {
-					$htmlMedm .= '<li>' . $countryName . '&nbsp;<small>(' . KT_I18N::number($result['count']) . ')&nbsp;' . KT_I18N::percentage($percent, 1) . '</small></li>';
+					$htmlMedm .= '<li>' . $place . '&nbsp;<small>(' . KT_I18N::number($result['count']) . ')&nbsp;' . KT_I18N::percentage($percent, 1) . '</small></li>';
 				}
 			}
 			$htmlHigh .= '</ul>';
@@ -3941,14 +3947,14 @@ class KT_Stats {
 			'COK'=>'CK', 'COL'=>'CO', 'COM'=>'KM', 'CPV'=>'CV', 'CRI'=>'CR', 'CUB'=>'CU',
 			'CXR'=>'CX', 'CYM'=>'KY', 'CYP'=>'CY', 'CZE'=>'CZ', 'DEU'=>'DE', 'DJI'=>'DJ',
 			'DMA'=>'DM', 'DNK'=>'DK', 'DOM'=>'DO', 'DZA'=>'DZ', 'ECU'=>'EC', 'EGY'=>'EG',
-			'ENG'=>'GB', 'ERI'=>'ER', 'ESH'=>'EH', 'ESP'=>'ES', 'EST'=>'EE', 'ETH'=>'ET',
+			'WLS'=>'GB', 'ERI'=>'ER', 'ESH'=>'EH', 'ESP'=>'ES', 'EST'=>'EE', 'ETH'=>'ET',
 			'FIN'=>'FI', 'FJI'=>'FJ', 'FLK'=>'FK', 'FRA'=>'FR', 'FRO'=>'FO', 'FSM'=>'FM',
-			'GAB'=>'GA', 'GBR'=>'GB', 'GEO'=>'GE', 'GHA'=>'GH', 'GIB'=>'GI', 'GIN'=>'GN',
+			'GAB'=>'GA', 'ENG'=>'GB', 'GEO'=>'GE', 'GHA'=>'GH', 'GIB'=>'GI', 'GIN'=>'GN',
 			'GLP'=>'GP', 'GMB'=>'GM', 'GNB'=>'GW', 'GNQ'=>'GQ', 'GRC'=>'GR', 'GRD'=>'GD',
 			'GRL'=>'GL', 'GTM'=>'GT', 'GUF'=>'GF', 'GUM'=>'GU', 'GUY'=>'GY', 'HKG'=>'HK',
 			'HMD'=>'HM', 'HND'=>'HN', 'HRV'=>'HR', 'HTI'=>'HT', 'HUN'=>'HU', 'IDN'=>'ID',
 			'IND'=>'IN', 'IOT'=>'IO', 'IRL'=>'IE', 'IRN'=>'IR', 'IRQ'=>'IQ', 'ISL'=>'IS',
-			'ISR'=>'IL', 'ITA'=>'IT', 'JAM'=>'JM', 'JOR'=>'JO', 'JPN'=>'JA', 'KAZ'=>'KZ',
+			'ISR'=>'IL', 'ITA'=>'IT', 'JAM'=>'JM', 'JOR'=>'JO', 'JPN'=>'JP', 'KAZ'=>'KZ',
 			'KEN'=>'KE', 'KGZ'=>'KG', 'KHM'=>'KH', 'KIR'=>'KI', 'KNA'=>'KN', 'KOR'=>'KO',
 			'KWT'=>'KW', 'LAO'=>'LA', 'LBN'=>'LB', 'LBR'=>'LR', 'LBY'=>'LY', 'LCA'=>'LC',
 			'LIE'=>'LI', 'LKA'=>'LK', 'LSO'=>'LS', 'LTU'=>'LT', 'LUX'=>'LU', 'LVA'=>'LV',
@@ -3970,7 +3976,7 @@ class KT_Stats {
 			'TTO'=>'TT', 'TUN'=>'TN', 'TUR'=>'TR', 'TUV'=>'TV', 'TWN'=>'TW', 'TZA'=>'TZ',
 			'UGA'=>'UG', 'UKR'=>'UA', 'UMI'=>'UM', 'URY'=>'UY', 'USA'=>'US', 'UZB'=>'UZ',
 			'VAT'=>'VA', 'VCT'=>'VC', 'VEN'=>'VE', 'VGB'=>'VG', 'VIR'=>'VI', 'VNM'=>'VN',
-			'VUT'=>'VU', 'WLF'=>'WF', 'WLS'=>'GB', 'WSM'=>'WS', 'YEM'=>'YE', 'ZAF'=>'ZA',
+			'VUT'=>'VU', 'WLF'=>'WF', 'GBR'=>'GB', 'WSM'=>'WS', 'YEM'=>'YE', 'ZAF'=>'ZA',
 			'ZMB'=>'ZM', 'ZWE'=>'ZW',
 		);
 	}

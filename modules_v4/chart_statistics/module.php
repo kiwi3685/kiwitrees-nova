@@ -560,7 +560,7 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 						<div class="cell medium-6">
 							<label class="h6">
 								<?php echo KT_I18N::translate('Events in countries'); ?>
-								<span data-tooltip class="strong top" data-click-open="false" data-alignment="center" title="<?php echo KT_I18N::translate('Any events in the country.'); ?>">
+								<span data-tooltip class="strong top" data-click-open="false" data-alignment="center" title="<?php echo KT_I18N::translate('Any events in the country, including multiple events per individual.'); ?>">
 									<i class="<?php echo $iconStyle; ?> fa-exclamation-circle"></i>
 								</span>
 							</label>
