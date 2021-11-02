@@ -157,8 +157,7 @@ class chart_pedigree_KT_Module extends KT_Module implements KT_Module_Chart {
 							</div>
 						</div>
 					</div>
-					<div class="cell medium-1 buttonRow
-">
+					<div class="cell medium-1 buttonRow">
 						<p></p>
 						<button class="button" type="submit">
 							<i class="<?php echo $iconStyle; ?> fa-eye"></i>
@@ -168,6 +167,8 @@ class chart_pedigree_KT_Module extends KT_Module implements KT_Module_Chart {
 				</div>
 			</form>
 			<hr>
+		</div>
+		<div class="cell">
 			<!-- end of form -->
 			<?php if ($controller->error_message) { ?>
 				<p class="callout alert"><?php echo $controller->error_message; ?></p>
