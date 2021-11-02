@@ -1267,6 +1267,38 @@ class KT_Stats {
 		return '<ul>' . $top10 . '</ul>';
 	}
 
+	function statsChartPlacesList() {
+		$data 		= array_values(json_decode($this->chartDistribution(), true));
+		$total		= 0;
+		foreach($data as $result) {
+			$total += $result['count'];
+		}
+		$htmlHigh = '<ul class="htmlHigh"><label class="h6">' . KT_I18N::translate('High population') . '</label>';
+		$htmlMedm = '<ul class="htmlMedm"><label class="h6">' . KT_I18N::translate('Low population') . '</label>';
+
+			foreach($data as $result) {
+				$percent = $result['count'] / $total;
+				foreach ($this->iso3166() as $key=>$value) {
+					if($value == $result['country']){
+						if($value == 'GB'){$key = 'GBR';} // combining WLS,ENG,SCI,NIR
+						$countries	 = $this->get_all_countries();
+						if (array_key_exists($key, $countries)) {
+							$countryName = $countries[$key];
+						}
+					}
+				}
+				if ($percent >= 0.80) {
+					$htmlHigh .= '<li>' . $countryName . '&nbsp;<small>(' . KT_I18N::number($result['count']) . ')&nbsp;' . KT_I18N::percentage($percent, 1) . '</small></li>';
+				} elseif ($percent < 0.80 && $percent > 0) {
+					$htmlMedm .= '<li>' . $countryName . '&nbsp;<small>(' . KT_I18N::number($result['count']) . ')&nbsp;' . KT_I18N::percentage($percent, 1) . '</small></li>';
+				}
+			}
+			$htmlHigh .= '</ul>';
+			$htmlMedm .= '</ul>';
+
+			return 	$htmlHigh . $htmlMedm;
+
+	}
 
 	function commonBirthPlacesList($params = array()) {
 		if ($params === null) {$params = array();}
@@ -1278,6 +1310,11 @@ class KT_Stats {
 		foreach ($places as $place => $count) {
 			$tmp		= new KT_Place($place, $this->_ged_id);
 			$place		= '<a href="' . $tmp->getURL() . '" class="list_item">' . $tmp->getFullName() . '</a>';
+
+			$urlStart	= '<a href="module.php?mod=list_places&mod_action=show&ged=Osborne&action=view&parent%5B%5D="';
+			$urlEnd		= '"';
+
+
 			$top10[]	='<li>' . $place . ' - ' . KT_I18N::number($count) . '</li>';
 			if ($i++ == $max) break;
 		}
@@ -3345,7 +3382,9 @@ class KT_Stats {
 				'category'	=> $top_name,
 				'count'		=> $count_per,
 				'percent'	=> KT_I18N::number($count_per) . ' (' . KT_I18N::number(100 * $count_per / $tot, 1) . '%)',
-				'color'		=> 'd'
+				'color'		=> 'd',
+				'type'		=> $top_name
+
 			);
 		}
 
@@ -3387,15 +3426,16 @@ class KT_Stats {
 		$ged_id = get_id_from_gedcom($GEDCOM);
 
 		$rows = KT_DB::prepare("
-			SELECT n_givn, COUNT(*) AS num
-			 FROM `##name`
-			  JOIN `##individuals` ON (n_id = i_id AND n_file = i_file)
-			 WHERE n_file = {$ged_id}
-			  AND n_type <> '_MARNM'
-			  AND n_givn NOT IN ('@P.N.', '')
-			  AND LENGTH(n_givn) > 1
-			  AND {$sex_sql} GROUP BY n_id, n_givn
-			")->fetchAll();
+			SELECT n_givn, COUNT(DISTINCT n_id) AS num
+			FROM `##name`
+			JOIN `##individuals` ON (n_id = i_id AND n_file = i_file)
+			WHERE n_file = {$ged_id}
+			AND n_type NOT IN ('_MARNM', '_AKA')
+			AND n_givn NOT IN ('@P.N.', '')
+			AND LENGTH(n_givn) > 1
+			AND {$sex_sql}
+			GROUP BY n_givn
+		")->fetchAll();
 
 		$nameList = array();
 
@@ -3414,7 +3454,6 @@ class KT_Stats {
 		}
 		arsort($nameList, SORT_NUMERIC);
 		$nameList=array_slice($nameList, 0, $maxtoshow);
-
 		if (count($nameList)==0) return '';
 		if ($type=='chart') return $nameList;
 		$common = array();
@@ -3515,7 +3554,8 @@ class KT_Stats {
 				'category'	=> $givn,
 				'count'		=> $count,
 				'percent'	=> KT_I18N::number($count) . ' (' . KT_I18N::number(100 * $count / $tot_indi, 1) . '%)',
-				'color'		=> 'd'
+				'color'		=> 'd',
+				'type'		=> $givn
 			);
 		}
 

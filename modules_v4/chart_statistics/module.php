@@ -176,7 +176,7 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 										 </small>
 									</div>
 								<?php } ?>
-								<div class="cell text-center"><?php echo KT_I18N::translate('Individuals, by gender'); ?></div>
+								<div class="cell text-center pie-chart"><?php echo KT_I18N::translate('Individuals, by gender'); ?></div>
 								<div class="cell" id="chartSex"></div>
 							</div>
 						</div>
@@ -198,7 +198,7 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 										 (<?php echo $stats->totalDeceasedPercentage(); ?>)
 									</small>
 								</div>
-								<div class="cell text-center"><?php echo KT_I18N::translate('Individuals, by living / deceased status'); ?></div>
+								<div class="cell text-center pie-chart"><?php echo KT_I18N::translate('Individuals, by living / deceased status'); ?></div>
 								<div class="cell" id="chartMortality"></div>
 							</div>
 						</div>
@@ -558,13 +558,38 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 							<div><?php echo $stats->commonMarriagePlacesList(); ?></div>
 						</div>
 						<div class="cell medium-6">
-							<label class="h6"><?php echo KT_I18N::translate('Events in countries'); ?></label>
-							<div><?php echo $stats->commonCountriesList(); ?></div>
+							<label class="h6">
+								<?php echo KT_I18N::translate('Events in countries'); ?>
+								<span data-tooltip class="strong top" data-click-open="false" data-alignment="center" title="<?php echo KT_I18N::translate('Any events in the country.'); ?>">
+									<i class="<?php echo $iconStyle; ?> fa-exclamation-circle"></i>
+								</span>
+							</label>
+							<div>
+								<?php echo $stats->commonCountriesList(); ?>
+							</div>
 						</div>
 						<div class="cell">
 							<div class="grid-x">
-								<div class="cell text-center"><?php echo KT_I18N::translate('Individual distribution chart'); ?></div>
-								<div class="cell" id="chartDistribution"></div>
+								<div class="cell text-center h5">
+									<?php echo KT_I18N::translate('Individual distribution chart'); ?>
+									<span
+										data-tooltip class="strong top"
+										data-alignment="center"
+										title="
+											<?php echo KT_I18N::translate('Number of individuals with one or more events in the country.'); ?>
+											<?php echo KT_I18N::translate('High populations are each 20 percent or more of the total.'); ?>
+										">
+										<i class="<?php echo $iconStyle; ?> fa-exclamation-circle"></i>
+									</span>
+								</div>
+								<div class="cell medium-9" id="chartDistribution"></div>
+								<div class="cell medium-3 topCountries">
+									<label class="h5"><?php echo KT_I18N::translate('Top countries'); ?></label>
+									<div class="scrollBlock">
+										<?php echo $stats->statsChartPlacesList(); ?>
+									</div>
+									<div><small><?php echo KT_I18N::translate('Scroll for more...'); ?></small></div>
+								</div>
 							</div>
 						</div>
 					</div>

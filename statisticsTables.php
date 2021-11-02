@@ -38,6 +38,7 @@ $table		= KT_Filter::get('table');
 $option		= KT_Filter::get('option');
 $tag		= KT_Filter::get('tag');
 $subtitle 	= '';
+$list	= array();
 
 switch ($table) {
 	case 'totalIndis':
@@ -87,14 +88,13 @@ switch ($table) {
 		}
 		$year = $option * 100 - 100;
 		$rows = KT_DB::prepare("
-			SELECT DISTINCT SQL_CACHE `d_gid` FROM `##dates`
+			SELECT DISTINCT `d_gid` FROM `##dates`
 				WHERE `d_file`=? AND
 				`d_year` >= ? AND
 				`d_year` < ? AND
 				`d_fact`='" . $gTag . "' AND
 				`d_type` IN ('@#DGREGORIAN@', '@#DJULIAN@')
 		")->execute(array($ged_id, $year, $year + 100))->fetchAll(PDO::FETCH_ASSOC);
-		$list	= array();
 		switch ($tag){
 			case 'birt':
 			case 'deat':
@@ -215,6 +215,46 @@ switch ($table) {
 	default:
 		$title 		= '';
 		$content	= KT_I18N::translate('No table selected');
+	break;
+	case 'commonNames':
+		switch ($option){
+			case 'surn':
+			$count = 0;
+				$surns = KT_Query_Name::surnames($tag, '', false, false, KT_GED_ID);
+				foreach ($surns as $surnames) {
+					$legend = implode('/', array_keys($surnames));
+					foreach ($surnames as $xrefList) {
+						foreach ($xrefList as $xref => $num) {
+							$person = KT_Person::getInstance($xref);
+							$list[] = clone $person;
+						}
+					}
+				}
+				$title 		= KT_I18N::translate('All individuals with the surname "%s"', $legend);
+				$content	= format_indi_table($list);
+			break;
+			case 'givn':
+				$rows = KT_DB::prepare("
+					SELECT DISTINCT n_id
+					FROM `##name`
+					JOIN `##individuals` ON (n_id = i_id AND n_file = i_file)
+					WHERE `n_file` = ?
+						AND `n_type` NOT IN ('_MARNM','_AKA')
+						AND n_givn NOT IN ('@P.N.', '')
+						AND LENGTH(n_givn) > 1
+						AND i_sex<>'U'
+						AND `n_givn` REGEXP CONCAT('[[:<:]]', ?, '[[:>:]]')
+					GROUP BY n_id
+				")->execute(array($ged_id, $tag))->fetchAll(PDO::FETCH_ASSOC);
+				foreach ($rows as $row) {
+					$person = KT_Person::getInstance($row['n_id']);
+						$list[] = clone $person;
+				}
+				$title 		= KT_I18N::translate('All individuals with the given name "%s"', $tag);
+				$subtitle	= KT_I18N::translate('(Number may differ from chart where individuals have multiple names recorded)');
+				$content	= format_indi_table($list);
+			break;
+		}
 	break;
 }
 

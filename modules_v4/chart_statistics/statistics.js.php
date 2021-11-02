@@ -150,16 +150,16 @@ switch($THEME_DIR) {
 			// Labels at the top of each bar.
 			svg.selectAll(".text")
 				.data(data)
-					.enter().append("text")
-						.attr("x", (function(d) { return x(d.category) + (x.bandwidth() / 2) ; }))
-						.attr("y", function(d) { return y(d.count) - 5; })
-						.style("text-anchor", "middle")
-						.style("font-size", "10px")
-						.append("a")
-							.attr("xlink:href", function(d){ return linkUrl + d.type })
-							.attr("target", "blank")
-							.html(function(d) { return d.percent; })
-							.style("fill", "<?php echo $linkColor; ?>");
+				.enter().append("text")
+					.attr("x", (function(d) { return x(d.category) + (x.bandwidth() / 2) ; }))
+					.attr("y", function(d) { return y(d.count) - 5; })
+					.style("text-anchor", "middle")
+					.style("font-size", "10px")
+					.append("a")
+						.attr("xlink:href", function(d){ return linkUrl + d.type })
+						.attr("target", "blank")
+						.html(function(d) { return d.percent; })
+						.style("fill", "<?php echo $linkColor; ?>");
 
 			// Add the X Axis
 			svg.append("g")
@@ -184,6 +184,7 @@ switch($THEME_DIR) {
 				var width	= 400;
 				var height	= 200;
 				var viewportSize = "0 0 400 200";
+                var linkUrl = "statisticsTables.php?ged=<?php echo $GEDCOM; ?>&table=commonNames&option=surn&tag=";
 			break;
 			case "#chartCommonGiven":
 				try {var data = JSON.parse(`<?php echo $stats->chartCommonGiven(array(0,10)); ?>`);}
@@ -191,63 +192,98 @@ switch($THEME_DIR) {
 				var width	= 400;
 				var height	= 200;
 				var viewportSize = "0 0 400 200";
-			break;
+                var linkUrl = "statisticsTables.php?ged=<?php echo $GEDCOM; ?>&table=commonNames&option=givn&tag=";
+                break;
 		}
 
 		if (data) {
-			//sort bars based on value
-	        data = data.sort(function (a, b) {
-	            return d3.descending(a.count, b.count);
-	        })
+            //sort bars based on value
+            data = data.sort(function (a, b) {
+                return d3.descending(a.count, b.count);
+            })
 
-			// set the dimensions and margins of the graph
-			var margin = {top: 0, right: 50, bottom: 10, left: 70},
-				w = width - margin.left - margin.right,
-				h = height - margin.top - margin.bottom;
+            //set up svg using margin conventions - we'll need plenty of room on the left for labels
+            var margin = {top: 0, right: 50, bottom: 10, left: 70}
+                width = width - margin.left - margin.right,
+                height = height - margin.top - margin.bottom;
 
-			// set the ranges
-			var x = d3.scaleLinear().range([0, w]);
-			var y = d3.scaleBand().range([0, h]).padding(0.1);
+            var svg = d3.select(element).append("svg")
+                .attr("preserveAspectRatio", "xMinYMin meet")
+                .attr("viewBox", viewportSize)
+                .attr("class", "horizontalChart")
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-			// Scale the range of the data in the domains
-			x.domain([0, d3.max(data, function(d) { return d.count; })]);
-			y.domain(data.map(function(d) { return d.category; }));
+            var x = d3.scaleLinear()
+                .range([0, width])
+                .domain([0, d3.max(data, function (d) {
+                    return d.count;
+                })]);
 
-			// format the data
-			data.forEach(function(d) {
-				d.count = +d.count;
-			});
+            var y = d3.scaleBand()
+                .range([0, height])
+                .padding(0.1)
+                .domain(data.map(function (d) {
+                    return d.category;
+                }));
 
-			var svg = d3.select(element).append("svg")
-				.attr("preserveAspectRatio", "xMinYMin meet")
-				.attr("viewBox", viewportSize)
-				.attr("class", "horizontalChart")
-				.append("g")
-					.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+            // format the data
+            data.forEach(function(d) {
+                d.count = +d.count;
+            });
 
-			// append the rectangles for the bar chart
-			svg.selectAll(".bar")
-				.data(data)
-					.enter().append("rect")
-						.attr("class", function(d){ return "bar-" +  d.color; })
-						.attr("width", function(d) { return x(d.count); })
-						.attr("y", function(d) { return y(d.category); })
-						.attr("height", y.bandwidth());
+            //make y axis to show bar names
+           var yAxis = d3.axisLeft()
+                .scale(y)
+                //no tick marks
+               .tickSize(3);
 
-			// Labels at the end of each bar.
-			svg.selectAll("text")
-				.data(data)
-					.enter().append("text")
-						.attr("y", (function(d) { return y(d.category) + (y.bandwidth() / 2 + 5) ; }  ))
-						.attr("x", function(d) { return x(d.count) + 5; })
-						.style("font-size", "8px")
-						.text(function(d) { return d.percent; });
+            var gy = svg.append("g")
+                .attr("class", "y axis")
+                .call(yAxis);
 
-		    // add the y Axis
-		    svg.append("g")
-				.style("font-size", "8px")
-		        .call(d3.axisLeft(y).tickSize(0));
-		}
+            svg.select(".y.axis") // select the g element with the y axis
+                .selectAll(".tick")
+                    .filter(function(d){ return typeof(d) == "string"; })
+                    .style("cursor", "pointer")
+                    .attr("target", "_blank")
+                    .on("click", function(d){
+                        window.open(linkUrl + d);
+                    });
+
+            var bars = svg.selectAll(".bar")
+                .data(data)
+                .enter()
+                .append("g")
+
+            //append rects
+            bars.append("rect")
+                .attr("class", function(d){ return "bar-" +  d.color; })
+                .attr("y", function (d) {
+                    return y(d.category);
+                })
+                .attr("height", y.bandwidth())
+                .attr("x", 0)
+                .attr("width", function (d) {
+                    return x(d.count);
+                });
+
+            //add a value label to the right of each bar
+            bars.append("text")
+                .attr("class", "label")
+                //y position of the label is halfway down the bar
+                .attr("y", function (d) {
+                    return y(d.category) + y.bandwidth() / 2 + 4;
+                })
+                //x position is 3 pixels to the right of the bar
+                .attr("x", function (d) {
+                    return x(d.count) + 1;
+                })
+                .text(function (d) {
+                    return d.percent;
+                });
+
+     		}
 	}
 
 	// GROUPED BAR CHART
@@ -401,10 +437,10 @@ switch($THEME_DIR) {
 
 		if (data) {
 			var color = d3.scaleOrdinal(d3.schemeCategory20);
-			var margin = {top: 0, right: 30, bottom: 0, left: 10},
+			var margin = {top: 0, right: 0, bottom: 0, left: 0},
 				w = width - margin.left - margin.right,
 				h = height - margin.top - margin.bottom;
-			var padding		= 50;
+			var padding		= 40;
 			var radius		= Math.min(width - padding, height - padding) / 2;
 
 			var svg = d3.select(element)
@@ -432,13 +468,12 @@ switch($THEME_DIR) {
 						.attr("class", function(d){ return "bar-" +  d.data.color; }) // css over-rides fill color if d.data.color exists
 						.attr("d", arc);
 
-			//new legend code
-			var legendCircRad	= 5;
-			var legendSpacing	= 6;
+			//  Legend code
+			var legendCircRad	= 6;
 
 			var legendWrap = svg.append('g')
 			.attr('class', 'legendwrap')
-			.attr("transform", function (d,i) { return "translate(" + (0) + "," + (h - 20) + ")";});
+			.attr("transform", function (d,i) { return "translate(" + ((w / 8) - 6) + "," + (h - 20) + ")";});
 
 			var legend = svg.select('.legendwrap').selectAll('.legend')
 				.data(pie(data))
@@ -454,16 +489,16 @@ switch($THEME_DIR) {
 				.attr("class", function(d){ return "bar-" +  d.data.color; }); // css over-rides fill color if d.data.color exists
 
 			legend.append('text')
-				.attr('x', legendCircRad + legendSpacing)
-				.attr('y', legendCircRad - legendSpacing + 2)
+				.attr('x', legendCircRad + 2)
+				.attr('y', legendCircRad - 3)
 				.style("text-anchor", "start")
-				.style("font-size", "8px")
+				.style("font-size", "7px")
 				.text(function(d){ return d.data.category + " (" + d.data.percent + ")"; });
 
 			var ypos = 0, newxpos = 0, rowOffsets = [];
 			var legendItemsCount = svg.selectAll('.legend').size();
 			legend.attr("transform", function (d, index) {
-			var length = d3.select(this).select("text").node().getComputedTextLength() + (legendCircRad + legendSpacing * 3);
+			var length = d3.select(this).select("text").node().getComputedTextLength() + ((legendCircRad + 6) * 3);
 			if (width < newxpos + length) {
 				rowOffsets.push((width - newxpos) / 2);
 				newxpos = 0;
@@ -498,18 +533,18 @@ switch($THEME_DIR) {
 		}
 
 		if (data) {
-			// Set <<High populatin>> to greater than 80% of total counts for color threshold
+			// Set <<High population>> to greater than 80% of total counts for color threshold
 			var totalCount = 0;
 			for (i = 0, len = data.length; i < len; ++i) {
 		        country = data[i];
-				totalCount += country.count;
+				totalCount += parseInt(country.count);
 		    }
-			var eightyPercent =  Math.round((totalCount * 0.80) / 1000) * 1000;
+			var highPercent =  Math.round((totalCount * 0.20) / 1000) * 1000; // 20% of the total
 
 			// Set color ranges
 			var colorScale = d3.scaleThreshold()
 				.range(["<?php echo $KT_STATS_CHART_COLOR3; ?>", "<?php echo $KT_STATS_CHART_COLOR2 ?>", "<?php echo $KT_STATS_CHART_COLOR1; ?>"])
-				.domain([1, eightyPercent]);
+				.domain([1, highPercent]);
 
 			// Create map
 			var margin = {top: 10, right: 10, bottom: 80, left: 10},
@@ -519,6 +554,7 @@ switch($THEME_DIR) {
 			// The svg
 			var svg = d3.select(element)
 				.append("svg")
+                .attr("class", "mapChart")
 				.attr("width", '100%')
 				.attr("height", '100%')
 				.attr("viewBox", viewportSize);
@@ -566,9 +602,9 @@ switch($THEME_DIR) {
 				svg.append("circle").attr("cx",0).attr("cy",276).attr("r", 7).style("fill", "<?php echo $KT_STATS_CHART_COLOR1; ?>")
 				svg.append("circle").attr("cx",150).attr("cy",276).attr("r", 7).style("fill", "<?php echo $KT_STATS_CHART_COLOR2; ?>")
 				svg.append("circle").attr("cx",300).attr("cy",276).attr("r", 7).style("fill", "<?php echo $KT_STATS_CHART_COLOR3; ?>")
-				svg.append("text").attr("x", 20).attr("y", 280).text("<?php echo KT_I18N::translate('High population'); ?>").style("text-anchor", "start").style("font-size", "12px")
-				svg.append("text").attr("x", 170).attr("y", 280).text("<?php echo KT_I18N::translate('Low population'); ?>").style("text-anchor", "start").style("font-size", "12px")
-				svg.append("text").attr("x", 320).attr("y", 280).text("<?php echo KT_I18N::translate('Nobody at all'); ?>").style("text-anchor", "start").style("font-size", "12px")
+				svg.append("text").attr("x", 20).attr("y", 280).text("<?php echo KT_I18N::translate('High population'); ?>").style("text-anchor", "start")
+				svg.append("text").attr("x", 170).attr("y", 280).text("<?php echo KT_I18N::translate('Low population'); ?>").style("text-anchor", "start")
+				svg.append("text").attr("x", 320).attr("y", 280).text("<?php echo KT_I18N::translate('Nobody at all'); ?>").style("text-anchor", "start")
 
 			});
 		}

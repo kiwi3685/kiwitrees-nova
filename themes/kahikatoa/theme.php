@@ -108,9 +108,9 @@ $cbheight = 60;
 $KT_STATS_MAP_X = 440;
 $KT_STATS_MAP_Y = 220;
 
-$KT_STATS_CHART_COLOR1 = "#0193b7";
-$KT_STATS_CHART_COLOR2 = "#e09798";
-$KT_STATS_CHART_COLOR3 = "#8a8a8a";
+$KT_STATS_CHART_COLOR1 = "#0193b7"; // male color
+$KT_STATS_CHART_COLOR2 = "#e09798"; // female color
+$KT_STATS_CHART_COLOR3 = "#8a8a8a"; // dark-gray color
 
 // -- fanchart variables
 /*

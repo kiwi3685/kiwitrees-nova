@@ -82,16 +82,16 @@ class block_charts_KT_Module extends KT_Module implements KT_Module_Block {
 		if ($person) {
 			switch($type) {
 				case 'pedigree':
-					$title = KT_I18N::translate('Pedigree of %s', $person->getFullName());
+					$title .= KT_I18N::translate('Pedigree of %s', $person->getFullName());
 					break;
 				case 'descendants':
-					$title = KT_I18N::translate('Descendants of %s', $person->getFullName());
+					$title .= KT_I18N::translate('Descendants of %s', $person->getFullName());
 					break;
 				case 'hourglass':
-					$title = KT_I18N::translate('Hourglass chart of %s', $person->getFullName());
+					$title .= KT_I18N::translate('Hourglass chart of %s', $person->getFullName());
 					break;
 				case 'treenav':
-					$title = KT_I18N::translate('Interactive tree of %s', $person->getFullName());
+					$title .= KT_I18N::translate('Interactive tree of %s', $person->getFullName());
 					break;
 			}
 
@@ -99,40 +99,40 @@ class block_charts_KT_Module extends KT_Module implements KT_Module_Block {
 				<div class="cell">
 					<table>
 						<tr>';
-							if ($type == 'descendants' || $type == 'hourglass') {
+							if ($type=='descendants' || $type=='hourglass') {
 								$content .= '<td valign="middle">';
-									ob_start();
-									$controller->print_descendency($person, 1, false);
-									$content .= ob_get_clean();
+								ob_start();
+								$controller->print_descendency($person, 1, false);
+								$content .= ob_get_clean();
 								$content .= '</td>';
 							}
-							if ($type == 'pedigree' || $type == 'hourglass') {
+							if ($type=='pedigree' || $type=='hourglass') {
 								//-- print out the root person
-								if ($type!='hourglass') {
+								if ($type != 'hourglass') {
 									$content .= '<td valign="middle">';
-										ob_start();
-										print_pedigree_person($person);
-										$content .= ob_get_clean();
+									ob_start();
+									print_pedigree_person($person);
+									$content .= ob_get_clean();
 									$content .= '</td>';
 								}
 								$content .= '<td valign="middle">';
-									ob_start();
-									$controller->print_person_pedigree($person, 1);
-									$content .= ob_get_clean();
-								$content .= '</td>';
+								ob_start();
+								$controller->print_person_pedigree($person, 1);
+								$content .= ob_get_clean();
+								$content .= '<td>';
 							}
 							if ($type == 'treenav') {
-								require_once KT_MODULES_DIR.'tabi_tree/module.php';
-								require_once KT_MODULES_DIR.'tabi_tree/class_treeview.php';
-								$mod		= new tabi_tree_KT_Module;
+								require_once KT_MODULES_DIR . 'tree/module.php';
+								require_once KT_MODULES_DIR . 'tree/class_treeview.php';
+								$mod		= new tree_KT_Module;
 								$tv			= new TreeView;
-								$content 	.= '
-									<td>
-										<script>jQuery("head").append(\'<link rel="stylesheet" href="' . $mod->css() . '" type="text/css" />\');</script>
-										<script src="' . $mod->js() . '"></script>';
-										list($html, $js) = $tv->drawViewport($person, 2);
-										$content .= $html . '<script>' . $js . '</script>
-									</td>';
+								$content	.= '<td>';
+
+								$content .= '<script>jQuery("head").append(\'<link rel="stylesheet" href="'.$mod->css().'" type="text/css" />\');</script>';
+								$content .= '<script src="' . $mod->js() . '"></script>';
+						    	list($html, $js) = $tv->drawViewport($person, 2);
+								$content .= $html.'<script>'.$js.'</script>';
+								$content .= '</td>';
 							}
 						$content .= '</tr>
 					</table>

@@ -80,7 +80,7 @@ class list_individuals_KT_Module extends KT_Module implements KT_Module_List {
 
 	// Display list
 	public function show() {
-		global $controller, $UNKNOWN_NN, $SEARCH_SPIDER, $SURNAME_LIST_STYLE;
+		global $controller, $UNKNOWN_NN, $UNKNOWN_PN, $SEARCH_SPIDER, $SURNAME_LIST_STYLE;
 		require_once KT_ROOT . 'includes/functions/functions_print_lists.php';
 
 		$module_url = 'module.php?mod=' . $this->getName() . '&amp;mod_action=show&amp;';
