@@ -82,16 +82,16 @@ class block_charts_KT_Module extends KT_Module implements KT_Module_Block {
 		if ($person) {
 			switch($type) {
 				case 'pedigree':
-					$title .= KT_I18N::translate('Pedigree of %s', $person->getFullName());
+					$title = KT_I18N::translate('Pedigree of %s', $person->getFullName());
 					break;
 				case 'descendants':
-					$title .= KT_I18N::translate('Descendants of %s', $person->getFullName());
+					$title = KT_I18N::translate('Descendants of %s', $person->getFullName());
 					break;
 				case 'hourglass':
-					$title .= KT_I18N::translate('Hourglass chart of %s', $person->getFullName());
+					$title = KT_I18N::translate('Hourglass chart of %s', $person->getFullName());
 					break;
 				case 'treenav':
-					$title .= KT_I18N::translate('Interactive tree of %s', $person->getFullName());
+					$title = KT_I18N::translate('Interactive tree of %s', $person->getFullName());
 					break;
 			}
 
@@ -171,7 +171,8 @@ class block_charts_KT_Module extends KT_Module implements KT_Module_Block {
 
 	// Implement class KT_Module_Block
 	public function configureBlock($block_id) {
-		global $controller;
+		global $controller, $iconStyle;
+		require_once KT_ROOT . 'includes/functions/functions_edit.php';
 
 		$PEDIGREE_ROOT_ID = get_gedcom_setting(KT_GED_ID, 'PEDIGREE_ROOT_ID');
 
@@ -183,9 +184,7 @@ class block_charts_KT_Module extends KT_Module implements KT_Module_Block {
 
 		$type		= get_block_setting($block_id, 'type',    'pedigree');
 		$pid		= get_block_setting($block_id, 'pid', KT_USER_ID ? (KT_USER_GEDCOM_ID ? KT_USER_GEDCOM_ID : $PEDIGREE_ROOT_ID) : $PEDIGREE_ROOT_ID);
-
-		require_once KT_ROOT . 'includes/functions/functions_edit.php';
-
+		$root = KT_Person::getInstance($pid);
 		$controller
 			->addExternalJavascript(KT_AUTOCOMPLETE_JS_URL)
 			->addInlineJavascript('autocomplete();
@@ -208,11 +207,15 @@ class block_charts_KT_Module extends KT_Module implements KT_Module_Block {
 			 <label><?php echo KT_I18N::translate('Individual'); ?></label>
 		</div>
 		<div class="cell medium-7">
-			<input data-autocomplete-type="INDI" type="text" name="pid" id="pid" value="<?php echo $pid; ?>" size="5">
-			<?php $root = KT_Person::getInstance($pid);
-			if ($root) {
-				echo ' <span class="list_item">', $root->getFullName(), $root->format_first_major_fact(KT_EVENTS_BIRT, 1), '</span>';
-			} ?>
+			<div class="input-group autocomplete_container">
+				<input data-autocomplete-type="INDI" type="text" id="autocompleteInput-favIndi" value="<?php echo strip_tags($root->getLifespanName()); ?>" placeholder="<?php echo KT_I18N::translate('Individual name'); ?>">
+				<span class="input-group-label">
+					<button class="clearAutocomplete autocomplete_icon">
+						<i class="<?php echo $iconStyle; ?> fa-times"></i>
+					</button>
+				</span>
+			</div>
+			<input type="hidden" id="selectedValue-indi" name="pid">
 		</div>
 		<hr>
 
