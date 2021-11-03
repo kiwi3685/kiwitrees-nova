@@ -401,6 +401,7 @@ class list_favorites_KT_Module extends KT_Module implements KT_Module_List {
 	// Create a "remove favourite" option
 	public static function removeFavourite($key) {
 		global $iconStyle;
+
 		$removeFavourite = '<a href="index.php?delete=deletefav&amp;favorite_id=' . $key . '"
 			onclick="return confirm(\'' . KT_I18N::translate('Are you sure you want to remove this?') . '\');">
 			<span>
