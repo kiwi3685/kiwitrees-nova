@@ -48,23 +48,31 @@ switch ($table) {
 			case 'male':
 				$title 		= KT_I18N::translate('Total males');
 				$content	= format_indi_table($stats->individualsList($ged_id, 'male'));
-				break;
+			break;
 			case 'female':
 				$title 		= KT_I18N::translate('Total females');
 				$content	= format_indi_table($stats->individualsList($ged_id, 'female'));
-				break;
+			break;
 			case 'unknown':
 				$title 		= KT_I18N::translate('Total unknown gender');
 				$content	= format_indi_table($stats->individualsList($ged_id, 'unknown'));
-				break;
+			break;
 			case 'living':
 				$title 		= KT_I18N::translate('Total living');
 				$content	= format_indi_table($stats->individualsList($ged_id, 'living'));
-				break;
+			break;
 			case 'deceased':
 				$title 		= KT_I18N::translate('Total deceased');
 				$content	= format_indi_table($stats->individualsList($ged_id, 'deceased'));
-				break;
+			break;
+			case 'withsour':
+				$title 		= KT_I18N::translate('Individuals with sources');
+				$content	= format_indi_table($stats->individualsList($ged_id, 'withsour'));
+			break;
+			case 'withoutsour':
+				$title 		= KT_I18N::translate('Individuals without sources');
+				$content	= format_indi_table($stats->individualsList($ged_id, 'withoutsour'));
+			break;
 		}
 	break;
 	case 'century': {
@@ -179,7 +187,14 @@ switch ($table) {
 				$title 		= KT_I18N::translate('Families with no children in the %s century', $stats->_centuryName($option));
 				$content	= format_fam_table($list);
 			break;
-
+			case 'withsour':
+				$title 		= KT_I18N::translate('Families with sources');
+				$content	= format_fam_table($stats->famsList($ged_id, 'withsour'));
+			break;
+			case 'withoutsour':
+				$title 		= KT_I18N::translate('Families without sources');
+				$content	= format_fam_table($stats->famsList($ged_id, 'withoutsour'));
+			break;
 		}
 	break;
     case 'totalBirths' :

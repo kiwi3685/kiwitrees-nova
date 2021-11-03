@@ -9942,6 +9942,19 @@ label.radio_inline {
 #statistics-page div[id^=chart] .mapChart text {
     font-size: 0.625rem;
 }
+#statistics-page .chartKeys svg.fa-circle {
+    font-size: 1.25rem;
+    vertical-align: bottom;
+}
+#statistics-page .chartKeys svg.fa-circle.female {
+    color: #e09798;
+}
+#statistics-page .chartKeys svg.fa-circle.male {
+    color: #0193b7;
+}
+#statistics-page .chartKeys svg.fa-circle.unknown {
+    color: #8a8a8a;
+}
 #statistics-page div.pie-chart {
     margin-top: 1rem;
     margin-bottom: -1rem;

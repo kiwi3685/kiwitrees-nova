@@ -323,7 +323,6 @@ class KT_Stats {
 			->execute(array($this->_ged_id))
 			->fetchOne();
 	}
-
 	function totalIndividuals() {
 		return KT_I18N::number($this->_totalIndividuals());
 	}
@@ -332,13 +331,21 @@ class KT_Stats {
 		$rows=self::_runSQL("SELECT COUNT(DISTINCT i_id) AS tot FROM `##link`, `##individuals` WHERE i_id=l_from AND i_file=l_file AND l_file=".$this->_ged_id." AND l_type='SOUR'");
 		return $rows[0]['tot'];
 	}
-
 	function totalIndisWithSources() {
 		return KT_I18N::number(self::_totalIndisWithSources());
 	}
-
 	function totalIndisWithSourcesPercentage() {
 		return KT_I18N::percentage(round(self::_totalIndisWithSources() / self::_totalIndividuals(), 1));
+	}
+
+	function _totalIndisWithoutSources() {
+		return self::_totalIndividuals() - self::_totalIndisWithSources();
+	}
+	function totalIndisWithoutSources() {
+		return KT_I18N::number(self::_totalIndisWithoutSources());
+	}
+	function totalIndisWithoutSourcesPercentage() {
+		return KT_I18N::percentage(round(self::_totalIndisWithoutSources() / self::_totalIndividuals(), 1));
 	}
 
 	function chartIndisWithSources() {
@@ -351,13 +358,13 @@ class KT_Stats {
 				array (
 					'category'	=> KT_I18N::translate('With sources'),
 					'count'		=> $this->_totalIndisWithSources(),
-					'percent'	=> KT_I18N::number($this->_totalIndisWithSources(), 0),
+					'percent'	=> $this->totalIndisWithSourcesPercentage(),
 					'color'		=> 'l'
 				),
 				array (
 					'category'	=> KT_I18N::translate('Without sources'),
-					'count'		=> $tot - $this->_totalIndisWithSources(),
-					'percent'	=> KT_I18N::number($tot - $this->_totalIndisWithSources(), 0),
+					'count'		=> $this->_totalIndisWithoutSources(),
+					'percent'	=> $this->totalIndisWithoutSourcesPercentage(),
 					'color'		=> 'd'
 				)
 			);
@@ -377,7 +384,6 @@ class KT_Stats {
 			->execute(array($this->_ged_id))
 			->fetchOne();
 	}
-
 	function totalFamilies() {
 		return KT_I18N::number($this->_totalFamilies());
 	}
@@ -386,14 +392,23 @@ class KT_Stats {
 		$rows=self::_runSQL("SELECT COUNT(DISTINCT f_id) AS tot FROM `##link`, `##families` WHERE f_id=l_from AND f_file=l_file AND l_file=".$this->_ged_id." AND l_type='SOUR'");
 		return $rows[0]['tot'];
 	}
-
 	function totalFamsWithSources() {
 		return KT_I18N::number(self::_totalFamsWithSources());
 	}
-
 	function totalFamsWithSourcesPercentage() {
 		return KT_I18N::percentage(round(self::_totalFamsWithSources() / self::_totalFamilies(), 1));
 	}
+
+	function _totalFamsWithoutSources() {
+		return self::_totalFamilies() - self::_totalFamsWithSources();
+	}
+	function totalFamsWithoutSources() {
+		return KT_I18N::number(self::_totalFamsWithoutSources());
+	}
+	function totalFamsWithoutSourcesPercentage() {
+		return KT_I18N::percentage(round(self::_totalFamsWithoutSources() / self::_totalFamilies(), 1));
+	}
+
 
 	function chartFamsWithSources() {
 		$tot = $this->_totalFamilies();
@@ -405,13 +420,13 @@ class KT_Stats {
 				array (
 					'category'	=> KT_I18N::translate('With sources'),
 					'count'		=> $this->_totalFamsWithSources(),
-					'percent'	=> KT_I18N::number($this->_totalFamsWithSources(), 0),
+					'percent'	=> $this->totalFamsWithSourcesPercentage(),
 					'color'		=> 'l'
 				),
 				array (
 					'category'	=> KT_I18N::translate('Without sources'),
-					'count'		=> $tot - $this->_totalFamsWithSources(),
-					'percent'	=> KT_I18N::number($tot - $this->_totalFamsWithSources(), 0),
+					'count'		=> $this->_totalFamsWithoutSources(),
+					'percent'	=> $this->totalFamsWithoutSourcesPercentage(),
 					'color'		=> 'd'
 				)
 			);
@@ -4294,26 +4309,89 @@ class KT_Stats {
 			switch ($option){
 				case 'male':
 					$sql .= " AND i_gedcom LIKE '%1 SEX M%'";
-					break;
+				break;
 				case 'female':
 					$sql .= " AND i_gedcom LIKE '%1 SEX F%'";
-					break;
+				break;
 				case 'unknown':
 					$sql .= " AND i_gedcom NOT LIKE '%1 SEX M%' AND i_gedcom NOT LIKE '%1 SEX F%'";
-					break;
+				break;
 				case 'living':
 					$sql .= " AND i_gedcom NOT REGEXP '\\n1 (" . KT_EVENTS_DEAT . ")'";
-					break;
+				break;
 				case 'deceased':
 					$sql .= " AND i_gedcom REGEXP '\\n1 (" . KT_EVENTS_DEAT . ")'";
-					break;
+				break;
+				case 'withsour':
+					$sql = "
+						SELECT i_id AS xref, i_file AS ged_id
+						FROM `##individuals`, `##link`
+						WHERE i_id = l_from AND i_file = l_file
+						AND l_file = " . $ged_id . "
+						AND l_type='SOUR'
+						GROUP BY i_id, i_file
+					";
+				break;
+				case 'withoutsour':
+					$sql = "
+						SELECT i_id AS xref, i_file AS ged_id
+						FROM `##individuals`
+						WHERE i_file=1
+						AND i_id NOT IN (
+						    SELECT DISTINCT i_id
+						    FROM `##individuals`, `##link`
+						    WHERE i_id = l_from AND i_file = l_file
+						    AND l_file=" . $ged_id . "
+						    AND l_type = 'SOUR'
+						);
+					";
+				break;
 			}
 		}
 		$rows	= KT_DB::prepare($sql)->fetchAll(PDO::FETCH_ASSOC);
 		$list	= array();
 		foreach ($rows as $row) {
-			$person = KT_Person::getInstance($row);
+			$person = KT_Person::getInstance($row['xref']);
 				$list[] = clone $person;
+		}
+		return $list;
+
+	}
+
+	static function famsList($ged_id, $option = '') {
+		if ($option) {
+			switch ($option){
+				case 'withsour':
+					$sql = "
+						SELECT f_id AS xref, f_file AS ged_id
+						FROM `##families`, `##link`
+						WHERE f_id = l_from AND f_file = l_file
+						AND l_file = " . $ged_id . "
+						AND l_type='SOUR'
+						GROUP BY f_id, f_file
+					";
+				break;
+				case 'withoutsour':
+					$sql = "
+						SELECT f_id AS xref, f_file AS ged_id
+						FROM `##families`
+						WHERE f_file=1
+						AND f_id NOT IN (
+						    SELECT DISTINCT f_id
+						    FROM `##families`, `##link`
+						    WHERE f_id = l_from AND f_file = l_file
+						    AND l_file=" . $ged_id . "
+						    AND l_type = 'SOUR'
+						);
+					";
+				break;
+			}
+		}
+		$rows	= KT_DB::prepare($sql)->fetchAll(PDO::FETCH_ASSOC);
+		$list	= array();
+		foreach ($rows as $row) {
+			$family = KT_Family::getInstance($row['xref']);
+				$list[] = clone $family;
 		}
 		return $list;
 

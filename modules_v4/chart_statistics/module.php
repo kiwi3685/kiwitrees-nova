@@ -150,27 +150,30 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 						<?php $stats->totalSexUnknown() > 0 ? $cells = 4 : $cells = 6; ?>
 						<div class="cell medium-6">
 							<div class="grid-x">
-								<div class="cell medium-<?php echo $cells; ?> text-center">
+								<div class="cell medium-<?php echo $cells; ?> chartKeys text-center">
 									<small>
+										<i class="<?php echo $iconStyle; ?> fa-circle fa-2x male"></i>
 										<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalIndis&amp;option=male">
-                                        <?php echo $stats->totalSexMales(); ?>
+                                        <?php echo KT_I18N::translate('Males (%s)', $stats->totalSexMales()); ?>
 										</a>
 										 (<?php echo $stats->totalSexMalesPercentage(); ?>)
 									</small>
 								</div>
-								<div class="cell medium-<?php echo $cells; ?> text-center">
+								<div class="cell medium-<?php echo $cells; ?> chartKeys text-center">
 									<small>
+										<i class="<?php echo $iconStyle; ?> fa-circle fa-2x female"></i>
 										<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalIndis&amp;option=female">
-                                        <?php echo $stats->totalSexFemales(); ?>
+                                        <?php echo KT_I18N::translate('Females (%s)', $stats->totalSexFemales()); ?>
 										</a>
 										 (<?php echo $stats->totalSexFemalesPercentage(); ?>)
 									</small>
 								</div>
 								<?php if ($stats->totalSexUnknown() > 0) { ?>
-									<div class="cell medium-<?php echo $cells; ?> text-center">
+									<div class="cell medium-<?php echo $cells; ?> chartKeys text-center">
 										<small>
+											<i class="<?php echo $iconStyle; ?> fa-circle fa-2x unknown"></i>
 											<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalIndis&amp;option=unknown">
-                                        <?php echo $stats->totalSexUnknown(); ?>
+                                        <?php echo KT_I18N::translate('Unknown (%s)', $stats->totalSexUnknown()); ?>
 											</a>
 											 (<?php echo $stats->totalSexUnknownPercentage(); ?>)
 										 </small>
@@ -182,16 +185,18 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 						</div>
 						<div class="cell medium-6">
 							<div class="grid-x">
-								<div class="cell medium-6 text-center">
+								<div class="cell medium-6 chartKeys text-center">
 									<small>
+										<i class="<?php echo $iconStyle; ?> fa-circle fa-2x female"></i>
 										<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalIndis&amp;option=living">
 											<?php echo KT_I18N::translate('Total living'); ?>&nbsp;<?php echo $stats->totalLiving(); ?>
 										</a>
 										 (<?php echo $stats->totalLivingPercentage(); ?>)
 									</small>
 								</div>
-								<div class="cell medium-6 text-center">
+								<div class="cell medium-6 chartKeys text-center">
 									<small>
+										<i class="<?php echo $iconStyle; ?> fa-circle fa-2x male"></i>
 										<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalIndis&amp;option=deceased">
 											<?php echo KT_I18N::translate('Total deceased'); ?>&nbsp;<?php echo $stats->totalDeceased(); ?>
 										</a>
@@ -520,24 +525,48 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 					<div class="grid-x grid-margin-x grid-margin-y statisticSection">
 						<div class="cell medium-6">
 							<div class="grid-x">
-								<div class="cell text-center">
-									<?php echo KT_I18N::translate('Individuals with sources'); ?>
-									<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalIndis&amp;option=male">
-										<?php echo $stats->totalIndisWithSources(); ?>
-									</a>
-									 (<?php echo $stats->totalIndividualsPercentage(); ?>)
+								<div class="cell text-center"><?php echo KT_I18N::translate('Individuals'); ?></div>
+								<div class="cell medium-6 chartKeys text-center">
+									<small>
+										<i class="<?php echo $iconStyle; ?> fa-circle fa-2x female"></i>
+										<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalIndis&amp;option=withsour">
+											<?php echo KT_I18N::translate('With sources') . '&nbsp;' . $stats->totalIndisWithSources(); ?>
+										</a>
+										 (<?php echo $stats->totalIndisWithSourcesPercentage(); ?>)
+									 </small>
+								 </div>
+								 <div class="cell medium-6 chartKeys text-center">
+									 <small>
+ 										<i class="<?php echo $iconStyle; ?> fa-circle fa-2x male"></i>
+											<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalIndis&amp;option=withoutsour">
+												<?php echo KT_I18N::translate('Without sources') . '&nbsp;' . $stats->totalIndisWithoutSources(); ?>
+											</a>
+ 										 (<?php echo $stats->totalIndisWithoutSourcesPercentage(); ?>)
+ 									 </small>
 								 </div>
 								<div class="cell" id="chartIndisWithSources"></div>
 							</div>
 						</div>
 						<div class="cell medium-6">
 							<div class="grid-x">
-								<div class="cell text-center">
-									<?php echo KT_I18N::translate('Families with sources'); ?>
-									<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalIndis&amp;option=male">
-										<?php echo $stats->totalFamsWithSources(); ?>
-									</a>
-									 (<?php echo $stats->totalFamiliesPercentage(); ?>)
+								<div class="cell text-center"><?php echo KT_I18N::translate('Families'); ?></div>
+								<div class="cell medium-6 chartKeys text-center">
+									<small>
+										<i class="<?php echo $iconStyle; ?> fa-circle fa-2x female"></i>
+										<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalFams&amp;tag=withsour">
+											<?php echo KT_I18N::translate('With sources') . '&nbsp;' . $stats->totalFamsWithSources(); ?>
+										</a>
+										 (<?php echo $stats->totalFamsWithSourcesPercentage(); ?>)
+									 </small>
+								 </div>
+								 <div class="cell medium-6 chartKeys text-center">
+									 <small>
+ 										<i class="<?php echo $iconStyle; ?> fa-circle fa-2x male"></i>
+ 										<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalFams&amp;tag=withoutsour">
+											<?php echo KT_I18N::translate('Without sources') . '&nbsp;' . $stats->totalFamsWithoutSources(); ?>
+ 										</a>
+ 										 (<?php echo $stats->totalFamsWithoutSourcesPercentage(); ?>)
+ 									 </small>
 								 </div>
 								<div class="cell" id="chartFamsWithSources"></div>
 							</div>
