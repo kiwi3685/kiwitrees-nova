@@ -63,7 +63,6 @@ if (KT_USE_CDN) {
 }
 
 // other js
-//define('KT_FONTAWESOME_JS',					KT_STATIC_URL . 'library/fontawesome/all.js'); 			// fontawesome-free-5.12.0 Updated 23-01-2020.
 define('KT_FONTAWESOME_JS',					KT_STATIC_URL . 'library/fontawesome/all.min.js');  // fontawesome-free-5.12.0 Updated 23-01-2020.
 define('KT_JQUERY_COLORBOX_URL',			KT_STATIC_URL . 'library/colorbox/jquery.colorbox-min.js');	// 1.6.4	Updated 11-05-2016
 define('KT_JQUERY_JEDITABLE_URL',			KT_STATIC_URL . 'js/jquery.jeditable.js');		    	// 1.7.3 (used only in site access rules table)
@@ -77,9 +76,7 @@ define('KT_CHOSEN_JS',						KT_STATIC_URL . 'library/chosen/chosen.jquery.min.js
 
 // kiwitrees own javascript libraries
 define('KT_KIWITREES_JS_URL',				KT_STATIC_URL . 'js/kiwitrees.min.js');					// used system wide, via Pages WT class
-//define('KT_KIWITREES_JS_URL',				KT_STATIC_URL . 'js/kiwitrees.js');						// used system wide, via Pages WT class
-//define('KT_AUTOCOMPLETE_JS_URL',			KT_STATIC_URL . 'js/autocomplete.min.js');				// used system wide
-define('KT_AUTOCOMPLETE_JS_URL',			KT_STATIC_URL . 'js/autocomplete.js');					// used system wide
+define('KT_AUTOCOMPLETE_JS_URL',			KT_STATIC_URL . 'js/autocomplete.min.js');				// used system wide
 define('KT_JQUERY_TREEVIEW_JS_URL',			KT_STATIC_URL . 'js/jquery.treeview.js');				// used only in branches.php
 define('KT_FANCY_TREEVIEW_JS_URL',			KT_STATIC_URL . 'js/fancytreeview.js');					// used in fancy_treeview_descendants & fancy_treeview_ancestors
 define('KT_INTERACTIVETREE_JS_URL',			KT_STATIC_URL . 'js/interactivetree.js');				// used in the interctive tree tab
