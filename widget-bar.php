@@ -44,12 +44,12 @@ $widgets = KT_Module::getActiveWidgets();
 		$class_name = $module_name . '_KT_Module';
 		$module = new $class_name;
 		$widget = KT_DB::prepare(
-			"SELECT SQL_CACHE * FROM `##block` WHERE module_name = ?"
+			"SELECT * FROM `##block` WHERE module_name = ?"
 		)->execute(array($module_name))->fetchOneRow();
 		if (!$widget) {
 			KT_DB::prepare("INSERT INTO `##block` (module_name, block_order) VALUES (?, 0)")
 				->execute(array($module_name));
-			$widget = KT_DB::prepare("SELECT SQL_CACHE * FROM `##block` WHERE module_name = ?")
+			$widget = KT_DB::prepare("SELECT * FROM `##block` WHERE module_name = ?")
 				->execute(array($module_name))->fetchOneRow();
 		}
 		echo $module->getWidget($widget->block_id);

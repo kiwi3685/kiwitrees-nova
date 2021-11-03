@@ -33,7 +33,7 @@ global $KT_TREE;
 
 $block_id	= KT_Filter::getInteger('block_id');
 $block		= KT_DB::prepare(
-					"SELECT SQL_CACHE * FROM `##block` WHERE block_id=?"
+					"SELECT * FROM `##block` WHERE block_id=?"
 				)->execute(array($block_id))->fetchOneRow();
 
 // Select either footer blocks or homep page blocks

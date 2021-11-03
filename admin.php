@@ -86,12 +86,12 @@ $total_users = count(get_all_users());
 
 // Administrators
 $administrators = KT_DB::prepare(
-	"SELECT SQL_CACHE user_id, real_name FROM `##user` JOIN `##user_setting` USING (user_id) WHERE setting_name='canadmin' AND setting_value='1'"
+	"SELECT user_id, real_name FROM `##user` JOIN `##user_setting` USING (user_id) WHERE setting_name='canadmin' AND setting_value='1'"
 )->fetchAll();
 
 // Managers
 $managers = KT_DB::prepare(
-	"SELECT SQL_CACHE user_id, real_name FROM `##user` JOIN `##user_gedcom_setting` USING (user_id)" .
+	"SELECT user_id, real_name FROM `##user` JOIN `##user_gedcom_setting` USING (user_id)" .
 	" WHERE setting_name = 'canedit' AND setting_value='admin'" .
 	" GROUP BY user_id, real_name" .
 	" ORDER BY real_name"
@@ -99,7 +99,7 @@ $managers = KT_DB::prepare(
 
 // Moderators
 $moderators = KT_DB::prepare(
-	"SELECT SQL_CACHE user_id, real_name FROM `##user` JOIN `##user_gedcom_setting` USING (user_id)" .
+	"SELECT user_id, real_name FROM `##user` JOIN `##user_gedcom_setting` USING (user_id)" .
 	" WHERE setting_name = 'canedit' AND setting_value='accept'" .
 	" GROUP BY user_id, real_name" .
 	" ORDER BY real_name"
@@ -107,14 +107,14 @@ $moderators = KT_DB::prepare(
 
 // Number of users who have not verified their email address
 $unverified = KT_DB::prepare(
-	"SELECT SQL_CACHE user_id, real_name FROM `##user` JOIN `##user_setting` USING (user_id)" .
+	"SELECT user_id, real_name FROM `##user` JOIN `##user_setting` USING (user_id)" .
 	" WHERE setting_name = 'verified' AND setting_value = '0'" .
 	" ORDER BY real_name"
 )->fetchAll();
 
 // Number of users whose accounts are not approved by an administrator
 $unapproved = KT_DB::prepare(
-	"SELECT SQL_CACHE user_id, real_name FROM `##user` JOIN `##user_setting` USING (user_id)" .
+	"SELECT user_id, real_name FROM `##user` JOIN `##user_setting` USING (user_id)" .
 	" WHERE setting_name = 'verified_by_admin' AND setting_value = '0'" .
 	" ORDER BY real_name"
 )->fetchAll();
@@ -129,25 +129,25 @@ $logged_in = KT_DB::prepare(
 
 // Count of records
 $individuals = KT_DB::prepare(
-	"SELECT SQL_CACHE gedcom_id, COUNT(i_id) AS count FROM `##gedcom` LEFT JOIN `##individuals` ON gedcom_id = i_file GROUP BY gedcom_id"
+	"SELECT gedcom_id, COUNT(i_id) AS count FROM `##gedcom` LEFT JOIN `##individuals` ON gedcom_id = i_file GROUP BY gedcom_id"
 )->fetchAssoc();
 $families = KT_DB::prepare(
-	"SELECT SQL_CACHE gedcom_id, COUNT(f_id) AS count FROM `##gedcom` LEFT JOIN `##families` ON gedcom_id = f_file GROUP BY gedcom_id"
+	"SELECT gedcom_id, COUNT(f_id) AS count FROM `##gedcom` LEFT JOIN `##families` ON gedcom_id = f_file GROUP BY gedcom_id"
 )->fetchAssoc();
 $sources = KT_DB::prepare(
-	"SELECT SQL_CACHE gedcom_id, COUNT(s_id) AS count FROM `##gedcom` LEFT JOIN `##sources` ON gedcom_id = s_file GROUP BY gedcom_id"
+	"SELECT gedcom_id, COUNT(s_id) AS count FROM `##gedcom` LEFT JOIN `##sources` ON gedcom_id = s_file GROUP BY gedcom_id"
 )->fetchAssoc();
 $media = KT_DB::prepare(
-	"SELECT SQL_CACHE gedcom_id, COUNT(m_id) AS count FROM `##gedcom` LEFT JOIN `##media` ON gedcom_id = m_file GROUP BY gedcom_id"
+	"SELECT gedcom_id, COUNT(m_id) AS count FROM `##gedcom` LEFT JOIN `##media` ON gedcom_id = m_file GROUP BY gedcom_id"
 )->fetchAssoc();
 $repositories = KT_DB::prepare(
-	"SELECT SQL_CACHE gedcom_id, COUNT(o_id) AS count FROM `##gedcom` LEFT JOIN `##other` ON gedcom_id = o_file AND o_type = 'REPO' GROUP BY gedcom_id"
+	"SELECT gedcom_id, COUNT(o_id) AS count FROM `##gedcom` LEFT JOIN `##other` ON gedcom_id = o_file AND o_type = 'REPO' GROUP BY gedcom_id"
 )->fetchAssoc();
 $notes = KT_DB::prepare(
-	"SELECT SQL_CACHE gedcom_id, COUNT(o_id) AS count FROM `##gedcom` LEFT JOIN `##other` ON gedcom_id = o_file AND o_type = 'NOTE' GROUP BY gedcom_id"
+	"SELECT gedcom_id, COUNT(o_id) AS count FROM `##gedcom` LEFT JOIN `##other` ON gedcom_id = o_file AND o_type = 'NOTE' GROUP BY gedcom_id"
 )->fetchAssoc();
 $changes = KT_DB::prepare(
-	"SELECT SQL_CACHE g.gedcom_id, COUNT(change_id) AS count FROM `##gedcom` AS g LEFT JOIN `##change` AS c ON g.gedcom_id = c.gedcom_id AND status = 'pending' GROUP BY g.gedcom_id"
+	"SELECT g.gedcom_id, COUNT(change_id) AS count FROM `##gedcom` AS g LEFT JOIN `##change` AS c ON g.gedcom_id = c.gedcom_id AND status = 'pending' GROUP BY g.gedcom_id"
 )->fetchAssoc();
 ?>
 

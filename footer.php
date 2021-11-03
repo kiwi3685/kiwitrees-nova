@@ -151,7 +151,7 @@ $cells				= '1';
 						$class_name = $module_name . '_KT_Module';
 						$module = new $class_name;
 						$footer = KT_DB::prepare(
-							"SELECT SQL_CACHE * FROM `##block` WHERE module_name = ? AND gedcom_id > 0"
+							"SELECT * FROM `##block` WHERE module_name = ? AND gedcom_id > 0"
 						)->execute(array($module_name))->fetchOneRow();
 							if ($footer) {
 								echo $module->getFooter($footer->block_id);

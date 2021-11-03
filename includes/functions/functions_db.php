@@ -993,12 +993,12 @@ function get_top_surnames($ged_id, $min, $max) {
 	$max=(int)$max;
 	if ($max==0) {
 		return
-			KT_DB::prepare("SELECT SQL_CACHE n_surn, COUNT(n_surn) FROM `##name` WHERE n_file=? AND n_type!=? AND n_surn NOT IN (?, ?, ?, ?) GROUP BY n_surn HAVING COUNT(n_surn)>=? ORDER BY 2 DESC")
+			KT_DB::prepare("SELECT n_surn, COUNT(n_surn) FROM `##name` WHERE n_file=? AND n_type!=? AND n_surn NOT IN (?, ?, ?, ?) GROUP BY n_surn HAVING COUNT(n_surn)>=? ORDER BY 2 DESC")
 			->execute(array($ged_id, '_MARNM', '@N.N.', '', '?', 'UNKNOWN', $min))
 			->fetchAssoc();
 	} else {
 		return
-			KT_DB::prepare("SELECT SQL_CACHE n_surn, COUNT(n_surn) FROM `##name` WHERE n_file=? AND n_type!=? AND n_surn NOT IN (?, ?, ?, ?) GROUP BY n_surn HAVING COUNT(n_surn)>=? ORDER BY 2 DESC LIMIT ".$max)
+			KT_DB::prepare("SELECT n_surn, COUNT(n_surn) FROM `##name` WHERE n_file=? AND n_type!=? AND n_surn NOT IN (?, ?, ?, ?) GROUP BY n_surn HAVING COUNT(n_surn)>=? ORDER BY 2 DESC LIMIT ".$max)
 			->execute(array($ged_id, '_MARNM', '@N.N.', '', '?', 'UNKNOWN', $min))
 			->fetchAssoc();
 	}
@@ -1320,7 +1320,7 @@ function get_gedcom_from_id($ged_id) {
 	}
 
 	return
-		KT_DB::prepare("SELECT SQL_CACHE gedcom_name FROM `##gedcom` WHERE gedcom_id=?")
+		KT_DB::prepare("SELECT gedcom_name FROM `##gedcom` WHERE gedcom_id=?")
 		->execute(array($ged_id))
 		->fetchOne();
 }
@@ -1333,7 +1333,7 @@ function get_id_from_gedcom($ged_name) {
 	}
 
 	return
-		KT_DB::prepare("SELECT SQL_CACHE gedcom_id FROM `##gedcom` WHERE gedcom_name=?")
+		KT_DB::prepare("SELECT gedcom_id FROM `##gedcom` WHERE gedcom_name=?")
 		->execute(array($ged_name))
 		->fetchOne();
 }
@@ -1377,7 +1377,7 @@ function create_user($username, $realname, $email, $password) {
 		// User already exists?
 	}
 	$user_id =
-		KT_DB::prepare("SELECT SQL_CACHE user_id FROM `##user` WHERE user_name=?")
+		KT_DB::prepare("SELECT user_id FROM `##user` WHERE user_name=?")
 		->execute(array($username))->fetchOne();
 	return $user_id;
 }
@@ -1411,16 +1411,16 @@ function delete_user($user_id) {
 function get_all_users($order='ASC', $key='realname') {
 	if ($key=='username') {
 		return
-			KT_DB::prepare("SELECT SQL_CACHE user_id, user_name FROM `##user` WHERE user_id>0 ORDER BY user_name")
+			KT_DB::prepare("SELECT user_id, user_name FROM `##user` WHERE user_id>0 ORDER BY user_name")
 			->fetchAssoc();
 	} elseif ($key=='realname') {
 		return
-			KT_DB::prepare("SELECT SQL_CACHE user_id, user_name FROM `##user` WHERE user_id>0 ORDER BY real_name")
+			KT_DB::prepare("SELECT user_id, user_name FROM `##user` WHERE user_id>0 ORDER BY real_name")
 			->fetchAssoc();
 	} else {
 		return
 			KT_DB::prepare(
-				"SELECT SQL_CACHE u.user_id, user_name".
+				"SELECT u.user_id, user_name".
 				" FROM `##user` u".
 				" LEFT JOIN `##user_setting` us1 ON (u.user_id=us1.user_id AND us1.setting_name=?)".
 				" WHERE u.user_id>0".
@@ -1431,7 +1431,7 @@ function get_all_users($order='ASC', $key='realname') {
 }
 
 function get_user_count() {
-	return KT_DB::prepare("SELECT SQL_CACHE COUNT(*) FROM `##user` WHERE user_id>0")->fetchOne();
+	return KT_DB::prepare("SELECT COUNT(*) FROM `##user` WHERE user_id>0")->fetchOne();
 }
 
 /**
@@ -1442,7 +1442,7 @@ function get_user_count() {
  * @return User|null
  */
 function find($user_id) {
-	return KT_DB::prepare("SELECT SQL_CACHE user_id, user_name, real_name, email FROM `##user` WHERE user_id = ?")->execute([$user_id])->fetchOneRow();
+	return KT_DB::prepare("SELECT user_id, user_name, real_name, email FROM `##user` WHERE user_id = ?")->execute([$user_id])->fetchOneRow();
 }
 
 /**
@@ -1454,7 +1454,7 @@ function find($user_id) {
  */
 function findByUserName($user_name) {
 	$user_id = KT_DB::prepare(
-		"SELECT SQL_CACHE user_id FROM `##user` WHERE user_name = ?"
+		"SELECT user_id FROM `##user` WHERE user_name = ?"
 	)->execute([$user_name])->fetchOne();
 
 	return find($user_id);
@@ -1468,19 +1468,19 @@ function findByUserName($user_name) {
  * @return User|null
  */
 function findByEmail($email) {
-	return KT_DB::prepare("SELECT SQL_CACHE user_id FROM `##user` WHERE email=?")->execute(array($email))->fetchOne();
+	return KT_DB::prepare("SELECT user_id FROM `##user` WHERE email=?")->execute(array($email))->fetchOne();
 }
 
 function get_admin_user_count() {
 	return
-		KT_DB::prepare("SELECT SQL_CACHE COUNT(*) FROM `##user_setting` WHERE setting_name=? AND setting_value=? AND user_id>0")
+		KT_DB::prepare("SELECT COUNT(*) FROM `##user_setting` WHERE setting_name=? AND setting_value=? AND user_id>0")
 		->execute(array('canadmin', '1'))
 		->fetchOne();
 }
 
 function get_non_admin_user_count() {
 	return
-		KT_DB::prepare("SELECT SQL_CACHE COUNT(*) FROM `##user_setting` WHERE  setting_name=? AND setting_value<>? AND user_id>0")
+		KT_DB::prepare("SELECT COUNT(*) FROM `##user_setting` WHERE  setting_name=? AND setting_value<>? AND user_id>0")
 		->execute(array('canadmin', '1'))
 		->fetchOne();
 }
@@ -1500,21 +1500,21 @@ function get_logged_in_users() {
 
 // Get the ID for a username
 function get_user_id($username) {
-	return KT_DB::prepare("SELECT SQL_CACHE user_id FROM `##user` WHERE user_name=?")
+	return KT_DB::prepare("SELECT user_id FROM `##user` WHERE user_name=?")
 		->execute(array($username))
 		->fetchOne();
 }
 
 // Get the username for a user ID
 function get_user_name($user_id) {
-	return KT_DB::prepare("SELECT SQL_CACHE user_name FROM `##user` WHERE user_id=?")
+	return KT_DB::prepare("SELECT user_name FROM `##user` WHERE user_id=?")
 		->execute(array($user_id))
 		->fetchOne();
 }
 
 function get_newest_registered_user() {
 	return KT_DB::prepare(
-		"SELECT SQL_CACHE u.user_id".
+		"SELECT u.user_id".
 		" FROM `##user` u".
 		" LEFT JOIN `##user_setting` us ON (u.user_id=us.user_id AND us.setting_name=?) ".
 		" ORDER BY us.setting_value DESC LIMIT 1"
@@ -1545,7 +1545,7 @@ function set_user_password($user_id, $password) {
 function check_user_password($user_id, $password) {
 	// crypt() needs the password-hash to use as a salt
 	$password_hash=
-		KT_DB::prepare("SELECT SQL_CACHE password FROM `##user` WHERE user_id=?")
+		KT_DB::prepare("SELECT password FROM `##user` WHERE user_id=?")
 		->execute(array($user_id))
 		->fetchOne();
 	if (crypt($password, $password_hash)==$password_hash) {
@@ -1566,7 +1566,7 @@ function get_user_setting($user_id, $setting_name, $default_value=null) {
 	static $statement = null;
 	if ($statement===null) {
 		$statement = KT_DB::prepare(
-			"SELECT SQL_CACHE setting_value FROM `##user_setting` WHERE user_id=? AND setting_name=?"
+			"SELECT setting_value FROM `##user_setting` WHERE user_id=? AND setting_name=?"
 		);
 	}
 	$setting_value=$statement->execute(array($user_id, $setting_name))->fetchOne();
@@ -1594,7 +1594,7 @@ function admin_user_exists() {
 function get_user_from_gedcom_xref($ged_id, $xref) {
 	return
 		KT_DB::prepare(
-			"SELECT SQL_CACHE user_id FROM `##user_gedcom_setting`".
+			"SELECT user_id FROM `##user_gedcom_setting`".
 			" WHERE gedcom_id=? AND setting_name=? AND setting_value=?"
 		)->execute(array($ged_id, 'gedcomid', $xref))->fetchOne();
 }
@@ -1602,7 +1602,7 @@ function get_user_from_gedcom_xref($ged_id, $xref) {
 function get_gedcomid($user_id, $gedcom_id) {
 	return
 		KT_DB::prepare(
-			"SELECT SQL_CACHE setting_value FROM `##user_gedcom_setting`".
+			"SELECT setting_value FROM `##user_gedcom_setting`".
 			" WHERE user_id=? AND gedcom_id=? AND setting_name=?"
 		)->execute(array($user_id, $gedcom_id, 'gedcomid'))->fetchOne();
 }
@@ -1610,7 +1610,7 @@ function get_gedcomid($user_id, $gedcom_id) {
 function get_admin_id($gedcom_id) {
 	return
 		KT_DB::prepare(
-			"SELECT SQL_CACHE user_id FROM `##user_gedcom_setting` WHERE gedcom_id=? AND setting_value='admin'"
+			"SELECT user_id FROM `##user_gedcom_setting` WHERE gedcom_id=? AND setting_value='admin'"
 		)->execute(array($gedcom_id))->fetchOne();
 }
 
@@ -1624,7 +1624,7 @@ function get_admin_id($gedcom_id) {
 function get_gedcom_blocks($gedcom_id) {
 	$blocks	= array('main' => array(), 'side' => array(), 'footer' => array());
 	$rows	= KT_DB::prepare("
-		SELECT SQL_CACHE location, block_id, module_name
+		SELECT location, block_id, module_name
 		 FROM  `##block`
 		 JOIN  `##module` USING (module_name)
 		 JOIN  `##module_privacy` USING (module_name, gedcom_id)
@@ -1641,7 +1641,7 @@ function get_gedcom_blocks($gedcom_id) {
 
 function get_block_location($block_id) {
 	return KT_DB::prepare(
-		"SELECT SQL_CACHE location FROM `##block` WHERE block_id=?"
+		"SELECT location FROM `##block` WHERE block_id=?"
 	)->execute(array($block_id))->fetchOne();
 }
 
@@ -1649,7 +1649,7 @@ function get_block_setting($block_id, $setting_name, $default_value = null) {
 	static $statement;
 	if ($statement === null) {
 		$statement = KT_DB::prepare(
-			"SELECT SQL_CACHE setting_value FROM `##block_setting` WHERE block_id=? AND setting_name=?"
+			"SELECT setting_value FROM `##block_setting` WHERE block_id=? AND setting_name=?"
 		);
 	}
 	$setting_value = $statement->execute(array($block_id, $setting_name))->fetchOne();
@@ -1674,7 +1674,7 @@ function get_module_setting($module_name, $setting_name, $default_value=null) {
 	static $statement;
 	if ($statement === null) {
 		$statement = KT_DB::prepare("
-			SELECT SQL_CACHE setting_value FROM `##module_setting` WHERE module_name=? AND setting_name=?
+			SELECT setting_value FROM `##module_setting` WHERE module_name=? AND setting_name=?
 		");
 	}
 	$setting_value = $statement->execute(array($module_name, $setting_name))->fetchOne();

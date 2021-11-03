@@ -378,7 +378,7 @@ function query_age($tag_array, $age) {
 		switch ($tag_array[$i]) {
 			case ('DEAT'):
 				$sql = "
-					SELECT SQL_CACHE
+					SELECT
 					 birth.d_gid AS xref,
 					 YEAR(NOW()) - birth.d_year AS age,
 					 birth.d_year AS birthyear
@@ -401,7 +401,7 @@ function query_age($tag_array, $age) {
 			break;
 			case ('MARR'):
 				$sql = "
-					SELECT SQL_CACHE
+					SELECT
 					 birth.d_gid AS xref,
 					 married.d_year AS marryear,
 					 married.d_year - birth.d_year AS age
@@ -425,7 +425,7 @@ function query_age($tag_array, $age) {
 			break;
 			case ('FAMS'):
 				$sql = "
-					SELECT SQL_CACHE
+					SELECT
 					 fam.f_id AS xref,
 					 MIN(wifebirth.d_year-husbbirth.d_year) AS age
 					 FROM `##families` AS fam
@@ -447,7 +447,7 @@ function query_age($tag_array, $age) {
 			break;
 			case ('CHIL_1'):
 				$sql = "
-					SELECT SQL_CACHE
+					SELECT
 					 parentfamily.l_to AS xref,
 					 childfamily.l_to AS xref2,
 					 MIN(childbirth.d_julianday2)-MIN(birth.d_julianday1) AS age,
@@ -475,7 +475,7 @@ function query_age($tag_array, $age) {
 			break;
 			case ('CHIL_2'):
 				$sql = "
-					SELECT SQL_CACHE
+					SELECT
 					 parentfamily.l_to AS xref,
 					 childfamily.l_to AS xref2,
 					 MIN(childbirth.d_julianday2)-MIN(birth.d_julianday1) AS age,
@@ -503,7 +503,7 @@ function query_age($tag_array, $age) {
 			break;
 			default:
 				$sql = "
-					SELECT SQL_CACHE
+					SELECT
 					 tag.d_gid AS xref,
 					 birth.d_year AS birtyear,
 					 tag.d_year - birth.d_year AS age

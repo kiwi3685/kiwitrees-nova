@@ -64,7 +64,7 @@ class list_favorites_KT_Module extends KT_Module implements KT_Module_List {
 
 		// Do not show empty lists
 		$row = KT_DB::prepare(
-			"SELECT SQL_CACHE EXISTS(SELECT 1 FROM `##favorites` WHERE gedcom_id=? )"
+			"SELECT EXISTS(SELECT 1 FROM `##favorites` WHERE gedcom_id=? )"
 		)->execute(array(KT_GED_ID))->fetchOneRow();
 
 		if ($row) {
@@ -478,7 +478,7 @@ class list_favorites_KT_Module extends KT_Module implements KT_Module_List {
 
 		return
 			KT_DB::prepare(
-				"SELECT SQL_CACHE favorite_id AS id, user_id, gedcom_id, xref AS gid, favorite_type AS type, title, note, url".
+				"SELECT favorite_id AS id, user_id, gedcom_id, xref AS gid, favorite_type AS type, title, note, url".
 				" FROM `##favorites` WHERE gedcom_id=? AND (user_id IS NULL OR user_id = ? )")
 			->execute(array(KT_GED_ID, $user_id))
 			->fetchAll(PDO::FETCH_ASSOC);

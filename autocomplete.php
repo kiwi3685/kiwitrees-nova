@@ -122,7 +122,7 @@ switch ($type) {
 		if (strlen($term) >= 2) {
 			$rows =
 				KT_DB::prepare("
-					SELECT SQL_CACHE 'INDI' AS type, i_id AS xref, i_file AS ged_id, i_gedcom AS gedrec
+					SELECT 'INDI' AS type, i_id AS xref, i_file AS ged_id, i_gedcom AS gedrec
 					 FROM `##individuals`
 					 WHERE i_gedcom LIKE '%\n2 CEME %' AND i_file=?
 					 ORDER BY SUBSTRING_INDEX(i_gedcom, '\n2 CEME ', -1) COLLATE '" . KT_I18N::$collation . "'
@@ -150,7 +150,7 @@ switch ($type) {
 		// Fetch all data, regardless of privacy
 		$rows=
 			KT_DB::prepare("
-				SELECT SQL_CACHE 'INDI' AS type, i_id AS xref, i_file AS ged_id, i_gedcom AS gedrec
+				SELECT 'INDI' AS type, i_id AS xref, i_file AS ged_id, i_gedcom AS gedrec
 				 FROM `##individuals`
 				 WHERE i_gedcom REGEXP '(.*)\n1 EVEN.*\n2 TYPE ([^\n]*)" . $term . "*[^\n]*' AND i_file=?
 				 ORDER BY SUBSTRING_INDEX(i_gedcom, '\n2 TYPE ', -1) COLLATE '" . KT_I18N::$collation . "'
@@ -177,7 +177,7 @@ switch ($type) {
 		// Fetch all data, regardless of privacy
 		$rows=
 			KT_DB::prepare("
-				SELECT SQL_CACHE 'INDI' AS type, i_id AS xref, i_file AS ged_id, i_gedcom AS gedrec
+				SELECT 'INDI' AS type, i_id AS xref, i_file AS ged_id, i_gedcom AS gedrec
 				 FROM `##individuals`
 				 WHERE i_gedcom REGEXP '(.*)\n1 FACT.*\n2 TYPE ([^\n]*)" . $term . "*[^\n]*' AND i_file=?
 				 ORDER BY SUBSTRING_INDEX(i_gedcom, '\n2 TYPE ', -1) COLLATE '" . KT_I18N::$collation . "'
@@ -204,7 +204,7 @@ switch ($type) {
 		// Fetch all data, regardless of privacy
 		$rows=
 			KT_DB::prepare("
-				SELECT SQL_CACHE 'INDI' AS type, i_id AS xref, i_file AS ged_id, i_gedcom AS gedrec
+				SELECT 'INDI' AS type, i_id AS xref, i_file AS ged_id, i_gedcom AS gedrec
 				 FROM `##individuals`
 				 WHERE i_gedcom REGEXP '(.*)\n1 [EVEN FACT].*\n2 TYPE ([^\n]*)" . $term . "*[^\n]*' AND i_file=?
 				 ORDER BY SUBSTRING_INDEX(i_gedcom, '\n2 TYPE ', -1) COLLATE '" . KT_I18N::$collation . "'
@@ -255,7 +255,7 @@ switch ($type) {
 		// Do not filter by privacy.  Given names on their own do not identify individuals.
 		echo json_encode(
 			KT_DB::prepare("
-				SELECT SQL_CACHE DISTINCT n_givn
+				SELECT DISTINCT n_givn
 				 FROM `##name`
 				 WHERE n_givn LIKE CONCAT(?, '%') AND n_file=?
 				 ORDER BY n_givn COLLATE '" . KT_I18N::$collation . "'
@@ -271,7 +271,7 @@ switch ($type) {
 		// select by surname
 		$rows1 =
 			KT_DB::prepare("
-				SELECT SQL_CACHE DISTINCT n_surn AS name, n_id AS xref
+				SELECT DISTINCT n_surn AS name, n_id AS xref
 				 FROM `##name`
 				 WHERE n_surn LIKE CONCAT('%', ?, '%')
 				 AND n_type= 'NAME'
@@ -284,7 +284,7 @@ switch ($type) {
 		// select by given names
 		$rows2 =
 			KT_DB::prepare("
-				SELECT SQL_CACHE DISTINCT n_id AS xref, n_givn AS name
+				SELECT DISTINCT n_id AS xref, n_givn AS name
 				 FROM `##name`
 				 WHERE n_givn LIKE CONCAT('%', ?, '%')
 				 AND n_type= 'NAME'
@@ -364,7 +364,7 @@ switch ($type) {
 		// Do not filter by privacy.  Surnames on their own do not identify individuals.
 		echo json_encode(
 			KT_DB::prepare("
-				SELECT SQL_CACHE DISTINCT SUBSTRING_INDEX(SUBSTRING_INDEX(i_gedcom, CONCAT('\n2 ', ?, ' '), -1), '\n', 1)
+				SELECT DISTINCT SUBSTRING_INDEX(SUBSTRING_INDEX(i_gedcom, CONCAT('\n2 ', ?, ' '), -1), '\n', 1)
 				 FROM `##individuals`
 				 WHERE i_gedcom LIKE CONCAT('%\n2 ', ?, ' ', ?, '%') AND i_file=?
 				 ORDER BY 1
@@ -401,7 +401,7 @@ switch ($type) {
 		// Fetch all data, regardless of privacy
 		$rows =
 			KT_DB::prepare("
-				SELECT SQL_CACHE 'INDI' AS type, i_id AS xref, i_file AS ged_id, i_gedcom AS gedrec
+				SELECT 'INDI' AS type, i_id AS xref, i_file AS ged_id, i_gedcom AS gedrec
 				 FROM `##individuals`
 				 WHERE i_gedcom LIKE '%\n1 OCCU %' AND i_file=?
 				 ORDER BY SUBSTRING_INDEX(i_gedcom, '\n1 OCCU ', -1) COLLATE '" . KT_I18N::$collation . "'
@@ -499,7 +499,7 @@ switch ($type) {
 		// Do not filter by privacy.  Place names on their own do not identify individuals.
 		echo json_encode(
 			KT_DB::prepare("
-				SELECT SQL_CACHE p_place
+				SELECT p_place
 				 FROM `##places`
 				 WHERE p_place LIKE CONCAT('%', ?, '%') AND p_file=?
 				 ORDER BY p_place COLLATE '" . KT_I18N::$collation . "'
@@ -577,7 +577,7 @@ switch ($type) {
 		// Fetch all data, regardless of privacy
 		$rows =
 			KT_DB::prepare("
-				SELECT SQL_CACHE 'INDI' AS type, i_id AS xref, i_file AS ged_id, i_gedcom AS gedrec
+				SELECT 'INDI' AS type, i_id AS xref, i_file AS ged_id, i_gedcom AS gedrec
 				 FROM `##individuals`
 				 WHERE i_gedcom LIKE CONCAT('%\n_ SOUR @', ?, '@%', REPLACE(?, ' ', '%'), '%') AND i_file=?
 			")
@@ -598,7 +598,7 @@ switch ($type) {
 		// Fetch all data, regardless of privacy
 		$rows=
 			KT_DB::prepare("
-				SELECT SQL_CACHE 'FAM' AS type, f_id AS xref, f_file AS ged_id, f_gedcom AS gedrec
+				SELECT 'FAM' AS type, f_id AS xref, f_file AS ged_id, f_gedcom AS gedrec
 				 FROM `##families`
 				 WHERE f_gedcom LIKE CONCAT('%\n_ SOUR @', ?, '@%', REPLACE(?, ' ', '%'), '%') AND f_file=?
 			")
@@ -619,7 +619,7 @@ switch ($type) {
         // Fetch all data, regardless of privacy
 		$rows=
 			KT_DB::prepare("
-				SELECT SQL_CACHE 'OBJE' AS type, m_id AS xref, m_file AS ged_id, m_gedcom AS gedrec
+				SELECT 'OBJE' AS type, m_id AS xref, m_file AS ged_id, m_gedcom AS gedrec
 				 FROM `##media`
 				 WHERE m_gedcom LIKE CONCAT('%\n_ SOUR @', ?, '@%', REPLACE(?, ' ', '%'), '%') AND m_file=?
 			")
@@ -674,7 +674,7 @@ switch ($type) {
 		// Do not filter by privacy.  Surnames on their own do not identify individuals.
 		echo json_encode(
 			KT_DB::prepare("
-				SELECT SQL_CACHE DISTINCT n_surname
+				SELECT DISTINCT n_surname
 				 FROM `##name`
 				 WHERE n_surname LIKE CONCAT(?, '%') AND n_file=?
 				 ORDER BY n_surname COLLATE '" . KT_I18N::$collation . "'
