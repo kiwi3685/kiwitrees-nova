@@ -43,16 +43,17 @@ class block_favorites_KT_Module extends KT_Module implements KT_Module_Block {
 
 		self::updateSchema(); // make sure the favorites table has been created
 
-		$action = KT_Filter::post('action');
-		switch ($action) {
-		case 'deletefav':
+		$delete = KT_Filter::get('delete');
+		if ($delete = 'deletefav') {
 			$favorite_id = KT_Filter::get('favorite_id');
 			if ($favorite_id) {
 				self::deleteFavorite($favorite_id);
 			}
-			unset($_GET['action']);
-			break;
-		case 'addfav':
+			unset($_GET['delete']);
+		}
+
+		$action = KT_Filter::post('action');
+		if ($action = 'addfav')	{
 			$gid		= KT_Filter::post('gid');
 			$favnote	= KT_Filter::post('favnote');
 			$url		= KT_Filter::post('listurl', KT_REGEX_URL);
@@ -82,8 +83,7 @@ class block_favorites_KT_Module extends KT_Module implements KT_Module_Block {
 					'title'		=> $favtitle ? $favtitle : $url,
 				));
 			}
-			unset($_GET['action']);
-			break;
+			unset($_POST['action']);
 		}
 
 		$block = get_block_setting($block_id, 'block', false);
@@ -254,13 +254,15 @@ class block_favorites_KT_Module extends KT_Module implements KT_Module_Block {
 				if (isset($favorite['id'])) {
 					$key = $favorite['id'];
 				}
-				$removeFavourite = '<a href="index.php?action=deletefav&amp;favorite_id=' . $key . '"
-					class="removeFavourite"
-					onclick="return confirm(\'' . KT_I18N::translate('Are you sure you want to remove this?') . '\');">
-					<small>
-						<i class="' . $iconStyle . ' fa-trash-alt"></i>' . KT_I18N::translate('Remove') . '
-					</small>
-				</a>';
+				$removeFavourite = '
+					<a href="index.php?delete=deletefav&amp;favorite_id=' . $key . '"
+						class="removeFavourite"
+						onclick="confirm(\'' . KT_I18N::translate('Are you sure you want to remove this?') . '\');">
+						<small>
+							<i class="' . $iconStyle . ' fa-trash-alt"></i>' . KT_I18N::translate('Remove') . '
+						</small>
+					</a>
+				';
 
 				if ($favorite['type'] == 'URL') {
 					$content .= '<div id="boxurl' . $key . '.0" class="grid-x grid-margin-x grid-padding-x">
@@ -361,8 +363,8 @@ class block_favorites_KT_Module extends KT_Module implements KT_Module_Block {
 
 	// Delete a favorite from the database
 	public static function deleteFavorite($favorite_id) {
-		return (bool)
-			KT_DB::prepare("DELETE FROM `##favorites` WHERE favorite_id=?")
+		return
+			KT_DB::prepare("DELETE FROM `##favorites` WHERE favorite_id = ?")
 			->execute(array($favorite_id));
 	}
 

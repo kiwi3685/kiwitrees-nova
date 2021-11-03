@@ -92,50 +92,51 @@ class list_favorites_KT_Module extends KT_Module implements KT_Module_List {
 			->setPageTitle($this->getTitle())
 			->pageHeader();
 
-		$action		= KT_Filter::post('action');
 		$favType	= false;
 		$record		= false;
-		switch ($action) {
-			case 'deletefav':
-				$favorite_id = KT_Filter::post('favorite_id');
-				if ($favorite_id) {
-					self::deleteFavorite($favorite_id);
-				}
-				unset($_POST['action']);
-				break;
-			case 'addfav':
-				$gid		= KT_Filter::post('gid');
-				$favnote	= KT_Filter::post('favnote');
-				$url		= KT_Filter::post('listurl', KT_REGEX_URL);
-				$favtitle	= KT_Filter::post('listurltitle');
-				$favType	= KT_Filter::postBool('favType');
 
-				if ($gid) {
-					$record = KT_GedcomRecord::getInstance($gid);
-					if ($record && $record->canDisplayDetails()) {
-						self::addFavorite(array(
-							'user_id'	=> (KT_USER_ID && $favType) ? KT_USER_ID : null,
-							'gedcom_id'	=> KT_GED_ID,
-							'gid'		=> $record->getXref(),
-							'type'		=> $record->getType(),
-							'url'		=> null,
-							'note'		=> $favnote,
-							'title'		=> $favtitle,
-						));
-					}
-				} elseif ($url) {
+		$delete = KT_Filter::get('delete');
+		if ($delete = 'deletefav') {
+			$favorite_id = KT_Filter::get('favorite_id');
+			if ($favorite_id) {
+				self::deleteFavorite($favorite_id);
+			}
+			unset($_GET['delete']);
+		}
+
+		$action = KT_Filter::post('action');
+		if ($action = 'addfav')	{
+			$gid		= KT_Filter::post('gid');
+			$favnote	= KT_Filter::post('favnote');
+			$url		= KT_Filter::post('listurl', KT_REGEX_URL);
+			$favtitle	= KT_Filter::post('listurltitle');
+			$favType	= KT_Filter::postBool('favType');
+
+			if ($gid) {
+				$record = KT_GedcomRecord::getInstance($gid);
+				if ($record && $record->canDisplayDetails()) {
 					self::addFavorite(array(
 						'user_id'	=> (KT_USER_ID && $favType) ? KT_USER_ID : null,
 						'gedcom_id'	=> KT_GED_ID,
-						'gid'		=> null,
-						'type'		=> 'URL',
-						'url'		=> $url,
+						'gid'		=> $record->getXref(),
+						'type'		=> $record->getType(),
+						'url'		=> null,
 						'note'		=> $favnote,
-						'title'		=> $favtitle ? $favtitle : $url,
+						'title'		=> $favtitle,
 					));
 				}
-				unset($_POST['action']);
-				break;
+			} elseif ($url) {
+				self::addFavorite(array(
+					'user_id'	=> (KT_USER_ID && $favType) ? KT_USER_ID : null,
+					'gedcom_id'	=> KT_GED_ID,
+					'gid'		=> null,
+					'type'		=> 'URL',
+					'url'		=> $url,
+					'note'		=> $favnote,
+					'title'		=> $favtitle ? $favtitle : $url,
+				));
+			}
+			unset($_POST['action']);
 		}
 
 		// Override GEDCOM configuration temporarily
@@ -170,7 +171,7 @@ class list_favorites_KT_Module extends KT_Module implements KT_Module_List {
 		} else {
 			$favPageTitle =	$controller->getPageTitle();
 		}
-		echo pageStart('favoriteslist', $includeTitle = 'n');
+		echo pageStart('favoriteslist', '', $includeTitle = 'n');
 			if (KT_USER_ID || KT_USER_GEDCOM_ADMIN) { ?>
 				<div class="grid-x is-hidden" id="add_favorite" data-toggler=".is-hidden">
 					<div class="cell">
@@ -400,7 +401,7 @@ class list_favorites_KT_Module extends KT_Module implements KT_Module_List {
 	// Create a "remove favourite" option
 	public static function removeFavourite($key) {
 		global $iconStyle;
-		$removeFavourite = '<a href="index.php?action=deletefav&amp;favorite_id=' . $key . '"
+		$removeFavourite = '<a href="index.php?delete=deletefav&amp;favorite_id=' . $key . '"
 			onclick="return confirm(\'' . KT_I18N::translate('Are you sure you want to remove this?') . '\');">
 			<span>
 				<i class="' . $iconStyle . ' fa-trash-alt"></i>' . KT_I18N::translate('Remove') . '
