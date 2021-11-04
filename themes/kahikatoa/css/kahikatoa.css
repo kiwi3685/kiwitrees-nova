@@ -9403,7 +9403,8 @@ div[id$=-page]:not(#indi-page) button[type=submit] {
 #branches-page ul li::before {
     content: counters(section, ".") ". ";
     display: inline-block;
-    width: 3rem;
+    width: auto;
+    margin-right: 1rem;
 }
 #branches-page ul li ul {
     margin-top: 0.5rem;
