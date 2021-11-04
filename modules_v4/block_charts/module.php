@@ -179,12 +179,13 @@ class block_charts_KT_Module extends KT_Module implements KT_Module_Block {
 		if (KT_Filter::postBool('save') && KT_Filter::checkCsrf()) {
 			set_block_setting($block_id, 'details', KT_Filter::postBool('details'));
 			set_block_setting($block_id, 'type',    KT_Filter::post('type', 'pedigree|descendants|hourglass|treenav', 'pedigree'));
+			set_block_setting($block_id, 'pid',     KT_Filter::post('pid', KT_REGEX_XREF));
 			exit;
 		}
 
-		$type		= get_block_setting($block_id, 'type',    'pedigree');
-		$pid		= get_block_setting($block_id, 'pid', KT_USER_ID ? (KT_USER_GEDCOM_ID ? KT_USER_GEDCOM_ID : $PEDIGREE_ROOT_ID) : $PEDIGREE_ROOT_ID);
-		$root = KT_Person::getInstance($pid);
+		$type	= get_block_setting($block_id, 'type',    'pedigree');
+		$pid	= get_block_setting($block_id, 'pid', KT_USER_ID ? (KT_USER_GEDCOM_ID ? KT_USER_GEDCOM_ID : $PEDIGREE_ROOT_ID) : $PEDIGREE_ROOT_ID);
+		$root 	= KT_Person::getInstance($pid);
 		$controller
 			->addExternalJavascript(KT_AUTOCOMPLETE_JS_URL)
 			->addInlineJavascript('autocomplete();
