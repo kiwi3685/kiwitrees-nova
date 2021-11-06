@@ -51,7 +51,7 @@ if (KT_USE_CDN) {
 	define('KT_DATATABLES_JS',				'https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js'); //1.10.20
 	define('KT_DATATABLES_CSS',				'https://cdn.datatables.net/1.10.20/css/dataTables.foundation.min.css'); //1.10.20
 } else {
-	define('KT_FOUNDATION_JS',				KT_STATIC_URL . 'library/foundation/dist/js/foundation.min.js'); // 6.7.2 10 Sep 2021
+	define('KT_FOUNDATION_JS',				KT_STATIC_URL . 'library/foundation/dist/js/foundation.min.js'); // 6.7.4 07 Nov 2021
 	define('KT_JQUERY_JS',					KT_STATIC_URL . 'library/jquery/jquery-3.6.0.min.js'); // 3.6.0 10 Sep 2021
 	define('KT_JQUERYUI_JS',				KT_STATIC_URL . 'js/jquery-ui.min.js');	 // 1.12.1 (all options. Also requires some css in individual theme stylesheets)
 	define('KT_DATEPICKER_JS',				KT_STATIC_URL . 'library/foundation-datepicker/js/foundation-datepicker.min.js'); // 1.5.6
@@ -73,6 +73,7 @@ define('KT_JQUERY_SHORTEN',					KT_STATIC_URL . 'js/jquery.shorten.js');
 define('KT_PASSWORDSCHECK',					KT_STATIC_URL . 'js/passwordscheck.js');				// Installed 09-11-2016
 define('KT_D3_JS',							KT_STATIC_URL . 'js/d3.min.js');						// Installed from https://d3js.org/ v.4
 define('KT_CHOSEN_JS',						KT_STATIC_URL . 'library/chosen/chosen.jquery.min.js'); // chosen-package-1.87 from https://github.com/harvesthq/chosen
+define('KT_CONFIRM_REVEAL',					KT_STATIC_URL . 'library/confirm-with-reveal/build/confirm_with_reveal.min.js'); // Installed from https://github.com/ubermanl/confirm-with-reveal v.1.0.2
 
 // kiwitrees own javascript libraries
 define('KT_KIWITREES_JS_URL',				KT_STATIC_URL . 'js/kiwitrees.min.js');					// used system wide, via Pages WT class
