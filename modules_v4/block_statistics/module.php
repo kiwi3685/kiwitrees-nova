@@ -44,7 +44,7 @@ class block_statistics_KT_Module extends KT_Module implements KT_Module_Block {
 
 	// Implement class KT_Module_Block
 	public function getBlock($block_id, $template = true, $cfg = null) {
-		global $KT_TREE, $iconStyle;
+		global $KT_TREE, $iconStyle, $controller;
 
 		$show_last_update    = get_block_setting($block_id, 'show_last_update',     true);
 		$show_common_surnames= get_block_setting($block_id, 'show_common_surnames', true);
@@ -94,7 +94,9 @@ class block_statistics_KT_Module extends KT_Module implements KT_Module_Block {
 				<div class="grid-x grid-padding-x grid-padding-y">';
 					if ($stat_indi) {
 						$content.='<div class="cell small-6">' . KT_I18N::translate('Individuals') . '</div>
-						<div class="cell small-6"><a href="indilist.php?surname_sublist=no&amp;ged=' . KT_GEDURL . '">' . $stats->totalIndividuals() . '</a></div>
+						<div class="cell small-6">
+							' . $this->checkStatsSize($stat = $stats->_totalIndividuals(), $target = 'statisticsTables.php?table=totalIndis') . '
+						</div>
 						<div class="cell small-6"><i class="' . $iconStyle . ' fa-male"></i>' . KT_I18N::translate('Males') . '</div>
 						<div class="cell small-6">' . $stats->totalSexMales() . '<br>' . $stats->totalSexMalesPercentage() . '</div>
 						<div class="cell small-6"><i class="' . $iconStyle . ' fa-female"></i>' . KT_I18N::translate('Females') . '</div>
@@ -102,11 +104,23 @@ class block_statistics_KT_Module extends KT_Module implements KT_Module_Block {
 					}
 					if ($stat_surname) {
 						$content .= '<div class="cell small-6">' . KT_I18N::translate('Total surnames') . '</div>
-						<div class="cell small-6"><a href="indilist.php?show_all=yes&amp;surname_sublist=yes&amp;ged=' . KT_GEDURL . '">' . $stats->totalSurnames() . '</a></div>';
+						<div class="cell small-6">
+							<a href="module.php?mod=list_individuals&amp;mod_action=show&amp;show_all=yes&amp;surname_sublist=yes&amp;ged=' . KT_GEDURL . '">
+								' . $stats->totalSurnames() . '
+								</a>
+							</div>';
 					}
 					if ($stat_fam) {
 						$content .= '<div class="cell small-6">' . KT_I18N::translate('Families') . '</div>
-						<div class="cell small-6"><a href="famlist.php?ged=' . KT_GEDURL . '">' . $stats->totalFamilies() . '</a></div>';
+						<div class="cell small-6">
+							<a data-confirm href="module.php?mod=list_families&amp;mod_action=show&amp;show_all=yes&amp;surname_sublist=yes&amp;ged=' . KT_GEDURL . '">
+								' . $stats->totalFamilies() . '
+							</a>
+
+
+
+
+						</div>';
 					}
 					if ($stat_sour) {
 						$content .= '<div class="cell small-6">' . KT_I18N::translate('Sources') . '</div>
@@ -361,4 +375,59 @@ class block_statistics_KT_Module extends KT_Module implements KT_Module_Block {
 		</div>
 
 	<?php }
+
+	/**
+	 * Restrict display of very long lists to avoid server resource issues.
+	 * $stat - string - the ststistic to be listed (e.g. $stats->_totalIndividuals())
+	 * $target - string - the url of the list page (e.g. 'statisticsTables.php?table=totalIndis')
+	*/
+	public function checkStatsSize($stat, $target) {
+		$stats	= new KT_Stats(KT_GEDCOM);
+		$html	= '<a href="#"';
+		if ($stat > 5000) {
+			$html.=' onclick="if (confirm(\'' . htmlspecialchars(KT_I18N::translate('Generating lists of large numbers may be slow or not work at all if your server has insufficient resources (i.e. far more than most normal servers). Do you want to continue?')) . '\')) {window.location=\'' . $target . '&amp;ged=' . KT_GEDURL . '\';} else {return false;}"';
+		} else {
+			$html.=' onclick="\'window.location=\'' . $target . '&amp;ged=' . KT_GEDURL . '\';"';
+		}
+		$html .='>
+			' . $stat . '
+		</a>';
+
+		return $html;
+
+	}
+
+	/**
+	 * Restrict display of very long lists to avoid server resource issues.
+	 * $stat - string - the ststistic to be listed (e.g. $stats->_totalIndividuals())
+	 * $target - string - the url of the list page (e.g. 'statisticsTables.php?table=totalIndis')
+	*/
+	public function checkStatsSize2($stat, $target) {
+		$stats	= new KT_Stats(KT_GEDCOM);
+
+		if ($stat > 5000) { ?>
+			<div class="alert">
+				<p>
+					<?php echo htmlspecialchars(
+						KT_I18N::translate(
+							'Generating lists of large numbers may be slow or not work
+							at all if your server has insufficient resources (i.e. more than most
+							normal servers). Do you want to continue?'
+						)
+					); ?>
+				</p>
+				<p>
+					<button class="button alert" type="submit">
+						<?php echo KT_I18N::translate('Cancel'); ?>
+					</button>
+					<button class="button success" data-confirm="" type="submit">
+						<?php echo KT_I18N::translate('Confirm'); ?>
+					</button>
+				</p>
+			</div>
+		<?php }
+
+	}
+
+
 }

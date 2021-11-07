@@ -73,7 +73,6 @@ define('KT_JQUERY_SHORTEN',					KT_STATIC_URL . 'js/jquery.shorten.js');
 define('KT_PASSWORDSCHECK',					KT_STATIC_URL . 'js/passwordscheck.js');				// Installed 09-11-2016
 define('KT_D3_JS',							KT_STATIC_URL . 'js/d3.min.js');						// Installed from https://d3js.org/ v.4
 define('KT_CHOSEN_JS',						KT_STATIC_URL . 'library/chosen/chosen.jquery.min.js'); // chosen-package-1.87 from https://github.com/harvesthq/chosen
-define('KT_CONFIRM_REVEAL',					KT_STATIC_URL . 'library/confirm-with-reveal/build/confirm_with_reveal.min.js'); // Installed from https://github.com/ubermanl/confirm-with-reveal v.1.0.2
 
 // kiwitrees own javascript libraries
 define('KT_KIWITREES_JS_URL',				KT_STATIC_URL . 'js/kiwitrees.min.js');					// used system wide, via Pages WT class
