@@ -36,6 +36,7 @@ var assist_window_specs    = ''; // edit_interface.php, used for census assistan
 var gmap_window_specs    = 'width=580,height=600,left=200,top=150,resizable=1,scrollbars=1'; // googlemap module place editing
 var pastefield, nameElement, remElement; // Elements to paste to
 */
+
 //Add help texts to page
 function display_help(title) {
     jQuery(".help-text").each(function() {

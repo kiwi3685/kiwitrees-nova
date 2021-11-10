@@ -492,7 +492,7 @@ class KT_Stats {
 	 *
 	 * @return string
 	 */
-	public function totalSurnames($params = array()) {
+	public function _totalSurnames($params = array()) {
 		if ($params) {
 			$opt      = 'IN (' . implode(',', array_fill(0, count($params), '?')) . ')';
 			$distinct = '';
@@ -511,6 +511,10 @@ class KT_Stats {
 			)->fetchOne();
 
 		return KT_I18N::number($total);
+	}
+
+	function totalSurnames() {
+		return KT_I18N::number($this->_totalSurnames());
 	}
 
 	function totalGivennames($params = array()) {

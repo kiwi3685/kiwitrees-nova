@@ -73,6 +73,7 @@ define('KT_JQUERY_SHORTEN',					KT_STATIC_URL . 'js/jquery.shorten.js');
 define('KT_PASSWORDSCHECK',					KT_STATIC_URL . 'js/passwordscheck.js');				// Installed 09-11-2016
 define('KT_D3_JS',							KT_STATIC_URL . 'js/d3.min.js');						// Installed from https://d3js.org/ v.4
 define('KT_CHOSEN_JS',						KT_STATIC_URL . 'library/chosen/chosen.jquery.min.js'); // chosen-package-1.87 from https://github.com/harvesthq/chosen
+define('KT_CONFIRM_JS',						KT_STATIC_URL . 'library/jquery-confirm/dist/jquery-confirm.min.js'); // Ver 3.3.4 from https://craftpip.github.io/jquery-confirm/
 
 // kiwitrees own javascript libraries
 define('KT_KIWITREES_JS_URL',				KT_STATIC_URL . 'js/kiwitrees.min.js');					// used system wide, via Pages WT class
@@ -86,6 +87,7 @@ define('KT_KIWITREES_ADMIN_JS_URL',	    	KT_STATIC_URL . 'themes/_administration
 // external css libraries
 define('KT_DATEPICKER_CSS',					KT_STATIC_URL . 'library/foundation-datepicker/css/foundation-datepicker.min.css');
 define('KT_CHOSEN_CSS',						KT_STATIC_URL . 'library/chosen/chosen.min.css'); // chosen-package-1.87 from https://github.com/harvesthq/chosen
+define('KT_CONFIRM_CSS',					KT_STATIC_URL . 'library/jquery-confirm/dist/jquery-confirm.min.css'); // Ver 3.3.4 from https://craftpip.github.io/jquery-confirm/
 
 // Location of our modules and themes.  These are used as URLs and folder paths.
 define('KT_MODULES_DIR', 'modules_v4/'); // Update setup.php when this changes

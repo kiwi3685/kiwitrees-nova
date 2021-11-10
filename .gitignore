@@ -48,6 +48,12 @@ prepros.config
 /library/Mobile-Detect/*
 !library/Mobile-Detect/Mobile_Detect.php
 
+#Jquery-Confirm
+/library/jquery-confirm/*
+!/library/jquery-confirm/dist
+/library/jquery-confirm/dist/*
+!/library/jquery-confirm/dist/jquery-confirm.min.js
+
 /modules_v4/database_backup/vendor/r23/msd/work
 /modules_v4/gallery/galleria/themes/azur
 /modules_v4/gallery/galleria/themes/folio

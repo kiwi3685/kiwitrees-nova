@@ -46,6 +46,45 @@ class block_statistics_KT_Module extends KT_Module implements KT_Module_Block {
 	public function getBlock($block_id, $template = true, $cfg = null) {
 		global $KT_TREE, $iconStyle, $controller;
 
+		$controller
+			->addExternalJavascript(KT_CONFIRM_JS)
+			->addInlineJavascript('
+				// alert if trying to view large list.
+				jQuery("a.jsConfirm").confirm({
+					onOpenBefore: function () {
+						 // before the modal is displayed.
+						 number = parseInt(this.$target.html());
+						 if (number <= 5000) { //approximate number where server processing slows too far.
+							url = this.$target.attr("href");
+							window.open(url, "_blank");
+						 }
+					},
+					title: "' . KT_I18N::translate('Caution - server overload possible') . '",
+					boxWidth: "100%",
+					useBootstrap: false,
+					draggable: false,
+					icon: "fas fa-exclamation-triangle",
+					content: "' . KT_I18N::translate('Generating lists of large numbers may be slow or not work at all if your server has insufficient resources (i.e. far more than most normal servers). Do you want to continue?') . '",
+					theme: "kiwitrees",
+					animation: "rotate",
+					animateFromElement: false,
+					buttons: {
+						cancel: {
+							text: "Cancel",
+							btnClass: "button hollow small",
+						},
+						confirm: {
+							text: "Confirm",
+							btnClass: "button primary small",
+							action: function(){
+								url = this.$target.attr("href");
+								window.open(url, "_blank");
+							}
+						},
+					}
+				});
+			');
+
 		$show_last_update    = get_block_setting($block_id, 'show_last_update',     true);
 		$show_common_surnames= get_block_setting($block_id, 'show_common_surnames', true);
 		$stat_indi           = get_block_setting($block_id, 'stat_indi',            true);
@@ -95,8 +134,10 @@ class block_statistics_KT_Module extends KT_Module implements KT_Module_Block {
 					if ($stat_indi) {
 						$content.='<div class="cell small-6">' . KT_I18N::translate('Individuals') . '</div>
 						<div class="cell small-6">
-							' . $this->checkStatsSize($stat = $stats->_totalIndividuals(), $target = 'statisticsTables.php?table=totalIndis') . '
-						</div>
+                            <a class="jsConfirm" href="statisticsTables.php?table=totalIndis">
+							 ' . $stats->_totalIndividuals() . '
+                            </a>
+                        </div>
 						<div class="cell small-6"><i class="' . $iconStyle . ' fa-male"></i>' . KT_I18N::translate('Males') . '</div>
 						<div class="cell small-6">' . $stats->totalSexMales() . '<br>' . $stats->totalSexMalesPercentage() . '</div>
 						<div class="cell small-6"><i class="' . $iconStyle . ' fa-female"></i>' . KT_I18N::translate('Females') . '</div>
@@ -105,34 +146,42 @@ class block_statistics_KT_Module extends KT_Module implements KT_Module_Block {
 					if ($stat_surname) {
 						$content .= '<div class="cell small-6">' . KT_I18N::translate('Total surnames') . '</div>
 						<div class="cell small-6">
-							<a href="module.php?mod=list_individuals&amp;mod_action=show&amp;show_all=yes&amp;surname_sublist=yes&amp;ged=' . KT_GEDURL . '">
-								' . $stats->totalSurnames() . '
+							<a class="jsConfirm" href="module.php?mod=list_individuals&amp;mod_action=show&amp;show_all=yes&amp;surname_sublist=yes&amp;ged=' . KT_GEDURL . '">
+								' . $stats->_totalSurnames() . '
 								</a>
 							</div>';
 					}
 					if ($stat_fam) {
 						$content .= '<div class="cell small-6">' . KT_I18N::translate('Families') . '</div>
 						<div class="cell small-6">
-							<a data-confirm href="module.php?mod=list_families&amp;mod_action=show&amp;show_all=yes&amp;surname_sublist=yes&amp;ged=' . KT_GEDURL . '">
-								' . $stats->totalFamilies() . '
+							<a class="jsConfirm" href="module.php?mod=list_families&amp;mod_action=show&amp;show_all=yes&amp;surname_sublist=yes&amp;ged=' . KT_GEDURL . '">
+								' . $stats->_totalFamilies() . '
 							</a>
-
-
-
-
 						</div>';
 					}
 					if ($stat_sour) {
 						$content .= '<div class="cell small-6">' . KT_I18N::translate('Sources') . '</div>
-						<div class="cell small-6"><a href="sourcelist.php?ged=' . KT_GEDURL . '">' . $stats->totalSources() . '</a></div>';
+						<div class="cell small-6">
+							<a class="jsConfirm" href="module.php?mod=list_sources&amp;mod_action=show&amp;ged=' . KT_GEDURL . '">
+								' . $stats->_totalSources() . '
+							</a>
+						</div>';
 					}
 					if ($stat_media) {
 						$content .= '<div class="cell small-6">' . KT_I18N::translate('Media objects') . '</div>
-						<div class="cell small-6"><a href="medialist.php?ged=' . KT_GEDURL . '">' . $stats->totalMedia() . '</a></div>';
+						<div class="cell small-6">
+							<a class="jsConfirm" href="module.php?action=filter&amp;search=yes&amp;mod=list_media&amp;mod_action=show&amp;&subdirs=on&amp;ged=' . KT_GEDURL . '"">
+								' . $stats->_totalMediaType('all') . '
+							</a>
+						</div>';
 					}
 					if ($stat_repo) {
 						$content .= '<div class="cell small-6">' . KT_I18N::translate('Repositories') . '</div>
-						<div class="cell small-6"><a href="repolist.php?ged=' . KT_GEDURL . '">' . $stats->totalRepositories() . '</a></div>';
+						<div class="cell small-6">
+							<a class="jsConfirm" href="module.php?mod=list_repositories&amp;mod_action=show&amp;ged=' . KT_GEDURL . '">
+                                ' . $stats->_totalRepositories() . '
+                            </a>
+                        </div>';
 					}
 					if ($stat_events) {
 						$content .= '<div class="cell small-6">' . KT_I18N::translate('Total events') . '</div>
@@ -244,7 +293,7 @@ class block_statistics_KT_Module extends KT_Module implements KT_Module_Block {
 							if ($i > 0) {
 								$content .= ', ';
 							}
-							$content .= '<a href="module.php?mod=list_individuals&amp;mod_action=show&amp;surname=' . rawurlencode($surname['name']) . '&amp;ged=' . KT_GEDURL . '">' . $surname['name'] . '</a>';
+							$content .= '<a class="jsConfirm" href="module.php?mod=list_individuals&amp;mod_action=show&amp;surname=' . rawurlencode($surname['name']) . '&amp;ged=' . KT_GEDURL . '&amp;show_all_firstnames=yes">' . $surname['name'] . '</a>';
 							$i++;
 						}
 					}
@@ -375,59 +424,5 @@ class block_statistics_KT_Module extends KT_Module implements KT_Module_Block {
 		</div>
 
 	<?php }
-
-	/**
-	 * Restrict display of very long lists to avoid server resource issues.
-	 * $stat - string - the ststistic to be listed (e.g. $stats->_totalIndividuals())
-	 * $target - string - the url of the list page (e.g. 'statisticsTables.php?table=totalIndis')
-	*/
-	public function checkStatsSize($stat, $target) {
-		$stats	= new KT_Stats(KT_GEDCOM);
-		$html	= '<a href="#"';
-		if ($stat > 5000) {
-			$html.=' onclick="if (confirm(\'' . htmlspecialchars(KT_I18N::translate('Generating lists of large numbers may be slow or not work at all if your server has insufficient resources (i.e. far more than most normal servers). Do you want to continue?')) . '\')) {window.location=\'' . $target . '&amp;ged=' . KT_GEDURL . '\';} else {return false;}"';
-		} else {
-			$html.=' onclick="\'window.location=\'' . $target . '&amp;ged=' . KT_GEDURL . '\';"';
-		}
-		$html .='>
-			' . $stat . '
-		</a>';
-
-		return $html;
-
-	}
-
-	/**
-	 * Restrict display of very long lists to avoid server resource issues.
-	 * $stat - string - the ststistic to be listed (e.g. $stats->_totalIndividuals())
-	 * $target - string - the url of the list page (e.g. 'statisticsTables.php?table=totalIndis')
-	*/
-	public function checkStatsSize2($stat, $target) {
-		$stats	= new KT_Stats(KT_GEDCOM);
-
-		if ($stat > 5000) { ?>
-			<div class="alert">
-				<p>
-					<?php echo htmlspecialchars(
-						KT_I18N::translate(
-							'Generating lists of large numbers may be slow or not work
-							at all if your server has insufficient resources (i.e. more than most
-							normal servers). Do you want to continue?'
-						)
-					); ?>
-				</p>
-				<p>
-					<button class="button alert" type="submit">
-						<?php echo KT_I18N::translate('Cancel'); ?>
-					</button>
-					<button class="button success" data-confirm="" type="submit">
-						<?php echo KT_I18N::translate('Confirm'); ?>
-					</button>
-				</p>
-			</div>
-		<?php }
-
-	}
-
 
 }
