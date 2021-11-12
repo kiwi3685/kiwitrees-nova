@@ -77,7 +77,9 @@ switch ($type) {
 				} else {
 					$label .= ', <i>' . $person->getLifeSpan() . '</i>';
 				}
-				$data[] = array('value' => $row['xref'], 'label' => $label);
+				$data[] = array(
+					'value' => $row['xref'],
+					'label' => $label);
 			}
 		}
 
@@ -229,10 +231,7 @@ switch ($type) {
 	case 'FAM': // Families, whose name contains the search terms
 		$data = array();
 
-		// Fetch all data, regardless of privacy
-		if (strlen($term) >= 3) {
-			$rows = get_FAM_rows($term);
-		}
+		$rows = get_FAM_rows($term);
 
 		// Filter for privacy
 		foreach ($rows as $row) {
@@ -240,9 +239,15 @@ switch ($type) {
 			if ($family->canDisplayName()) {
 				$marriage_year = $family->getMarriageYear();
 				if ($marriage_year) {
-					$data[] = array('value' => $family->getXref(), 'label' => $family->getFullName() . ', <i>' . $marriage_year . '</i>');
+					$data[] = array(
+						'value' => $family->getXref(),
+						'label' => $family->getFullName() . ', <i>' . $marriage_year . '</i>'
+					);
 				} else {
-					$data[] = array('value' => $family->getXref(), 'label' => $family->getFullName());
+					$data[] = array(
+						'value' => $family->getXref(),
+						'label' => $family->getFullName()
+					);
 				}
 			}
 		}
@@ -327,8 +332,10 @@ switch ($type) {
 				$data[] = array(
 					'value' => $person->getXref(),
 					'label' => str_replace(array('@N.N.', '@P.N.'),
-					array(
-						$UNKNOWN_NN, $UNKNOWN_PN),
+						array(
+							$UNKNOWN_NN,
+							$UNKNOWN_PN
+						),
 						$person->getLifeSpanName(),
 					)
 				);
@@ -340,18 +347,18 @@ switch ($type) {
 	exit;
 
 	case 'NOTE': // Notes which contain the search terms
-		global $NOTE_ID_PREFIX;
 		$data = array();
 
-		// Fetch all data, regardless of privacy
-		if ((strlen($term) >= 2 && substr($term,0,1) === $NOTE_ID_PREFIX && is_numeric(substr($term,1,1))) || strlen($term) >= 3) {
-			$rows = get_NOTE_rows($term);
-		}
+		$rows = get_NOTE_rows($term);
+
 		// Filter for privacy
 		foreach ($rows as $row) {
 			$note = KT_Note::getInstance($row);
 			if ($note->canDisplayName()) {
-				$data[] = array('value' => $row['xref'], 'label' => $note->getFullName());
+				$data[] = array(
+					'value' => $row['xref'],
+					'label' => $note->getFullName()
+				);
 			}
 		}
 
@@ -377,19 +384,18 @@ switch ($type) {
 	exit;
 
 	case 'OBJE':
-		global $MEDIA_ID_PREFIX;
 		$data = array();
 
-		// Fetch all data, regardless of privacy
-		if ((strlen($term) >= 2 && substr($term,0,1) === $MEDIA_ID_PREFIX && is_numeric(substr($term,1,1))) || strlen($term) >= 3) {
-			$rows = get_OBJE_rows($term);
-		}
+		$rows = get_OBJE_rows($term);
 
 		// Filter for privacy
 		foreach ($rows as $row) {
 			$media = KT_Media::getInstance($row);
 			if ($media->canDisplayName()) {
-				$data[] = array('value' => $row['xref'], 'label'=>'<img src="' . $media->getHtmlUrlDirect() . '" width="25"> ' . $media->getFullName());
+				$data[] = array(
+					'value' => $row['xref'],
+					'label' => '<img src="' . $media->getHtmlUrlDirect() . '" width="25"> ' . $media->getFullName()
+				);
 			}
 		}
 
@@ -512,19 +518,18 @@ switch ($type) {
 	exit;
 
 	case 'REPO': // Repositories, that include the search terms
-		global $REPO_ID_PREFIX;
 		$data = array();
 
-		// Fetch all data, regardless of privacy
-		if ((strlen($term) >= 2 && substr($term,0,1) === $REPO_ID_PREFIX && is_numeric(substr($term,1,1))) || strlen($term) >= 3) {
-			$rows = get_REPO_rows($term);
-		}
+		$rows = get_REPO_rows($term);
 
 		// Filter for privacy
 		foreach ($rows as $row) {
 			$repository = KT_Repository::getInstance($row);
 			if ($repository->canDisplayName()) {
-				$data[] = array('value' => $row['xref'], 'label' => $row['n_full']);
+				$data[] = array(
+					'value' => $row['xref'],
+					'label' => $row['n_full']
+				);
 			}
 		}
 
@@ -551,19 +556,17 @@ switch ($type) {
 	exit;
 
 	case 'SOUR': // Sources, that include the search terms
-		global $SOUR_ID_PREFIX;
 		$data = array();
 
-		// Fetch all data, regardless of privacy
-		if ((strlen($term) >= 2 && substr($term,0,1) === $SOUR_ID_PREFIX && is_numeric(substr($term,1,1))) || strlen($term) >= 3) {
-			$rows = get_SOUR_rows($term);
-		}
+		$rows = get_SOUR_rows($term);
 
 		// Filter for privacy
 		foreach ($rows as $row) {
 			$source = KT_Source::getInstance($row);
 			if ($source->canDisplayName()) {
-				$data[] = array('value' => $row['xref'], 'label' => $row['n_full']);
+				$data[] = array(
+					'value' => $row['xref'],
+					'label' => $row['n_full']);
 			}
 		}
 
@@ -687,26 +690,28 @@ switch ($type) {
 	exit;
 
 	case 'IFSRON':
-		global $GEDCOM_ID_PREFIX, $FAM_ID_PREFIX, $SOUR_ID_PREFIX, $REPO_ID_PREFIX, $MEDIA_ID_PREFIX, $NOTE_ID_PREFIX;
 		$data = array();
 
-		// Fetch all data, regardless of privacy
-		if ((strlen($term) >= 2 && substr($term,0,1) === $GEDCOM_ID_PREFIX && is_numeric(substr($term,1,1))) || strlen($term) >= 3) {
-			$rows = get_INDI_rows($term);
-		}
+		$rows = get_INDI_rows($term);
 
 		// Filter for privacy
 		foreach ($rows as $row) {
 			$person = KT_Person::getInstance($row);
 			if ($person->canDisplayName()) {
-				$data[] = array('value' => $row['xref'], 'label'=>str_replace(array('@N.N.', '@P.N.'), array($UNKNOWN_NN, $UNKNOWN_PN), $row['n_full']) . ', <i>' . $person->getLifeSpan() . '</i>');
+				$data[] = array(
+					'value' => $person->getXref(),
+					'label'=>str_replace(array('@N.N.', '@P.N.'),
+						array(
+							$UNKNOWN_NN,
+							$UNKNOWN_PN
+						),
+						$person->getLifeSpanName()
+					)
+				);
 			}
 		}
 
-		// Fetch all data, regardless of privacy
-		if ((strlen($term) >= 2 && substr($term,0,1) === $FAM_PREFIX && is_numeric(substr($term,1,1))) || strlen($term) >= 3) {
-			$rows = get_FAM_rows($term);
-		}
+		$rows = get_FAM_rows($term);
 
 		// Filter for privacy
 		foreach ($rows as $row) {
@@ -714,49 +719,55 @@ switch ($type) {
 			if ($family->canDisplayName()) {
 				$marriage_year = $family->getMarriageYear();
 				if ($marriage_year) {
-					$data[] = array('value' => $family->getXref(), 'label' => $family->getFullName() . ', <i>' . $marriage_year . '</i>');
+					$data[] = array(
+						'value' => $family->getXref(),
+						'label' => $family->getFullName() . ', <i>' . $marriage_year . '</i>'
+					);
 				} else {
-					$data[] = array('value' => $family->getXref(), 'label' => $family->getFullName());
+					$data[] = array(
+						'value' => $family->getXref(),
+						'label' => $family->getFullName()
+					);
 				}
 			}
 		}
 
-		// Fetch all data, regardless of privacy
-		if ((strlen($term) >= 2 && substr($term,0,1) === $SOUR_PREFIX && is_numeric(substr($term,1,1))) || strlen($term) >= 3) {
-			$rows = get_SOUR_rows($term);
-		}
+		$rows = get_SOUR_rows($term);
 
 		// Filter for privacy
 		foreach ($rows as $row) {
 			$source = KT_Source::getInstance($row);
 			if ($source->canDisplayName()) {
-				$data[] = array('value' => $row['xref'], 'label' => $row['n_full']);
+				$data[] = array(
+					'value' => $row['xref'],
+					'label' => $row['n_full']
+				);
 			}
 		}
 
-		// Fetch all data, regardless of privacy
-		if ((strlen($term) >= 2 && substr($term,0,1) === $REPO_PREFIX && is_numeric(substr($term,1,1))) || strlen($term) >= 3) {
-			$rows = get_REPO_rows($term);
-		}
+		$rows = get_REPO_rows($term);
 
 		// Filter for privacy
 		foreach ($rows as $row) {
 			$repository = KT_Repository::getInstance($row);
 			if ($repository->canDisplayName()) {
-				$data[] = array('value' => $row['xref'], 'label' => $row['n_full']);
+				$data[] = array(
+					'value' => $row['xref'],
+					'label' => $row['n_full']
+				);
 			}
 		}
 
-		// Fetch all data, regardless of privacy
-		if ((strlen($term) >= 2 && substr($term,0,1) === $MEDIA_PREFIX && is_numeric(substr($term,1,1))) || strlen($term) >= 3) {
-			$rows = get_OBJE_rows($term);
-		}
+		$rows = get_OBJE_rows($term);
 
 		// Filter for privacy
 		foreach ($rows as $row) {
 			$media = KT_Media::getInstance($row);
 			if ($media->canDisplayName()) {
-				$data[] = array('value' => $row['xref'], 'label'=>'<img src="' . $media->getHtmlUrlDirect() . '" width="25"> ' . $media->getFullName());
+				$data[] = array(
+					'value' => $row['xref'],
+					'label' => '<img src="' . $media->getHtmlUrlDirect() . '" width="25"> ' . $media->getFullName()
+				);
 			}
 		}
 
@@ -767,7 +778,9 @@ switch ($type) {
 		foreach ($rows as $row) {
 			$note = KT_Note::getInstance($row);
 			if ($note->canDisplayName()) {
-				$data[] = array('value' => $row['xref'], 'label' => $note->getFullName());
+				$data[] = array(
+					'value' => $row['xref'],
+					'label' => $note->getFullName());
 			}
 		}
 
@@ -776,26 +789,28 @@ switch ($type) {
 	exit;
 
 	case 'IFS':
-		global $GEDCOM_ID_PREFIX, $FAM_ID_PREFIX, $SOUR_ID_PREFIX;
 		$data = array();
 
-		// Fetch all data, regardless of privacy
-		if ((strlen($term) >= 2 && substr($term,0,1) === $GEDCOM_ID_PREFIX && is_numeric(substr($term,1,1))) || strlen($term) >= 3) {
-			$rows = get_INDI_rows($term);
-		}
+		$rows = get_INDI_rows($term);
 
 		// Filter for privacy
 		foreach ($rows as $row) {
 			$person = KT_Person::getInstance($row);
 			if ($person->canDispLayname()) {
-				$data[] = array('value' => $row['xref'], 'label'=>'<i class="icon-button_indi"></i>'. str_replace(array('@N.N.', '@P.N.'), array($UNKNOWN_NN, $UNKNOWN_PN), $row['n_full']) . ', <i>' . $person->getLifeSpan() . '</i>');
+				$data[] = array(
+					'value' => $person->getXref(),
+					'label' => str_replace(array('@N.N.', '@P.N.'),
+						array(
+							$UNKNOWN_NN,
+							$UNKNOWN_PN
+						),
+						$person->getLifeSpanName()
+					)
+				);
 			}
 		}
 
-		// Fetch all data, regardless of privacy
-		if ((strlen($term) >= 2 && substr($term,0,1) === $FAM_ID_PREFIX && is_numeric(substr($term,1,1))) || strlen($term) >= 3) {
-			$rows = get_FAM_rows($term);
-		}
+		$rows = get_FAM_rows($term);
 
 		// Filter for privacy
 		foreach ($rows as $row) {
@@ -803,23 +818,29 @@ switch ($type) {
 			if ($family->canDispLayname()) {
 				$marriage_year = $family->getMarriageYear();
 				if ($marriage_year) {
-					$data[] = array('value' => $family->getXref(), 'label'=>'<i class="icon-button_family"></i>'. $family->getFullName() . ', <i>' . $marriage_year . '</i>');
+					$data[] = array(
+						'value' => $family->getXref(),
+						'label' => '<i class="icon-button_family"></i>'. $family->getFullName() . ', <i>' . $marriage_year . '</i>'
+					);
 				} else {
-					$data[] = array('value' => $family->getXref(), 'label'=>'<i class="icon-button_family"></i>'. $family->getFullName());
+					$data[] = array(
+						'value' => $family->getXref(),
+						'label' => '<i class="icon-button_family"></i>'. $family->getFullName()
+					);
 				}
 			}
 		}
 
-		// Fetch all data, regardless of privacy
-		if ((strlen($term) >= 2 && substr($term,0,1) === $SOUR_ID_PREFIX && is_numeric(substr($term,1,1))) || strlen($term) >= 3) {
-			$rows = get_SOUR_rows($term);
-		}
+		$rows = get_SOUR_rows($term);
 
 		// Filter for privacy
 		foreach ($rows as $row) {
 			$source = KT_Source::getInstance($row);
 			if ($source->canDispLayname()) {
-				$data[] = array('value' => $row['xref'], 'label'=>'<i class="icon-button_source"></i>'. $row['n_full']);
+				$data[] = array(
+					'value' => $row['xref'],
+					'label' => '<i class="icon-button_source"></i>'. $row['n_full']
+				);
 			}
 		}
 
@@ -835,109 +856,193 @@ function get_INDI_rows($term) {
 	// Don't search until a minimum number of characters are entered or search uses an id number
 	if (strlen($term) >= 2 && substr($term,0,1) === $GEDCOM_ID_PREFIX && is_numeric(substr($term,1,1))) {
 		// Search for Xref only
-		return
-			KT_DB::prepare("
-				SELECT 'INDI' AS type, i_id AS xref, i_file AS ged_id, i_gedcom AS gedrec
-				FROM `##individuals`
-				WHERE i_id LIKE ?
-				AND i_file = ?
-			")
-			->execute(array($term, KT_GED_ID))
-			->fetchAll(PDO::FETCH_ASSOC);
+		return KT_DB::prepare("
+			SELECT 'INDI' AS type, i_id AS xref, i_file AS ged_id, i_gedcom AS gedrec
+			FROM `##individuals`
+			WHERE i_id LIKE ?
+			AND i_file = ?
+		")
+		->execute(array($term, KT_GED_ID))
+		->fetchAll(PDO::FETCH_ASSOC);
 
 	} elseif (strlen($term) >= 3 && !is_numeric(substr($term,1,1))) {
-		return
-			KT_DB::prepare("
-				SELECT DISTINCT 'INDI' as type, n_id AS xref, n_file AS ged_id, i_gedcom AS gedrec, n_sort
-				FROM (
-					SELECT n_id, n_file, i_gedcom, n_sort
-					FROM `##name`
-					JOIN `##individuals` ON (i_id=n_id AND i_file=n_file)
-					WHERE (n_full LIKE CONCAT('%', REPLACE(?, ' ', '%'), '%') OR n_surn LIKE CONCAT('%', REPLACE(?, ' ', '%'), '%'))
-					AND `n_id` LIKE CONCAT(?, '%')
-					AND n_type LIKE 'NAME'
-					AND n_file = ?
-					ORDER BY RAND()
-					LIMIT 100
-				) t1
-				ORDER by n_sort
-			")
-			->execute(array($term, $term, $GEDCOM_ID_PREFIX, KT_GED_ID))
-			->fetchAll(PDO::FETCH_ASSOC);
+		return KT_DB::prepare("
+			SELECT DISTINCT 'INDI' as type, n_id AS xref, n_file AS ged_id, i_gedcom AS gedrec, n_sort
+			FROM (
+				SELECT n_id, n_file, i_gedcom, n_sort
+				FROM `##name`
+				JOIN `##individuals` ON (i_id=n_id AND i_file=n_file)
+				WHERE (n_full LIKE CONCAT('%', REPLACE(?, ' ', '%'), '%') OR n_surn LIKE CONCAT('%', REPLACE(?, ' ', '%'), '%'))
+				AND `n_id` LIKE CONCAT(?, '%')
+				AND n_type LIKE 'NAME'
+				AND n_file = ?
+				ORDER BY RAND()
+				LIMIT 100
+			) t1
+			ORDER by n_sort
+		")
+		->execute(array($term, $term, $GEDCOM_ID_PREFIX, KT_GED_ID))
+		->fetchAll(PDO::FETCH_ASSOC);
 
 	}
-
 }
 
 function get_FAM_rows($term) {
-	return
-		KT_DB::prepare("
+	global $FAM_ID_PREFIX;
+
+	// Fetch all data, regardless of privacy
+	// Don't search until a minimum number of characters are entered or search uses an id number
+	if (strlen($term) >= 2 && substr($term,0,1) === $FAM_ID_PREFIX && is_numeric(substr($term,1,1))) {
+		// Search for Xref only
+		return KT_DB::prepare("
+			SELECT 'FAM' AS type, f_id AS xref, f_file AS ged_id, f_gedcom AS gedrec
+			FROM `##families`
+			WHERE f_id LIKE ?
+			AND f_file = ?
+		")
+		->execute(array($term, KT_GED_ID))
+		->fetchAll(PDO::FETCH_ASSOC);
+
+	} elseif (strlen($term) >= 3 && !is_numeric(substr($term,1,1))) {
+		return KT_DB::prepare("
 			SELECT DISTINCT 'FAM' AS type, f_id AS xref, f_file AS ged_id, f_gedcom AS gedrec, husb_name.n_sort, wife_name.n_sort
 			 FROM `##families`
 			 JOIN `##name` AS husb_name ON (f_husb=husb_name.n_id AND f_file=husb_name.n_file)
 			 JOIN `##name` AS wife_name ON (f_wife=wife_name.n_id AND f_file=wife_name.n_file)
 			 WHERE CONCAT(husb_name.n_full, ' ', wife_name.n_full) LIKE CONCAT('%', REPLACE(?, ' ', '%'), '%')
 			 AND husb_name.n_type<>'_MARNM' AND wife_name.n_type<>'_MARNM'
-			 OR f_id LIKE ?
-			 AND f_file=?
+			 AND f_file = ?
 			 ORDER BY husb_name.n_sort, wife_name.n_sort COLLATE '" . KT_I18N::$collation . "'
 		")
-		->execute(array($term, $term, KT_GED_ID))
+		->execute(array($term, KT_GED_ID))
 		->fetchAll(PDO::FETCH_ASSOC);
+
+	}
 }
 
 function get_SOUR_rows($term) {
-	return
-		KT_DB::prepare("
+	global $SOURCE_ID_PREFIX;
+
+	// Fetch all data, regardless of privacy
+	// Don't search until a minimum number of characters are entered or search uses an id number
+	if (strlen($term) >= 2 && substr($term,0,1) === $SOURCE_ID_PREFIX && is_numeric(substr($term,1,1))) {
+		// Search for Xref only
+		return KT_DB::prepare("
 			SELECT 'SOUR' AS type, s_id AS xref, s_file AS ged_id, s_gedcom AS gedrec, s_name AS n_full
-			 FROM `##sources`
-			 WHERE s_name LIKE CONCAT('%', REPLACE(?, ' ', '%'), '%')
-			 OR s_id LIKE ?
-			 AND s_file=?
-			 ORDER BY s_name COLLATE '" . KT_I18N::$collation . "'
+			FROM `##sources`
+			WHERE s_id LIKE ?
+			AND s_file = ?
 		")
-		->execute(array($term, $term, KT_GED_ID))
+		->execute(array($term, KT_GED_ID))
 		->fetchAll(PDO::FETCH_ASSOC);
+
+	} elseif (strlen($term) >= 3 && !is_numeric(substr($term,1,1))) {
+		return KT_DB::prepare("
+			SELECT 'SOUR' AS type, s_id AS xref, s_file AS ged_id, s_gedcom AS gedrec, s_name AS n_full
+			FROM `##sources`
+			WHERE s_name LIKE CONCAT('%', REPLACE(?, ' ', '%'), '%')
+			AND s_file = ?
+			ORDER BY s_name COLLATE '" . KT_I18N::$collation . "'
+		")
+		->execute(array($term, KT_GED_ID))
+		->fetchAll(PDO::FETCH_ASSOC);
+
+	}
 }
 
-
 function get_REPO_rows($term) {
-	return
+	global $REPO_ID_PREFIX;
+
+	// Fetch all data, regardless of privacy
+	// Don't search until a minimum number of characters are entered or search uses an id number
+	if (strlen($term) >= 2 && substr($term,0,1) === $REPO_ID_PREFIX && is_numeric(substr($term,1,1))) {
+		// Search for Xref only
+		return KT_DB::prepare("
+			SELECT o_type AS type, o_id AS xref, o_file AS ged_id, o_gedcom AS gedrec
+			FROM `##other`
+			WHERE o_id LIKE ?
+			AND o_type='REPO'
+			AND o_file = ?
+		")
+		->execute(array($term, KT_GED_ID))
+		->fetchAll(PDO::FETCH_ASSOC);
+
+	} elseif (strlen($term) >= 3 && !is_numeric(substr($term,1,1))) {
 		KT_DB::prepare("
 			SELECT o_type AS type, o_id AS xref, o_file AS ged_id, o_gedcom AS gedrec, n_full
-			 FROM `##other`
-			 JOIN `##name` ON (o_id=n_id AND o_file=n_file)
-			 WHERE (n_full LIKE CONCAT('%', REPLACE(?, ' ', '%'), '%') AND o_file=? AND o_type='REPO')
-			 OR o_id LIKE ? AND o_type='REPO'
-			 ORDER BY n_full COLLATE '" . KT_I18N::$collation . "'
+			FROM `##other`
+			JOIN `##name` ON (o_id=n_id AND o_file=n_file)
+			WHERE n_full LIKE CONCAT('%', REPLACE(?, ' ', '%'), '%')
+			ND o_file = ?
+			AND o_type = 'REPO'
+			ORDER BY n_full COLLATE '" . KT_I18N::$collation . "'
 		")
-		->execute(array($term, $term, KT_GED_ID))
+		->execute(array($term, KT_GED_ID))
 		->fetchAll(PDO::FETCH_ASSOC);
+
+	}
 }
 
 function get_NOTE_rows($term) {
+	global $NOTE_ID_PREFIX;
+
+	// Fetch all data, regardless of privacy
+	// Don't search until a minimum number of characters are entered or search uses an id number
+	if (strlen($term) >= 2 && substr($term,0,1) === $NOTE_ID_PREFIX && is_numeric(substr($term,1,1))) {
+		// Search for Xref only
+		return KT_DB::prepare("
+			SELECT o_type AS type, o_id AS xref, o_file AS ged_id, o_gedcom AS gedrec
+			FROM `##other`
+			WHERE o_id LIKE ?
+			AND o_type='NOTE'
+			AND o_file = ?
+		")
+		->execute(array($term, KT_GED_ID))
+		->fetchAll(PDO::FETCH_ASSOC);
+
+	} elseif (strlen($term) >= 3 && !is_numeric(substr($term,1,1))) {
 	return
 		KT_DB::prepare("
 			SELECT o_type AS type, o_id AS xref, o_file AS ged_id, o_gedcom AS gedrec, n_full
 			 FROM `##other`
 			 JOIN `##name` ON (o_id=n_id AND o_file=n_file)
-			 WHERE o_gedcom LIKE CONCAT('%', REPLACE(?, ' ', '%'), '%') AND o_file=? AND o_type='NOTE'
-			 OR o_id LIKE ? AND o_type='NOTE'
+			 WHERE o_gedcom LIKE CONCAT('%', REPLACE(?, ' ', '%'), '%')
+			 AND o_file = ?
+			 AND o_type = 'NOTE'
 			 ORDER BY n_full COLLATE '" . KT_I18N::$collation . "'
 		")
 		->execute(array($term, $term, KT_GED_ID))
 		->fetchAll(PDO::FETCH_ASSOC);
+
+	}
 }
 
 function get_OBJE_rows($term) {
+	global $MEDIA_ID_PREFIX;
+
+	// Fetch all data, regardless of privacy
+	// Don't search until a minimum number of characters are entered or search uses an id number
+	if (strlen($term) >= 2 && substr($term,0,1) === $MEDIA_ID_PREFIX && is_numeric(substr($term,1,1))) {
+		// Search for Xref only
+		return KT_DB::prepare("
+			SELECT 'OBJE' AS type, m_id AS xref, m_file AS ged_id, m_gedcom AS gedrec, m_titl, m_filename
+			FROM `##media`
+			WHERE m_id LIKE ?
+			AND m_file = ?
+		")
+		->execute(array($term, KT_GED_ID))
+		->fetchAll(PDO::FETCH_ASSOC);
+
+	} elseif (strlen($term) >= 3 && !is_numeric(substr($term,1,1))) {
 	return
 		KT_DB::prepare("
 			SELECT 'OBJE' AS type, m_id AS xref, m_file AS ged_id, m_gedcom AS gedrec, m_titl, m_filename
 			 FROM `##media`
-			 WHERE (m_titl LIKE CONCAT('%', REPLACE(?, ' ', '%'), '%')
-			 OR m_id LIKE CONCAT('%', REPLACE(?, ' ', '%'), '%'))
-			 AND m_file=?
+			 WHERE m_titl LIKE CONCAT('%', REPLACE(?, ' ', '%'), '%')
+			 AND m_file = ?
 		")
-		->execute(array($term, $term, KT_GED_ID))
+		->execute(array($term, KT_GED_ID))
 		->fetchAll(PDO::FETCH_ASSOC);
+
+	}
 }
