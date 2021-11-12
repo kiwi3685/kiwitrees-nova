@@ -316,20 +316,22 @@ switch ($type) {
 	exit;
 
 	case 'INDI': // Individuals, whose name contains the search terms
-		global $GEDCOM_ID_PREFIX;
 		$data = array();
 
-		// Don't search until a minimum number of characters are entered or search uses an id number
-		if ((strlen($term) >= 2 && substr($term,0,1) === $GEDCOM_ID_PREFIX && is_numeric(substr($term,1,1))) || strlen($term) >= 3) {
-		    // Fetch all data, regardless of privacy
-		    $rows = get_INDI_rows($term);
-		}
+	    $rows = get_INDI_rows($term);
 
 		// Filter for privacy
 		foreach ($rows as $row) {
 			$person = KT_Person::getInstance($row);
 			if ($person->canDisplayName()) {
-				$data[] = array('value' => $row['xref'], 'label'=>str_replace(array('@N.N.', '@P.N.'), array($UNKNOWN_NN, $UNKNOWN_PN), $row['n_full']) . ', <i>' . $person->getLifeSpan() . '</i>');
+				$data[] = array(
+					'value' => $person->getXref(),
+					'label' => str_replace(array('@N.N.', '@P.N.'),
+					array(
+						$UNKNOWN_NN, $UNKNOWN_PN),
+						$person->getLifeSpanName(),
+					)
+				);
 			}
 		}
 
@@ -342,7 +344,6 @@ switch ($type) {
 		$data = array();
 
 		// Fetch all data, regardless of privacy
-
 		if ((strlen($term) >= 2 && substr($term,0,1) === $NOTE_ID_PREFIX && is_numeric(substr($term,1,1))) || strlen($term) >= 3) {
 			$rows = get_NOTE_rows($term);
 		}
@@ -828,18 +829,44 @@ switch ($type) {
 }
 
 function get_INDI_rows($term) {
+	global $GEDCOM_ID_PREFIX;
+
+	// Fetch all data, regardless of privacy
+	// Don't search until a minimum number of characters are entered or search uses an id number
+	if (strlen($term) >= 2 && substr($term,0,1) === $GEDCOM_ID_PREFIX && is_numeric(substr($term,1,1))) {
+		// Search for Xref only
 		return
 			KT_DB::prepare("
-				SELECT 'INDI' AS type, i_id AS xref, i_file AS ged_id, i_gedcom AS gedrec, n_full
-				 FROM `##individuals`
-				 JOIN `##name` ON (i_id=n_id AND i_file=n_file)
-				 WHERE n_full LIKE CONCAT('%', REPLACE(?, ' ', '%'), '%')
-				 OR i_id LIKE ?
-				 AND i_file=?
-				 ORDER BY n_full COLLATE '" . KT_I18N::$collation . "'
+				SELECT 'INDI' AS type, i_id AS xref, i_file AS ged_id, i_gedcom AS gedrec
+				FROM `##individuals`
+				WHERE i_id LIKE ?
+				AND i_file = ?
 			")
-			->execute(array($term, $term, KT_GED_ID))
+			->execute(array($term, KT_GED_ID))
 			->fetchAll(PDO::FETCH_ASSOC);
+
+	} elseif (strlen($term) >= 3 && !is_numeric(substr($term,1,1))) {
+		return
+			KT_DB::prepare("
+				SELECT DISTINCT 'INDI' as type, n_id AS xref, n_file AS ged_id, i_gedcom AS gedrec, n_sort
+				FROM (
+					SELECT n_id, n_file, i_gedcom, n_sort
+					FROM `##name`
+					JOIN `##individuals` ON (i_id=n_id AND i_file=n_file)
+					WHERE (n_full LIKE CONCAT('%', REPLACE(?, ' ', '%'), '%') OR n_surn LIKE CONCAT('%', REPLACE(?, ' ', '%'), '%'))
+					AND `n_id` LIKE CONCAT(?, '%')
+					AND n_type LIKE 'NAME'
+					AND n_file = ?
+					ORDER BY RAND()
+					LIMIT 100
+				) t1
+				ORDER by n_sort
+			")
+			->execute(array($term, $term, $GEDCOM_ID_PREFIX, KT_GED_ID))
+			->fetchAll(PDO::FETCH_ASSOC);
+
+	}
+
 }
 
 function get_FAM_rows($term) {
