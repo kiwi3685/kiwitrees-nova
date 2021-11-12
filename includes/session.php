@@ -82,7 +82,6 @@ define('KT_JQUERY_TREEVIEW_JS_URL',			KT_STATIC_URL . 'js/jquery.treeview.js');	
 define('KT_FANCY_TREEVIEW_JS_URL',			KT_STATIC_URL . 'js/fancytreeview.js');					// used in fancy_treeview_descendants & fancy_treeview_ancestors
 define('KT_INTERACTIVETREE_JS_URL',			KT_STATIC_URL . 'js/interactivetree.js');				// used in the interctive tree tab
 //define('KT_KIWITREES_ADMIN_JS_URL',			KT_STATIC_URL . 'themes/_administration/js/kiwitrees-admin.js');		// used on some admin pages
-define('KT_KIWITREES_ADMIN_JS_URL',	    	KT_STATIC_URL . 'themes/_administration/js/kiwitrees-admin.min.js');	// used on some admin pages
 
 // external css libraries
 define('KT_DATEPICKER_CSS',					KT_STATIC_URL . 'library/foundation-datepicker/css/foundation-datepicker.min.css');
