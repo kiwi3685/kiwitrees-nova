@@ -510,14 +510,14 @@ class KT_Stats {
 				$params
 			)->fetchOne();
 
-		return KT_I18N::number($total);
+		return $total;
 	}
 
 	function totalSurnames() {
 		return KT_I18N::number($this->_totalSurnames());
 	}
 
-	function totalGivennames($params = array()) {
+	function _totalGivennames($params = array()) {
 		if ($params) {
 			$qs       = implode(',', array_fill(0, count($params), '?'));
 			$params[] = $this->_ged_id;
@@ -532,9 +532,14 @@ class KT_Stats {
 					->fetchOne();
 		}
 
-		return KT_I18N::number($total);
+		return $total;
 
 	}
+
+	function totalGivennames() {
+		return KT_I18N::number($this->_totalGivennames());
+	}
+
 
 	function totalEvents($params = array(), $list = false) {
 		$vars = array($this->_ged_id);

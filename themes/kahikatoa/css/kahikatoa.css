@@ -11238,9 +11238,6 @@ table.dataTable td {
     top: 20%;
     width: 40%;
 }
-.jconfirm.jconfirm-kiwitrees .jconfirm-bg {
-    display: none;
-}
 .jconfirm.jconfirm-kiwitrees .jconfirm-holder {
     padding: 0 !important;
 }

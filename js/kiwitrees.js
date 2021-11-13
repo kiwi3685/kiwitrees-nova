@@ -1734,3 +1734,48 @@ function changeType(x, type) {
         return tmp;
     }
 }
+
+/*
+ * Initialise jquery=confirm
+ *  PARAMS : /** -
+ *
+ */
+function jquery_confirm_defaults() {
+    jconfirm.defaults = {
+        bgOpacity: "50%",
+        boxWidth: "100%",
+        useBootstrap: false,
+        draggable: false,
+        icon: "fas fa-exclamation-triangle",
+        theme: "kiwitrees",
+        animation: "rotate",
+        animateFromElement: false,
+        defaultButtons: {
+            ok: {
+                isHidden: true,
+                isDisabled: true,
+            },
+            close: {
+                isHidden: true,
+                isDisabled: true,
+            },
+        },
+        autoClose: "close|5000",
+        buttons: {
+            cancel: {
+                text: "Cancel",
+                btnClass: "button hollow small",
+                action: function () {
+                },
+            },
+            confirm: {
+                text: "Confirm",
+                btnClass: "button primary small",
+                action: function(){
+                    url = this.$target.attr("href");
+                    window.open(url, "_blank");
+                }
+            }
+        }
+    }
+}

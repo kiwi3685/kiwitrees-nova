@@ -49,40 +49,22 @@ class block_statistics_KT_Module extends KT_Module implements KT_Module_Block {
 		$controller
 			->addExternalJavascript(KT_CONFIRM_JS)
 			->addInlineJavascript('
-				// alert if trying to view large list.
+				// initiate the jquery_confirm dialog
 				jQuery("a.jsConfirm").confirm({
 					onOpenBefore: function () {
-						 // before the modal is displayed.
-						 number = parseInt(this.$target.html());
-						 if (number <= 5000) { //approximate number where server processing slows too far.
+						// before the modal is displayed.
+						number = parseInt(this.$target.html().replace((/[\,\.]/g, "")));
+						if (number <= 5000) { //approximate number where server processing slows too far.
 							url = this.$target.attr("href");
 							window.open(url, "_blank");
-						 }
+						}
 					},
 					title: "' . KT_I18N::translate('Caution - server overload possible') . '",
-					boxWidth: "100%",
-					useBootstrap: false,
-					draggable: false,
-					icon: "fas fa-exclamation-triangle",
 					content: "' . KT_I18N::translate('Generating lists of large numbers may be slow or not work at all if your server has insufficient resources (i.e. far more than most normal servers). Do you want to continue?') . '",
-					theme: "kiwitrees",
-					animation: "rotate",
-					animateFromElement: false,
-					buttons: {
-						cancel: {
-							text: "Cancel",
-							btnClass: "button hollow small",
-						},
-						confirm: {
-							text: "Confirm",
-							btnClass: "button primary small",
-							action: function(){
-								url = this.$target.attr("href");
-								window.open(url, "_blank");
-							}
-						},
-					}
 				});
+
+				// Add the jquery_confirm Defaults
+				jquery_confirm_defaults();
 			');
 
 		$show_last_update    = get_block_setting($block_id, 'show_last_update',     true);

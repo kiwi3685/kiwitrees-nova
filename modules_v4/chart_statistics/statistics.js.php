@@ -157,6 +157,7 @@ switch($THEME_DIR) {
 					.style("font-size", "10px")
 					.append("a")
 						.attr("xlink:href", function(d){ return linkUrl + d.type })
+                        .attr("class", "jsConfirm")
 						.attr("target", "blank")
 						.html(function(d) { return d.percent; })
 						.style("fill", "<?php echo $linkColor; ?>");
@@ -246,6 +247,7 @@ switch($THEME_DIR) {
                 .selectAll(".tick")
                     .filter(function(d){ return typeof(d) == "string"; })
                     .style("cursor", "pointer")
+                    .attr("class", "jsConfirm")
                     .attr("target", "_blank")
                     .on("click", function(d){
                         window.open(linkUrl + d);
