@@ -92,7 +92,7 @@ switch($THEME_DIR) {
 				var width	= 960;
 				var height	= 200;
 				var viewportSize = "0 0 960 200";
-				var linkUrl = "medialist.php?action=filter&search=yes&folder=&subdirs=on&sortby=title&max=20&filter=&apply_filter=apply_filter&form_type=";
+				var linkUrl = "module.php?mod=list_media&mod_action=show&action=filter&search=yes&folder=&subdirs=on&sortby=title&max=18&filter=&apply_filter=apply_filter&form_type=";
 			break;
 			case "#chartChild":
 				try {var data	= JSON.parse(`<?php echo $stats->statsChildren(); ?>`);}

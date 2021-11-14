@@ -126,6 +126,8 @@ switch ($table) {
 	}
 	break;
 	case 'totalFams' :
+		$title 		= KT_I18N::translate('Total families');
+		$content	= format_fam_table($stats->famsList($ged_id));
 		switch ($tag){
 			case 'marr' :
 				$title 		= KT_I18N::translate('Total marriages');

@@ -9642,6 +9642,9 @@ div[id$=-page]:not(#indi-page) button[type=submit] {
     transform: translateY(-50%);
 }
 
+#medialist-page input#filter {
+    padding: 0.2rem;
+}
 #medialist-page .card .card-divider {
     font-size: 0.9rem;
     height: 10rem;
@@ -9924,6 +9927,9 @@ label.radio_inline {
 
 #statistics-page .callout button {
     font-size: 1rem;
+}
+#statistics-page a.list_item {
+    font-weight: normal;
 }
 #statistics-page div[id^=chart] .legend {
     margin: 20px;
@@ -11059,7 +11065,7 @@ div.dataTables_paginate ul.pagination li.paginate_button.current {
     }
 
     #medialist-page .card .card-divider img {
-        height: 5rem;
+        height: 4rem;
     }
 }
 /* PRINT layout adjustments */
@@ -11234,7 +11240,7 @@ table.dataTable td {
     color: #331919;
     height: auto;
     left: 30%;
-    position: absolute;
+    position: fixed;
     top: 20%;
     width: 40%;
 }

@@ -49,12 +49,23 @@ class block_statistics_KT_Module extends KT_Module implements KT_Module_Block {
 		$controller
 			->addExternalJavascript(KT_CONFIRM_JS)
 			->addInlineJavascript('
-				// initiate the jquery_confirm dialog
+				// add "jsconfirm" to all links except the tab switchers
+				jQuery("a:not(.names)[href]").addClass("jsConfirm");
+
+				// Add the jquery_confirm defaults
+				jquery_confirm_defaults();
+
+				// Add page specific settings
 				jQuery("a.jsConfirm").confirm({
+					// Before the modal is displayed.
 					onOpenBefore: function () {
-						// before the modal is displayed.
-						number = parseInt(this.$target.html().replace((/[\,\.]/g, "")));
-						if (number <= 5000) { //approximate number where server processing slows too far.
+						// Set button text for locale
+						jQuery(".btnCancel").html("' . KT_I18N::translate('Cancel') . '");
+						jQuery(".btnConfirm").html("' . KT_I18N::translate('Confirm') . '");
+
+						// Only display warning for long lists where server processing slows too far
+						number = this.$target.html().replace(/[\s\,\.]/g,"");
+						if (number <= 5000) {
 							url = this.$target.attr("href");
 							window.open(url, "_blank");
 						}
@@ -63,8 +74,6 @@ class block_statistics_KT_Module extends KT_Module implements KT_Module_Block {
 					content: "' . KT_I18N::translate('Generating lists of large numbers may be slow or not work at all if your server has insufficient resources (i.e. far more than most normal servers). Do you want to continue?') . '",
 				});
 
-				// Add the jquery_confirm Defaults
-				jquery_confirm_defaults();
 			');
 
 		$show_last_update    = get_block_setting($block_id, 'show_last_update',     true);
@@ -117,7 +126,7 @@ class block_statistics_KT_Module extends KT_Module implements KT_Module_Block {
 						$content.='<div class="cell small-6">' . KT_I18N::translate('Individuals') . '</div>
 						<div class="cell small-6">
                             <a class="jsConfirm" href="statisticsTables.php?table=totalIndis">
-							 ' . $stats->_totalIndividuals() . '
+							 ' . $stats->totalIndividuals() . '
                             </a>
                         </div>
 						<div class="cell small-6"><i class="' . $iconStyle . ' fa-male"></i>' . KT_I18N::translate('Males') . '</div>
@@ -129,7 +138,7 @@ class block_statistics_KT_Module extends KT_Module implements KT_Module_Block {
 						$content .= '<div class="cell small-6">' . KT_I18N::translate('Total surnames') . '</div>
 						<div class="cell small-6">
 							<a class="jsConfirm" href="module.php?mod=list_individuals&amp;mod_action=show&amp;show_all=yes&amp;surname_sublist=yes&amp;ged=' . KT_GEDURL . '">
-								' . $stats->_totalSurnames() . '
+								' . $stats->totalSurnames() . '
 								</a>
 							</div>';
 					}
@@ -137,7 +146,7 @@ class block_statistics_KT_Module extends KT_Module implements KT_Module_Block {
 						$content .= '<div class="cell small-6">' . KT_I18N::translate('Families') . '</div>
 						<div class="cell small-6">
 							<a class="jsConfirm" href="module.php?mod=list_families&amp;mod_action=show&amp;show_all=yes&amp;surname_sublist=yes&amp;ged=' . KT_GEDURL . '">
-								' . $stats->_totalFamilies() . '
+								' . $stats->totalFamilies() . '
 							</a>
 						</div>';
 					}
@@ -145,7 +154,7 @@ class block_statistics_KT_Module extends KT_Module implements KT_Module_Block {
 						$content .= '<div class="cell small-6">' . KT_I18N::translate('Sources') . '</div>
 						<div class="cell small-6">
 							<a class="jsConfirm" href="module.php?mod=list_sources&amp;mod_action=show&amp;ged=' . KT_GEDURL . '">
-								' . $stats->_totalSources() . '
+								' . $stats->totalSources() . '
 							</a>
 						</div>';
 					}
@@ -153,7 +162,7 @@ class block_statistics_KT_Module extends KT_Module implements KT_Module_Block {
 						$content .= '<div class="cell small-6">' . KT_I18N::translate('Media objects') . '</div>
 						<div class="cell small-6">
 							<a class="jsConfirm" href="module.php?action=filter&amp;search=yes&amp;mod=list_media&amp;mod_action=show&amp;&subdirs=on&amp;ged=' . KT_GEDURL . '"">
-								' . $stats->_totalMediaType('all') . '
+								' . $stats->totalMedia() . '
 							</a>
 						</div>';
 					}
@@ -161,7 +170,7 @@ class block_statistics_KT_Module extends KT_Module implements KT_Module_Block {
 						$content .= '<div class="cell small-6">' . KT_I18N::translate('Repositories') . '</div>
 						<div class="cell small-6">
 							<a class="jsConfirm" href="module.php?mod=list_repositories&amp;mod_action=show&amp;ged=' . KT_GEDURL . '">
-                                ' . $stats->_totalRepositories() . '
+                                ' . $stats->totalRepositories() . '
                             </a>
                         </div>';
 					}
@@ -275,7 +284,7 @@ class block_statistics_KT_Module extends KT_Module implements KT_Module_Block {
 							if ($i > 0) {
 								$content .= ', ';
 							}
-							$content .= '<a class="jsConfirm" href="module.php?mod=list_individuals&amp;mod_action=show&amp;surname=' . rawurlencode($surname['name']) . '&amp;ged=' . KT_GEDURL . '&amp;show_all_firstnames=yes">' . $surname['name'] . '</a>';
+							$content .= '<a class="names" href="module.php?mod=list_individuals&amp;mod_action=show&amp;surname=' . rawurlencode($surname['name']) . '&amp;ged=' . KT_GEDURL . '&amp;show_all_firstnames=yes" target="_blank">' . $surname['name'] . '</a>';
 							$i++;
 						}
 					}

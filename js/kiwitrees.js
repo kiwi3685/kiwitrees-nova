@@ -1764,13 +1764,13 @@ function jquery_confirm_defaults() {
         buttons: {
             cancel: {
                 text: "Cancel",
-                btnClass: "button hollow small",
+                btnClass: "btnCancel button hollow small",
                 action: function () {
                 },
             },
             confirm: {
                 text: "Confirm",
-                btnClass: "button primary small",
+                btnClass: "btnConfirm button primary small",
                 action: function(){
                     url = this.$target.attr("href");
                     window.open(url, "_blank");

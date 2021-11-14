@@ -1280,8 +1280,9 @@ class KT_Stats {
 		foreach ($all_db_countries as $country_code => $country) {
 			$top10[] = '<li>';
 			foreach ($country as $country_name=>$tot) {
+				$tot >= 5000 ? $totClass = 'jsConfirm' : $totClass = 'notJsConfirm';
 				$tmp		= new KT_Place($country_name, $this->_ged_id);
-				$place		= '<a href="' . $tmp->getURL() . '" class="list_item">' . $all_countries[$country_code] . '</a>';
+				$place		= '<a class="' . $totClass . '" href="' . $tmp->getURL() . '" class="list_item">' . $all_countries[$country_code] . '</a>';
 				$top10[]	.= $place . ' - ' . KT_I18N::number($tot);
 			}
 			$top10[] .= '</li>';
@@ -1339,12 +1340,7 @@ class KT_Stats {
 		arsort($places);
 		foreach ($places as $place => $count) {
 			$tmp		= new KT_Place($place, $this->_ged_id);
-			$place		= '<a href="' . $tmp->getURL() . '" class="list_item">' . $tmp->getFullName() . '</a>';
-
-			$urlStart	= '<a href="module.php?mod=list_places&mod_action=show&ged=Osborne&action=view&parent%5B%5D="';
-			$urlEnd		= '"';
-
-
+			$place		= '<a href="' . $tmp->getURL() . '" class="notJsConfirm list_item">' . $tmp->getFullName() . '</a>';
 			$top10[]	='<li>' . $place . ' - ' . KT_I18N::number($count) . '</li>';
 			if ($i++ == $max) break;
 		}
@@ -1361,7 +1357,7 @@ class KT_Stats {
 		arsort($places);
 		foreach ($places as $place => $count) {
 			$tmp		= new KT_Place($place, $this->_ged_id);
-			$place		= '<a href="' . $tmp->getURL() . '" class="list_item">' . $tmp->getFullName() . '</a>';
+			$place		= '<a href="' . $tmp->getURL() . '" class="notJsConfirm list_item">' . $tmp->getFullName() . '</a>';
 			$top10[]	= '<li>' . $place . ' - ' . KT_I18N::number($count) . '</li>';
 			if ($i++ == $max) break;
 		}
@@ -1378,7 +1374,7 @@ class KT_Stats {
 		arsort($places);
 		foreach ($places as $place => $count) {
 			$tmp		= new KT_Place($place, $this->_ged_id);
-			$place		= '<a href="' . $tmp->getURL() . '" class="list_item">' . $tmp->getFullName() . '</a>';
+			$place		= '<a href="' . $tmp->getURL() . '" class="notJsConfirm list_item">' . $tmp->getFullName() . '</a>';
 			$top10[]	= '<li>' . $place . ' - ' . KT_I18N::number($count) . '</li>';
 			if ($i++ == $max) break;
 		}
@@ -3328,7 +3324,7 @@ class KT_Stats {
 	static function _commonSurnamesQuery($type='list', $show_tot=false, $params = array()) {
 		global $SURNAME_LIST_STYLE, $GEDCOM;
 
-		$ged_id=get_id_from_gedcom($GEDCOM);
+		$ged_id = get_id_from_gedcom($GEDCOM);
 		if (is_array($params) && isset($params[0]) && $params[0] != '') {$threshold = strtolower($params[0]);} else {$threshold = get_gedcom_setting($ged_id, 'COMMON_NAMES_THRESHOLD');}
 		if (is_array($params) && isset($params[1]) && $params[1] != '' && $params[1] >= 0) {$maxtoshow = strtolower($params[1]);} else {$maxtoshow = false;}
 		if (is_array($params) && isset($params[2]) && $params[2] != '') {$sorting = strtolower($params[2]);} else {$sorting = 'alpha';}
@@ -3359,7 +3355,7 @@ class KT_Stats {
 	}
 
 	function getCommonSurname() {
-		$surnames=array_keys(get_top_surnames($this->_ged_id, 1, 1));
+		$surnames = array_keys(get_top_surnames($this->_ged_id, 1, 1));
 		return array_shift($surnames);
 	}
 
@@ -3385,6 +3381,8 @@ class KT_Stats {
 			}
 			$all_surnames = array_merge($all_surnames, KT_Query_Name::surnames(utf8_strtoupper($surname), '', false, false, KT_GED_ID));
 		}
+
+		$tot_indi = $this->_totalIndividuals();
 		$tot = 0;
 		$per = 0;
 		foreach ($surnames as $indexval => $surname) {
@@ -3411,7 +3409,7 @@ class KT_Stats {
 			$data[] = array (
 				'category'	=> $top_name,
 				'count'		=> $count_per,
-				'percent'	=> KT_I18N::number($count_per) . ' (' . KT_I18N::number(100 * $count_per / $tot, 1) . '%)',
+				'percent'	=> KT_I18N::number($count_per) . ' (' . KT_I18N::number(100 * $count_per / $tot_indi, 1) . '%)',
 				'color'		=> 'd',
 				'type'		=> $top_name
 
@@ -4367,34 +4365,39 @@ class KT_Stats {
 
 	}
 
-	static function famsList($ged_id, $option = '') {
-		if ($option) {
-			switch ($option){
-				case 'withsour':
-					$sql = "
-						SELECT f_id AS xref, f_file AS ged_id
-						FROM `##families`, `##link`
-						WHERE f_id = l_from AND f_file = l_file
-						AND l_file = " . $ged_id . "
-						AND l_type='SOUR'
-						GROUP BY f_id, f_file
-					";
-				break;
-				case 'withoutsour':
-					$sql = "
-						SELECT f_id AS xref, f_file AS ged_id
-						FROM `##families`
-						WHERE f_file=1
-						AND f_id NOT IN (
-						    SELECT DISTINCT f_id
-						    FROM `##families`, `##link`
-						    WHERE f_id = l_from AND f_file = l_file
-						    AND l_file=" . $ged_id . "
-						    AND l_type = 'SOUR'
-						);
-					";
-				break;
-			}
+	static function famsList($ged_id, $option = false) {
+		switch ($option){
+			case 'withsour':
+				$sql = "
+					SELECT f_id AS xref, f_file AS ged_id
+					FROM `##families`, `##link`
+					WHERE f_id = l_from AND f_file = l_file
+					AND l_file = " . $ged_id . "
+					AND l_type='SOUR'
+					GROUP BY f_id, f_file
+				";
+			break;
+			case 'withoutsour':
+				$sql = "
+					SELECT f_id AS xref, f_file AS ged_id
+					FROM `##families`
+					WHERE f_file=" . $ged_id . "
+					AND f_id NOT IN (
+					    SELECT DISTINCT f_id
+					    FROM `##families`, `##link`
+					    WHERE f_id = l_from AND f_file = l_file
+					    AND l_file=" . $ged_id . "
+					    AND l_type = 'SOUR'
+					);
+				";
+			break;
+			default:
+				$sql = "
+					SELECT f_id AS xref, f_file AS ged_id
+					FROM `##families`
+					WHERE f_file=" . $ged_id . "
+				";
+			break;
 		}
 		$rows	= KT_DB::prepare($sql)->fetchAll(PDO::FETCH_ASSOC);
 		$list	= array();

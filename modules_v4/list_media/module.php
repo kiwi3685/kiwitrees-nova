@@ -293,7 +293,7 @@ class list_media_KT_Module extends KT_Module implements KT_Module_List {
 							$pagination .= '</p>'; ?>
 
 							<!-- Output display -->
-							<h4><?php echo KT_I18N::translate('%s media objects found', $ct); ?></h4>
+							<h4><?php echo KT_I18N::translate('%s media objects found', KT_I18N::number($ct)); ?></h4>
 							<div class="cell">
 								<?php echo $pagination; ?>
 							</div>

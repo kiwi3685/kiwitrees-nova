@@ -89,20 +89,26 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 			->addExternalJavascript(KT_D3_JS)
 			->addExternalJavascript(KT_CONFIRM_JS)
 			->addInlineJavascript('
-				// force PDF Files to open in new window
-				jQuery("a[href]").attr("target", "_blank");
+				// force all links except the tab switchers to open in new window
+				jQuery("a:not(.tabs)[href]").attr("target", "_blank");
 
-				// add "jsconfirm" to all links except the tab switchers
-				jQuery("a[href]").addClass("jsConfirm");
-				jQuery("a.tabs").removeClass("jsConfirm");
+				// add "jsconfirm" to all links except those with class "notJsConfirm"
+				jQuery("a:not(.notJsConfirm)[href]").addClass("jsConfirm");
 
+				// Add the jquery_confirm defaults
+				jquery_confirm_defaults();
 
-				// initiate the jquery_confirm dialog
+				// Add page specific settings
 				jQuery("a.jsConfirm").confirm({
+					// Before the modal is displayed.
 					onOpenBefore: function () {
-						// before the modal is displayed.
-						number = parseInt(this.$target.html().replace((/[\,\.]/g, "")));
-						if (number <= 5000) { //approximate number where server processing slows too far.
+						// Set button text for locale
+						jQuery(".btnCancel").html("' . KT_I18N::translate('Cancel') . '");
+						jQuery(".btnConfirm").html("' . KT_I18N::translate('Confirm') . '");
+
+						// Only display warning for long lists where server processing slows too far
+						number = this.$target.html().replace(/[\s\,\.]/g,"");
+						if (number <= 5000) {
 							url = this.$target.attr("href");
 							window.open(url, "_blank");
 						}
@@ -110,9 +116,6 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 					title: "' . KT_I18N::translate('Caution - server overload possible') . '",
 					content: "' . KT_I18N::translate('Generating lists of large numbers may be slow or not work at all if your server has insufficient resources (i.e. far more than most normal servers). Do you want to continue?') . '",
 				});
-
-				// Add the jquery_confirm Defaults
-				jquery_confirm_defaults();
 
 			');
 
@@ -130,19 +133,19 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 					</button>
 				</div>
 			</div>
-			<ul class="tabs" id="statistics-tabs" data-tabs data-deep-link="true">
+			<ul class="tabs " id="statistics-tabs" data-tabs data-deep-link="true">
 				<li class="tabs-title is-active">
-					<a href="#stats-indi" class="tabs" aria-selected="true">
+					<a href="#stats-indi" class="tabs notJsConfirm" aria-selected="true">
 						<span><?php echo KT_I18N::translate('Individuals'); ?></span>
 					</a>
 				</li>
 				<li class="tabs-title">
-					<a href="#stats-fam" class="tabs">
+					<a href="#stats-fam" class="tabs notJsConfirm">
 						<span><?php echo KT_I18N::translate('Families'); ?></span>
 					</a>
 				</li>
 				<li class="tabs-title">
-					<a href="#stats-other" class="tabs">
+					<a href="#stats-other" class="tabs notJsConfirm">
 						<span><?php echo KT_I18N::translate('Other'); ?></span>
 					</a>
 				</li>
@@ -163,7 +166,7 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 				<div class="tabs-panel is-active" id="stats-indi">
 					<h5>
 						<?php echo KT_I18N::translate('Total individuals'); ?>
-						<a  class="jsConfirm" href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalIndis">
+						<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalIndis">
 							<?php echo $stats->totalIndividuals(); ?>
 						</a>
 					</h5>
@@ -234,7 +237,7 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 							</div>
 						</div>
 					</div>
-					<h5><?php echo KT_I18N::translate('Events'); ?></h5>
+					<h5><?php echo KT_I18N::translate('Individual events'); ?></h5>
 					<div class="grid-x grid-margin-x grid-margin-y statisticSection">
 						<div class="cell medium-6">
 							<label class="h6"><?php echo KT_I18N::translate('Total births'); ?>
@@ -345,11 +348,23 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 						</div>
 						<div class="cell medium-6">
 							<div class="cell" id="chartCommonSurnames"></div>
-							<div class="cell text-center"><?php echo KT_I18N::translate('Top surnames'); ?></div>
+							<div class="cell text-center"><?php echo KT_I18N::translate('Top 10 surnames'); ?></div>
+							<?php
+								$proportionSurnames = KT_I18N::number($stats->_totalSurnames() / $stats->_totalIndividuals() * 100, 0) . '%';
+							?>
+							<div class="cell text-center">
+								<small><?php echo KT_I18N::translate('Representing %s of all individuals', $proportionSurnames); ?></small>
+							</div>
 						</div>
 						<div class="cell medium-6">
 							<div class="cell" id="chartCommonGiven"></div>
-							<div class="cell text-center"><?php echo KT_I18N::translate('Top given names'); ?></div>
+							<div class="cell text-center"><?php echo KT_I18N::translate('Top 10 given names'); ?></div>
+							<?php
+								$proportionSurnames = KT_I18N::number($stats->_totalGivennames() / $stats->_totalIndividuals() * 100, 0) . '%';
+							?>
+							<div class="cell text-center">
+								<small><?php echo KT_I18N::translate('Representing %s of all individuals', $proportionSurnames); ?></small>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -363,8 +378,13 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 					barChart("chartNoChild");
 				'); ?>
 				<div class="tabs-panel" id="stats-fam">
-					<h5><?php echo KT_I18N::translate('Total families: %s', $stats->totalFamilies()); ?></h5>
-					<h5><?php echo KT_I18N::translate('Events'); ?></h5>
+					<h5>
+						<?php echo KT_I18N::translate('Total families'); ?>
+						<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalFams">
+							<?php echo $stats->totalFamilies(); ?>
+						</a>
+					</h5>
+					<h5><?php echo KT_I18N::translate('Family events'); ?></h5>
 					<div class="grid-x grid-margin-x grid-margin-y statisticSection">
 						<div class="cell medium-6">
 							<label class="h6"><?php echo KT_I18N::translate('Total marriages'); ?>&nbsp;<?php echo $stats->totalMarriages(); ?></label>
@@ -510,7 +530,7 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 					mapChart("chartDistribution");
 				'); ?>
 				<div class="tabs-panel" id="stats-other">
-					<h5><?php echo KT_I18N::translate('Total records: %s', $stats->totalRecords()); ?></h5>
+					<h5><?php echo KT_I18N::translate('Total records %s', $stats->totalRecords()); ?></h5>
 					<div class="grid-x grid-margin-x grid-margin-y statisticSection">
 						<div class="cell medium-3">
 							<?php echo KT_I18N::translate('Media objects'); ?>
@@ -537,7 +557,7 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 							</a>
 						</div>
 					</div>
-					<h5><?php echo KT_I18N::translate('Total events: %s', $stats->totalEvents()); ?></h5>
+					<h5><?php echo KT_I18N::translate('Total events %s', $stats->totalEvents()); ?></h5>
 					<div class="grid-x grid-margin-x grid-margin-y statisticSection">
 						<div class="cell medium-6">
 							<label class="h6"><?php echo KT_I18N::translate('First event'); ?> - <?php echo $stats->firstEventType(); ?></label>
@@ -548,14 +568,24 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 							<div><?php echo $stats->lastEvent(); ?></div>
 						</div>
 					</div>
-					<h5><?php echo KT_I18N::translate('Media objects: %s', $stats->totalMedia()); ?></h5>
+					<h5>
+						<?php echo KT_I18N::translate('Media objects'); ?>
+						<a href="module.php?action=filter&search=yes&mod=list_media&mod_action=show&folder=&subdirs=on&sortby=title&form_type=&max=18&filter=&ged=<?php echo $GEDCOM; ?>">
+							<?php echo $stats->totalMedia(); ?>
+						</a>
+					</h5>
 					<div class="grid-x grid-margin-x grid-margin-y statisticSection">
 						<div class="cell">
 							<div class="cell text-center"><?php echo KT_I18N::translate('Media objects by type'); ?></div>
 							<div class="cell" id="chartMedia"></div>
 						</div>
 					</div>
-					<h5><?php echo KT_I18N::translate('Sources: %s', $stats->totalSources()); ?></h5>
+					<h5>
+						<?php echo KT_I18N::translate('Sources'); ?>
+						<a href="module.php?mod=list_sources&amp;mod_action=show&amp;ged=<?php echo $GEDCOM; ?>">
+							<?php echo $stats->totalSources(); ?>
+						</a>
+					</h5>
 					<div class="grid-x grid-margin-x grid-margin-y statisticSection">
 						<div class="cell medium-6">
 							<div class="grid-x">
@@ -563,8 +593,9 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 								<div class="cell medium-6 chartKeys text-center">
 									<small>
 										<i class="<?php echo $iconStyle; ?> fa-circle fa-2x female"></i>
+										<?php echo KT_I18N::translate('With sources') . '&nbsp'; ?>
 										<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalIndis&amp;option=withsour">
-											<?php echo KT_I18N::translate('With sources') . '&nbsp;' . $stats->totalIndisWithSources(); ?>
+											<?php echo $stats->totalIndisWithSources(); ?>
 										</a>
 										 (<?php echo $stats->totalIndisWithSourcesPercentage(); ?>)
 									 </small>
@@ -572,8 +603,9 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 								 <div class="cell medium-6 chartKeys text-center">
 									 <small>
  										<i class="<?php echo $iconStyle; ?> fa-circle fa-2x male"></i>
+										<?php echo KT_I18N::translate('Without sources') . '&nbsp;'; ?>
 											<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalIndis&amp;option=withoutsour">
-												<?php echo KT_I18N::translate('Without sources') . '&nbsp;' . $stats->totalIndisWithoutSources(); ?>
+												<?php echo $stats->totalIndisWithoutSources(); ?>
 											</a>
  										 (<?php echo $stats->totalIndisWithoutSourcesPercentage(); ?>)
  									 </small>
@@ -587,8 +619,9 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 								<div class="cell medium-6 chartKeys text-center">
 									<small>
 										<i class="<?php echo $iconStyle; ?> fa-circle fa-2x female"></i>
+										<?php echo KT_I18N::translate('With sources') . '&nbsp;'; ?>
 										<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalFams&amp;tag=withsour">
-											<?php echo KT_I18N::translate('With sources') . '&nbsp;' . $stats->totalFamsWithSources(); ?>
+											<?php echo $stats->totalFamsWithSources(); ?>
 										</a>
 										 (<?php echo $stats->totalFamsWithSourcesPercentage(); ?>)
 									 </small>
@@ -596,8 +629,9 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 								 <div class="cell medium-6 chartKeys text-center">
 									 <small>
  										<i class="<?php echo $iconStyle; ?> fa-circle fa-2x male"></i>
+										<?php echo KT_I18N::translate('Without sources') . '&nbsp;'; ?>
  										<a href="statisticsTables.php?ged=<?php echo $GEDCOM; ?>&amp;table=totalFams&amp;tag=withoutsour">
-											<?php echo KT_I18N::translate('Without sources') . '&nbsp;' . $stats->totalFamsWithoutSources(); ?>
+											<?php echo $stats->totalFamsWithoutSources(); ?>
  										</a>
  										 (<?php echo $stats->totalFamsWithoutSourcesPercentage(); ?>)
  									 </small>
@@ -606,7 +640,7 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 							</div>
 						</div>
 					</div>
-					<h5><?php echo KT_I18N::translate('Places: %s', $stats->totalPlaces()); ?></h5>
+					<h5><?php echo KT_I18N::translate('Places %s', $stats->totalPlaces()); ?></h5>
 					<div class="grid-x grid-margin-x grid-margin-y statisticSection">
 						<div class="cell medium-6">
 							<label class="h6"><?php echo KT_I18N::translate('Birth places'); ?></label>
