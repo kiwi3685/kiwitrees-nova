@@ -158,7 +158,7 @@ switch($THEME_DIR) {
 					.append("a")
 						.attr("xlink:href", function(d){ return linkUrl + d.type })
                         .attr("class", "jsConfirm")
-						.attr("target", "blank")
+                        .attr("target", "_blank")
 						.html(function(d) { return d.percent; })
 						.style("fill", "<?php echo $linkColor; ?>");
 

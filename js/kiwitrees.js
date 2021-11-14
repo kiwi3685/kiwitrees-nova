@@ -1769,7 +1769,7 @@ function jquery_confirm_defaults() {
                 },
             },
             confirm: {
-                text: "Confirm",
+                text: "Continue",
                 btnClass: "btnConfirm button primary small",
                 action: function(){
                     url = this.$target.attr("href");

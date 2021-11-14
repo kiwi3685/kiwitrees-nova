@@ -49,9 +49,6 @@ class block_statistics_KT_Module extends KT_Module implements KT_Module_Block {
 		$controller
 			->addExternalJavascript(KT_CONFIRM_JS)
 			->addInlineJavascript('
-				// add "jsconfirm" to all links except the tab switchers
-				jQuery("a:not(.names)[href]").addClass("jsConfirm");
-
 				// Add the jquery_confirm defaults
 				jquery_confirm_defaults();
 
@@ -61,11 +58,11 @@ class block_statistics_KT_Module extends KT_Module implements KT_Module_Block {
 					onOpenBefore: function () {
 						// Set button text for locale
 						jQuery(".btnCancel").html("' . KT_I18N::translate('Cancel') . '");
-						jQuery(".btnConfirm").html("' . KT_I18N::translate('Confirm') . '");
+						jQuery(".btnConfirm").html("' . KT_I18N::translate('Continue') . '");
 
 						// Only display warning for long lists where server processing slows too far
-						number = this.$target.html().replace(/[\s\,\.]/g,"");
-						if (number <= 5000) {
+						num1 = parseInt(this.$target.html().replace(/\W/g,""));
+						if (isNaN(num) || typeof num !== "number" || num <= 5000) {
 							url = this.$target.attr("href");
 							window.open(url, "_blank");
 						}
@@ -129,10 +126,28 @@ class block_statistics_KT_Module extends KT_Module implements KT_Module_Block {
 							 ' . $stats->totalIndividuals() . '
                             </a>
                         </div>
-						<div class="cell small-6"><i class="' . $iconStyle . ' fa-male"></i>' . KT_I18N::translate('Males') . '</div>
-						<div class="cell small-6">' . $stats->totalSexMales() . '<br>' . $stats->totalSexMalesPercentage() . '</div>
-						<div class="cell small-6"><i class="' . $iconStyle . ' fa-female"></i>' . KT_I18N::translate('Females') . '</div>
-						<div class="cell small-6">' . $stats->totalSexFemales() . '<br>' . $stats->totalSexFemalesPercentage() . '</div>';
+						<div class="cell small-6">
+							<i class="' . $iconStyle . ' fa-male"></i>
+							' . KT_I18N::translate('Males') . '
+						</div>
+						<div class="cell small-6">
+							<a class="jsConfirm" href="statisticsTables.php?ged=' . KT_GEDURL . '&amp;table=totalIndis&amp;option=male">
+								 ' . $stats->totalSexMales() . '
+							</a>
+							<br>
+							' . $stats->totalSexMalesPercentage() . '
+						</div>
+						<div class="cell small-6">
+							<i class="' . $iconStyle . ' fa-female">
+							</i>' . KT_I18N::translate('Females') . '
+						</div>
+						<div class="cell small-6">
+							<a class="jsConfirm" href="statisticsTables.php?ged=' . KT_GEDURL . '&amp;table=totalIndis&amp;option=female">
+								' . $stats->totalSexFemales() . '
+							</a>
+							<br>
+							' . $stats->totalSexFemalesPercentage() . '
+						</div>';
 					}
 					if ($stat_surname) {
 						$content .= '<div class="cell small-6">' . KT_I18N::translate('Total surnames') . '</div>
