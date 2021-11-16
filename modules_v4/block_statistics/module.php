@@ -200,7 +200,7 @@ class block_statistics_KT_Module extends KT_Module implements KT_Module_Block {
 						<div class="cell small-6">' . KT_I18N::translate('Total users') . '</div>
 						<div class="cell small-6">';
 							if (KT_USER_GEDCOM_ADMIN) {
-								$content .= '<a href="admin_users.php">'. $stats->totalUsers() . '</a>';
+								$content .= '<a class="jsConfirm" href="admin_users.php">'. $stats->totalUsers() . '</a>';
 							} else {
 								$content .= $stats->totalUsers();
 							}
