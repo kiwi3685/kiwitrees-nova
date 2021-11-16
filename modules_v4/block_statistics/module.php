@@ -54,21 +54,23 @@ class block_statistics_KT_Module extends KT_Module implements KT_Module_Block {
 
 				// Add page specific settings
 				jQuery("a.jsConfirm").confirm({
+					title: "' . KT_I18N::translate('Caution - server overload possible') . '",
+					content: "' . KT_I18N::translate('Generating lists of large numbers may be slow or not work at all if your server has insufficient resources (i.e. far more than most normal servers). Do you want to continue?') . '",
 					// Before the modal is displayed.
 					onOpenBefore: function () {
+						var jc = this;
 						// Set button text for locale
 						jQuery(".btnCancel").html("' . KT_I18N::translate('Cancel') . '");
 						jQuery(".btnConfirm").html("' . KT_I18N::translate('Continue') . '");
 
 						// Only display warning for long lists where server processing slows too far
-						num1 = parseInt(this.$target.html().replace(/\W/g,""));
+						num = parseInt(this.$target.html().replace(/\W/g,""));
 						if (isNaN(num) || typeof num !== "number" || num <= 5000) {
+							jc.close();
 							url = this.$target.attr("href");
 							window.open(url, "_blank");
 						}
-					},
-					title: "' . KT_I18N::translate('Caution - server overload possible') . '",
-					content: "' . KT_I18N::translate('Generating lists of large numbers may be slow or not work at all if your server has insufficient resources (i.e. far more than most normal servers). Do you want to continue?') . '",
+					}
 				});
 
 			');
