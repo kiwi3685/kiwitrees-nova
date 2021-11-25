@@ -29,8 +29,7 @@ if (!defined('KT_KIWITREES')) {
 // Theme name - this needs double quotes, as file is scanned/parsed by script
 $theme_name		= "kahikatoa";
 $theme_display	= "Kahikātoa"; // Māori language text - not translatable
-
-$headerfile = KT_THEME_DIR . 'header.php';
+$headerfile		= KT_THEME_DIR . 'header.php';
 
 /**
  * Tell menu constructor the fontawesome style icons required
@@ -44,25 +43,13 @@ $iconStyle	= 'fas'; // fontawesome style set
 //- main icons
 $KT_IMAGES = array(
 	// used to draw charts
-	'dline'          =>KT_THEME_URL.'images/dline.png',
-	'dline2'         =>KT_THEME_URL.'images/dline2.png',
-	'hline'          =>KT_THEME_URL.'images/hline.png',
-	'spacer'         =>KT_THEME_URL.'images/spacer.png',
-	'vline'          =>KT_THEME_URL.'images/vline.png',
-	'minus'          =>KT_THEME_URL.'images/minus.png',
-	'plus'           =>KT_THEME_URL.'images/plus.png',
-
-	/* used in button images and javascript
-	'add'            =>KT_THEME_URL.'images/add.png',
-	'button_family'  =>KT_THEME_URL.'images/buttons/family.png',
-	'remove'         =>KT_THEME_URL.'images/remove.png',
-	'search'         =>KT_THEME_URL.'images/search.png',
-
-	// need different sizes before moving to CSS
-	'default_image_M'=>KT_THEME_URL.'images/silhouette_male.png',
-	'default_image_F'=>KT_THEME_URL.'images/silhouette_female.png',
-	'default_image_U'=>KT_THEME_URL.'images/silhouette_unknown.png',
-	*/
+	'dline'		=> KT_THEME_URL . 'images/dline.png',
+	'dline2'	=> KT_THEME_URL . 'images/dline2.png',
+	'hline'		=> KT_THEME_URL . 'images/hline.png',
+	'spacer'	=> KT_THEME_URL . 'images/spacer.png',
+	'vline'		=> KT_THEME_URL . 'images/vline.png',
+	'minus'		=> KT_THEME_URL . 'images/minus.png',
+	'plus'		=> KT_THEME_URL . 'images/plus.png',
 );
 
 /**
@@ -113,14 +100,6 @@ $KT_STATS_CHART_COLOR2 = "#e09798"; // female color
 $KT_STATS_CHART_COLOR3 = "#8a8a8a"; // dark-gray color
 
 // -- fanchart variables
-/*
-$fanChart = array(
-	'color'   =>'#555',
-	'bgColor' =>'#eee',
-	'bgMColor'=>'#b1cff0',
-	'bgFColor'=>'#e9daf1'
-);
-*/
 $fanChart = array(
 	'color'   =>'#331919',
 	'bgColor' =>'#e3e3e3',

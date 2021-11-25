@@ -112,116 +112,116 @@ $controller
 	->pageHeader()
 	->setPageTitle(KT_I18N::translate('Change the Footer blocks'))
 	->addInlineJavascript('
-	/**
-	* Move Up Block Javascript function
-	*
-	* This function moves the selected option up in the given select list
-	* @param String section_name the name of the select to move the options
-	*/
-	function move_up_block(section_name) {
-		section_select = document.getElementById(section_name);
-		if (section_select) {
-			if (section_select.selectedIndex <= 0) return false;
-			index = section_select.selectedIndex;
-			temp = new Option(section_select.options[index-1].text, section_select.options[index-1].value);
-			section_select.options[index-1] = new Option(section_select.options[index].text, section_select.options[index].value);
-			section_select.options[index] = temp;
-			section_select.selectedIndex = index-1;
+		/**
+		* Move Up Block Javascript function
+		*
+		* This function moves the selected option up in the given select list
+		* @param String section_name the name of the select to move the options
+		*/
+		function move_up_block(section_name) {
+			section_select = document.getElementById(section_name);
+			if (section_select) {
+				if (section_select.selectedIndex <= 0) return false;
+				index = section_select.selectedIndex;
+				temp = new Option(section_select.options[index-1].text, section_select.options[index-1].value);
+				section_select.options[index-1] = new Option(section_select.options[index].text, section_select.options[index].value);
+				section_select.options[index] = temp;
+				section_select.selectedIndex = index-1;
+			}
 		}
-	}
 
-	/**
-	* Move Down Block Javascript function
-	*
-	* This function moves the selected option down in the given select list
-	* @param String section_name the name of the select to move the options
-	*/
-	function move_down_block(section_name) {
-		section_select = document.getElementById(section_name);
-		if (section_select) {
-			if (section_select.selectedIndex < 0) return false;
-			if (section_select.selectedIndex >= section_select.length-1) return false;
-			index = section_select.selectedIndex;
-			temp = new Option(section_select.options[index+1].text, section_select.options[index+1].value);
-			section_select.options[index+1] = new Option(section_select.options[index].text, section_select.options[index].value);
-			section_select.options[index] = temp;
-			section_select.selectedIndex = index+1;
+		/**
+		* Move Down Block Javascript function
+		*
+		* This function moves the selected option down in the given select list
+		* @param String section_name the name of the select to move the options
+		*/
+		function move_down_block(section_name) {
+			section_select = document.getElementById(section_name);
+			if (section_select) {
+				if (section_select.selectedIndex < 0) return false;
+				if (section_select.selectedIndex >= section_select.length-1) return false;
+				index = section_select.selectedIndex;
+				temp = new Option(section_select.options[index+1].text, section_select.options[index+1].value);
+				section_select.options[index+1] = new Option(section_select.options[index].text, section_select.options[index].value);
+				section_select.options[index] = temp;
+				section_select.selectedIndex = index+1;
+			}
 		}
-	}
 
-	/**
-	* Move Block from one column to the other Javascript function
-	*
-	* This function moves the selected option down in the given select list
-	* @author KosherJava
-	* @param String from_column the name of the select to move the option from
-	* @param String to_column the name of the select to remove the option to
-	*/
-	function move_left_right_block(from_column, to_column) {
-		to_select = document.getElementById(to_column);
-		from_select = document.getElementById(from_column);
-		instruct = document.getElementById("instructions");
-		if ((to_select) && (from_select)) {
-			add_option = from_select.options[from_select.selectedIndex];
-			if (to_column != "available_select") {
-				to_select.options[to_select.length] = new Option(add_option.text, add_option.value);
-			}
-			if (from_column != "available_select") {
-				from_select.options[from_select.selectedIndex] = null; //remove from list
-			}
-		}
-	}
-	/**
-	* Select Options Javascript function
-	*
-	* This function selects all the options in the multiple select lists
-	*/
-	function select_options() {
-		section_select = document.getElementById("main_select");
-		if (section_select) {
-			for (i=0; i<section_select.length; i++) {
-				section_select.options[i].selected=true;
+		/**
+		* Move Block from one column to the other Javascript function
+		*
+		* This function moves the selected option down in the given select list
+		* @author KosherJava
+		* @param String from_column the name of the select to move the option from
+		* @param String to_column the name of the select to remove the option to
+		*/
+		function move_left_right_block(from_column, to_column) {
+			to_select = document.getElementById(to_column);
+			from_select = document.getElementById(from_column);
+			instruct = document.getElementById("instructions");
+			if ((to_select) && (from_select)) {
+				add_option = from_select.options[from_select.selectedIndex];
+				if (to_column != "available_select") {
+					to_select.options[to_select.length] = new Option(add_option.text, add_option.value);
+				}
+				if (from_column != "available_select") {
+					from_select.options[from_select.selectedIndex] = null; //remove from list
+				}
 			}
 		}
-		section_select = document.getElementById("right_select");
-		if (section_select) {
-			for (i=0; i<section_select.length; i++) {
-				section_select.options[i].selected=true;
+		/**
+		* Select Options Javascript function
+		*
+		* This function selects all the options in the multiple select lists
+		*/
+		function select_options() {
+			section_select = document.getElementById("main_select");
+			if (section_select) {
+				for (i=0; i<section_select.length; i++) {
+					section_select.options[i].selected=true;
+				}
+			}
+			section_select = document.getElementById("right_select");
+			if (section_select) {
+				for (i=0; i<section_select.length; i++) {
+					section_select.options[i].selected=true;
+				}
+			}
+			return true;
+		}
+		/**
+		* Show Block Description Javascript function
+		*
+		* This function shows a description for the selected option
+		* @param String list_name the name of the select to get the option from
+		*/
+		function show_description(list_name) {
+			list_select = document.getElementById(list_name);
+			instruct = document.getElementById("instructions");
+			if (block_descr[list_select.options[list_select.selectedIndex].value] && instruct) {
+				instruct.innerHTML = block_descr[list_select.options[list_select.selectedIndex].value];
+			} else {
+				instruct.innerHTML = block_descr["advice1"];
+			}
+			list1 = document.getElementById("main_select");
+			list2 = document.getElementById("available_select");
+			list3 = document.getElementById("right_select");
+			if (list_name=="main_select") {
+				list2.selectedIndex = -1;
+				list3.selectedIndex = -1;
+			}
+			if (list_name=="available_select") {
+				list1.selectedIndex = -1;
+				list3.selectedIndex = -1;
+			}
+			if (list_name=="right_select") {
+				list1.selectedIndex = -1;
+				list2.selectedIndex = -1;
 			}
 		}
-		return true;
-	}
-	/**
-	* Show Block Description Javascript function
-	*
-	* This function shows a description for the selected option
-	* @param String list_name the name of the select to get the option from
-	*/
-	function show_description(list_name) {
-		list_select = document.getElementById(list_name);
-		instruct = document.getElementById("instructions");
-		if (block_descr[list_select.options[list_select.selectedIndex].value] && instruct) {
-			instruct.innerHTML = block_descr[list_select.options[list_select.selectedIndex].value];
-		} else {
-			instruct.innerHTML = block_descr["advice1"];
-		}
-		list1 = document.getElementById("main_select");
-		list2 = document.getElementById("available_select");
-		list3 = document.getElementById("right_select");
-		if (list_name=="main_select") {
-			list2.selectedIndex = -1;
-			list3.selectedIndex = -1;
-		}
-		if (list_name=="available_select") {
-			list1.selectedIndex = -1;
-			list3.selectedIndex = -1;
-		}
-		if (list_name=="right_select") {
-			list1.selectedIndex = -1;
-			list2.selectedIndex = -1;
-		}
-	}
-	var block_descr = new Array();
+		var block_descr = new Array();
 	');
 
 
