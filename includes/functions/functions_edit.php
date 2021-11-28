@@ -2931,9 +2931,35 @@ function no_update_chan(KT_GedcomRecord $record = null) {
 			</div>
 		</div>
 	<?php } else {
+
 		return '';
 	}
 }
+
+/**
+ * A stadard "Save / Cancel" pair of buttons, used on many pages
+ *
+ * @return string[]
+ */
+
+function editSubmitButtons() {
+	global $iconStyle;
+
+	$buttonHtml = '
+		<button class="button secondary" type="submit" onclick="window.close();">
+			<i class="' . $iconStyle . ' fa-times"></i>'
+			 . KT_I18N::translate('Cancel') .
+		'</button>
+		<button class="button" type="submit">
+			<i class="' . $iconStyle . ' fa-save"></i>'
+			 . KT_I18N::translate('Save') .
+		'</button>
+	';
+
+	return $buttonHtml;
+
+}
+
 
 /**
  * Remove a complete directory

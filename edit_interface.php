@@ -140,37 +140,35 @@ switch ($action) {
         list($gedrec1, $gedrec2) = explode("\n", $gedrec, 2);
 
         $controller
-            ->setPageTitle(KT_I18N::translate('Edit raw GEDCOM record') . ' - ' . ($type == 'INDI' ? $record->getLifespanName() : $record->getFullName()))
+            ->setPageTitle(($type == 'INDI' ? $record->getLifespanName() : $record->getFullName()))
             ->pageHeader();
         ?>
 
-		<div id="edit_interface-page">
-			<h2>
-				<?php echo $controller->getPageTitle(); ?>
-				<?php print_specialchar_link('newgedrec2'); ?>
-			</h2>
-			<span id="edit_edit_raw" class="help_text"></span>
-			<form method="post" action="edit_interface.php">
-				<input type="hidden" name="action" value="updateraw">
-				<input type="hidden" name="pid" value="<?php echo $pid; ?>">
-				<p>
-					<textarea name="newgedrec1" id="newgedrec1" dir="ltr" readonly="readonly"><?php echo htmlspecialchars($gedrec1); ?></textarea>
-				</p>
-				<p>
-					<textarea name="newgedrec2" id="newgedrec2" dir="ltr"><?php echo htmlspecialchars($gedrec2); ?></textarea>
-				</p>
-				<?php echo no_update_chan($record); ?>
-				<p id="save-cancel">
-					<button class="btn btn-primary" type="submit">
-						<i class="fa fa-save"></i>
-						<?php echo KT_I18N::translate('Save'); ?>
-					</button>
-					<button class="btn btn-primary" type="button" onclick="window.close();">
-						<i class="fa fa-times"></i>
-						<?php echo KT_I18N::translate('close'); ?>
-					</button>
-				</p>
-			</form>
+        <div id="edit_interface-page" class="grid-x grid-padding-x">
+			<div class="cell large-10 large-offset-1">
+				<h3><?php echo $controller->getPageTitle(); ?></h3>
+                <h4><?php echo KT_I18N::translate('Edit raw GEDCOM record'); ?></h4>
+
+                <?php print_specialchar_link('newgedrec2'); ?>
+
+    			<span id="edit_edit_raw" class="help_text"></span>
+
+    			<form method="post" action="edit_interface.php">
+    				<input type="hidden" name="action" value="updateraw">
+    				<input type="hidden" name="pid" value="<?php echo $pid; ?>">
+    				<p>
+    					<textarea name="newgedrec1" id="newgedrec1" dir="ltr" readonly="readonly"><?php echo htmlspecialchars($gedrec1); ?></textarea>
+    				</p>
+    				<p>
+    					<textarea name="newgedrec2" id="newgedrec2" dir="ltr"><?php echo htmlspecialchars($gedrec2); ?></textarea>
+    				</p>
+
+    				<?php echo no_update_chan($record); ?>
+
+                    <?php echo editSubmitButtons(); ?>
+
+    			</form>
+            </div>
 		</div> <!-- id="edit_interface-page" -->
 		<?php
         break;
@@ -187,9 +185,10 @@ switch ($action) {
         // Hide the private data
         list($gedrec) = $record->privatizeGedcom(KT_USER_ACCESS_LEVEL);
         ?>
+
 		<div id="edit_interface-page" class="grid-x grid-padding-x">
 			<div class="cell large-10 large-offset-1">
-				<h2><?php echo $controller->getPageTitle(); ?></h2>
+				<h3><?php echo $controller->getPageTitle(); ?></h3>
 				<?php init_calendar_popup(); ?>
 				<form name="editform" method="post" action="edit_interface.php" enctype="multipart/form-data">
 					<input type="hidden" name="action" value="update">
@@ -244,15 +243,7 @@ switch ($action) {
                         } ?>
 					</ul>
 
-					<button class="button" type="submit">
-						<i class="<?php echo $iconStyle; ?> fa-save"></i>
-						<?php echo KT_I18N::translate('Save'); ?>
-					</button>
-					<button class="button secondary" type="submit" onclick="window.close();">
-						<i class="<?php echo $iconStyle; ?> fa-times"></i>
-						<?php echo KT_I18N::translate('Cancel'); ?>
-					</button>
-
+                    <?php echo editSubmitButtons(); ?>
 
 				</form>
 			</div>
