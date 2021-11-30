@@ -121,9 +121,9 @@ class block_statistics_KT_Module extends KT_Module implements KT_Module_Block {
 		}
 
 		$content .= '
-		<div class="grid-x">
+		<div class="grid-x grid-margin-x">
 			<div class="cell large-3">
-				<div class="grid-x grid-padding-x grid-padding-y">';
+				<div class="grid-x grid-padding-y smallLeft">';
 					if ($stat_indi) {
 						$content.='<div class="cell small-6">' . KT_I18N::translate('Individuals') . '</div>
 						<div class="cell small-6">

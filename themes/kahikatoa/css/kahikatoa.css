@@ -8917,8 +8917,11 @@ footer .card .card-section .contact_links {
 	max-width: 60%;
 	width: auto;
 }
+.block .blockcontent .smallLeft {
+	border-right: 0.1rem solid #e0e0e0;
+}
 .block .blockcontent .statistics {
-	border-bottom: 0.1rem solid #faf5e8;
+	border-bottom: 0.1rem solid #e0e0e0;
 	margin-bottom: 0.5rem;
 }
 .block .blockcontent .indent {
