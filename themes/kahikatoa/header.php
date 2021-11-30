@@ -74,7 +74,17 @@
 		<meta http-equiv="x-ua-compatible" content="ie=edge">
 		<?php echo header_links($META_DESCRIPTION, $META_ROBOTS, $META_GENERATOR, $LINK_CANONICAL); ?>
 		<title><?php echo htmlspecialchars($title); ?></title>
-		<link rel="icon" href="<?php echo KT_THEME_URL; ?>images/favicon.png" type="image/png">
+        <!--Generic favicons-->
+        <link rel="icon" sizes="16x16" href="<?php echo KT_THEME_URL; ?>images/favicon.png">
+        <link rel="icon" sizes="32x32" href="<?php echo KT_THEME_URL; ?>images/favicon-32.png">
+        <link rel="icon" sizes="128x128" href="<?php echo KT_THEME_URL; ?>images/favicon-128.png">
+        <link rel="icon" sizes="192x192" href="<?php echo KT_THEME_URL; ?>images/favicon-192.png">
+        <!--Android-->
+        <link rel="shortcut icon" sizes="196x196" href="<?php echo KT_THEME_URL; ?>images/favicon-196.png">
+        <!--iPad-->
+        <link rel="apple-touch-icon" sizes="152x152" href="<?php echo KT_THEME_URL; ?>images/favicon-152.png">
+        <!--iPhone-->
+        <link rel="apple-touch-icon" sizes="180x180" href="<?php echo KT_THEME_URL; ?>images/apple-touch-icon.png">
 		<?php if ($view !='simple') { ?>
 			<link rel="stylesheet" href="<?php echo KT_DATATABLES_CSS; ?>">
 			<link rel="stylesheet" href="<?php echo KT_DATEPICKER_CSS; ?>">
