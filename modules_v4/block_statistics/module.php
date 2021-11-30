@@ -46,6 +46,8 @@ class block_statistics_KT_Module extends KT_Module implements KT_Module_Block {
 	public function getBlock($block_id, $template = true, $cfg = null) {
 		global $KT_TREE, $iconStyle, $controller;
 
+		$memory_limit	= (int)(int_from_bytestring(ini_get('memory_limit')) / (1024 * 1024));
+
 		$controller
 			->addExternalJavascript(KT_CONFIRM_JS)
 			->addInlineJavascript('
@@ -53,6 +55,7 @@ class block_statistics_KT_Module extends KT_Module implements KT_Module_Block {
 				jquery_confirm_defaults();
 
 				// Add page specific settings
+				memory = ' . $memory_limit . ';
 				jQuery("a.jsConfirm").confirm({
 					title: "' . KT_I18N::translate('Caution - server overload possible') . '",
 					content: "' . KT_I18N::translate('Generating lists of large numbers may be slow or not work at all if your server has insufficient resources (i.e. far more than most normal servers). Do you want to continue?') . '",
@@ -65,7 +68,7 @@ class block_statistics_KT_Module extends KT_Module implements KT_Module_Block {
 
 						// Only display warning for long lists where server processing slows too far
 						num = parseInt(this.$target.html().replace(/\W/g,""));
-						if (isNaN(num) || typeof num !== "number" || num <= 5000) {
+						if (isNaN(num) || typeof num !== "number" || (num <= 5000 && memory >= 256)) {
 							jc.close();
 							url = this.$target.attr("href");
 							window.open(url, "_blank");

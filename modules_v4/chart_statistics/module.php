@@ -77,9 +77,10 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 	// Display list
 	public function show() {
 		global $controller, $GEDCOM, $iconStyle, $KT_STATS_CHART_COLOR1, $KT_STATS_CHART_COLOR2, $KT_STATS_CHART_COLOR3, $iconStyle;
-		$controller	= new KT_Controller_Page;
-		$stats		= new KT_Stats($GEDCOM);
-		$tab		= KT_Filter::get('tab', KT_REGEX_NOSCRIPT, 0);
+		$controller		= new KT_Controller_Page;
+		$stats			= new KT_Stats($GEDCOM);
+		$tab			= KT_Filter::get('tab', KT_REGEX_NOSCRIPT, 0);
+		$memory_limit	= (int)(int_from_bytestring(ini_get('memory_limit')) / (1024 * 1024));
 
 		$controller
 			->restrictAccess(KT_Module::isActiveChart(KT_GED_ID, $this->getName(), KT_USER_ACCESS_LEVEL))
@@ -96,6 +97,7 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 				jquery_confirm_defaults();
 
 				// Add page specific settings
+				memory = ' . $memory_limit . ';
 				jQuery("a.jsConfirm").confirm({
 					title: "' . KT_I18N::translate('Caution - server overload possible') . '",
 					content: "' . KT_I18N::translate('Generating lists of large numbers may be slow or not work at all if your server has insufficient resources (i.e. far more than most normal servers). Do you want to continue?') . '",
@@ -108,7 +110,7 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 
 						// Only display warning for long lists where server processing slows too far
 						num = parseInt(this.$target.html().replace(/\W/g,""));
-						if (isNaN(num) || typeof num !== "number" || num <= 5000) {
+						if (isNaN(num) || typeof num !== "number" || (num <= 5000 && memory >= 256)) {
 							jc.close();
 							url = this.$target.attr("href");
 							window.open(url, "_blank");
@@ -125,7 +127,7 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 			<div class="callout alert small"  data-closable>
 				<div class="grid-x">
 					<div class="cell">
-						<?php echo KT_I18N::translate('Click on links to see more details for each statistic.'); ?>
+						<?php echo KT_I18N::translate('Click on highlighted links to see more details for each statistic.'); ?>
 					</div>
 					<button class="close-button" aria-label="Dismiss alert" type="button" data-close>
 						<span aria-hidden="true"><i class="<?php echo $iconStyle; ?> fa-times"></i></span>

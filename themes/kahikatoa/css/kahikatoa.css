@@ -15,7 +15,7 @@
 	content: "";
 }
 .accordion .accordion-item .accordion-title {
-	background-color: #cacaca;
+	background-color: #e0e0e0;
 	font-weight: 600;
 	padding: 1rem;
 }
@@ -4145,7 +4145,7 @@ table.hover:not(.unstriped) tr:nth-of-type(even):hover {
 
 .callout {
 	position: relative;
-	margin: 0 1rem 1rem;
+	margin: 0 0 1rem;
 	padding: 1rem;
 	border: 1px solid rgba(51, 25, 25, 0.25);
 	border-radius: 0;
@@ -8876,6 +8876,7 @@ footer .card .card-section .contact_links {
 
 /* Blocks */
 .block {
+	box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
 	margin-bottom: 1.875rem;
 	/* block_charts */
 	/* block_login */
@@ -9652,6 +9653,13 @@ div[id$=-page] button[type=submit] {
 	border-left: 0.25rem solid #ab3334;
 	border-right: 0.25rem solid #ab3334;
 	word-wrap: break-word;
+}
+#edit_interface-page .accordion .accordion-title {
+	padding: 1rem 3rem;
+}
+#edit_interface-page .accordion .accordion-title svg {
+	left: 0.5rem;
+	margin-top: 0.05rem;
 }
 
 #fanchart-page svg {
