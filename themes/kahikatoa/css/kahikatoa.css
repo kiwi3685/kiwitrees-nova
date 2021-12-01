@@ -10460,6 +10460,7 @@ button:focus {
 }
 
 .loading-image {
+	line-height: 30rem;
 	text-align: center;
 }
 
@@ -11233,7 +11234,7 @@ table.dataTable td {
 	border-right: 0.35rem solid #ffae00;
 	outline: none;
 }
-.jconfirm.jconfirm-kiwitrees .jconfirm-box div.jconfirm-closeIcon {
+.jconfirm.jconfirm-kiwitrees div.jconfirm-closeIcon {
 	display: block;
 	height: 1rem;
 	width: 1rem;
@@ -11246,22 +11247,22 @@ table.dataTable td {
 	font-size: 1.2rem !important;
 	line-height: 1 !important;
 }
-.jconfirm.jconfirm-kiwitrees .jconfirm-box div.jconfirm-title-c {
+.jconfirm.jconfirm-kiwitrees div.jconfirm-title-c {
 	font-size: 1rem;
 	font-weight: 600;
 	padding: 0.125rem 1rem;
 }
-.jconfirm.jconfirm-kiwitrees .jconfirm-box div.jconfirm-title-c .jconfirm-icon-c .svg-inline--fa {
+.jconfirm.jconfirm-kiwitrees div.jconfirm-title-c .jconfirm-icon-c .svg-inline--fa {
 	margin: 0.25rem 0.5rem 0 0;
 }
-.jconfirm.jconfirm-kiwitrees .jconfirm-box div.jconfirm-content-pane {
+.jconfirm.jconfirm-kiwitrees div.jconfirm-content-pane {
 	padding: 0.5rem;
 }
-.jconfirm.jconfirm-kiwitrees .jconfirm-box .jconfirm-buttons {
+.jconfirm.jconfirm-kiwitrees .jconfirm-buttons {
 	display: inline-block;
 	height: auto;
 }
-.jconfirm.jconfirm-kiwitrees .jconfirm-box .jconfirm-buttons button {
+.jconfirm.jconfirm-kiwitrees .jconfirm-buttons button {
 	margin: 0.5rem;
 	min-width: 3rem;
 }
