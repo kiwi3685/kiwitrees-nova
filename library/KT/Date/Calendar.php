@@ -31,6 +31,7 @@ class KT_Date_Calendar {
 	var $minJD, $maxJD; // Julian Day numbers
 
 	function __construct($date) {
+
 		// Construct from an integer (a julian day number)
 		if (is_integer($date)) {
 			$this->minJD = $date;
@@ -54,14 +55,28 @@ class KT_Date_Calendar {
 		}
 
 		// Construct from an equivalent xxxxDate object
-		if (get_class($this) == get_class($date)) {
-			// NOTE - can't copy whole object - need to be able to copy Hebrew to Jewish, etc.
-			$this->y		= $date->y;
-			$this->m 		= $date->m;
-			$this->d 		= $date->d;
-			$this->minJD 	= $date->minJD;
-			$this->maxJD 	= $date->maxJD;
-			return;
+		if (version_compare(PHP_VERSION, '8.0', '<')) {
+			if (get_class($this) == get_class($date)) {
+				// NOTE - can't copy whole object - need to be able to copy Hebrew to Jewish, etc.
+				$this->y		= $date->y;
+				$this->m 		= $date->m;
+				$this->d 		= $date->d;
+				$this->minJD 	= $date->minJD;
+				$this->maxJD 	= $date->maxJD;
+				return;
+			}
+		} else {
+			$date = new KT_Date('');
+			// This version required for php 8+
+			if ($this::class == $date::class) {
+				// NOTE - can't copy whole object - need to be able to copy Hebrew to Jewish, etc.
+				$this->y		= $date->y;
+				$this->m 		= $date->m;
+				$this->d 		= $date->d;
+				$this->minJD 	= $date->minJD;
+				$this->maxJD 	= $date->maxJD;
+				return;
+			}
 		}
 
         // Not all dates can be converted
