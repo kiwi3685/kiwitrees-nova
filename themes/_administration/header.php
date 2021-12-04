@@ -330,7 +330,10 @@ $this
 							<span><?php echo KT_I18N::translate('Customizing'); ?></span>
 						</a>
 						<ul class="menu vertical">
-							<?php foreach ($custom as $file=>$title) { ?>
+							<?php foreach ($custom as $file=>$title) {
+								if ($title == KT_I18N::translate('Custom javascript') && !KT_Module::isActiveMenu(KT_GED_ID, 'custom_js', KT_USER_ACCESS_LEVEL)) {
+									continue;
+								} ?>
 								<li><a <?php echo (KT_SCRIPT_NAME == $file ? 'class="current" ' : ''); ?>href="<?php echo $file; ?>"><?php echo $title; ?></a></li>
 							<?php } ?>
 							<li><a href="index_edit.php?gedcom_id=-1" onclick="return modalDialog('index_edit.php?gedcom_id=-1, <?php echo  KT_I18N::translate('Set the default blocks for new family trees'); ?>');"><?php echo KT_I18N::translate('Set the default blocks'); ?></a></li>
