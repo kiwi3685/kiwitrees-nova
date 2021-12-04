@@ -25,10 +25,22 @@ if (!defined('KT_KIWITREES')) {
 	header('HTTP/1.0 403 Forbidden');
 	exit;
 }
+require KT_ROOT . 'library/Carbon/autoload.php';
+use Carbon\Carbon;
+use Carbon\CarbonInterval;
+
 
 class KT_Date_Calendar {
-	var $y, $m, $d;     // Numeric year/month/day
-	var $minJD, $maxJD; // Julian Day numbers
+	var int $y;
+	var int $m;
+	var int $d;
+	var int $minJD;
+	var int $maxJD;
+
+	// Convert GEDCOM month names to month numbers.
+	protected const MONTH_TO_NUMBER = [];
+	protected const NUMBER_TO_MONTH = [];
+
 
 	function __construct($date) {
 
@@ -36,47 +48,38 @@ class KT_Date_Calendar {
 		if (is_int($date)) {
 			$this->minJD = $date;
 			$this->maxJD = $date;
-			list($this->y, $this->m, $this->d) = $this->JDtoYMD($date);
+			[$this->y, $this->m, $this->d] = $this->JDtoYMD($date);
 			return;
 		}
 
 		// Construct from an array (of three gedcom-style strings: "1900", "feb", "4")
 		if (is_array($date)) {
-			$this->d = (int)$date[2];
-			if (!is_null($this->MONTH_TO_NUM($date[1]))) {
-				$this->m = $this->MONTH_TO_NUM($date[1]);
-			} else {
-				$this->m = 0;
-				$this->d = 0;
-			}
-			$this->y = $this->ExtractYear($date[0]);
+			$this->d = (int) $date[2];
+            $this->m = static::MONTH_TO_NUMBER[$date[1]] ?? 0;
+
+            if ($this->m === 0) {
+                $this->d   = 0;
+            }
+
+            $this->y = $this->extractYear($date[0]);
+
 			$this->SetJDfromYMD();
+
 			return;
 		}
 
+		// Construct from a CalendarDate
+		$this->minJD = $date->minJD;
+		$this->maxJD = $date->maxJD;
+
 		// Construct from an equivalent xxxxDate object
-		if (version_compare(PHP_VERSION, '8.0', '<')) {
-			if (get_class($this) == get_class($date)) {
-				// NOTE - can't copy whole object - need to be able to copy Hebrew to Jewish, etc.
-				$this->y		= $date->y;
-				$this->m 		= $date->m;
-				$this->d 		= $date->d;
-				$this->minJD 	= $date->minJD;
-				$this->maxJD 	= $date->maxJD;
-				return;
-			}
-		} else {
-			$date = new KT_Date('');
-			// This version required for php 8+
-			if ($this::class == $date::class) {
-				// NOTE - can't copy whole object - need to be able to copy Hebrew to Jewish, etc.
-				$this->y		= $date->y;
-				$this->m 		= $date->m;
-				$this->d 		= $date->d;
-				$this->minJD 	= $date->minJD;
-				$this->maxJD 	= $date->maxJD;
-				return;
-			}
+		if (get_class($this) === get_class($date)) {
+			// NOTE - can't copy whole object - need to be able to copy Hebrew to Jewish, etc.
+			$this->y = $date->y;
+			$this->m = $date->m;
+			$this->d = $date->d;
+
+			return;
 		}
 
         // Not all dates can be converted
@@ -89,19 +92,20 @@ class KT_Date_Calendar {
         }
 
 		// ...else construct an inequivalent xxxxDate object
-		if ($date->y == 0) {
+		if ($date->y === 0) {
 			// Incomplete date - convert on basis of anniversary in current year
-			$today 	= $date->TodayYMD();
-			$jd 	= $date->YMDtoJD($today[0], $date->m, $date->d == 0?$today[2]:$date->d);
+//			$today	= $date->TodayYMD();
+			$today	= $date->calendar->jdToYmd(Carbon::now()->JD());
+			$jd		= $date->YMDtoJD($today[0], $date->m, $date->d === 0 ? $today[2] : $date->d);
 		} else {
 			// Complete date
 			$jd = (int)(($date->maxJD + $date->minJD)/2);
 		}
 		list($this->y, $this->m, $this->d) = $this->JDtoYMD($jd);
 		// New date has same precision as original date
-		if ($date->y == 0) $this->y = 0;
-		if ($date->m == 0) $this->m = 0;
-		if ($date->d == 0) $this->d = 0;
+		if ($date->y == 0) {$this->y = 0;}
+		if ($date->m == 0) {$this->m = 0;}
+		if ($date->d == 0) {$this->d = 0;}
 		$this->SetJDfromYMD();
 	}
 

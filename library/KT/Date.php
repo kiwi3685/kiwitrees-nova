@@ -175,7 +175,7 @@ class KT_Date {
 		$conv1 = '';
 		$conv2 = '';
 		foreach ($cal_fmts as $cal_fmt) {
-			if ($cal_fmt != 'none') {
+			if ($cal_fmt !== 'none') {
 				$d1conv = $this->date1->convert_to_cal($cal_fmt);
 				if ($d1conv->InValidRange()) {
 					$d1tmp = $d1conv->Format($date_fmt, $this->qual1);
@@ -196,20 +196,20 @@ class KT_Date {
 				// If the date is different to the unconverted date, add it to the date string.
 				if ($d1 != $d1tmp /*&& $d1tmp != ''*/) {
 					if ($url) {
-						if ($CALENDAR_FORMAT != "none") {
-							$conv1 .= ' <span dir="' . $TEXT_DIRECTION . '">(<a href="'.$d1conv->CalendarURL($date_fmt).'">'.$d1tmp.'</a>)</span>';
+						if ($cal_fmt !== "none") {
+							$conv1 .= ' <span dir="' . $TEXT_DIRECTION . '1">(<a href="'.$d1conv->CalendarURL($date_fmt).'">'.$d1tmp.'</a>)</span>';
 						} else {
-							$conv1 .= ' <span dir="' . $TEXT_DIRECTION . '"><br><a href="'.$d1conv->CalendarURL($date_fmt).'">'.$d1tmp.'</a></span>';
+							$conv1 .= ' <span dir="' . $TEXT_DIRECTION . '2"><br><a href="'.$d1conv->CalendarURL($date_fmt).'">'.$d1tmp.'</a></span>';
 						}
 					} else {
-						$conv1 .= ' <span dir="' . $TEXT_DIRECTION . '">('.$d1tmp.')</span>';
+						$conv1 .= ' <span dir="' . $TEXT_DIRECTION . '3">('.$d1tmp.')</span>';
 					}
 				}
-				if (!is_null($this->date2) && $d2 != $d2tmp && $d1tmp != '') {
+				if (!is_null($this->date2) && $d2 != $d2tmp && $d1tmp !== '') {
 					if ($url) {
-						$conv2 .= ' <span dir="'.$TEXT_DIRECTION.'">(<a href="'.$d2conv->CalendarURL($date_fmt).'">'.$d2tmp.'</a>)</span>';
+						$conv2 .= ' <span dir="'.$TEXT_DIRECTION.'4">(<a href="'.$d2conv->CalendarURL($date_fmt).'">'.$d2tmp.'</a>)</span>';
 					} else {
-						$conv2 .= ' <span dir="'.$TEXT_DIRECTION.'">('.$d2tmp.')</span>';
+						$conv2 .= ' <span dir="'.$TEXT_DIRECTION.'5">('.$d2tmp.')</span>';
 					}
 				}
 			}
