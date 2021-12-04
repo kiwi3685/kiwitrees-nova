@@ -32,13 +32,13 @@ $controller
 	->setPageTitle(KT_I18N::translate('Source citation check'))
 	->pageHeader()
 	->addExternalJavascript(KT_AUTOCOMPLETE_JS_URL)
+	->addExternalJavascript(KT_DATATABLES_JS)
+	->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
+	->addExternalJavascript(KT_DATATABLES_BUTTONS)
+	->addExternalJavascript(KT_DATATABLES_HTML5)
 	->addInlineJavascript('
 		autocomplete();
-	')
-	->addExternalJavascript(JQUERY_DATATABLES_URL)
-	->addExternalJavascript(JQUERY_DT_HTML5)
-	->addExternalJavascript(JQUERY_DT_BUTTONS)
-	->addInlineJavascript('
+
 		jQuery("#citation_table").dataTable({
 			dom: \'<"H"pBf<"clear">irl>t<"F"pl>\',
 			' . KT_I18N::datatablesI18N() . ',
@@ -125,7 +125,7 @@ $sid = KT_Filter::post('source');
 					<?php
 					foreach ($data as $row) {
 						preg_match('/\n\d SOUR @' . $sid . '@(?:\n[3-9].*)*\n\d PAGE (.*)\n/i', $row->gedrec, $match);
-						$record = KT_Person::getInstance($row->xref) ? KT_Person::getInstance($row->xref) : KT_Family::getInstance($row->xref) ? KT_Family::getInstance($row->xref) : KT_Media::getInstance($row->xref);
+						$record = KT_Person::getInstance($row->xref) ? KT_Person::getInstance($row->xref) : (KT_Family::getInstance($row->xref) ? KT_Family::getInstance($row->xref) : KT_Media::getInstance($row->xref));
 						?>
 						<tr>
 							<td>
