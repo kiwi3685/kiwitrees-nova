@@ -94,18 +94,23 @@ class KT_Date_Calendar {
 		// ...else construct an inequivalent xxxxDate object
 		if ($date->y === 0) {
 			// Incomplete date - convert on basis of anniversary in current year
-//			$today	= $date->TodayYMD();
 			$today	= $date->calendar->jdToYmd(Carbon::now()->JD());
 			$jd		= $date->YMDtoJD($today[0], $date->m, $date->d === 0 ? $today[2] : $date->d);
 		} else {
 			// Complete date
 			$jd = (int)(($date->maxJD + $date->minJD)/2);
 		}
-		list($this->y, $this->m, $this->d) = $this->JDtoYMD($jd);
+		[$this->y, $this->m, $this->d] = $this->JDtoYMD($jd);
 		// New date has same precision as original date
-		if ($date->y == 0) {$this->y = 0;}
-		if ($date->m == 0) {$this->m = 0;}
-		if ($date->d == 0) {$this->d = 0;}
+		if ($date->y == 0) {
+			$this->y = 0;
+		}
+		if ($date->m == 0) {
+			$this->m = 0;
+		}
+		if ($date->d == 0) {
+			$this->d = 0;
+		}
 		$this->SetJDfromYMD();
 	}
 
@@ -135,9 +140,11 @@ class KT_Date_Calendar {
 	static function CALENDAR_ESCAPE() {
 		return '@#DUNKNOWN@';
 	}
+
 	static function NUM_MONTHS() {
 		return 12;
 	}
+
 	static function MONTH_TO_NUM($m) {
 		static $months = array(''  =>  0, 'JAN' => 1, 'FEB' => 2, 'MAR' => 3, 'APR' => 4, 'MAY' => 5, 'JUN' => 6, 'JUL' => 7, 'AUG' => 8, 'SEP' => 9, 'OCT' => 10, 'NOV' => 11, 'DEC' => 12);
 		if (isset($months[$m])) {
@@ -146,6 +153,7 @@ class KT_Date_Calendar {
 			return null;
 		}
 	}
+	
 	// We put these in the base class, to save duplicating it in the Julian and Gregorian calendars
 	static function NUM_TO_MONTH_NOMINATIVE($n, $leap_year) {
 		switch ($n) {
