@@ -25,10 +25,6 @@ if (!defined('KT_KIWITREES')) {
 	header('HTTP/1.0 403 Forbidden');
 	exit;
 }
-require KT_ROOT . 'library/Carbon/autoload.php';
-use Carbon\Carbon;
-use Carbon\CarbonInterval;
-
 
 class KT_Date_Calendar {
 	var int $y;
@@ -37,13 +33,7 @@ class KT_Date_Calendar {
 	var int $minJD;
 	var int $maxJD;
 
-	// Convert GEDCOM month names to month numbers.
-	protected const MONTH_TO_NUMBER = [];
-	protected const NUMBER_TO_MONTH = [];
-
-
 	function __construct($date) {
-
 		// Construct from an integer (a julian day number)
 		if (is_int($date)) {
 			$this->minJD = $date;
@@ -54,30 +44,27 @@ class KT_Date_Calendar {
 
 		// Construct from an array (of three gedcom-style strings: "1900", "feb", "4")
 		if (is_array($date)) {
-			$this->d = (int) $date[2];
-            $this->m = static::MONTH_TO_NUMBER[$date[1]] ?? 0;
+			$this->d = (int)$date[2];
+			$this->m = $this->MONTH_TO_NUM($date[1]);
 
-            if ($this->m === 0) {
-                $this->d   = 0;
-            }
 
-            $this->y = $this->extractYear($date[0]);
-
+           		 if ($this->m === 0) {
+				$this->d = 0;
+			}
+			$this->y = $this->ExtractYear($date[0]);
 			$this->SetJDfromYMD();
-
 			return;
 		}
 
 		// Construct from a CalendarDate
 		$this->minJD = $date->minJD;
 		$this->maxJD = $date->maxJD;
-
 		// Construct from an equivalent xxxxDate object
 		if (get_class($this) === get_class($date)) {
 			// NOTE - can't copy whole object - need to be able to copy Hebrew to Jewish, etc.
-			$this->y = $date->y;
-			$this->m = $date->m;
-			$this->d = $date->d;
+			$this->y     = $date->y;
+			$this->m     = $date->m;
+			$this->d     = $date->d;
 
 			return;
 		}
@@ -92,13 +79,13 @@ class KT_Date_Calendar {
         }
 
 		// ...else construct an inequivalent xxxxDate object
-		if ($date->y === 0) {
+		if ($date->y == 0) {
 			// Incomplete date - convert on basis of anniversary in current year
-			$today	= $date->calendar->jdToYmd(Carbon::now()->JD());
-			$jd		= $date->YMDtoJD($today[0], $date->m, $date->d === 0 ? $today[2] : $date->d);
+			$today   = $date->TodayYMD();
+			$jd      = $date->YMDtoJD($today[0], $date->m, $date->d === 0 ? $today[2]:$date->d);
 		} else {
 			// Complete date
-			$jd = (int)(($date->maxJD + $date->minJD)/2);
+			$jd = intdiv($date->maxJD + $date->minJD, 2);
 		}
 		[$this->y, $this->m, $this->d] = $this->JDtoYMD($jd);
 		// New date has same precision as original date
@@ -116,21 +103,21 @@ class KT_Date_Calendar {
 
 	// Set the object's JD from a potentially incomplete YMD
 	function SetJDfromYMD() {
-		if ($this->y == 0) {
-			$this->minJD = 0;
-			$this->maxJD = 0;
+		if ($this->y === 0) {
+			$this->minJD=0;
+			$this->maxJD=0;
 		} else
-			if ($this->m == 0) {
-				$this->minJD = $this->YMDtoJD($this->y, 1, 1);
-				$this->maxJD = $this->YMDtoJD($this->NextYear($this->y), 1, 1)-1;
+			if ($this->m === 0) {
+				$this->minJD=$this->YMDtoJD($this->y, 1, 1);
+				$this->maxJD=$this->YMDtoJD($this->NextYear($this->y), 1, 1)-1;
 			} else {
-				if ($this->d == 0) {
-					list($ny,$nm) 	= $this->NextMonth();
-					$this->minJD 	= $this->YMDtoJD($this->y, $this->m,  1);
-					$this->maxJD 	= $this->YMDtoJD($ny, $nm, 1)-1;
+				if ($this->d==0) {
+					[$ny, $nm] = $this->NextMonth();
+					$this->minJD=$this->YMDtoJD($this->y, $this->m,  1);
+					$this->maxJD=$this->YMDtoJD($ny, $nm, 1)-1;
 				} else {
-					$this->minJD = $this->YMDtoJD($this->y, $this->m, $this->d);
-					$this->maxJD = $this->minJD;
+					$this->minJD=$this->YMDtoJD($this->y, $this->m, $this->d);
+					$this->maxJD=$this->minJD;
 				}
 			}
 	}
@@ -140,20 +127,17 @@ class KT_Date_Calendar {
 	static function CALENDAR_ESCAPE() {
 		return '@#DUNKNOWN@';
 	}
-
 	static function NUM_MONTHS() {
 		return 12;
 	}
-
 	static function MONTH_TO_NUM($m) {
-		static $months = array(''  =>  0, 'JAN' => 1, 'FEB' => 2, 'MAR' => 3, 'APR' => 4, 'MAY' => 5, 'JUN' => 6, 'JUL' => 7, 'AUG' => 8, 'SEP' => 9, 'OCT' => 10, 'NOV' => 11, 'DEC' => 12);
+		static $months=array(''=>0, 'JAN'=>1, 'FEB'=>2, 'MAR'=>3, 'APR'=>4, 'MAY'=>5, 'JUN'=>6, 'JUL'=>7, 'AUG'=>8, 'SEP'=>9, 'OCT'=>10, 'NOV'=>11, 'DEC'=>12);
 		if (isset($months[$m])) {
 			return $months[$m];
 		} else {
 			return null;
 		}
 	}
-	
 	// We put these in the base class, to save duplicating it in the Julian and Gregorian calendars
 	static function NUM_TO_MONTH_NOMINATIVE($n, $leap_year) {
 		switch ($n) {
@@ -296,7 +280,7 @@ class KT_Date_Calendar {
 	}
 	// Most years are 1 more than the previous, but not always (e.g. 1BC->1AD)
 	static function NextYear($y) {
-		return $y + 1;
+		return $y+1;
 	}
 	// Calendars that use suffixes, etc. (e.g. 'B.C.') or OS/NS notation should redefine this.
 	function ExtractYear($year) {
@@ -322,43 +306,43 @@ class KT_Date_Calendar {
 	// bool $full: true=gedcom style, false=just years
 	// int $jd: date for calculation
 	// TODO: KT_Date_Jewish needs to redefine this to cope with leap months
-	function GetAge($full, $jd, $warn_on_negative = true) {
-		if ($this->y == 0 || $jd == 0) {
+	function GetAge($full, $jd, $warn_on_negative=true) {
+		if ($this->y==0 || $jd==0) {
 			return $full?'':'0';
 		}
 		if ($this->minJD < $jd && $this->maxJD > $jd) {
 			return $full?'':'0';
 		}
-		if ($this->minJD == $jd) {
+		if ($this->minJD==$jd) {
 			return $full?'':'0';
 		}
 		if ($warn_on_negative && $jd<$this->minJD) {
 			return '<i class="icon-warning"></i>';
 		}
-		list($y,$m,$d) = $this->JDtoYMD($jd);
-		$dy = $y-$this->y;
-		$dm = $m-max($this->m,1);
-		$dd = $d-max($this->d,1);
+		list($y,$m,$d)=$this->JDtoYMD($jd);
+		$dy=$y-$this->y;
+		$dm=$m-max($this->m,1);
+		$dd=$d-max($this->d,1);
 		if ($dd<0) {
-			$dd  +=  $this->DaysInMonth();
+			$dd+=$this->DaysInMonth();
 			$dm--;
 		}
 		if ($dm<0) {
-			$dm += $this->NUM_MONTHS();
+			$dm+=$this->NUM_MONTHS();
 			$dy--;
 		}
 		// Not a full age?  Then just the years
 		if (!$full)
 			return $dy;
 		// Age in years?
-		if ($dy > 1)
-			return $dy . 'y';
-		$dm += $dy * $this->NUM_MONTHS();
+		if ($dy>1)
+			return $dy.'y';
+		$dm+=$dy*$this->NUM_MONTHS();
 		// Age in months?
-		if ($dm > 1)
-			return $dm . 'm';
+		if ($dm>1)
+			return $dm.'m';
 		// Age in days?
-		return ($jd - $this->minJD) . "d";
+		return ($jd-$this->minJD)."d";
 	}
 
 	// Convert a date from one calendar to another.
@@ -388,7 +372,7 @@ class KT_Date_Calendar {
 
 	// How many days in the current month
 	function DaysInMonth() {
-		list($ny,$nm) = $this->NextMonth();
+		list($ny,$nm)=$this->NextMonth();
 		return $this->YMDtoJD($ny, $nm, 1) - $this->YMDtoJD($this->y, $this->m, 1);
 	}
 
@@ -399,65 +383,65 @@ class KT_Date_Calendar {
 
 	// Format a date
 	// $format - format string: the codes are specified in http://php.net/date
-	function Format($format, $qualifier = '') {
+	function Format($format, $qualifier='') {
 		// Don't show exact details for inexact dates
 		if (!$this->d) {
 			// The comma is for US "M D, Y" dates
-			$format = preg_replace('/%[djlDNSwz][,]?/', '', $format);
+			$format=preg_replace('/%[djlDNSwz][,]?/', '', $format);
 		}
 		if (!$this->m) {
-			$format = str_replace(array('%F', '%m', '%M', '%n', '%t'), '', $format);
+			$format=str_replace(array('%F', '%m', '%M', '%n', '%t'), '', $format);
 		}
 		if (!$this->y) {
-			$format = str_replace(array('%t', '%L', '%G', '%y', '%Y'), '', $format);
+			$format=str_replace(array('%t', '%L', '%G', '%y', '%Y'), '', $format);
 		}
 		// If we've trimmed the format, also trim the punctuation
 		if (!$this->d || !$this->m || !$this->y) {
-			$format = trim($format, ',. ;/-');
+			$format=trim($format, ',. ;/-');
 		}
 		if ($this->d && preg_match('/%[djlDNSwz]/', $format)) {
 			// If we have a day-number *and* we are being asked to display it, then genitive
-			$case = 'GENITIVE';
+			$case='GENITIVE';
 		} else {
 			switch ($qualifier) {
 			case '':
 			case 'INT':
 			case 'EST':
-			case 'CAL': $case = 'NOMINATIVE'; break;
+			case 'CAL': $case='NOMINATIVE'; break;
 			case 'TO':
 			case 'ABT':
-			case 'FROM': $case = 'GENITIVE'; break;
-			case 'AFT':  $case = 'LOCATIVE'; break;
+			case 'FROM': $case='GENITIVE'; break;
+			case 'AFT':  $case='LOCATIVE'; break;
 			case 'BEF':
 			case 'BET':
-			case 'AND': $case = 'INSTRUMENTAL'; break;
+			case 'AND': $case='INSTRUMENTAL'; break;
 			}
 		}
 		// Build up the formated date, character at a time
 		preg_match_all('/%[^%]/', $format, $matches);
 		foreach ($matches[0] as $match) {
 			switch ($match) {
-			case '%d': $format = str_replace($match, $this->FormatDayZeros(),       $format); break;
-			case '%j': $format = str_replace($match, $this->FormatDay(),            $format); break;
-			case '%l': $format = str_replace($match, $this->FormatLongWeekday(),    $format); break;
-			case '%D': $format = str_replace($match, $this->FormatShortWeekday(),   $format); break;
-			case '%N': $format = str_replace($match, $this->FormatISOWeekday(),     $format); break;
-			case '%S': $format = str_replace($match, $this->FormatOrdinalSuffix(),  $format); break;
-			case '%w': $format = str_replace($match, $this->FormatNumericWeekday(), $format); break;
-			case '%z': $format = str_replace($match, $this->FormatDayOfYear(),      $format); break;
-			case '%F': $format = str_replace($match, $this->FormatLongMonth($case), $format); break;
-			case '%m': $format = str_replace($match, $this->FormatMonthZeros(),     $format); break;
-			case '%M': $format = str_replace($match, $this->FormatShortMonth(),     $format); break;
-			case '%n': $format = str_replace($match, $this->FormatMonth(),          $format); break;
-			case '%t': $format = str_replace($match, $this->DaysInMonth(),          $format); break;
-			case '%L': $format = str_replace($match, (int)$this->IsLeapYear(),      $format); break;
-			case '%Y': $format = str_replace($match, $this->FormatLongYear(),       $format); break;
-			case '%y': $format = str_replace($match, $this->FormatShortYear(),      $format); break;
+			case '%d': $format=str_replace($match, $this->FormatDayZeros(),       $format); break;
+			case '%j': $format=str_replace($match, $this->FormatDay(),            $format); break;
+			case '%l': $format=str_replace($match, $this->FormatLongWeekday(),    $format); break;
+			case '%D': $format=str_replace($match, $this->FormatShortWeekday(),   $format); break;
+			case '%N': $format=str_replace($match, $this->FormatISOWeekday(),     $format); break;
+			case '%S': $format=str_replace($match, $this->FormatOrdinalSuffix(),  $format); break;
+			case '%w': $format=str_replace($match, $this->FormatNumericWeekday(), $format); break;
+			case '%z': $format=str_replace($match, $this->FormatDayOfYear(),      $format); break;
+			case '%F': $format=str_replace($match, $this->FormatLongMonth($case), $format); break;
+			case '%m': $format=str_replace($match, $this->FormatMonthZeros(),     $format); break;
+			case '%M': $format=str_replace($match, $this->FormatShortMonth(),     $format); break;
+			case '%n': $format=str_replace($match, $this->FormatMonth(),          $format); break;
+			case '%t': $format=str_replace($match, $this->DaysInMonth(),          $format); break;
+			case '%L': $format=str_replace($match, (int)$this->IsLeapYear(),      $format); break;
+			case '%Y': $format=str_replace($match, $this->FormatLongYear(),       $format); break;
+			case '%y': $format=str_replace($match, $this->FormatShortYear(),      $format); break;
 			// These 4 extensions are useful for re-formatting gedcom dates.
-			case '%@': $format = str_replace($match, $this->CALENDAR_ESCAPE(),      $format); break;
-			case '%A': $format = str_replace($match, $this->FormatGedcomDay(),      $format); break;
-			case '%O': $format = str_replace($match, $this->FormatGedcomMonth(),    $format); break;
-			case '%E': $format = str_replace($match, $this->FormatGedcomYear(),     $format); break;
+			case '%@': $format=str_replace($match, $this->CALENDAR_ESCAPE(),      $format); break;
+			case '%A': $format=str_replace($match, $this->FormatGedcomDay(),      $format); break;
+			case '%O': $format=str_replace($match, $this->FormatGedcomMonth(),    $format); break;
+			case '%E': $format=str_replace($match, $this->FormatGedcomYear(),     $format); break;
 			}
 		}
 		return $format;
@@ -466,10 +450,10 @@ class KT_Date_Calendar {
 	// Functions to extract bits of the date in various formats.  Individual calendars
 	// will want to redefine some of these.
 	function FormatDayZeros() {
-		if ($this->d > 9) {
+		if ($this->d>9) {
 			return KT_I18N::digits($this->d);
 		} else {
-			return KT_I18N::digits('0' . $this->d);
+			return KT_I18N::digits('0'.$this->d);
 		}
 	}
 
@@ -490,7 +474,7 @@ class KT_Date_Calendar {
 	}
 
 	function FormatOrdinalSuffix() {
-		$func = "ordinal_suffix_" . KT_LOCALE;
+		$func="ordinal_suffix_".KT_LOCALE;
 		if (function_exists($func))
 			return $func($this->d);
 		else
@@ -513,11 +497,11 @@ class KT_Date_Calendar {
 		if ($this->m>9) {
 			return KT_I18N::digits($this->m);
 		} else {
-			return KT_I18N::digits('0' . $this->m);
+			return KT_I18N::digits('0'.$this->m);
 		}
 	}
 
-	function FormatLongMonth($case = 'NOMINATIVE') {
+	function FormatLongMonth($case='NOMINATIVE') {
 		switch ($case) {
 		case 'GENITIVE':     return $this->NUM_TO_MONTH_GENITIVE    ($this->m, $this->IsLeapYear());
 		case 'NOMINATIVE':   return $this->NUM_TO_MONTH_NOMINATIVE  ($this->m, $this->IsLeapYear());
@@ -537,7 +521,7 @@ class KT_Date_Calendar {
 	}
 
 	function FormatGedcomDay() {
-		if ($this->d == 0) {
+		if ($this->d==0) {
 			return '';
 		} else {
 			return sprintf('%02d', $this->d);
@@ -549,7 +533,7 @@ class KT_Date_Calendar {
 	}
 
 	function FormatGedcomYear() {
-		if ($this->y == 0) {
+		if ($this->y==0) {
 			return '';
 		} else {
 			return sprintf('%04d', $this->y);
@@ -563,32 +547,32 @@ class KT_Date_Calendar {
 	// Calendars with leap-months should redefine this.
 	function NextMonth() {
 		return array(
-			$this->m == $this->NUM_MONTHS() ? $this->NextYear($this->y) : $this->y,
-			($this->m%$this->NUM_MONTHS()) + 1
+			$this->m==$this->NUM_MONTHS() ? $this->NextYear($this->y) : $this->y,
+			($this->m%$this->NUM_MONTHS())+1
 		);
 	}
 
 	// Convert a decimal number to roman numerals
 	static function NumToRoman($num) {
-		static $lookup = array(1000 => 'M', '900' => 'CM', '500' => 'D', 400 => 'CD', 100 => 'C', 90 => 'XC', 50 => 'L', 40 => 'XL', 10 => 'X', 9 => 'IX', 5 => 'V', 4 => 'IV', 1 => 'I');
+		static $lookup=array(1000=>'M', '900'=>'CM', '500'=>'D', 400=>'CD', 100=>'C', 90=>'XC', 50=>'L', 40=>'XL', 10=>'X', 9=>'IX', 5=>'V', 4=>'IV', 1=>'I');
 		if ($num<1) return $num;
-		$roman = '';
-		foreach ($lookup as $key => $value)
+		$roman='';
+		foreach ($lookup as $key=>$value)
 			while ($num>=$key) {
-				$roman .= $value;
-				$num -= $key;
+				$roman.=$value;
+				$num-=$key;
 			}
 		return $roman;
 	}
 
 	// Convert a roman numeral to decimal
 	static function RomanToNum($roman) {
-		static $lookup = array(1000 => 'M', '900' => 'CM', '500'  =>  'D', 400  =>  'CD', 100  =>  'C', 90  =>  'XC', 50  =>  'L', 40  =>  'XL', 10  =>  'X', 9  =>  'IX', 5  =>  'V', 4  =>  'IV', 1  =>  'I');
-		$num = 0;
-		foreach ($lookup as $key  =>  $value)
-			if (strpos($roman, $value) === 0) {
+		static $lookup=array(1000=>'M', '900'=>'CM', '500'=>'D', 400=>'CD', 100=>'C', 90=>'XC', 50=>'L', 40=>'XL', 10=>'X', 9=>'IX', 5=>'V', 4=>'IV', 1=>'I');
+		$num=0;
+		foreach ($lookup as $key=>$value)
+			if (strpos($roman, $value)===0) {
 				$num+=$key;
-				$roman = substr($roman, strlen($value));
+				$roman=substr($roman, strlen($value));
 			}
 		return $num;
 	}
@@ -598,42 +582,42 @@ class KT_Date_Calendar {
 		return $this->JDtoYMD(KT_Date_Gregorian::YMDtoJD(date('Y'), date('n'), date('j')));
 	}
 	function Today() {
-		$tmp 	= clone $this;
-		$ymd 	= $tmp->TodayYMD();
-		$tmp->y = $ymd[0];
-		$tmp->m = $ymd[1];
-		$tmp->d = $ymd[2];
+		$tmp=clone $this;
+		$ymd=$tmp->TodayYMD();
+		$tmp->y=$ymd[0];
+		$tmp->m=$ymd[1];
+		$tmp->d=$ymd[2];
 		$tmp->SetJDfromYMD();
 		return $tmp;
 	}
 
 	// Create a URL that links this date to the WT calendar
-	function CalendarURL($date_fmt = "") {
+	function CalendarURL($date_fmt="") {
 		global $DATE_FORMAT;
 		if (empty($date_fmt)) {
-			$date_fmt = $DATE_FORMAT;
+			$date_fmt=$DATE_FORMAT;
 		}
-		$URL 	= 'calendar.php?cal = ' . rawurlencode($this->CALENDAR_ESCAPE());
-		$view 	= "year";
-		if (strpos($date_fmt, "Y") !== false
-		||  strpos($date_fmt, "y") !== false) {
-			$URL .= '&amp;year=' . $this->FormatGedcomYear();
+		$URL='calendar.php?cal='.rawurlencode($this->CALENDAR_ESCAPE());
+		$view="year";
+		if (strpos($date_fmt, "Y")!==false
+		||  strpos($date_fmt, "y")!==false) {
+			$URL.='&amp;year='.$this->FormatGedcomYear();
 		}
-		if (strpos($date_fmt, "F") !== false
-		||  strpos($date_fmt, "M") !== false
-		||  strpos($date_fmt, "m") !== false
-		||  strpos($date_fmt, "n") !== false) {
-			$URL .= '&amp;month=' . $this->FormatGedcomMonth();
+		if (strpos($date_fmt, "F")!==false
+		||  strpos($date_fmt, "M")!==false
+		||  strpos($date_fmt, "m")!==false
+		||  strpos($date_fmt, "n")!==false) {
+			$URL.='&amp;month='.$this->FormatGedcomMonth();
 			if ($this->m>0)
-				$view = "month";
+				$view="month";
 		}
-		if (strpos($date_fmt, "d") !== false
-		||  strpos($date_fmt, "D") !== false
-		||  strpos($date_fmt, "j") !== false) {
-			$URL .= '&amp;day=' . $this->FormatGedcomDay();
+		if (strpos($date_fmt, "d")!==false
+		||  strpos($date_fmt, "D")!==false
+		||  strpos($date_fmt, "j")!==false) {
+			$URL.='&amp;day='.$this->FormatGedcomDay();
 			if ($this->d>0)
-				$view = "today";
+				$view="today";
 		}
-		return $URL . '&amp;view=' . $view;
+		return $URL.'&amp;view='.$view;
 	}
 }
