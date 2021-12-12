@@ -115,7 +115,7 @@ class tabi_tree_KT_Module extends KT_Module implements KT_Module_IndiTab {
         $tv = new TreeView('tv');
         ob_start();
         $person = $controller->getSignificantIndividual();
-        list($html, $js) = $tv->drawViewport($person, 4);
+        [$html, $js] = $tv->drawViewport($person, 4);
         $html = '<div id="tree-page">' . $html . '</div>';
 
         $controller
