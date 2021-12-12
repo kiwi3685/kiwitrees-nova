@@ -636,7 +636,7 @@ class KT_Person extends KT_GedcomRecord {
                     }
                 }
                 if ($min && $max) {
-                    list($y)                      = KT_Date_Gregorian::JDtoYMD((int) ((max($min) + min($max)) / 2));
+                    [$y] = KT_Date_Gregorian::JDtoYMD((int) ((max($min) + min($max)) / 2));
                     $this->_getEstimatedBirthDate = new KT_Date("EST {$y}");
                 } else {
                     $this->_getEstimatedBirthDate = new KT_Date(''); // always return a date object
@@ -1728,7 +1728,12 @@ class KT_Person extends KT_GedcomRecord {
         // Extract the structured name parts - use for "sortable" names and indexes
         ////////////////////////////////////////////////////////////////////////////
 
-        $gedrec <> NULL ? $sublevel = 1 + (int) $gedrec[0] : $sublevel = 1;
+        if($gedrec) {
+            $sublevel = 1 + (int) $gedrec[0];
+        } else {
+            $sublevel = 1;
+        }
+        
         $NPFX     = preg_match("/\n{$sublevel} NPFX (.+)/", $gedrec, $match) ? $match[1] : '';
         $GIVN     = preg_match("/\n{$sublevel} GIVN (.+)/", $gedrec, $match) ? $match[1] : '';
         $SURN     = preg_match("/\n{$sublevel} SURN (.+)/", $gedrec, $match) ? $match[1] : '';
