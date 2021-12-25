@@ -8787,6 +8787,9 @@ nav .top-bar.second-top-bar {
 nav .top-bar.second-top-bar .treetitle, nav .top-bar.second-top-bar .subtitle {
 	text-shadow: 0.2rem 0.2rem 0.2rem #331919;
 }
+nav .top-bar.second-top-bar .treetitle {
+	padding: 0 1rem;
+}
 nav .top-bar.second-top-bar .subtitle {
 	font-size: 1.2rem;
 	font-style: italic;
@@ -9102,7 +9105,8 @@ button.widget .svg-inline--fa {
 	font-size: 0.9rem;
 }
 #sidebarAccordion .accordion-content #sb_family_nav_content .nav_content .famnavTitleContainer {
-	border: 0.1rem solid #ab3334;
+	border-bottom: 0.075rem solid #ab3334;
+	border-top: 0.075rem solid #ab3334;
 	font-size: 0.95rem;
 	font-weight: 700;
 }
@@ -9592,11 +9596,18 @@ div[id$=-page] button[type=submit] {
 	width: 1rem;
 }
 #compact-page table.unstriped tbody tr td.person_box_template {
+	border: 0.125rem solid #e0e0e0;
 	display: inline-block;
 	width: 12rem;
 }
 #compact-page table.unstriped tbody tr td.person_box_template.sosa1 {
 	background-color: #e0e0e0;
+}
+#compact-page table.unstriped tbody tr td.person_box_template.M {
+	border-color: #0193b7;
+}
+#compact-page table.unstriped tbody tr td.person_box_template.F {
+	border-color: #e09798;
 }
 #compact-page table.unstriped tbody tr td.person_box_template table.sosa123 {
 	width: 100%;
@@ -9663,6 +9674,10 @@ div[id$=-page] button[type=submit] {
 #edit_interface-page .accordion .accordion-title svg {
 	left: 0.5rem;
 	margin-top: 0.05rem;
+}
+#edit_interface-page div.callout div.factDetails {
+	display: inline-block;
+	font-size: 0.5rem;
 }
 
 #fanchart-page svg {
