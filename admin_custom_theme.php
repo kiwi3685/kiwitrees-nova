@@ -26,7 +26,7 @@ require './includes/session.php';
 require KT_ROOT.'includes/functions/functions_edit.php';
 ?>
 	<!-- Load codemirror library files - only used on this page, so not added to session.php -->
-	<!-- The CodeMirror 5.51.0 (2020-01-20) -->
+	<!-- The CodeMirror 5.65.0 (20201-12-26) -->
     <script src="library/codemirror/lib/codemirror.js" type="text/javascript"></script>
     <script src="library/codemirror/mode/css/css.js" type="text/javascript"></script>
     <script src="library/codemirror/mode/php/php.js" type="text/javascript"></script>
