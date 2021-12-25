@@ -26,6 +26,33 @@ prepros.config
 /library/swiftmailer/tests
 /library/swiftmailer/doc
 
+#codemirror
+!/library/codemirror
+/library/codemirror/*
+!/library/codemirror/addon/
+/library/codemirror/addon/*
+!/library/codemirror/addon/selection/
+/library/codemirror/addon/selection/*
+!/library/codemirror/addon/selection/active-line.js
+!/library/codemirror/lib/
+/library/codemirror/lib/*
+!/library/codemirror/lib/codemirror.css
+!/library/codemirror/lib/codemirror.js
+!/library/codemirror/mode/
+/library/codemirror/mode/*
+!/library/codemirror/mode/css
+/library/codemirror/mode/css/*
+!/library/codemirror/mode/css/css.js
+!/library/codemirror/mode/htmlmixed
+/library/codemirror/mode/htmlmixed/*
+!/library/codemirror/mode/htmlmixed/htmlmixed.js
+/library/codemirror/mode/php/*
+!/library/codemirror/mode/php
+!/library/codemirror/mode/php/php.js
+!/library/codemirror/theme/
+/library/codemirror/theme/*
+!/library/codemirror/theme/mdn-like.css
+
 #colorbox
 /library/colorbox/content
 /library/colorbox/example*
@@ -46,7 +73,7 @@ prepros.config
 #Mobile-Detect
 !/library/Mobile-Detect/
 /library/Mobile-Detect/*
-!library/Mobile-Detect/Mobile_Detect.php
+!/library/Mobile-Detect/Mobile_Detect.php
 
 #Jquery-Confirm
 /library/jquery-confirm/*
