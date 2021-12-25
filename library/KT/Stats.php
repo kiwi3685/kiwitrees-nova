@@ -2797,7 +2797,7 @@ class KT_Stats {
 					$return = '<a href="'.$child2->getHtmlUrl().'">'.$child2->getFullName().'</a> ';
 					$return .= KT_I18N::translate('and').' ';
 					$return .= '<a href="'.$child1->getHtmlUrl().'">'.$child1->getFullName().'</a>';
-					$return .= ' <a href="'.$family->getHtmlUrl().'">['.KT_I18N::translate('View family').']</a>';
+					$return .= ' <a href="'.$family->getHtmlUrl().'">['.KT_USER_CAN_EDIT ? KT_I18N::translate('Edit family') : KT_I18N::translate('View family').']</a>';
 				} else {
 					$return = KT_I18N::translate('This information is private and cannot be shown.');
 				}
@@ -2823,7 +2823,7 @@ class KT_Stats {
 						$return .= KT_I18N::translate('and').' ';
 						$return .= '<a href="' . $child1->getHtmlUrl() . '">' . $child1->getFullName() . '</a>';
 						$return .= ' (' . $age . ') ';
-						$return .= '<a href="' . $family->getHtmlUrl() . '">' . (KT_I18N::translate('View family')) . '</a>';
+						$return .= '<a href="' . $family->getHtmlUrl() . '"><small>' . (KT_USER_CAN_EDIT ? KT_I18N::translate('Edit family') : KT_I18N::translate('View family')) . '</small></a>';
 						$return .= '</li>';
 						$top10[] = $return;
 						$dist[] = $fam['family'];
@@ -2834,7 +2834,7 @@ class KT_Stats {
 					$return .= KT_I18N::translate('and').' ';
 					$return .= '<a href="' . $child1->getHtmlUrl() . '">' . $child1->getFullName() . '</a>';
 					$return .= ' (' . $age . ') ';
-					$return .= '<a href="' . $family->getHtmlUrl() . '">' . (KT_I18N::translate('View family')) . '</a>';
+					$return .= '<a href="' . $family->getHtmlUrl() . '"><small>' . (KT_USER_CAN_EDIT ? KT_I18N::translate('Edit family') : KT_I18N::translate('View family')) . '</small></a>';
 					$return .= '</li>';
 					$top10[] = $return;
 				}
@@ -2843,7 +2843,7 @@ class KT_Stats {
 					$return = $child2->format_list('span', false, $child2->getFullName());
 					$return .= '<br>' . KT_I18N::translate('and') . '<br>';
 					$return .= $child1->format_list('span', false, $child1->getFullName());
-					$return .= '<br><a href="' . $family->getHtmlUrl() . '">' . (KT_I18N::translate('View family')) . '</a>';
+					$return .= '<br><a href="' . $family->getHtmlUrl() . '"><small>' . (KT_USER_CAN_EDIT ? KT_I18N::translate('Edit family') : KT_I18N::translate('View family')) . '</small></a>';
 					return $return;
 				} else {
 					return KT_I18N::translate('This information is private and cannot be shown.');
@@ -3186,7 +3186,7 @@ class KT_Stats {
 			WHERE
 				f_numchil = 0 AND
 				fam.f_file = {$this->_ged_id} AND
-				$years.
+				{$years}
 				married.d_fact = 'MARR' AND
 				married.d_type IN ('@#DGREGORIAN@', '@#DJULIAN@')
 			GROUP BY fam.f_id, married.d_year ;
@@ -3776,7 +3776,7 @@ class KT_Stats {
 		}
 
 		$count=KT_DB::prepare(
-			"SELECT SQL_NO_CACHE page_count FROM `##hit_counter`".
+			"SELECT page_count FROM `##hit_counter`".
 			" WHERE gedcom_id=? AND page_name=? AND page_parameter=?"
 		)->execute(array(KT_GED_ID, $page_name, $page_parameter))->fetchOne();
 		return '<span class="hit-counter">'.KT_I18N::number($count).'</span>';
@@ -3969,14 +3969,14 @@ class KT_Stats {
 			'COK'=>'CK', 'COL'=>'CO', 'COM'=>'KM', 'CPV'=>'CV', 'CRI'=>'CR', 'CUB'=>'CU',
 			'CXR'=>'CX', 'CYM'=>'KY', 'CYP'=>'CY', 'CZE'=>'CZ', 'DEU'=>'DE', 'DJI'=>'DJ',
 			'DMA'=>'DM', 'DNK'=>'DK', 'DOM'=>'DO', 'DZA'=>'DZ', 'ECU'=>'EC', 'EGY'=>'EG',
-			'WLS'=>'GB', 'ERI'=>'ER', 'ESH'=>'EH', 'ESP'=>'ES', 'EST'=>'EE', 'ETH'=>'ET',
+			'ENG'=>'GB', 'ERI'=>'ER', 'ESH'=>'EH', 'ESP'=>'ES', 'EST'=>'EE', 'ETH'=>'ET',
 			'FIN'=>'FI', 'FJI'=>'FJ', 'FLK'=>'FK', 'FRA'=>'FR', 'FRO'=>'FO', 'FSM'=>'FM',
-			'GAB'=>'GA', 'ENG'=>'GB', 'GEO'=>'GE', 'GHA'=>'GH', 'GIB'=>'GI', 'GIN'=>'GN',
+			'GAB'=>'GA', 'GBR'=>'GB', 'GEO'=>'GE', 'GHA'=>'GH', 'GIB'=>'GI', 'GIN'=>'GN',
 			'GLP'=>'GP', 'GMB'=>'GM', 'GNB'=>'GW', 'GNQ'=>'GQ', 'GRC'=>'GR', 'GRD'=>'GD',
 			'GRL'=>'GL', 'GTM'=>'GT', 'GUF'=>'GF', 'GUM'=>'GU', 'GUY'=>'GY', 'HKG'=>'HK',
 			'HMD'=>'HM', 'HND'=>'HN', 'HRV'=>'HR', 'HTI'=>'HT', 'HUN'=>'HU', 'IDN'=>'ID',
 			'IND'=>'IN', 'IOT'=>'IO', 'IRL'=>'IE', 'IRN'=>'IR', 'IRQ'=>'IQ', 'ISL'=>'IS',
-			'ISR'=>'IL', 'ITA'=>'IT', 'JAM'=>'JM', 'JOR'=>'JO', 'JPN'=>'JP', 'KAZ'=>'KZ',
+			'ISR'=>'IL', 'ITA'=>'IT', 'JAM'=>'JM', 'JOR'=>'JO', 'JPN'=>'JA', 'KAZ'=>'KZ',
 			'KEN'=>'KE', 'KGZ'=>'KG', 'KHM'=>'KH', 'KIR'=>'KI', 'KNA'=>'KN', 'KOR'=>'KO',
 			'KWT'=>'KW', 'LAO'=>'LA', 'LBN'=>'LB', 'LBR'=>'LR', 'LBY'=>'LY', 'LCA'=>'LC',
 			'LIE'=>'LI', 'LKA'=>'LK', 'LSO'=>'LS', 'LTU'=>'LT', 'LUX'=>'LU', 'LVA'=>'LV',
@@ -3998,7 +3998,7 @@ class KT_Stats {
 			'TTO'=>'TT', 'TUN'=>'TN', 'TUR'=>'TR', 'TUV'=>'TV', 'TWN'=>'TW', 'TZA'=>'TZ',
 			'UGA'=>'UG', 'UKR'=>'UA', 'UMI'=>'UM', 'URY'=>'UY', 'USA'=>'US', 'UZB'=>'UZ',
 			'VAT'=>'VA', 'VCT'=>'VC', 'VEN'=>'VE', 'VGB'=>'VG', 'VIR'=>'VI', 'VNM'=>'VN',
-			'VUT'=>'VU', 'WLF'=>'WF', 'GBR'=>'GB', 'WSM'=>'WS', 'YEM'=>'YE', 'ZAF'=>'ZA',
+			'VUT'=>'VU', 'WLF'=>'WF', 'WLS'=>'GB', 'WSM'=>'WS', 'YEM'=>'YE', 'ZAF'=>'ZA',
 			'ZMB'=>'ZM', 'ZWE'=>'ZW',
 		);
 	}
