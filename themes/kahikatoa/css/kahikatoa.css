@@ -9418,54 +9418,54 @@ div[id$=-page] button[type=submit] {
 	min-width: 10rem;
 }
 
-#ancestry-page ul {
+#ancestry-page .chart ul {
 	list-style: none;
 	margin: 0;
 	width: auto;
 }
-#ancestry-page ul li {
+#ancestry-page .chart ul li {
 	line-height: 5rem;
 }
-#ancestry-page ul li div.ancestry-details-1 {
+#ancestry-page .chart ul li div.ancestry-details-1 {
 	min-width: 15rem;
 }
-#ancestry-page ul li div.ancestry-details-1 .compact_box_template {
+#ancestry-page .chart ul li div.ancestry-details-1 .compact_box_template {
 	line-height: initial;
 }
-#ancestry-page ul li div.ancestry-details-2 {
+#ancestry-page .chart ul li div.ancestry-details-2 {
 	line-height: 2;
 	margin-top: 1rem;
 }
-#ancestry-page ul li div.ancestry-details-3 {
+#ancestry-page .chart ul li div.ancestry-details-3 {
 	height: 2rem;
 	font-size: 0.875rem;
 	line-height: 2rem;
 	margin-top: 1rem;
 	padding-left: 4rem;
 }
-#ancestry-page ul li .sosa {
+#ancestry-page .chart ul li .sosa {
 	padding: 0.125rem 0.125rem 0;
 	line-height: 1.25;
 	margin: 0 0.5rem;
 }
-#ancestry-page ul li .sosa.person_box_template {
+#ancestry-page .chart ul li .sosa.person_box_template {
 	font-size: 0.675rem;
 }
-#ancestry-page ul li ul {
+#ancestry-page .chart ul li ul {
 	margin: 0 5rem;
 }
-#ancestry-page ul li.paginate_button {
+#ancestry-page .chart ul li.paginate_button {
 	line-height: initial;
 }
-#ancestry-page ul li + li {
+#ancestry-page .chart ul li + li {
 	padding-top: 0.25rem;
 }
-#ancestry-page ul button {
+#ancestry-page .chart ul button {
 	border: none;
 	margin: 0;
 	padding: 0;
 }
-#ancestry-page ul .toggle_hide {
+#ancestry-page .chart ul .toggle_hide {
 	display: none;
 }
 

@@ -95,8 +95,7 @@ class chart_ancestry_KT_Module extends KT_Module implements KT_Module_Chart {
 				<input type="hidden" name="mod" value="<?php echo $this->getName(); ?>">
 				<input type="hidden" name="mod_action" value="show">
 				<div class="grid-x grid-margin-x">
-					<div class="cell medium-6 large-3">
-						<label class="h5" for="autocompleteInput"><?php echo KT_I18N::translate('Individual'); ?></label>
+					<label class="h5 cell medium-6 large-4" for="autocompleteInput"><?php echo KT_I18N::translate('Individual'); ?>
 						<div class="input-group autocomplete_container">
 							<input
 								data-autocomplete-type="INDI"
@@ -111,9 +110,8 @@ class chart_ancestry_KT_Module extends KT_Module implements KT_Module_Chart {
 							</span>
 						</div>
 						<input type="hidden" name="rootid" id="selectedValue" value="<?php echo $controller->rootid; ?>">
-					</div>
-					<div class="cell medium-6 large-3">
-						<label class="h5" for="generations"><?php echo KT_I18N::translate('Generations'); ?></label>
+					</label>
+					<label class="h5 cell medium-6 large-4" for="generations"><?php echo KT_I18N::translate('Generations'); ?>
 						<div class="grid-x grid-padding-x">
 							<div class="cell small-9">
 							  <div class="slider" data-slider data-start="2" data-step="1" data-end="<?php echo $MAX_PEDIGREE_GENERATIONS; ?>" data-initial-start="<?php echo $controller->generations; ?>">
@@ -125,64 +123,39 @@ class chart_ancestry_KT_Module extends KT_Module implements KT_Module_Chart {
 							  <input type="number" id="generations" name="generations">
 							</div>
 						</div>
-					</div>
-					<div class="cell medium-6 large-3">
-						<label class="h5"><?php echo KT_I18N::translate('Layout'); ?></label>
-						<div class="grid-x grid-margin-x grid-margin-y">
-							<label class="cell small-8 medium-4 large-3"><?php echo KT_I18N::translate('List'); ?></label>
-							<div class="switch">
-								<input class="switch-input" type="radio" id="list" name="chart_style" value="0" onclick="statusDisable('show_cousins');" <?php echo $controller->chart_style == 0 ? 'checked' : ''; ?>>
-								<label class="switch-paddle" for="list">
-									<span class="show-for-sr"><?php echo KT_I18N::translate('List'); ?></span>
-								    <span class="switch-active" aria-hidden="true"><?php echo KT_I18N::translate('on'); ?></span>
-								    <span class="switch-inactive" aria-hidden="true"><?php echo KT_I18N::translate('off'); ?></span>
-								</label>
-							</div>
-							<label class="cell small-8 medium-4 large-3"><?php echo KT_I18N::translate('Booklet'); ?></label>
-							<div class="switch">
-								<input class="switch-input" type="radio" id="booklet" name="chart_style" value="1" onclick="statusEnable('show_cousins');" <?php echo $controller->chart_style == 1 ? 'checked' : ''; ?>>
-								<label class="switch-paddle" for="booklet">
-									<span class="show-for-sr"><?php echo KT_I18N::translate('Booklet'); ?></span>
-								    <span class="switch-active" aria-hidden="true"><?php echo KT_I18N::translate('on'); ?></span>
-								    <span class="switch-inactive" aria-hidden="true"><?php echo KT_I18N::translate('off'); ?></span>
-								</label>
-							</div>
-							<label class="cell small-8 medium-4 large-3"><?php echo KT_I18N::translate('Individual'); ?></label>
-							<div class="switch">
-								<input class="switch-input" type="radio" id="individual" name="chart_style" value="2" onclick="statusDisable('show_cousins');" <?php echo $controller->chart_style == 2 ? 'checked' : ''; ?>>
-								<label class="switch-paddle" for="individual">
-									<span class="show-for-sr"><?php echo KT_I18N::translate('Individual'); ?></span>
-								    <span class="switch-active" aria-hidden="true"><?php echo KT_I18N::translate('on'); ?></span>
-								    <span class="switch-inactive" aria-hidden="true"><?php echo KT_I18N::translate('off'); ?></span>
-								</label>
-							</div>
-							<label class="cell small-8 medium-4 large-3"><?php echo KT_I18N::translate('Family'); ?></label>
-							<div class="switch">
-								<input class="switch-input" type="radio" id="family" name="chart_style" value="3" onclick="statusDisable('show_cousins');" <?php echo $controller->chart_style == 3 ? 'checked' : ''; ?>>
-								<label class="switch-paddle" for="family">
-									<span class="show-for-sr"><?php echo KT_I18N::translate('Family'); ?></span>
-								    <span class="switch-active" aria-hidden="true"><?php echo KT_I18N::translate('on'); ?></span>
-								    <span class="switch-inactive" aria-hidden="true"><?php echo KT_I18N::translate('off'); ?></span>
-								</label>
-							</div>
-						</div>
-					</div>
-					<div class="cell medium-6 large-3">
-						<label class="h5">
-							<?php echo KT_I18N::translate('Options'); ?>
-							&nbsp;
-							<span class="h6"><?php echo KT_I18N::translate('(Only for booklet)'); ?></span>
-						</label>
-						<div class="grid-x grid-margin-x grid-margin-y">
-							<label class="cell small-8 medium-4 large-4"><?php echo KT_I18N::translate('Show cousins'); ?></label>
-							<div class="switch">
-								<input  class="switch-input" id="show_cousins" type="checkbox" name="show_cousins" <?php echo ($controller->chart_style === 1 ? '' : 'disabled'); ?> value="1" <?php echo $controller->show_cousins ? ' checked="checked"' : ''; ?>>
-								<label class="switch-paddle" for="show_cousins">
-									<span class="show-for-sr"><?php echo KT_I18N::translate('Show cousins'); ?></span>
-								    <span class="switch-active" aria-hidden="true"><?php echo KT_I18N::translate('on'); ?></span>
-								    <span class="switch-inactive" aria-hidden="true"><?php echo KT_I18N::translate('off'); ?></span>
-								</label>
-							</div>
+					</label>
+					<div class="cell medium-6 large-4">
+						<div class="grid-x grid-padding-x">
+							<label class="h5 cell small-8 medium-4 large-3"><?php echo KT_I18N::translate('Chart'); ?>
+								<div class="switch">
+									<input class="switch-input" type="radio" id="list" name="chart_style" value="0" onclick="statusDisable('show_cousins');" <?php echo $controller->chart_style == 0 ? 'checked' : ''; ?>>
+									<label class="switch-paddle" for="list">
+										<span class="show-for-sr"><?php echo KT_I18N::translate('List'); ?></span>
+									    <span class="switch-active" aria-hidden="true"><?php echo KT_I18N::translate('on'); ?></span>
+									    <span class="switch-inactive" aria-hidden="true"><?php echo KT_I18N::translate('off'); ?></span>
+									</label>
+								</div>
+							</label>
+							<label class="h5 cell small-8 medium-4 large-5"><?php echo KT_I18N::translate('Individual list'); ?>
+								<div class="switch">
+									<input class="switch-input" type="radio" id="individual" name="chart_style" value="1" onclick="statusDisable('show_cousins');" <?php echo $controller->chart_style == 1 ? 'checked' : ''; ?>>
+									<label class="switch-paddle" for="individual">
+										<span class="show-for-sr"><?php echo KT_I18N::translate('Individual'); ?></span>
+									    <span class="switch-active" aria-hidden="true"><?php echo KT_I18N::translate('on'); ?></span>
+									    <span class="switch-inactive" aria-hidden="true"><?php echo KT_I18N::translate('off'); ?></span>
+									</label>
+								</div>
+							</label>
+							<label class="h5 cell small-8 medium-4 large-4"><?php echo KT_I18N::translate('Family list'); ?>
+								<div class="switch">
+									<input class="switch-input" type="radio" id="family" name="chart_style" value="2" onclick="statusDisable('show_cousins');" <?php echo $controller->chart_style == 2 ? 'checked' : ''; ?>>
+									<label class="switch-paddle" for="family">
+										<span class="show-for-sr"><?php echo KT_I18N::translate('Family'); ?></span>
+									    <span class="switch-active" aria-hidden="true"><?php echo KT_I18N::translate('on'); ?></span>
+									    <span class="switch-inactive" aria-hidden="true"><?php echo KT_I18N::translate('off'); ?></span>
+									</label>
+								</div>
+							</label>
 						</div>
 					</div>
 				</div>
@@ -203,7 +176,7 @@ class chart_ancestry_KT_Module extends KT_Module implements KT_Module_Chart {
 				case 0:
 					// List
 					$pidarr = array(); ?>
-					<div class="cell">
+					<div class="cell chart">
 						<ul>
 							<?php echo $controller->print_child_ascendancy($controller->root, 1, $controller->generations - 1); ?>
 						</ul>
@@ -211,34 +184,15 @@ class chart_ancestry_KT_Module extends KT_Module implements KT_Module_Chart {
 					<?php
 				break;
 				case 1:
-					// Booklet
-					$show_cousins = $controller->show_cousins; ?>
-					<div class="cell">
-						<?php echo print_pedigree_person($controller->root, 1, 1);
-						$treeid = ancestry_array($controller->root->getXref(), $controller->generations - 1);
-						foreach ($treeid as $i => $pid) {
-							if ($pid) {
-								$person = KT_Person::getInstance($pid);
-								if ($person) {
-									foreach ($person->getChildFamilies() as $family) {
-										print_sosa_family($family->getXref(), $pid, $i);
-									}
-								}
-							}
-						} ?>
-					</div>
-					<?php
-				break;
-				case 2:
 					// Individual list
 					require_once KT_ROOT.'includes/functions/functions_print_lists.php';
 					$treeid = ancestry_array($controller->root->getXref(), $controller->generations); ?>
-					<div class="cell">
+					<div class="cell list">
 						<?php echo format_indi_table($treeid, 'sosa'); ?>
 					</div>
 					<?php
 				break;
-				case 3:
+				case 2:
 					// Family list
 					require_once KT_ROOT.'includes/functions/functions_print_lists.php';
 					$treeid		= ancestry_array($controller->root->getXref(), $controller->generations - 1);
@@ -252,7 +206,7 @@ class chart_ancestry_KT_Module extends KT_Module implements KT_Module_Chart {
 							$famlist[$famc->getXref()] = $famc;
 						}
 					} ?>
-					<div class="cell">
+					<div class="cell list">
 						<?php echo format_fam_table($famlist, $controller->getPageTitle()); ?>
 					</div>
 					<?php
