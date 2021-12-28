@@ -103,8 +103,7 @@ class chart_compact_KT_Module extends KT_Module implements KT_Module_Chart {
 				<input type="hidden" name="mod" value="<?php echo $this->getName(); ?>">
 				<input type="hidden" name="mod_action" value="show">
 				<div class="grid-x grid-margin-x">
-					<div class="cell medium-6 large-4">
-						<label class="h5" for="autocompleteInput"><?php echo KT_I18N::translate('Individual'); ?></label>
+					<label class="h5 cell medium-6 large-4" for="autocompleteInput"><?php echo KT_I18N::translate('Individual'); ?>
 						<div class="input-group autocomplete_container">
 							<input
 								data-autocomplete-type="INDI"
@@ -119,12 +118,9 @@ class chart_compact_KT_Module extends KT_Module implements KT_Module_Chart {
 							</span>
 						</div>
 						<input type="hidden" name="rootid" id="selectedValue" value="<?php echo $controller->rootid; ?>">
-					</div>
+					</label>
 					<?php if ($SHOW_HIGHLIGHT_IMAGES) { ?>
-						<div class="cell medium-6 large-4">
-							<label class="h5" for="show_thumbs">
-								<?php echo KT_I18N::translate('Show photo in people boxes'); ?>
-							</label>
+						<label class="h5 cell medium-6 large-4" for="show_thumbs"><?php echo KT_I18N::translate('Show photo in people boxes'); ?>
 							<div class="switch">
 							  <input class="switch-input" id="show_thumbs" type="checkbox" name="show_thumbs" <?php echo $controller->show_thumbs ? 'checked="checked"' : ''; ?>>
 							  <label class="switch-paddle" for="show_thumbs">
@@ -133,7 +129,7 @@ class chart_compact_KT_Module extends KT_Module implements KT_Module_Chart {
 							      <span class="switch-inactive" aria-hidden="true"><?php echo KT_I18N::translate('No'); ?></span>
 							  </label>
 							</div>
-						</div>
+						</label>
 					<?php } ?>
 				</div>
 				<button class="button" type="submit">
