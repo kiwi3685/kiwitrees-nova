@@ -54,12 +54,11 @@ $stats = new KT_Stats(KT_GEDCOM);
 $server_warnings = array();
 if (
     // security
-    PHP_VERSION_ID < 50600 ||
-    PHP_VERSION_ID < 70000 && date('Y-m-d') >= '2018-12-31' ||
-    PHP_VERSION_ID >= 70000 && PHP_VERSION_ID < 70100 && date('Y-m-d') >= '2018-12-03' ||
-    PHP_VERSION_ID < 70200 && date('Y-m-d') >= '2019-12-01' ||
-    PHP_VERSION_ID < 70300 && date('Y-m-d') >= '2020-11-30' ||
-    PHP_VERSION_ID < 70400 && date('Y-m-d') >= '2021-12-06'
+	PHP_VERSION_ID < 70000 ||
+	PHP_VERSION_ID < 70100 && date('Y-m-d') >= '2019-01-10' ||
+	PHP_VERSION_ID < 70200 && date('Y-m-d') >= '2019-12-01' ||
+	PHP_VERSION_ID < 70300 && date('Y-m-d') >= '2020-11-30' ||
+	PHP_VERSION_ID < 70400 && date('Y-m-d') >= '2021-12-06'
 ) {
 	$server_warnings[] = '
 		<span class="warning">' .
@@ -68,12 +67,10 @@ if (
 		<span>';
 } elseif (
     // active support
-	PHP_VERSION_ID < 50600 ||
-	PHP_VERSION_ID < 70000 && date('Y-m-d') >= '2016-12-31' ||
-	PHP_VERSION_ID < 70100 && date('Y-m-d') >= '2017-12-31' ||
-    PHP_VERSION_ID < 70200 && date('Y-m-d') >= '2018-12-31' ||
-    PHP_VERSION_ID < 70300 && date('Y-m-d') >= '2019-11-30' ||
-    PHP_VERSION_ID < 70400 && date('Y-m-d') >= '2020-12-06'
+	PHP_VERSION_ID < 70400 ||
+	PHP_VERSION_ID < 80000 && date('Y-m-d') >= '2021-11-28' ||
+	PHP_VERSION_ID < 80100 && date('Y-m-d') >= '2022-11-26' ||
+	PHP_VERSION_ID < 80200 && date('Y-m-d') >= '2023-12-26'
 ) {
 	$server_warnings[] = '
 		<span class="accepted">' . KT_I18N::translate('Your web server is using PHP version %s, which is no longer maintained.  You should should ask your web service provider to upgrade to a later version.', PHP_VERSION) . '
@@ -246,8 +243,8 @@ $changes = KT_DB::prepare(
 								</div>
 							<?php }
 							// PHP version check
-							if (version_compare(phpversion(), '8.0', '<')) {
-								if (version_compare(phpversion(), '5.6', '<')) { ?>
+							if (version_compare(phpversion(), '8.1', '<')) {
+								if (version_compare(phpversion(), '7.3', '<')) { ?>
 									<div class="callout large-4 alert">
 										<?php echo  KT_I18N::translate('Kiwitrees is no longer compatible with versions of PHP older than 7.0'); ?>
 									</div>

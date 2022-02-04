@@ -9951,6 +9951,15 @@ div[id$=-page] button[type=submit] {
 #descendancy-page .dataTables_wrapper .dataTable thead tr th.famListAnniv {
 	min-width: 3.5rem;
 }
+#indilist-page .dataTables_wrapper .dataTable tbody,
+#famlist-page .dataTables_wrapper .dataTable tbody,
+#statistics_tables-page .dataTables_wrapper .dataTable tbody,
+#placelist-page .dataTables_wrapper .dataTable tbody,
+#ancestry-page .dataTables_wrapper .dataTable tbody,
+#descendancy-page .dataTables_wrapper .dataTable tbody {
+	border: 0.1rem solid #e0e0e0;
+	background-color: #e0e0e0;
+}
 
 #placelist-page #place-list div.places {
 	background-color: #faf5e8;

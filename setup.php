@@ -24,8 +24,8 @@
 define('KT_SCRIPT_NAME', 'setup.php');
 define('KT_CONFIG_FILE', 'config.ini.php');
 
-if (version_compare(PHP_VERSION, '5.6') < 0) {
-	// Our translation system requires PHP 5.6, so we cannot translate this message :-(
+if (version_compare(PHP_VERSION, '7.0') < 0) {
+
 	header('Content-Type: text/html; charset=UTF-8'); ?>
 	<!DOCTYPE html>
 	<html lang="en" dir="ltr">
@@ -35,7 +35,7 @@ if (version_compare(PHP_VERSION, '5.6') < 0) {
 			<div class="callout alert text-center">
 				<h4>Sorry, the setup wizard cannot start.</h4>
 				<p>This server is running PHP version <?php echo PHP_VERSION; ?></p>
-				<p>Kiwitrees-nova requires PHP 5.6 or later. PHP 7 is recommended.</p>
+				<p>Kiwitrees-nova requires PHP 7.0 or later. PHP 8 is recommended.</p>
 			</div>
 	<?php
 	exit;

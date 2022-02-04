@@ -172,7 +172,7 @@ class tabi_changes_KT_Module extends KT_Module implements KT_Module_IndiTab {
              LEFT JOIN `##user` USING (user_id)
              WHERE `xref` LIKE ?
              AND `gedcom_id` = ?
-             ORDER BY `change_id` ASC";
+             ORDER BY `change_id` DESC";
          $rows = KT_DB::prepare($sql)->execute(array($xref, KT_GED_ID))->fetchAll();
 
 		return $rows;

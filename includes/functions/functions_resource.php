@@ -382,13 +382,19 @@ function report_findfact($fact, $type='') {
 	$list = array();
 	// Fetch all data, regardless of privacy
 	if ($fact == 'EVEN' || $fact == 'FACT'){
-		$sql = "SELECT i_id AS xref, i_file AS ged_id, i_gedcom AS gedrec" .
-				" FROM `##individuals`" .
-				" WHERE `i_gedcom` REGEXP '(.*)\n1 " . $fact . ".*\n2 TYPE ([^\n]*)" . $type . "*[^\n]*' AND i_file=?";
+		$sql = "
+			SELECT i_id AS xref
+			FROM `##individuals`
+			WHERE `i_gedcom` REGEXP '(.*)\n1 " . $fact . ".*\n2 TYPE ([^\n]*)" . $type . "*[^\n]*'
+			AND i_file=?
+		";
 	} else {
-		$sql = "SELECT i_id AS xref, i_file AS ged_id, i_gedcom AS gedrec" .
-				" FROM `##individuals`" .
-				" WHERE `i_gedcom` REGEXP '(.*)\n1 " . $fact . "' AND i_file=?";
+		$sql = "
+			SELECT i_id AS xref, i_file
+			FROM `##individuals`
+			WHERE `i_gedcom` REGEXP '(.*)\n1 " . $fact . "'
+			AND i_file=?
+		";
 	}
 	$rows = KT_DB::prepare($sql)->execute(array(KT_GED_ID))->fetchAll();
 	foreach ($rows as $row) {
@@ -401,13 +407,8 @@ function report_findfact($fact, $type='') {
 		}
 	}
 	// remove duplicate individuals
-	foreach ($list as $key=>$value) {
-		$list[$key] = serialize($list[$key]);
-	}
-	$list = array_unique($list);
-	foreach ($list as $key=>$value){
-		$list[$key] = unserialize($list[$key]);
-	}
+	$list = array_unique($list, SORT_REGULAR);
+
 	return $list;
 }
 
@@ -664,7 +665,7 @@ function getResourcefact($fact, $family, $sup, $source_list, $number) {
 }
 
 // list marriage records
-function report_marriages ($name = '', $place, $m_fromJD, $m_toJD, $ged){
+function report_marriages ($place, $m_fromJD, $m_toJD, $ged, $name = ''){
 	$sql_select   = "SELECT DISTINCT f_id AS xref, f_gedcom AS gedcom FROM `##families` ";
 	$sql_join     = "";
 	$sql_where    = " WHERE f_file = " . $ged . " AND f_gedcom LIKE '%1 MARR%'";

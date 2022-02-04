@@ -114,7 +114,7 @@ class widget_blog_KT_Module extends KT_Module implements KT_Module_Widget {
 	protected static function updateSchema() {
 		// Create tables, if not already present
 		try {
-			KT_DB::updateSchema(KT_ROOT.KT_MODULES_DIR . 'widget_blog/db_schema/', 'NB_SCHEMA_VERSION', 3);
+			KT_DB::updateSchema(KT_ROOT .KT_MODULES_DIR . 'widget_blog/db_schema/', 'NB_SCHEMA_VERSION', 3);
 		} catch (PDOException $ex) {
 			// The schema update scripts should never fail.  If they do, there is no clean recovery.
 			die($ex);

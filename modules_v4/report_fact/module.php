@@ -1,7 +1,7 @@
 <?php
 /**
  * Kiwitrees: Web based Family History software
- * Copyright (C) 2012 to 2021 kiwitrees.net
+ * Copyright (C) 2012 to 2022 kiwitrees.net
  *
  * Derived from webtrees (www.webtrees.net)
  * Copyright (C) 2010 to 2012 webtrees development team
@@ -83,7 +83,7 @@ class report_fact_KT_Module extends KT_Module implements KT_Module_Report {
 		$names   = $person->getAllNames();
 		$primary = $person->getPrimaryName();
 
-		list($surn, $givn) = explode(',', $names[$primary]['sort']);
+		[$surn, $givn] = explode(',', $names[$primary]['sort']);
 
 		$givn = str_replace('@P.N.', 'AAAA', $givn);
 		$surn = str_replace('@N.N.', 'AAAA', $surn);
@@ -146,21 +146,6 @@ class report_fact_KT_Module extends KT_Module implements KT_Module_Report {
 			->addExternalJavascript(KT_AUTOCOMPLETE_JS_URL)
 			->addInlineJavascript('
 				autocomplete();
-
-				var form = document.getElementById("resource"),
-				fact = form.elements.fact;
-				var typefacts = ' . json_encode($typefacts) . ';
-				fact.onchange = function () {
-				    var form = this.form;
-					if (jQuery.inArray(this.value, typefacts) !== -1) {
-				        form.elements.type.disabled = false;
-						jQuery("#disable_type input").css("opacity", "initial");
-				    } else {
-				        form.elements.type.disabled = true;
-						jQuery("#disable_type input").css("opacity", "0.4");
-				    }
-				};
-				fact.onchange();
 			');
 		?>
 
@@ -170,7 +155,7 @@ class report_fact_KT_Module extends KT_Module implements KT_Module_Report {
 				<div class="help_text">
 					<div class="help_content">
 						<h5><?php echo $this->getDescription(); ?></h5>
-						<a href="#" class="more noprint"><i class="' . $iconStyle . ' fa-question-circle-o icon-help"></i></a>
+						<a href="#" class="more noprint"><i class="fa fa-question-circle-o icon-help"></i></a>
 						<div class="hidden">
 							<?php echo /* I18N: help for report facts and events module */ KT_I18N::translate('The list of available facts and events are those set by the site administrator as "All individual facts" and "Unique individual facts" at Administration > Family trees > <i>your family tree</i> > "Edit options" tab and therefore only GEDCOM first-level records.<br>Date filters must be 4-digit year only. Place, type and detail filters can be any string of characters you expect to find in those data fields. The "Type" field is only avaiable for Custom facts and Custom events.'); ?>
 						</div>
@@ -189,7 +174,7 @@ class report_fact_KT_Module extends KT_Module implements KT_Module_Report {
 								}
 							}
 							echo '<option value="EVEN"' . ($fact == 'EVEN'? ' selected ' : '') . '>' . KT_I18N::translate('Custom event') . '</option>';
-							echo '<option value="FACT"' . ($fact == 'FACT'? ' selected ' : '') . '>' . KT_I18N::translate('Custom Fact') . '</option>';
+							echo '<option value="FACT"' . ($fact == 'FACT'? ' selected ' : '') . '>' . KT_I18N::translate('Custom fact') . '</option>';
 							?>
 						</select>
 					</div>
@@ -204,18 +189,18 @@ class report_fact_KT_Module extends KT_Module implements KT_Module_Report {
 						</div>
 						<div class="chart_options" id="disable_type">
 							<label for="type"><?php echo KT_I18N::translate('Type'); ?></label>
-							<input type="text" data-autocomplete-type="EF_TYPE" id="type" name="type" value="<?php echo $type; ?>" <?php ($fact !== 'EVEN' || $fact !== 'FACT' ? '' : 'disabled'); ?>>
+							<input type="text" data-autocomplete-type="EF_TYPE" id="type" name="type" value="<?php echo $type; ?>">
 						</div>
 						<div class="chart_options">
 							<label for="detail"><?php echo KT_I18N::translate('Details'); ?></label>
 							<input type="text" id="detail" name="detail" value="<?php echo $detail; ?>">
 						</div>
 		 				<button class="btn btn-primary" type="submit" value="<?php echo KT_I18N::translate('show'); ?>">
-							<i class="' . $iconStyle . ' fa-eye"></i>
+							<i class="fa fa-eye"></i>
 							<?php echo KT_I18N::translate('show'); ?>
 						</button>
 						<button class="btn btn-primary" type="submit" name="reset" value="reset">
-							<i class="' . $iconStyle . ' fa-sync"></i>
+							<i class="fa fa-refresh"></i>
 							<?php echo KT_I18N::translate('Reset'); ?>
 						</button>
 				</form>
@@ -225,6 +210,9 @@ class report_fact_KT_Module extends KT_Module implements KT_Module_Report {
 			<?php if ($go == 1) {
 				// prepare data.
 				$rows = report_findfact($fact);
+				if(!$rows) {
+					echo KT_I18N::translate('No matching records found');
+				}
 				$data = array();
 				$x = 0;
 				$count_type = false;
@@ -257,7 +245,7 @@ class report_fact_KT_Module extends KT_Module implements KT_Module_Report {
 										if ($num == $person->getPrimaryName()) {
 											$class =' class="name2"';
 											$sex_image = $person->getSexImage();
-											list($surn, $givn) = explode(',', $name['sort']);
+											[$surn, $givn] = explode(',', $name['sort']);
 										} else {
 											$class = '';
 											$sex_image = '';
@@ -291,12 +279,12 @@ class report_fact_KT_Module extends KT_Module implements KT_Module_Report {
 				}
 
 				$controller
-					->addExternalJavascript(KT_DATATABLES_JS)
-					->addExternalJavascript(KT_DATATABLES_HTML5)
+					->addExternalJavascript(KT_JQUERY_DATATABLES_URL)
+					->addExternalJavascript(KT_JQUERY_DT_HTML5)
 					->addExternalJavascript(KT_JQUERY_DT_BUTTONS)
 					->addInlineJavascript('
 						jQuery("#' .$table_id. '").dataTable( {
-							dom: \'<"H"pBf<"clear">irl>t<"F"pl>\',
+							dom: \'<"H"pBf<"dt-clear">irl>t<"F"pl>\',
 							' . KT_I18N::datatablesI18N() . ',
 							buttons: [{extend: "csv", exportOptions: {columns: ":visible"}}],
 							autoWidth: true,

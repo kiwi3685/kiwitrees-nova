@@ -106,9 +106,11 @@ switch ($type) {
 		// Filter for privacy
 		foreach ($rows as $row) {
 			$person = KT_Person::getInstance($row);
-			if (preg_match('/\n2 CAUS (.*'.preg_quote($term, '/') . '.*)/i', $person->getGedcomRecord(), $match)) {
-				if (!in_array($match[1], $data)) {
-					$data[] = $match[1];
+			if ($person->canDisplayName()) {
+				if (preg_match('/\n2 CAUS (.*'.preg_quote($term, '/') . '.*)/i', $person->getGedcomRecord(), $match)) {
+					if (!in_array($match[1], $data)) {
+						$data[] = $match[1];
+					}
 				}
 			}
 		}
@@ -163,9 +165,11 @@ switch ($type) {
 		// Filter for privacy
 		foreach ($rows as $row) {
 			$person = KT_Person::getInstance($row);
-			if (preg_match('/\n2 TYPE (.*'.preg_quote($term, '/') . '.*)/i', $person->getGedcomRecord(), $match)) {
-				if (!in_array($match[1], $data)) {
-					$data[] = $match[1];
+			if ($person->canDisplayName()) {
+				if (preg_match('/\n2 TYPE (.*'.preg_quote($term, '/') . '.*)/i', $person->getGedcomRecord(), $match)) {
+					if (!in_array($match[1], $data)) {
+						$data[] = $match[1];
+					}
 				}
 			}
 		}
@@ -190,9 +194,11 @@ switch ($type) {
 		// Filter for privacy
 		foreach ($rows as $row) {
 			$person = KT_Person::getInstance($row);
-			if (preg_match('/\n2 TYPE (.*'.preg_quote($term, '/') . '.*)/i', $person->getGedcomRecord(), $match)) {
-				if (!in_array($match[1], $data)) {
-					$data[] = $match[1];
+			if ($person->canDisplayName()) {
+				if (preg_match('/\n2 TYPE (.*'.preg_quote($term, '/') . '.*)/i', $person->getGedcomRecord(), $match)) {
+					if (!in_array($match[1], $data)) {
+						$data[] = $match[1];
+					}
 				}
 			}
 		}
@@ -217,9 +223,11 @@ switch ($type) {
 		// Filter for privacy
 		foreach ($rows as $row) {
 			$person = KT_Person::getInstance($row);
-			if (preg_match('/\n2 TYPE (.*'.preg_quote($term, '/') . '.*)/i', $person->getGedcomRecord(), $match)) {
-				if (!in_array($match[1], $data)) {
-					$data[] = $match[1];
+			if ($person->canDisplayName()) {
+				if (preg_match('/\n2 TYPE (.*'.preg_quote($term, '/') . '.*)/i', $person->getGedcomRecord(), $match)) {
+					if (!in_array($match[1], $data)) {
+						$data[] = $match[1];
+					}
 				}
 			}
 		}
@@ -419,9 +427,11 @@ switch ($type) {
 		// Filter for privacy
 		foreach ($rows as $row) {
 			$person = KT_Person::getInstance($row);
-			if (preg_match('/\n1 OCCU (.*'.preg_quote($term, '/') . '.*)/i', $person->getGedcomRecord(), $match)) {
-				if (!in_array($match[1], $data)) {
-					$data[] = $match[1];
+			if ($person->canDisplayName()) {
+				if (preg_match('/\n1 OCCU (.*'.preg_quote($term, '/') . '.*)/i', $person->getGedcomRecord(), $match)) {
+					if (!in_array($match[1], $data)) {
+						$data[] = $match[1];
+					}
 				}
 			}
 		}
@@ -591,11 +601,13 @@ switch ($type) {
 		// Filter for privacy
 		foreach ($rows as $row) {
 			$person = KT_Person::getInstance($row);
-			if (preg_match('/\n1 SOUR @' . $sid . '@(?:\n[2-9].*)*\n2 PAGE (.*'.str_replace(' ', '.+', preg_quote($term, '/')) . '.*)/i', $person->getGedcomRecord(), $match)) {
-				$data[] = $match[1];
-			}
-			if (preg_match('/\n2 SOUR @' . $sid . '@(?:\n[3-9].*)*\n3 PAGE (.*'.str_replace(' ', '.+', preg_quote($term, '/')) . '.*)/i', $person->getGedcomRecord(), $match)) {
-				$data[] = $match[1];
+			if ($person->canDisplayName()) {
+				if (preg_match('/\n1 SOUR @' . $sid . '@(?:\n[2-9].*)*\n2 PAGE (.*'.str_replace(' ', '.+', preg_quote($term, '/')) . '.*)/i', $person->getGedcomRecord(), $match)) {
+					$data[] = $match[1];
+				}
+				if (preg_match('/\n2 SOUR @' . $sid . '@(?:\n[3-9].*)*\n3 PAGE (.*'.str_replace(' ', '.+', preg_quote($term, '/')) . '.*)/i', $person->getGedcomRecord(), $match)) {
+					$data[] = $match[1];
+				}
 			}
 		}
 
@@ -612,11 +624,13 @@ switch ($type) {
 		// Filter for privacy
 		foreach ($rows as $row) {
 			$family = KT_Family::getInstance($row);
-			if (preg_match('/\n1 SOUR @' . $sid . '@(?:\n[2-9].*)*\n2 PAGE (.*'.str_replace(' ', '.+', preg_quote($term, '/')) . '.*)/i', $family->getGedcomRecord(), $match)) {
-				$data[] = $match[1];
-			}
-			if (preg_match('/\n2 SOUR @' . $sid . '@(?:\n[3-9].*)*\n3 PAGE (.*'.str_replace(' ', '.+', preg_quote($term, '/')) . '.*)/i', $family->getGedcomRecord(), $match)) {
-				$data[] = $match[1];
+			if ($family->canDisplayName()) {
+				if (preg_match('/\n1 SOUR @' . $sid . '@(?:\n[2-9].*)*\n2 PAGE (.*'.str_replace(' ', '.+', preg_quote($term, '/')) . '.*)/i', $family->getGedcomRecord(), $match)) {
+					$data[] = $match[1];
+				}
+				if (preg_match('/\n2 SOUR @' . $sid . '@(?:\n[3-9].*)*\n3 PAGE (.*'.str_replace(' ', '.+', preg_quote($term, '/')) . '.*)/i', $family->getGedcomRecord(), $match)) {
+					$data[] = $match[1];
+				}
 			}
 		}
 
