@@ -576,7 +576,7 @@ class KT_Tree {
 	* @param string $ged_id the gedcom to remove from the database
 	* @param boolean $keepmedia Whether or not to keep media and media links in the tables
 	*/
-	function empty_database($ged_id, $keepmedia) {
+	public static function empty_database($ged_id, $keepmedia) {
 		KT_DB::prepare("DELETE FROM `##gedcom_chunk` WHERE gedcom_id=?")->execute(array($ged_id));
 		KT_DB::prepare("DELETE FROM `##individuals`  WHERE i_file   =?")->execute(array($ged_id));
 		KT_DB::prepare("DELETE FROM `##families`     WHERE f_file   =?")->execute(array($ged_id));
