@@ -64,10 +64,10 @@ class KT_Date {
 	static function ParseDate($date) {
 		// Valid calendar escape specified? - use it
 		if (preg_match('/^(@#D(?:GREGORIAN|JULIAN|HEBREW|HIJRI|JALALI|FRENCH R|ROMAN|JALALI)+@) ?(.*)/', $date, $match)) {
-			$cal = $match[1];
-			$date = $match[2];
+			$cal	= $match[1];
+			$date	= $match[2];
 		} else {
-			$cal = '';
+			$cal	= '';
 		}
 		// A date with a month: DM, M, MY or DMY
 		if (preg_match('/^(\d?\d?) ?(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC|TSH|CSH|KSL|TVT|SHV|ADR|ADS|NSN|IYR|SVN|TMZ|AAV|ELL|VEND|BRUM|FRIM|NIVO|PLUV|VENT|GERM|FLOR|PRAI|MESS|THER|FRUC|COMP|MUHAR|SAFAR|RABI[AT]|JUMA[AT]|RAJAB|SHAAB|RAMAD|SHAWW|DHUAQ|DHUAH|FARVA|ORDIB|KHORD|TIR|MORDA|SHAHR|MEHR|ABAN|AZAR|DEY|BAHMA|ESFAN) ?((?:\d+(?: B ?C)?|\d\d\d\d \/ \d{1,4})?)$/', $date, $match)) {
