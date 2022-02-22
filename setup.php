@@ -127,9 +127,16 @@ header('Content-Type: text/html; charset=UTF-8'); ?>
 ////////////////////////////////////////////////////////////////////////////////
 
 if (!isset($_POST['lang'])) { ?>
-	<h4><?php echo KT_I18N::translate('1 - Select your default language'); ?></h4>
-		<?php echo edit_field_language('change_lang', KT_LOCALE, 'onchange="window.location=\'' .  KT_SCRIPT_NAME . '?lang=\'+this.value;">'); ?>
-	<h4><?php echo KT_I18N::translate('2 - Checking your server configuration'); ?></h4>
+	<h4>
+		<?php echo KT_I18N::translate('1 - Select your default language'); ?>
+	</h4>
+
+	<?php echo edit_field_language('change_lang', KT_LOCALE, 'onchange="window.location=\'' .  KT_SCRIPT_NAME . '?lang=\'+this.value;">'); ?>
+
+	<h4>
+		<?php echo KT_I18N::translate('2 - Checking your server configuration'); ?>
+	</h4>
+
 	<?php
 	$warnings	= false;
 	$errors		= false;
