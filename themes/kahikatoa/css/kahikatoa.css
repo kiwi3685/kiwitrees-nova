@@ -9115,6 +9115,7 @@ button.widget .svg-inline--fa {
 }
 #sidebarAccordion .accordion-content #sb_family_nav_content .nav_content .submenu {
 	background-color: #faf5e8;
+	box-shadow: rgba(0, 0, 0, 0.16) 0px 5px 18px 0px, rgba(0, 0, 0, 0.1) 0px 0px 0px 1px;
 	font-size: 0.75rem;
 	padding: 0.5rem;
 }
@@ -10371,7 +10372,9 @@ label.radio_inline {
 	height: 12rem;
 	line-height: 12rem;
 }
-.person_card_template.card .card-image img {
+.person_card_template.card .card-image img,
+.person_card_template.card .card-image [class^=icon-silhouette],
+.person_card_template.card .card-image svg {
 	vertical-align: middle;
 }
 .person_card_template.card .card-image [class^=icon-silhouette] {
@@ -10405,11 +10408,23 @@ label.radio_inline {
 #tree_completeness-page form button .button {
 	margin: 0;
 }
+#tree_completeness-page table tbody {
+	border: 0.1rem solid #e0e0e0;
+}
 #tree_completeness-page table tbody td:first-child {
+	width: 1rem;
+}
+#tree_completeness-page table tbody td:nth-child(2) {
 	text-transform: capitalize;
 }
 #tree_completeness-page .callout {
-	margin: 0 0.5rem 1rem;
+	padding: 0 1rem;
+}
+#tree_completeness-page .callout button {
+	margin: 0 0.5rem 0.25rem;
+}
+#tree_completeness-page .callout button.close-button {
+	font-size: 1.25rem;
 }
 
 /* Census assistant */

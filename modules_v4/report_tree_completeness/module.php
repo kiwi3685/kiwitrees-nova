@@ -186,7 +186,7 @@ class report_tree_completeness_KT_Module extends KT_Module implements KT_Module_
 						<table id="completenessTable">
 							<thead>
 								<tr>
-									<th><?php echo KT_I18N::translate('Generation'); ?></th>
+									<th colspan="2" class="text-center"><?php echo KT_I18N::translate('Generation'); ?></th>
 									<th class="text-right"><?php echo KT_I18N::translate('Ancestors recorded'); ?></th>
 									<th class="text-right"><?php echo KT_I18N::translate('Completeness at this level'); ?></th>
 								</tr>
@@ -195,6 +195,9 @@ class report_tree_completeness_KT_Module extends KT_Module implements KT_Module_
 								<?php foreach ($countArray['counts'] as $generation => $recorded) {
 									$target = pow(2, $generation) ?>
 									<tr>
+										<td class="text-right">
+											<?php echo KT_I18N::number($generation + 1); ?>
+										</td>
 										<td>
 											<?php if ($generation == 0) {
 												echo $person->getFullName();
@@ -202,8 +205,12 @@ class report_tree_completeness_KT_Module extends KT_Module implements KT_Module_
 												<?php echo get_generation_names($generation + 1); ?>
 											<?php } ?>
 										</td>
-										<td class="text-right"><?php echo KT_I18N::translate('%1s of %2s', $recorded, $target); ?></td>
-										<td class="text-right"><?php echo KT_I18N::number($recorded / $target * 100, 2); ?>%</td>
+										<td class="text-right">
+											<?php echo KT_I18N::translate('%1s of %2s', $recorded, $target); ?>
+										</td>
+										<td class="text-right">
+											<?php echo KT_I18N::number($recorded / $target * 100, 2); ?>%
+										</td>
 									</tr>
 									<?php
 									$allRecorded	= $allRecorded + $recorded;
@@ -212,6 +219,7 @@ class report_tree_completeness_KT_Module extends KT_Module implements KT_Module_
 							</tbody>
 							<tfoot>
 								<tr>
+									<th></th>
 									<th><?php echo KT_I18N::translate('Total for %s generations', $maxGen); ?></th>
 									<th class="text-right"><?php echo KT_I18N::translate('%1s of %2s', $allRecorded, $allTarget); ?></th>
 									<th class="text-right"><?php echo KT_I18N::number($allRecorded / $allTarget * 100, 2); ?>%</th>
