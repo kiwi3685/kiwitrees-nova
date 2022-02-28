@@ -1,7 +1,7 @@
 <?php
 /**
  * Kiwitrees: Web based Family History software
- * Copyright (C) 2012 to 2021 kiwitrees.net
+ * Copyright (C) 2012 to 2022 kiwitrees.net
  *
  * Derived from webtrees (www.webtrees.net)
  * Copyright (C) 2010 to 2012 webtrees development team
@@ -107,8 +107,8 @@ switch ($action) {
             ->pageHeader();
 
         // Retrieve the private data
-        $record                        = new KT_GedcomRecord($gedrec);
-        list($gedcom, $private_gedrec) = $record->privatizeGedcom(KT_USER_ACCESS_LEVEL);
+        $record                    = new KT_GedcomRecord($gedrec);
+        [$gedcom, $private_gedrec] = $record->privatizeGedcom(KT_USER_ACCESS_LEVEL);
 
         // When deleting a media link, $linenum comes is an OBJE and the $mediaid to delete should be set
         if ($linenum == 'OBJE') {
@@ -125,19 +125,20 @@ switch ($action) {
 
     ////////////////////////////////////////////////////////////////////////////////
     case 'editraw':
-        $pid    = safe_GET('pid', KT_REGEX_XREF); // print_indi_form() uses this
+        $pid    = KT_Filter::get('pid', KT_REGEX_XREF); // print_indi_form() uses this
         $record = KT_GedcomRecord::getInstance($pid);
+
         $controller->addInlineJavascript('
 			display_help();
 		');
 
         // Hide the private data
-        list($gedrec) = $record->privatizeGedcom(KT_USER_ACCESS_LEVEL);
+        [$gedrec] = $record->privatizeGedcom(KT_USER_ACCESS_LEVEL);
 
         // Remove the first line of the gedrec - things go wrong when users change either the TYPE or XREF
         // Notes are special - they may contain data on the first line
-        $gedrec                  = preg_replace('/^(0 @' . KT_REGEX_XREF . '@ NOTE) (.+)/', "$1\n1 CONC $2", $gedrec);
-        list($gedrec1, $gedrec2) = explode("\n", $gedrec, 2);
+        $gedrec              = preg_replace('/^(0 @' . KT_REGEX_XREF . '@ NOTE) (.+)/', "$1\n1 CONC $2", $gedrec);
+        [$gedrec1, $gedrec2] = explode("\n", $gedrec, 2);
 
         $controller
             ->setPageTitle(($type == 'INDI' ? $record->getLifespanName() : $record->getFullName()))
@@ -154,14 +155,10 @@ switch ($action) {
     			<span id="edit_edit_raw" class="help_text"></span>
 
     			<form method="post" action="edit_interface.php">
-    				<input type="hidden" name="action" value="updateraw">
+    				<input type="hidden" name="action" value="update">
     				<input type="hidden" name="pid" value="<?php echo $pid; ?>">
-    				<p>
-    					<textarea name="newgedrec1" id="newgedrec1" dir="ltr" readonly="readonly"><?php echo htmlspecialchars($gedrec1); ?></textarea>
-    				</p>
-    				<p>
-    					<textarea name="newgedrec2" id="newgedrec2" dir="ltr"><?php echo htmlspecialchars($gedrec2); ?></textarea>
-    				</p>
+ 					<textarea name="newgedrec1" id="newgedrec1" dir="ltr" readonly="readonly"><?php echo htmlspecialchars($gedrec1); ?></textarea>
+					<textarea name="newgedrec2" id="newgedrec2" dir="ltr"><?php echo htmlspecialchars($gedrec2); ?></textarea>
 
     				<?php echo no_update_chan($record); ?>
 
@@ -170,7 +167,59 @@ switch ($action) {
     			</form>
             </div>
 		</div> <!-- id="edit_interface-page" -->
+
 		<?php
+        break;
+
+    ////////////////////////////////////////////////////////////////////////////////
+    case 'editrawfact':
+        $pid    = KT_Filter::get('pid', KT_REGEX_XREF);
+        $tag    = KT_Filter::get('tag');
+        $record = KT_GedcomRecord::getInstance($pid);
+        $person = KT_Person::getInstance($pid);
+        $events = $person->getIndiFacts();
+
+        $controller
+            ->setPageTitle(($type == 'INDI' ? $record->getLifespanName() : $record->getFullName()))
+            ->pageHeader();
+        ?>
+
+        <div id="edit_interface-page" class="grid-x grid-padding-x">
+			<div class="cell large-10 large-offset-1">
+				<h3><?php echo $controller->getPageTitle(); ?></h3>
+                <h4><?php echo KT_I18N::translate('Edit raw GEDCOM record'); ?></h4>
+                <?php print_specialchar_link('newgedrec'); ?>
+
+                <div class="callout">
+                    <?php echo KT_I18N::translate('This page allows you to bypass the usual forms, and edit the underlying data directly. It is an advanced option, and you should not use it unless you understand the GEDCOM format. If you make a mistake here, it can be difficult to fix.<br>You can download a copy of the GEDCOM specification from https://www.kiwitrees.net/wp-content/uploads/2016/03/ged551-5.pdf.'); ?>
+                </div>
+                <?php
+                foreach ($events as $event) {
+                    if ($tag === $event->getTag()) {
+                        $oldgedrec = $event->getGedcomRecord();  ?>
+
+                        <div class="callout">
+                            <?php echo $event->print_simple_fact(); ?>
+                        </div>
+
+            			<form method="post" action="edit_interface.php">
+            				<input type="hidden" name="action" value="updaterawfact">
+            				<input type="hidden" name="pid" value="<?php echo $pid; ?>">
+                            <input type="hidden" name="oldgedrec" value="<?php echo $oldgedrec; ?>">
+        					<textarea name="newgedrec" id="newgedrec" dir="ltr"><?php echo htmlspecialchars($event->getGedcomRecord()); ?></textarea>
+
+            				<?php echo no_update_chan($record); ?>
+
+                            <?php echo editSubmitButtons(); ?>
+
+            			</form>
+                    <?php break;
+                    }
+                } ?>
+            </div>
+		</div>
+		<?php
+
         break;
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -183,7 +232,7 @@ switch ($action) {
             ->pageHeader();
 
         // Hide the private data
-        list($gedrec) = $record->privatizeGedcom(KT_USER_ACCESS_LEVEL);
+        [$gedrec] = $record->privatizeGedcom(KT_USER_ACCESS_LEVEL);
         ?>
 
 		<div id="edit_interface-page" class="grid-x grid-padding-x">
@@ -1008,7 +1057,7 @@ switch ($action) {
         $source = KT_Source::getInstance($pid);
 
         // Hide the private data
-        list($gedrec) = $source->privatizeGedcom(KT_USER_ACCESS_LEVEL);
+        [$gedrec] = $source->privatizeGedcom(KT_USER_ACCESS_LEVEL);
 
         $gedlines    = explode("\n", $gedrec); // -- find the number of lines in the record
         $uniquefacts = preg_split("/[, ;:]+/", get_gedcom_setting(KT_GED_ID, 'SOUR_FACTS_UNIQUE'), -1, PREG_SPLIT_NO_EMPTY);
@@ -1100,7 +1149,7 @@ switch ($action) {
         $note = KT_Note::getInstance($pid);
 
         // Hide the private data
-        list($gedrec) = $note->privatizeGedcom(KT_USER_ACCESS_LEVEL);
+        [$gedrec] = $note->privatizeGedcom(KT_USER_ACCESS_LEVEL);
 
         if (preg_match("/^0 @$pid@ NOTE ?(.*)/", $gedrec, $n1match)) {
             $note_content = $n1match[1] . get_cont(1, $gedrec, false);
@@ -1378,10 +1427,36 @@ switch ($action) {
         $record = KT_GedcomRecord::getInstance($pid);
 
         // Retrieve the private data
-        list(, $private_gedrec) = $record->privatizeGedcom(KT_USER_ACCESS_LEVEL);
+        [, $private_gedrec] = $record->privatizeGedcom(KT_USER_ACCESS_LEVEL);
 
-        $newgedrec = $_POST['newgedrec1'] . "\n" . $_POST['newgedrec2'] . $private_gedrec;
+        if (isset($_POST['newgedrec'])) {
+            $newgedrec = $_POST['newgedrec'] . $private_gedrec;
+        } else {
+            $newgedrec = $_POST['newgedrec1'] . "\n" . $_POST['newgedrec2'] . $private_gedrec;
+        }
         $success   = replace_gedrec($pid, KT_GED_ID, $newgedrec, !KT_Filter::postBool('preserve_last_changed'));
+
+        if ($success && !KT_DEBUG) {
+            $controller->addInlineJavascript('closePopupAndReloadParent();');
+        }
+        break;
+
+    ////////////////////////////////////////////////////////////////////////////////
+    case 'updaterawfact':
+        $controller
+            ->setPageTitle(KT_I18N::translate('Edit raw GEDCOM record'))
+            ->pageHeader();
+
+        $pid    = KT_Filter::post('pid', KT_REGEX_XREF);
+        $record = KT_GedcomRecord::getInstance($pid);
+        // Hide the private data
+        [$gedrec] = $record->privatizeGedcom(KT_USER_ACCESS_LEVEL);
+
+        $oldgedrec = $_POST['oldgedrec'];
+        $newgedrec = $_POST['newgedrec'];
+        $updatedgedrec = str_replace($oldgedrec, $newgedrec, $gedrec);
+
+        $success   = replace_gedrec($pid, KT_GED_ID, $updatedgedrec, !KT_Filter::postBool('preserve_last_changed'));
 
         if ($success && !KT_DEBUG) {
             $controller->addInlineJavascript('closePopupAndReloadParent();');
@@ -1427,8 +1502,8 @@ switch ($action) {
             }
 
             // Retrieve the private data
-            $tmp                           = new KT_GedcomRecord($gedrec);
-            list($gedrec, $private_gedrec) = $tmp->privatizeGedcom(KT_USER_ACCESS_LEVEL);
+            $tmp                       = new KT_GedcomRecord($gedrec);
+            [$gedrec, $private_gedrec] = $tmp->privatizeGedcom(KT_USER_ACCESS_LEVEL);
 
             // If the fact has a DATE or PLAC, then delete any value of Y
             if ($text[0] == 'Y') {
@@ -2141,7 +2216,7 @@ switch ($action) {
 			<h2> <?php echo $controller->getPageTitle(); ?></h2>
 
 			<?php // Hide the private data
-            list($gedrec) = $person->privatizeGedcom(KT_USER_ACCESS_LEVEL);
+            [$gedrec] = $person->privatizeGedcom(KT_USER_ACCESS_LEVEL);
             $gedlines     = explode("\n", trim($gedrec));
             $fields       = explode(' ', $gedlines[$linenum]);
             $glevel       = $fields[0];

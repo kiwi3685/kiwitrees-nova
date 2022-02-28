@@ -63,7 +63,7 @@ if (KT_USE_CDN) {
 }
 
 // other js
-define('KT_FONTAWESOME_JS',					KT_STATIC_URL . 'library/fontawesome/all.min.js');  // fontawesome-free-5.12.0 Updated 23-01-2020.
+define('KT_FONTAWESOME_JS',					KT_STATIC_URL . 'library/fontawesome/all.min.js');  // fontawesome-free-6.0.0 Updated 10-02-2022.
 define('KT_JQUERY_COLORBOX_URL',			KT_STATIC_URL . 'library/colorbox/jquery.colorbox-min.js');	// 1.6.4	Updated 11-05-2016
 define('KT_JQUERY_JEDITABLE_URL',			KT_STATIC_URL . 'js/jquery.jeditable.js');		    	// 1.7.3 (used only in site access rules table)
 define('KT_JQUERY_WHEELZOOM_URL',			KT_STATIC_URL . 'js/jquery.wheelzoom.js');		    	// 2.0.0

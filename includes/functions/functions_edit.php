@@ -1,7 +1,7 @@
 <?php
 /**
  * Kiwitrees: Web based Family History software
- * Copyright (C) 2012 to 2021 kiwitrees.net
+ * Copyright (C) 2012 to 2022 kiwitrees.net
  *
  * Derived from webtrees (www.webtrees.net)
  * Copyright (C) 2010 to 2012 webtrees development team
@@ -1329,6 +1329,7 @@ function print_addnewsource_link($element_id) {
 * @param boolean $rowDisplay True to have the row displayed by default, false to hide it by default
 */
 function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $rowDisplay = true) {
+
 	global $MEDIA_DIRECTORY, $tags, $emptyfacts, $main_fact, $TEXT_DIRECTION;
 	global $NPFX_accept, $SPFX_accept, $NSFX_accept, $FILE_FORM_accept, $upload_count;
 	global $pid, $gender, $linkToID, $bdm, $action, $event_add, $iconStyle;
@@ -1372,31 +1373,47 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 		<?php
 	}
 
-	if (empty($linkToID)) $linkToID = $pid;
+	if (empty($linkToID)){
+		$linkToID = $pid;
+	}
 
 	$subnamefacts = array('NPFX', 'GIVN', 'SPFX', 'SURN', 'NSFX', '_MARNM_SURN');
+
 	preg_match('/^(?:(\d+) (' . KT_REGEX_TAG . ') ?(.*))/', $tag, $match);
+
 	if ($match) {
-		[$level, $fact, $value] = $match;
+		[, $level, $fact, $value] = $match;
 	}
 
 	// element name : used to POST data
 	if ($level == 0) {
-		if ($upperlevel) $element_name = $upperlevel . "_" . $fact; // ex: BIRT_DATE | DEAT_DATE | ...
-		else $element_name = $fact; // ex: OCCU
-	} else $element_name = "text[]";
-	if ($level == 1) $main_fact = $fact;
+		if ($upperlevel) {
+			$element_name = $upperlevel . "_" . $fact; // ex: BIRT_DATE | DEAT_DATE | ...
+		} else {
+			$element_name = $fact; // ex: OCCU
+		}
+	} else {
+		$element_name = "text[]";
+	}
+
+	if ($level == 1) {
+		$main_fact = $fact;
+	}
 
 	// element id : used by javascript functions
-	if ($level == 0)
+	if ($level == 0) {
 		$element_id = $fact; // ex: NPFX | GIVN ...
-	else
+	} else {
 		$element_id = $fact . (int)(microtime(true)*1000000); // ex: SOUR56402
-	if ($upperlevel)
+	}
+
+	if ($upperlevel) {
 		$element_id = $upperlevel . "_" . $fact . (int)(microtime(true)*1000000); // ex: BIRT_DATE56402 | DEAT_DATE56402 ...
+	}
 
 	// field value
 	$islink = (substr($value, 0, 1) == "@" && substr($value, 0, 2) != "@#");
+
 	if ($islink) {
 		$value = trim(trim(substr($tag, strlen($fact) + 3)), " @\r");
 	} else {
@@ -1409,16 +1426,19 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 		$islink = true; $fact = "SHARED_NOTE";
 	}
 
+	// label
 	if ($fact === 'DATA' || $fact === 'MAP' || ($fact === 'LATI' || $fact === 'LONG') && $value === '') {
 		$style = ' style="display:none;"';
 	} else {
 		$style = '';
 	}
+
 	if ($fact == "SOUR" || ($level > 1 && ($fact == "TEXT" || $fact == "PAGE" || $fact == "OBJE" || $fact == "QUAY" || $fact == "DATE" || $fact == "NOTE"))) {
 		$class = 'sour_facts';
 	} else {
 		$class = '';
 	} ?>
+
 
 	<div id="<?php echo $element_id; ?>_factdiv" class="cell <?php echo $class; ?>" <?php echo $style; ?>>
 		<div class="grid-x">
@@ -2591,8 +2611,9 @@ function create_add_form($fact) {
 * @param string $level0type the type of the level 0 gedcom record
 */
 function create_edit_form($gedrec, $linenum, $level0type) {
-	global $WORD_WRAPPED_NOTES;
+
 	global $pid, $tags, $ADVANCED_PLAC_FACTS, $date_and_time;
+	global $WORD_WRAPPED_NOTES;
 	global $FULL_SOURCES;
 
 	$tags		=array();
@@ -2606,6 +2627,7 @@ function create_edit_form($gedrec, $linenum, $level0type) {
 	$glevel = $fields[0];
 	$level = $glevel;
 
+
 	if ($level != 1 && preg_match("~/@.*/@~i", trim($fields[1]))) {
 		echo "<span class=\"error\">", KT_I18N::translate('An error occurred while creating the Edit form.  Another user may have changed this record since you previously viewed it.'), "<br><br>";
 		echo KT_I18N::translate('Please reload the previous page to make sure you are working with the most recent record.'), "</span>";
@@ -2615,7 +2637,7 @@ function create_edit_form($gedrec, $linenum, $level0type) {
 	$type				= trim($fields[1]);
 	$level1type			= $type;
 	$level1typeLabel	= KT_Gedcom_Tag::getLabel($level1type);
- 	?>
+	?>
 
 	<!-- Sub-heading for edit_interface page -->
 	<h4>
@@ -2625,7 +2647,7 @@ function create_edit_form($gedrec, $linenum, $level0type) {
 	<!-- end heading -->
 
 	<?php
-	if (count($fields)>2) {
+	if (count($fields) > 2) {
 		$ct = preg_match("/@.*@/", $fields[2]);
 		$levellink = $ct > 0;
 	} else {
@@ -2635,29 +2657,34 @@ function create_edit_form($gedrec, $linenum, $level0type) {
 	$inSource		= false;
 	$levelSource	= 0;
 	$add_date		= true;
+
 	// List of tags we would expect at the next level
 	// NB insert_missing_subtags() already takes care of the simple cases
 	// where a level 1 tag is missing a level 2 tag.  Here we only need to
 	// handle the more complicated cases.
 	$expected_subtags = array(
-		'SOUR'=>array('PAGE', 'DATA', 'OBJE'),
-		'DATA'=>array('TEXT'),
-		'PLAC'=>array('MAP'),
-		'MAP' =>array('LATI', 'LONG')
+		'SOUR' => array('PAGE', 'DATA', 'OBJE'),
+		'DATA' => array('TEXT'),
+		'PLAC' => array('MAP'),
+		'MAP'  => array('LATI', 'LONG')
 	);
+
 	if ($FULL_SOURCES) {
 		$expected_subtags['SOUR'][] = 'QUAY';
 		$expected_subtags['DATA'][] = 'DATE';
 	}
+
 	if (preg_match_all('/('.KT_REGEX_TAG.')/', $ADVANCED_PLAC_FACTS, $match)) {
 		$expected_subtags['PLAC'] = array_merge($match[1], $expected_subtags['PLAC']);
 	}
 
-	$stack = array(0=>$level0type);
+	$stack = array(0 => $level0type);
+
 	// Loop on existing tags :
 	while (true) {
 		// Keep track of our hierarchy, e.g. 1=>BIRT, 2=>PLAC, 3=>FONE
 		$stack[(int)$level] = $type;
+
 		// Merge them together, e.g. BIRT:PLAC:FONE
 		$label = implode(':', array_slice($stack, 1, $level));
 
@@ -2666,23 +2693,26 @@ function create_edit_form($gedrec, $linenum, $level0type) {
 			if ($j > 2) $text .= ' ';
 			$text .= $fields[$j];
 		}
+
 		$text = rtrim($text);
-		while (($i + 1 < count($gedlines)) && (preg_match("/".($level+1) . " CONT ?(.*)/", $gedlines[$i+1], $cmatch)>0)) {
+
+		while (($i + 1 < count($gedlines)) && (preg_match("/" . ($level + 1) . " CONT ?(.*)/", $gedlines[$i + 1], $cmatch) > 0)) {
 			$text .= "\n" . $cmatch[1];
 			$i++;
 		}
 
 		if ($type == "SOUR") {
-			$inSource = true;
-			$levelSource = $level;
+			$inSource 		= true;
+			$levelSource	= $level;
 		} elseif ($levelSource >= $level) {
-			$inSource = false;
+			$inSource 		= false;
 		}
 
 		if ($type != "DATA" && $type != "CONT") {
 			$tags[]		= $type;
 			$person		= KT_Person::getInstance($pid);
 			$subrecord	= $level . ' ' . $type . ' ' . $text;
+
 			if ($inSource && $type === "DATE") {
 				add_simple_tag($subrecord, '', KT_Gedcom_Tag::getLabel($label, $person));
 			} elseif (!$inSource && $type === "DATE") {
@@ -2699,6 +2729,7 @@ function create_edit_form($gedrec, $linenum, $level0type) {
 			} else {
 				add_simple_tag($subrecord, $level0type, KT_Gedcom_Tag::getLabel($label, $person));
 			}
+
 		}
 
 		// Get a list of tags present at the next level
@@ -2749,6 +2780,7 @@ function create_edit_form($gedrec, $linenum, $level0type) {
 	if ($level1type != '_PRIM') {
 		insert_missing_subtags($level1type, $add_date);
 	}
+
 	return $level1type;
 }
 
