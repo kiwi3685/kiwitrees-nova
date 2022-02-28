@@ -9423,6 +9423,32 @@ div[id$=-page] button[type=submit] {
 #family-page #children .compact_box_template {
 	min-width: 10rem;
 }
+#family-page .empty_parent {
+	background-color: #fffff4;
+	border-width: 0.125rem;
+	border-style: solid;
+	font-size: 1rem;
+	height: 5rem;
+	overflow: hidden;
+	padding: 0.125rem !important;
+	width: auto;
+	min-width: 15rem;
+}
+#family-page .empty_parent i.icon-silhouette-M,
+#family-page .empty_parent i.icon-silhouette-F,
+#family-page .empty_parent i.icon-silhouette-U {
+	height: 2.5rem;
+	vertical-align: top;
+}
+#family-page .empty_parent.M {
+	border-color: #0193b7;
+}
+#family-page .empty_parent.F {
+	border-color: #e09798;
+}
+#family-page .empty_parent.U {
+	border-color: #8a8a8a;
+}
 
 #ancestry-page .chart ul {
 	list-style: none;

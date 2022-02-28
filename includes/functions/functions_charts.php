@@ -728,9 +728,9 @@ function print_parents($famid, $personcount = 1) {
 						</div>
 					<?php } else { ?>
 						<div class="cell medium-6 fam_parent">
-						  	<div class="person_box empty_parent">
+						  	<div class="empty_parent M">
 						 		<a href="#" onclick="return addnewparentfamily(\'<?php echo $husb_mother; ?>\', \'HUSB\', \'<?php echo $upfamid; ?>\');">
-									<i class="icon-silhouette-M small"></i>
+									<i class="icon-silhouette-M"></i>
 									<span><?php echo KT_I18N::translate('Add new'); ?></span>
 								</a>
 						  	</div>
@@ -743,9 +743,9 @@ function print_parents($famid, $personcount = 1) {
 						</div>
 					<?php } else { ?>
 						<div class="cell medium-6 fam_parent">
-						  	<div class="person_box empty_parent">
+						  	<div class="empty_parent F">
 						 		<a href="#" onclick="return addnewparentfamily(\'<?php echo $husb_father; ?>\', \'WIFE\', \'<?php echo $upfamid; ?>\');">
-									<i class="icon-silhouette-F small"></i>
+									<i class="icon-silhouette-F"></i>
 									<span><?php echo KT_I18N::translate('Add new'); ?></span>
 								</a>
 						  	</div>
@@ -763,20 +763,21 @@ function print_parents($famid, $personcount = 1) {
 				</div>
 			</div>
 		<?php } else { ?>
-			<div class="cell medium-4" id="husb_parents">
+			<div class="cell medium-4 medium-offset-2" id="husb_parents">
 				<div class="grid-x grid-margin-x">
-					<div class="fam_parent">
-					  	<div class="person_box empty_parent">
+					<div class="cell" style="height:2.625rem;"></div>
+					<div class="cell medium-6 fam_parent">
+					  	<div class="empty_parent M">
 					 		<a href="#" onclick="return addnewparentfamily(\'<?php echo $husb->getXref(); ?>\', \'HUSB\', \'new\');">
-								<i class="icon-silhouette-M small"></i>
+								<i class="icon-silhouette-M"></i>
 								<span><?php echo KT_I18N::translate('Add new'); ?></span>
 							</a>
 					  	</div>
 					</div>
-					<div class="fam_parent">
-					  	<div class="person_box empty_parent">
+					<div class="cell medium-6 fam_parent">
+					  	<div class="empty_parent F">
 					 		<a href="#" onclick="return addnewparentfamily(\'<?php echo $husb->getXref(); ?>\', \'WIFE\', \'new\');">
-								<i class="icon-silhouette-F small"></i>
+								<i class="icon-silhouette-F"></i>
 								<span><?php echo KT_I18N::translate('Add new'); ?></span>
 							</a>
 					  	</div>
@@ -814,9 +815,9 @@ function print_parents($famid, $personcount = 1) {
 						</div>
 					<?php } else { ?>
 						<div class="cell medium-6 fam_parent">
-						  	<div class="person_box empty_parent">
+						  	<div class="empty_parent M">
 						 		<a href="#" onclick="return addnewparentfamily(\'<?php echo $wife_father; ?>\', \'HUSB\', \'<?php echo $upfamid; ?>\');">
-									<i class="icon-silhouette-M small"></i>
+									<i class="icon-silhouette-M"></i>
 									<span><?php echo KT_I18N::translate('Add new'); ?></span>
 								</a>
 						  	</div>
@@ -829,9 +830,9 @@ function print_parents($famid, $personcount = 1) {
 						</div>
 					<?php } else { ?>
 						<div class="cell medium-6 fam_parent">
-						  	<div class="person_box empty_parent">
+						  	<div class="empty_parent F">
 						 		<a href="#" onclick="return addnewparentfamily(\'<?php echo $wife_mother; ?>\', \'WIFE\', \'<?php echo $upfamid; ?>\');">
-									<i class="icon-silhouette-F small"></i>
+									<i class="icon-silhouette-F"></i>
 									<span><?php echo KT_I18N::translate('Add new'); ?></span>
 								</a>
 						  	</div>
@@ -849,20 +850,21 @@ function print_parents($famid, $personcount = 1) {
 				</div>
 			</div>
 		<?php } else { ?>
-			<div class="cell medium-5 medium-offset-1" id="wife_parents">
-				<div class="grid-x">
-					<div class="fam_parent">
-					  	<div class="person_box empty_parent">
+			<div class="cell medium-4" id="wife_parents">
+				<div class="grid-x grid-margin-x">
+					<div class="cell" style="height:2.625rem;"></div>
+					<div class="cell medium-6 fam_parent">
+					  	<div class="empty_parent M">
 					 		<a href="#" onclick="return addnewparentfamily(\'<?php echo $wife->getXref(); ?>\', \'HUSB\', \'new\');">
-								<i class="icon-silhouette-M small"></i>
+								<i class="icon-silhouette-M"></i>
 								<span><?php echo KT_I18N::translate('Add new'); ?></span>
 							</a>
 					  	</div>
 					</div>
-					<div class="fam_parent">
-					  	<div class="person_box empty_parent">
+					<div class="cell medium-6 fam_parent">
+					  	<div class="empty_parent F">
 					 		<a href="#" onclick="return addnewparentfamily(\'<?php echo $wife->getXref(); ?>\', \'WIFE\', \'new\');">
-								<i class="icon-silhouette-F small"></i>
+								<i class="icon-silhouette-F"></i>
 								<span><?php echo KT_I18N::translate('Add new'); ?></span>
 							</a>
 					  	</div>
@@ -893,9 +895,9 @@ function print_parents($famid, $personcount = 1) {
 					</div>
 				<?php } else { ?>
 					<div class="cell medium-6 parent_husb">
-						<div class="person_box empty_parent">
+						<div class="empty_parent M">
 							<a href="#" onclick="return addnewparentfamily(\'\', \'HUSB\', \'<?php echo $controller->record->getXref(); ?>\');">
-								<i class="icon-silhouette-M small"></i>
+								<i class="icon-silhouette-M"></i>
 								<span><?php echo KT_I18N::translate('Add new'); ?></span>
 							</a>
 						</div>
@@ -912,9 +914,9 @@ function print_parents($famid, $personcount = 1) {
 					</div>
 				<?php } else { ?>
 					<div class="cell medium-6 parent_wife">
-						<div class="person_boxF empty_parent">
+						<div class="empty_parent F">
 							<a href="#" onclick="return addnewparentfamily(\'\', \'WIFE\', \'<?php echo $controller->record->getXref(); ?>\');">
-								<i class="icon-silhouette-F small"></i>
+								<i class="icon-silhouette-F"></i>
 								<span><?php echo KT_I18N::translate('Add new'); ?></span>
 							</a>
 						</div>
