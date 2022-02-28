@@ -8685,6 +8685,11 @@ button .svg-inline--fa {
 	display: none;
 }
 
+.search_hit {
+	background-color: #fff000;
+	padding: 0.1em 0.2em;
+}
+
 .lang-active {
 	background-color: #e0e0e0;
 	color: #3adb76;
