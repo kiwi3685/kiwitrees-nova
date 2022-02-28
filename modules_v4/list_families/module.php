@@ -196,6 +196,7 @@ class list_families_KT_Module extends KT_Module implements KT_Module_List {
 		<div id="famlist-page" class="grid-x grid-padding-x">
 			<div class="cell large-10 large-offset-1">
 				<h3><?php echo KT_I18N::translate('Families') . $surnameheader; ?></h3>
+
 				<?php
 				// Print a selection list of initial letters
 				$list = array();

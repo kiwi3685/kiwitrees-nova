@@ -195,6 +195,7 @@ class list_individuals_KT_Module extends KT_Module implements KT_Module_List {
 		<div id="indilist-page" class="grid-x grid-padding-x">
 			<div class="cell large-10 large-offset-1">
 				<h3><?php echo $controller->getPageTitle(); ?></h3>
+
 				<?php
 				// Print a selection list of initial letters
 				$list = array();
