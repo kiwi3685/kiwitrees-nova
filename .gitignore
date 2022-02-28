@@ -10,6 +10,7 @@ npm-debug.log
 /node_modules
 package.json
 prepros.config
+Developer aids.txt
 
 /data/cache/
 /data/media/
