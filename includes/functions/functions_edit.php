@@ -1722,7 +1722,7 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 						}
 
 						if (strpos($extra_markup, 'data-autocomplete-type')) { ?>
-							<div class="input-group autocomplete_container">
+							<div class="input-group autocomplete_container XXX">
 								<input
 									type="text"
 									id="autocompleteInput-<?php echo $element_id; ?>"
@@ -2637,14 +2637,15 @@ function create_edit_form($gedrec, $linenum, $level0type) {
 	$type				= trim($fields[1]);
 	$level1type			= $type;
 	$level1typeLabel	= KT_Gedcom_Tag::getLabel($level1type);
-	?>
 
-	<!-- Sub-heading for edit_interface page -->
-	<h4>
-		<?php echo KT_I18N::translate('Editing %s data', $level1typeLabel); ?>
-	</h4>
-	<hr>
-	<!-- end heading -->
+	if (!in_array($level0type, array('REPO', 'SOUR'))) { ?>
+		<!-- Sub-heading for edit_interface page -->
+		<h4>
+			<?php echo KT_I18N::translate('Editing %s data', $level1typeLabel); ?>
+		</h4>
+		<hr>
+		<!-- end heading -->
+	<?php } ?>
 
 	<?php
 	if (count($fields) > 2) {
@@ -2940,8 +2941,8 @@ function no_update_chan(KT_GedcomRecord $record = null) {
 			<div class="grid-x">
 				<div class="cell medium-3">
 					<label>
-						<?php echo KT_Gedcom_Tag::getLabel('CHAN');
-						if ($record) { ?>
+						<span class="h5"><?php echo KT_Gedcom_Tag::getLabel('CHAN'); ?></span>
+						<?php if ($record) { ?>
 							<h6 class="subheader"><?php echo KT_Gedcom_Tag::getLabelValue('DATE', $record->LastChangeTimestamp()); ?></h6>
 							<h6 class="subheader"><?php echo KT_Gedcom_Tag::getLabelValue('_KT_USER', $record->LastChangeUser()); ?></h6>
 						<?php } ?>
@@ -2974,18 +2975,20 @@ function no_update_chan(KT_GedcomRecord $record = null) {
  * @return string[]
  */
 
-function editSubmitButtons() {
+function submitButtons() {
 	global $iconStyle;
 
 	$buttonHtml = '
-		<button class="button secondary" type="submit" onclick="window.close();">
-			<i class="' . $iconStyle . ' fa-times"></i>'
-			 . KT_I18N::translate('Cancel') .
-		'</button>
-		<button class="button" type="submit">
-			<i class="' . $iconStyle . ' fa-save"></i>'
-			 . KT_I18N::translate('Save') .
-		'</button>
+		<div class="cell align-justify button-group">
+			<button class="button secondary" type="submit" onclick="window.close();">
+				<i class="' . $iconStyle . ' fa-times"></i>'
+				 . KT_I18N::translate('Cancel') .
+			'</button>
+			<button class="button primary" type="submit">
+				<i class="' . $iconStyle . ' fa-save"></i>'
+				 . KT_I18N::translate('Save') .
+			'</button>
+		</div>
 	';
 
 	return $buttonHtml;

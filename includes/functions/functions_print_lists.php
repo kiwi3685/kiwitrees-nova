@@ -38,7 +38,6 @@ function format_indi_table($datalist, $option='') {
 
 	$SHOW_EST_LIST_DATES = get_gedcom_setting(KT_GED_ID, 'SHOW_EST_LIST_DATES');
 	if ($option == 'MARR_PLAC') return;
-	$html = '';
 
 	$controller
 		->addExternalJavascript(KT_DATATABLES_JS)
@@ -53,6 +52,8 @@ function format_indi_table($datalist, $option='') {
 	} else {
 		$buttons = '';
 	}
+
+	$html = '';
 
 	$controller
 		->addInlineJavascript('
@@ -1189,7 +1190,6 @@ function format_sour_table($datalist) {
 		"SELECT CONCAT(l_to, '@', l_file), COUNT(*) FROM `##other` JOIN `##link` ON l_from = o_id AND l_file = o_file AND o_type = 'NOTE' AND l_type = 'SOUR' GROUP BY l_to, l_file"
 	)->fetchAssoc();
 
-	$html = '';
 
 	if (KT_SCRIPT_NAME == 'search.php') {
 		$table_id = 'ID' . (int)(microtime(true)*1000000); // lists requires a unique ID in case there are multiple lists per page
@@ -1197,14 +1197,23 @@ function format_sour_table($datalist) {
 		$table_id = 'sourTable';
 	}
 
+	$controller
+		->addExternalJavascript(KT_DATATABLES_JS)
+		->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
+	;
+
 	if (KT_USER_CAN_EDIT) {
+		$controller
+			->addExternalJavascript(KT_DATATABLES_BUTTONS)
+			->addExternalJavascript(KT_DATATABLES_HTML5);
 		$buttons = 'B';
 	} else {
 		$buttons = '';
 	}
 
+	$html = '';
+
 	$controller
-		->addExternalJavascript(KT_DATATABLES_JS)
 		->addInlineJavascript('
 			jQuery.fn.dataTableExt.oSort["unicode-asc" ]=function(a,b) {return a.replace(/<[^<]*>/, "").localeCompare(b.replace(/<[^<]*>/, ""))};
 			jQuery.fn.dataTableExt.oSort["unicode-desc"]=function(a,b) {return b.replace(/<[^<]*>/, "").localeCompare(a.replace(/<[^<]*>/, ""))};
@@ -1218,6 +1227,11 @@ function format_sour_table($datalist) {
 				displayLength: 20,
 				pagingType: "full_numbers",
 				stateSave: true,
+				stateSaveParams: function (settings, data) {
+					data.columns.forEach(function(column) {
+						delete column.search;
+					});
+				},
 				stateDuration: -1,
 				columns: [
 					/*  0 title     */ { dataSort: 1 },
@@ -1240,124 +1254,131 @@ function format_sour_table($datalist) {
 		   jQuery(".loading-image").css("display", "none");
 		');
 
-	$html .= '<div class="cell text-center loading-image"><i class="' . $iconStyle . ' fa-spinner fa-spin fa-3x"></i><span class="sr-only">Loading...</span></div>
-	<table id="' . $table_id . '" style="visibility: hidden;">
-		<thead>
-			<tr>
-				<th>' . KT_Gedcom_Tag::getLabel('TITL') . '</th>
-				<th>TITL</th>
-				<th>' . KT_Gedcom_Tag::getLabel('AUTH') . '</th>
-				<th>' . KT_I18N::translate('Individuals') . '</th>
-				<th>#INDI</th>
-				<th>' . KT_I18N::translate('Families') . '</th>
-				<th>#FAM</th>
-				<th>' . KT_I18N::translate('Media objects') . '</th>
-				<th>#OBJE</th>
-				<th>' . KT_I18N::translate('Shared notes') . '</th>
-				<th>#NOTE</th>
-				<th>'. KT_Gedcom_Tag::getLabel('CHAN') . '</th>
-				<th>CHAN</th>
-				<th class="delete_src" style="' . (KT_USER_GEDCOM_ADMIN ? '' : 'display: none;') . '">
-					<input
-						type="button"
-						value = "' . KT_I18N::translate('Delete'). '"
-						class="button tiny"
-						onclick="if (confirm(\'' . htmlspecialchars(KT_I18N::translate('Permanently delete these records?')) . '\')) {return checkbox_delete(\'sources\');} else {return false;}"
-						>
-					<input type="checkbox" onclick="toggle_select(this)" style="vertical-align:middle;">
-				</th>
-			</tr>
-		</thead>
-		<tbody>';
-			$n = 0;
-			foreach ($datalist as $key => $value) {
-				if (is_object($value)) { // Array of objects
-					$source = $value;
-				} elseif (!is_array($value)) { // Array of IDs
-					$source = KT_Source::getInstance($key); // from placelist
-					if (is_null($source)) {
-						$source = KT_Source::getInstance($value);
-					}
-					unset($value);
-				} else { // Array of search results
-					$gid = '';
-					if (isset($value['gid'])) {
-						$gid = $value['gid'];
-					}
-					if (isset($value['gedcom'])) {
-						$source = new KT_Source($value['gedcom']);
-					} else {
-						$source = KT_Source::getInstance($gid);
-					}
-				}
-				if (!$source || !$source->canDisplayDetails()) {
-					continue;
-				}
-				$html .= '<tr>';
-					//-- Source name(s)
-					$html .= '<td>';
-						foreach ($source->getAllNames() as $n => $name) {
-							if ($n) {
-								$html .= '<br>';
+	//--table wrapper
+	$html .= '
+		<div class="cell text-center loading-image">
+			<i class="' . $iconStyle . ' fa-spinner fa-spin fa-3x"></i>
+			<span class="sr-only">Loading...</span>
+		</div>
+		<div class="sour-list">
+			<table id="' . $table_id . '" style="visibility: hidden;">
+				<thead>
+					<tr>
+						<th>' . KT_Gedcom_Tag::getLabel('TITL') . '</th>
+						<th>TITL</th>
+						<th>' . KT_Gedcom_Tag::getLabel('AUTH') . '</th>
+						<th>' . KT_I18N::translate('Individuals') . '</th>
+						<th>#INDI</th>
+						<th>' . KT_I18N::translate('Families') . '</th>
+						<th>#FAM</th>
+						<th>' . KT_I18N::translate('Media objects') . '</th>
+						<th>#OBJE</th>
+						<th>' . KT_I18N::translate('Shared notes') . '</th>
+						<th>#NOTE</th>
+						<th>'. KT_Gedcom_Tag::getLabel('CHAN') . '</th>
+						<th>CHAN</th>
+						<th class="delete_src" style="' . (KT_USER_GEDCOM_ADMIN ? '' : 'display: none;') . '">
+							<input
+								type="button"
+								value = "' . KT_I18N::translate('Delete'). '"
+								class="button tiny"
+								onclick="if (confirm(\'' . htmlspecialchars(KT_I18N::translate('Permanently delete these records?')) . '\')) {return checkbox_delete(\'sources\');} else {return false;}"
+								>
+							<input type="checkbox" onclick="toggle_select(this)" style="vertical-align:middle;">
+						</th>
+					</tr>
+				</thead>
+				<tbody>';
+					$n = 0;
+					foreach ($datalist as $key => $value) {
+						if (is_object($value)) { // Array of objects
+							$source = $value;
+						} elseif (!is_array($value)) { // Array of IDs
+							$source = KT_Source::getInstance($key); // from placelist
+							if (is_null($source)) {
+								$source = KT_Source::getInstance($value);
 							}
-							if ($n == $source->getPrimaryName()) {
-								$html .= '<a class="name2" href="' . $source->getHtmlUrl() . '">' . highlight_search_hits($name['full']) . '</a>';
+							unset($value);
+						} else { // Array of search results
+							$gid = '';
+							if (isset($value['gid'])) {
+								$gid = $value['gid'];
+							}
+							if (isset($value['gedcom'])) {
+								$source = new KT_Source($value['gedcom']);
 							} else {
-								$html .= '<a href="' . $source->getHtmlUrl() . '">' . highlight_search_hits($name['full']) . '</a>';
+								$source = KT_Source::getInstance($gid);
 							}
 						}
-					$html .= '</td>';
-					// Sortable name
-					$html .= '<td>' . strip_tags($source->getFullName()) . '</td>';
-					$key = $source->getXref() . '@' . KT_GED_ID;
-					//-- Author
-					$html .= '<td>' . highlight_search_hits(htmlspecialchars($source->getAuth())) . '</td>';
-						//-- Linked INDIs
-						$num = array_key_exists($key, $count_individuals) ? $count_individuals[$key] : 0;
-					$html .= '
-						<td>' . KT_I18N::number($num) . '</td>
-						<td>'. $num . '</td>
-					';
-					//-- Linked FAMs
-					$num = array_key_exists($key, $count_families) ? $count_families[$key] : 0;
-					$html .= '
-						<td>' . KT_I18N::number($num) . '</td>
-						<td>'. $num . '</td>
-					';
-					//-- Linked OBJEcts
-					$num = array_key_exists($key, $count_media) ? $count_media[$key] : 0;
-					$html .= '
-						<td>' . KT_I18N::number($num) . '</td>
-						<td>'. $num . '</td>
-					';
-					//-- Linked NOTEs
-					$num = array_key_exists($key, $count_notes) ? $count_notes[$key] : 0;
-					$html .= '
-						<td>' . KT_I18N::number($num) . '</td>
-						<td>'. $num . '</td>
-					';
-					//-- Last change
-					if ($SHOW_LAST_CHANGE) {
-						$html .= '<td>' . $source->LastChangeTimestamp() . '</td>';
-					} else {
-						$html .= '<td>&nbsp;</td>';
+						if (!$source || !$source->canDisplayDetails()) {
+							continue;
+						}
+						$html .= '<tr>';
+							//-- Source name(s)
+							$html .= '<td>';
+								foreach ($source->getAllNames() as $n => $name) {
+									if ($n) {
+										$html .= '<br>';
+									}
+									if ($n == $source->getPrimaryName()) {
+										$html .= '<a class="name2" href="' . $source->getHtmlUrl() . '">' . highlight_search_hits($name['full']) . '</a>';
+									} else {
+										$html .= '<a href="' . $source->getHtmlUrl() . '">' . highlight_search_hits($name['full']) . '</a>';
+									}
+								}
+							$html .= '</td>';
+							// Sortable name
+							$html .= '<td>' . strip_tags($source->getFullName()) . '</td>';
+							$key = $source->getXref() . '@' . KT_GED_ID;
+							//-- Author
+							$html .= '<td>' . highlight_search_hits(htmlspecialchars($source->getAuth())) . '</td>';
+								//-- Linked INDIs
+								$num = array_key_exists($key, $count_individuals) ? $count_individuals[$key] : 0;
+							$html .= '
+								<td>' . KT_I18N::number($num) . '</td>
+								<td>'. $num . '</td>
+							';
+							//-- Linked FAMs
+							$num = array_key_exists($key, $count_families) ? $count_families[$key] : 0;
+							$html .= '
+								<td>' . KT_I18N::number($num) . '</td>
+								<td>'. $num . '</td>
+							';
+							//-- Linked OBJEcts
+							$num = array_key_exists($key, $count_media) ? $count_media[$key] : 0;
+							$html .= '
+								<td>' . KT_I18N::number($num) . '</td>
+								<td>'. $num . '</td>
+							';
+							//-- Linked NOTEs
+							$num = array_key_exists($key, $count_notes) ? $count_notes[$key] : 0;
+							$html .= '
+								<td>' . KT_I18N::number($num) . '</td>
+								<td>'. $num . '</td>
+							';
+							//-- Last change
+							if ($SHOW_LAST_CHANGE) {
+								$html .= '<td>' . $source->LastChangeTimestamp() . '</td>';
+							} else {
+								$html .= '<td>&nbsp;</td>';
+							}
+							//-- Last change hidden sort column
+							if ($SHOW_LAST_CHANGE) {
+								$html .= '<td>' . $source->LastChangeTimestamp(true) . '</td>';
+							} else {
+								$html .= '<td>&nbsp;</td>';
+							}
+							//-- Select & delete
+							$html .= '<td style="' . (KT_USER_GEDCOM_ADMIN ? '' : 'display: none;') . '">
+								<div class="delete_src">
+									<input type="checkbox" name="del_places[]" class="check" value="' . $source->getXref() . '" title="' . KT_I18N::translate('Delete') . '">'.
+								'</div>
+							</td>
+						</tr>';
 					}
-					//-- Last change hidden sort column
-					if ($SHOW_LAST_CHANGE) {
-						$html .= '<td>' . $source->LastChangeTimestamp(true) . '</td>';
-					} else {
-						$html .= '<td>&nbsp;</td>';
-					}
-					//-- Select & delete
-					$html .= '<td style="' . (KT_USER_GEDCOM_ADMIN ? '' : 'display: none;') . '">
-						<div class="delete_src">
-							<input type="checkbox" name="del_places[]" class="check" value="' . $source->getXref() . '" title="' . KT_I18N::translate('Delete') . '">'.
-						'</div>
-					</td>
-				</tr>';
-			}
-			$html .= '</tbody>
-		</table>';
+					$html .= '</tbody>
+				</table>
+			</div>';
 
 	return $html;
 }
@@ -1550,22 +1571,29 @@ function format_repo_table($repos) {
 		"SELECT CONCAT(l_to, '@', l_file), COUNT(*) FROM `##sources` JOIN `##link` ON l_from = s_id AND l_file = s_file AND l_type = 'REPO' GROUP BY l_to, l_file"
 	)->fetchAssoc();
 
-	$html = '';
-
 	if (KT_SCRIPT_NAME == 'search.php') {
 		$table_id = 'ID'.(int)(microtime(true)*1000000); // lists requires a unique ID in case there are multiple lists per page
 	} else {
 		$table_id = 'repoTable';
 	}
 
+	$controller
+		->addExternalJavascript(KT_DATATABLES_JS)
+		->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
+	;
+
 	if (KT_USER_CAN_EDIT) {
+		$controller
+			->addExternalJavascript(KT_DATATABLES_BUTTONS)
+			->addExternalJavascript(KT_DATATABLES_HTML5);
 		$buttons = 'B';
 	} else {
 		$buttons = '';
 	}
 
+	$html = '';
+
 	$controller
-		->addExternalJavascript(KT_DATATABLES_JS)
 		->addInlineJavascript('
 			jQuery.fn.dataTableExt.oSort["unicode-asc" ]=function(a,b) {return a.replace(/<[^<]*>/, "").localeCompare(b.replace(/<[^<]*>/, ""))};
 			jQuery.fn.dataTableExt.oSort["unicode-desc"]=function(a,b) {return b.replace(/<[^<]*>/, "").localeCompare(a.replace(/<[^<]*>/, ""))};
@@ -1579,6 +1607,11 @@ function format_repo_table($repos) {
 				displayLength: 20,
 				pagingType: "full_numbers",
 				stateSave: true,
+				stateSaveParams: function (settings, data) {
+					data.columns.forEach(function(column) {
+						delete column.search;
+					});
+				},
 				stateDuration: -1,
 				columns: [
 					/* 0 name      */ { type: "unicode" },
@@ -1589,13 +1622,16 @@ function format_repo_table($repos) {
 					/* 5 DELETE    */ { visible: ' . (KT_USER_GEDCOM_ADMIN?'true':'false') . ', sortable: false, class: "text-center" }
 				]
 			});
-			jQuery(".repo-list").css("visibility", "visible");
+			jQuery("#' . $table_id . '").css("visibility", "visible");
 			jQuery(".loading-image").css("display", "none");
 		');
 
 	//--table wrapper
 	$html .= '
-		<div class="loading-image">&nbsp;</div>
+		<div class="cell text-center loading-image">
+			<i class="' . $iconStyle . ' fa-spinner fa-spin fa-3x"></i>
+			<span class="sr-only">Loading...</span>
+		</div>
 		<div class="repo-list">
 			<table id="' . $table_id . '">
 				<thead>

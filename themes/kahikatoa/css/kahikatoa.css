@@ -8580,7 +8580,7 @@ html.is-reveal-open body {
 /* From jquery-ui.css */
 .input-group.autocomplete_container {
 	position: relative;
-	margin: 0;
+	margin: 0 0 -1rem 0;
 	padding: 0;
 }
 .input-group.autocomplete_container .ui-autocomplete-input {
@@ -8596,6 +8596,10 @@ html.is-reveal-open body {
 }
 .input-group.autocomplete_container .input-group-label .svg-inline--fa:hover {
 	color: #ab3334;
+}
+
+div [id$=_description] {
+	margin-bottom: 1rem;
 }
 
 .ui-autocomplete {
@@ -9684,8 +9688,9 @@ div[id$=-page] button[type=submit] {
 #edit_interface-page .popup_links a .svg-inline--fa:hover {
 	color: #ab3334;
 }
-#edit_interface-page .fdatepicker .input-group-label {
+#edit_interface-page .fdatepicker .input-group {
 	height: 2.4rem;
+	margin-bottom: 0;
 }
 #edit_interface-page .fdatepicker .input-group-label .svg-inline--fa {
 	cursor: pointer;
@@ -9927,72 +9932,6 @@ div[id$=-page] button[type=submit] {
 	text-align: center;
 }
 
-#indilist-page .dataTables_wrapper .dataTable thead tr th.indiListGivn,
-#indilist-page .dataTables_wrapper .dataTable thead tr th.famListGivn,
-#famlist-page .dataTables_wrapper .dataTable thead tr th.indiListGivn,
-#famlist-page .dataTables_wrapper .dataTable thead tr th.famListGivn,
-#statistics_tables-page .dataTables_wrapper .dataTable thead tr th.indiListGivn,
-#statistics_tables-page .dataTables_wrapper .dataTable thead tr th.famListGivn,
-#placelist-page .dataTables_wrapper .dataTable thead tr th.indiListGivn,
-#placelist-page .dataTables_wrapper .dataTable thead tr th.famListGivn,
-#ancestry-page .dataTables_wrapper .dataTable thead tr th.indiListGivn,
-#ancestry-page .dataTables_wrapper .dataTable thead tr th.famListGivn,
-#descendancy-page .dataTables_wrapper .dataTable thead tr th.indiListGivn,
-#descendancy-page .dataTables_wrapper .dataTable thead tr th.famListGivn {
-	min-width: 7rem;
-}
-#indilist-page .dataTables_wrapper .dataTable thead tr th.indiListSurn,
-#indilist-page .dataTables_wrapper .dataTable thead tr th.famListSurn,
-#famlist-page .dataTables_wrapper .dataTable thead tr th.indiListSurn,
-#famlist-page .dataTables_wrapper .dataTable thead tr th.famListSurn,
-#statistics_tables-page .dataTables_wrapper .dataTable thead tr th.indiListSurn,
-#statistics_tables-page .dataTables_wrapper .dataTable thead tr th.famListSurn,
-#placelist-page .dataTables_wrapper .dataTable thead tr th.indiListSurn,
-#placelist-page .dataTables_wrapper .dataTable thead tr th.famListSurn,
-#ancestry-page .dataTables_wrapper .dataTable thead tr th.indiListSurn,
-#ancestry-page .dataTables_wrapper .dataTable thead tr th.famListSurn,
-#descendancy-page .dataTables_wrapper .dataTable thead tr th.indiListSurn,
-#descendancy-page .dataTables_wrapper .dataTable thead tr th.famListSurn {
-	min-width: 5rem;
-}
-#indilist-page .dataTables_wrapper .dataTable thead tr th.indiListDate,
-#indilist-page .dataTables_wrapper .dataTable thead tr th.famListDate,
-#famlist-page .dataTables_wrapper .dataTable thead tr th.indiListDate,
-#famlist-page .dataTables_wrapper .dataTable thead tr th.famListDate,
-#statistics_tables-page .dataTables_wrapper .dataTable thead tr th.indiListDate,
-#statistics_tables-page .dataTables_wrapper .dataTable thead tr th.famListDate,
-#placelist-page .dataTables_wrapper .dataTable thead tr th.indiListDate,
-#placelist-page .dataTables_wrapper .dataTable thead tr th.famListDate,
-#ancestry-page .dataTables_wrapper .dataTable thead tr th.indiListDate,
-#ancestry-page .dataTables_wrapper .dataTable thead tr th.famListDate,
-#descendancy-page .dataTables_wrapper .dataTable thead tr th.indiListDate,
-#descendancy-page .dataTables_wrapper .dataTable thead tr th.famListDate {
-	width: 11rem;
-}
-#indilist-page .dataTables_wrapper .dataTable thead tr th.indiListAnniv,
-#indilist-page .dataTables_wrapper .dataTable thead tr th.famListAnniv,
-#famlist-page .dataTables_wrapper .dataTable thead tr th.indiListAnniv,
-#famlist-page .dataTables_wrapper .dataTable thead tr th.famListAnniv,
-#statistics_tables-page .dataTables_wrapper .dataTable thead tr th.indiListAnniv,
-#statistics_tables-page .dataTables_wrapper .dataTable thead tr th.famListAnniv,
-#placelist-page .dataTables_wrapper .dataTable thead tr th.indiListAnniv,
-#placelist-page .dataTables_wrapper .dataTable thead tr th.famListAnniv,
-#ancestry-page .dataTables_wrapper .dataTable thead tr th.indiListAnniv,
-#ancestry-page .dataTables_wrapper .dataTable thead tr th.famListAnniv,
-#descendancy-page .dataTables_wrapper .dataTable thead tr th.indiListAnniv,
-#descendancy-page .dataTables_wrapper .dataTable thead tr th.famListAnniv {
-	min-width: 3.5rem;
-}
-#indilist-page .dataTables_wrapper .dataTable tbody,
-#famlist-page .dataTables_wrapper .dataTable tbody,
-#statistics_tables-page .dataTables_wrapper .dataTable tbody,
-#placelist-page .dataTables_wrapper .dataTable tbody,
-#ancestry-page .dataTables_wrapper .dataTable tbody,
-#descendancy-page .dataTables_wrapper .dataTable tbody {
-	border: 0.1rem solid #e0e0e0;
-	background-color: #e0e0e0;
-}
-
 #placelist-page #place-list div.places {
 	background-color: #faf5e8;
 	border: 0.125rem solid #ab3334;
@@ -10012,6 +9951,19 @@ div[id$=-page] button[type=submit] {
 }
 #placelist-page .button-group .button {
 	margin: 0 0.5rem;
+}
+
+#repo-details-page .indiFact,
+#source-details-page .indiFact {
+	border-bottom: 0.0125rem solid #ab3334;
+}
+#repo-details-page .indiFact:last-child,
+#source-details-page .indiFact:last-child {
+	border-bottom: none;
+}
+#repo-details-page .indiFact .fact-title,
+#source-details-page .indiFact .fact-title {
+	padding: 0 0.5rem;
 }
 
 #favoriteslist-page form {
@@ -10044,6 +9996,11 @@ label.radio_inline {
 	display: inline-block !important;
 	font-weight: 400;
 	padding-left: 1.25rem;
+}
+
+div.last_change label {
+	padding-top: 0;
+	margin-bottom: 1rem;
 }
 
 #research_links-page .check-boxes input {
@@ -10513,10 +10470,6 @@ i.icon-silhouette-U.small {
 }
 
 /* Miscellaneous items */
-div.facts .fact-title, div.facts .fact-detail {
-	background: #e0e0e0;
-}
-
 a:focus,
 button:focus {
 	outline: none !important;
@@ -10789,6 +10742,99 @@ div.dataTables_wrapper table.dataTable thead tr th svg {
 div.dataTables_wrapper table.dataTable thead tr th svg.fa-bell, div.dataTables_wrapper table.dataTable thead tr th svg.fa-child {
 	right: auto;
 	left: 0.125rem;
+}
+
+#indilist-page .dataTables_wrapper .dataTable thead tr th.indiListGivn,
+#indilist-page .dataTables_wrapper .dataTable thead tr th.famListGivn,
+#famlist-page .dataTables_wrapper .dataTable thead tr th.indiListGivn,
+#famlist-page .dataTables_wrapper .dataTable thead tr th.famListGivn,
+#repolist-page .dataTables_wrapper .dataTable thead tr th.indiListGivn,
+#repolist-page .dataTables_wrapper .dataTable thead tr th.famListGivn,
+#sourcelist-page .dataTables_wrapper .dataTable thead tr th.indiListGivn,
+#sourcelist-page .dataTables_wrapper .dataTable thead tr th.famListGivn,
+#placelist-page .dataTables_wrapper .dataTable thead tr th.indiListGivn,
+#placelist-page .dataTables_wrapper .dataTable thead tr th.famListGivn,
+#ancestry-page .dataTables_wrapper .dataTable thead tr th.indiListGivn,
+#ancestry-page .dataTables_wrapper .dataTable thead tr th.famListGivn,
+#descendancy-page .dataTables_wrapper .dataTable thead tr th.indiListGivn,
+#descendancy-page .dataTables_wrapper .dataTable thead tr th.famListGivn,
+#source-details-page .dataTables_wrapper .dataTable thead tr th.indiListGivn,
+#source-details-page .dataTables_wrapper .dataTable thead tr th.famListGivn,
+#statistics_tables-page .dataTables_wrapper .dataTable thead tr th.indiListGivn,
+#statistics_tables-page .dataTables_wrapper .dataTable thead tr th.famListGivn {
+	min-width: 7rem;
+}
+#indilist-page .dataTables_wrapper .dataTable thead tr th.indiListSurn,
+#indilist-page .dataTables_wrapper .dataTable thead tr th.famListSurn,
+#famlist-page .dataTables_wrapper .dataTable thead tr th.indiListSurn,
+#famlist-page .dataTables_wrapper .dataTable thead tr th.famListSurn,
+#repolist-page .dataTables_wrapper .dataTable thead tr th.indiListSurn,
+#repolist-page .dataTables_wrapper .dataTable thead tr th.famListSurn,
+#sourcelist-page .dataTables_wrapper .dataTable thead tr th.indiListSurn,
+#sourcelist-page .dataTables_wrapper .dataTable thead tr th.famListSurn,
+#placelist-page .dataTables_wrapper .dataTable thead tr th.indiListSurn,
+#placelist-page .dataTables_wrapper .dataTable thead tr th.famListSurn,
+#ancestry-page .dataTables_wrapper .dataTable thead tr th.indiListSurn,
+#ancestry-page .dataTables_wrapper .dataTable thead tr th.famListSurn,
+#descendancy-page .dataTables_wrapper .dataTable thead tr th.indiListSurn,
+#descendancy-page .dataTables_wrapper .dataTable thead tr th.famListSurn,
+#source-details-page .dataTables_wrapper .dataTable thead tr th.indiListSurn,
+#source-details-page .dataTables_wrapper .dataTable thead tr th.famListSurn,
+#statistics_tables-page .dataTables_wrapper .dataTable thead tr th.indiListSurn,
+#statistics_tables-page .dataTables_wrapper .dataTable thead tr th.famListSurn {
+	min-width: 5rem;
+}
+#indilist-page .dataTables_wrapper .dataTable thead tr th.indiListDate,
+#indilist-page .dataTables_wrapper .dataTable thead tr th.famListDate,
+#famlist-page .dataTables_wrapper .dataTable thead tr th.indiListDate,
+#famlist-page .dataTables_wrapper .dataTable thead tr th.famListDate,
+#repolist-page .dataTables_wrapper .dataTable thead tr th.indiListDate,
+#repolist-page .dataTables_wrapper .dataTable thead tr th.famListDate,
+#sourcelist-page .dataTables_wrapper .dataTable thead tr th.indiListDate,
+#sourcelist-page .dataTables_wrapper .dataTable thead tr th.famListDate,
+#placelist-page .dataTables_wrapper .dataTable thead tr th.indiListDate,
+#placelist-page .dataTables_wrapper .dataTable thead tr th.famListDate,
+#ancestry-page .dataTables_wrapper .dataTable thead tr th.indiListDate,
+#ancestry-page .dataTables_wrapper .dataTable thead tr th.famListDate,
+#descendancy-page .dataTables_wrapper .dataTable thead tr th.indiListDate,
+#descendancy-page .dataTables_wrapper .dataTable thead tr th.famListDate,
+#source-details-page .dataTables_wrapper .dataTable thead tr th.indiListDate,
+#source-details-page .dataTables_wrapper .dataTable thead tr th.famListDate,
+#statistics_tables-page .dataTables_wrapper .dataTable thead tr th.indiListDate,
+#statistics_tables-page .dataTables_wrapper .dataTable thead tr th.famListDate {
+	width: 11rem;
+}
+#indilist-page .dataTables_wrapper .dataTable thead tr th.indiListAnniv,
+#indilist-page .dataTables_wrapper .dataTable thead tr th.famListAnniv,
+#famlist-page .dataTables_wrapper .dataTable thead tr th.indiListAnniv,
+#famlist-page .dataTables_wrapper .dataTable thead tr th.famListAnniv,
+#repolist-page .dataTables_wrapper .dataTable thead tr th.indiListAnniv,
+#repolist-page .dataTables_wrapper .dataTable thead tr th.famListAnniv,
+#sourcelist-page .dataTables_wrapper .dataTable thead tr th.indiListAnniv,
+#sourcelist-page .dataTables_wrapper .dataTable thead tr th.famListAnniv,
+#placelist-page .dataTables_wrapper .dataTable thead tr th.indiListAnniv,
+#placelist-page .dataTables_wrapper .dataTable thead tr th.famListAnniv,
+#ancestry-page .dataTables_wrapper .dataTable thead tr th.indiListAnniv,
+#ancestry-page .dataTables_wrapper .dataTable thead tr th.famListAnniv,
+#descendancy-page .dataTables_wrapper .dataTable thead tr th.indiListAnniv,
+#descendancy-page .dataTables_wrapper .dataTable thead tr th.famListAnniv,
+#source-details-page .dataTables_wrapper .dataTable thead tr th.indiListAnniv,
+#source-details-page .dataTables_wrapper .dataTable thead tr th.famListAnniv,
+#statistics_tables-page .dataTables_wrapper .dataTable thead tr th.indiListAnniv,
+#statistics_tables-page .dataTables_wrapper .dataTable thead tr th.famListAnniv {
+	min-width: 3.5rem;
+}
+#indilist-page .dataTables_wrapper .dataTable tbody,
+#famlist-page .dataTables_wrapper .dataTable tbody,
+#repolist-page .dataTables_wrapper .dataTable tbody,
+#sourcelist-page .dataTables_wrapper .dataTable tbody,
+#placelist-page .dataTables_wrapper .dataTable tbody,
+#ancestry-page .dataTables_wrapper .dataTable tbody,
+#descendancy-page .dataTables_wrapper .dataTable tbody,
+#source-details-page .dataTables_wrapper .dataTable tbody,
+#statistics_tables-page .dataTables_wrapper .dataTable tbody {
+	border: 0.1rem solid #e0e0e0;
+	background-color: #e0e0e0;
 }
 
 #colorbox,

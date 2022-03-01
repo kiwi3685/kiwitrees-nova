@@ -86,6 +86,11 @@ $controller->pageHeader(); ?>
 	$linked_fam  = $controller->record->fetchLinkedFamilies();
 	$linked_obje = $controller->record->fetchLinkedMedia();
 	$linked_note = $controller->record->fetchLinkedNotes();
+
+	$count_linked_indi = count($linked_indi);
+	$count_linked_fam  = count($linked_fam);
+	$count_linked_obje = count($linked_obje);
+	$count_linked_note = count($linked_note);
 	?>
 
 	<div class="cell large-10 large-offset-1">
@@ -93,16 +98,44 @@ $controller->pageHeader(); ?>
 		<ul class="tabs" data-tabs id="source-tabs">
 			<li class="tabs-title is-active"><a href="#source-edit"><span><?php echo KT_I18N::translate('Details'); ?></span></a></li>
 			<?php if ($linked_indi) { ?>
-				<li class="tabs-title"><a href="#indi-sources"><span id="indisource"><?php echo KT_I18N::translate('Individuals'); ?></span></a></li>
+				<li class="tabs-title">
+					<a href="#indi-sources">
+						<span id="indisource">
+							<?php echo KT_I18N::translate('Individuals'); ?>
+							<sup><?php echo $count_linked_indi; ?></sup>
+						</span>
+					</a>
+				</li>
 			<?php }
 			if ($linked_fam) { ?>
-				<li class="tabs-title"><a href="#fam-sources"><span id="famsource"><?php echo KT_I18N::translate('Families'); ?></span></a></li>
+				<li class="tabs-title">
+					<a href="#fam-sources">
+						<span id="famsource">
+							<?php echo KT_I18N::translate('Families'); ?>
+							<sup><?php echo $count_linked_fam; ?></sup>
+						</span>
+					</a>
+				</li>
 			<?php }
 			if ($linked_obje) { ?>
-				<li class="tabs-title"><a href="#media-sources"><span id="mediasource"><?php echo KT_I18N::translate('Media objects'); ?></span></a></li>
+				<li class="tabs-title">
+					<a href="#media-sources">
+						<span id="mediasource">
+							<?php echo KT_I18N::translate('Media objects'); ?>
+							<sup><?php echo $count_linked_obje; ?></sup>
+						</span>
+					</a>
+				</li>
 			<?php }
 			if ($linked_note) { ?>
-				<li class="tabs-title"><a href="#note-sources"><span id="notesource"><?php echo KT_I18N::translate('Notes'); ?></span></a></li>
+				<li class="tabs-title">
+					<a href="#note-sources">
+						<span id="notesource">
+							<?php echo KT_I18N::translate('Notes'); ?>
+							<sup><?php echo $count_linked_note; ?></sup>
+						</span>
+					</a>
+				</li>
 			<?php } ?>
 		</ul>
 		<div class="tabs-content" data-tabs-content="source-tabs">

@@ -1213,7 +1213,7 @@ function print_add_new_fact($id, $usedfacts, $type) {
 	global $KT_SESSION; ?>
 
 	<div class="cell indiFact famFact">
-		<div class="grid-x">
+		<div class="grid-x grid-padding-x grid-padding-y">
 			<?php if ($KT_SESSION->clipboard) { // -- Add from clipboard
 				$newRow = true;
 				foreach (array_reverse($KT_SESSION->clipboard, true) as $key => $fact) {

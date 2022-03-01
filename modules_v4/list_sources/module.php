@@ -92,6 +92,7 @@ class list_sources_KT_Module extends KT_Module implements KT_Module_List {
 			->setPageTitle(KT_I18N::translate('Sources'))
 			->pageHeader();
 		?>
+
 		<div id="sourcelist-page" class="grid-x grid-padding-x">
 			<div class="cell large-10 large-offset-1">
 				<h3><?php echo $controller->getPageTitle(); ?></h3>

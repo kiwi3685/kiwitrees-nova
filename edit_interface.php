@@ -162,7 +162,7 @@ switch ($action) {
 
     				<?php echo no_update_chan($record); ?>
 
-                    <?php echo editSubmitButtons(); ?>
+                    <?php echo submitButtons(); ?>
 
     			</form>
             </div>
@@ -210,7 +210,7 @@ switch ($action) {
 
             				<?php echo no_update_chan($record); ?>
 
-                            <?php echo editSubmitButtons(); ?>
+                            <?php echo submitButtons(); ?>
 
             			</form>
                     <?php break;
@@ -238,6 +238,7 @@ switch ($action) {
 		<div id="edit_interface-page" class="grid-x grid-padding-x">
 			<div class="cell large-10 large-offset-1">
 				<h3><?php echo $controller->getPageTitle(); ?></h3>
+                
 				<?php init_calendar_popup(); ?>
 				<form name="editform" method="post" action="edit_interface.php" enctype="multipart/form-data">
 					<input type="hidden" name="action" value="update">
@@ -292,7 +293,7 @@ switch ($action) {
                         } ?>
 					</ul>
 
-                    <?php echo editSubmitButtons(); ?>
+                    <?php echo submitButtons(); ?>
 
 				</form>
 			</div>
@@ -1077,68 +1078,51 @@ switch ($action) {
             init_calendar_popup();
         ?>
 
-		<div id="edit_interface-page">
-			<h2><?php echo $controller->getPageTitle(); ?></h2>
-			<form method="post" action="edit_interface.php" enctype="multipart/form-data">
-				<input type="hidden" name="action" value="update">
-				<input type="hidden" name="pid" value="<?php echo $pid; ?>">
-				<div id="add_facts">
-					<?php
-                    for ($i = $linenum; $i < $lines; $i++) {
-                        $fields = explode(' ', $gedlines[$i]);
-                        if ((substr($gedlines[$i], 0, 1) < 2) && $fields[1] != "CHAN") {
-                            $level1type = create_edit_form($gedrec, $i, $level0type); ?>
-							<input type="hidden" name="linenum[]" value="<?php echo $i; ?>">
-							<?php
-                            $usedfacts[] = $fields[1];
-                            foreach ($uniquefacts as $key => $fact) {
-                                if ($fact == $fields[1]) {
-                                    unset($uniquefacts[$key]);
+        <div id="edit_interface-page" class="grid-x grid-padding-x">
+			<div class="cell large-10 large-offset-1">
+				<h3><?php echo $controller->getPageTitle(); ?></h3>
+
+    			<form method="post" action="edit_interface.php" enctype="multipart/form-data">
+    				<input type="hidden" name="action" value="update">
+    				<input type="hidden" name="pid" value="<?php echo $pid; ?>">
+    				<div id="add_facts">
+    					<?php
+                        for ($i = $linenum; $i < $lines; $i++) {
+                            $fields = explode(' ', $gedlines[$i]);
+                            if ((substr($gedlines[$i], 0, 1) < 2) && $fields[1] != "CHAN") {
+                                $level1type = create_edit_form($gedrec, $i, $level0type); ?>
+    							<input type="hidden" name="linenum[]" value="<?php echo $i; ?>">
+    							<?php
+                                $usedfacts[] = $fields[1];
+                                foreach ($uniquefacts as $key => $fact) {
+                                    if ($fact == $fields[1]) {
+                                        unset($uniquefacts[$key]);
+                                    }
                                 }
                             }
                         }
-                    }
-                    foreach ($uniquefacts as $key => $fact) {
-                        $gedrec .= "\n1 " . $fact;
-                        $level1type = create_edit_form($gedrec, $lines++, $level0type); ?>
-						<input type="hidden" name="linenum[]" value="<?php echo $i; ?>">
-					<?php
-                    } ?>
-					<?php if (KT_USER_IS_ADMIN) { ?>
-						<div class="last_change">
-							<label>
-								<?php echo KT_Gedcom_Tag::getLabel('CHAN'); ?>
-							</label>
-							<div class="input">
-								<?php if ($NO_UPDATE_CHAN) { ?>
-									<input type="checkbox" checked="checked" name="preserve_last_changed">
-								<?php } else { ?>
-									<input type="checkbox" name="preserve_last_changed">
-								<?php }
-                                echo KT_I18N::translate('Do not update the “last change” record'), help_link('no_update_CHAN'); ?>
-							</div>
-						</div>
-					<?php }?>
-				</div>
-				<div id="additional_facts">
-					<?php
-                    print_add_layer("OBJE");
-                    print_add_layer("NOTE");
-                    print_add_layer("SHARED_NOTE");
-                    print_add_layer("RESN");
-                    ?>
-				</div>
-				<p id="save-cancel">
-					<button class="btn btn-primary" type="submit">
-						<i class="fa fa-save"></i>
-						<?php echo KT_I18N::translate('Save'); ?>
-					</button>
-					<button class="btn btn-primary" type="button"  onclick="window.close();">
-						<i class="fa fa-times"></i>
-						<?php echo KT_I18N::translate('close'); ?>
-					</button>
-				</p>
-			</form>
+                        foreach ($uniquefacts as $key => $fact) {
+                            $gedrec .= "\n1 " . $fact;
+                            $level1type = create_edit_form($gedrec, $lines++, $level0type); ?>
+    						<input type="hidden" name="linenum[]" value="<?php echo $i; ?>">
+    					<?php
+                        } ?>
+
+    					<?php echo no_update_chan(); ?>
+
+    				</div>
+                    <ul class="accordion" data-accordion="y6a1xd-accordion" data-allow-all-closed="true" data-multi-expand="true">
+    					<!--  Add new source to fact -->
+    					<?php
+                        print_add_layer("OBJE");
+                        print_add_layer("NOTE");
+                        print_add_layer("SHARED_NOTE");
+                        print_add_layer("RESN");
+                        ?>
+    				</ul>
+                    <?php echo submitButtons(); ?>
+    			</form>
+            </div>
 		</div> <!-- id="edit_interface-page" -->
 		<?php
         break;

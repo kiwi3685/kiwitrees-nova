@@ -145,7 +145,7 @@ function print_fact(KT_Event $fact, KT_GedcomRecord $record) {
 	} ?>
 
 	<div class="cell indiFact <?php echo $styleadd; ?>">
-		<div class="grid-x">
+		<div class="grid-x grid-padding-x grid-padding-y">
 			<div class="cell medium-3 fact-title">
 				<label>
 					<?php if ($SHOW_FACT_ICONS) {
@@ -155,7 +155,7 @@ function print_fact(KT_Event $fact, KT_GedcomRecord $record) {
 				</label>
 
 				<?php if (KT_USER_CAN_EDIT && $styleadd != 'change_old' && $fact->getLineNumber() > 0 && $fact->canEdit()) { ?>
-					<div class="editfacts button-group stacked">
+					<div class="editfacts button-group">
 						<a class="button clear" onclick="return edit_record('<?php echo $pid; ?>', <?php echo $fact->getLineNumber(); ?>);">
 							<i class="<?php echo $iconStyle; ?> fa-edit"></i>
 							<span class="link_text" tabindex="1" title="<?php echo KT_I18N::translate('Edit'); ?>">

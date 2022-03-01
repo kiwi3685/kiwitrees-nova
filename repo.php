@@ -76,7 +76,7 @@ $controller->pageHeader(); ?>
 
 	<?php
 
-	$linkToID=$controller->record->getXref(); // Tell addmedia.php what to link to
+	$linkToID = $controller->record->getXref(); // Tell addmedia.php what to link to
 
 	$controller->addInlineJavascript('
 		function show_gedcom_record() {
@@ -90,15 +90,21 @@ $controller->pageHeader(); ?>
 	<div class="cell large-10 large-offset-1">
 		<h3><?php echo $controller->record->getFullName(); ?></h3>
 		<ul class="tabs" data-tabs id="repo-tabs">
-		 	<li class="tabs-title is-active"><a href="#repo-edit" aria-selected="true"><span><?php echo KT_I18N::translate('Details'); ?></span></a></li>
+		 	<li class="tabs-title is-active">
+				<a href="#repo-edit" aria-selected="true">
+					<span><?php echo KT_I18N::translate('Details'); ?></span>
+				</a>
+			</li>
 			<?php if ($linked_sour) { ?>
-				<li class="tabs-title"><a href="#source-repo"><span id="reposource"><?php echo KT_I18N::translate('Sources'); ?></span></a></li>
+				<li class="tabs-title">
+					<a href="#source-repo">
+						<span id="reposource"><?php echo KT_I18N::translate('Sources'); ?></span>
+					</a>
+				</li>
 			<?php } ?>
 		</ul>
-
 		<div class="tabs-content" data-tabs-content="repo-tabs">
-			<div class="tabs-panel is-active" id="repo-edit">
-				<div class="facts grid-x grid-margin-x grid-margin-y  grid-padding-x grid-padding-y">
+			<div class="tabs-panel facts is-active" id="repo-edit">
 					<?php
 					$repositoryfacts = $controller->record->getFacts();
 					foreach ($repositoryfacts as $fact) {
@@ -110,15 +116,15 @@ $controller->pageHeader(); ?>
 						print_add_new_fact($controller->record->getXref(), $repositoryfacts, 'REPO');
 					}
 					?>
-				</div>
 			</div>
 			<!-- Sources linked to this repository -->
 			<?php if ($linked_sour) { ?>
-				<div class="tabs-panel" id=id="source-repo">
+				<div class="tabs-panel" id="source-repo">
 					<?php echo format_sour_table($linked_sour, $controller->record->getFullName()); ?>
 				</div>
 			<?php } ?>
 		</div>
+
 	</div>
 </div>
 <?php
