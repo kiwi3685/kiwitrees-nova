@@ -885,7 +885,7 @@ function print_parents($famid, $personcount = 1) {
 		<div class="cell medium-4 medium-offset-4">
 			<div class="grid-x grid-margin-x">
 				<!-- husband -->
-				<?php if (isset($newparents) && $husb->getXref() != $newparents["HUSB"]) { ?>
+				<?php if ($newparents $$ $husb && ($husb->getXref() != $newparents["HUSB"])) { ?>
 					<div class="cell medium-6 facts_valueblue parent_husb">
 						<?php print_pedigree_person(KT_Person::getInstance($newparents['HUSB']), 1, 2, $personcount); ?>
 					</div>
@@ -904,7 +904,7 @@ function print_parents($famid, $personcount = 1) {
 					</div>
 				<?php } ?>
 				<!-- wife -->
-				<?php if (isset($newparents) && $wife->getXref() != $newparents["WIFE"]) { ?>
+				<?php if ($newparents && $wife && ($wife->getXref() != $newparents["WIFE"])) { ?>
 					<div class="cell medium-6 facts_valueblue parent_wife">
 						<?php print_pedigree_person(KT_Person::getInstance($newparents['WIFE']), 1, 3, $personcount); ?>
 					</div>
