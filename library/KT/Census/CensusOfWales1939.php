@@ -24,7 +24,7 @@
 /**
  * Definitions for a census
  */
-class KT_Census_RegisterOfEngland1939 extends KT_Census_CensusOfEngland implements KT_Census_CensusInterface {
+class KT_Census_CensusOfWales1939 extends KT_Census_CensusOfWales implements KT_Census_CensusInterface {
 	/**
 	 * When did this census occur.
 	 *
@@ -43,13 +43,13 @@ class KT_Census_RegisterOfEngland1939 extends KT_Census_CensusOfEngland implemen
 		return array(
 			new KT_Census_CensusColumnNull($this, 'Schedule', 'Schedule Number'),
 			new KT_Census_CensusColumnNull($this, 'SubNum', 'Schedule Sub Number'),
-			new KT_Census_CensusColumnSurnameGivenNames($this, 'Name', 'Surname & other names', 'width: 250px;'),
+			new KT_Census_CensusColumnSurnameGivenNames($this, 'Name', 'Surname & other names'),
 			new KT_Census_CensusColumnNull($this, 'Role', 'For institutions only – for example, Officer, Visitor, Servant, Patient, Inmate'),
 			new KT_Census_CensusColumnSexMF($this, 'Sex', 'Male or Female'),
-			new KT_Census_CensusColumnBirthDayMonthSlashYear($this, 'DOB', 'Date of birth', 'width: 90px;'),
-			new KT_Census_CensusColumnConditionEnglish($this, 'Condition', 'Marital Condition - Married, Single, Unmarried, Widowed or Divorced'),
-			new KT_Census_CensusColumnOccupation($this, 'Occupation', 'Occupation', 'width: 200px;'),
-			new KT_Census_CensusColumnOccupation($this, 'Other', 'Instructions', 'width: 200px;'),
+			new KT_Census_CensusColumnBirthDayMonthSlashYear($this, 'DOB', 'Date of birth'),
+			new KT_Census_CensusColumnConditionEnglish($this, 'MC', 'Marital Condition - Married, Single, Unmarried, Widowed or Divorced'),
+			new KT_Census_CensusColumnOccupation($this, 'Occupation', 'Occupation'),
+			new KT_Census_CensusColumnOccupation($this, 'Other', 'Instructions'),
 		);
 	}
 }

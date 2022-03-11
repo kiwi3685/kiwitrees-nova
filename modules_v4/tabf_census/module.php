@@ -107,7 +107,9 @@ class tabf_census_KT_Module extends KT_Module implements KT_Module_FamTab {
 							$person	= KT_Person::getInstance($details['xref']); ?>
 							<tr>
 								<td>
-									<a href="individual.php?pid=<?php echo $details['xref']; ?>&amp;ged=<?php echo KT_GEDURL; ?>#tab_i_census"><?php echo $details['name']; ?></a>
+									<a href="individual.php?pid=<?php echo $details['xref']; ?>&amp;ged=<?php echo KT_GEDURL; ?>#tab_i_census">
+										<?php echo $details['name']; ?>
+									</a>
 								</td>
 								<?php foreach ($censusPlace->allCensusDates() as $census) {
 									$year	= substr($census->censusDate(), -4);
@@ -115,13 +117,18 @@ class tabf_census_KT_Module extends KT_Module implements KT_Module_FamTab {
 									<td>
 										<?php if (in_array($year, $details['cens'])) {
 											echo $correct;
-										} elseif (($person->getBirthDate()->JD() > 0 && $person->getBirthDate()->JD() > $date->JD()) || ($person->getDeathDate()->JD() > 0 && $person->getDeathDate()->JD() < $date->JD())) {
+										} elseif (
+											($person->getBirthDate()->JD() > 0 && $person->getBirthDate()->JD() > $date->JD())
+											|| ($person->getDeathDate()->JD() > 0 && $person->getDeathDate()->JD() < $date->JD())
+											) {
 											echo $nothing;
-										} elseif (($person->getBirthDate()->JD() == 0 && $person->getEstimatedBirthDate()->JD() > $date->JD()) || ($person->getDeathDate()->JD() == 0 && $person->getEstimatedBirthDate()->JD() < $date->JD())) {
+										} elseif (
+											($person->getBirthDate()->JD() == 0 && $person->getEstimatedBirthDate()->JD() > $date->JD())
+											|| ($person->getDeathDate()->JD() == 0 && $person->getEstimatedBirthDate()->JD() < $date->JD())) {
 											echo $unknown;
 										} else {
 											echo $missing;
-										}?>
+										} ?>
 									</td>
 								<?php } ?>
 							</tr>
