@@ -59,7 +59,7 @@ class tabf_census_KT_Module extends KT_Module implements KT_Module_FamTab {
 
 	// Implement KT_Module_FamTab
 	public function canLoadAjax() {
-		return false;
+		return true;
 	}
 
 	// Implement KT_Module_FamTab

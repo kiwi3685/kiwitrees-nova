@@ -59,7 +59,7 @@ class tabf_factsandevents_KT_Module extends KT_Module implements KT_Module_FamTa
 
 	// Implement KT_Module_FamTab
 	public function canLoadAjax() {
-		return false;
+		return true;
 	}
 
 	// Implement KT_Module_FamTab
