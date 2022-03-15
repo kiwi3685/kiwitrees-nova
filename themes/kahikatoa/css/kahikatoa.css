@@ -9378,6 +9378,7 @@ div[id$=-page] button[type=submit] {
 
 #family-page ul#famTabs {
 	margin-top: 1rem;
+	margin-bottom: 1rem;
 }
 #family-page .tabs-panel .tabHeader {
 	border-bottom: 0.0125rem solid #ab3334;
