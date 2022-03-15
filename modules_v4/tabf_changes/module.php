@@ -29,7 +29,7 @@ if (!defined('KT_KIWITREES')) {
 class tabf_changes_KT_Module extends KT_Module implements KT_Module_FamTab {
 	// Extend KT_Module
 	public function getTitle() {
-		return /* I18N: Name of a module/tab on the individual page. */ KT_I18N::translate('Changes');
+		return /* I18N: Name of a module/tab on the individual page. */ KT_I18N::translate('Family record changes');
 	}
 
 	// Extend KT_Module
@@ -52,6 +52,8 @@ class tabf_changes_KT_Module extends KT_Module implements KT_Module_FamTab {
         global $controller;
         require_once KT_ROOT.'library/php-diff/lib/Diff.php';
         require_once KT_ROOT.'library/php-diff/lib/Diff/Renderer/Html/SideBySide.php';
+
+//		ob_start();
 
         $controller
 			->addExternalJavascript(KT_DATATABLES_JS)
@@ -92,91 +94,113 @@ class tabf_changes_KT_Module extends KT_Module implements KT_Module_FamTab {
                 $item  = $controller->record;
                 $title = '';
             break;
-		}
+		} ?>
+		<style>
+            #tab_changes.ui-widget-content tbody {
+                background: #ffffff
+            }
+            #tab_changes_content thead th {
+                vertical-align: top;
+                white-space: nowrap;
+                padding: 5px;
+            }
+            #tab_changes_content tbody td {
+                vertical-align: top;
+                white-space: pre-wrap;
+                font-size: 90%;
+            }
+            .dataTables_wrapper table.DifferencesSideBySide {
+                border-collapse:collapse;
+                table-layout:fixed;
+            }
+            .dataTables_wrapper table.DifferencesSideBySide th {
+                height: auto;
+                padding: 0 3px;
+                background-color: #c9c9c9;
+                font-weight: normal;
+                width: 5%;
+            }
+            .dataTables_wrapper table.DifferencesSideBySide td.Left {
+                width: 45%;
+            }
+            #tab_changes_content tbody.ChangeReplace,
+            #tab_changes_content tbody.ChangeInsert,
+            #tab_changes_content tbody.ChangeDelete {background-color: yellow;}
+            #tab_changes_content tbody.ChangeReplace ins,
+            #tab_changes_content tbody.ChangeInsert ins,
+            #tab_changes_content tbody.ChangeDelete ins {color: red; text-decoration: initial;}
+            #tab_changes_content tbody.ChangeReplace del,
+            #tab_changes_content tbody.ChangeInsert del,
+            #tab_changes_content tbody.ChangeDelete del {color: blue; text-decoration: initial;}
+        </style>
+
+		<?php
         $xref		= $item->getXref();
         $rows       = $this->getChangeList($xref);
+		?>
 
-        if ($rows) {
-            foreach ($rows as $row) {
-                $a = explode("\n", htmlspecialchars($row->old_gedcom));
-                $b = explode("\n", htmlspecialchars($row->new_gedcom));
-                // Generate a side by side diff
-                $renderer = new Diff_Renderer_Html_SideBySide;
-                // Options for generating the diff
-                $options = array();
-                // Initialize the diff class
-                $diff = new Diff($a, $b, $options);
-                $row->old_gedcom = $diff->Render($renderer);
-                $row->new_gedcom = '';
-            }
-    		?>
-            <style>
-                #tab_changes.ui-widget-content tbody {
-                    background: #ffffff
-                }
-                #tab_changes_content thead th {
-                    vertical-align: top;
-                    white-space: nowrap;
-                    padding: 5px;
-                }
-                #tab_changes_content tbody td {
-                    vertical-align: top;
-                    white-space: pre-wrap;
-                    font-size: 90%;
-                }
-                .dataTables_wrapper table.DifferencesSideBySide {
-                    border-collapse:collapse;
-                    table-layout:fixed;
-                }
-                .dataTables_wrapper table.DifferencesSideBySide th {
-                    height: auto;
-                    padding: 0 3px;
-                    background-color: #c9c9c9;
-                    font-weight: normal;
-                    width: 5%;
-                }
-                .dataTables_wrapper table.DifferencesSideBySide td.Left {
-                    width: 45%;
-                }
-                #tab_changes_content tbody.ChangeReplace,
-                #tab_changes_content tbody.ChangeInsert,
-                #tab_changes_content tbody.ChangeDelete {background-color: yellow;}
-                #tab_changes_content tbody.ChangeReplace ins,
-                #tab_changes_content tbody.ChangeInsert ins,
-                #tab_changes_content tbody.ChangeDelete ins {color: red; text-decoration: initial;}
-                #tab_changes_content tbody.ChangeReplace del,
-                #tab_changes_content tbody.ChangeInsert del,
-                #tab_changes_content tbody.ChangeDelete del {color: blue; text-decoration: initial;}
-            </style>
+		<div class="cell tabHeader">
+			<div class="grid-x">
+				<div class="cell">
+					<h5><?php echo $this->getTitle(); ?></h5>
+				</div>
+			</div>
+		</div>
 
-    		<div id="tab_changes_content">
-    			<?php if ($item && $item->canDisplayDetails()) { ?>
-                    <h3><?php echo $title; ?></h3>
-    				<table id="change_list" style="width: 100%;">
-    					<thead>
-    						<tr>
-    							<th><?php echo KT_I18N::translate('Timestamp'); ?></th>
-    							<th><?php echo KT_I18N::translate('User'); ?></th>
-    							<th><?php echo KT_I18N::translate('GEDCOM Data'); ?></th>
-    							<th><?php echo KT_I18N::translate('Status'); ?></th>
-    						</tr>
-    					</thead>
-    					<tbody>
-                            <?php foreach($rows as $row) { ?>
+		<div id="tab_changes_content" class="cell FamFact">
+			<div class="grid-x grid-padding-x">
+				<?php if ($rows && $item->canDisplayDetails()) {
+		            foreach ($rows as $row) {
+		                $a = explode("\n", htmlspecialchars($row->old_gedcom));
+		                $b = explode("\n", htmlspecialchars($row->new_gedcom));
+		                // Generate a side by side diff
+		                $renderer = new Diff_Renderer_Html_SideBySide;
+		                // Options for generating the diff
+		                $options = array();
+		                // Initialize the diff class
+		                $diff = new Diff($a, $b, $options);
+		                $row->old_gedcom = $diff->Render($renderer);
+		                $row->new_gedcom = '';
+		            } ?>
+					<table>
+						<thead>
+							<tr>
+								<th><?php echo KT_I18N::translate('Timestamp'); ?></th>
+								<th><?php echo KT_I18N::translate('User'); ?></th>
+								<th><?php echo KT_I18N::translate('GEDCOM Data'); ?></th>
+								<th><?php echo KT_I18N::translate('Status'); ?></th>
+							</tr>
+						</thead>
+						<tbody>
+	                        <?php foreach($rows as $row) { ?>
 						        <tr>
-        							<td><?php echo $row->change_time; ?></td>
-        							<td><?php echo $row->user_name; ?></td>
-        							<td><?php echo $row->old_gedcom; ?></td>
-        							<td><?php echo $row->status; ?></td>
+	    							<td><?php echo $row->change_time; ?></td>
+	    							<td><?php echo $row->user_name; ?></td>
+	    							<td><?php echo $row->old_gedcom; ?></td>
+	    							<td><?php echo $row->status; ?></td>
 						        </tr>
-                            <?php } ?>
-    					</tbody>
-    				</table>
-    			<?php } ?>
-    		</div>
-		<?php } else { ?>
-            <div> <?php echo KT_I18N::translate('No change data available'); ?></div>
-        <?php }
+	                        <?php } ?>
+						</tbody>
+					</table>
+				<?php } else { ?>
+					<div class="cell medium-10 medium-offset-1">
+						<div class="callout secondary" style="margin-top: 1rem;">
+							<?php echo KT_I18N::translate('No change data available'); ?>
+						</div>
+					</div>
+				<?php } ?>
+			</div>
+		</div>
+
+		<?php
+
+//		return '
+//			<div class="grid-x grid-margin-y">
+//				<div class="cell">' .
+//					ob_get_clean() . '
+//				</div>
+//			</div>
+//		';
 	}
 
 	// Implement KT_Module_Tab

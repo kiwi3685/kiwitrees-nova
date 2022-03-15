@@ -109,7 +109,7 @@ class tabi_changes_KT_Module extends KT_Module implements KT_Module_IndiTab {
                 // Generate a side by side diff
                 $renderer = new Diff_Renderer_Html_SideBySide;
                 // Options for generating the diff
-                $options = array();
+                $options = [];
                 // Initialize the diff class
                 $diff = new Diff($a, $b, $options);
                 $row->old_gedcom = $diff->Render($renderer);
