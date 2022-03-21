@@ -1485,6 +1485,11 @@ function autocomplete(selector) {
             jQuery(this).data("autocomplete-ged", KT_GEDCOM);
         }
 
+        var person = $(this).data("autocomplete-person");  // rootid or gedcomid
+        if (typeof(person) === "undefined") {
+            jQuery(this).data("autocomplete-person", "");
+        }
+
         var self = jQuery(this);
         self.autocomplete({
             // Cannot use a simple URL, as the data-autocomplete-xxxx parameters may change.
@@ -1498,6 +1503,7 @@ function autocomplete(selector) {
                 jQuery.getJSON("autocomplete.php", {
                     field: self.data("autocomplete-type"),
                     ged:   self.data("autocomplete-ged"),
+                    person: self.data("autocomplete-person"),
                     extra: extra,
                     term:  request.term
                 }, response);
@@ -1505,7 +1511,13 @@ function autocomplete(selector) {
             select: function( event, ui ) {
                 var item_html = jQuery("<p>" + ui.item.label + "</p>").text();
                 jQuery(self).val(item_html);//Display label in input field
-                jQuery("input[id^=selectedValue]").val(ui.item.value);//Saving the selected value in hidden field
+
+                if (person === "rootid" || person === "gedcomid") {
+                    jQuery("input[id^=selectedValue-" + person + "]").val(ui.item.value);//Saving the selected value in hidden field
+                } else {
+                    jQuery("input[id^=selectedValue]").val(ui.item.value);//Saving the selected value in hidden field
+                }
+
                 return false;
             },
             html: true
@@ -1600,53 +1612,6 @@ function checkbox_delete(type) {
         }
     }
 }
-
-// fix for jQuery / CKEditor conflict
-//jQuery.widget( "ui.dialog", jQuery.ui.dialog, {
-    /*! jQuery UI - v1.10.2 - 2013-12-12
-     *  http://bugs.jqueryui.com/ticket/9087#comment:27 - bugfix
-     *  http://bugs.jqueryui.com/ticket/4727#comment:23 - bugfix
-     *  allowInteraction fix to accommodate windowed editors
-     */
-/*    _allowInteraction: function( event ) {
-        if ( this._super( event ) ) {
-            return true;
-        }
-
-        // address interaction issues with general iframes with the dialog
-        if ( event.target.ownerDocument != this.document[ 0 ] ) {
-            return true;
-        }
-
-        // address interaction issues with dialog window
-        if ( jQuery( event.target ).closest( ".cke_dialog" ).length ) {
-            return true;
-        }
-
-        // address interaction issues with iframe based drop downs in IE
-        if ( jQuery( event.target ).closest( ".cke" ).length ) {
-            return true;
-        }
-    },
-    /*! jQuery UI - v1.10.2 - 2013-10-28
-     *  http://dev.ckeditor.com/ticket/10269 - bugfix
-     *  moveToTop fix to accommodate windowed editors
-     */
-/*    _moveToTop: function ( event, silent ) {
-        if ( !event || !this.options.modal ) {
-            this._super( event, silent );
-        }
-    }
-});*/
-
-// common script for login block(s)
-//jQuery(".new_passwd_form").hide();
-//jQuery(".passwd_click").click(function() {
-//    jQuery(".new_passwd_form").slideToggle(100, function() {
-//        jQuery(".new_passwd_username").focus();
-//    });
-//    return false;
-//});
 
 // common script for help text drop-down display
 jQuery(".help_content").on("click", ".more", function(e){

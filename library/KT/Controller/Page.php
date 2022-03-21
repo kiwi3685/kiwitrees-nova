@@ -219,11 +219,16 @@ class KT_Controller_Page extends KT_Controller_Base {
 				jQuery("a.icon_arrow").attr("href", "#");
 			}
 
-			// Common help_content shortening script
+			// Common help_content shortening scripts
 			jQuery(".helpcontent").shorten({
 			    showChars: 900,
-				moreText: "' . KT_I18N::translate('More') . '",
-				lessText: "' . KT_I18N::translate('Less') . '"
+				moreText: "' . KT_I18N::translate('Read more') . '",
+				lessText: "' . KT_I18N::translate('Read less') . '"
+			});
+			jQuery(".shortenMedium").shorten({
+			    showChars: 350,
+				moreText: "' . KT_I18N::translate('Read more') . '",
+				lessText: "' . KT_I18N::translate('Read less') . '"
 			});
 
 			// Initialise foundation

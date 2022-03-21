@@ -53,7 +53,6 @@ switch (KT_Filter::post('action')) {
 			$realname			= KT_Filter::post('real_name');
 			$email				= KT_Filter::postEmail('email');
 			$pass1				= KT_Filter::post('pass1', KT_REGEX_PASSWORD);
-			$pass2				= KT_Filter::post('pass2', KT_REGEX_PASSWORD);
 			$language			= KT_Filter::post('language');
 			$contact_method		= KT_Filter::post('contact_method');
 			$comment			= KT_Filter::post('comment');
@@ -70,8 +69,6 @@ switch (KT_Filter::post('action')) {
 					KT_FlashMessages::addMessage(KT_I18N::translate('Duplicate username. A user with that username already exists. Please choose another username.'));
 				} elseif (findByEmail($email)) {
 					KT_FlashMessages::addMessage(KT_I18N::translate('Duplicate email address. A user with that email already exists.'));
-				} elseif ($pass1 !== $pass2) {
-					KT_FlashMessages::addMessage(KT_I18N::translate('The passwords do not match.'));
 				} else {
 					$user_id = create_user($username, $realname, $email, $pass1);
 					set_user_setting($user_id, 'reg_timestamp', date('U'));
@@ -87,11 +84,7 @@ switch (KT_Filter::post('action')) {
     				} else {
 					    setUserEmail ($user_id, $email);
                     }
-                    if ($pass1 !== null && $pass1 !== $pass2) {
-                        KT_FlashMessages::addMessage(KT_I18N::translate('The passwords do not match.'));
-                    } else {
-						set_user_password($user_id, $pass1);
-					}
+					set_user_password($user_id, $pass1);
 				}
 			}
 
@@ -122,6 +115,7 @@ switch (KT_Filter::post('action')) {
 					set_user_setting($user_id, 'canadmin', $canadmin);
 				}
 
+				// Set tree based user settings
 				foreach (KT_Tree::getAll() as $tree) {
 					$tree->userPreference($user_id, 'rootid', KT_Filter::post('rootid' . $tree->tree_id, KT_REGEX_XREF));
 					$tree->userPreference($user_id, 'gedcomid', KT_Filter::post('gedcomid' . $tree->tree_id, KT_REGEX_XREF));
@@ -135,7 +129,12 @@ switch (KT_Filter::post('action')) {
 				}
 			}
 		}
-		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH .  KT_SCRIPT_NAME);
+
+		if ($user_id > 0) {
+			header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH .  KT_SCRIPT_NAME . '?action=edit&user_id=' . $user_id);
+		} else {
+			header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH .  KT_SCRIPT_NAME);
+		}
 
 		return;
 }
@@ -308,8 +307,13 @@ switch (KT_Filter::get('action')) {
 			$controller->setPageTitle(KT_I18N::translate('Edit user') . ' - ' . $realname);
 		}
 
+		$varname	= '';
+		$person		= '';
+		$url		= KT_SCRIPT_NAME . '?action=' . KT_Filter::post('page') . '&amp;user_id=' . $user_id;
+
 		$controller
 			->pageHeader()
+			->addExternalJavascript(KT_KIWITREES_ADMIN_JS_URL)
 			->addExternalJavascript(KT_AUTOCOMPLETE_JS_URL)
 			->addExternalJavascript(KT_PASSWORDSCHECK)
 			->addInlineJavascript('
@@ -326,350 +330,440 @@ switch (KT_Filter::get('action')) {
 				function regex_quote(str) {
 					return str.replace(/[\\\\.?+*()[\](){}|]/g, "\\\\$&");
 				};
-				jQuery(function() {
-					jQuery("div.config_options:odd").addClass("odd");
-					jQuery("div.config_options:even").addClass("even");
-				});
 
 			');
 
 		?>
 		<div id="user_details" class="cell">
-			<h2><?php echo $controller->getPageTitle(); ?></h2>
+			<h4><?php echo $controller->getPageTitle(); ?></h4>
+			<div class="grid-x grid-padding-x grid-padding-y">
+				<div class="cell">
+					<form name="newform" method="post" role="form" autocomplete="off">
+						<?php echo KT_Filter::getCsrf(); ?>
+						<input type="hidden" name="action" value="save">
+						<input type="hidden" name="user_id" value="<?php echo $user_id; ?>">
+						<input type="hidden" name="page" value="edit">
+						<div class="grid-x grid-margin-x">
 
-			<form name="newform" method="post" role="form" action="admin_users.php?action=edit" autocomplete="off">
-				<?php echo KT_Filter::getCsrf(); ?>
-				<input type="hidden" name="action" value="save">
-				<input type="hidden" name="user_id" value="<?php echo $user_id; ?>">
-				<!-- REAL NAME -->
-				<div class="config_options">
-					<label for="real_name">
-						<?php echo KT_I18N::translate('Real name'); ?>
-					</label>
-					<div class="input_group">
-						<input type="text" id="real_name" name="real_name" required maxlength="64" value="<?php echo KT_Filter::escapeHtml($realname); ?>" dir="auto">
-						<div class="helpcontent">
-							<?php echo KT_I18N::translate('This is your real name, as you would like it displayed on screen.'); ?>
-						</div>
-					</div>
-				</div>
-				<!-- USER NAME -->
-				<div class="config_options">
-					<label for="username">
-						<?php echo KT_I18N::translate('Username'); ?>
-					</label>
-					<div class="input_group">
-						<input type="text" id="username" name="username" required maxlength="32" value="<?php echo KT_Filter::escapeHtml($username); ?>" dir="auto">
-						<div class="helpcontent">
-							<?php echo KT_I18N::translate('Usernames are case-insensitive and ignore accented letters, so that “chloe”, “chloë”, and “Chloe” are considered to be the same.'); ?>
-						</div>
-					</div>
-				</div>
-				<!-- PASSWORD -->
-				<div class="config_options">
-					<label for="pass1">
-						<?php echo KT_I18N::translate('Password'); ?>
-					</label>
-					<div class="input_group">
-						<input type="password" id="pass1" name="pass1" pattern = "<?php echo KT_REGEX_PASSWORD; ?>" placeholder="<?php echo KT_I18N::plural('Use at least %s character.', 'Use at least %s characters.', KT_MINIMUM_PASSWORD_LENGTH, KT_I18N::number(KT_MINIMUM_PASSWORD_LENGTH)); ?>" <?php echo $user_id ? '' : 'required'; ?> onchange="form.pass2.pattern = regex_quote(this.value);">
-						<span id="result" class="input_label right">&nbsp;</span>
-						<div class="helpcontent">
-							<?php if ($user_id > 0) { ?>
-								<?php echo KT_I18N::translate('Leave password blank if you want to keep the current password.'); ?>
-								<br>
-							<?php } ?>
-							<?php echo KT_I18N::translate('
-								Passwords must be at least 6 characters long and are case-sensitive, so that “secret” is different from “SECRET”.
-								<br>
-								Anything with 6 characters or more is acceptable, but mixed lower and uppercase characters, numbers, and special characters will increase the security of the password.
-							'); ?>
-						</div>
-					</div>
-					<!-- CONFIRM PASSWORD -->
-					<label for="pass2">
-						<?php echo KT_I18N::translate('Confirm password'); ?>
-					</label>
-					<div class="input_group">
-						<input type="password" id="pass2" name="pass2" pattern = "<?php echo KT_REGEX_PASSWORD; ?>" placeholder="<?php echo KT_I18N::translate('Type the password again.'); ?>" <?php echo $user_id ? '' : 'required'; ?>>
-					</div>
-				</div>
-				<!-- EMAIL ADDRESS -->
-				<div class="config_options">
-					<label for="email">
-						<?php echo KT_I18N::translate('Email address'); ?>
-					</label>
-					<div class="input_group">
-						<input type="email" id="email" name="email" required maxlength="64" value="<?php echo KT_Filter::escapeHtml($email); ?>">
-						<div class="helpcontent">
-							<?php echo KT_I18N::translate('This email address will be used to send password reminders, website notifications, and messages from other family members who are registered on the website.'); ?>
-						</div>
-					</div>
-				</div>
-				<!-- EMAIL VERIFIED and ACCOUNT APPROVED -->
-				<div class="config_options">
-					<label for="verified">
-						<?php echo KT_I18N::translate('Account approval and email verification'); ?>
-					</label>
-					<div class="input_group">
-						<div class="checkbox">
-							<label>
-								<input type="checkbox" name="verified" value="1" <?php echo get_user_setting($user_id, 'verified') ? 'checked' : ''; ?>>
-								<?php echo KT_I18N::translate('Email verified'); ?>
-							</label>
-							<label>
-								<input type="checkbox" name="verified_by_admin" value="1" <?php echo get_user_setting($user_id, 'verified_by_admin') ? 'checked' : ''; ?>>
-								<?php echo KT_I18N::translate('Approved by administrator'); ?>
-							</label>
-							<div class="helpcontent">
-								<?php echo KT_I18N::translate('When a user registers for an account, an email is sent to their email address with a verification link. When they follow this link, we know the email address is correct, and the “email verified” option is selected automatically.
-								<br>
-								If an administrator creates a user account, the verification email is not sent, and the email must be verified manually.
-								<br>
-								You should not approve an account unless you know that the email address is correct.
-								<br>
-								A user will not be able to sign in until both “email verified” and “approved by administrator” are selected.'); ?>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- LANGUAGE -->
-				<div class="config_options">
-					<label for="language">
-						<?php echo /* I18N: A configuration setting */ KT_I18N::translate('Language'); ?>
-					</label>
-					<div class="input_group">
-						<select id="language" name="language">
-							<?php foreach (KT_I18N::used_languages() as $code=>$name) { ?>
-								<option value="<?php echo $code; ?>" dir="auto" <?php echo get_user_setting($user_id, 'language') === $code ? 'selected' : ''; ?>>
-									<?php echo KT_I18N::translate($name); ?>
-								</option>
-							<?php } ?>
-						</select>
-					</div>
-				</div>
-				<!-- AUTO ACCEPT -->
-				<div class="config_options">
-					<label for="auto_accept">
-						<?php echo KT_I18N::translate('Changes'); ?>
-					</label>
-					<div class="input_group">
-						<div class="checkbox">
-							<label>
-								<input type="checkbox" name="auto_accept" value="1" <?php echo get_user_setting($user_id, 'auto_accept') ? 'checked' : ''; ?>>
-								<?php echo KT_I18N::translate('Automatically accept changes made by this user'); ?>
-							</label>
-							<div class="helpcontent">
-								<?php echo KT_I18N::translate('Normally, any changes made to a family tree need to be reviewed by a moderator. This option allows a user to make changes without needing a moderator.'); ?>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- VISIBLE ONLINE -->
-				<div class="config_options">
-					<label for="visible_online">
-						<?php echo /* I18N: A configuration setting */ KT_I18N::translate('Visible online'); ?>
-					</label>
-					<div class="input_group">
-						<div class="checkbox">
-							<label>
-								<input type="checkbox" id="visible_online" name="visible_online" value="1" <?php echo get_user_setting($user_id, 'visibleonline') ? 'checked' : ''; ?>>
-								<?php echo /* I18N: A configuration setting */ KT_I18N::translate('Visible to other users when online'); ?>
-							</label>
-							<div class="helpcontent">
-								<?php echo KT_I18N::translate('You can choose whether to appear in the list of users who are currently signed-in.'); ?>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- CONTACT METHOD -->
-				<div class="config_options">
-					<label for="contactmethod">
-						<?php echo /* I18N: A configuration setting */ KT_I18N::translate('Preferred contact method'); ?>
-					</label>
-					<div class="input_group">
-						<?php echo edit_field_contact('contact_method', get_user_setting($user_id, 'contactmethod')); ?>
-						<div class="helpcontent">
-							<?php echo /* I18N: Help text for the “Preferred contact method” configuration setting */
-							KT_I18N::translate('Site members can send each other messages. You can choose to how these messages are sent to you, or choose not receive them at all.'); ?>
-						</div>
-					</div>
-				</div>
-				<!-- COMMENTS -->
-				<div class="config_options">
-					<label for="comment">
-						<?php echo KT_I18N::translate('Administrator comments on user'); ?>
-					</label>
-					<div class="input_group">
-						<textarea id="comment" name="comment" rows="5" maxlength="255"><?php echo KT_Filter::escapeHtml(get_user_setting($user_id, 'comment')); ?></textarea>
-					</div>
-				</div>
-				<!-- ADMIN NOTIFICATION OPTIONS -->
-				<?php if (KT_USER_IS_ADMIN) { ?>
-					<div class="config_options">
-						<label for="verified">
-							<?php echo KT_I18N::translate('Notification options'); ?>
-						</label>
-						<div class="input_group">
-							<div class="checkbox">
-								<label>
-									<input type="checkbox" name="notify_clipping" value="1" <?php echo get_user_setting($user_id, 'notify_clipping', 1) ? 'checked' : ''; ?>>
-									<?php echo KT_I18N::translate('Clippings cart downloads'); ?>
+							<!-- REAL NAME -->
+							<div class="cell large-2 large-offset-1">
+								<label for="real_name">
+									<?php echo KT_I18N::translate('Real name'); ?>
 								</label>
-								<div class="helpcontent">
-									<?php echo KT_I18N::translate('When a user downloads a GEDCOM file created in the Clippings cart the site administrator will be notified by mail if this option is selected.'); ?>
+							</div>
+							<div class="cell large-8">
+								<div class="input_group">
+									<input type="text" id="real_name" name="real_name" required maxlength="64" value="<?php echo KT_Filter::escapeHtml($realname); ?>" dir="auto">
+									<div class="callout warning helpcontent">
+										<?php echo KT_I18N::translate('This is your real name, as you would like it displayed on screen.'); ?>
+									</div>
 								</div>
 							</div>
-						</div>
-					</div>
-				<?php } ?>
-				<!-- FAMILY TREEs - ACCESS and SETTINGS -->
-				<div id="access">
-					<h3><?php echo KT_I18N::translate('Family tree access and settings'); ?></h3>
-					<div class="helpcontent">
-						<h4><?php echo KT_I18N::translate('Help for family tree access settings'); ?></h4>
-						<div class="help_label">
-							<label><?php echo KT_I18N::translate('Default individual'); ?></label>
-							<span>
-								<?php echo KT_I18N::translate('This individual will be selected by default when viewing charts and reports.'); ?>
-							</span>
-						</div>
-						<div class="help_label">
-							<label><?php echo KT_I18N::translate('Individual record'); ?></label>
-							<span>
-								<?php echo KT_I18N::translate('Link this user to an individual in the family tree.'); ?>
-							</span>
-						</div>
-						<div class="help_label">
-							<label><?php echo KT_I18N::translate('Roles'); ?></label>
-							<span>
-								<?php echo KT_I18N::translate('A role is a set of access rights, which give permission to view data, change preferences, etc. Access rights are assigned to roles, and roles are granted to users. Each family tree can assign different access to each role, and users can have a different role in each family tree.'); ?>
-							</span>
-						</div>
-						<div class="indent">
-							<div class="help_label">
-								<label><?php echo KT_I18N::translate('Visitor'); ?></label>
-								<span>
-									<?php echo KT_I18N::translate('Everybody has this role, including visitors to the website and search engines.'); ?>
-								</span>
-							</div>
-							<div class="help_label">
-								<label><?php echo KT_I18N::translate('Member'); ?></label>
-								<span>
-									<?php echo KT_I18N::translate('This role has all the permissions of the visitor role, plus any additional access granted by the family tree configuration.'); ?>
-								</span>
-							</div>
-							<div class="help_label">
-								<label><?php echo KT_I18N::translate('Editor'); ?></label>
-								<span>
-									<?php echo KT_I18N::translate('This role has all the permissions of the member role, plus permission to add/change/delete data. Any changes will need to be reviewed by a moderator, unless the user has the “automatically accept changes” option enabled.'); ?>
-								</span>
-							</div>
-							<div class="help_label">
-								<label><?php echo KT_I18N::translate('Moderator'); ?></label>
-								<span>
-									<?php echo KT_I18N::translate('This role has all the permissions of the editor role, plus permission to accept/reject changes made by other users.'); ?>
-								</span>
-							</div>
-							<div class="help_label">
-								<label><?php echo KT_I18N::translate('Manager'); ?></label>
-								<span>
-									<?php echo KT_I18N::translate('This role has all the permissions of the moderator role, plus any additional access granted by the family tree configuration, plus permission to change the settings/configuration of a family tree.'); ?>
-								</span>
-							</div>
-							<div class="help_label">
-								<label><?php echo KT_I18N::translate('Administrator'); ?></label>
-								<span>
-									<?php echo KT_I18N::translate('This role has all the permissions of the manager role in all family trees, plus permission to change the settings/configuration of the website, users, and modules.'); ?>
-								</span>
-							</div>
-						</div>
-						<div class="help_label">
-							<label><?php echo KT_I18N::translate('Restrict to immediate family'); ?></label>
-							<span>
-								<?php echo KT_I18N::translate('Where a user is associated with an individual record in a family tree and has a role of member, editor, or moderator, you can prevent them from accessing the details of distant, living relations. You specify the number of relationship steps that the user is allowed to see.'); ?>
-								<?php echo KT_I18N::translate('For example, if you specify a path length of 2, the individual will be able to see their grandson (child, child), their aunt (parent, sibling), their step-daughter (spouse, child), but not their first cousin (parent, sibling, child).'); ?>
-								<?php echo KT_I18N::translate('Note: longer path lengths require a lot of calculation, which can make your website run slowly for these users.'); ?>
-							</span>
-						</div>
-					</div>
-					<!-- ADMINISTRATOR -->
-					<div class="config_options">
-						<label for="admin">
-							<?php echo KT_I18N::translate('Administration role'); ?>
-						</label>
-						<div class="input_group">
-							<div class="checkbox">
-								<label>
-									<input
-										type="checkbox" id="admin" name="canadmin" value="1"
-										<?php echo get_user_setting($user_id, 'canadmin') ? 'checked' : ''; ?>
-										<?php echo $user_id === KT_USER_ID ? 'disabled' : ''; ?>
-									>
-									<?php echo KT_I18N::translate('Administrator'); ?>
+
+							<!-- USER NAME -->
+							<div class="cell large-2 large-offset-1">
+								<label for="username">
+									<?php echo KT_I18N::translate('Username'); ?>
 								</label>
 							</div>
-						</div>
-					</div>
-					<!-- FAMILY TREE SETTINGS -->
-					<div class="config_options access_table">
-						<table>
-							<thead>
-								<tr>
-									<th><?php echo KT_I18N::translate('Family tree'); ?></th>
-									<th><?php echo KT_I18N::translate('Default individual'); ?></th>
-									<th><?php echo KT_I18N::translate('Individual record'); ?></th>
-									<th><?php echo KT_I18N::translate('Role'); ?></th>
-									<th><?php echo KT_I18N::translate('Restrict to immediate family'); ?></th>
-							</thead>
-							<tbody>
-								<?php foreach (KT_Tree::getAll() as $tree): ?>
-									<tr>
-										<td><?php echo $tree->tree_title_html; ?></td>
-										<!-- PEDIGREE ROOT PERSON -->
-										<td>
-											<?php $varname = 'rootid' . $tree->tree_id; ?>
-											<input data-autocomplete-type="INDI" data-autocomplete-ged="<?php echo $tree->tree_name_html; ?>" type="text" size="12" name="<?php echo $varname; ?>" id="<?php echo $varname; ?>" value="<?php echo KT_Filter::escapeHtml($tree->userPreference($user_id, 'rootid')); ?>">
-										<!-- GEDCOM INDI Record ID -->
-										<td>
-											<?php $varname = 'gedcomid' . $tree->tree_id; ?>
-											<input data-autocomplete-type="INDI" data-autocomplete-ged="<?php echo $tree->tree_name_html; ?>" type="text" size="12" name="<?php echo $varname; ?>" id="<?php echo $varname; ?>" value="<?php echo KT_Filter::escapeHtml($tree->userPreference($user_id, 'gedcomid')); ?>">
-										</td>
-										<!-- ROLE -->
-										<td>
-											<?php $varname = 'canedit' . $tree->tree_id; ?>
-											<select name="<?php echo $varname; ?>" style="width: 200px;">
-												<?php foreach ($ALL_EDIT_OPTIONS as $EDIT_OPTION => $desc) { ?>
-													<option value="<?php echo $EDIT_OPTION; ?>"
-														<?php echo $EDIT_OPTION === $tree->userPreference($user_id, 'canedit') ? 'selected' : ''; ?>
-													><?php echo $desc; ?></option>
-												<?php } ?>
-											</select>
-										</td>
-										<!-- RELATIONSHIP PATH -->
-										<td>
-											<?php $varname = 'RELATIONSHIP_PATH_LENGTH' . $tree->tree_id; ?>
-											<select name="<?php echo $varname; ?>" id="<?php echo $varname; ?>" class="relpath" style="width: 200px;">
-												<?php for ($n = 0; $n <= 10; ++$n): ?>
-													<option value="<?php echo $n; ?>" <?php echo $tree->userPreference($user_id, 'RELATIONSHIP_PATH_LENGTH') == $n ? 'selected' : ''; ?>>
-													<?php echo $n ? $n : KT_I18N::translate('No'); ?>
-												</option>
-												<?php endfor; ?>
-											</select>
-										</td
-									</tr>
-								<?php endforeach; ?>
-							</tbody>
-						</table>
-					</div>
-				</div>
-				<p class ="clearfloat">
-					<button class="btn btn-primary" type="submit">
-					<i class="fas fa-save"></i>
-						<?php echo KT_I18N::translate('Save'); ?>
-					</button>
-				</p>
+							<div class="cell large-8">
+								<div class="input_group">
+									<input type="text" id="username" name="username" required maxlength="32" value="<?php echo KT_Filter::escapeHtml($username); ?>" dir="auto">
+									<div class="callout warning helpcontent">
+										<?php echo KT_I18N::translate('Usernames are case-insensitive and ignore accented letters, so that “chloe”, “chloë”, and “Chloe” are considered to be the same.'); ?>
+									</div>
+								</div>
+							</div>
 
-			</form>
+							<!-- PASSWORD -->
+							<div class="cell large-2 large-offset-1">
+								<label for="pass1">
+									<?php echo KT_I18N::translate('Password'); ?>
+								</label>
+							</div>
+							<div class="cell large-8">
+								<div class="input-group">
+									<input class="input-group-field" type="password" id="pass_word" name="password" placeholder="<?php echo KT_I18N::translate('Password'); ?>" required value="<?php echo htmlspecialchars($username); ?>">
+									<span class="input-group-label unmask" title="<?php echo KT_I18N::translate('Show/Hide password to check content'); ?>">
+										<i class="<?php echo $iconStyle; ?> fa-eye"></i>
+									</span>
+									<span id="result" class="input_label right">&nbsp;</span>
+								</div>
+								<div class="callout warning helpcontent">
+									<?php if ($user_id > 0) { ?>
+										<?php echo KT_I18N::translate('Leave password blank if you want to keep the current password.'); ?>
+										<br>
+									<?php } ?>
+									<?php echo KT_I18N::translate('
+										Passwords must be at least 6 characters long and are case-sensitive, so that “secret” is different from “SECRET”.
+										<br>
+										Anything with 6 characters or more is acceptable, but mixed lower and uppercase characters, numbers, and special characters will increase the security of the password.
+									'); ?>
+								</div>
+							</div>
+
+							<!-- EMAIL ADDRESS -->
+							<div class="cell large-2 large-offset-1">
+								<label for="email">
+									<?php echo KT_I18N::translate('Email address'); ?>
+								</label>
+							</div>
+							<div class="cell large-8">
+								<div class="input_group">
+									<input type="email" id="email" name="email" required maxlength="64" value="<?php echo KT_Filter::escapeHtml($email); ?>">
+									<div class="callout warning helpcontent">
+										<?php echo KT_I18N::translate('This email address will be used to send password reminders, website notifications, and messages from other family members who are registered on the website.'); ?>
+									</div>
+								</div>
+							</div>
+
+							<!-- EMAIL VERIFIED and ACCOUNT APPROVED -->
+							<div class="cell large-2 large-offset-1">
+								<label for="verified">
+									<?php echo KT_I18N::translate('Account approval and verification'); ?>
+								</label>
+							</div>
+							<div class="cell large-8">
+								<div class="input_group">
+									<div class="checkbox">
+										<label>
+											<input type="checkbox" name="verified" value="1" <?php echo get_user_setting($user_id, 'verified') ? 'checked' : ''; ?>>
+											<?php echo KT_I18N::translate('Email verified'); ?>
+										</label>
+										<label>
+											<input type="checkbox" name="verified_by_admin" value="1" <?php echo get_user_setting($user_id, 'verified_by_admin') ? 'checked' : ''; ?>>
+											<?php echo KT_I18N::translate('Approved by administrator'); ?>
+										</label>
+										<div class="callout warning helpcontent">
+											<?php echo KT_I18N::translate('When a user registers for an account, an email is sent to their email address with a verification link. When they follow this link, we know the email address is correct, and the “email verified” option is selected automatically.
+											<br>
+											If an administrator creates a user account, the verification email is not sent, and the email must be verified manually.
+											<br>
+											You should not approve an account unless you know that the email address is correct.
+											<br>
+											A user will not be able to sign in until both “email verified” and “approved by administrator” are selected.'); ?>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<!-- LANGUAGE -->
+							<div class="cell large-2 large-offset-1">
+								<label for="language">
+									<?php echo /* I18N: A configuration setting */ KT_I18N::translate('Language'); ?>
+								</label>
+							</div>
+							<div class="cell large-8">
+								<div class="input_group">
+									<select id="language" name="language">
+										<?php foreach (KT_I18N::used_languages() as $code=>$name) { ?>
+											<option value="<?php echo $code; ?>" dir="auto" <?php echo get_user_setting($user_id, 'language') === $code ? 'selected' : ''; ?>>
+												<?php echo KT_I18N::translate($name); ?>
+											</option>
+										<?php } ?>
+									</select>
+								</div>
+							</div>
+
+							<!-- AUTO ACCEPT -->
+							<div class="cell large-2 large-offset-1">
+								<label for="auto_accept">
+									<?php echo KT_I18N::translate('Changes'); ?>
+								</label>
+							</div>
+							<div class="cell large-8">
+								<div class="input_group">
+									<div class="checkbox">
+										<label>
+											<input type="checkbox" name="auto_accept" value="1" <?php echo get_user_setting($user_id, 'auto_accept') ? 'checked' : ''; ?>>
+											<?php echo KT_I18N::translate('Automatically accept changes made by this user'); ?>
+										</label>
+										<div class="callout warning helpcontent">
+											<?php echo KT_I18N::translate('Normally, any changes made to a family tree need to be reviewed by a moderator. This option allows a user to make changes without needing a moderator.'); ?>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<!-- VISIBLE ONLINE -->
+							<div class="cell large-2 large-offset-1">
+								<label for="visible_online">
+									<?php echo /* I18N: A configuration setting */ KT_I18N::translate('Visible online'); ?>
+								</label>
+							</div>
+							<div class="cell large-8">
+								<div class="input_group">
+									<div class="checkbox">
+										<label>
+											<input type="checkbox" id="visible_online" name="visible_online" value="1" <?php echo get_user_setting($user_id, 'visibleonline') ? 'checked' : ''; ?>>
+											<?php echo /* I18N: A configuration setting */ KT_I18N::translate('Visible to other users when online'); ?>
+										</label>
+										<div class="callout warning helpcontent">
+											<?php echo KT_I18N::translate('You can choose whether to appear in the list of users who are currently signed-in.'); ?>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<!-- CONTACT METHOD -->
+							<div class="cell large-2 large-offset-1">
+								<label for="contactmethod">
+									<?php echo /* I18N: A configuration setting */ KT_I18N::translate('Preferred contact method'); ?>
+								</label>
+							</div>
+							<div class="cell large-8">
+								<div class="input_group">
+									<?php echo edit_field_contact('contact_method', get_user_setting($user_id, 'contactmethod')); ?>
+									<div class="callout warning helpcontent">
+										<?php echo /* I18N: Help text for the “Preferred contact method” configuration setting */
+										KT_I18N::translate('Site members can send each other messages. You can choose to how these messages are sent to you, or choose not receive them at all.'); ?>
+									</div>
+								</div>
+							</div>
+
+							<!-- COMMENTS -->
+							<div class="cell large-2 large-offset-1">
+								<label for="comment">
+									<?php echo KT_I18N::translate('Administrator comments on user'); ?>
+								</label>
+							</div>
+							<div class="cell large-8">
+								<div class="input_group">
+									<textarea id="comment" name="comment" rows="5" maxlength="255"><?php echo KT_Filter::escapeHtml(get_user_setting($user_id, 'comment')); ?></textarea>
+								</div>
+							</div>
+
+							<!-- ADMIN NOTIFICATION OPTIONS -->
+							<?php if (KT_USER_IS_ADMIN) { ?>
+								<div class="cell large-2 large-offset-1">
+									<label for="notify_clipping">
+										<?php echo KT_I18N::translate('Notification options'); ?>
+									</label>
+								</div>
+								<div class="cell large-8">
+									<div class="checkbox">
+										<label>
+											<input type="checkbox" name="notify_clipping" value="1" <?php echo get_user_setting($user_id, 'notify_clipping', 1) ? 'checked' : ''; ?>>
+											<?php echo KT_I18N::translate('Clippings cart downloads'); ?>
+										</label>
+										<div class="callout warning helpcontent">
+											<?php echo KT_I18N::translate('When a user downloads a GEDCOM file created in the Clippings cart the site administrator will be notified by mail if this option is selected.'); ?>
+										</div>
+									</div>
+								</div>
+							<?php } ?>
+
+							<hr class="cell">
+
+							<!-- FAMILY TREEs - ACCESS and SETTINGS -->
+							<div id="access" class="cell large-10 large-offset-1">
+								<h3><?php echo KT_I18N::translate('Family tree access and settings'); ?></h4>
+								<div class="grid-x">
+									<div class="cell callout warning shortenMedium">
+										<h5><?php echo KT_I18N::translate('Help for family tree access settings'); ?></h5>
+										<div class="help_label">
+											<label><?php echo KT_I18N::translate('Default individual'); ?></label>
+											<span>
+												<?php echo KT_I18N::translate('This individual will be selected by default when viewing charts and reports.'); ?>
+											</span>
+										</div>
+										<div class="help_label">
+											<label><?php echo KT_I18N::translate('Individual record'); ?></label>
+											<span>
+												<?php echo KT_I18N::translate('Link this user to an individual in the family tree.'); ?>
+											</span>
+										</div>
+										<div class="help_label">
+											<label><?php echo KT_I18N::translate('Roles'); ?></label>
+											<span>
+												<?php echo KT_I18N::translate('A role is a set of access rights, which give permission to view data, change preferences, etc. Access rights are assigned to roles, and roles are granted to users. Each family tree can assign different access to each role, and users can have a different role in each family tree.'); ?>
+											</span>
+										</div>
+										<div class="indent">
+											<div class="help_label">
+												<label><?php echo KT_I18N::translate('Visitor'); ?></label>
+												<span>
+													<?php echo KT_I18N::translate('Everybody has this role, including visitors to the website and search engines.'); ?>
+												</span>
+											</div>
+											<div class="help_label">
+												<label><?php echo KT_I18N::translate('Member'); ?></label>
+												<span>
+													<?php echo KT_I18N::translate('This role has all the permissions of the visitor role, plus any additional access granted by the family tree configuration.'); ?>
+												</span>
+											</div>
+											<div class="help_label">
+												<label><?php echo KT_I18N::translate('Editor'); ?></label>
+												<span>
+													<?php echo KT_I18N::translate('This role has all the permissions of the member role, plus permission to add/change/delete data. Any changes will need to be reviewed by a moderator, unless the user has the “automatically accept changes” option enabled.'); ?>
+												</span>
+											</div>
+											<div class="help_label">
+												<label><?php echo KT_I18N::translate('Moderator'); ?></label>
+												<span>
+													<?php echo KT_I18N::translate('This role has all the permissions of the editor role, plus permission to accept/reject changes made by other users.'); ?>
+												</span>
+											</div>
+											<div class="help_label">
+												<label><?php echo KT_I18N::translate('Manager'); ?></label>
+												<span>
+													<?php echo KT_I18N::translate('This role has all the permissions of the moderator role, plus any additional access granted by the family tree configuration, plus permission to change the settings/configuration of a family tree.'); ?>
+												</span>
+											</div>
+											<div class="help_label">
+												<label><?php echo KT_I18N::translate('Administrator'); ?></label>
+												<span>
+													<?php echo KT_I18N::translate('This role has all the permissions of the manager role in all family trees, plus permission to change the settings/configuration of the website, users, and modules.'); ?>
+												</span>
+											</div>
+										</div>
+										<div class="help_label">
+											<label><?php echo KT_I18N::translate('Restrict to immediate family'); ?></label>
+											<span>
+												<?php echo KT_I18N::translate('Where a user is associated with an individual record in a family tree and has a role of member, editor, or moderator, you can prevent them from accessing the details of distant, living relations. You specify the number of relationship steps that the user is allowed to see.'); ?>
+												<?php echo KT_I18N::translate('For example, if you specify a path length of 2, the individual will be able to see their grandson (child, child), their aunt (parent, sibling), their step-daughter (spouse, child), but not their first cousin (parent, sibling, child).'); ?>
+												<?php echo KT_I18N::translate('Note: longer path lengths require a lot of calculation, which can make your website run slowly for these users.'); ?>
+											</span>
+										</div>
+									</div>
+
+									<!-- ADMINISTRATOR -->
+									<div class="cell large-2">
+										<label for="admin">
+											<?php echo KT_I18N::translate('Administration role'); ?>
+										</label>
+									</div>
+									<div class="cell large-10">
+										<div class="input_group">
+											<div class="checkbox">
+												<label>
+													<input
+														type="checkbox" id="admin" name="canadmin" value="1"
+														<?php echo get_user_setting($user_id, 'canadmin') ? 'checked' : ''; ?>
+														<?php echo $user_id === KT_USER_ID ? 'disabled' : ''; ?>
+													>
+													<?php echo KT_I18N::translate('Administrator'); ?>
+												</label>
+											</div>
+										</div>
+									</div>
+
+									<!-- FAMILY TREE SETTINGS -->
+									<div class="cell">
+										<table>
+											<thead>
+												<tr>
+													<th><?php echo KT_I18N::translate('Family tree'); ?></th>
+													<th><?php echo KT_I18N::translate('Default individual'); ?></th>
+													<th><?php echo KT_I18N::translate('Individual record'); ?></th>
+													<th><?php echo KT_I18N::translate('Role'); ?></th>
+													<th><?php echo KT_I18N::translate('Restrict to immediate family'); ?></th>
+											</thead>
+											<tbody>
+												<?php foreach (KT_Tree::getAll() as $tree): ?>
+													<tr>
+														<td>
+															<?php echo $tree->tree_title_html; ?>
+														</td>
+														<!-- PEDIGREE ROOT PERSON -->
+														<td>
+															<?php $varname 	= 'rootid' . $tree->tree_id; ?>
+															<?php $person	= KT_Person::getInstance($tree->userPreference($user_id, 'rootid')); ?>
+															<div class="input-group autocomplete_container">
+																<input
+																	id="autocompleteInput-<?php echo $varname; ?>"
+																	data-autocomplete-type="INDI"
+																	data-autocomplete-ged="<?php echo $tree->tree_name_html; ?>"
+																	data-autocomplete-person="rootid"
+																	type="text"
+																	value="<?php echo strip_tags($person->getLifespanName()); ?>"
+																	placeholder="<?php echo KT_I18N::translate('Individual name'); ?>"
+																>
+																<span class="input-group-label">
+																	<button id="<?php echo $varname; ?>" class="adminClearAutocomplete autocomplete_icon">
+																		<i class="<?php echo $iconStyle; ?> fa-times"></i>
+																	</button>
+																</span>
+															</div>
+															<input
+																type="hidden"
+																name="<?php echo $varname; ?>"
+																id="selectedValue-<?php echo $varname; ?>"
+																value="<?php echo $tree->userPreference($user_id, 'rootid'); ?>"
+															>
+														</td>
+
+														<!-- GEDCOM INDI Record ID -->
+														<td>
+															<?php $varname 	= 'gedcomid' . $tree->tree_id; ?>
+															<?php $person	= KT_Person::getInstance($tree->userPreference($user_id, 'gedcomid')); ?>
+															<div class="input-group autocomplete_container">
+																<input
+																	id="autocompleteInput-<?php echo $varname; ?>"
+																	data-autocomplete-type="INDI"
+																	data-autocomplete-ged="<?php echo $tree->tree_name_html; ?>"
+																	data-autocomplete-person="gedcomid"
+																	type="text"
+																	value="<?php echo strip_tags($person->getLifespanName()); ?>"
+																	placeholder="<?php echo KT_I18N::translate('Individual name'); ?>"
+																>
+																<span class="input-group-label">
+																	<button id="<?php echo $varname; ?>" class="adminClearAutocomplete autocomplete_icon">
+																		<i class="<?php echo $iconStyle; ?> fa-times"></i>
+																	</button>
+																</span>
+															</div>
+															<input
+																type="hidden"
+																name="<?php echo $varname; ?>"
+																id="selectedValue-<?php echo $varname; ?>"
+																value="<?php echo $tree->userPreference($user_id, 'gedcomid'); ?>"
+															>
+														</td>
+
+														<!-- ROLE -->
+														<td>
+															<?php $varname = 'canedit' . $tree->tree_id; ?>
+															<select name="<?php echo $varname; ?>">
+																<?php foreach ($ALL_EDIT_OPTIONS as $EDIT_OPTION => $desc) { ?>
+																	<option value="<?php echo $EDIT_OPTION; ?>"
+																		<?php echo $EDIT_OPTION === $tree->userPreference($user_id, 'canedit') ? 'selected' : ''; ?>
+																	><?php echo $desc; ?></option>
+																<?php } ?>
+															</select>
+														</td>
+														<!-- RELATIONSHIP PATH -->
+														<td>
+															<?php $varname = 'RELATIONSHIP_PATH_LENGTH' . $tree->tree_id; ?>
+															<select name="<?php echo $varname; ?>" id="<?php echo $varname; ?>" class="relpath">
+																<?php for ($n = 0; $n <= 10; ++$n): ?>
+																	<option value="<?php echo $n; ?>" <?php echo $tree->userPreference($user_id, 'RELATIONSHIP_PATH_LENGTH') == $n ? 'selected' : ''; ?>>
+																	<?php echo $n ? $n : KT_I18N::translate('No'); ?>
+																</option>
+																<?php endfor; ?>
+															</select>
+														</td
+													</tr>
+												<?php endforeach; ?>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+							<div class="cell large-10 large-offset-1 align-justify button-group">
+								<button class="button secondary" type="button" onclick="window.location.href='<?php echo KT_SERVER_NAME . KT_SCRIPT_PATH .  KT_SCRIPT_NAME; ?>'">
+							        <i class="<?php echo  $iconStyle; ?> fa-times"></i>
+							        <?php echo KT_I18N::translate('Close'); ?>
+							    </button>
+							    <button class="button primary" type="submit">
+							        <i class="<?php echo $iconStyle; ?> fa-save"></i>
+							         <?php echo KT_I18N::translate('Save'); ?>
+							    </button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
 		</div>
 		<?php
 		return;
