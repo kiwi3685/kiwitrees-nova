@@ -380,7 +380,7 @@ switch (KT_Filter::get('action')) {
 							</div>
 							<div class="cell large-8">
 								<div class="input-group">
-									<input class="input-group-field" type="password" id="pass_word" name="password" placeholder="<?php echo KT_I18N::translate('Password'); ?>" required value="<?php echo htmlspecialchars($username); ?>">
+									<input class="input-group-field" type="password" id="pass1" name="pass1" pattern="<?php echo KT_REGEX_PASSWORD; ?>" placeholder="<?php echo KT_I18N::plural('Use at least %s character.', 'Use at least %s characters.', KT_MINIMUM_PASSWORD_LENGTH, KT_I18N::number(KT_MINIMUM_PASSWORD_LENGTH)); ?>" <?php echo $user_id ? '' : 'required'; ?>>
 									<span class="input-group-label unmask" title="<?php echo KT_I18N::translate('Show/Hide password to check content'); ?>">
 										<i class="<?php echo $iconStyle; ?> fa-eye"></i>
 									</span>
@@ -388,7 +388,7 @@ switch (KT_Filter::get('action')) {
 								</div>
 								<div class="callout warning helpcontent">
 									<?php if ($user_id > 0) { ?>
-										<?php echo KT_I18N::translate('Leave password blank if you want to keep the current password.'); ?>
+										<?php echo '<b>' . KT_I18N::translate('Leave password blank if you want to keep the current password.') . '</b>'; ?>
 										<br>
 									<?php } ?>
 									<?php echo KT_I18N::translate('
