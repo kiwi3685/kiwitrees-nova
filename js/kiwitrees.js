@@ -1479,13 +1479,13 @@ function autocomplete(selector) {
             alert("Missing data-autocomplete-type attribute");
         }
 
-        var ged  = $(this).data("autocomplete-ged");  // Which family tree
+        var ged  = jQuery(this).data("autocomplete-ged");  // Which family tree
         // Default to the current tree
         if (typeof(ged) === "undefined") {
             jQuery(this).data("autocomplete-ged", KT_GEDCOM);
         }
 
-        var person = $(this).data("autocomplete-person");  // rootid or gedcomid
+        var person = jQuery(this).data("autocomplete-person");  // rootid or gedcomid
         if (typeof(person) === "undefined") {
             jQuery(this).data("autocomplete-person", "");
         }
@@ -1512,10 +1512,10 @@ function autocomplete(selector) {
                 var item_html = jQuery("<p>" + ui.item.label + "</p>").text();
                 jQuery(self).val(item_html);//Display label in input field
 
-                if (person === "rootid" || person === "gedcomid") {
-                    jQuery("input[id^=selectedValue-" + person + "]").val(ui.item.value);//Saving the selected value in hidden field
+                if (person.includes("rootid") || person.includes("gedcomid")) {
+                    jQuery("input(id^=selectedValue-" + person + ")").val(ui.item.value);//Saving the selected id in hidden field
                 } else {
-                    jQuery("input[id^=selectedValue]").val(ui.item.value);//Saving the selected value in hidden field
+                    jQuery("input(id^=selectedValue)").val(ui.item.value);//Saving the selected id in hidden field
                 }
 
                 return false;

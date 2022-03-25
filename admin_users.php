@@ -33,7 +33,6 @@ require_once KT_ROOT.'includes/functions/functions_edit.php';
 
 // Valid values for form variables
 $ALL_EDIT_OPTIONS = array(
-	'none'  => /* I18N: Listbox entry; name of a role */ KT_I18N::translate('Visitor'),
 	'access'=> /* I18N: Listbox entry; name of a role */ KT_I18N::translate('Member'),
 	'edit'  => /* I18N: Listbox entry; name of a role */ KT_I18N::translate('Editor'),
 	'accept'=> /* I18N: Listbox entry; name of a role */ KT_I18N::translate('Moderator'),
@@ -307,8 +306,6 @@ switch (KT_Filter::get('action')) {
 			$controller->setPageTitle(KT_I18N::translate('Edit user') . ' - ' . $realname);
 		}
 
-		$varname	= '';
-		$person		= '';
 		$url		= KT_SCRIPT_NAME . '?action=' . KT_Filter::post('page') . '&amp;user_id=' . $user_id;
 
 		$controller
@@ -398,6 +395,8 @@ switch (KT_Filter::get('action')) {
 										Passwords must be at least 6 characters long and are case-sensitive, so that “secret” is different from “SECRET”.
 										<br>
 										Anything with 6 characters or more is acceptable, but mixed lower and uppercase characters, numbers, and special characters will increase the security of the password.
+										<br>
+										Use the "Show or hide password" icon (eye) to check your password before saving it.
 									'); ?>
 								</div>
 							</div>
@@ -581,15 +580,9 @@ switch (KT_Filter::get('action')) {
 										</div>
 										<div class="indent">
 											<div class="help_label">
-												<label><?php echo KT_I18N::translate('Visitor'); ?></label>
-												<span>
-													<?php echo KT_I18N::translate('Everybody has this role, including visitors to the website and search engines.'); ?>
-												</span>
-											</div>
-											<div class="help_label">
 												<label><?php echo KT_I18N::translate('Member'); ?></label>
 												<span>
-													<?php echo KT_I18N::translate('This role has all the permissions of the visitor role, plus any additional access granted by the family tree configuration.'); ?>
+													<?php echo KT_I18N::translate('This role has permissions to view but not edit the full tree, psubject to any additional limits set in the family tree configuration.'); ?>
 												</span>
 											</div>
 											<div class="help_label">
@@ -660,23 +653,31 @@ switch (KT_Filter::get('action')) {
 													<th><?php echo KT_I18N::translate('Restrict to immediate family'); ?></th>
 											</thead>
 											<tbody>
-												<?php foreach (KT_Tree::getAll() as $tree): ?>
+												<?php foreach (KT_Tree::getAll() as $tree) { ?>
 													<tr>
 														<td>
-															<?php echo $tree->tree_title_html; ?>
+															<?php echo $tree->tree_title_html . '-' . $tree->tree_id; ?>
 														</td>
 														<!-- PEDIGREE ROOT PERSON -->
 														<td>
-															<?php $varname 	= 'rootid' . $tree->tree_id; ?>
-															<?php $person	= KT_Person::getInstance($tree->userPreference($user_id, 'rootid')); ?>
+															<?php
+															$varname	= 'rootid' . $tree->tree_id;
+															$xref		= $tree->userPreference($user_id, 'rootid');
+															$rootID		= new KT_Person(find_gedcom_record($xref, $tree->tree_id, true));
+															if ($xref) {
+																$rootName = strip_tags($rootID->getLifespanName());
+															} else {
+																$rootName = '';
+															}
+															?>
 															<div class="input-group autocomplete_container">
 																<input
 																	id="autocompleteInput-<?php echo $varname; ?>"
 																	data-autocomplete-type="INDI"
 																	data-autocomplete-ged="<?php echo $tree->tree_name_html; ?>"
-																	data-autocomplete-person="rootid"
+																	data-autocomplete-person="<?php echo $varname; ?>"
 																	type="text"
-																	value="<?php echo strip_tags($person->getLifespanName()); ?>"
+																	value="<?php echo $rootName; ?>"
 																	placeholder="<?php echo KT_I18N::translate('Individual name'); ?>"
 																>
 																<span class="input-group-label">
@@ -695,16 +696,24 @@ switch (KT_Filter::get('action')) {
 
 														<!-- GEDCOM INDI Record ID -->
 														<td>
-															<?php $varname 	= 'gedcomid' . $tree->tree_id; ?>
-															<?php $person	= KT_Person::getInstance($tree->userPreference($user_id, 'gedcomid')); ?>
+															<?php
+															$varname	= 'gedcomid' . $tree->tree_id;
+															$xref		= $tree->userPreference($user_id, 'gedcomid');
+															$gedcomID	= new KT_Person(find_gedcom_record($xref, $tree->tree_id, true));
+															if ($xref) {
+																$gedcomName = strip_tags($gedcomID->getLifespanName());
+															} else {
+																$gedcomName = '';
+															}
+															?>
 															<div class="input-group autocomplete_container">
 																<input
 																	id="autocompleteInput-<?php echo $varname; ?>"
 																	data-autocomplete-type="INDI"
 																	data-autocomplete-ged="<?php echo $tree->tree_name_html; ?>"
-																	data-autocomplete-person="gedcomid"
+																	data-autocomplete-person="<?php echo $varname; ?>"
 																	type="text"
-																	value="<?php echo strip_tags($person->getLifespanName()); ?>"
+																	value="<?php echo $gedcomName; ?>"
 																	placeholder="<?php echo KT_I18N::translate('Individual name'); ?>"
 																>
 																<span class="input-group-label">
@@ -742,9 +751,9 @@ switch (KT_Filter::get('action')) {
 																</option>
 																<?php endfor; ?>
 															</select>
-														</td
+														</td>
 													</tr>
-												<?php endforeach; ?>
+												<?php } ?>
 											</tbody>
 										</table>
 									</div>
