@@ -755,14 +755,14 @@ switch (KT_Filter::get('action')) {
 									</div>
 								</div>
 							</div>
-							<div class="cell large-10 large-offset-1 align-justify button-group">
-								<button class="button secondary" type="button" onclick="window.location.href='<?php echo KT_SERVER_NAME . KT_SCRIPT_PATH .  KT_SCRIPT_NAME; ?>'">
-							        <i class="<?php echo  $iconStyle; ?> fa-times"></i>
-							        <?php echo KT_I18N::translate('Close'); ?>
-							    </button>
-							    <button class="button primary" type="submit">
+							<div class="cell large-10 large-offset-1 align-left button-group">
+								<button class="button primary" type="submit">
 							        <i class="<?php echo $iconStyle; ?> fa-save"></i>
 							         <?php echo KT_I18N::translate('Save'); ?>
+							    </button>
+								<button class="button hollow" type="button" onclick="window.location.href='<?php echo KT_SERVER_NAME . KT_SCRIPT_PATH .  KT_SCRIPT_NAME; ?>'">
+							        <i class="<?php echo  $iconStyle; ?> fa-times"></i>
+							        <?php echo KT_I18N::translate('Close'); ?>
 							    </button>
 							</div>
 						</div>

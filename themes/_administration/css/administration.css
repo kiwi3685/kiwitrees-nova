@@ -3409,8 +3409,8 @@ a.button:hover, a.button:focus {
 }
 .button-group .button {
 	margin: 0;
-	margin-right: 1px;
-	margin-bottom: 1px;
+	margin-right: 2rem;
+	margin-bottom: 2rem;
 	font-size: 0.9rem;
 	flex: 0 0 auto;
 }
