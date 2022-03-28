@@ -49,8 +49,8 @@ require 'includes/authentication.php'; // for AddToLog()
 require 'includes/functions/functions_db.php'; // for get/setSiteSetting()
 define('KT_DATA_DIR',    'data/');
 define('KT_DEBUG_SQL',   false);
-define('KT_REQUIRED_MYSQL_VERSION', '5.0.13'); // For: prepared statements within stored procedures
-define('KT_REQUIRED_MARIADB_VERSION', '10.1.21'); // For: prepared statements within stored procedures
+define('KT_REQUIRED_MYSQL_VERSION', 5.0.13); // For: prepared statements within stored procedures
+define('KT_REQUIRED_MARIADB_VERSION', 10.1.21); // For: prepared statements within stored procedures
 define('KT_MODULES_DIR', 'modules_v4/');
 define('KT_ROOT', '');
 define('KT_GED_ID', null);
@@ -287,7 +287,7 @@ if (!isset($_POST['tblpfx'])) $_POST['tblpfx']='ktn_';
 
 define('KT_TBLPREFIX', $_POST['tblpfx']);
 try {
-	$db_version_ok=false;
+	$db_version_ok = false;
 	KT_DB::createInstance(
 		$_POST['dbhost'],
 		$_POST['dbport'],
@@ -297,14 +297,16 @@ try {
 	);
 
 	KT_DB::exec("SET NAMES 'utf8'");
-	$row = KT_DB::prepare("SHOW VARIABLES LIKE 'VERSION'")->fetchOneRow();
-	if ($row->value < 10 && version_compare($row->value, KT_REQUIRED_MYSQL_VERSION, '<')) {
+    $row = KT_DB::prepare("SHOW VARIABLES LIKE 'VERSION'")->fetchOneRow();
+
+	if ($row->value < "10" && version_compare($row->value, KT_REQUIRED_MYSQL_VERSION, '>')) {
 		echo '<p class="callout alert">' . KT_I18N::translate('This database is only running MySQL version %s.  You cannot install kiwitrees here.', $row->value) . '</p>';
-	} elseif ($row->value > 10 && version_compare($row->value, KT_REQUIRED_MARIADB_VERSION, '<')) {
+	} elseif ($row->value > "10" && version_compare($row->value, KT_REQUIRED_MARIADB_VERSION, '>')) {
 		 echo '<p class="callout alert">' . KT_I18N::translate('This database is only running MariaDB version %s.  You cannot install Kiwitrees-nova here.', $row->value) . '</p>';
-  } else {
+	} else {
 		$db_version_ok = true;
 	}
+
 } catch (PDOException $ex) {
 	KT_DB::disconnect();
 	if ($_POST['dbuser']) {
