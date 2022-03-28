@@ -343,12 +343,12 @@ switch (KT_Filter::get('action')) {
 						<div class="grid-x grid-margin-x">
 
 							<!-- REAL NAME -->
-							<div class="cell large-2 large-offset-1">
+							<div class="cell large-3">
 								<label for="real_name">
 									<?php echo KT_I18N::translate('Real name'); ?>
 								</label>
 							</div>
-							<div class="cell large-8">
+							<div class="cell large-9">
 								<div class="input_group">
 									<input type="text" id="real_name" name="real_name" required maxlength="64" value="<?php echo KT_Filter::escapeHtml($realname); ?>" dir="auto">
 									<div class="callout warning helpcontent">
@@ -358,12 +358,12 @@ switch (KT_Filter::get('action')) {
 							</div>
 
 							<!-- USER NAME -->
-							<div class="cell large-2 large-offset-1">
+							<div class="cell large-3">
 								<label for="username">
 									<?php echo KT_I18N::translate('Username'); ?>
 								</label>
 							</div>
-							<div class="cell large-8">
+							<div class="cell large-9">
 								<div class="input_group">
 									<input type="text" id="username" name="username" required maxlength="32" value="<?php echo KT_Filter::escapeHtml($username); ?>" dir="auto">
 									<div class="callout warning helpcontent">
@@ -373,12 +373,12 @@ switch (KT_Filter::get('action')) {
 							</div>
 
 							<!-- PASSWORD -->
-							<div class="cell large-2 large-offset-1">
+							<div class="cell large-3">
 								<label for="pass1">
 									<?php echo KT_I18N::translate('Password'); ?>
 								</label>
 							</div>
-							<div class="cell large-8">
+							<div class="cell large-9">
 								<div class="input-group">
 									<input class="input-group-field" type="password" id="pass1" name="pass1" pattern="<?php echo KT_REGEX_PASSWORD; ?>" placeholder="<?php echo KT_I18N::plural('Use at least %s character.', 'Use at least %s characters.', KT_MINIMUM_PASSWORD_LENGTH, KT_I18N::number(KT_MINIMUM_PASSWORD_LENGTH)); ?>" <?php echo $user_id ? '' : 'required'; ?>>
 									<span class="input-group-label unmask" title="<?php echo KT_I18N::translate('Show/Hide password to check content'); ?>">
@@ -402,12 +402,12 @@ switch (KT_Filter::get('action')) {
 							</div>
 
 							<!-- EMAIL ADDRESS -->
-							<div class="cell large-2 large-offset-1">
+							<div class="cell large-3">
 								<label for="email">
 									<?php echo KT_I18N::translate('Email address'); ?>
 								</label>
 							</div>
-							<div class="cell large-8">
+							<div class="cell large-9">
 								<div class="input_group">
 									<input type="email" id="email" name="email" required maxlength="64" value="<?php echo KT_Filter::escapeHtml($email); ?>">
 									<div class="callout warning helpcontent">
@@ -417,12 +417,12 @@ switch (KT_Filter::get('action')) {
 							</div>
 
 							<!-- EMAIL VERIFIED and ACCOUNT APPROVED -->
-							<div class="cell large-2 large-offset-1">
+							<div class="cell large-3">
 								<label for="verified">
 									<?php echo KT_I18N::translate('Account approval and verification'); ?>
 								</label>
 							</div>
-							<div class="cell large-8">
+							<div class="cell large-9">
 								<div class="input_group">
 									<div class="checkbox">
 										<label>
@@ -447,12 +447,12 @@ switch (KT_Filter::get('action')) {
 							</div>
 
 							<!-- LANGUAGE -->
-							<div class="cell large-2 large-offset-1">
+							<div class="cell large-3">
 								<label for="language">
 									<?php echo /* I18N: A configuration setting */ KT_I18N::translate('Language'); ?>
 								</label>
 							</div>
-							<div class="cell large-8">
+							<div class="cell large-9">
 								<div class="input_group">
 									<select id="language" name="language">
 										<?php foreach (KT_I18N::used_languages() as $code=>$name) { ?>
@@ -465,12 +465,12 @@ switch (KT_Filter::get('action')) {
 							</div>
 
 							<!-- AUTO ACCEPT -->
-							<div class="cell large-2 large-offset-1">
+							<div class="cell large-3">
 								<label for="auto_accept">
 									<?php echo KT_I18N::translate('Changes'); ?>
 								</label>
 							</div>
-							<div class="cell large-8">
+							<div class="cell large-9">
 								<div class="input_group">
 									<div class="checkbox">
 										<label>
@@ -485,12 +485,12 @@ switch (KT_Filter::get('action')) {
 							</div>
 
 							<!-- VISIBLE ONLINE -->
-							<div class="cell large-2 large-offset-1">
+							<div class="cell large-3">
 								<label for="visible_online">
 									<?php echo /* I18N: A configuration setting */ KT_I18N::translate('Visible online'); ?>
 								</label>
 							</div>
-							<div class="cell large-8">
+							<div class="cell large-9">
 								<div class="input_group">
 									<div class="checkbox">
 										<label>
@@ -505,12 +505,12 @@ switch (KT_Filter::get('action')) {
 							</div>
 
 							<!-- CONTACT METHOD -->
-							<div class="cell large-2 large-offset-1">
+							<div class="cell large-3">
 								<label for="contactmethod">
 									<?php echo /* I18N: A configuration setting */ KT_I18N::translate('Preferred contact method'); ?>
 								</label>
 							</div>
-							<div class="cell large-8">
+							<div class="cell large-9">
 								<div class="input_group">
 									<?php echo edit_field_contact('contact_method', get_user_setting($user_id, 'contactmethod')); ?>
 									<div class="callout warning helpcontent">
@@ -521,12 +521,12 @@ switch (KT_Filter::get('action')) {
 							</div>
 
 							<!-- COMMENTS -->
-							<div class="cell large-2 large-offset-1">
+							<div class="cell large-3">
 								<label for="comment">
 									<?php echo KT_I18N::translate('Administrator comments on user'); ?>
 								</label>
 							</div>
-							<div class="cell large-8">
+							<div class="cell large-9">
 								<div class="input_group">
 									<textarea id="comment" name="comment" rows="5" maxlength="255"><?php echo KT_Filter::escapeHtml(get_user_setting($user_id, 'comment')); ?></textarea>
 								</div>
@@ -534,12 +534,12 @@ switch (KT_Filter::get('action')) {
 
 							<!-- ADMIN NOTIFICATION OPTIONS -->
 							<?php if (KT_USER_IS_ADMIN) { ?>
-								<div class="cell large-2 large-offset-1">
+								<div class="cell large-3">
 									<label for="notify_clipping">
 										<?php echo KT_I18N::translate('Notification options'); ?>
 									</label>
 								</div>
-								<div class="cell large-8">
+								<div class="cell large-9">
 									<div class="checkbox">
 										<label>
 											<input type="checkbox" name="notify_clipping" value="1" <?php echo get_user_setting($user_id, 'notify_clipping', 1) ? 'checked' : ''; ?>>
@@ -556,7 +556,7 @@ switch (KT_Filter::get('action')) {
 
 							<!-- FAMILY TREEs - ACCESS and SETTINGS -->
 							<div id="access" class="cell large-10 large-offset-1">
-								<h3><?php echo KT_I18N::translate('Family tree access and settings'); ?></h4>
+								<h4><?php echo KT_I18N::translate('Family tree roles and settings'); ?></h4>
 								<div class="grid-x">
 									<div class="cell callout warning shortenMedium">
 										<h5><?php echo KT_I18N::translate('Help for family tree access settings'); ?></h5>
@@ -622,23 +622,20 @@ switch (KT_Filter::get('action')) {
 
 									<!-- ADMINISTRATOR -->
 									<div class="cell large-2">
-										<label for="admin">
+										<label for="admin" class="admin">
 											<?php echo KT_I18N::translate('Administration role'); ?>
 										</label>
 									</div>
 									<div class="cell large-10">
-										<div class="input_group">
-											<div class="checkbox">
-												<label>
-													<input
-														type="checkbox" id="admin" name="canadmin" value="1"
-														<?php echo get_user_setting($user_id, 'canadmin') ? 'checked' : ''; ?>
-														<?php echo $user_id === KT_USER_ID ? 'disabled' : ''; ?>
-													>
-													<?php echo KT_I18N::translate('Administrator'); ?>
-												</label>
-											</div>
-										</div>
+										<?php $user_id === KT_USER_ID ? $disabled = 'disabled' : $disabled = ''; ?>
+										<?php echo simple_switch(
+											'canadmin',
+											true,
+											get_user_setting($user_id, 'canadmin'),
+											$disabled,
+											KT_I18N::translate('yes'),
+											KT_I18N::translate('no'));
+										?>
 									</div>
 
 									<!-- FAMILY TREE SETTINGS -->

@@ -133,22 +133,26 @@ function select_edit_control_inline($name, $values, $empty, $selected, $controll
 
 /**
 * Create an on-off switch for a form
-* @param string $name     - the ID for the form element
+* @param string $name     - the name and ID for the form element
 * @param array  $values   - array of value=>display items
 * @param string $selected - the currently selected item (if any)
+* @param string $activeText - label for active response
+* @param string $inactiveText - label for inactive response
 *
 */
-function simple_switch($name, $value, $selected) {
+function simple_switch($name, $value, $selected, $disabled = '', $activeText = '', $inactiveText = '') {
 	$html = '
 		<div class="grid-x grid-margin-y">
 			<div class="switch cell small-8 medium-4 large-2">
-				<input class="switch-input" id="' . $name . '" type="checkbox" name="' . $name . '"';
+				<input class="switch-input" ' . $disabled . ' id="' . $name . '" type="checkbox" name="' . $name . '"';
 					if ((string)$value === (string)$selected) {
 						$html .= ' checked';
 					}
 				$html .= '>' . '
 				<label class="switch-paddle" for="' . $name . '">
 					<span class="show-for-sr">' . $value . '</span>
+					<span class="switch-active" aria-hidden="true">' . $activeText . '</span>
+					<span class="switch-inactive" aria-hidden="true">' . $inactiveText . '</span>
 				</label>
 			</div>
 		</div>
