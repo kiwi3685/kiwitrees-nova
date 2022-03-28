@@ -21,7 +21,7 @@
  */
 
 /*
-// Specifications for various types of popup edit window.
+// Specifications for various types of popup edit window
 // Choose positions to center in the smallest (1000x800) target screen
 var edit_window_specs    = 'width=650,height=600,left=175,top=100,resizable=1,scrollbars=1'; // edit_interface.php, add_media.php, gedrecord.php
 var indx_window_specs    = 'width=600,height=500,left=200,top=150,resizable=1,scrollbars=1'; // index_edit.php, module configuration
@@ -29,6 +29,7 @@ var news_window_specs    = 'width=900,height=750,left=70, top=70, resizable=1,sc
 var help_window_specs    = 'width=500,height=400,left=250,top=200,resizable=1,scrollbars=1'; // help.php
 */
 var find_window_specs    = 'width=550,height=600,left=250,top=150,resizable=1,scrollbars=1'; // special characters
+var xray = '';
 /*
 var mesg_window_specs    = 'width=800,height=650,left=250,top=100,resizable=1,scrollbars=1'; // message.php
 var chan_window_specs    = 'width=600,height=600,left=250,top=100,resizable=1,scrollbars=1'; // edit_changes.php

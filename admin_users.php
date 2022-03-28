@@ -669,6 +669,11 @@ switch (KT_Filter::get('action')) {
 															?>
 															<div class="input-group autocomplete_container">
 																<input
+																	type="hidden"
+																	id="selectedValue-<?php echo $varname; ?>"
+																	name="<?php echo $varname; ?>"
+																>
+																<input
 																	id="autocompleteInput-<?php echo $varname; ?>"
 																	data-autocomplete-type="INDI"
 																	data-autocomplete-ged="<?php echo $tree->tree_name_html; ?>"
@@ -683,12 +688,6 @@ switch (KT_Filter::get('action')) {
 																	</button>
 																</span>
 															</div>
-															<input
-																type="hidden"
-																name="<?php echo $varname; ?>"
-																id="selectedValue-<?php echo $varname; ?>"
-																value="<?php echo $tree->userPreference($user_id, 'rootid'); ?>"
-															>
 														</td>
 
 														<!-- GEDCOM INDI Record ID -->
