@@ -149,23 +149,23 @@ function create_map($placelevels) {
 				<script src="<?php echo KT_GM_SCRIPT; ?>"></script>
 			</div>
 
-			<?php if (KT_USER_IS_ADMIN) {
-        			$placecheck_url = $update_places_url = $adminplaces_url = '';
+			<?php if (KT_USER_IS_ADMIN && $parent !== null) {
+        		$placecheck_url		= '';
+				$update_places_url	= '';
+				$adminplaces_url	= '';
 
-				$placecheck_url = 'module.php?mod=googlemap&amp;mod_action=admin_placecheck';
-				if ($parent && isset($parent[0]) ) {
-					$placecheck_url .= '&amp;country=' . $parent[0];
-					if (isset($parent[1])) {
-						$placecheck_url .= '&amp;state=' . $parent[1];
-					}
-    					$update_places_url = 'admin_trees_places.php?ged=' . KT_GEDCOM . '&amp;search=' . $parent[0];
+				$placecheck_url = 'module.php?mod=googlemap&amp;mod_action=admin_placecheck&amp;country=' . $parent[0];
+				if (isset($parent[1])) {
+					$placecheck_url .= '&amp;state=' . $parent[1];
 				}
+
+				$update_places_url = 'admin_trees_places.php?ged=' . KT_GEDCOM . '&amp;search=' . $parent[0];
+
 				$adminplaces_url = 'module.php?mod=googlemap&amp;mod_action=admin_places';
 				if ($latlng && isset($latlng['pl_id'])) {
 					$adminplaces_url .= '&amp;parent='.$latlng['pl_id'];
-				}
-				$update_places_url = 'admin_trees_places.php?ged=' . KT_GEDCOM . '&amp;search=' . $parent[0];
-				?>
+				} ?>
+
 				<div id="gm_links" class="button-group expanded">
 					<a class="button" href="module.php?mod=googlemap&amp;mod_action=admin_config">
 						<?php echo KT_I18N::translate('Google Maps™ preferences'); ?>
@@ -180,6 +180,7 @@ function create_map($placelevels) {
 						<?php echo KT_I18N::translate('Update place names'); ?>
 					</a>
 				</div>
+				
 			<?php }
 
 			if ($STREETVIEW && $level >= 1) {

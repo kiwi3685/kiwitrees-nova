@@ -9950,9 +9950,6 @@ div[id$=-page] button[type=submit] {
 	margin-bottom: 1rem;
 	width: 100%;
 }
-#placelist-page .button-group .button {
-	margin: 0 0.5rem;
-}
 
 #repo-details-page .indiFact,
 #source-details-page .indiFact {

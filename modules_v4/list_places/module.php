@@ -123,26 +123,42 @@ class list_places_KT_Module extends KT_Module implements KT_Module_List {
 							$listPlaceNames[]	= $placeName;
 						}
 
-						$controller->addExternalJavascript(KT_DATATABLES_JS);
+						$controller
+							->addExternalJavascript(KT_DATATABLES_JS)
+							->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
+						;
+
 						if (KT_USER_CAN_EDIT) {
+							$controller
+								->addExternalJavascript(KT_DATATABLES_BUTTONS)
+								->addExternalJavascript(KT_DATATABLES_HTML5);
 							$buttons = 'B';
 						} else {
 							$buttons = '';
 						}
+
 						$controller->addInlineJavascript('
 							jQuery("#placeListTable").dataTable({
-								dom: \'<"top"' . $buttons . 'lp<"clear">irf>t<"bottom"pl>\',
+								dom: \'<"top"p' . $buttons . 'f<"clear">irl>t<"bottom"pl>\',
 								' . KT_I18N::datatablesI18N() . ',
-								buttons: [{extend: "csv"}],
-								jQueryUI: true,
+								buttons: [{extend: "csvHtml5"}],
 								autoWidth: false,
+								processing: true,
+								retrieve: true,
 								displayLength: 20,
 								pagingType: "full_numbers",
 								stateSave: true,
-								stateDuration: -1
+								stateSaveParams: function (settings, data) {
+									data.columns.forEach(function(column) {
+										delete column.search;
+									});
+								},
+								stateDuration: -1,
 							});
+
 							jQuery("#placeListContainer").css("visibility", "visible");
 							jQuery(".loading-image").css("display", "none");
+
 						'); ?>
 
 						<div id="PlaceListContainer-page" class="grid-x grid-padding-x">
