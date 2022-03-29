@@ -29,7 +29,6 @@ var news_window_specs    = 'width=900,height=750,left=70, top=70, resizable=1,sc
 var help_window_specs    = 'width=500,height=400,left=250,top=200,resizable=1,scrollbars=1'; // help.php
 */
 var find_window_specs    = 'width=550,height=600,left=250,top=150,resizable=1,scrollbars=1'; // special characters
-var xray = '';
 /*
 var mesg_window_specs    = 'width=800,height=650,left=250,top=100,resizable=1,scrollbars=1'; // message.php
 var chan_window_specs    = 'width=600,height=600,left=250,top=100,resizable=1,scrollbars=1'; // edit_changes.php
@@ -1513,10 +1512,10 @@ function autocomplete(selector) {
                 var item_html = jQuery("<p>" + ui.item.label + "</p>").text();
                 jQuery(self).val(item_html);//Display label in input field
 
-                if (person.includes("rootid") || person.includes("gedcomid")) {
-                    jQuery("input(id^=selectedValue-" + person + ")").val(ui.item.value);//Saving the selected id in hidden field
+                if (person && (person.includes("rootid") || person.includes("gedcomid"))) {
+                    jQuery("input[id=selectedValue-" + person + "]").val(ui.item.value);//Saving the selected id in hidden field
                 } else {
-                    jQuery("input(id^=selectedValue)").val(ui.item.value);//Saving the selected id in hidden field
+                    jQuery("input[id^=selectedValue]").val(ui.item.value);//Saving the selected id in hidden field
                 }
 
                 return false;
