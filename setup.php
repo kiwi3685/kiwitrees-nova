@@ -347,11 +347,11 @@ if (empty($_POST['dbuser']) || !KT_DB::isConnected() || !$db_version_ok) { ?>
 			<input type="password" id="dbpass" name="dbpass" value="<?php echo htmlspecialchars($_POST['dbpass']); ?>">
 			<span class="help-text"><?php echo KT_I18N::translate('This is case sensitive.'); ?></span>
 		</div>
-		<div class="cell align-justify button-group">
-			<button type="submit" class="button">
+		<div class="cell align-left button-group">
+			<button type="submit" class="button primary">
 				<?php echo /* I18N: button label */ KT_I18N::translate('Next'); ?>
 			</button>
-			<button type="submit" class="button secondary" onclick="history.back()">
+			<button type="submit" class="button hollow" onclick="history.back()">
 				<?php echo /* I18N: button label */ KT_I18N::translate('Previous'); ?>
 			</button>
 		</div>
@@ -441,11 +441,11 @@ if (!$dbname_ok) { ?>
 			<input type="text" id="tblpfx" name="tblpfx" value="<?php echo htmlspecialchars($_POST['tblpfx']); ?>">
 			<span class="help-text"><?php echo KT_I18N::translate('The prefix is optional, but recommended.  By giving the table names a unique prefix you can let several different applications share the same database. "kt_" is suggested, but can be anything you want.'); ?></span>
 		</div>
-		<div class="cell align-justify button-group">
-			<button type="submit" class="button">
+		<div class="cell align-left button-group">
+			<button type="submit" class="button primary">
 				<?php echo /* I18N: button label */ KT_I18N::translate('Next'); ?>
 			</button>
-			<button type="submit" class="button secondary" onclick="history.back()">
+			<button type="submit" class="button hollow" onclick="history.back()">
 				<?php echo /* I18N: button label */ KT_I18N::translate('Previous'); ?>
 			</button>
 		</div>
@@ -499,10 +499,10 @@ if (empty($_POST['ktname']) || empty($_POST['ktuser']) || strlen($_POST['ktpass'
 			<span class="help-text"><?php echo KT_I18N::translate('This email address will be used to send you password reminders, site notifications, and messages from other family members who are registered on the site.'); ?></span>
 		</div>
 		<div class="cell align-justify button-group">
-			<button type="submit" class="button">
+			<button type="submit" class="button primary">
 				<?php echo /* I18N: button label */ KT_I18N::translate('Next'); ?>
 			</button>
-			<button type="submit" class="button secondary" onclick="history.back()">
+			<button type="submit" class="button hollow" onclick="history.back()">
 				<?php echo /* I18N: button label */ KT_I18N::translate('Previous'); ?>
 			</button>
 		</div>

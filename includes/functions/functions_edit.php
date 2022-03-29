@@ -2983,14 +2983,14 @@ function submitButtons() {
 	global $iconStyle;
 
 	$buttonHtml = '
-		<div class="cell align-justify button-group">
-			<button class="button secondary" type="submit" onclick="window.close();">
+		<div class="cell align-left button-group">
+		<button class="button primary" type="submit">
+			<i class="' . $iconStyle . ' fa-save"></i>'
+			 . KT_I18N::translate('Save') .
+		'</button>
+			<button class="button hollow" type="submit" onclick="window.close();">
 				<i class="' . $iconStyle . ' fa-times"></i>'
 				 . KT_I18N::translate('Cancel') .
-			'</button>
-			<button class="button primary" type="submit">
-				<i class="' . $iconStyle . ' fa-save"></i>'
-				 . KT_I18N::translate('Save') .
 			'</button>
 		</div>
 	';

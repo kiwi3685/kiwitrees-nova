@@ -31,12 +31,6 @@
 	font-size: 1rem;
 }
 
-/*.button.dropdown:after {
-    border-color: $secondary-color transparent transparent!important;
-}
-.button {
-    border-color: $primary-color;
-}*/
 .callout.primary {
 	border-left: 0.25rem solid #ab3334;
 	border-right: 0.25rem solid #ab3334;
@@ -3463,8 +3457,8 @@ a.button:hover, a.button:focus {
 }
 .button-group .button {
 	margin: 0;
-	margin-right: 1px;
-	margin-bottom: 1px;
+	margin-right: 2rem;
+	margin-bottom: 2rem;
 	font-size: 0.9rem;
 	flex: 0 0 auto;
 }
@@ -8694,6 +8688,11 @@ button .svg-inline--fa {
 	padding: 0.1em 0.2em;
 }
 
+form select {
+	background-position: none;
+	background-image: none !important;
+}
+
 .lang-active {
 	background-color: #e0e0e0;
 	color: #3adb76;
@@ -9775,6 +9774,7 @@ div[id$=-page] button[type=submit] {
 }
 
 #medialist-page input#filter {
+	background-color: #fffff4;
 	padding: 0.2rem;
 }
 #medialist-page .card .card-divider {

@@ -3174,7 +3174,7 @@ h3 {
 	vertical-align: middle;
 	margin: 0 1rem;
 	padding: 0.85em 1em;
-	border: 1px solid transparent;
+	border: 0.125rem solid #34689c;
 	border-radius: 0;
 	transition: background-color 0.25s ease-out, color 0.25s ease-out;
 	font-family: inherit;
