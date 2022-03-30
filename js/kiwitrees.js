@@ -23,21 +23,8 @@
 /*
 // Specifications for various types of popup edit window
 // Choose positions to center in the smallest (1000x800) target screen
-var edit_window_specs    = 'width=650,height=600,left=175,top=100,resizable=1,scrollbars=1'; // edit_interface.php, add_media.php, gedrecord.php
-var indx_window_specs    = 'width=600,height=500,left=200,top=150,resizable=1,scrollbars=1'; // index_edit.php, module configuration
-var news_window_specs    = 'width=900,height=750,left=70, top=70, resizable=1,scrollbars=1'; // edit_news.php
-var help_window_specs    = 'width=500,height=400,left=250,top=200,resizable=1,scrollbars=1'; // help.php
 */
-var find_window_specs    = 'width=550,height=600,left=250,top=150,resizable=1,scrollbars=1'; // special characters
-/*
-var mesg_window_specs    = 'width=800,height=650,left=250,top=100,resizable=1,scrollbars=1'; // message.php
-var chan_window_specs    = 'width=600,height=600,left=250,top=100,resizable=1,scrollbars=1'; // edit_changes.php
-var mord_window_specs    = 'width=500,height=600,left=250,top=100,resizable=1,scrollbars=1'; // edit_interface.php, media reorder
-var link_window_specs    = 'width=950,height=750,left=70,top=70,  resizable=1,scrollbars=1'; // edit_interface.php, used for census assistant
-var assist_window_specs    = ''; // edit_interface.php, used for census assistant
-var gmap_window_specs    = 'width=580,height=600,left=200,top=150,resizable=1,scrollbars=1'; // googlemap module place editing
-var pastefield, nameElement, remElement; // Elements to paste to
-*/
+var find_window_specs = 'width=550,height=600,left=250,top=150,resizable=1,scrollbars=1'; // special characters
 
 //Add help texts to page
 function display_help(title) {
@@ -1218,47 +1205,6 @@ var monthLabels = [];
       cal_toggleDate(dateDivId, dateFieldId);
       return false;
   }
-
-function findWindow(ged, type, pastefield, queryParams) {
-    queryParams = queryParams || {};
-    queryParams.type = type;
-    queryParams.ged = typeof ged === 'undefined' ? KT_GEDCOM : ged;
-    window.pastefield = pastefield;
-    window.open('find.php?' + jQuery.param(queryParams), '_blank', find_window_specs);    return false;
-}
-
-function findIndi(field, indiname, ged) {
-     window.nameElement = indiname;
-     return findWindow(ged, "indi", field);
- }
-
-function findPlace(field, ged) {
-    return findWindow(ged, "place", field);
-}
-
-function findFamily(field, ged) {
-    return findWindow(ged, "fam", field);
-}
-
-function findMedia(field, choose, ged) {
-    return findWindow(ged, "media", field, {
-        "choose": choose || "0all"
-    });
-}
-
-function findSource(field, sourcename, ged) {
-    window.nameElement = sourcename;
-    return findWindow(ged, "source", field);
-}
-
-function findnote(field, notename, ged) {
-    window.nameElement = notename;
-    return findWindow(ged, "note", field);
-}
-
-function findRepository(field, ged) {
-    return findWindow(ged, "repo", field);
-}
 
 function findSpecialChar(field) {
     return findWindow(undefined, "specialchar", field);

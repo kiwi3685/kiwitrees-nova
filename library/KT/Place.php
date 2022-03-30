@@ -123,7 +123,7 @@ class KT_Place {
 		}
 	}
 
-	// For the "view all" option of placelist.php and find.php
+	// For the "view all" option of placelist.php
 	public function getReverseName() {
 		$tmp=array();
 		foreach (array_reverse($this->gedcom_place) as $place) {

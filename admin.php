@@ -1900,6 +1900,7 @@ function old_paths() {
 		KT_ROOT . 'modules_v4/stories',
 		// Other
 		KT_ROOT . 'expand_view.php',
+//		KT_ROOT . 'find.php',
 		KT_ROOT . 'admin_site_lang.php',
 		KT_ROOT . 'js/jquery.colorbox-min.js',
 		KT_ROOT . 'modules_v4/pages/help_text.php',
