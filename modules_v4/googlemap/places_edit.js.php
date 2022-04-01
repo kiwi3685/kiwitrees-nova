@@ -2,13 +2,13 @@
 /**
  * Kiwitrees: Web based Family History software
  * Copyright (C) 2012 to 2022 kiwitrees.net
- * 
+ *
  * Derived from webtrees (www.webtrees.net)
  * Copyright (C) 2010 to 2012 webtrees development team
- * 
+ *
  * Derived from PhpGedView (phpgedview.sourceforge.net)
  * Copyright (C) 2002 to 2010 PGV Development Team
- * 
+ *
  * Kiwitrees is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -30,7 +30,7 @@ if (!defined('KT_KIWITREES')) {
 <head>
 	<script src="<?php echo KT_GM_SCRIPT; ?>"></script>
 	<script src="<?php echo KT_STATIC_URL, KT_MODULES_DIR; ?>googlemap/places_edit_overlays.js.php"></script>
-	<link type="text/css" href="<?php echo KT_STATIC_URL, KT_MODULES_DIR; ?>googlemap/css/googlemap.css" rel="stylesheet">
+	<link type="text/css" href="<?php echo KT_STATIC_URL, KT_MODULES_DIR; ?>googlemap/css/googlemap.min.css" rel="stylesheet">
 
 	<script>
 	var map;
@@ -206,7 +206,7 @@ if (!defined('KT_KIWITREES')) {
 			position: google.maps.ControlPosition.TOP_RIGHT,			// BOTTOM, BOTTOM_LEFT, LEFT, TOP, etc
 			style: google.maps.NavigationControlStyle.SMALL				// ANDROID, DEFAULT, SMALL, ZOOM_PAN
 			},
-			streetViewControl: false,									// Show Pegman or not
+//			streetViewControl: false,									// Show Pegman or not
 			scrollwheel: true
 		};
 

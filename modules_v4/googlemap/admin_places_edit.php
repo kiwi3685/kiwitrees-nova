@@ -2,13 +2,13 @@
 /**
  * Kiwitrees: Web based Family History software
  * Copyright (C) 2012 to 2022 kiwitrees.net
- * 
+ *
  * Derived from webtrees (www.webtrees.net)
  * Copyright (C) 2010 to 2012 webtrees development team
- * 
+ *
  * Derived from PhpGedView (phpgedview.sourceforge.net)
  * Copyright (C) 2002 to 2010 PGV Development Team
- * 
+ *
  * Kiwitrees is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -38,7 +38,7 @@ $controller
 		->setPageTitle(KT_I18N::translate('Geographic data'))
 		->pageHeader();
 
-echo '<link type="text/css" href ="', KT_STATIC_URL, KT_MODULES_DIR, 'googlemap/css/googlemap.css" rel="stylesheet">';
+echo '<link type="text/css" href ="', KT_STATIC_URL, KT_MODULES_DIR, 'googlemap/css/googlemap.min.css" rel="stylesheet">';
 
 // Take a place id and find its place in the hierarchy
 // Input: place ID
@@ -104,6 +104,7 @@ if ($action=='updaterecord' && KT_USER_IS_ADMIN) {
 
 // Update placelocation STREETVIEW fields
 // TODO: This ought to be a POST request, rather than a GET request
+/*
 if ($action == 'update_sv_params' && KT_USER_IS_ADMIN) {
         KT_DB::prepare(
                 "UPDATE `##placelocation` SET sv_lati=?, sv_long=?, sv_bearing=?, sv_elevation=?, sv_zoom=? WHERE pl_id=?"
@@ -118,7 +119,7 @@ if ($action == 'update_sv_params' && KT_USER_IS_ADMIN) {
         $controller->addInlineJavaScript('window.close();');
         exit;
 }
-
+*/
 if ($action=="update") {
 	// --- find the place in the file
 	$row=

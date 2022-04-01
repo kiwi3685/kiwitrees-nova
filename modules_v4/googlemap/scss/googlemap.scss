@@ -1,0 +1,445 @@
+$color_1: #ff0000;  // red
+$color_2: #000000;  // black;
+$color_3: #0000cc;  // strong blue
+$color_4: #777;     // mid grey
+$color_5: #333;     // dark grey
+$color_7: #4444ff;  // blue
+$font-family_1: 'FontAwesome';
+$background-color_1: #eeeeee; // light rey
+$background-color_2: #efefef; // off white
+$background-color_3: #ffffff; // white
+
+/*
+ * kiwitrees googlemap V3 css
+ *
+ * kiwitrees:Web based Family History software
+ * Copyright (C) 2014 kiwitrees development team.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *
+ * $Id: googlemap style sheet 15069 2013-06-20 22:59:03Z nigel $
+ *
+ * @ Original author Brian Holland
+*/
+
+#googlemap_left {
+	margin-top: -1rem;
+}
+div.infowindow {
+	max-height: 260px;
+	overflow-x: hidden;
+}
+#iwhead {
+	text-align: center;
+	font-size: 10px;
+	white-space: normal;
+	margin-right: 0px;
+	margin-left: -2px;
+	margin-top: -1px;
+	background: #ffffff;
+	border-top: 1px solid #bbbbbb;
+	border-bottom: 1px solid #bbbbbb;
+	border-left: 0px solid #bbbbbb;
+	border-right: 0px solid #bbbbbb;
+	padding-left: .2em;
+	padding-right: .2em;
+	padding-top: .3em;
+	padding-bottom: .3em;
+	width: 300px;
+	a {
+		&:hover {
+			color: $color_1;
+		}
+		color: $color_3;
+	}
+}
+#iwcontent {
+	background-color: $background-color_1;
+	border: 1px solid #bbbbbb;
+	margin-right: 0em;
+	a {
+		color: $color_2;
+		&:hover {
+			color: $color_1;
+		}
+	}
+}
+#gmtabs {
+	background-color: $background-color_1;
+	border: 0px solid red;
+	margin-top: 0em;
+	margin-left: -2px;
+	font-size: 11px;
+	margin-right: 4.5em;
+	width: 247px;
+	ul {
+		margin-left: -2px;
+		border: 0px solid red;
+		border-bottom: 1px solid #aaaaaa;
+	}
+	ul.tabs {
+		margin: 0 !important;
+		padding: 0;
+		padding-left: 2px;
+		padding-top: 2px;
+		height: 20px;
+		border: 1px solid #666;
+		background: #ddeeff;
+		width: 296px;
+		li {
+			float: left;
+			padding: 0;
+			margin: 0;
+			margin-left: 2px;
+			list-style-type: none;
+		}
+		a {
+			float: left;
+			font-size: 13px;
+			display: block;
+			padding: 0px 10px;
+			text-decoration: none;
+			border: 1px solid #666;
+			border-bottom: 0px;
+			height: 18px;
+			background-color: $background-color_2;
+			color: $color_4;
+			margin-right: 2px;
+			position: relative;
+			top: 1px;
+			outline: 0;
+			border-radius: 4px 4px 0 0;
+			&:hover {
+				background-color: $background-color_3;
+				color: $color_5;
+			}
+		}
+		a.current {
+			background-color: $background-color_3;
+			border-bottom: 1px solid #ddd;
+			color: $color_2;
+			cursor: default;
+		}
+	}
+}
+#txt {
+	width: 300px;
+	margin-top: -8px;
+	margin-left: -8px;
+	background: #ffffcc;
+	text-align: center;
+}
+#pano {
+	width: 297px;
+	height: 216px;
+	margin-left: 0px;
+	margin-top: 0em;
+	border-top: 1px solid #aaaaaa;
+}
+.highlt_img {
+	background-color: $background-color_1;
+	text-align: center;
+	img {
+		float: none;
+		border: none;
+	}
+	.gallery {
+		img {
+			float: left;
+			margin: 0 4px 0 0;
+			height: 50px;
+			width: auto;
+			max-width: 50px;
+		}
+	}
+}
+#EV {
+	background: #ffffff;
+	padding-bottom: 1px;
+}
+#SV {
+	background: #cccccc;
+	padding-bottom: 0px;
+}
+#PH {
+	background: #cccccc;
+	padding-bottom: 0px;
+}
+#SP {
+	background: #cccccc;
+	padding-bottom: 0px;
+}
+#pane1 {
+	display: block;
+}
+#pane2 {
+	display: none;
+}
+#pane3 {
+	display: none;
+}
+#pane3_text {
+	margin-left: 10px;
+}
+#pane4_text {
+	margin-left: 10px;
+}
+#view_type {
+	display: block;
+	margin-top: -12px;
+	td {
+		width: 360px;
+	}
+	form {
+		width: 360px;
+		text-align: center;
+	}
+}
+#s_bar {
+	display: none;
+	width: 370px;
+	border: 1px solid black;
+	margin-bottom: 1em;
+	td {
+		padding-left: 5px;
+		width: 370px;
+		text-decoration: none;
+		color: $color_7;
+		background: #aabbd8;
+	}
+}
+.icon_BAPM {
+	display: block;
+	background: url('../images/css_sprite_facts.png') no-repeat;
+	background-position: -0px -0px;
+	width: 60px;
+	height: 60px;
+}
+.icon_CHR {
+	display: block;
+	background: url('../images/css_sprite_facts.png') no-repeat;
+	background-position: -0px -0px;
+	width: 60px;
+	height: 60px;
+}
+.icon_RETI {
+	display: block;
+	background: url('../images/css_sprite_facts.png') no-repeat;
+	background-position: -60px -0px;
+	width: 60px;
+	height: 60px;
+}
+.icon_CENS {
+	display: block;
+	background: url('../images/css_sprite_facts.png') no-repeat;
+	background-position: -120px -0px;
+	width: 60px;
+	height: 60px;
+}
+.icon_BURI {
+	display: block;
+	background: url('../images/css_sprite_facts.png') no-repeat;
+	background-position: -0px -60px;
+	width: 60px;
+	height: 60px;
+}
+.icon_CREM {
+	display: block;
+	background: url('../images/css_sprite_facts.png') no-repeat;
+	background-position: -0px -60px;
+	width: 60px;
+	height: 60px;
+}
+.icon__MILI {
+	display: block;
+	background: url('../images/css_sprite_facts.png') no-repeat;
+	background-position: -60px -60px;
+	width: 60px;
+	height: 60px;
+}
+.icon_RESI {
+	display: block;
+	background: url('../images/css_sprite_facts.png') no-repeat;
+	background-position: -120px -60px;
+	width: 60px;
+	height: 60px;
+}
+.icon_DEAT {
+	display: block;
+	background: url('../images/css_sprite_facts.png') no-repeat;
+	background-position: -0px -120px;
+	width: 60px;
+	height: 60px;
+}
+.icon_OCCU {
+	display: block;
+	background: url('../images/css_sprite_facts.png') no-repeat;
+	background-position: -60px -120px;
+	width: 60px;
+	height: 60px;
+}
+.icon_BIRT {
+	display: block;
+	background: url('../images/css_sprite_facts.png') no-repeat;
+	background-position: -120px -120px;
+	width: 60px;
+	height: 60px;
+}
+#gname {
+	vertical-align: middle;
+	margin-top: 0px;
+	white-space: pre-wrap;
+	width: 200px;
+	height: 60px;
+}
+#namelink {
+	padding-bottom: 5px;
+}
+#iwcontent_edit {
+	background-color: $background-color_1;
+	border: 1px solid #bbbbbb;
+	height: 60px;
+	margin-right: 0em;
+	a {
+		color: $color_2;
+		&:hover {
+			color: $color_1;
+		}
+	}
+}
+.optionbox {
+	#gname {
+		white-space: normal;
+		line-height: initial;
+	}
+}
+.iwstyle {
+	width: 360px;
+	.gallery {
+		img {
+			float: left;
+			margin: 0 4px 0 0;
+			height: 50px;
+			width: auto;
+			max-width: 50px;
+		}
+	}
+	.icon-silhouette-M {
+		float: left;
+	}
+	.icon-silhouette-F {
+		float: left;
+	}
+	.icon-silhouette-U {
+		float: left;
+	}
+}
+#side_bar {
+	.gallery {
+		img {
+			float: left;
+			margin: 0 4px 0 0;
+			height: 50px;
+			width: auto;
+			max-width: 50px;
+		}
+	}
+	.icon-silhouette-M {
+		float: left;
+	}
+	.icon-silhouette-F {
+		float: left;
+	}
+	.icon-silhouette-U {
+		float: left;
+	}
+}
+html[dir="rtl"] {
+	#side_bar {
+		.gallery {
+			img {
+				float: right;
+				margin: 0 0 0 4px;
+			}
+		}
+		.icon-silhouette-M {
+			float: right;
+		}
+		.icon-silhouette-F {
+			float: right;
+		}
+		.icon-silhouette-U {
+			float: right;
+		}
+	}
+	.iwstyle {
+		.gallery {
+			img {
+				float: right;
+				margin: 0 0 0 4px;
+			}
+		}
+		.icon-silhouette-M {
+			float: right;
+		}
+		.icon-silhouette-F {
+			float: right;
+		}
+		.icon-silhouette-U {
+			float: right;
+		}
+	}
+	.highlt_img {
+		.gallery {
+			img {
+				float: right;
+				margin: 0 0 0 4px;
+			}
+		}
+	}
+}
+#pedigreemap_chart {
+	margin: 20px;
+	span.relationship {
+		font-weight: 600;
+		margin: auto 5px;
+		text-transform: capitalize;
+	}
+	span.event {
+		font-weight: 600;
+		text-transform: capitalize;
+	}
+}
+.icon-config_maps {
+	font-family: $font-family_1;
+	font-style: normal;
+	font-size: 1.2em;
+	vertical-align: inherit;
+	margin: 0 3px 0 10px;
+}
+.icon-edit_maps {
+	font-family: $font-family_1;
+	font-style: normal;
+	font-size: 1.2em;
+	vertical-align: inherit;
+	margin: 0 3px 0 10px;
+}
+.icon-check_maps {
+	font-family: $font-family_1;
+	font-style: normal;
+	font-size: 1.2em;
+	vertical-align: inherit;
+	margin: 0 3px 0 10px;
+}

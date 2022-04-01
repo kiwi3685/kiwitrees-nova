@@ -140,7 +140,7 @@ class googlemap_KT_Module extends KT_Module implements KT_Module_Config, KT_Modu
 			ob_start();
 			require_once KT_ROOT.KT_MODULES_DIR.'googlemap/googlemap.php';
 			require_once KT_ROOT.KT_MODULES_DIR.'googlemap/defaultconfig.php';
-			echo '<link type="text/css" href ="', KT_STATIC_URL, KT_MODULES_DIR, 'googlemap/css/googlemap.css" rel="stylesheet">';
+			echo '<link type="text/css" href ="', KT_STATIC_URL, KT_MODULES_DIR, 'googlemap/css/googlemap.min.css" rel="stylesheet">';
 			if (KT_USER_IS_ADMIN) {
 				echo '
 					<p style="margin:-10px 0 0 0; padding-bottom:2px;">
@@ -201,7 +201,7 @@ class googlemap_KT_Module extends KT_Module implements KT_Module_Config, KT_Modu
 
 		if ($action == 'update') {
 			set_module_setting('googlemap', 'GM_MAP_TYPE',          $_POST['NEW_GM_MAP_TYPE']);
-			set_module_setting('googlemap', 'GM_USE_STREETVIEW',    $_POST['NEW_GM_USE_STREETVIEW']);
+//			set_module_setting('googlemap', 'GM_USE_STREETVIEW',    $_POST['NEW_GM_USE_STREETVIEW']);
 			set_module_setting('googlemap', 'GM_MIN_ZOOM',          $_POST['NEW_GM_MIN_ZOOM']);
 			set_module_setting('googlemap', 'GM_MAX_ZOOM',          $_POST['NEW_GM_MAX_ZOOM']);
 			set_module_setting('googlemap', 'GM_PRECISION_0',       $_POST['NEW_GM_PRECISION_0']);
@@ -269,8 +269,8 @@ class googlemap_KT_Module extends KT_Module implements KT_Module_Config, KT_Modu
 							</td>
 						</tr>
 						<tr>
-							<th><?php echo /* I18N: http://en.wikipedia.org/wiki/Google_street_view */ KT_I18N::translate('Google Street View™'); ?></th>
-							<td><?php echo radio_buttons('NEW_GM_USE_STREETVIEW', array(false=>KT_I18N::translate('hide'),true=>KT_I18N::translate('show')), get_module_setting('googlemap', 'GM_USE_STREETVIEW', '0')); ?></td>
+							<th><?php //echo /* I18N: http://en.wikipedia.org/wiki/Google_street_view */ KT_I18N::translate('Google Street View™'); ?></th>
+							<td><?php //echo radio_buttons('NEW_GM_USE_STREETVIEW', array(false=>KT_I18N::translate('hide'),true=>KT_I18N::translate('show')), get_module_setting('googlemap', 'GM_USE_STREETVIEW', '0')); ?></td>
 						</tr>
 						<tr>
 							<th>
@@ -722,7 +722,7 @@ class googlemap_KT_Module extends KT_Module implements KT_Module_Config, KT_Modu
 			->addExternalJavascript(KT_AUTOCOMPLETE_JS_URL)
 			->addInlineJavascript('autocomplete();');
 
-		echo '<link type="text/css" href ="', KT_STATIC_URL, KT_MODULES_DIR, 'googlemap/css/googlemap.css" rel="stylesheet">';
+		echo '<link type="text/css" href ="', KT_STATIC_URL, KT_MODULES_DIR, 'googlemap/css/googlemap.min.css" rel="stylesheet">';
 		echo '<div id="pedigreemap-page">
 				<h2>', $controller->getPageTitle(), '</h2>';
 
@@ -1231,7 +1231,7 @@ class googlemap_KT_Module extends KT_Module implements KT_Module_Config, KT_Modu
 				position: google.maps.ControlPosition.TOP_RIGHT,  // BOTTOM, BOTTOM_LEFT, LEFT, TOP, etc
 				style: google.maps.NavigationControlStyle.SMALL   // ANDROID, DEFAULT, SMALL, ZOOM_PAN
 			},
-			streetViewControl: false,  // Show Pegman or not
+//			streetViewControl: false,  // Show Pegman or not
 			scrollwheel: true
 		};
 		var pm_map = new google.maps.Map(document.getElementById("pm_map"), myOptions);
@@ -1879,7 +1879,7 @@ class googlemap_KT_Module extends KT_Module implements KT_Module_Config, KT_Modu
 					position: google.maps.ControlPosition.TOP_RIGHT,  // BOTTOM, BOTTOM_LEFT, LEFT, TOP, etc
 					style: google.maps.NavigationControlStyle.SMALL   // ANDROID, DEFAULT, SMALL, ZOOM_PAN
 				},
-				streetViewControl: false,  // Show Pegman or not
+//				streetViewControl: false,  // Show Pegman or not
 				scrollwheel: true
 			};
 
@@ -1950,7 +1950,7 @@ class googlemap_KT_Module extends KT_Module implements KT_Module_Config, KT_Modu
 					zoom: svzoom
 				}
 			};
-			panorama = new google.maps.StreetViewPanorama(document.getElementById('mapCanvas'), panoramaOptions);
+//			panorama = new google.maps.StreetViewPanorama(document.getElementById('mapCanvas'), panoramaOptions);
 			panorama.setPosition(latLng);
 			setTimeout(function() { panorama.setVisible(true); }, 1000);
 			setTimeout(function() { panorama.setVisible(true); }, 2000);
@@ -2023,6 +2023,7 @@ class googlemap_KT_Module extends KT_Module implements KT_Module_Config, KT_Modu
 			map.overlayMapTypes.push(null);
 
 			// Now create the StreetView ImageMap
+/*
 			var street = new google.maps.ImageMapType({
 				getTileUrl: function(coord, zoom) {
 					var X = coord.x % (1 << zoom);  // wrap
@@ -2031,11 +2032,11 @@ class googlemap_KT_Module extends KT_Module implements KT_Module_Config, KT_Modu
 				tileSize: new google.maps.Size(256, 256),
 				isPng: true
 			});
-
+*/
 			//  Add the Street view Image Map
-			map.overlayMapTypes.setAt(1, street);
+//			map.overlayMapTypes.setAt(1, street);
 		}
-
+/*
 		function toggleStreetView() {
 			var toggle = panorama.getVisible();
 			if (toggle == false) {
@@ -2046,7 +2047,7 @@ class googlemap_KT_Module extends KT_Module implements KT_Module_Config, KT_Modu
 				document.myForm.butt1.value = "<?php echo KT_I18N::translate('Google Street View™'); ?>";
 			}
 		}
-
+*/
 		// Onload handler to fire off the app.
 		google.maps.event.addDomListener(window, 'load', initialize);
 

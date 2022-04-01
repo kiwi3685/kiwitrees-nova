@@ -374,7 +374,7 @@ class list_places_KT_Module extends KT_Module implements KT_Module_List {
 							</div>
 						<?php }
 						if ($use_googlemap) { ?>
-							<link type="text/css" href="<?php echo KT_STATIC_URL . KT_MODULES_DIR; ?>googlemap/css/googlemap.css" rel="stylesheet">
+							<link type="text/css" href="<?php echo KT_STATIC_URL . KT_MODULES_DIR; ?>googlemap/css/googlemap.min.css" rel="stylesheet">
 							<?php map_scripts($numfound, $level, $parent, $linklevels, $placelevels, $place_names);
 						}
 					break;

@@ -125,7 +125,7 @@ function create_map($placelevels) {
 	global $GOOGLEMAP_PH_XSIZE, $GOOGLEMAP_PH_YSIZE, $GOOGLEMAP_MAP_TYPE, $levelm, $plzoom, $controller;
 
 	// *** ENABLE STREETVIEW *** (boolean) =========================================================
-	$STREETVIEW	= get_module_setting('googlemap', 'GM_USE_STREETVIEW');
+//	$STREETVIEW	= get_module_setting('googlemap', 'GM_USE_STREETVIEW');
 	// =============================================================================================
 	$parent		= KT_Filter::get('parent');
 
@@ -180,79 +180,9 @@ function create_map($placelevels) {
 						<?php echo KT_I18N::translate('Update place names'); ?>
 					</a>
 				</div>
-				
-			<?php }
 
-			if ($STREETVIEW && $level >= 1) {
-				$controller->addInlineJavascript('
-					function update_sv_params(placeid) {
-						var svlati = document.getElementById("sv_latiText").value.slice(0, -1);
-						var svlong = document.getElementById("sv_longText").value.slice(0, -1);
-						var svbear = document.getElementById("sv_bearText").value.slice(0, -1);
-						var svelev = document.getElementById("sv_elevText").value.slice(0, -1);
-						var svzoom = document.getElementById("sv_zoomText").value;
-						win03 = window.open("module.php?mod=googlemap&mod_action=admin_places_edit&action=update_sv_params&placeid="+placeid+"&svlati="+svlati+"&svlong="+svlong+"&svbear="+svbear+"&svelev="+svelev+"&svzoom="+svzoom, "win03", indx_window_specs);
-						if (window.focus) {win03.focus();}
-					}
-				'); ?>
-				<div id="streetview">
-					<?php
-			$parent = KT_Filter::get('parent');
-					global $TBLPREFIX, $pl_lati, $pl_long;
-					if ($level>=1) {
-						$pl_lati = str_replace(array('N', 'S', ','), array('', '-', '.'), $latlng['pl_lati']);	// KT_placelocation lati
-						$pl_long = str_replace(array('E', 'W', ','), array('', '-', '.'), $latlng['pl_long']);	// KT_placelocation long
+			<?php } ?>
 
-						// Check if Streetview location parameters are stored in database
-						$placeid	= $latlng['pl_id'];			// Placelocation place id
-						$sv_lat		= $latlng['sv_lati'];		// StreetView Point of View Latitude
-						$sv_lng		= $latlng['sv_long'];		// StreetView Point of View Longitude
-						$sv_dir		= $latlng['sv_bearing'];	// StreetView Point of View Direction (degrees from North)
-						$sv_pitch	= $latlng['sv_elevation'];	// StreetView Point of View Elevation (+90 to -90 degrees (+=down, -=up)
-						$sv_zoom	= $latlng['sv_zoom'];		// StreetView Point of View Zoom (0, 1, 2 or 3)
-
-						// Check if Street View Lati/Long are the default of 0 or null, if so use regular Place Lati/Long to set an initial location for the panda ------------
-						if (($latlng['sv_lati'] == null && $latlng['sv_long'] == null) || ($latlng['sv_lati'] == 0 && $latlng['sv_long'] == 0)) {
-								$sv_lat = $pl_lati;
-								$sv_lng = $pl_long;
-						}
-						// Set Street View parameters to numeric value if NULL (avoids problem with Google Street View™ Pane not rendering)
-						if ($sv_dir == Null) {
-							$sv_dir = 0;
-						}
-						if ($sv_pitch == null) {
-							$sv_pitch = 0;
-						}
-						if ($sv_zoom == null) {
-							$sv_zoom = 1;
-						}
-						?>
-						<iframe src="module.php?mod=googlemap&amp;mod_action=street_view&amp;x=<?php echo $sv_lng; ?>&amp;y=<?php echo $sv_lat; ?>&amp;z=18&amp;t=2&amp;c=1&amp;s=1&amp;b=<?php echo $sv_dir; ?>&amp;p=<?php echo $sv_pitch; ?>&amp;m=<?php echo $sv_zoom; ?>&amp;j=1&amp;k=1&amp;v=1" marginwidth="0" marginheight="0" frameborder="0" scrolling="no"></iframe>
-						<?php if (KT_USER_IS_ADMIN) { ?>
-							<form method="post" action="">
-								<p>
-								<?php echo KT_Gedcom_Tag::getLabel('LATI'); ?>
-									<input name="sv_latiText" id="sv_latiText" type="text" value="<?php echo $sv_lat; ?>">
-								<?php echo KT_Gedcom_Tag::getLabel('LONG'); ?>
-									<input name="sv_longText" id="sv_longText" type="text" value="<?php echo $sv_lng; ?>">
-								<?php echo /* I18N: Compass bearing (in degrees), for street-view mapping */ KT_I18N::translate('Bearing'); ?>
-									<input name="sv_bearText" id="sv_bearText" type="text" value="<?php echo $sv_dir; ?>">
-								<?php echo /* I18N: Angle of elevation (in degrees), for street-view mapping */ KT_I18N::translate('Elevation'); ?>
-									<input name="sv_elevText" id="sv_elevText" type="text" value="<?php echo $sv_pitch; ?>">
-								<?php echo KT_I18N::translate('Zoom'); ?>
-									<input name="sv_zoomText" id="sv_zoomText" type="text" value="<?php echo $sv_zoom; ?>">
-								</p>
-									<p id="save-cancel">
-										<button class="btn btn-primary" type="submit" name="Submit" onclick="update_sv_params(<?php echo $placeid; ?>);">
-											<i class="<?php echo $iconStyle; ?> fa-save"></i>
-											<?php echo KT_I18N::translate('Save'); ?>
-										</button>
-									</p>
-							</form>
-						<?php }
-					} ?>
-				</div>
-			<?php }	?>
 		</div>
 	</div>
 	<?php
@@ -446,7 +376,7 @@ function map_scripts($numfound, $level, $parent, $linklevels, $placelevels, $pla
 	global $GOOGLEMAP_MAP_TYPE, $GOOGLEMAP_PH_MARKER, $plzoom, $controller;
 
 	$controller->addInlineJavascript('
-		jQuery("head").append(\'<link rel="stylesheet" type="text/css" href="' . KT_STATIC_URL . KT_MODULES_DIR . 'googlemap/css/googlemap.css" />\');
+		jQuery("head").append(\'<link rel="stylesheet" type="text/css" href="' . KT_STATIC_URL . KT_MODULES_DIR . 'googlemap/css/googlemap.min.css" />\');
 		var numMarkers = "' . $numfound . '";
 		var mapLevel   = "' . $level . '";
 		var placezoom  = "' . $plzoom . '";
@@ -475,7 +405,7 @@ function map_scripts($numfound, $level, $parent, $linklevels, $placelevels, $pla
 				position: google.maps.ControlPosition.TOP_RIGHT, // BOTTOM, BOTTOM_LEFT, LEFT, TOP, etc
 				style: google.maps.NavigationControlStyle.SMALL  // ANDROID, DEFAULT, SMALL, ZOOM_PAN
 			},
-			streetViewControl: false, // Show Pegman or not
+//			streetViewControl: false, // Show Pegman or not
 			scrollwheel: false
 		};
 		map = new google.maps.Map(document.getElementById("place_map"), mapOptions);

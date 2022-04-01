@@ -188,7 +188,7 @@ if ($action=='ExportFile' && KT_USER_IS_ADMIN) {
 $controller
 	->setPageTitle(KT_I18N::translate('Google Maps™'))
 	->pageHeader();
-echo '<link type="text/css" href ="', KT_STATIC_URL, KT_MODULES_DIR, 'googlemap/css/googlemap.css" rel="stylesheet">';
+echo '<link type="text/css" href ="', KT_STATIC_URL, KT_MODULES_DIR, 'googlemap/css/googlemap.min.css" rel="stylesheet">';
 
 ?>
 <table id="gm_config">
