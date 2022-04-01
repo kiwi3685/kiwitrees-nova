@@ -182,7 +182,7 @@ switch ($action) {
 						<div class="cell medium-8 medium-offset-2">
 							<label for="pass_word" class="h6"><?php echo KT_I18N::translate('Password'); ?></label>
 							<div class="input-group">
-								<input class="input-group-field" type="password" id="pass_word" name="password" placeholder="<?php echo KT_I18N::translate('Password'); ?>" required value="<?php echo htmlspecialchars($username); ?>">
+								<input class="input-group-field" type="password" id="pass_word" name="password" placeholder="<?php echo KT_I18N::translate('Password'); ?>" required value="">
 								<span class="input-group-label unmask" title="<?php echo KT_I18N::translate('Show/Hide password to check content'); ?>">
 									<i class="<?php echo $iconStyle; ?> fa-eye"></i>
 								</span>
