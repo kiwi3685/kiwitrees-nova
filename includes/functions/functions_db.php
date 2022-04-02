@@ -353,8 +353,9 @@ function search_indis($query, $geds, $match) {
 	$sql = "
 		SELECT 'INDI' AS type, i_id AS xref, i_file AS ged_id, i_gedcom AS gedrec
 		 FROM `##individuals`
-		 WHERE (".implode(" {$match} ", $querysql).')
-		 AND i_file IN ('.implode(',', $geds).')';
+		 WHERE (" . implode(" {$match} ", $querysql) . ") AND
+		 i_file IN (" . implode(',', $geds) . ")
+	";
 
 	// Group results by gedcom, to minimise switching between privacy files
 	$sql.=' ORDER BY ged_id';
@@ -413,11 +414,12 @@ function search_indis_names($query, $geds, $match) {
 		SELECT DISTINCT 'INDI' AS type, i_id AS xref, i_file AS ged_id, i_gedcom AS gedrec, n_num
 		 FROM `##individuals`
 		 JOIN `##name` ON i_id=n_id AND i_file=n_file
-		 WHERE (".implode(" {$match} ", $querysql).')
-		 AND i_file IN ('.implode(',', $geds).')';
+		WHERE (" . implode(" {$match} ", $querysql) . ")
+		AND i_file IN (" . implode(',', $geds) . ")
+	";
 
 	// Group results by gedcom, to minimise switching between privacy files
-	$sql.=' ORDER BY ged_id';
+	$sql .= " ORDER BY ged_id";
 
 	$list=array();
 	$rows=KT_DB::prepare($sql)->fetchAll(PDO::FETCH_ASSOC);
@@ -600,13 +602,14 @@ function search_fams($query, $geds, $match) {
 	}
 
 	$sql = "
-		SELECT 'FAM' AS type, f_id AS xref, f_file AS ged_id, f_gedcom AS gedrec
-		 FROM `##families`
-		 WHERE (".implode(" {$match} ", $querysql).')
-		 AND f_file IN ('.implode(',', $geds).')';
+		SELECT 'FAM' AS type, f_id AS xref, f_file AS ged_id, f_gedcom AS gedrec 
+		FROM `##families`
+		WHERE (" . implode(" {$match} ", $querysql) . ")
+		AND f_file IN (" . implode(',', $geds) . ")
+	";
 
 	// Group results by gedcom, to minimise switching between privacy files
-	$sql.=' ORDER BY ged_id';
+	$sql .= " ORDER BY ged_id";
 
 	$list=array();
 	$rows=KT_DB::prepare($sql)->fetchAll(PDO::FETCH_ASSOC);
@@ -664,14 +667,14 @@ function search_fams_names($query, $geds, $match) {
 	$sql = "
 		SELECT DISTINCT 'FAM' AS type, f_id AS xref, f_file AS ged_id, f_gedcom AS gedrec
 		 FROM `##families`
-		 LEFT OUTER JOIN `##name` husb ON f_husb=husb.n_id
-		 AND f_file=husb.n_file LEFT OUTER JOIN `##name` wife ON f_wife=wife.n_id
-		 AND f_file=wife.n_file
-		 WHERE (".implode(" {$match} ", $querysql).')
-		 AND f_file IN ('.implode(',', $geds).')';
+		LEFT OUTER JOIN `##name` husb ON f_husb=husb.n_id AND f_file=husb.n_file
+		LEFT OUTER JOIN `##name` wife ON f_wife=wife.n_id AND f_file=wife.n_file
+		WHERE (" . implode(" {$match} ", $querysql) . ")
+		AND f_file IN (" . implode(',', $geds) . ")
+	";
 
 	// Group results by gedcom, to minimise switching between privacy files
-	$sql .= ' ORDER BY ged_id';
+	$sql .= " ORDER BY ged_id";
 
 	$list=array();
 	$rows=KT_DB::prepare($sql)->fetchAll(PDO::FETCH_ASSOC);
@@ -721,8 +724,9 @@ function search_sources($query, $geds, $match) {
 	$sql = "
 		SELECT 'SOUR' AS type, s_id AS xref, s_file AS ged_id, s_gedcom AS gedrec
 		 FROM `##sources`
-		 WHERE (".implode(" {$match} ", $querysql).')
-		 AND s_file IN ('.implode(',', $geds).')';
+		WHERE (" . implode(" {$match} ", $querysql) . ")
+		AND s_file IN (" . implode(',', $geds) . ")
+	";
 
 	// Group results by gedcom, to minimise switching between privacy files
 	$sql.=' ORDER BY ged_id';
@@ -788,10 +792,11 @@ function search_notes($query, $geds, $match) {
 		SELECT 'NOTE' AS type, o_id AS xref, o_file AS ged_id, o_gedcom AS gedrec
 		 FROM `##other`
 		 WHERE (".implode(" {$match} ", $querysql).")
-		 AND o_type='NOTE' AND o_file IN (".implode(',', $geds).')';
+		AND o_type='NOTE' AND o_file IN (" . implode(',', $geds) . ")
+	";
 
 	// Group results by gedcom, to minimise switching between privacy files
-	$sql.=' ORDER BY ged_id';
+	$sql .= " ORDER BY ged_id";
 
 	$list=array();
 	$rows=KT_DB::prepare($sql)->fetchAll(PDO::FETCH_ASSOC);
@@ -857,10 +862,11 @@ function search_repos($query, $geds, $match) {
 		 FROM `##other`
 		 WHERE (".implode(" {$match} ", $querysql).")
 		 AND o_type='REPO'
-		 AND o_file IN (".implode(',', $geds).')';
+		AND o_file IN (" . implode(',', $geds) . ")
+	";
 
 	// Group results by gedcom, to minimise switching between privacy files
-	$sql .=' ORDER BY ged_id';
+	$sql .= " ORDER BY ged_id";
 
 	$list=array();
 	$rows=KT_DB::prepare($sql)->fetchAll(PDO::FETCH_ASSOC);
@@ -1055,7 +1061,7 @@ function get_anniversary_events($jd, $facts='', $ged_id=KT_GED_ID) {
 			case 3:
 				// 1 KSL includes 30 CSH (if this year didn't have 30 CSH)
 				// 29 KSL does not include 30 KSL (but would include an invalid 31 KSL if there were no 30 KSL)
-				if ($anniv->d==1) {
+    				if ($anniv->d===1) {
 					$tmp=new KT_Date_Jewish(array($anniv->y, 'csh', 1));
 					if ($tmp->DaysInMonth()==29) {
 						$where.=" AND (d_day<=1 AND d_mon=3 OR d_day=30 AND d_mon=2)";
@@ -1073,7 +1079,7 @@ function get_anniversary_events($jd, $facts='', $ged_id=KT_GED_ID) {
 				break;
 			case 4:
 				// 1 TVT includes 30 KSL (if this year didn't have 30 KSL)
-				if ($anniv->d==1) {
+    				if ($anniv->d===1) {
 					$tmp=new KT_Date_Jewish($anniv->y, 'ksl', 1);
 					if ($tmp->DaysInMonth()==29) {
 						$where.=" AND (d_day<=1 AND d_mon=4 OR d_day=30 AND d_mon=3)";
@@ -1081,14 +1087,14 @@ function get_anniversary_events($jd, $facts='', $ged_id=KT_GED_ID) {
 						$where.=" AND d_day<=1 AND d_mon=4";
 					}
 				} else
-					if ($anniv->d==$anniv->DaysInMonth()) {
+    					if ($anniv->d===$anniv->DaysInMonth()) {
 						$where.=" AND d_day>={$anniv->d} AND d_mon=4";
 					} else {
 						$where.=" AND d_day={$anniv->d} AND d_mon=4";
 					}
 				break;
 			case 6: // ADR (non-leap) includes ADS (leap)
-				if ($anniv->d==1) {
+    				if ($anniv->d===1) {
 					$where.=" AND d_day<=1";
 				} elseif ($anniv->d==$anniv->DaysInMonth()) {
 					$where.=" AND d_day>={$anniv->d}";
@@ -1102,7 +1108,7 @@ function get_anniversary_events($jd, $facts='', $ged_id=KT_GED_ID) {
 				}
 				break;
 			case 7: // ADS includes ADR (non-leap)
-				if ($anniv->d==1) {
+    				if ($anniv->d===1) {
 					$where.=" AND d_day<=1";
 				} elseif ($anniv->d==$anniv->DaysInMonth()) {
 					$where.=" AND d_day>={$anniv->d}";
@@ -1112,7 +1118,7 @@ function get_anniversary_events($jd, $facts='', $ged_id=KT_GED_ID) {
 				$where.=" AND (d_mon=6 AND MOD(7*d_year+1, 19)>=7 OR d_mon=7)";
 				break;
 			case 8: // 1 NSN includes 30 ADR, if this year is non-leap
-				if ($anniv->d==1) {
+    				if ($anniv->d===1) {
 					if ($anniv->IsLeapYear()) {
 						$where.=" AND d_day<=1 AND d_mon=8";
 					} else {
@@ -1400,7 +1406,9 @@ function delete_user($user_id) {
 		KT_DB::prepare("DELETE FROM `##user_gedcom_setting` WHERE user_id=?")->execute(array($user_id));
 		KT_DB::prepare("DELETE FROM `##gedcom_setting` WHERE setting_value=? AND setting_name IN ('CONTACT_USER_ID', 'WEBMASTER_USER_ID')")->execute(array((string) $user_id));
 		KT_DB::prepare("DELETE FROM `##user_setting` WHERE user_id=?")->execute(array($user_id));
-		KT_DB::prepare("DELETE FROM `##message` WHERE user_id=?")->execute(array($user_id));
+		if (table_exists("##message")) {
+			KT_DB::prepare("DELETE FROM `##message` WHERE user_id=?")->execute(array($user_id));
+		}
 		KT_DB::prepare("DELETE FROM `##user` WHERE user_id=?")->execute(array($user_id));
 	} else {
 		KT_FlashMessages::addMessage(KT_I18N::translate('<span class="error">Unable to delete user. This user has pending data changes.</span>'));
@@ -1490,12 +1498,11 @@ function get_logged_in_users() {
 	// If the user is logged in on multiple times, this query would fetch
 	// multiple rows.  fetchAssoc() will eliminate the duplicates
 	return
-		KT_DB::prepare(
-			"SELECT SQL_NO_CACHE user_id, user_name".
-			" FROM `##user` u".
-			" JOIN `##session` USING (user_id)"
-		)
-		->fetchAssoc();
+		KT_DB::prepare("
+			SELECT user_id, user_name
+			FROM `##user` u
+			JOIN `##session` USING (user_id)
+		")->fetchAssoc();
 }
 
 // Get the ID for a username
@@ -1644,6 +1651,11 @@ function get_block_location($block_id) {
 		"SELECT location FROM `##block` WHERE block_id=?"
 	)->execute(array($block_id))->fetchOne();
 }
+function get_block_order($block_id) {
+	return KT_DB::prepare(
+		"SELECT block_order FROM `##block` WHERE block_id=?"
+	)->execute(array($block_id))->fetchOne();;
+}
 
 function get_block_setting($block_id, $setting_name, $default_value = null) {
 	static $statement;
@@ -1746,4 +1758,13 @@ function format_size($size) {
 			return KT_I18N::number(($size / 1024000000), 2) . ' GB';
 			break;
 	}
+}
+function table_exists ($table) {
+    $sql  = "SELECT * FROM `" . $table . "`";
+    try {
+        $rows = KT_DB::prepare($sql)->fetchAll(PDO::FETCH_ASSOC);
+        return true;
+    } catch (PDOException $ex) {
+    	return false;
+    }
 }
