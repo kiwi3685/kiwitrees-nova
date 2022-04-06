@@ -380,7 +380,11 @@ switch (KT_Filter::get('action')) {
 							</div>
 							<div class="cell large-9">
 								<div class="input-group">
-									<input class="input-group-field" type="password" id="pass1" name="pass1" pattern="<?php echo KT_REGEX_PASSWORD; ?>" placeholder="<?php echo KT_I18N::plural('Use at least %s character.', 'Use at least %s characters.', KT_MINIMUM_PASSWORD_LENGTH, KT_I18N::number(KT_MINIMUM_PASSWORD_LENGTH)); ?>" <?php echo $user_id ? '' : 'required'; ?>>
+									<input
+										class="input-group-field"
+										type="password" id="pass1"
+										name="pass1"
+										pattern="<?php echo KT_REGEX_PASSWORD; ?>" placeholder="<?php echo KT_I18N::plural('Use at least %s character.', 'Use at least %s characters.', KT_MINIMUM_PASSWORD_LENGTH, KT_I18N::number(KT_MINIMUM_PASSWORD_LENGTH)); ?>" <?php echo $user_id ? '' : 'required'; ?>>
 									<span class="input-group-label unmask" title="<?php echo KT_I18N::translate('Show/Hide password to check content'); ?>">
 										<i class="<?php echo $iconStyle; ?> fa-eye"></i>
 									</span>
@@ -634,8 +638,8 @@ switch (KT_Filter::get('action')) {
 											get_user_setting($user_id, 'canadmin'),
 											$disabled,
 											KT_I18N::translate('yes'),
-											KT_I18N::translate('no'));
-										?>
+											KT_I18N::translate('no')
+										); ?>
 									</div>
 
 									<!-- FAMILY TREE SETTINGS -->
