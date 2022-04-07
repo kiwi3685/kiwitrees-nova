@@ -28,7 +28,11 @@ if (!defined('KT_KIWITREES')) {
 
 global $GM_API_KEY;
 $GM_API_KEY = get_module_setting('googlemap', 'GM_API_KEY', ''); // Optional Google Map API key
-if ($GM_API_KEY) {$key = '&key=' . $GM_API_KEY; } else {$key = '';}
+if ($GM_API_KEY) {
+	$key = '&key=' . $GM_API_KEY;
+} else {
+	$key = '';
+}
 define('KT_GM_SCRIPT', 'https://maps.google.com/maps/api/js?v=3&amp;language=' . KT_LOCALE . $key);
 
 // http://www.google.com/permissions/guidelines.html
@@ -59,31 +63,31 @@ class googlemap_KT_Module extends KT_Module implements KT_Module_Config, KT_Modu
 	// Extend KT_Module
 	public function modAction($mod_action) {
 		switch($mod_action) {
-		case 'admin_config':
-			$this->config();
-			break;
-		case 'admin_flags':
-			$this->flags();
-			break;
-		case 'pedigree_map':
-			$this->pedigree_map();
-			break;
-		case 'admin_placecheck':
-			$this->admin_placecheck();
-			break;
-		case 'admin_places':
-		case 'admin_places_edit':
-			// TODO: these files should be methods in this class
-			require KT_ROOT . KT_MODULES_DIR . 'googlemap/googlemap.php';
-			require KT_ROOT . KT_MODULES_DIR . 'googlemap/defaultconfig.php';
-			require KT_ROOT . KT_MODULES_DIR . $this->getName() . '/' . $mod_action . '.php';
-			break;
-		case 'street_view':
-			$this->street_view();
-			break;
-		default:
-			header('HTTP/1.0 404 Not Found');
-			break;
+			case 'admin_config':
+				$this->config();
+				break;
+			case 'admin_flags':
+				$this->flags();
+				break;
+			case 'pedigree_map':
+				$this->pedigree_map();
+				break;
+			case 'admin_placecheck':
+				$this->admin_placecheck();
+				break;
+			case 'admin_places':
+			case 'admin_places_edit':
+				// TODO: these files should be methods in this class
+				require KT_ROOT . KT_MODULES_DIR . 'googlemap/googlemap.php';
+				require KT_ROOT . KT_MODULES_DIR . 'googlemap/defaultconfig.php';
+				require KT_ROOT . KT_MODULES_DIR . $this->getName() . '/' . $mod_action . '.php';
+				break;
+			case 'street_view':
+				$this->street_view();
+				break;
+			default:
+				header('HTTP/1.0 404 Not Found');
+				break;
 		}
 	}
 
@@ -189,279 +193,380 @@ class googlemap_KT_Module extends KT_Module implements KT_Module_Config, KT_Modu
 		require KT_ROOT . KT_MODULES_DIR.'googlemap/defaultconfig.php';
 		require KT_ROOT . 'includes/functions/functions_edit.php';
 
+		$precision = [
+			0 => KT_I18N::translate('Country'),
+			1 => KT_I18N::translate('State'),
+			3 => KT_I18N::translate('Neighbourhood'),
+			4 => KT_I18N::translate('House'),
+			5 => KT_I18N::translate('Max')
+		];
+
+		$selected = [
+			'0' => $GOOGLEMAP_PRECISION_0,
+			'1' => $GOOGLEMAP_PRECISION_1,
+			'3' => $GOOGLEMAP_PRECISION_2,
+			'4' => $GOOGLEMAP_PRECISION_3,
+			'5' => $GOOGLEMAP_PRECISION_4
+		];
 		$action = safe_REQUEST($_REQUEST, 'action');
 
 		$controller = new KT_Controller_Page();
 		$controller
 			->restrictAccess(KT_USER_IS_ADMIN)
 			->setPageTitle(KT_I18N::translate('Google Maps™'))
-			->pageHeader()
-			->addInlineJavascript('jQuery("#tabs").tabs();');
+			->pageHeader();
 
+			switch (KT_Filter::post('action')) {
+				case 'update_basic' :
+					set_module_setting('googlemap', 'GM_PLACE_HIERARCHY',   KT_Filter::postBool('NEW_GM_PLACE_HIERARCHY'));
+					set_module_setting('googlemap', 'GM_PH_MARKER',         KT_Filter::post('NEW_GM_PH_MARKER'));
+					set_module_setting('googlemap', 'GM_DISP_SHORT_PLACE',  KT_Filter::postBool('NEW_GM_DISP_SHORT_PLACE'));
+					set_module_setting('googlemap', 'GM_COORD',             KT_Filter::postBool('NEW_GM_COORD'));
+					set_module_setting('googlemap', 'GM_MAP_TYPE',          KT_Filter::post('NEW_GM_MAP_TYPE'));
+					set_module_setting('googlemap', 'GM_MIN_ZOOM',          KT_Filter::post('NEW_GM_MIN_ZOOM'));
+					set_module_setting('googlemap', 'GM_MAX_ZOOM',          KT_Filter::post('NEW_GM_MAX_ZOOM'));
+					set_module_setting('googlemap', 'GM_API_KEY',  			KT_Filter::post('NEW_GM_API_KEY'));
+					AddToLog('Googlemap basic settings updated', 'config');
+					// read the config file again, to set the vars
+					require KT_ROOT . KT_MODULES_DIR . 'googlemap/defaultconfig.php';
+					// Reload the page, so that the settings take effect immediately.
+				    echo '<script>
+				        window.location.href="module.php?mod=googlemap&mod_action=admin_config";
+				    </script>';
+					exit;
 
-		if ($action == 'update') {
-			set_module_setting('googlemap', 'GM_MAP_TYPE',          $_POST['NEW_GM_MAP_TYPE']);
-//			set_module_setting('googlemap', 'GM_USE_STREETVIEW',    $_POST['NEW_GM_USE_STREETVIEW']);
-			set_module_setting('googlemap', 'GM_MIN_ZOOM',          $_POST['NEW_GM_MIN_ZOOM']);
-			set_module_setting('googlemap', 'GM_MAX_ZOOM',          $_POST['NEW_GM_MAX_ZOOM']);
-			set_module_setting('googlemap', 'GM_PRECISION_0',       $_POST['NEW_GM_PRECISION_0']);
-			set_module_setting('googlemap', 'GM_PRECISION_1',       $_POST['NEW_GM_PRECISION_1']);
-			set_module_setting('googlemap', 'GM_PRECISION_2',       $_POST['NEW_GM_PRECISION_2']);
-			set_module_setting('googlemap', 'GM_PRECISION_3',       $_POST['NEW_GM_PRECISION_3']);
-			set_module_setting('googlemap', 'GM_PRECISION_4',       $_POST['NEW_GM_PRECISION_4']);
-			set_module_setting('googlemap', 'GM_PRECISION_5',       $_POST['NEW_GM_PRECISION_5']);
-			set_module_setting('googlemap', 'GM_DEFAULT_TOP_VALUE', $_POST['NEW_GM_DEFAULT_TOP_LEVEL']);
-			set_module_setting('googlemap', 'GM_COORD',             $_POST['NEW_GM_COORD']);
-			set_module_setting('googlemap', 'GM_PLACE_HIERARCHY',   $_POST['NEW_GM_PLACE_HIERARCHY']);
-			set_module_setting('googlemap', 'GM_PH_MARKER',         $_POST['NEW_GM_PH_MARKER']);
-			set_module_setting('googlemap', 'GM_DISP_SHORT_PLACE',  $_POST['NEW_GM_DISP_SHORT_PLACE']);
-			set_module_setting('googlemap', 'GM_API_KEY',  			$_POST['NEW_GM_API_KEY']);
+				case 'update_advanced' :
+					set_module_setting('googlemap', 'GM_PRECISION_0',       KT_Filter::post('NEW_GM_PRECISION_0'));
+					set_module_setting('googlemap', 'GM_PRECISION_1',       KT_Filter::post('NEW_GM_PRECISION_1'));
+					set_module_setting('googlemap', 'GM_PRECISION_2',       KT_Filter::post('NEW_GM_PRECISION_2'));
+					set_module_setting('googlemap', 'GM_PRECISION_3',       KT_Filter::post('NEW_GM_PRECISION_3'));
+					set_module_setting('googlemap', 'GM_PRECISION_4',       KT_Filter::post('NEW_GM_PRECISION_4'));
+					set_module_setting('googlemap', 'GM_PRECISION_5',       KT_Filter::post('NEW_GM_PRECISION_5'));
+					set_module_setting('googlemap', 'GM_DEFAULT_TOP_VALUE', KT_Filter::post('NEW_GM_DEFAULT_TOP_LEVEL'));
 
-			for ($i = 1; $i <= 9; $i ++) {
-				set_module_setting('googlemap', 'GM_PREFIX_'.$i,  $_POST['NEW_GM_PREFIX_'.$i]);
-				set_module_setting('googlemap', 'GM_POSTFIX_'.$i, $_POST['NEW_GM_POSTFIX_'.$i]);
-			}
+					for ($i = 1; $i <= 9; $i ++) {
+						set_module_setting('googlemap', 'GM_PREFIX_' . $i,  KT_Filter::post('NEW_GM_PREFIX_' . $i));
+						set_module_setting('googlemap', 'GM_POSTFIX_' . $i, KT_Filter::post('NEW_GM_POSTFIX_' . $i));
+					}
+					AddToLog('Googlemap advanced settings updated', 'config');
+					// read the config file again, to set the vars
+					require KT_ROOT . KT_MODULES_DIR . 'googlemap/defaultconfig.php';
+					// Reload the page, so that the settings take effect immediately.
+				    echo '<script>
+				        window.location.href="module.php?mod=googlemap&mod_action=admin_config";
+				    </script>';
+					exit;
 
-			AddToLog('Googlemap config updated', 'config');
-			// read the config file again, to set the vars
-			require KT_ROOT . KT_MODULES_DIR . 'googlemap/defaultconfig.php';
-		}
-		?>
-		<table id = "gm_config">
-			<tr>
-				<th>
-					<a class="current" href="module.php?mod=googlemap&amp;mod_action=admin_config">
-						<?php echo KT_I18N::translate('Google Maps™ preferences'); ?>
-					</a>
-				</th>
-				<th>
-					<a href="module.php?mod=googlemap&amp;mod_action=admin_places">
-						<?php echo KT_I18N::translate('Geographic data'); ?>
-					</a>
-				</th>
-				<th>
-					<a href="module.php?mod=googlemap&amp;mod_action=admin_placecheck">
-						<?php echo KT_I18N::translate('Place Check'); ?>
-					</a>
-				</th>
-			</tr>
-		</table>
+			} ?>
 
-		<form method="post" name="configform" action="module.php?mod=googlemap&mod_action=admin_config">
-			<input type="hidden" name="action" value="update">
-			<div id="tabs">
-				<ul>
-				<li><a href="#gm_basic"><span><?php echo KT_I18N::translate('Basic'); ?></span></a></li>
-					<li><a href="#gm_advanced"><span><?php echo KT_I18N::translate('Advanced'); ?></span></a></li>
-					<li><a href="#gm_ph"><span><?php echo KT_I18N::translate('Place hierarchy'); ?></span></a></li>
+			<div id="gm_config" class="cell">
+				<h4><?php echo $controller->getPageTitle(); ?></h4>
+
+				<ul class="tabs" id="gm_pages">
+					<li class="tabs-title medium-4 text-center is-active">
+						<a href="module.php?mod=googlemap&amp;mod_action=admin_config" class="current" aria-selected="true">
+							<?php echo KT_I18N::translate('Google Maps™ preferences'); ?>
+						</a>
+					</li>
+					<li class="tabs-title text-center">
+						<a href="module.php?mod=googlemap&amp;mod_action=admin_places">
+							<?php echo KT_I18N::translate('Geographic data'); ?>
+						</a>
+					</li>
+					<li class="tabs-title text-center">
+						<a href="module.php?mod=googlemap&amp;mod_action=admin_placecheck">
+							<?php echo KT_I18N::translate('Place check'); ?>
+						</a>
+					</li>
 				</ul>
-				<div id="gm_basic">
-					<table class="gm_edit_config">
-						<tr>
-							<th><?php echo KT_I18N::translate('Default map type'); ?></th>
-							<td>
-								<select name="NEW_GM_MAP_TYPE">
-									<option value="ROADMAP" <?php if ($GOOGLEMAP_MAP_TYPE == "ROADMAP") echo "selected=\"selected\""; ?>><?php echo KT_I18N::translate('Map'); ?></option>
-									<option value="SATELLITE" <?php if ($GOOGLEMAP_MAP_TYPE == "SATELLITE") echo "selected=\"selected\""; ?>><?php echo KT_I18N::translate('Satellite'); ?></option>
-									<option value="HYBRID" <?php if ($GOOGLEMAP_MAP_TYPE == "HYBRID") echo "selected=\"selected\""; ?>><?php echo KT_I18N::translate('Hybrid'); ?></option>
-									<option value="TERRAIN" <?php if ($GOOGLEMAP_MAP_TYPE == "TERRAIN") echo "selected=\"selected\""; ?>><?php echo KT_I18N::translate('Terrain'); ?></option>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<th><?php //echo /* I18N: http://en.wikipedia.org/wiki/Google_street_view */ KT_I18N::translate('Google Street View™'); ?></th>
-							<td><?php //echo radio_buttons('NEW_GM_USE_STREETVIEW', array(false=>KT_I18N::translate('hide'),true=>KT_I18N::translate('show')), get_module_setting('googlemap', 'GM_USE_STREETVIEW', '0')); ?></td>
-						</tr>
-						<tr>
-							<th>
-								<?php echo KT_I18N::translate('Zoom factor of map'); ?>
-							</th>
-							<td>
-								<?php echo KT_I18N::translate('minimum'); ?>: <select name="NEW_GM_MIN_ZOOM">
-								<?php for ($j=1; $j<15; $j++) { ?>
-								<option value="<?php echo $j, "\""; if ($GOOGLEMAP_MIN_ZOOM == $j) echo " selected=\"selected\""; echo ">", $j; ?></option>
-								<?php } ?>
-								</select>
-								<?php echo KT_I18N::translate('maximum'); ?>: <select name="NEW_GM_MAX_ZOOM">
-								<?php for ($j=1; $j<21; $j++) { ?>
-								<option value="<?php echo $j, "\""; if ($GOOGLEMAP_MAX_ZOOM == $j) echo " selected=\"selected\""; echo ">", $j; ?></option>
-								<?php } ?>
-								</select>
-								<p class="help_content">
-									<?php echo KT_I18N::translate('Minimum and maximum zoom factor for the Google map. 1 is the full map, 15 is single house. Note that 15 is only available in certain areas.'); ?>
-								</p>
-							</td>
-						</tr>
-						<tr>
-							<th><?php echo /* I18N: Optional Google Map API key */ KT_I18N::translate('Google Maps™ API key'); ?></th>
-							<td>
-								<input type="text" name="NEW_GM_API_KEY" value="<?php echo $GM_API_KEY; ?>" size="50">
-								<p class="help_content">
-									<?php echo KT_I18N::translate('<b>Optional</b>. Google prefers that users of Google Maps™ obtain an API key from them. This is linked to their usage restrictions described at https://developers.google.com/maps/documentation/geocoding/usage-limits. The same page has a link to get a key. You can continue to use the maps feature without the API key if you do not exceed the restrictions but a warning message will exist in the source code of your web page.'); ?>
-								</p>
-							</td>
-						</tr>
-					</table>
-				</div>
 
-				<div id="gm_advanced">
-					<table class="gm_edit_config">
-						<tr>
-							<th colspan="2"><?php echo KT_I18N::translate('Precision of the latitude and longitude'); ?></th>
-							<td>
-								<table>
-									<tr>
-										<td><?php echo KT_I18N::translate('Country'); ?>&nbsp;&nbsp;</td>
-										<td><select name="NEW_GM_PRECISION_0">
-											<?php for ($j=0; $j<10; $j++) { ?>
-											<option value="<?php echo $j; ?>"<?php if ($GOOGLEMAP_PRECISION_0 == $j) echo " selected=\"selected\""; echo ">", $j; ?></option>
-											<?php } ?>
-											</select>&nbsp;&nbsp;<?php echo KT_I18N::translate('digits'); ?>
-										</td>
-									</tr>
-									<tr>
-										<td><?php echo KT_I18N::translate('State'); ?>&nbsp;&nbsp;</td>
-										<td><select name="NEW_GM_PRECISION_1">
-											<?php for ($j=0; $j<10; $j++) { ?>
-											<option value="<?php echo $j; ?>"<?php if ($GOOGLEMAP_PRECISION_1 == $j) echo " selected=\"selected\""; echo ">", $j; ?></option>
-											<?php } ?>
-											</select>&nbsp;&nbsp;<?php echo KT_I18N::translate('digits'); ?>
-										</td>
-									</tr>
-									<tr>
-										<td><?php echo KT_I18N::translate('City'); ?>&nbsp;&nbsp;</td>
-										<td><select name="NEW_GM_PRECISION_2">
-											<?php for ($j=0; $j<10; $j++) { ?>
-											<option value="<?php echo $j; ?>"<?php if ($GOOGLEMAP_PRECISION_2 == $j) echo " selected=\"selected\""; echo ">", $j; ?></option>
-											<?php } ?>
-											</select>&nbsp;&nbsp;<?php echo KT_I18N::translate('digits'); ?>
-										</td>
-									</tr>
-									<tr><td><?php echo KT_I18N::translate('Neighborhood'); ?>&nbsp;&nbsp;</td>
-										<td><select name="NEW_GM_PRECISION_3">
-											<?php for ($j=0; $j<10; $j++) { ?>
-											<option value="<?php echo $j; ?>"<?php if ($GOOGLEMAP_PRECISION_3 == $j) echo " selected=\"selected\""; echo ">", $j; ?></option>
-											<?php } ?>
-											</select>&nbsp;&nbsp;<?php echo KT_I18N::translate('digits'); ?>
-										</td>
-									</tr>
-									<tr><td><?php echo KT_I18N::translate('House'); ?>&nbsp;&nbsp;</td>
-										<td><select name="NEW_GM_PRECISION_4">
-											<?php for ($j=0; $j<10; $j++) { ?>
-											<option value="<?php echo $j; ?>"<?php if ($GOOGLEMAP_PRECISION_4 == $j) echo " selected=\"selected\""; echo ">", $j; ?></option>
-											<?php } ?>
-											</select>&nbsp;&nbsp;<?php echo KT_I18N::translate('digits'); ?>
-										</td>
-									</tr>
-									<tr>
-										<td><?php echo KT_I18N::translate('Max'); ?>&nbsp;&nbsp;</td>
-										<td><select name="NEW_GM_PRECISION_5">
-											<?php for ($j=0; $j<10; $j++) { ?>
-											<option value="<?php echo $j; ?>"<?php if ($GOOGLEMAP_PRECISION_5 == $j) echo " selected=\"selected\""; echo ">", $j; ?></option>
-											<?php } ?>
-											</select>&nbsp;&nbsp;<?php echo KT_I18N::translate('digits'); ?>
-										</td>
-									</tr>
-								</table>
-							</td>
-							<td>&nbsp;</td>
-						</tr>
-						<tr>
-							<td colspan="4">
-								<span class="help_content">
-									<?php echo KT_I18N::translate('This specifies the precision of the different levels when entering new geographic locations. For example a country will be specified with precision 0 (=0 digits after the decimal point), while a town needs 3 or 4 digits.'); ?>
-								</span>
-							</td>
-						</tr>
-						<tr>
-							<th colspan="2"><?php echo KT_I18N::translate('Default value for top-level'); ?></th>
-							<td><input type="text" name="NEW_GM_DEFAULT_TOP_LEVEL" value="<?php echo $GM_DEFAULT_TOP_VALUE; ?>" size="20"></td>
-							<td>&nbsp;</td>
-						</tr>
-						<tr>
-							<td colspan="4">
-								<span class="help_content">
+			    <ul class="tabs" data-tabs id="gmBasicTabs">
+			        <li class="tabs-title is-active">
+			            <a href="#gm_basic" aria-selected="true">
+			                <?php echo KT_I18N::translate('Basic'); ?>
+			            </a>
+			        </li>
+			        <li class="tabs-title">
+			            <a href="#gm_advanced">
+			                <?php echo KT_I18N::translate('Advanced'); ?>
+			            </a>
+			        </li>
+			    </ul>
+
+			    <div class="tabs-content" data-tabs-content="gmBasicTabs">
+					<!-- Panel 1 - Basic settings -->
+			        <div class="tabs-panel is-active" id="gm_basic">
+			            <form class="cell" method="post" name="configform" action="module.php?mod=googlemap&mod_action=admin_config">
+			                <input type="hidden" name="action" value="update_basic">
+			                <input type="hidden" name="tabid" value="gm_basic">
+			                <div class="grid-x grid-margin-x">
+								<div class="cell medium-3">
+			                        <label class="middle">
+			                            <?php echo KT_I18N::translate('Use Google Maps™ for the Place hierarchy'); ?>
+			                        </label>
+			                    </div>
+			                    <div class="cell medium-9">
+			                        <?php echo simple_switch(
+			                            'NEW_GM_PLACE_HIERARCHY',
+			                            true,
+			                            get_module_setting('googlemap', 'GM_PLACE_HIERARCHY', '0'),
+			                            '',
+			                            KT_I18N::translate('yes'),
+			                            KT_I18N::translate('no')
+			                        ); ?>
+			                    </div>
+								<div class="cell medium-3">
+			                        <label for="mapApi" class="middle">
+			                            <?php echo /* I18N: Optional Google Map API key */ KT_I18N::translate('Google Maps™ API key'); ?>
+			                        </label>
+			                    </div>
+			                    <div class="cell medium-9">
+			                        <input type="text" name="NEW_GM_API_KEY" value="<?php echo $GM_API_KEY; ?>">
+			                        <div class="callout warning helpcontent">
+			                            <?php echo KT_I18N::translate('
+			                                Google require that users of Google Maps™ obtain an API key from them.
+			                                This is linked to their usage restrictions described at
+			                                https://developers.google.com/maps/documentation/geocoding/usage-limits.
+			                                The same page has a link to get a key.
+			                                You can continue to use the maps feature without the API key if you do not exceed the restrictions
+			                                but Google will add a warning message overlaid on the map .'); ?>
+			                        </div>
+			                    </div>
+								<div class="cell medium-3">
+			                        <label for="mapType" class="middle">
+			                            <?php echo KT_I18N::translate('Default map type'); ?>
+			                        </label>
+			                    </div>
+			                    <div class="cell medium-9 radio">
+									<?php echo radio_switch_group(
+										'NEW_GM_MAP_TYPE',
+										array(
+											'ROADMAP'	=> KT_I18N::translate('Road map'),
+											'SATELLITE'	=> KT_I18N::translate('Satellite'),
+											'HYBRID'	=> KT_I18N::translate('Hybrid'),
+											'TERRAIN'	=> KT_I18N::translate('Terrain')
+										),
+										$GOOGLEMAP_MAP_TYPE
+									); ?>
+			                    </div>
+			                    <div class="cell medium-3">
+			                        <label for="mapMin" class="middle">
+			                            <?php echo KT_I18N::translate('Zoom factor of map'); ?>
+			                        </label>
+			                    </div>
+			                    <div class="cell medium-4">
+			                        <div class="input-group">
+			                            <span class="input-group-label"><?php echo KT_I18N::translate('Minimum'); ?></span>
+			                            <select id="mapMin" name="NEW_GM_MIN_ZOOM">
+			                                <?php for ($j = 1; $j < 15; $j ++) { ?>
+			                                    <option value="<?php echo $j; ?>";
+			                                        <?php if ($GOOGLEMAP_MIN_ZOOM == $j) {
+			                                            echo ' selected="selected"';
+			                                        } ?>
+			                                    >
+			                                        <?php echo $j; ?>
+			                                    </option>
+			                                <?php } ?>
+			                            </select>
+			                        </div>
+			                    </div>
+			                    <div class="cell medium-4">
+			                        <div class="input-group">
+			                            <span class="input-group-label"><?php echo KT_I18N::translate('Maximum'); ?></span>
+			                            <select id="mapMax" name="NEW_GM_MAX_ZOOM">
+			                                <?php for ($j = 1; $j < 21; $j ++) { ?>
+			                                    <option value="<?php echo $j; ?>";
+			                                        <?php if ($GOOGLEMAP_MAX_ZOOM == $j) {
+			                                            echo ' selected="selected"';
+			                                        } ?>
+			                                    >
+			                                        <?php echo $j; ?>
+			                                    </option>
+			                                <?php } ?>
+			                            </select>
+			                        </div>
+			                    </div>
+								<div class="callout warning helpcontent medium-9 medium-offset-3">
+										<?php echo KT_I18N::translate('Minimum and maximum zoom factor for the Google map. 1 is the full map, 15 is single house. Note that 15 is only available in certain areas.'); ?>
+								</div>
+			                    <div class="cell medium-3">
+			                        <label for="gm_marker" class="middle">
+			                            <?php echo KT_I18N::translate('Type of place markers in Place Hierarchy'); ?>
+			                        </label>
+			                    </div>
+			                    <div class="cell medium-9 radio">
+									<?php echo radio_switch_group(
+										'NEW_GM_PH_MARKER',
+										array(
+											'G_DEFAULT_ICON'	=> KT_I18N::translate('Standard'),
+											'G_FLAG'			=> KT_I18N::translate('Flag')
+										),
+										$GOOGLEMAP_PH_MARKER
+									); ?>
+			                    </div>
+			                    <div class="cell medium-3">
+			                        <label class="middle">
+			                            <?php echo KT_I18N::translate('Display short placenames'); ?>
+			                        </label>
+			                    </div>
+			                    <div class="cell medium-9">
+			                        <?php echo simple_switch(
+			                            'NEW_GM_DISP_SHORT_PLACE',
+			                            true,
+			                            $GM_DISP_SHORT_PLACE,
+			                            '',
+			                            KT_I18N::translate('yes'),
+			                            KT_I18N::translate('no')
+			                        ); ?>
+			                        <div class="callout warning helpcontent">
+			                            <?php echo KT_I18N::translate('
+			                                Here you can choose between two types of displaying places names in hierarchy.
+			                                If set Yes the place has short name or actual level name, if No - full name.
+			                                <br />
+			                                <b>Examples:<br />
+			                                Full name: </b>Chicago, Illinois, USA&nbsp;&nbsp;&nbsp;<b>Short name: </b>Chicago
+			                                <br />
+			                                <b>Full name: </b>Illinois, USA&nbsp;&nbsp;&nbsp;<b>Short name: </b>Illinois
+			                            '); ?>
+			                        </div>
+			                    </div>
+			                    <div class="cell medium-3">
+			                        <label class="middle">
+			                            <?php echo KT_I18N::translate('Display Map Coordinates'); ?>
+			                        </label>
+			                    </div>
+			                    <div class="cell medium-9">
+			                        <?php echo simple_switch(
+			                            'NEW_GM_COORD',
+			                            true,
+			                            $GOOGLEMAP_COORD,
+			                            '',
+			                            KT_I18N::translate('yes'),
+			                            KT_I18N::translate('no')
+			                        ); ?>
+			                        <div class="callout warning helpcontent">
+			                            <?php echo KT_I18N::translate('
+			                                This options sets whether Latitude and Longitude are displayed on the pop-up window
+			                                attached to map markers.
+			                            '); ?>
+			                        </div>
+			                    </div>
+							</div>
+			                <button type="submit" class="button">
+			                    <i class="<?php echo $iconStyle; ?> fa-save"></i>
+			                    <?php echo KT_I18N::translate('Save'); ?>
+			                </button>
+			            </form>
+			        </div>
+					<!-- Panel 2 - Advanced settings -->
+			        <div class="tabs-panel" id="gm_advanced">
+			            <form class="cell" method="post" name="configform" action="module.php?mod=googlemap&mod_action=admin_config">
+			                <input type="hidden" name="action" value="update_advanced">
+			                <input type="hidden" name="tabid" value="gm_advanced">
+			                <div class="grid-x grid-margin-x">
+			                    <h6 class="cell strong"><?php echo KT_I18N::translate('Precision of the latitude and longitude'); ?></h6>
+								<?php foreach ($precision as $key => $value) { ?>
+									<div class="cell medium-3">
+										<label for="precision-<?php echo $key; ?>" class="middle">
+											<?php echo $value; ?>
+										</label>
+									</div>
+									<div class="cell medium-2 precision">
+										<div class="input-group precision">
+											<select id="precision-<?php echo $key; ?>" name="NEW_GM_PRECISION_<?php echo $key; ?>">
+												<?php for ($j = 0; $j < 10; $j ++) {
+													$select = $selected[$key]; ?>
+													<option value="<?php echo $j; ?>"
+														<?php if ($select == $j) {
+															echo ' selected="selected"';
+														} ?>
+													>
+														<?php echo $j; ?>
+													</option>
+												<?php } ?>
+											</select>
+											<span class="input-group-label"><?php echo KT_I18N::translate('digits'); ?></span>
+										</div>
+									</div>
+									<div class="cell medium-7 precision"></div>
+								<?php } ?>
+			                    <hr class="cell">
+								<div class="cell callout warning helpcontent">
 									<?php echo KT_I18N::translate('Here the default level for the highest level in the place-hierarchy can be defined. If a place cannot be found this name is added as the highest level (country) and the database is searched again.'); ?>
-								</span>
-							</td>
-						</tr>
-						<tr>
-							<th class="gm_prefix" colspan="3"><?php echo KT_I18N::translate('Optional prefixes and suffixes');?></th>
-						</tr>
-						<tr>
-							<td colspan="4">
-								<span class="help_content">
-									<?php echo KT_I18N::translate('Some place names may be written with optional prefixes and suffixes.  For example “Orange” versus “Orange County”.  If the family tree contains the full place names, but the geographic database contains the short place names, then you should specify a list of the prefixes and suffixes to be disregarded.  Multiple options should be separated with semicolons.  For example “County;County of” or “Township;Twp;Twp.”.'); ?>
-								</span>
-							</td>
-						</tr>
-						<tr id="gm_level_titles">
-							<th>&nbsp;</th>
-							<th><?php echo KT_I18N::translate('Prefixes'); ?></th>
-							<th><?php echo KT_I18N::translate('Suffixes'); ?></th>
-						<?php for ($level=1; $level < 10; $level++) { ?>
-						<tr  class="gm_levels">
-							<th>
-								<?php
-								if ($level == 1) {
-									echo KT_I18N::translate('Country');
-								} else {
-									echo KT_I18N::translate('Level'), " ", $level;
-								}
-								?>
-							</th>
-							<td><input type="text" size="30" name="NEW_GM_PREFIX_<?php echo $level; ?>" value="<?php echo $GM_PREFIX[$level]; ?>"></td>
-							<td><input type="text" size="30" name="NEW_GM_POSTFIX_<?php echo $level; ?>" value="<?php echo $GM_POSTFIX[$level]; ?>"></td>
-						</tr>
-						<?php } ?>
-					</table>
-				</div>
+								</div>
+			                    <div class="cell medium-3">
+			                        <label for="gm_default" class="middle">
+			                            <?php echo KT_I18N::translate('Default value for top-level'); ?>
+			                        </label>
+			                    </div>
+			                    <div class="cell medium-9">
+			                        <input
+			                            id="gm_default"
+			                            type="text"
+			                            name="NEW_GM_DEFAULT_TOP_LEVEL"
+			                            value="<?php echo $GM_DEFAULT_TOP_VALUE; ?>"
+			                        >
+			                    </div>
+			                    <hr class="cell">
+								<div class="cell callout warning helpcontent">
+			                        <?php echo KT_I18N::translate('Some place names may be written with optional prefixes and suffixes.  For example “Orange” versus “Orange County”.  If the family tree contains the full place names, but the geographic database contains the short place names, then you should specify a list of the prefixes and suffixes to be disregarded.  Multiple options should be separated with semicolons.  For example “County;County of” or “Township;Twp;Twp.”.'); ?>
+			                    </div>
+								<div class="cell medium-3 precision">
+									<label class="h6 strong middle success">
+										<?php echo KT_I18N::translate('Optional prefixes and suffixes');?>
+									</label>
+								</div>
+			                    <div class="cell medium-3 precision">
+			                        <label class="strong text-center middle">
+			                            <?php echo KT_I18N::translate('Prefixes'); ?>
+			                        </label>
+			                    </div>
+			                    <div class="cell medium-3 precision">
+			                        <label class="strong text-center middle">
+			                            <?php echo KT_I18N::translate('Suffixes'); ?>
+			                        </label>
+			                    </div>
+			                    <div class="cell medium-3 precision"></div>
+			                    <?php for ($level = 1; $level <= 9; $level ++) { ?>
+			                        <?php if ($level == 1) { ?>
+			                            <div class="cell medium-3 precision">
+			                                <label  class="success middle">
+			                                    <?php echo KT_I18N::translate('Country'); ?>
+			                                </label>
+			                            </div>
+			                        <?php } else { ?>
+			                            <div class="cell medium-3 precision">
+			                                <label class="success middle">
+			                                    <?php echo KT_I18N::translate('Level %s', $level); ?>
+			                                </label>
+			                            </div>
+			                        <?php } ?>
+			                        <div class="cell medium-3 precision">
+			                            <input
+			                                type="text"
+			                                name="NEW_GM_PREFIX_<?php echo $level; ?>"
+			                                value="<?php echo $GM_PREFIX[$level]; ?>"
+			                            >
+			                        </div>
+			                        <div class="medium-3 precision">
+			                            <input
+			                                type="text"
+			                                name="NEW_GM_POSTFIX_<?php echo $level; ?>"
+			                                value="<?php echo $GM_POSTFIX[$level]; ?>"
+			                            >
+			                        </div>
+			                        <div class="cell medium-3 precision"></div>
+			                    <?php } ?>
+			                </div>
+			                <button type="submit" class="button">
+			                    <i class="<?php echo $iconStyle; ?> fa-save"></i>
+			                    <?php echo KT_I18N::translate('Save'); ?>
+			                </button>
+			            </form>
+			        </div>
 
-				<div id="gm_ph">
-					<table class="gm_edit_config">
-						<tr>
-							<th><?php echo KT_I18N::translate('Use Google Maps™ for the place hierarchy'); ?></th>
-							<td><?php echo edit_field_yes_no('NEW_GM_PLACE_HIERARCHY', get_module_setting('googlemap', 'GM_PLACE_HIERARCHY', '0')); ?></td>
-							<td></td>
-						</tr>
-						<tr>
-							<th><?php echo KT_I18N::translate('Type of place markers in Place Hierarchy'); ?></th>
-							<td>
-								<select name="NEW_GM_PH_MARKER">
-									<option value="G_DEFAULT_ICON" <?php if ($GOOGLEMAP_PH_MARKER == "G_DEFAULT_ICON") echo "selected=\"selected\""; ?>><?php echo KT_I18N::translate('Standard'); ?></option>
-									<option value="G_FLAG" <?php if ($GOOGLEMAP_PH_MARKER == "G_FLAG") echo "selected=\"selected\""; ?>><?php echo KT_I18N::translate('Flag'); ?></option>
-								</select>
-							</td>
-							<td></td>
-						</tr>
-						<tr>
-							<th><?php echo KT_I18N::translate('Display short placenames'); ?></th>
-							<td><?php echo edit_field_yes_no('NEW_GM_DISP_SHORT_PLACE', $GM_DISP_SHORT_PLACE); ?></td>
-							<td>
-								<span class="help_content">
-									<?php echo KT_I18N::translate('Here you can choose between two types of displaying places names in hierarchy. If set Yes the place has short name or actual level name, if No - full name.<br /><b>Examples:<br />Full name: </b>Chicago, Illinois, USA<br /><b>Short name: </b>Chicago<br /><b>Full name: </b>Illinois, USA<br /><b>Short name: </b>Illinois'); ?>
-								</span>
-							</td>
-						</tr>
-						<tr>
-							<th><?php echo KT_I18N::translate('Display Map Coordinates'); ?></th>
-							<td><?php echo edit_field_yes_no('NEW_GM_COORD', $GOOGLEMAP_COORD); ?></td>
-							<td>
-								<span class="help_content">
-									<?php echo KT_I18N::translate('This options sets whether Latitude and Longitude are displayed on the pop-up window attached to map markers.'); ?>
-								</span>
-							</td>
-						</tr>
-					</table>
-				</div>
+			    </div>
 			</div>
-			<p>
-				<button class="btn btn-primary" type="submit">
-				<i class="' . $iconStyle . ' fa-floppy-o"></i>
-					<?php echo KT_I18N::translate('Save'); ?>
-				</button>
-			</p>
-		</form>
 		<?php
 	}
 
@@ -1471,25 +1576,30 @@ class googlemap_KT_Module extends KT_Module implements KT_Module_Config, KT_Modu
 			->setPageTitle(KT_I18N::translate('Google Maps™'))
 			->pageHeader();
 
-		echo '
-			<table id="gm_config">
-				<tr>
-					<th>
-						<a href="module.php?mod=googlemap&amp;mod_action=admin_config">', KT_I18N::translate('Google Maps™ preferences'),'</a>
-					</th>
-					<th>
-						<a href="module.php?mod=googlemap&amp;mod_action=admin_places">
-							', KT_I18N::translate('Geographic data'),'
-						</a>
-					</th>
-					<th>
-						<a class="current" href="module.php?mod=googlemap&amp;mod_action=admin_placecheck">
-							', KT_I18N::translate('Place Check'),'
-						</a>
-					</th>
-				</tr>
-			</table>';
+		?>
 
+		<div id="gm_config" class="cell">
+			<h4><?php echo $controller->getPageTitle(); ?></h4>
+
+			<ul class="tabs" id="gm_pages">
+				<li class="tabs-title medium-4 text-center">
+					<a href="module.php?mod=googlemap&amp;mod_action=admin_config">
+						<?php echo KT_I18N::translate('Google Maps™ preferences'); ?>
+					</a>
+				</li>
+				<li class="tabs-title text-center">
+					<a href="module.php?mod=googlemap&amp;mod_action=admin_places">
+						<?php echo KT_I18N::translate('Geographic data'); ?>
+					</a>
+				</li>
+				<li class="tabs-title text-center is-active">
+					<a href="module.php?mod=googlemap&amp;mod_action=admin_placecheck" class="current" aria-selected="true">
+						<?php echo KT_I18N::translate('Place check'); ?>
+					</a>
+				</li>
+			</ul>
+		</div>
+		<?php
 		//Start of User Defined options
 		echo '
 			<form method="get" name="placecheck" action="module.php">

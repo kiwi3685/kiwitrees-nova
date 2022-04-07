@@ -734,7 +734,7 @@ hr {
 	margin: 1.25rem auto;
 	border-top: 0;
 	border-right: 0;
-	border-bottom: 1px solid #cacaca;
+	border-bottom: 0.125rem solid #cacaca;
 	border-left: 0;
 }
 
@@ -9326,6 +9326,10 @@ ol.list-upper-roman {
 	font-weight: 600;
 }
 
+.strong {
+	font-weight: 600;
+}
+
 label {
 	font-weight: 700;
 	padding-top: 0.5rem;
@@ -9334,6 +9338,10 @@ label.radio_inline {
 	display: inline-block !important;
 	font-weight: 400;
 	padding-left: 1.25rem;
+}
+
+button {
+	min-width: 6rem;
 }
 
 #flash-messages {
@@ -9561,6 +9569,7 @@ body #admin-container {
 	/* ADD UNLINKED */
 	/* MISSING DATA */
 	/* RESEARCH LINKS */
+	/* Googlemaps Admin */
 	/* USERS */
 	/* CLEAN UP TABLE */
 	/* MODULE PAGES */
@@ -10016,6 +10025,31 @@ body #admin-container {
 #admin-container #admin-content #research-links-page h6,
 #admin-container #admin-content #research-links-page .h6 {
 	font-weight: 600;
+}
+#admin-container #admin-content #gm_config div.callout.helpcontent {
+	margin-top: -0.6rem;
+	padding: 0.5rem 1rem;
+}
+#admin-container #admin-content #gm_config div.radio {
+	margin-bottom: 1rem;
+}
+#admin-container #admin-content #gm_config #gm_pages {
+	margin-bottom: 1rem;
+}
+#admin-container #admin-content #gm_config #gm_pages li {
+	width: 33%;
+}
+#admin-container #admin-content #gm_config #gm_advanced div.precision {
+	margin-bottom: 0;
+}
+#admin-container #admin-content #gm_config #gm_advanced div.precision select:not(:last-child) {
+	margin-bottom: 0;
+}
+#admin-container #admin-content #gm_config #gm_advanced div.precision input[type=text] {
+	margin-bottom: 0;
+}
+#admin-container #admin-content #gm_config #gm_advanced div.precision label {
+	margin-bottom: 0.25rem;
 }
 #admin-container #admin-content table#clean {
 	width: auto;

@@ -191,25 +191,28 @@ $controller
 echo '<link type="text/css" href ="', KT_STATIC_URL, KT_MODULES_DIR, 'googlemap/css/googlemap.min.css" rel="stylesheet">';
 
 ?>
-<table id="gm_config">
-	<tr>
-		<th>
+<div id="gm_config" class="cell">
+	<h4><?php echo $controller->getPageTitle(); ?></h4>
+
+	<ul class="tabs" id="gm_pages">
+		<li class="tabs-title medium-4 text-center">
 			<a href="module.php?mod=googlemap&amp;mod_action=admin_config">
 				<?php echo KT_I18N::translate('Google Maps™ preferences'); ?>
 			</a>
-		</th>
-		<th>
-			<a class="current" href="module.php?mod=googlemap&amp;mod_action=admin_places">
+		</li>
+		<li class="tabs-title text-center is-active">
+			<a href="module.php?mod=googlemap&amp;mod_action=admin_places" class="current" aria-selected="true">
 				<?php echo KT_I18N::translate('Geographic data'); ?>
 			</a>
-		</th>
-		<th>
+		</li>
+		<li class="tabs-title text-center">
 			<a href="module.php?mod=googlemap&amp;mod_action=admin_placecheck">
-				<?php echo KT_I18N::translate('Place Check'); ?>
+				<?php echo KT_I18N::translate('Place check'); ?>
 			</a>
-		</th>
-	</tr>
-</table>
+		</li>
+	</ul>
+</div>
+
 <?php
 
 if ($action=='ImportGedcom') {
