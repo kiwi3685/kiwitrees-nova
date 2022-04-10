@@ -1,0 +1,14 @@
+{
+    "require": {
+		"php": "^7.4 || ^8.0",
+		"ext-ftp": "*",	
+		"ext-mysqli": "*",
+		"ext-openssl": "*",
+		"ext-curl": "*",
+		"ext-json": "*",
+		"ext-zip": "*",
+		"ext-zlib": "*",		
+        "league/flysystem-sftp": "^2.0",
+		"visualappeal/php-auto-update": "^1.0.2"
+    }
+}
