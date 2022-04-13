@@ -9348,6 +9348,14 @@ button {
 	margin: 1rem;
 }
 
+div.callout.helpcontent {
+	font-size: 80%;
+	font-style: italic;
+	margin-top: 0;
+	margin-bottom: 1rem;
+	padding: 0.5rem 0.75rem;
+}
+
 div.allcontent {
 	height: 98% !important;
 }
@@ -9732,15 +9740,6 @@ body #admin-container {
 #admin-container #admin-content .tabs-content .accordion.is-active > .accordion-title:before {
 	content: "";
 }
-#admin-container #admin-content .helpcontent {
-	font-size: 80%;
-	font-style: italic;
-	margin-top: -1rem;
-	margin-bottom: 1rem;
-}
-#admin-container #admin-content .helpcontent.space {
-	margin-top: 0;
-}
 #admin-container #admin-content .faq_link {
 	float: right;
 	font-size: 0.9rem;
@@ -9888,10 +9887,6 @@ body #admin-container {
 	float: right;
 	width: 4rem;
 }
-#admin-container #admin-content #user_details div.callout.helpcontent {
-	margin-top: -0.6rem;
-	padding: 0.5rem 1rem;
-}
 #admin-container #admin-content #user_details label.admin {
 	font-size: 1rem;
 	font-weight: 900;
@@ -10026,30 +10021,73 @@ body #admin-container {
 #admin-container #admin-content #research-links-page .h6 {
 	font-weight: 600;
 }
-#admin-container #admin-content #gm_config div.callout.helpcontent {
-	margin-top: -0.6rem;
-	padding: 0.5rem 1rem;
+#admin-container #admin-content #gm_pages {
+	margin-bottom: 1rem;
+}
+#admin-container #admin-content #gm_pages li {
+	width: 33%;
 }
 #admin-container #admin-content #gm_config div.radio {
 	margin-bottom: 1rem;
 }
-#admin-container #admin-content #gm_config #gm_pages {
+#admin-container #admin-content #gm_config div.close {
+	margin-bottom: 2rem;
+}
+#admin-container #admin-content #gm_config div.close div.input-group {
+	margin-bottom: 0.25rem;
+}
+#admin-container #admin-content #gm_config div.close select {
+	margin-bottom: 0;
+}
+#admin-container #admin-content #gm_config div.close input[type=text] {
+	margin-bottom: 0.25rem;
+}
+#admin-container #admin-content #gm_config div.close label {
+	margin-bottom: 0;
+}
+#admin-container #admin-content #gm_list #gm_active label,
+#admin-container #admin-content #gm_list #gm_count label {
+	font-size: inherit;
+}
+#admin-container #admin-content #gm_list #gm_breadcrumb {
+	line-height: 3;
+}
+#admin-container #admin-content #gm_list #gm_breadcrumb a {
+	color: #5da423;
+	font-weight: 700;
+}
+#admin-container #admin-content #gm_list #gm_breadcrumb a:hover {
+	color: #34689c;
+}
+#admin-container #admin-content #map_pane {
+	border: 0.125rem solid #878787;
+	height: 30rem;
 	margin-bottom: 1rem;
 }
-#admin-container #admin-content #gm_config #gm_pages li {
-	width: 33%;
-}
-#admin-container #admin-content #gm_config #gm_advanced div.precision {
+#admin-container #admin-content #editplaces-page div.input-group {
 	margin-bottom: 0;
 }
-#admin-container #admin-content #gm_config #gm_advanced div.precision select:not(:last-child) {
-	margin-bottom: 0;
+#admin-container #admin-content #editplaces-page a.button {
+	margin-top: 0.125rem;
+	font-weight: 600;
 }
-#admin-container #admin-content #gm_config #gm_advanced div.precision input[type=text] {
-	margin-bottom: 0;
+#admin-container #admin-content #editplaces-page .precision span {
+	margin: 0 0.75rem;
 }
-#admin-container #admin-content #gm_config #gm_advanced div.precision label {
-	margin-bottom: 0.25rem;
+#admin-container #admin-content #changeflags-page .flags_item {
+	float: left;
+	line-height: 3;
+	padding: 5px;
+	width: 200px;
+}
+#admin-container #admin-content #changeflags-page .flags_item img {
+	vertical-align: text-top;
+}
+#admin-container #admin-content #changeflags-page .flags_item span {
+	float: left;
+	height: 65px;
+	margin-bottom: 20px;
+	width: 60px;
 }
 #admin-container #admin-content table#clean {
 	width: auto;
