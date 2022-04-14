@@ -9893,6 +9893,9 @@ body #admin-container {
 	padding-bottom: 1rem;
 	padding-top: 0.25rem;
 }
+#admin-container #admin-content #user_details label.offset {
+	padding: 0.2rem 2rem 0;
+}
 #admin-container #admin-content #user_details table thead th:nth-child(1) {
 	max-width: 10rem;
 }

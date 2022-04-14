@@ -23,10 +23,6 @@ Developer aids.txt
 
 /language/unused languages
 
-#swiftmailer
-/library/swiftmailer/tests
-/library/swiftmailer/doc
-
 #codemirror
 !/library/codemirror
 /library/codemirror/*
@@ -65,22 +61,32 @@ Developer aids.txt
 /library/colorbox/README.md
 /library/colorbox/package.json
 
-#lightGallery
-/library/lightGallery
-
-#php-diff
-/library/php-diff/example
-
-#Mobile-Detect
-!/library/Mobile-Detect/
-/library/Mobile-Detect/*
-!/library/Mobile-Detect/Mobile_Detect.php
+#fontawesone
+/library/fontawesome/*
+!/library/fontawesome/js/
+/library/fontawesome/js/*
+!/library/fontawesome/js/all.min.js
 
 #Jquery-Confirm
 /library/jquery-confirm/*
 !/library/jquery-confirm/dist
 /library/jquery-confirm/dist/*
 !/library/jquery-confirm/dist/jquery-confirm.min.js
+
+#lightGallery
+/library/lightGallery
+
+#Mobile-Detect
+!/library/Mobile-Detect/
+/library/Mobile-Detect/*
+!/library/Mobile-Detect/Mobile_Detect.php
+
+#php-diff
+/library/php-diff/example
+
+#swiftmailer
+/library/swiftmailer/tests
+/library/swiftmailer/doc
 
 /modules_v4/database_backup/vendor/r23/msd/work
 /modules_v4/gallery/galleria/themes/azur

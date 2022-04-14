@@ -427,26 +427,40 @@ switch (KT_Filter::get('action')) {
 								</label>
 							</div>
 							<div class="cell large-9">
-								<div class="input_group">
-									<div class="checkbox">
-										<label>
-											<input type="checkbox" name="verified" value="1" <?php echo get_user_setting($user_id, 'verified') ? 'checked' : ''; ?>>
-											<?php echo KT_I18N::translate('Email verified'); ?>
-										</label>
-										<label>
-											<input type="checkbox" name="verified_by_admin" value="1" <?php echo get_user_setting($user_id, 'verified_by_admin') ? 'checked' : ''; ?>>
-											<?php echo KT_I18N::translate('Approved by administrator'); ?>
-										</label>
-										<div class="callout warning helpcontent">
-											<?php echo KT_I18N::translate('When a user registers for an account, an email is sent to their email address with a verification link. When they follow this link, we know the email address is correct, and the “email verified” option is selected automatically.
-											<br>
-											If an administrator creates a user account, the verification email is not sent, and the email must be verified manually.
-											<br>
-											You should not approve an account unless you know that the email address is correct.
-											<br>
-											A user will not be able to sign in until both “email verified” and “approved by administrator” are selected.'); ?>
-										</div>
-									</div>
+								<div class="grid-x">
+									<?php echo simple_switch(
+										'verified',
+										true,
+										get_user_setting($user_id, 'verified'),
+										'',
+										KT_I18N::translate('yes'),
+			                            KT_I18N::translate('no')
+									); ?>
+									<label for"userVerified" class="cell medium-6 offset">
+										<?php echo KT_I18N::translate('Email verified'); ?>
+									</label>
+								</div>
+								<div class="grid-x">
+									<?php echo simple_switch(
+										'verified_by_admin',
+										true,
+										get_user_setting($user_id, 'verified_by_admin'),
+										'',
+										KT_I18N::translate('yes'),
+			                            KT_I18N::translate('no')
+									); ?>
+									<label for"adminVerified" class="cell medium-6 offset">
+										<?php echo KT_I18N::translate('Approved by administrator'); ?>
+									</label>
+								</div>
+								<div class="callout warning helpcontent">
+									<?php echo KT_I18N::translate('When a user registers for an account, an email is sent to their email address with a verification link. When they follow this link, we know the email address is correct, and the “email verified” option is selected automatically.
+									<br>
+									If an administrator creates a user account, the verification email is not sent, and the email must be verified manually.
+									<br>
+									You should not approve an account unless you know that the email address is correct.
+									<br>
+									A user will not be able to sign in until both “email verified” and “approved by administrator” are selected.'); ?>
 								</div>
 							</div>
 
@@ -475,16 +489,18 @@ switch (KT_Filter::get('action')) {
 								</label>
 							</div>
 							<div class="cell large-9">
-								<div class="input_group">
-									<div class="checkbox">
-										<label>
-											<input type="checkbox" name="auto_accept" value="1" <?php echo get_user_setting($user_id, 'auto_accept') ? 'checked' : ''; ?>>
-											<?php echo KT_I18N::translate('Automatically accept changes made by this user'); ?>
-										</label>
-										<div class="callout warning helpcontent">
-											<?php echo KT_I18N::translate('Normally, any changes made to a family tree need to be reviewed by a moderator. This option allows a user to make changes without needing a moderator.'); ?>
-										</div>
-									</div>
+								<div class="grid-x">
+									<?php echo simple_switch(
+										'auto_accept',
+										true,
+										get_user_setting($user_id, 'auto_accept'),
+										'',
+										KT_I18N::translate('yes'),
+			                            KT_I18N::translate('no')
+									); ?>
+									<label for"auto_accept" class="cell medium-6 offset">
+										<?php echo KT_I18N::translate('Automatically accept changes made by this user'); ?>
+									</label>
 								</div>
 							</div>
 
@@ -495,16 +511,18 @@ switch (KT_Filter::get('action')) {
 								</label>
 							</div>
 							<div class="cell large-9">
-								<div class="input_group">
-									<div class="checkbox">
-										<label>
-											<input type="checkbox" id="visible_online" name="visible_online" value="1" <?php echo get_user_setting($user_id, 'visibleonline') ? 'checked' : ''; ?>>
-											<?php echo /* I18N: A configuration setting */ KT_I18N::translate('Visible to other users when online'); ?>
-										</label>
-										<div class="callout warning helpcontent">
-											<?php echo KT_I18N::translate('You can choose whether to appear in the list of users who are currently signed-in.'); ?>
-										</div>
-									</div>
+								<div class="grid-x">
+									<?php echo simple_switch(
+										'visible_online',
+										true,
+										get_user_setting($user_id, 'visible_online'),
+										'',
+										KT_I18N::translate('yes'),
+			                            KT_I18N::translate('no')
+									); ?>
+									<label for"visible_online" class="cell medium-6 offset">
+										<?php echo KT_I18N::translate('Automatically accept changes made by this user'); ?>
+									</label>
 								</div>
 							</div>
 
@@ -544,14 +562,18 @@ switch (KT_Filter::get('action')) {
 									</label>
 								</div>
 								<div class="cell large-9">
-									<div class="checkbox">
-										<label>
-											<input type="checkbox" name="notify_clipping" value="1" <?php echo get_user_setting($user_id, 'notify_clipping', 1) ? 'checked' : ''; ?>>
+									<div class="grid-x">
+										<?php echo simple_switch(
+											'notify_clipping',
+											true,
+											get_user_setting($user_id, 'notify_clipping'),
+											'',
+											KT_I18N::translate('yes'),
+				                            KT_I18N::translate('no')
+										); ?>
+										<label for"notify_clipping" class="cell medium-6 offset">
 											<?php echo KT_I18N::translate('Clippings cart downloads'); ?>
 										</label>
-										<div class="callout warning helpcontent">
-											<?php echo KT_I18N::translate('When a user downloads a GEDCOM file created in the Clippings cart the site administrator will be notified by mail if this option is selected.'); ?>
-										</div>
 									</div>
 								</div>
 							<?php } ?>
