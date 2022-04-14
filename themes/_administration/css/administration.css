@@ -10064,6 +10064,9 @@ body #admin-container {
 	height: 30rem;
 	margin-bottom: 1rem;
 }
+#admin-container #admin-content table#gm_check_details .latlong {
+	min-width: 3rem;
+}
 #admin-container #admin-content #editplaces-page div.input-group {
 	margin-bottom: 0;
 }

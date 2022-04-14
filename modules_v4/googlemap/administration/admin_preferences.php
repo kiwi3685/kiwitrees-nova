@@ -80,6 +80,7 @@
 
      <div id="gm_config" class="cell">
          <h4><?php echo $controller->getPageTitle(); ?></h4>
+
          <ul class="tabs" id="gm_pages">
              <li class="tabs-title medium-4 text-center is-active">
                  <a href="module.php?mod=googlemap&amp;mod_action=admin_preferences" class="current" aria-selected="true">
@@ -97,6 +98,7 @@
                  </a>
              </li>
          </ul>
+
          <form class="cell" method="post" name="configform" action="module.php?mod=googlemap&mod_action=admin_preferences">
              <input type="hidden" name="action" value="update">
              <div class="grid-x grid-margin-x">
