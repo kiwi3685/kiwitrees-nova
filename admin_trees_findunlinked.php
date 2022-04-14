@@ -98,7 +98,7 @@ $sql_REPO = "
 	<div class="grid-x grid-margin-x">
 		<div class="cell">
 			<h4><?php echo $controller->getPageTitle(); ?></h4>
-			<div class="cell helpcontent">
+			<div class="cell callout warning helpcontent">
 				<?php echo /* I18N: Help text for the Find unlinked records tool. */ KT_I18N::translate('List records that are not linked to any other records. It does not include Families as a family record cannot exist without at least one family member.<br>
 				The definition of unlinked for each type of record is:
 				<ul><li>Individuals: a person who is not linked to any family, as a child or a spouse.</li>

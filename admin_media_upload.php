@@ -195,14 +195,14 @@ if (empty($filesize)) $filesize = "2M";
 	<form method="post" name="uploadmedia" enctype="multipart/form-data" action="<?php echo KT_SCRIPT_NAME; ?>">
 		<input type="hidden" name="action" value="upload">
 		<div class="grid-x grid-margin-x grid-margin-y grid-padding-x grid-padding-y">
-			<div class="cell callout alert">
-				<?php echo KT_I18N::translate('Maximum file size allowed is %s', detectMaxUploadFileSize()); ?>
+			<div class="cell callout warning">
+				<?php echo KT_I18N::translate('Maximum simultaneous upload allowed by your server is %s MB', KT_I18N::number(detectMaxUploadFileSize() / 1048576)); ?>
 			</div>
 			<!-- Print 6 forms for uploading images -->
 			<?php for ($i = 1; $i < 7; $i ++) { ?>
 				<div class="cell medium-6 mediaUpload">
 					<h5><?php echo KT_I18N::translate('Media file %s', $i); ?></h5>
-					<div class="grid-x">
+					<div class="grid-x grid-margin-y">
 						<div class="cell large-3">
 							<label for="<?php echo 'mediafile' . $i; ?>"><?php echo KT_I18N::translate('Media file to upload'); ?></label>
 						</div>

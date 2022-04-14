@@ -128,7 +128,7 @@ $controller
 	<a class="current faq_link" href="<?php echo KT_KIWITREES_URL; ?>/faqs/general/sanity-check/" target="_blank" rel="noopener noreferrer" title="<?php echo KT_I18N::translate('View FAQ for this page.'); ?>"><?php echo KT_I18N::translate('View FAQ for this page.'); ?><i class="<?php echo $iconStyle; ?> fa-comment-dots"></i></a>
 	<h3><?php echo $controller->getPageTitle(); ?></h3>
 	<h5><?php echo KT_I18N::translate('%s checks to help you monitor the quality of your family history data', count($checks)); ?></h5>
-	<div class="callout warning">
+	<div class="cell callout warning helpcontent">
 		<?php echo KT_I18N::translate('This process can be slow. If you have a large family tree or suspect large numbers of errors you should only select a few checks each time.<br><br>Options marked <span class="alert">**</span> are often very slow.'); ?>
 	</div>
 	<div class="grid-x grid-padding-x">
@@ -162,27 +162,22 @@ $controller
 						</div>
 				<?php } ?>
 			</div>
-			<div class="grid-x">
-				<div class="cell small-6 medium-1">
-					<button type="submit" class="button" >
-						<i class="<?php echo $iconStyle; ?> fa-check"></i>
-						<?php echo KT_I18N::translate('Check'); ?>
-					</button>
-				</div>
+			<div class="grid-x grid-margin-x">
+				<button type="submit" class="button" >
+					<i class="<?php echo $iconStyle; ?> fa-check"></i>
+					<?php echo KT_I18N::translate('Check'); ?>
+				</button>
 			</div>
 		</form>
-		<form class="cell" method="post" name="rela_form" action="#">
-			<input type="hidden" name="reset" value="1">
-			<div class="grid-x">
-				<div class="cell small-6 medium-1">
-					<button type="submit" class="button">
-						<i class="<?php echo $iconStyle; ?> fa-sync"></i>
-						<?php echo KT_I18N::translate('Reset'); ?>
-					</button>
-				</div>
-			</div>
-			<hr>
-		</form>
+		<div class="resetButton">
+			<form method="post" name="rela_form" action="#">
+				<input type="hidden" name="reset" value="1">
+				<button type="submit" class="button">
+					<i class="<?php echo $iconStyle; ?> fa-sync"></i>
+					<?php echo KT_I18N::translate('Reset'); ?>
+				</button>
+			</form>
+		</div>
 	</div>
 	<?php if (KT_Filter::post('save')) {?>
 		<div class="loading-image"></div>

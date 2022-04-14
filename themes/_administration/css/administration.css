@@ -9991,6 +9991,14 @@ body #admin-container {
 #admin-container #admin-content #sanity_check .accordion .accordion-item .accordion-content .grid-x {
 	border-bottom: 0.125rem solid #e6e6e6;
 }
+#admin-container #admin-content #sanity_check button.button {
+	margin-top: 2rem;
+}
+#admin-container #admin-content #sanity_check .resetButton {
+	position: relative;
+	left: 8rem;
+	bottom: 4.7rem;
+}
 #admin-container #admin-content #unlinked-records-page button {
 	margin: 1rem;
 	text-align: left;
@@ -10008,10 +10016,14 @@ body #admin-container {
 }
 #admin-container #admin-content #missing_data-page button.button {
 	margin-top: 2rem;
+	padding: 0.65rem 1rem;
 }
 #admin-container #admin-content #missing_data-page .input-group.autocomplete_container .ui-autocomplete-input,
 #admin-container #admin-content #missing_data-page .input-group.autocomplete_container .input-group-label {
 	height: 2.4375rem;
+}
+#admin-container #admin-content #missing_data-page .input-group.autocomplete_container button.autocomplete_icon {
+	min-width: auto;
 }
 #admin-container #admin-content #research-links-page button {
 	margin: 1rem;
