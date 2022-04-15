@@ -1904,6 +1904,8 @@ function old_paths() {
 		KT_ROOT . 'admin_site_lang.php',
 		KT_ROOT . 'js/jquery.colorbox-min.js',
 		KT_ROOT . 'modules_v4/pages/help_text.php',
+		KT_ROOT . 'modules_v4/googlemap/admin_places.php',
+		KT_ROOT . 'modules_v4/googlemap/admin_places_edit.php',
 
 	);
 }
