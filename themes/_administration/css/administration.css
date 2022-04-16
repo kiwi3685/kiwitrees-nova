@@ -9291,6 +9291,9 @@ ol.list-upper-roman {
 .input-group.autocomplete_container .ui-autocomplete-loading {
 	background: url("../images/ui-anim_loading.gif") calc(100% - 2rem) center no-repeat;
 }
+.input-group.autocomplete_container button.autocomplete_icon {
+	min-width: auto;
+}
 
 .ui-autocomplete {
 	background-color: #fefefe !important;
@@ -10006,9 +10009,6 @@ body #admin-container {
 #admin-container #admin-content #missing_data-page .input-group.autocomplete_container .ui-autocomplete-input,
 #admin-container #admin-content #missing_data-page .input-group.autocomplete_container .input-group-label {
 	height: 2.4375rem;
-}
-#admin-container #admin-content #missing_data-page .input-group.autocomplete_container button.autocomplete_icon {
-	min-width: auto;
 }
 #admin-container #admin-content #research-links-page button {
 	margin: 1rem;
