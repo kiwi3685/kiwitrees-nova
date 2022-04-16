@@ -3930,7 +3930,7 @@ table {
 thead,
 tbody,
 tfoot {
-	border: 1px solid #f1f1f1;
+	border: 1px solid #ebebeb;
 	background-color: #fefefe;
 }
 
@@ -3940,12 +3940,12 @@ caption {
 }
 
 thead {
-	background: #f8f8f8;
+	background: #f4f4f4;
 	color: #1B1212;
 }
 
 tfoot {
-	background: #f1f1f1;
+	background: #ebebeb;
 	color: #1B1212;
 }
 
@@ -3969,14 +3969,14 @@ tbody td {
 
 tbody tr:nth-child(even) {
 	border-bottom: 0;
-	background-color: #f1f1f1;
+	background-color: #ebebeb;
 }
 
 table.unstriped tbody {
 	background-color: #fefefe;
 }
 table.unstriped tbody tr {
-	border-bottom: 1px solid #f1f1f1;
+	border-bottom: 1px solid #ebebeb;
 	background-color: #fefefe;
 }
 
@@ -4004,16 +4004,16 @@ table.scroll {
 }
 
 table.hover thead tr:hover {
-	background-color: #f3f3f3;
+	background-color: #efefef;
 }
 table.hover tfoot tr:hover {
-	background-color: #ececec;
+	background-color: #e6e6e6;
 }
 table.hover tbody tr:hover {
 	background-color: #f9f9f9;
 }
 table.hover:not(.unstriped) tr:nth-of-type(even):hover {
-	background-color: #ececec;
+	background-color: #e6e6e6;
 }
 
 .table-scroll {
@@ -4286,8 +4286,8 @@ table.hover:not(.unstriped) tr:nth-of-type(even):hover {
 .has-tip {
 	position: relative;
 	display: inline-block;
-	border-bottom: dotted 1px #878787;
-	font-weight: 900;
+	border-bottom: none;
+	font-weight: normal;
 	cursor: help;
 }
 
@@ -10202,7 +10202,7 @@ div.dataTables_wrapper table.dataTable thead tr.first-row-header {
 div.dataTables_wrapper table.dataTable thead tr th {
 	background-image: none !important;
 	border: 0.125rem solid #e6e6e6;
-	font-weight: 600;
+	font-weight: 500;
 	padding: 0.5rem;
 	position: relative;
 }

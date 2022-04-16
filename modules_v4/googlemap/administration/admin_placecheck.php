@@ -364,35 +364,41 @@
                                              $placestr2 = $mapstr_add . $id . '&amp;level=' . $level . $mapstr3 . $mapstr7 . '<strong>' . rtrim(ltrim(KT_I18N::translate('unknown'))) . "</strong>" . $mapstr8;
                                              $matched[$x] ++;
                                          } else {
-                                             $placestr2 = $mapstr_add . $id . '&amp;place_name=' . urlencode($levels[$z]) . '&amp;level=' . $level . $mapstr3 . $mapstr7 . '<span class="error">' . rtrim(ltrim($levels[$z])) . '</span>' . $mapstr8;
+                                             $placestr2 = $mapstr_add . $id . '&amp;place_name=' . urlencode($levels[$z]) . '&amp;level=' . $level . $mapstr3 . $mapstr7 . '<span class="alert">' . rtrim(ltrim($levels[$z])) . '</span>' . $mapstr8;
                                              $matched[$x] ++;
                                          }
                                      }
 
                                      if ($prev_lati == 0) { // no link to edit if parent has no coordinates
-                                         $plac[$z] = '<td class="CellWithComment">' .
-                                             $levels[$z] . '
-                                             <span class="CellComment">' . KT_I18N::translate('Coordinates can not be added here until the parent place has coordinates.') . '</span>
+                                         $plac[$z] = '<td>
+                                             <span
+                                                data-tooltip class="top "
+                                                title="' . KT_I18N::translate('
+                                                    Coordinates can not be added here until the parent place has coordinates.
+                                                    ') . '
+                                                ">' .
+                                                    $levels[$z] . '
+                                            </span>
                                          </td>';
                                      } else {
                                          $plac[$z] = '<td>' . $placestr2 . '</td>';
                                      }
 
                                      if (!empty($row['pl_lati']) && $row['pl_lati'] == '0') {
-                                         $lati[$z] = '<td class="error"><strong>' . $row['pl_lati'] . '</strong></td>';
+                                         $lati[$z] = '<td class="alert"><strong>' . $row['pl_lati'] . '</strong></td>';
                                      } elseif (!empty($row['pl_lati']) && $row['pl_lati'] <> '0') {
                                          $lati[$z] = '<td>' . $row['pl_lati'] . '</td>';
                                      } else {
-                                         $lati[$z] = '<td class="error center"><strong>X</strong></td>';
+                                         $lati[$z] = '<td class="alert center"><strong>X</strong></td>';
                                          $prev_lati = 0;
                                          $matched[$x]++;
                                      }
                                      if (!empty($row['pl_long']) && $row['pl_long'] == '0') {
-                                         $long[$z] = '<td class="error"><strong>' . $row['pl_long'] . '</strong></td>';
+                                         $long[$z] = '<td class="alert"><strong>' . $row['pl_long'] . '</strong></td>';
                                      } elseif (!empty($row['pl_long'])  && $row['pl_long'] <> '0') {
                                          $long[$z] = '<td>' . $row['pl_long'] . '</td>';
                                      } else {
-                                         $long[$z] = "<td class='error center'><strong>X</strong></td>";
+                                         $long[$z] = "<td class='alert center'><strong>X</strong></td>";
                                          $matched[$x]++;
                                      }
                                      $level++;
