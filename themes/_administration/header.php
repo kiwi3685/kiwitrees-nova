@@ -205,8 +205,9 @@ $this
 		<div id="admin-container" class="grid-x"> <!--  closed in footer.php -->
 			<!-- normal menu -->
 			<ul id="admin-menu" class="cell large-2 menu vertical accordion-menu" data-accordion-menu data-multi-open="false" style="visibility: hidden;">
-				<li>
-				    <a href="admin.php" class="admin-menu-title dashboard">
+				<li class="
+				dashboard">
+				    <a href="admin.php" class="admin-menu-title">
 						<span class="fa-stack" style="vertical-align: top;">
 							<i class="<?php echo $iconStyle; ?> background fa-circle fa-stack-2x"></i>
 							<i class="<?php echo $iconStyle; ?> foreground fa-tachometer-alt fa-fw fa-stack-1x"></i>
@@ -240,7 +241,7 @@ $this
 					</a>
 			        <ul class="menu vertical">
 						<?php if (KT_USER_IS_ADMIN) { ?>
-							<li><a class="leadItem" <?php echo (KT_SCRIPT_NAME == "admin_trees_manage.php" ? 'class="current" ' : ''); ?>href="admin_trees_manage.php"><?php echo KT_I18N::translate('Manage: <em>All family trees</em>'); ?></a></li>
+							<li><a <?php echo (KT_SCRIPT_NAME == "admin_trees_manage.php" ? 'class="current" ' : ''); ?>href="admin_trees_manage.php"><?php echo KT_I18N::translate('Manage: <em>All family trees</em>'); ?></a></li>
 						<?php }
 						//-- gedcom list
 						foreach (KT_Tree::getAll() as $tree) {
@@ -281,7 +282,7 @@ $this
 							<span><?php echo KT_I18N::translate('Users'); ?></span>
 						</a>
 						<ul class="menu vertical">
-							<li><a class="leadItem" <?php echo (KT_SCRIPT_NAME == "admin_users.php" && KT_Filter::get('action') != "cleanup" && KT_Filter::get('action')!="edit" ? 'class="current" ' : ''); ?>href="admin_users.php"><?php echo KT_I18N::translate('Manage users'); ?></a></li>
+							<li><a <?php echo (KT_SCRIPT_NAME == "admin_users.php" && KT_Filter::get('action') != "cleanup" && KT_Filter::get('action')!="edit" ? 'class="current" ' : ''); ?>href="admin_users.php"><?php echo KT_I18N::translate('Manage users'); ?></a></li>
 							<li><a <?php echo (KT_SCRIPT_NAME == "admin_users.php" && KT_Filter::get('action') == "edit" && KT_Filter::get('user_id') == 0  ? 'class="current" ' : ''); ?>href="admin_users.php?action=edit"><?php echo KT_I18N::translate('Add a new user'); ?></a></li>
 							<li><a <?php echo (KT_SCRIPT_NAME == "admin_users_bulk.php" ? 'class="current" ' : ''); ?>href="admin_users_bulk.php"><?php echo KT_I18N::translate('Send broadcast messages'); ?></a></li>
 							<li><a <?php echo (KT_SCRIPT_NAME == "admin_users.php" && KT_Filter::get('action') == "cleanup" ? 'class="current" ' : ''); ?>href="admin_users.php?action=cleanup"><?php echo KT_I18N::translate('Delete inactive users'); ?></a></li>
@@ -298,7 +299,7 @@ $this
 							<span><?php echo KT_I18N::translate('Media'); ?></span>
 						</a>
 						<ul class="menu vertical">
-							<li><a class="leadItem" <?php echo (KT_SCRIPT_NAME == "admin_media.php" ? 'class="current" ' : ''); ?>href="admin_media.php"><?php echo KT_I18N::translate('Manage media'); ?></a></li>
+							<li><a <?php echo (KT_SCRIPT_NAME == "admin_media.php" ? 'class="current" ' : ''); ?>href="admin_media.php"><?php echo KT_I18N::translate('Manage media'); ?></a></li>
 							<li><a <?php echo (KT_SCRIPT_NAME == "admin_media_upload.php" ? 'class="current" ' : ''); ?>href="admin_media_upload.php"><?php echo KT_I18N::translate('Upload media files'); ?></a></li>
 						</ul>
 					</li>
@@ -313,7 +314,7 @@ $this
 							<span><?php echo KT_I18N::translate('Modules'); ?></span>
 						</a>
 						<ul class="menu vertical">
-							<li><a class="leadItem" <?php echo (KT_SCRIPT_NAME == "admin_modules.php" ? 'class="current" ' : ''); ?>href="admin_modules.php"><?php echo KT_I18N::translate('Manage modules'); ?></a></li>
+							<li><a <?php echo (KT_SCRIPT_NAME == "admin_modules.php" ? 'class="current" ' : ''); ?>href="admin_modules.php"><?php echo KT_I18N::translate('Manage modules'); ?></a></li>
 							<?php foreach ($module_cats as $file=>$title) { ?>
 								<li><a <?php echo (KT_SCRIPT_NAME == $file ? 'class="current" ' : ''); ?>href="<?php echo $file; ?>"><?php echo $title; ?></a></li>
 							<?php } ?>
