@@ -716,12 +716,12 @@ h6, .h6 {
 }
 a {
 	line-height: inherit;
-	color: #5da423;
+	color: #34689c;
 	text-decoration: none;
 	cursor: pointer;
 }
 a:hover, a:focus {
-	color: #4f8b1e;
+	color: #2c5885;
 }
 a img {
 	border: 0;
@@ -5091,7 +5091,7 @@ a.thumbnail image {
 	border-width: 6px;
 	content: "";
 	border-right-width: 0;
-	border-color: transparent transparent transparent #5da423;
+	border-color: transparent transparent transparent #34689c;
 	right: 1rem;
 	left: auto;
 }
@@ -5103,7 +5103,7 @@ a.thumbnail image {
 	border-width: 6px;
 	content: "";
 	border-left-width: 0;
-	border-color: transparent #5da423 transparent transparent;
+	border-color: transparent #34689c transparent transparent;
 	right: auto;
 	left: 1rem;
 }
@@ -5143,7 +5143,7 @@ a.thumbnail image {
 	border-width: 6px;
 	content: "";
 	border-bottom-width: 0;
-	border-color: #5da423 transparent transparent;
+	border-color: #34689c transparent transparent;
 	right: 5px;
 	left: auto;
 	margin-top: -3px;
@@ -5188,7 +5188,7 @@ a.thumbnail image {
 	border-width: 6px;
 	content: "";
 	border-left-width: 0;
-	border-color: transparent #5da423 transparent transparent;
+	border-color: transparent #34689c transparent transparent;
 	right: auto;
 	left: 5px;
 }
@@ -5200,7 +5200,7 @@ a.thumbnail image {
 	border-width: 6px;
 	content: "";
 	border-right-width: 0;
-	border-color: transparent transparent transparent #5da423;
+	border-color: transparent transparent transparent #34689c;
 }
 @media print, screen and (min-width: 48.0625em) {
 	.dropdown.menu.medium-horizontal > li.opens-left > .is-dropdown-submenu {
@@ -5225,7 +5225,7 @@ a.thumbnail image {
 		border-width: 6px;
 		content: "";
 		border-bottom-width: 0;
-		border-color: #5da423 transparent transparent;
+		border-color: #34689c transparent transparent;
 		right: 5px;
 		left: auto;
 		margin-top: -3px;
@@ -5253,7 +5253,7 @@ a.thumbnail image {
 		border-width: 6px;
 		content: "";
 		border-left-width: 0;
-		border-color: transparent #5da423 transparent transparent;
+		border-color: transparent #34689c transparent transparent;
 		right: auto;
 		left: 5px;
 	}
@@ -5265,7 +5265,7 @@ a.thumbnail image {
 		border-width: 6px;
 		content: "";
 		border-right-width: 0;
-		border-color: transparent transparent transparent #5da423;
+		border-color: transparent transparent transparent #34689c;
 	}
 }
 @media print, screen and (min-width: 64.0625em) {
@@ -5291,7 +5291,7 @@ a.thumbnail image {
 		border-width: 6px;
 		content: "";
 		border-bottom-width: 0;
-		border-color: #5da423 transparent transparent;
+		border-color: #34689c transparent transparent;
 		right: 5px;
 		left: auto;
 		margin-top: -3px;
@@ -5319,7 +5319,7 @@ a.thumbnail image {
 		border-width: 6px;
 		content: "";
 		border-left-width: 0;
-		border-color: transparent #5da423 transparent transparent;
+		border-color: transparent #34689c transparent transparent;
 		right: auto;
 		left: 5px;
 	}
@@ -5331,7 +5331,7 @@ a.thumbnail image {
 		border-width: 6px;
 		content: "";
 		border-right-width: 0;
-		border-color: transparent transparent transparent #5da423;
+		border-color: transparent transparent transparent #34689c;
 	}
 }
 .dropdown.menu.align-right .is-dropdown-submenu.first-sub {
@@ -5394,7 +5394,7 @@ a.thumbnail image {
 	border-width: 6px;
 	content: "";
 	border-left-width: 0;
-	border-color: transparent #5da423 transparent transparent;
+	border-color: transparent #34689c transparent transparent;
 	right: auto;
 	left: 5px;
 }
@@ -5406,7 +5406,7 @@ a.thumbnail image {
 	border-width: 6px;
 	content: "";
 	border-right-width: 0;
-	border-color: transparent transparent transparent #5da423;
+	border-color: transparent transparent transparent #34689c;
 }
 .is-dropdown-submenu .is-dropdown-submenu {
 	margin-top: -1px;
