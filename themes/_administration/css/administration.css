@@ -402,7 +402,7 @@ label > [type=radio] {
 label {
 	display: block;
 	margin: 0;
-	font-size: 0.875rem;
+	font-size: 1rem;
 	font-weight: 400;
 	line-height: 1.8;
 	color: #1B1212;
@@ -3639,7 +3639,7 @@ a.button:hover, a.button:focus {
 	display: inline-block;
 	padding: 0.33333rem 0.5rem;
 	border-radius: 0;
-	font-size: 0.8rem;
+	font-size: 1rem;
 	line-height: 1;
 	white-space: nowrap;
 	cursor: default;
@@ -9334,12 +9334,10 @@ ol.list-upper-roman {
 }
 
 label {
-	font-weight: 700;
 	padding-top: 0.5rem;
 }
 label.radio_inline {
 	display: inline-block !important;
-	font-weight: 400;
 	padding-left: 1.25rem;
 }
 
@@ -9874,7 +9872,6 @@ body #admin-container {
 }
 #admin-container #admin-content #user_details label.admin {
 	font-size: 1rem;
-	font-weight: 900;
 	padding-bottom: 1rem;
 	padding-top: 0.25rem;
 }
