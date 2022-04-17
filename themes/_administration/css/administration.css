@@ -3930,7 +3930,7 @@ table {
 thead,
 tbody,
 tfoot {
-	border: 1px solid #ebebeb;
+	border: 0.125rem solid #f8f8f8;
 	background-color: #fefefe;
 }
 
@@ -3940,7 +3940,7 @@ caption {
 }
 
 thead {
-	background: #f4f4f4;
+	background: #ebebeb;
 	color: #1B1212;
 }
 
@@ -3976,7 +3976,7 @@ table.unstriped tbody {
 	background-color: #fefefe;
 }
 table.unstriped tbody tr {
-	border-bottom: 1px solid #ebebeb;
+	border-bottom: 0.125rem solid #f8f8f8;
 	background-color: #fefefe;
 }
 
@@ -4004,7 +4004,7 @@ table.scroll {
 }
 
 table.hover thead tr:hover {
-	background-color: #efefef;
+	background-color: #e6e6e6;
 }
 table.hover tfoot tr:hover {
 	background-color: #e6e6e6;
@@ -10150,6 +10150,9 @@ footer .logo a {
 	color: #fefefe;
 }
 
+div.dataTables_wrapper {
+	font-size: 0.95rem;
+}
 div.dataTables_wrapper div div.clear {
 	clear: both;
 }
@@ -10186,6 +10189,9 @@ div.dataTables_wrapper div div.dt-buttons button {
 	color: #fefefe;
 	padding: 0.7rem 1rem;
 }
+div.dataTables_wrapper table.dataTable {
+	border-collapse: separate;
+}
 div.dataTables_wrapper table.dataTable.surname-list {
 	margin: 0 auto !important;
 	width: auto;
@@ -10201,7 +10207,6 @@ div.dataTables_wrapper table.dataTable thead tr.first-row-header {
 }
 div.dataTables_wrapper table.dataTable thead tr th {
 	background-image: none !important;
-	border: 0.125rem solid #e6e6e6;
 	font-weight: 500;
 	padding: 0.5rem;
 	position: relative;
