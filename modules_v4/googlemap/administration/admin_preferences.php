@@ -23,6 +23,8 @@
 
  require KT_ROOT . 'includes/functions/functions_edit.php';
 
+ global $iconStyle;
+
  $precision = [
      0 => KT_I18N::translate('Country'),
      1 => KT_I18N::translate('State'),
@@ -128,7 +130,7 @@
                          <?php echo KT_I18N::translate('
                              Google require that users of Google Maps™ obtain an API key from them.
                              This is linked to their usage restrictions described at
-                             https://developers.google.com/maps/documentation/geocoding/usage-limits.
+                             <a href="https://developers.google.com/maps/documentation/geocoding/usage-limits"><strong>Google usage limits</strong></a>.
                              The same page has a link to get a key.
                              You can continue to use the maps feature without the API key if you do not exceed the restrictions
                              but Google will add a warning message overlaid on the map .'); ?>
@@ -303,7 +305,7 @@
                      </div>
                  </div>
                  <div class="cell medium-3">
-                     <label class="h6 strong middle success">
+                     <label class="h6 strong middle">
                          <?php echo KT_I18N::translate('Optional prefixes and suffixes');?>
                      </label>
                  </div>
@@ -327,13 +329,13 @@
                          <?php for ($level = 1; $level <= 9; $level ++) { ?>
                              <?php if ($level == 1) { ?>
                                  <div class="cell medium-4">
-                                     <label  class="success middle">
+                                     <label class="middle">
                                          <?php echo KT_I18N::translate('Country'); ?>
                                      </label>
                                  </div>
                              <?php } else { ?>
                                  <div class="cell medium-4">
-                                     <label class="success middle">
+                                     <label class="middle">
                                          <?php echo KT_I18N::translate('Level %s', $level); ?>
                                      </label>
                                  </div>
