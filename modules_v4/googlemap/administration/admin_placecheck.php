@@ -290,7 +290,7 @@
                                  <?php
                                  $cols = 0;
                                  while ($cols < $max) { ?>
-                                     <th><?php echo KT_Gedcom_Tag::getLabel('PLAC'); ?></th>
+                                     <th class="place"><?php echo KT_Gedcom_Tag::getLabel('PLAC'); ?></th>
                                      <th class="latlong"><?php echo /* I18N 3-character abbreviation for Latitude */ KT_I18N::translate('Lat.'); ?></th>
                                      <th class="latlong"><?php echo /* I18N 3-character abbreviation for Longitude */KT_I18N::translate('Lon.'); ?></th>
                                      <?php $cols ++;

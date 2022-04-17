@@ -10058,6 +10058,9 @@ body #admin-container {
 	height: 30rem;
 	margin-bottom: 1rem;
 }
+#admin-container #admin-content table#gm_check_details .place {
+	min-width: 8rem;
+}
 #admin-container #admin-content table#gm_check_details .latlong {
 	min-width: 3rem;
 }
