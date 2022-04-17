@@ -36,7 +36,7 @@ $controller
     jQuery("#tabs_table").sortable({items: ".sortme", forceHelperSize: true, forcePlaceholderSize: true, opacity: 0.7, cursor: "move", axis: "y"});
 
     //-- update the order numbers after drag-n-drop sorting is complete
-    jQuery("#tabs_table").bind("sortupdate", function(event, ui) {
+    jQuery("#tabi_table").bind("sortupdate", function(event, ui) {
 			jQuery("#"+jQuery(this).attr("id")+" input").each(
 				function (index, value) {
 					value.value = index+1;
@@ -70,26 +70,26 @@ if ($action == 'update_mods' && KT_Filter::checkCsrf()) {
 
 ?>
 <div id="tabs" class="cell">
-	<form method="post" action="<?php echo KT_SCRIPT_NAME; ?>">
+	<div class="grid-x grid-margin-x">
+		<form class="cell" method="post" action="<?php echo KT_SCRIPT_NAME; ?>">
 		<input type="hidden" name="action" value="update_mods">
 		<?php echo KT_Filter::getCsrf(); ?>
 		<h4><?php echo $controller->getPageTitle(); ?></h4>
-		<div class="grid-x grid-padding-x show-for-medium">
+		<div class="grid-x show-for-medium">
 			<div class="cell medium-10">
-				<p class="help-text">
+				<div class="cell callout warning helpcontent">
 					<?php echo KT_I18N::translate('"Drag & drop" each module, or manually adjust the order numbers, to change the order these modules will be displayed in.'); ?>
-					<br>
 					<?php echo KT_I18N::translate('The "Access level" setting "Hide from everyone" means exactly that, including Administrators.'); ?>
-				</p>
+				</div>
 			</div>
-			<div class="cell medium-1 medium-offset-1 vertical">
+			<div class="cell medium-1 medium-offset-1">
 				<button class="button" type="submit">
 					<i class="<?php echo $iconStyle; ?> fa-save"></i>
 					<?php echo KT_I18N::translate('Save'); ?>
 				</button>
 			</div>
 		</div>
-		<table id="tabs_table" class="modules_table">
+		<table id="tabi_table" class="modules_table">
 			<thead>
 				<tr>
 					<th colspan="2"><?php echo KT_I18N::translate('Tab'); ?></th>
@@ -158,4 +158,5 @@ if ($action == 'update_mods' && KT_Filter::checkCsrf()) {
 			<?php echo KT_I18N::translate('Save'); ?>
 		</button>
 	</form>
+	</div>
 </div>

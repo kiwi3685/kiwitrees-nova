@@ -61,92 +61,93 @@ if ($action == 'update_mods' && KT_Filter::checkCsrf()) {
 
 ?>
 <div id="footers" class="cell">
-	<form method="post" action="<?php echo KT_SCRIPT_NAME; ?>">
-		<input type="hidden" name="action" value="update_mods">
-		<?php echo KT_Filter::getCsrf(); ?>
-		<h4><?php echo $controller->getPageTitle(); ?></h4>
-		<div class="grid-x grid-padding-x show-for-medium">
-			<div class="cell medium-10">
-				<p class="help-text">
-					<?php echo KT_I18N::translate('"Drag & drop" each module, or manually adjust the order numbers, to change the order these modules will be displayed in.'); ?>
-					<br>
-					<?php echo KT_I18N::translate('The "Access level" setting "Hide from everyone" means exactly that, including Administrators.'); ?>
-				</p>
+	<div class="grid-x grid-margin-x">
+		<form class="cell" method="post" action="<?php echo KT_SCRIPT_NAME; ?>">
+			<input type="hidden" name="action" value="update_mods">
+			<?php echo KT_Filter::getCsrf(); ?>
+			<h4><?php echo $controller->getPageTitle(); ?></h4>
+			<div class="grid-x show-for-medium">
+				<div class="cell medium-10">
+					<div class="cell callout warning helpcontent">
+						<?php echo KT_I18N::translate('"Drag & drop" each module, or manually adjust the order numbers, to change the order these modules will be displayed in.'); ?>
+						<?php echo KT_I18N::translate('The "Access level" setting "Hide from everyone" means exactly that, including Administrators.'); ?>
+					</div>
+				</div>
+				<div class="cell medium-1 medium-offset-1">
+					<button class="button" type="submit">
+						<i class="<?php echo $iconStyle; ?> fa-save"></i>
+						<?php echo KT_I18N::translate('Save'); ?>
+					</button>
+				</div>
 			</div>
-			<div class="cell medium-1 medium-offset-1 vertical">
-				<button class="button" type="submit">
-					<i class="<?php echo $iconStyle; ?> fa-save"></i>
-					<?php echo KT_I18N::translate('Save'); ?>
-				</button>
-			</div>
-		</div>
-		<table id="footers_table" class="modules_table">
-			<thead>
-				<tr>
-					<th colspan="2"><?php echo KT_I18N::translate('Footer block'); ?></th>
-					<th><?php echo KT_I18N::translate('Description'); ?></th>
-					<th><?php echo KT_I18N::translate('Order'); ?></th>
-					<th><?php echo KT_I18N::translate('Access level'); ?></th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php
-				$order = 1;
-				foreach ($modules as $module) {
-					?>
-					<tr class="sortme">
-						<td>
-							<i class="<?php echo $iconStyle; ?> fa-bars"></i>
-						</td>
-						<td>
-							<?php
-							if ( $module instanceof KT_Module_Config ) {
-								echo '<a href="', $module->getConfigLink(), '">';
-							}
-							echo $module->getTitle();
-							if ( $module instanceof KT_Module_Config && array_key_exists($module->getName(), KT_Module::getActiveModules() ) ) {
-								echo ' <i class="' . $iconStyle . ' fa-cogs"></i></a>';
-							}
-							?>
-						</td>
-						<td>
-							<?php echo $module->getDescription(); ?>
-						</td>
-						<td>
-							<input type="number" size="3" value="<?php echo $order; ?>" name="order-<?php echo $module->getName(); ?>">
-						</td>
-						<td>
-							<table class="modules_table2">
-								<?php foreach (KT_Tree::getAll() as $tree) { ?>
-									<tr>
-										<td>
-											<?php echo $tree->tree_title_html; ?>
-										</td>
-										<td>
-											<?php
-												$access_level = KT_DB::prepare(
-													"SELECT access_level FROM `##module_privacy` WHERE gedcom_id=? AND module_name=? AND component='footer'"
-												)->execute(array($tree->tree_id, $module->getName()))->fetchOne();
-												if ($access_level === null) {
-													$access_level = $module->defaultAccessLevel();
-												}
-												echo edit_field_access_level('access-' . $module->getName() . '-' . $tree->tree_id, $access_level, '', false);
-											?>
-										</td>
-									</tr>
-								<?php } ?>
-							</table>
-						</td>
+			<table id="footers_table" class="modules_table">
+				<thead>
+					<tr>
+						<th colspan="2"><?php echo KT_I18N::translate('Footer block'); ?></th>
+						<th><?php echo KT_I18N::translate('Description'); ?></th>
+						<th><?php echo KT_I18N::translate('Order'); ?></th>
+						<th><?php echo KT_I18N::translate('Access level'); ?></th>
 					</tr>
-				<?php
-				$order++;
-				}
-				?>
-			</tbody>
-		</table>
-		<button class="button" type="submit">
-			<i class="<?php echo $iconStyle; ?> fa-save"></i>
-			<?php echo KT_I18N::translate('Save'); ?>
-		</button>
-	</form>
+				</thead>
+				<tbody>
+					<?php
+					$order = 1;
+					foreach ($modules as $module) {
+						?>
+						<tr class="sortme">
+							<td>
+								<i class="<?php echo $iconStyle; ?> fa-bars"></i>
+							</td>
+							<td>
+								<?php
+								if ( $module instanceof KT_Module_Config ) {
+									echo '<a href="', $module->getConfigLink(), '">';
+								}
+								echo $module->getTitle();
+								if ( $module instanceof KT_Module_Config && array_key_exists($module->getName(), KT_Module::getActiveModules() ) ) {
+									echo ' <i class="' . $iconStyle . ' fa-cogs"></i></a>';
+								}
+								?>
+							</td>
+							<td>
+								<?php echo $module->getDescription(); ?>
+							</td>
+							<td>
+								<input type="number" size="3" value="<?php echo $order; ?>" name="order-<?php echo $module->getName(); ?>">
+							</td>
+							<td>
+								<table class="modules_table2">
+									<?php foreach (KT_Tree::getAll() as $tree) { ?>
+										<tr>
+											<td>
+												<?php echo $tree->tree_title_html; ?>
+											</td>
+											<td>
+												<?php
+													$access_level = KT_DB::prepare(
+														"SELECT access_level FROM `##module_privacy` WHERE gedcom_id=? AND module_name=? AND component='footer'"
+													)->execute(array($tree->tree_id, $module->getName()))->fetchOne();
+													if ($access_level === null) {
+														$access_level = $module->defaultAccessLevel();
+													}
+													echo edit_field_access_level('access-' . $module->getName() . '-' . $tree->tree_id, $access_level, '', false);
+												?>
+											</td>
+										</tr>
+									<?php } ?>
+								</table>
+							</td>
+						</tr>
+					<?php
+					$order++;
+					}
+					?>
+				</tbody>
+			</table>
+			<button class="button" type="submit">
+				<i class="<?php echo $iconStyle; ?> fa-save"></i>
+				<?php echo KT_I18N::translate('Save'); ?>
+			</button>
+		</form>
+	</div>
 </div>

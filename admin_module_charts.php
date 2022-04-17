@@ -50,81 +50,82 @@ if ($action == 'update_mods' && KT_Filter::checkCsrf()) {
 
 ?>
 <div id="charts" class="cell">
-	<form method="post" action="<?php echo KT_SCRIPT_NAME; ?>">
-		<input type="hidden" name="action" value="update_mods">
-		<?php echo KT_Filter::getCsrf(); ?>
-		<h4><?php echo $controller->getPageTitle(); ?></h4>
-		<div class="grid-x grid-padding-x show-for-medium">
-			<div class="cell medium-10">
-				<p class="help-text">
-					<?php echo KT_I18N::translate('The order of these items under the main menu "%s" is fixed at alphabetical, based on the current display language in use.', $menuItem); ?>
-					<br>
-					<?php echo KT_I18N::translate('The "Access level" setting "Hide from everyone" means exactly that, including Administrators.'); ?>
-				</p>
+	<div class="grid-x grid-margin-x">
+		<form class="cell" method="post" action="<?php echo KT_SCRIPT_NAME; ?>">
+			<input type="hidden" name="action" value="update_mods">
+			<?php echo KT_Filter::getCsrf(); ?>
+			<h4><?php echo $controller->getPageTitle(); ?></h4>
+			<div class="grid-x show-for-medium">
+				<div class="cell medium-10">
+					<div class="cell callout warning helpcontent">
+						<?php echo KT_I18N::translate('The order of these items under the main menu "%s" is fixed at alphabetical, based on the current display language in use.', $menuItem); ?>
+						<?php echo KT_I18N::translate('The "Access level" setting "Hide from everyone" means exactly that, including Administrators.'); ?>
+					</div>
+				</div>
+				<div class="cell medium-1 medium-offset-1 vertical">
+					<button class="button" type="submit">
+						<i class="<?php echo $iconStyle; ?> fa-save"></i>
+						<?php echo KT_I18N::translate('Save'); ?>
+					</button>
+				</div>
 			</div>
-			<div class="cell medium-1 medium-offset-1 vertical">
-				<button class="button" type="submit">
-					<i class="<?php echo $iconStyle; ?> fa-save"></i>
-					<?php echo KT_I18N::translate('Save'); ?>
-				</button>
-			</div>
-		</div>
-		<table id="charts_table" class="modules_table">
-			<thead>
-				<tr>
-					<th><?php echo KT_I18N::translate('Chart'); ?></th>
-					<th><?php echo KT_I18N::translate('Description'); ?></th>
-					<th><?php echo KT_I18N::translate('Access level'); ?></th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php
-				foreach ($modules as $module) {
-					?>
+			<table id="charts_table" class="modules_table">
+				<thead>
 					<tr>
-						<td>
-							<?php
-							if ( $module instanceof KT_Module_Config ) {
-								echo '<a href="', $module->getConfigLink(), '">';
-							}
-							echo $module->getTitle();
-							if ( $module instanceof KT_Module_Config && array_key_exists($module->getName(), KT_Module::getActiveModules() ) ) {
-								echo ' <i class="' . $iconStyle . ' fa-cogs"></i></a>';
-							}
-							?>
-						</td>
-						<td>
-							<?php echo $module->getDescription(); ?>
-						</td>
-						<td>
-							<table class="modules_table2">
-								<?php foreach (KT_Tree::getAll() as $tree) { ?>
-									<tr>
-										<td>
-											<?php echo $tree->tree_title_html; ?>
-										</td>
-										<td>
-											<?php
-												$access_level = KT_DB::prepare(
-													"SELECT access_level FROM `##module_privacy` WHERE gedcom_id=? AND module_name=? AND component='chart'"
-												)->execute(array($tree->tree_id, $module->getName()))->fetchOne();
-												if ($access_level === null) {
-													$access_level = $module->defaultAccessLevel();
-												}
-												echo edit_field_access_level('access-' . $module->getName() . '-' . $tree->tree_id, $access_level);
-											?>
-										</td>
-									</tr>
-								<?php } ?>
-							</table>
-						</td>
+						<th><?php echo KT_I18N::translate('Chart'); ?></th>
+						<th><?php echo KT_I18N::translate('Description'); ?></th>
+						<th><?php echo KT_I18N::translate('Access level'); ?></th>
 					</tr>
-				<?php } ?>
-			</tbody>
-		</table>
-		<button class="button" type="submit">
-			<i class="<?php echo $iconStyle; ?> fa-save"></i>
-			<?php echo KT_I18N::translate('Save'); ?>
-		</button>
-	</form>
+				</thead>
+				<tbody>
+					<?php
+					foreach ($modules as $module) {
+						?>
+						<tr>
+							<td>
+								<?php
+								if ( $module instanceof KT_Module_Config ) {
+									echo '<a href="', $module->getConfigLink(), '">';
+								}
+								echo $module->getTitle();
+								if ( $module instanceof KT_Module_Config && array_key_exists($module->getName(), KT_Module::getActiveModules() ) ) {
+									echo ' <i class="' . $iconStyle . ' fa-cogs"></i></a>';
+								}
+								?>
+							</td>
+							<td>
+								<?php echo $module->getDescription(); ?>
+							</td>
+							<td>
+								<table class="modules_table2">
+									<?php foreach (KT_Tree::getAll() as $tree) { ?>
+										<tr>
+											<td>
+												<?php echo $tree->tree_title_html; ?>
+											</td>
+											<td>
+												<?php
+													$access_level = KT_DB::prepare(
+														"SELECT access_level FROM `##module_privacy` WHERE gedcom_id=? AND module_name=? AND component='chart'"
+													)->execute(array($tree->tree_id, $module->getName()))->fetchOne();
+													if ($access_level === null) {
+														$access_level = $module->defaultAccessLevel();
+													}
+													echo edit_field_access_level('access-' . $module->getName() . '-' . $tree->tree_id, $access_level);
+												?>
+											</td>
+										</tr>
+									<?php } ?>
+								</table>
+							</td>
+						</tr>
+					<?php } ?>
+				</tbody>
+			</table>
+			<button class="button" type="submit">
+				<i class="<?php echo $iconStyle; ?> fa-save"></i>
+				<?php echo KT_I18N::translate('Save'); ?>
+			</button>
+		</form>
+	</div>
 </div>
