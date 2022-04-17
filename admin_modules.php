@@ -121,96 +121,99 @@ $controller
 ?>
 
 <div id="module-admin-page" class="cell">
-	<h4><?php echo KT_I18N::translate('Manage modules'); ?></h4>
-	<form method="post" action="<?php echo KT_SCRIPT_NAME; ?>">
-		<input type="hidden" name="action" value="update_mods">
-		<?php echo KT_Filter::getCsrf(); ?>
-		<div class="grid-x grid-margin-y">
-			<div class="cell">
-				<table id="installed_table" style="width: 100%;">
-					<thead>
-						<tr>
-							<th><?php echo KT_I18N::translate('Enabled'); ?></th>
-							<th>STATUS</th>
-							<th style="width: 120px;"><?php echo KT_I18N::translate('Module'); ?></th>
-							<th style="width: 400px;"><?php echo KT_I18N::translate('Description'); ?></th>
-							<th><?php echo KT_I18N::translate('Block'); ?></th>
-							<th><?php echo KT_I18N::translate('Chart'); ?></th>
-							<th><?php echo KT_I18N::translate('Footer'); ?></th>
-							<th><?php echo KT_I18N::translate('List'); ?></th>
-							<th><?php echo KT_I18N::translate('Menu'); ?></th>
-							<th><?php echo KT_I18N::translate('Report'); ?></th>
-							<th><?php echo KT_I18N::translate('Sidebar'); ?></th>
-							<th><?php echo KT_I18N::translate('Indi tab'); ?></th>
-							<th><?php echo KT_I18N::translate('Widget'); ?></th>
-							<th><?php echo KT_I18N::translate('Fam tab'); ?></th>
-						</tr>
-					</thead>
-					<tbody>
-						<?php
-						foreach ($module_status as $module_name => $status) {
-							if (array_key_exists($module_name, $modules)) {
-								$module = $modules[$module_name];
-								echo
-									'<tr>
-										<td>' . two_state_checkbox('status-' . $module_name, $status == 'enabled') . '</td>
-										<td>' . $status . '</td>
-										<td>';
-											if ( $module instanceof KT_Module_Config ) {
-												echo '<a href="' . $module->getConfigLink() . '">';
-											}
-											echo $module->getTitle();
-											if ( $module instanceof KT_Module_Config && array_key_exists( $module_name, KT_Module::getActiveModules() ) ) {
-												echo ' <i class="' . $iconStyle . ' fa-cogs"></i></a>';
-											}
-										echo '</td>
-										<td>' . $module->getDescription() . '</td>
-										<td>', $module instanceof KT_Module_Block   	? ($module->isGedcomBlock() ? KT_I18N::translate('Home') : KT_I18N::translate('Other')) : '-', '</td>
-										<td>', $module instanceof KT_Module_Chart   	? KT_I18N::translate('Chart') : '-', '</td>
-										<td>', $module instanceof KT_Module_Footer   	? KT_I18N::translate('Footer') : '-', '</td>
-										<td>', $module instanceof KT_Module_List   		? KT_I18N::translate('List') : '-', '</td>
-										<td>', $module instanceof KT_Module_Menu    	? KT_I18N::translate('Menu') : '-', '</td>
-										<td>', $module instanceof KT_Module_Report  	? KT_I18N::translate('Report') : '-', '</td>
-										<td>', $module instanceof KT_Module_Sidebar 	? KT_I18N::translate('Sidebar') : '-', '</td>
-										<td>', $module instanceof KT_Module_IndiTab     ? KT_I18N::translate('Indi tab') : '-', '</td>
-										<td>', $module instanceof KT_Module_Widget  	? KT_I18N::translate('Widget') : '-', '</td>
-										<td>', $module instanceof KT_Module_FamTab      ? KT_I18N::translate('Fam tab') : '-', '</td>
-									</tr>
-								';
-							} else {
-								// Module can't be found on disk?
-								// Don't delete it automatically.  It may be temporarily missing, after a re-installation, etc.
-								echo
-									'<tr>
-										<td></td>
-										<td></td>
-										<td class="error">' . $module_name . '</td>
-										<td>
-											<a class="error" href="' . KT_SCRIPT_NAME . '?action=delete_module&amp;module_name=' . $module_name .'">' .
-												KT_I18N::translate('This module cannot be found.  Delete its configuration settings.') .
-											'</a>
-										</td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>';
+		<h4><?php echo KT_I18N::translate('Manage modules'); ?></h4>
+		<form class="cell" method="post" action="<?php echo KT_SCRIPT_NAME; ?>">
+			<input type="hidden" name="action" value="update_mods">
+			<?php echo KT_Filter::getCsrf(); ?>
+			<div class="grid-x grid-margin-y">
+				<div class="cell">
+					<table id="installed_table">
+						<thead>
+							<tr>
+								<th><?php echo KT_I18N::translate('Enabled'); ?></th>
+								<th>STATUS</th>
+								<th style="width: 120px;"><?php echo KT_I18N::translate('Module'); ?></th>
+								<th style="width: 400px;"><?php echo KT_I18N::translate('Description'); ?></th>
+								<th><?php echo KT_I18N::translate('Block'); ?></th>
+								<th><?php echo KT_I18N::translate('Chart'); ?></th>
+								<th><?php echo KT_I18N::translate('Footer'); ?></th>
+								<th><?php echo KT_I18N::translate('List'); ?></th>
+								<th><?php echo KT_I18N::translate('Menu'); ?></th>
+								<th><?php echo KT_I18N::translate('Report'); ?></th>
+								<th><?php echo KT_I18N::translate('Sidebar'); ?></th>
+								<th><?php echo KT_I18N::translate('Indi tab'); ?></th>
+								<th><?php echo KT_I18N::translate('Widget'); ?></th>
+								<th><?php echo KT_I18N::translate('Fam tab'); ?></th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php
+							foreach ($module_status as $module_name => $status) {
+								if (array_key_exists($module_name, $modules)) {
+									$module = $modules[$module_name];
+									echo
+										'<tr>
+											<td>' . two_state_checkbox('status-' . $module_name, $status == 'enabled') . '</td>
+											<td>' . $status . '</td>
+											<td>';
+												if ( $module instanceof KT_Module_Config ) {
+													echo '<a href="' . $module->getConfigLink() . '">';
+												}
+												echo $module->getTitle();
+												if ( $module instanceof KT_Module_Config && array_key_exists( $module_name, KT_Module::getActiveModules() ) ) {
+													echo ' <i class="' . $iconStyle . ' fa-cogs"></i></a>';
+												}
+											echo '</td>
+											<td>' . $module->getDescription() . '</td>
+											<td>', $module instanceof KT_Module_Block   	? ($module->isGedcomBlock() ? KT_I18N::translate('Home') : KT_I18N::translate('Other')) : '-', '</td>
+											<td>', $module instanceof KT_Module_Chart   	? KT_I18N::translate('Chart') : '-', '</td>
+											<td>', $module instanceof KT_Module_Footer   	? KT_I18N::translate('Footer') : '-', '</td>
+											<td>', $module instanceof KT_Module_List   		? KT_I18N::translate('List') : '-', '</td>
+											<td>', $module instanceof KT_Module_Menu    	? KT_I18N::translate('Menu') : '-', '</td>
+											<td>', $module instanceof KT_Module_Report  	? KT_I18N::translate('Report') : '-', '</td>
+											<td>', $module instanceof KT_Module_Sidebar 	? KT_I18N::translate('Sidebar') : '-', '</td>
+											<td>', $module instanceof KT_Module_IndiTab     ? KT_I18N::translate('Indi tab') : '-', '</td>
+											<td>', $module instanceof KT_Module_Widget  	? KT_I18N::translate('Widget') : '-', '</td>
+											<td>', $module instanceof KT_Module_FamTab      ? KT_I18N::translate('Fam tab') : '-', '</td>
+										</tr>
+									';
+								} else {
+									// Module can't be found on disk?
+									// Don't delete it automatically.  It may be temporarily missing, after a re-installation, etc.
+									echo
+										'<tr>
+											<td></td>
+											<td></td>
+											<td class="error">' . $module_name . '</td>
+											<td>
+												<a class="error" href="' . KT_SCRIPT_NAME . '?action=delete_module&amp;module_name=' . $module_name .'">' .
+													KT_I18N::translate('This module cannot be found.  Delete its configuration settings.') .
+												'</a>
+											</td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+										</tr>';
+								}
 							}
-						}
-						?>
-					</tbody>
-				</table>
+							?>
+						</tbody>
+					</table>
+				</div>
+				<div class="cell">
+					<button class="button" type="submit">
+						<i class="<?php echo $iconStyle; ?> fa-save"></i>
+						<?php echo KT_I18N::translate('Save'); ?>
+					</button>
+				</div>
 			</div>
-			<button class="button" type="submit">
-				<i class="<?php echo $iconStyle; ?> fa-save"></i>
-				<?php echo KT_I18N::translate('Save'); ?>
-			</button>
-		</div>
-	</form>
+		</form>
+	</div>
 </div>
