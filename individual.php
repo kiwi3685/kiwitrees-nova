@@ -208,15 +208,13 @@ if ($highlightImage) {
 				</div>
 			<?php // =============== Individual page tabs ======================
             foreach ($controller->tabs as $tab) {
-                if (substr($tab->getName(), 0, 4) == 'tabi') {
-                    echo $tab->getPreLoadContent();
-                    $modules[] = $tab;
-                }
+                echo $tab->getPreLoadContent();
             } ?>
+
 			<div class="grid-x">
 				<div class="cell">
 					<ul class="tabs" data-tabs id="indiTabs" data-deep-link="true" data-allow-all-closed="true" data-responsive-accordion-tabs="tabs small-accordion medium-tabs" >
-						<?php foreach ($modules as $tab) {
+						<?php foreach ($controller->tabs as $tab) {
                             if ($tab->isGrayedOut()) {
                                 $greyed_out = ' rela';
                             } else {
@@ -237,7 +235,7 @@ if ($highlightImage) {
 						} ?>
 					</ul>
 					<div class="tabs-content" data-tabs-content="indiTabs">
-						<?php foreach ($modules as $tab) {
+						<?php foreach ($controller->tabs as $tab) {
                             if ($tab->hasTabContent()) { ?>
 								<div class="tabs-panel" id="<?php echo $tab->getName(); ?>">
                                     <?php if (!$tab->canLoadAjax()) {

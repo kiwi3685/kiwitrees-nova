@@ -436,7 +436,7 @@ switch (KT_Filter::get('action')) {
 										KT_I18N::translate('yes'),
 			                            KT_I18N::translate('no')
 									); ?>
-									<label for"userVerified" class="cell medium-6 offset">
+									<label for"userVerified" class="cell medium-10 offset">
 										<?php echo KT_I18N::translate('Email verified'); ?>
 									</label>
 								</div>
@@ -449,7 +449,7 @@ switch (KT_Filter::get('action')) {
 										KT_I18N::translate('yes'),
 			                            KT_I18N::translate('no')
 									); ?>
-									<label for"adminVerified" class="cell medium-6 offset">
+									<label for"adminVerified" class="cell medium-10 offset">
 										<?php echo KT_I18N::translate('Approved by administrator'); ?>
 									</label>
 								</div>
@@ -498,7 +498,7 @@ switch (KT_Filter::get('action')) {
 										KT_I18N::translate('yes'),
 			                            KT_I18N::translate('no')
 									); ?>
-									<label for"auto_accept" class="cell medium-6 offset">
+									<label for"auto_accept" class="cell medium-10 offset">
 										<?php echo KT_I18N::translate('Automatically accept changes made by this user'); ?>
 									</label>
 								</div>
@@ -520,8 +520,10 @@ switch (KT_Filter::get('action')) {
 										KT_I18N::translate('yes'),
 			                            KT_I18N::translate('no')
 									); ?>
-									<label for"visible_online" class="cell medium-6 offset">
-										<?php echo KT_I18N::translate('Automatically accept changes made by this user'); ?>
+									<label for"visible_online" class="cell medium-10 offset">
+										<?php /* I18N: A configuration setting */ echo KT_I18N::translate('
+											You can choose whether to appear in the list of users who are currently signed-in.
+										'); ?>
 									</label>
 								</div>
 							</div>
@@ -571,79 +573,70 @@ switch (KT_Filter::get('action')) {
 											KT_I18N::translate('yes'),
 				                            KT_I18N::translate('no')
 										); ?>
-										<label for"notify_clipping" class="cell medium-6 offset">
+										<label for"notify_clipping" class="cell medium-10 offset">
 											<?php echo KT_I18N::translate('Clippings cart downloads'); ?>
 										</label>
 									</div>
+									<div class="cell callout warning helpcontent">
+										<?php echo KT_I18N::translate('
+											When a user downloads a GEDCOM file created in the Clippings cart the
+											site administrator will be notified by mail if this option is selected.
+										'); ?>
+									</div>
 								</div>
+
 							<?php } ?>
 
 							<hr class="cell">
 
 							<!-- FAMILY TREEs - ACCESS and SETTINGS -->
-							<div id="access" class="cell large-10 large-offset-1">
+							<div id="access" class="cell">
 								<h4><?php echo KT_I18N::translate('Family tree roles and settings'); ?></h4>
 								<div class="grid-x">
 									<div class="cell callout warning shortenMedium">
 										<h5><?php echo KT_I18N::translate('Help for family tree access settings'); ?></h5>
-										<div class="help_label">
-											<label><?php echo KT_I18N::translate('Default individual'); ?></label>
-											<span>
-												<?php echo KT_I18N::translate('This individual will be selected by default when viewing charts and reports.'); ?>
-											</span>
-										</div>
-										<div class="help_label">
-											<label><?php echo KT_I18N::translate('Individual record'); ?></label>
-											<span>
-												<?php echo KT_I18N::translate('Link this user to an individual in the family tree.'); ?>
-											</span>
-										</div>
-										<div class="help_label">
-											<label><?php echo KT_I18N::translate('Roles'); ?></label>
-											<span>
-												<?php echo KT_I18N::translate('A role is a set of access rights, which give permission to view data, change preferences, etc. Access rights are assigned to roles, and roles are granted to users. Each family tree can assign different access to each role, and users can have a different role in each family tree.'); ?>
-											</span>
-										</div>
-										<div class="indent">
-											<div class="help_label">
-												<label><?php echo KT_I18N::translate('Member'); ?></label>
-												<span>
-													<?php echo KT_I18N::translate('This role has permissions to view but not edit the full tree, psubject to any additional limits set in the family tree configuration.'); ?>
-												</span>
-											</div>
-											<div class="help_label">
-												<label><?php echo KT_I18N::translate('Editor'); ?></label>
-												<span>
-													<?php echo KT_I18N::translate('This role has all the permissions of the member role, plus permission to add/change/delete data. Any changes will need to be reviewed by a moderator, unless the user has the “automatically accept changes” option enabled.'); ?>
-												</span>
-											</div>
-											<div class="help_label">
-												<label><?php echo KT_I18N::translate('Moderator'); ?></label>
-												<span>
-													<?php echo KT_I18N::translate('This role has all the permissions of the editor role, plus permission to accept/reject changes made by other users.'); ?>
-												</span>
-											</div>
-											<div class="help_label">
-												<label><?php echo KT_I18N::translate('Manager'); ?></label>
-												<span>
-													<?php echo KT_I18N::translate('This role has all the permissions of the moderator role, plus any additional access granted by the family tree configuration, plus permission to change the settings/configuration of a family tree.'); ?>
-												</span>
-											</div>
-											<div class="help_label">
-												<label><?php echo KT_I18N::translate('Administrator'); ?></label>
-												<span>
-													<?php echo KT_I18N::translate('This role has all the permissions of the manager role in all family trees, plus permission to change the settings/configuration of the website, users, and modules.'); ?>
-												</span>
-											</div>
-										</div>
-										<div class="help_label">
-											<label><?php echo KT_I18N::translate('Restrict to immediate family'); ?></label>
-											<span>
+										<dl>
+											<dt><?php echo KT_I18N::translate('Default individual'); ?></dt>
+											<dd>
+											<?php echo KT_I18N::translate('This individual will be selected by default when viewing charts and reports.'); ?>
+											</dd>
+											<dt><?php echo KT_I18N::translate('Individual record'); ?></dt>
+											<dd>
+											<?php echo KT_I18N::translate('Link this user to an individual in the family tree.'); ?>
+											</dd>
+											<dt><?php echo KT_I18N::translate('Roles'); ?></dt>
+											<dd>
+											<?php echo KT_I18N::translate('A role is a set of access rights, which give permission to view data, change preferences, etc. Access rights are assigned to roles, and roles are granted to users. Each family tree can assign different access to each role, and users can have a different role in each family tree.'); ?>
+											</dd>
+												<dl class="offset">
+													<dt><?php echo KT_I18N::translate('Member'); ?></dt>
+													<dd>
+														<?php echo KT_I18N::translate('This role has permissions to view but not edit the full tree, psubject to any additional limits set in the family tree configuration.'); ?>
+													</dd>
+													<dt><?php echo KT_I18N::translate('Editor'); ?></dt>
+													<dd>
+														<?php echo KT_I18N::translate('This role has all the permissions of the member role, plus permission to add/change/delete data. Any changes will need to be reviewed by a moderator, unless the user has the “automatically accept changes” option enabled.'); ?>
+													</dd>
+													<dt><?php echo KT_I18N::translate('Moderator'); ?></dt>
+													<dd>
+														<?php echo KT_I18N::translate('This role has all the permissions of the editor role, plus permission to accept/reject changes made by other users.'); ?>
+													</dd>
+													<dt><?php echo KT_I18N::translate('Manager'); ?></dt>
+													<dd>
+														<?php echo KT_I18N::translate('This role has all the permissions of the moderator role, plus any additional access granted by the family tree configuration, plus permission to change the settings/configuration of a family tree.'); ?>
+													</dd>
+													<dt><?php echo KT_I18N::translate('Administrator'); ?></dt>
+													<dd>
+														<?php echo KT_I18N::translate('This role has all the permissions of the manager role in all family trees, plus permission to change the settings/configuration of the website, users, and modules.'); ?>
+													</dd>
+												</dl>
+											<dt><?php echo KT_I18N::translate('Restrict to immediate family'); ?></dt>
+											<dd>
 												<?php echo KT_I18N::translate('Where a user is associated with an individual record in a family tree and has a role of member, editor, or moderator, you can prevent them from accessing the details of distant, living relations. You specify the number of relationship steps that the user is allowed to see.'); ?>
 												<?php echo KT_I18N::translate('For example, if you specify a path length of 2, the individual will be able to see their grandson (child, child), their aunt (parent, sibling), their step-daughter (spouse, child), but not their first cousin (parent, sibling, child).'); ?>
 												<?php echo KT_I18N::translate('Note: longer path lengths require a lot of calculation, which can make your website run slowly for these users.'); ?>
-											</span>
-										</div>
+											</dd>
+										</dl>
 									</div>
 
 									<!-- ADMINISTRATOR -->
@@ -673,9 +666,17 @@ switch (KT_Filter::get('action')) {
 													<th><?php echo KT_I18N::translate('Default individual'); ?></th>
 													<th><?php echo KT_I18N::translate('Individual record'); ?></th>
 													<th><?php echo KT_I18N::translate('Role'); ?></th>
-													<th><?php echo KT_I18N::translate('Restrict to immediate family'); ?></th>
+													<th><?php echo KT_I18N::translate('Restrict to close family'); ?></th>
+												</tr>
 											</thead>
 											<tbody>
+												<tr>
+													<td colspan="5">
+														<div class="callout warning helpcontent">
+															<?php echo KT_I18N::translate('For more imformation about these items, seee the help content above.'); ?>
+														</div>
+													</td>
+												</tr>
 												<?php foreach (KT_Tree::getAll() as $tree) { ?>
 													<tr>
 														<td>
@@ -767,11 +768,13 @@ switch (KT_Filter::get('action')) {
 														<td>
 															<?php $varname = 'RELATIONSHIP_PATH_LENGTH' . $tree->tree_id; ?>
 															<select name="<?php echo $varname; ?>" id="<?php echo $varname; ?>" class="relpath">
-																<?php for ($n = 0; $n <= 10; ++$n): ?>
-																	<option value="<?php echo $n; ?>" <?php echo $tree->userPreference($user_id, 'RELATIONSHIP_PATH_LENGTH') == $n ? 'selected' : ''; ?>>
-																	<?php echo $n ? $n : KT_I18N::translate('No'); ?>
-																</option>
-																<?php endfor; ?>
+																<?php for ($n = 0; $n <= 10; ++$n) { ?>
+																	<option
+																		value="<?php echo $n; ?>"
+																		<?php echo $tree->userPreference($user_id, 'RELATIONSHIP_PATH_LENGTH') == $n ? ' selected' : ''; ?>
+																	>
+																	<?php echo $n ?  /* I18N: setting privacy for relationship steps */ KT_I18N::plural('%s step away', '%s steps away', $n, $n) : KT_I18N::translate('No'); ?>
+																<?php } ?>
 															</select>
 														</td>
 													</tr>
@@ -781,16 +784,16 @@ switch (KT_Filter::get('action')) {
 									</div>
 								</div>
 							</div>
-							<div class="cell large-10 large-offset-1 align-left button-group">
-								<button class="button primary" type="submit">
-							        <i class="<?php echo $iconStyle; ?> fa-save"></i>
-							         <?php echo KT_I18N::translate('Save'); ?>
-							    </button>
-								<button class="button hollow" type="button" onclick="window.location.href='<?php echo KT_SERVER_NAME . KT_SCRIPT_PATH .  KT_SCRIPT_NAME; ?>'">
-							        <i class="<?php echo  $iconStyle; ?> fa-times"></i>
-							        <?php echo KT_I18N::translate('Close'); ?>
-							    </button>
-							</div>
+						</div>
+						<div class="cell large-10 align-left button-group">
+							<button class="button primary" type="submit">
+								<i class="<?php echo $iconStyle; ?> fa-save"></i>
+								 <?php echo KT_I18N::translate('Save'); ?>
+							</button>
+							<button class="button hollow" type="button" onclick="window.location.href='<?php echo KT_SERVER_NAME . KT_SCRIPT_PATH .  KT_SCRIPT_NAME; ?>'">
+								<i class="<?php echo  $iconStyle; ?> fa-times"></i>
+								<?php echo KT_I18N::translate('Close'); ?>
+							</button>
 						</div>
 					</form>
 				</div>

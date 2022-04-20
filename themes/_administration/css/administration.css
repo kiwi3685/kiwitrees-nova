@@ -9561,7 +9561,6 @@ body #admin-container {
 	/* MISSING DATA */
 	/* RESEARCH LINKS */
 	/* Googlemaps Admin */
-	/* USERS */
 	/* CLEAN UP TABLE */
 	/* MODULE PAGES */
 	/* PAGES MODULE */
@@ -9878,14 +9877,15 @@ body #admin-container {
 #admin-container #admin-content #user_details label.offset {
 	padding: 0.2rem 2rem 0;
 }
-#admin-container #admin-content #user_details table thead th:nth-child(1) {
-	max-width: 10rem;
-}
 #admin-container #admin-content #user_details table thead th:nth-child(4) {
 	max-width: 5rem;
 }
 #admin-container #admin-content #user_details table thead th:nth-child(5) {
-	width: 10rem;
+	width: 15rem;
+}
+#admin-container #admin-content #user_details dl dl {
+	margin-left: 3rem;
+	margin-right: 3rem;
 }
 #admin-container #admin-content #log_list th {
 	min-width: 10rem;
