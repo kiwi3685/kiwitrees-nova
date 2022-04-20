@@ -320,7 +320,7 @@ switch (KT_Filter::get('action')) {
 					var idNum = fieldIDx.replace("RELATIONSHIP_PATH_LENGTH","");
 					var newIDx = "gedcomid"+idNum;
 					if (jQuery("#"+newIDx).val() === "" && jQuery("#".fieldIDx).val() !== "0") {
-						alert("' . KT_I18N::translate('You must specify an individual record before you can restrict the user to their immediate family.') . '");
+						alert("' . KT_I18N::translate('You must specify an individual record before you can restrict the user to their close family.') . '");
 						jQuery(this).val("0");
 					}
 				});
@@ -630,7 +630,7 @@ switch (KT_Filter::get('action')) {
 														<?php echo KT_I18N::translate('This role has all the permissions of the manager role in all family trees, plus permission to change the settings/configuration of the website, users, and modules.'); ?>
 													</dd>
 												</dl>
-											<dt><?php echo KT_I18N::translate('Restrict to immediate family'); ?></dt>
+											<dt><?php echo KT_I18N::translate('Restrict to close family'); ?></dt>
 											<dd>
 												<?php echo KT_I18N::translate('Where a user is associated with an individual record in a family tree and has a role of member, editor, or moderator, you can prevent them from accessing the details of distant, living relations. You specify the number of relationship steps that the user is allowed to see.'); ?>
 												<?php echo KT_I18N::translate('For example, if you specify a path length of 2, the individual will be able to see their grandson (child, child), their aunt (parent, sibling), their step-daughter (spouse, child), but not their first cousin (parent, sibling, child).'); ?>
