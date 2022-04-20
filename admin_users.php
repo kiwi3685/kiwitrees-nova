@@ -611,7 +611,7 @@ switch (KT_Filter::get('action')) {
 												<dl class="offset">
 													<dt><?php echo KT_I18N::translate('Member'); ?></dt>
 													<dd>
-														<?php echo KT_I18N::translate('This role has permissions to view but not edit the full tree, psubject to any additional limits set in the family tree configuration.'); ?>
+														<?php echo KT_I18N::translate('This role has permissions to view but not edit the full tree, subject to any additional limits set in the family tree configuration.'); ?>
 													</dd>
 													<dt><?php echo KT_I18N::translate('Editor'); ?></dt>
 													<dd>
