@@ -315,6 +315,7 @@ switch (KT_Filter::get('action')) {
 			->addExternalJavascript(KT_PASSWORDSCHECK)
 			->addInlineJavascript('
 				autocomplete();
+
 				jQuery(".relpath").change(function() {
 					var fieldIDx = jQuery(this).attr("id");
 					var idNum = fieldIDx.replace("RELATIONSHIP_PATH_LENGTH","");
@@ -324,9 +325,7 @@ switch (KT_Filter::get('action')) {
 						jQuery(this).val("0");
 					}
 				});
-				function regex_quote(str) {
-					return str.replace(/[\\\\.?+*()[\](){}|]/g, "\\\\$&");
-				};
+
 
 			');
 
@@ -384,7 +383,10 @@ switch (KT_Filter::get('action')) {
 										class="input-group-field"
 										type="password" id="pass1"
 										name="pass1"
-										pattern="<?php echo KT_REGEX_PASSWORD; ?>" placeholder="<?php echo KT_I18N::plural('Use at least %s character.', 'Use at least %s characters.', KT_MINIMUM_PASSWORD_LENGTH, KT_I18N::number(KT_MINIMUM_PASSWORD_LENGTH)); ?>" <?php echo $user_id ? '' : 'required'; ?>>
+										pattern="<?php echo KT_REGEX_PASSWORD; ?>"
+										placeholder="<?php echo KT_I18N::plural('Use at least %s character.', 'Use at least %s characters.', KT_MINIMUM_PASSWORD_LENGTH, KT_I18N::number(KT_MINIMUM_PASSWORD_LENGTH)); ?>"
+										<?php echo $user_id ? '' : 'required'; ?>
+									>
 									<span class="input-group-label unmask" title="<?php echo KT_I18N::translate('Show/Hide password to check content'); ?>">
 										<i class="<?php echo $iconStyle; ?> fa-eye"></i>
 									</span>
