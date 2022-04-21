@@ -320,7 +320,7 @@ switch (KT_Filter::get('action')) {
 					var idNum = fieldIDx.replace("RELATIONSHIP_PATH_LENGTH","");
 					var newIDx = "gedcomid"+idNum;
 					if (jQuery("#"+newIDx).val() === "" && jQuery("#".fieldIDx).val() !== "0") {
-						alert("' . KT_I18N::translate('You must specify an individual record before you can restrict the user to their close family.') . '");
+						alert("' . KT_I18N::translate('You must specify an individual record for this user before you can restrict the user to their close family.') . '");
 						jQuery(this).val("0");
 					}
 				});
@@ -539,7 +539,11 @@ switch (KT_Filter::get('action')) {
 									<?php echo edit_field_contact('contact_method', get_user_setting($user_id, 'contactmethod')); ?>
 									<div class="callout warning helpcontent">
 										<?php echo /* I18N: Help text for the “Preferred contact method” configuration setting */
-										KT_I18N::translate('Site members can send each other messages. You can choose to how these messages are sent to you, or choose not receive them at all.'); ?>
+										KT_I18N::translate('
+											Site members can send each other messages.
+											You can choose how these messages are sent to you,
+											or choose not receive them at all.
+										'); ?>
 									</div>
 								</div>
 							</div>
@@ -552,7 +556,9 @@ switch (KT_Filter::get('action')) {
 							</div>
 							<div class="cell large-9">
 								<div class="input_group">
-									<textarea id="comment" name="comment" rows="5" maxlength="255"><?php echo KT_Filter::escapeHtml(get_user_setting($user_id, 'comment')); ?></textarea>
+									<textarea id="comment" name="comment" rows="5" maxlength="255">
+										<?php echo KT_Filter::escapeHtml(get_user_setting($user_id, 'comment')); ?>
+									</textarea>
 								</div>
 							</div>
 
@@ -598,7 +604,9 @@ switch (KT_Filter::get('action')) {
 										<dl>
 											<dt><?php echo KT_I18N::translate('Default individual'); ?></dt>
 											<dd>
-											<?php echo KT_I18N::translate('This individual will be selected by default when viewing charts and reports.'); ?>
+											<?php echo KT_I18N::translate('
+												This individual will be selected by default when viewing charts and reports.
+											'); ?>
 											</dd>
 											<dt><?php echo KT_I18N::translate('Individual record'); ?></dt>
 											<dd>
@@ -606,35 +614,69 @@ switch (KT_Filter::get('action')) {
 											</dd>
 											<dt><?php echo KT_I18N::translate('Roles'); ?></dt>
 											<dd>
-											<?php echo KT_I18N::translate('A role is a set of access rights, which give permission to view data, change preferences, etc. Access rights are assigned to roles, and roles are granted to users. Each family tree can assign different access to each role, and users can have a different role in each family tree.'); ?>
+											<?php echo KT_I18N::translate('
+												A role is a set of access rights, which give permission to view data,
+												change preferences, etc. Access rights are assigned to roles,
+												and roles are granted to users. Each family tree can assign different access to each role,
+												and users can have a different role in each family tree.
+											'); ?>
 											</dd>
 												<dl class="offset">
 													<dt><?php echo KT_I18N::translate('Member'); ?></dt>
 													<dd>
-														<?php echo KT_I18N::translate('This role has permissions to view but not edit the full tree, subject to any additional limits set in the family tree configuration.'); ?>
+														<?php echo KT_I18N::translate('
+														This role has permissions to view but not edit the full tree,
+														subject to any additional limits set in the family tree configuration.
+													'); ?>
 													</dd>
 													<dt><?php echo KT_I18N::translate('Editor'); ?></dt>
 													<dd>
-														<?php echo KT_I18N::translate('This role has all the permissions of the member role, plus permission to add/change/delete data. Any changes will need to be reviewed by a moderator, unless the user has the “automatically accept changes” option enabled.'); ?>
+														<?php echo KT_I18N::translate('
+															This role has all the permissions of the member role,
+															plus permission to add/change/delete data.
+															Any changes will need to be reviewed by a moderator,
+															unless the user has the “automatically accept changes” option enabled.
+														'); ?>
 													</dd>
 													<dt><?php echo KT_I18N::translate('Moderator'); ?></dt>
 													<dd>
-														<?php echo KT_I18N::translate('This role has all the permissions of the editor role, plus permission to accept/reject changes made by other users.'); ?>
+														<?php echo KT_I18N::translate('
+															This role has all the permissions of the editor role,
+															plus permission to accept/reject changes made by other users.
+														'); ?>
 													</dd>
 													<dt><?php echo KT_I18N::translate('Manager'); ?></dt>
 													<dd>
-														<?php echo KT_I18N::translate('This role has all the permissions of the moderator role, plus any additional access granted by the family tree configuration, plus permission to change the settings/configuration of a family tree.'); ?>
+														<?php echo KT_I18N::translate('
+															This role has all the permissions of the moderator role,
+															plus any additional access granted by the family tree configuration,
+															plus permission to change the settings/configuration of a family tree.
+														'); ?>
 													</dd>
 													<dt><?php echo KT_I18N::translate('Administrator'); ?></dt>
 													<dd>
-														<?php echo KT_I18N::translate('This role has all the permissions of the manager role in all family trees, plus permission to change the settings/configuration of the website, users, and modules.'); ?>
+														<?php echo KT_I18N::translate('
+															This role has all the permissions of the manager role in all family trees,
+															plus permission to change the settings/configuration of the website, users, and modules.
+														'); ?>
 													</dd>
 												</dl>
 											<dt><?php echo KT_I18N::translate('Restrict to close family'); ?></dt>
 											<dd>
-												<?php echo KT_I18N::translate('Where a user is associated with an individual record in a family tree and has a role of member, editor, or moderator, you can prevent them from accessing the details of distant, living relations. You specify the number of relationship steps that the user is allowed to see.'); ?>
-												<?php echo KT_I18N::translate('For example, if you specify a path length of 2, the individual will be able to see their grandson (child, child), their aunt (parent, sibling), their step-daughter (spouse, child), but not their first cousin (parent, sibling, child).'); ?>
-												<?php echo KT_I18N::translate('Note: longer path lengths require a lot of calculation, which can make your website run slowly for these users.'); ?>
+												<?php echo KT_I18N::translate('
+													Where a user is associated with an individual record in a family tree
+													and has a role of member, editor, or moderator, you can prevent them from accessing the details of distant,
+													living relations. You specify the number of relationship steps that the user is allowed to see.
+												'); ?>
+												<?php echo KT_I18N::translate('
+													For example, if you specify a path length of 2, the individual will be able
+													to see their grandson (child, child), their aunt (parent, sibling),
+													their step-daughter (spouse, child), but not their first cousin (parent, sibling, child).
+												'); ?>
+												<?php echo KT_I18N::translate('
+													Note: longer path lengths require a lot of calculation,
+													which can make your website run slowly for these users.
+												'); ?>
 											</dd>
 										</dl>
 									</div>
@@ -673,7 +715,7 @@ switch (KT_Filter::get('action')) {
 												<tr>
 													<td colspan="5">
 														<div class="callout warning helpcontent">
-															<?php echo KT_I18N::translate('For more imformation about these items, seee the help content above.'); ?>
+															<?php echo KT_I18N::translate('For more imformation about these items, see the help content above.'); ?>
 														</div>
 													</td>
 												</tr>
@@ -773,7 +815,10 @@ switch (KT_Filter::get('action')) {
 																		value="<?php echo $n; ?>"
 																		<?php echo $tree->userPreference($user_id, 'RELATIONSHIP_PATH_LENGTH') == $n ? ' selected' : ''; ?>
 																	>
-																	<?php echo $n ?  /* I18N: setting privacy for relationship steps */ KT_I18N::plural('%s step away', '%s steps away', $n, $n) : KT_I18N::translate('No'); ?>
+																	<?php
+																		echo $n ?  /* I18N: setting privacy for relationship steps */ KT_I18N::plural('
+																			%s step away', '%s steps away', $n, $n) : KT_I18N::translate('No')
+																		; ?>
 																<?php } ?>
 															</select>
 														</td>
