@@ -593,26 +593,6 @@ case 'oldest_top':
 	$text = KT_I18N::translate('When this check box is checked, the chart will be printed with oldest people at the top.  When it is unchecked, youngest people will appear at the top.');
 	break;
 
-case 'password':
-	$title = KT_I18N::translate('Password');
-	$text = KT_I18N::translate('Leave password blank if you want to keep the current password.<br>Passwords must be at least 6 characters long and are case-sensitive, so that “secret” is different to “SECRET”.');
-	break;
-
-case 'password_confirm':
-	$title = KT_I18N::translate('Confirm password');
-	$text = KT_I18N::translate('Type your password again, to make sure you have typed it correctly.');
-	break;
-
-case 'password01':
-	$title	= '';
-	$text	= KT_I18N::translate('Passwords must be at least 6 characters long and are case-sensitive, so that “secret” is different to “SECRET”.');
-	break;
-
-case 'password_confirm':
-	$title	= '';
-	$text	= KT_I18N::translate('Type your password again, to make sure you have typed it correctly.');
-	break;
-
 case 'password_lost':
 	$title	= '';
 	$text	= KT_I18N::translate('To reset your password, submit your username or email address here. If we can find you in the database an email will be sent to your email address, with instructions how to get access again.');
