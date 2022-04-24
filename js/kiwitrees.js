@@ -1607,8 +1607,10 @@ jQuery('.unmask').on('click', function(){
 
     if(jQuery(this).prev('input').attr('type') == 'password') {
         changeType(jQuery(this).prev('input'), 'text');
+        jQuery(".close-eye").attr("data-icon", "eye-slash");
     } else {
         changeType(jQuery(this).prev('input'), 'password');
+        jQuery(".close-eye").attr("data-icon", "eye");
     }
 
     return false;
