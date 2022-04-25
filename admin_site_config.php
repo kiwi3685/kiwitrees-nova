@@ -31,13 +31,7 @@ require KT_ROOT . 'includes/functions/functions_edit.php';
 $controller = new KT_Controller_Page();
 $controller
 	->restrictAccess(KT_USER_IS_ADMIN)
-	->setPageTitle(KT_I18N::translate('Site configuration'))
-	->addInlineJavascript('
-		jQuery(window).on("beforeunload", function() {
-			jQuery("body").hide();
-			jQuery(window).scrollTop(0);
-		});
-	');
+	->setPageTitle(KT_I18N::translate('Site configuration'));
 
 // Lists of options for <select> controls.
 $SMTP_SSL_OPTIONS = array(
@@ -78,9 +72,8 @@ switch (KT_Filter::post('action')) {
 		KT_Site::preference('SERVER_URL',					KT_Filter::post('SERVER_URL'));
 		KT_Site::preference('MAINTENANCE',					KT_Filter::postBool('MAINTENANCE'));
 		// Reload the page, so that the settings take effect immediately.
-		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '#site');
-		KT_FlashMessages::addMessage(KT_I18N::translate('Site configuration "%s" updated', KT_I18N::translate('Website settings')));
 		Zend_Session::writeClose();
+		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '#site');
 	exit;
 	case 'update-mail':
 		if (!KT_Filter::checkCsrf()) {
@@ -99,9 +92,8 @@ switch (KT_Filter::post('action')) {
 			KT_Site::preference('SMTP_AUTH_PASS',			KT_Filter::post('SMTP_AUTH_PASS'));
 		}
 		// Reload the page, so that the settings take effect immediately.
-		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '#mail');
-		KT_FlashMessages::addMessage(KT_I18N::translate('Site configuration "%s" updated', KT_I18N::translate('Mail configuration')));
 		Zend_Session::writeClose();
+		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '#mail');
 	exit;
 	case 'update-login':
 			if (!KT_Filter::checkCsrf()) {
@@ -117,9 +109,8 @@ switch (KT_Filter::post('action')) {
 		KT_Site::preference('USE_REGISTRATION_MODULE',		KT_Filter::postBool('USE_REGISTRATION_MODULE'));
 		KT_Site::preference('SHOW_REGISTER_CAUTION',		KT_Filter::postBool('SHOW_REGISTER_CAUTION'));
 		// Reload the page, so that the settings take effect immediately.
-		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '#login');
-		KT_FlashMessages::addMessage(KT_I18N::translate('Site configuration "%s" updated', KT_I18N::translate('Login & registration')));
 		Zend_Session::writeClose();
+		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '#login');
 	exit;
 	case 'update-spam':
 		if (!KT_Filter::checkCsrf()) {
@@ -145,9 +136,8 @@ switch (KT_Filter::post('action')) {
 			KT_Site::preference('BLOCKED_EMAIL_ADDRESS_LIST', str_replace(array(' ', "\n", "\r"), '', KT_Filter::post('BLOCKED_EMAIL_ADDRESS_LIST')));
 		}
 		// Reload the page, so that the settings take effect immediately.
-		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '#spam');
-		KT_FlashMessages::addMessage(KT_I18N::translate('Site configuration "%s" updated', KT_I18N::translate('Anti-spam')));
 		Zend_Session::writeClose();
+		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '#spam');
 	exit;
 	case 'update-lang':
 		if (!KT_Filter::checkCsrf()) {
@@ -155,9 +145,8 @@ switch (KT_Filter::post('action')) {
 		}
 		KT_Site::preference('LANGUAGES', implode(',',  KT_Filter::postArray('LANGUAGES')));
 		// Reload the page, so that the settings take effect immediately.
-		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '#lang');
-		KT_FlashMessages::addMessage(KT_I18N::translate('Site configuration "%s" updated', KT_I18N::translate('Languages')));
 		Zend_Session::writeClose();
+		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '#lang');
 	exit;
 }
 
