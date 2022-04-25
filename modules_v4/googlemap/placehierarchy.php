@@ -405,7 +405,7 @@ function map_scripts($numfound, $level, $parent, $linklevels, $placelevels, $pla
 				position: google.maps.ControlPosition.TOP_RIGHT, // BOTTOM, BOTTOM_LEFT, LEFT, TOP, etc
 				style: google.maps.NavigationControlStyle.SMALL  // ANDROID, DEFAULT, SMALL, ZOOM_PAN
 			},
-//			streetViewControl: false, // Show Pegman or not
+			streetViewControl: false, // Show Pegman or not
 			scrollwheel: false
 		};
 		map = new google.maps.Map(document.getElementById("place_map"), mapOptions);

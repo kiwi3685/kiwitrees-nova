@@ -22,6 +22,25 @@
  *
  * @ Original author Brian Holland
 */
+#map_pane,
+#pm_map {
+	height: 30rem;
+	width: 100%;
+}
+#map_pane #side_bar #side_bar,
+#pm_map #side_bar #side_bar {
+	width: 18rem;
+	font-size: 0.9em;
+	overflow: auto;
+	overflow-x: hidden;
+	overflow-y: auto;
+	height: 30rem;
+}
+
+#gm_mapTab #map_content {
+	margin: 1rem auto;
+}
+
 #googlemap_left {
 	margin-top: -1rem;
 }
