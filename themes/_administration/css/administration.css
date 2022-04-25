@@ -9547,6 +9547,7 @@ body #admin-container {
 #admin-container #admin-content {
 	/* Dashboard */
 	/* Media upload */
+	/* SITE config */
 	/* TREE config */
 	/* CUSTOM LANG */
 	/* CUSTOM THEME */
@@ -9761,6 +9762,11 @@ body #admin-container {
 	padding-bottom: 1rem;
 	vertical-align: middle;
 }
+#admin-container #admin-content #site_config label.middle {
+	margin: 0 0 1rem;
+	line-height: 1;
+	padding: 0.5625rem 0 0;
+}
 #admin-container #admin-content #family_tree_config #media .padding-bottom {
 	margin-bottom: 1rem;
 }
@@ -9886,6 +9892,31 @@ body #admin-container {
 #admin-container #admin-content #user_details dl dl {
 	margin-left: 3rem;
 	margin-right: 3rem;
+}
+#admin-container #admin-content #user_details #password-checker {
+	height: 3rem;
+}
+#admin-container #admin-content #user_details #password-checker span {
+	font-size: 0.9rem;
+}
+#admin-container #admin-content #user_details #password-checker .fa-check {
+	color: #5da423;
+}
+#admin-container #admin-content #user_details #password-checker .progress {
+	height: 0.5rem;
+	margin-bottom: 0;
+}
+#admin-container #admin-content #user_details #password-checker .progress .progress-bar {
+	height: 0.5rem;
+}
+#admin-container #admin-content #user_details #password-checker .progress .progress-bar-danger {
+	background-color: #ff0000;
+}
+#admin-container #admin-content #user_details #password-checker .progress .progress-bar-warning {
+	background-color: #ffae00;
+}
+#admin-container #admin-content #user_details #password-checker .progress .progress-bar-success {
+	background-color: #5da423;
 }
 #admin-container #admin-content #log_list th {
 	min-width: 10rem;

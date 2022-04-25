@@ -31,7 +31,13 @@ require KT_ROOT . 'includes/functions/functions_edit.php';
 $controller = new KT_Controller_Page();
 $controller
 	->restrictAccess(KT_USER_IS_ADMIN)
-	->setPageTitle(KT_I18N::translate('Site configuration'));
+	->setPageTitle(KT_I18N::translate('Site configuration'))
+	->addInlineJavascript('
+		jQuery(window).on("beforeunload", function() {
+			jQuery("body").hide();
+			jQuery(window).scrollTop(0);
+		});
+	');
 
 // Lists of options for <select> controls.
 $SMTP_SSL_OPTIONS = array(
@@ -72,9 +78,10 @@ switch (KT_Filter::post('action')) {
 		KT_Site::preference('SERVER_URL',					KT_Filter::post('SERVER_URL'));
 		KT_Site::preference('MAINTENANCE',					KT_Filter::postBool('MAINTENANCE'));
 		// Reload the page, so that the settings take effect immediately.
-		Zend_Session::writeClose();
 		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '#site');
-		exit;
+		KT_FlashMessages::addMessage(KT_I18N::translate('Site configuration "%s" updated', KT_I18N::translate('Website settings')));
+		Zend_Session::writeClose();
+	exit;
 	case 'update-mail':
 		if (!KT_Filter::checkCsrf()) {
 			break;
@@ -92,22 +99,28 @@ switch (KT_Filter::post('action')) {
 			KT_Site::preference('SMTP_AUTH_PASS',			KT_Filter::post('SMTP_AUTH_PASS'));
 		}
 		// Reload the page, so that the settings take effect immediately.
-		Zend_Session::writeClose();
 		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '#mail');
-		exit;
-		case 'update-login':
+		KT_FlashMessages::addMessage(KT_I18N::translate('Site configuration "%s" updated', KT_I18N::translate('Mail configuration')));
+		Zend_Session::writeClose();
+	exit;
+	case 'update-login':
 			if (!KT_Filter::checkCsrf()) {
 				break;
 			}
 		KT_Site::preference('LOGIN_URL',					KT_Filter::post('LOGIN_URL'));
+		KT_Site::preference('PASSWORD_ALPHA',				KT_Filter::postBool('PASSWORD_ALPHA'));
+		KT_Site::preference('PASSWORD_NUMBERS',				KT_Filter::postBool('PASSWORD_NUMBERS'));
+		KT_Site::preference('PASSWORD_SPECIAL',				KT_Filter::postBool('PASSWORD_SPECIAL'));
+		KT_Site::preference('PASSWORD_LENGTH',				KT_Filter::post('PASSWORD_LENGTH'));
 		KT_Site::preference('WELCOME_TEXT_AUTH_MODE',		KT_Filter::post('WELCOME_TEXT_AUTH_MODE'));
 		KT_Site::preference('WELCOME_TEXT_AUTH_MODE_' .		KT_LOCALE, KT_Filter::post('WELCOME_TEXT_AUTH_MODE_4'));
 		KT_Site::preference('USE_REGISTRATION_MODULE',		KT_Filter::postBool('USE_REGISTRATION_MODULE'));
 		KT_Site::preference('SHOW_REGISTER_CAUTION',		KT_Filter::postBool('SHOW_REGISTER_CAUTION'));
 		// Reload the page, so that the settings take effect immediately.
-		Zend_Session::writeClose();
 		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '#login');
-		exit;
+		KT_FlashMessages::addMessage(KT_I18N::translate('Site configuration "%s" updated', KT_I18N::translate('Login & registration')));
+		Zend_Session::writeClose();
+	exit;
 	case 'update-spam':
 		if (!KT_Filter::checkCsrf()) {
 			break;
@@ -132,18 +145,20 @@ switch (KT_Filter::post('action')) {
 			KT_Site::preference('BLOCKED_EMAIL_ADDRESS_LIST', str_replace(array(' ', "\n", "\r"), '', KT_Filter::post('BLOCKED_EMAIL_ADDRESS_LIST')));
 		}
 		// Reload the page, so that the settings take effect immediately.
-		Zend_Session::writeClose();
 		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '#spam');
-		exit;
+		KT_FlashMessages::addMessage(KT_I18N::translate('Site configuration "%s" updated', KT_I18N::translate('Anti-spam')));
+		Zend_Session::writeClose();
+	exit;
 	case 'update-lang':
 		if (!KT_Filter::checkCsrf()) {
 			break;
 		}
 		KT_Site::preference('LANGUAGES', implode(',',  KT_Filter::postArray('LANGUAGES')));
 		// Reload the page, so that the settings take effect immediately.
-		Zend_Session::writeClose();
 		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '#lang');
-		exit;
+		KT_FlashMessages::addMessage(KT_I18N::translate('Site configuration "%s" updated', KT_I18N::translate('Languages')));
+		Zend_Session::writeClose();
+	exit;
 }
 
 $controller
@@ -420,7 +435,7 @@ $controller
 			<form method="post" name="configform" action="<?php echo KT_SCRIPT_NAME; ?>#login" data-abide novalidate>
 				<?php echo KT_Filter::getCsrf(); ?>
 				<input type="hidden" name="action" value="update-login">
-				<div class="grid-x grid-margin-x">
+				<div class="grid-x grid-margin-x grid-margin-y">
 					<div data-abide-error class="alert callout" style="display: none;">
 						<p><i class="fi-alert"></i><?php echo /* I18N: A general error message for forms */ KT_I18N::translate('There are some errors in your form.'); ?></p>
 					</div>
@@ -431,6 +446,38 @@ $controller
 						<input type="text" id="loginurl" name="LOGIN_URL" value="<?php echo KT_Filter::escapeHtml(KT_Site::preference('LOGIN_URL')); ?>" maxlength="255">
 						<div class="cell callout warning helpcontent">
 							<?php echo /* I18N: Help text for the “Login URL” site configuration setting */ KT_I18N::translate('You only need to enter a Login URL if you want to redirect to a different site or location when your users login. This is very useful if you need to switch from http to https when your users login. Include the full URL to <i>login.php</i>. For example, https://www.yourserver.com/kiwitrees/login.php .'); ?>
+						</div>
+					</div>
+					<div class="cell large-3">
+						<label><?php echo KT_I18N::translate('Password requirements'); ?></label>
+					</div>
+					<div class="cell large-9">
+						<div class="grid-x grid-margin-y">
+							<div class="medium-2">
+								<?php echo simple_switch('PASSWORD_ALPHA', true, KT_Site::preference('PASSWORD_ALPHA')); ?>
+							</div>
+							<div class="medium-10">
+								<label class="middle"><?php echo KT_I18N::translate('Require at least one upper case and one lower case letter'); ?></label>
+							</div>
+							<div class="medium-2">
+								<?php echo simple_switch('PASSWORD_NUMBERS', true, KT_Site::preference('PASSWORD_NUMBERS')); ?>
+							</div>
+							<div class="medium-10">
+								<label class="middle"><?php echo KT_I18N::translate('Require at least one number'); ?></label>
+							</div>
+							<div class="medium-2">
+								<?php echo simple_switch('PASSWORD_SPECIAL', true, KT_Site::preference('PASSWORD_SPECIAL')); ?>
+							</div>
+							<div class="medium-10">
+								<?php $chars = '!@#$%^&*'; ?>
+								<label class="middle"><?php echo KT_I18N::translate('Require at least one character from %s', $chars); ?></label>
+							</div>
+							<div class="medium-1">
+								<input type="number" value="<?php echo (KT_Site::preference('PASSWORD_LENGTH') ? KT_Site::preference('PASSWORD_LENGTH') : 6); ?>" name="PASSWORD_LENGTH" min="6" max="20" step="2" required>
+							</div>
+							<div class="medium-10 medium-offset-1">
+								<label class="middle"><?php echo KT_I18N::translate('Set minimum password length'); ?></label>
+							</div>
 						</div>
 					</div>
 					<div class="cell large-3">

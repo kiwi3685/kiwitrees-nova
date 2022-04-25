@@ -106,8 +106,6 @@ define('KT_ERROR_LEVEL', 2); // 0=none, 1=minimal, 2=full
 define('KT_SCHEMA_VERSION', 40);
 
 // Regular expressions for validating user input, etc.
-define('KT_MINIMUM_PASSWORD_LENGTH', 6);
-
 define('KT_REGEX_XREF',     '[A-Za-z0-9:_-]+');
 define('KT_REGEX_TAG',      '[_A-Z][_A-Z0-9]*');
 define('KT_REGEX_INTEGER',  '-?\d+');
@@ -115,7 +113,6 @@ define('KT_REGEX_ALPHA',    '[a-zA-Z]+');
 define('KT_REGEX_ALPHANUM', '[a-zA-Z0-9]+');
 define('KT_REGEX_BYTES',    '[0-9]+[bBkKmMgG]?');
 define('KT_REGEX_USERNAME', '[^<>"%{};]+');
-define('KT_REGEX_PASSWORD', '.{' . KT_MINIMUM_PASSWORD_LENGTH . ',}');
 define('KT_REGEX_NOSCRIPT', '[^<>"&%{};]*');
 define('KT_REGEX_URL',      '[\/0-9A-Za-z_!~*\'().;?:@&=+$,%#-]+'); // Simple list of valid chars
 define('KT_REGEX_EMAIL',    '[^\s<>"&%{};@]+@[^\s<>"&%{};@]+');
@@ -306,6 +303,17 @@ try {
 // The config.ini.php file must always be in a fixed location.
 // Other user files can be stored elsewhere...
 define('KT_DATA_DIR', realpath(KT_Site::preference('INDEX_DIRECTORY') ? KT_Site::preference('INDEX_DIRECTORY') : 'data').DIRECTORY_SEPARATOR);
+
+// Setup a regular expression to test a complex password
+define('KT_MINIMUM_PASSWORD_LENGTH', KT_Site::preference('PASSWORD_LENGTH') ? KT_Site::preference('PASSWORD_LENGTH') : 6);
+$passwordNumbers	=(KT_Site::preference('PASSWORD_NUMBERS') ? '(?=(.*\d))' : '');
+$passwordAlpha		= KT_Site::preference('PASSWORD_ALPHA') ? '(?=.*[a-z])(?=.*[A-Z])' : '';
+$passwordSpecial	= KT_Site::preference('PASSWORD_SPECIAL') ? '(?=.*[\!\@\#\$\%\^\&\*])' : '';
+$passwordLength		= KT_Site::preference('PASSWORD_LENGTH') ? '.{' . KT_MINIMUM_PASSWORD_LENGTH . ',}' : '';
+
+$passwordRegex = '^' . $passwordNumbers . $passwordAlpha . $passwordSpecial . $passwordLength . '$';
+
+define('KT_REGEX_PASSWORD', $passwordRegex);
 
 // If we have a preferred URL (e.g. www.example.com instead of www.isp.com/~example), then redirect to it.
 $SERVER_URL = KT_Site::preference('SERVER_URL');

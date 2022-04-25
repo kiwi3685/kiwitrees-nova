@@ -31,6 +31,8 @@ $controller
 
 require_once KT_ROOT.'includes/functions/functions_edit.php';
 
+global $iconStyle;
+
 // Valid values for form variables
 $ALL_EDIT_OPTIONS = array(
 	'access'=> /* I18N: Listbox entry; name of a role */ KT_I18N::translate('Member'),
@@ -51,7 +53,7 @@ switch (KT_Filter::post('action')) {
 			$username			= KT_Filter::post('username');
 			$realname			= KT_Filter::post('real_name');
 			$email				= KT_Filter::postEmail('email');
-			$pass1				= KT_Filter::post('pass1', KT_REGEX_PASSWORD);
+			$password				= KT_Filter::post('password', KT_REGEX_PASSWORD);
 			$language			= KT_Filter::post('language');
 			$contact_method		= KT_Filter::post('contact_method');
 			$comment			= KT_Filter::post('comment');
@@ -69,7 +71,7 @@ switch (KT_Filter::post('action')) {
 				} elseif (findByEmail($email)) {
 					KT_FlashMessages::addMessage(KT_I18N::translate('Duplicate email address. A user with that email already exists.'));
 				} else {
-					$user_id = create_user($username, $realname, $email, $pass1);
+					$user_id = create_user($username, $realname, $email, $password);
 					set_user_setting($user_id, 'reg_timestamp', date('U'));
 					set_user_setting($user_id, 'sessiontime', '0');
 					AddToLog('User ->' . $username . '<- created', 'auth');
@@ -83,7 +85,7 @@ switch (KT_Filter::post('action')) {
     				} else {
 					    setUserEmail ($user_id, $email);
                     }
-					set_user_password($user_id, $pass1);
+					set_user_password($user_id, $password);
 				}
 			}
 
@@ -326,10 +328,78 @@ switch (KT_Filter::get('action')) {
 					}
 				});
 
+				// Code for password strength check
+				// Based on code from "Coding Beast" on CodePen
+				// https://codepen.io/coding_beast/pen/LYGrXde
+				// converted to jquery and for fontawesom svg icons
+				jQuery("#password").keyup(function() {
+				   var strength         = 0;
+				   var password         = jQuery(this).val();
+				   var passwordStrength = jQuery("#password-strength");
+				   var lowuppercase     = jQuery(".low-upper-case");
+				   var number           = jQuery(".one-number");
+				   var specialChar      = jQuery(".one-special-char");
+				   var multiChar        = jQuery(".multi-character");
+
+				  //If password contains both lower and uppercase characters
+				  if (password.match(/([a-z].*[A-Z])|([A-Z].*[a-z])/)) {
+					  strength += 1;
+					  lowuppercase.attr("data-icon", "check");
+				  } else {
+					  lowuppercase.attr("data-icon", "caret-right");
+				  }
+
+				  //If it has numbers and characters
+				  if (password.match(/([0-9])/)) {
+					  strength += 1;
+					  number.attr("data-icon", "check");
+				  } else {
+					  number.attr("data-icon", "caret-right");
+				  }
+
+				  //If it has one special character
+				  if (password.match(/([!,%,&,@,#,$,^,*,?,_,~])/)) {
+					  strength += 1;
+					  specialChar.attr("data-icon", "check");
+				  } else {
+					  specialChar.attr("data-icon", "caret-right");
+				  }
+
+				  //If password is greater than configured minimum
+				  if (password.length >= ' . KT_MINIMUM_PASSWORD_LENGTH . ') {
+					  strength += 1;
+					  multiChar.attr("data-icon", "check");
+				  } else {
+					  multiChar.attr("data-icon", "caret-right");
+				  }
+
+				  // If value is less than 2
+				  if (strength < 2) {
+					  passwordStrength.removeClass("progress-bar-warning");
+					  passwordStrength.removeClass("progress-bar-success")
+					  passwordStrength.addClass("progress-bar-danger");
+					  passwordStrength.css("width", "10%");
+				  } else if (strength == 3) {
+					  passwordStrength.removeClass("progress-bar-success");
+					  passwordStrength.removeClass("progress-bar-danger");
+					  passwordStrength.addClass("progress-bar-warning");
+					  passwordStrength.css("width", "60%");
+				  } else if (strength == 4) {
+					  passwordStrength.removeClass("progress-bar-warning");
+					  passwordStrength.removeClass("progress-bar-danger");
+					  passwordStrength.addClass("progress-bar-success");
+					  passwordStrength.css("width", "100%");
+				  }
+
+			   });
+
+
 
 			');
+//			require_once KT_ROOT . KT_THEMES_DIR . '_administration/js/kiwitrees-admin-js.php';
 
 		?>
+
 		<div id="user_details" class="cell">
 			<h4><?php echo $controller->getPageTitle(); ?></h4>
 			<div class="grid-x grid-padding-x grid-padding-y">
@@ -373,7 +443,7 @@ switch (KT_Filter::get('action')) {
 
 							<!-- PASSWORD -->
 							<div class="cell large-3">
-								<label for="pass1">
+								<label for="password">
 									<?php echo KT_I18N::translate('Password'); ?>
 								</label>
 							</div>
@@ -381,16 +451,55 @@ switch (KT_Filter::get('action')) {
 								<div class="input-group">
 									<input
 										class="input-group-field"
-										type="password" id="pass1"
-										name="pass1"
-										pattern="<?php echo KT_REGEX_PASSWORD; ?>"
-										placeholder="<?php echo KT_I18N::plural('Use at least %s character.', 'Use at least %s characters.', KT_MINIMUM_PASSWORD_LENGTH, KT_I18N::number(KT_MINIMUM_PASSWORD_LENGTH)); ?>"
+										type="password"
+										id="password"
+										name="password"
+										<?php if ($user_id) { ?>
+											placeholder="<?php echo KT_I18N::translate('Leave password blank if you want to keep the current password.'); ?>"
+										<?php } ?>
 										<?php echo $user_id ? '' : 'required'; ?>
 									>
 									<span class="input-group-label unmask" title="<?php echo KT_I18N::translate('Show/Hide password to check content'); ?>">
-										<i class="<?php echo $iconStyle; ?> fa-eye"></i>
+										<i class="close-eye <?php echo $iconStyle; ?> fa-eye"></i>
 									</span>
 									<span id="result" class="input_label right">&nbsp;</span>
+								</div>
+								<div class="grid-x" id="password-checker">
+									<div class="cell progress">
+									    <div
+											id="password-strength"
+									        class="progress-bar"
+									        role="progressbar"
+									        aria-valuenow="40"
+									        aria-valuemin="0"
+									        aria-valuemax="100"
+									        style="width:0%"
+										>
+									    </div>
+									</div>
+									<?php if (KT_Site::preference('PASSWORD_ALPHA')) { ?>
+									    <div class="medium-3">
+								            <i class="low-upper-case <?php echo $iconStyle; ?> fa-caret-right fa-fw" aria-hidden="true"></i>
+								            <span><?php echo KT_I18N::translate('Lowercase &amp; uppercase'); ?><span>
+									    </div>
+									<?php } ?>
+									<?php if (KT_Site::preference('PASSWORD_NUMBERS')) { ?>
+									    <div class="medium-3">
+								            <i class="one-number <?php echo $iconStyle; ?> fa-caret-right fa-fw" aria-hidden="true"></i>
+								           <span> <?php echo KT_I18N::translate('Number (0-9)'); ?><span>
+									    </div>
+									<?php } ?>
+									<?php if (KT_Site::preference('PASSWORD_SPECIAL')) { ?>
+									    <div class="medium-3">
+									        <?php $chars = '!@#$%^&*'; ?>
+								            <i class="one-special-char <?php echo $iconStyle; ?> fa-caret-right fa-fw" aria-hidden="true"></i>
+								            <span><?php echo KT_I18N::translate('Special character (%s)', $chars); ?><span>
+									    </div>
+									<?php } ?>
+								    <div class="medium-3 auto">
+							            <i class="multi-character <?php echo $iconStyle; ?> fa-caret-right fa-fw" aria-hidden="true"></i>
+							            <span><?php echo KT_I18N::translate('At least %d characters', KT_MINIMUM_PASSWORD_LENGTH); ?><span>
+								    </div>
 								</div>
 								<div class="callout warning helpcontent">
 									<?php if ($user_id > 0) { ?>
@@ -398,12 +507,12 @@ switch (KT_Filter::get('action')) {
 										<br>
 									<?php } ?>
 									<?php echo KT_I18N::translate('
-										Passwords must be at least 6 characters long and are case-sensitive, so that “secret” is different from “SECRET”.
+										Passwords are case-sensitive, so that “secret” is different from “SECRET”.
 										<br>
-										Anything with 6 characters or more is acceptable, but mixed lower and uppercase characters, numbers, and special characters will increase the security of the password.
+										Anything with %2d characters or more is acceptable, but mixed lower and uppercase characters, numbers, and special characters will increase the security of the password.
 										<br>
 										Use the "Show or hide password" icon (eye) to check your password before saving it.
-									'); ?>
+									', KT_MINIMUM_PASSWORD_LENGTH, KT_MINIMUM_PASSWORD_LENGTH); ?>
 								</div>
 							</div>
 
@@ -558,9 +667,7 @@ switch (KT_Filter::get('action')) {
 							</div>
 							<div class="cell large-9">
 								<div class="input_group">
-									<textarea id="comment" name="comment" rows="5" maxlength="255">
-										<?php echo KT_Filter::escapeHtml(get_user_setting($user_id, 'comment')); ?>
-									</textarea>
+									<textarea id="comment" name="comment" rows="5" maxlength="255"><?php echo KT_Filter::escapeHtml(get_user_setting($user_id, 'comment')); ?></textarea>
 								</div>
 							</div>
 
