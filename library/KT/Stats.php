@@ -577,7 +577,9 @@ class KT_Stats {
 	}
 
 	function totalBirths() {
-		$rows = KT_DB::prepare("
+		$list = array();
+
+        $rows = KT_DB::prepare("
             SELECT DISTINCT i_id
             FROM `##individuals`
             WHERE `i_file`=?
@@ -585,16 +587,23 @@ class KT_Stats {
             ORDER BY i_id
         ")
         ->execute(array($this->_ged_id))
-			->fetchAll();
+        ->fetchAll();
 
-
-		foreach ($rows as $row) {
+        foreach($rows as $row) {
             $list[] = $row->i_id;
         }
 
-		return array('list' => $list, 'count' => count($list));
-			}
+		if ($list != NULL) {
+			return array('list' => $list, 'count' => count($list));
+		} else {
+			return array('list' => KT_I18N::translate('None recorded'), 'count' => 0);
+		}
+
+	}
+
     function totalDatedBirths() {
+		$list = array();
+
         $rows = KT_DB::prepare("
             SELECT DISTINCT d_gid
             FROM `##dates`
@@ -605,22 +614,40 @@ class KT_Stats {
             ORDER BY d_gid
 		")->execute(array($this->_ged_id))
 		->fetchAll();
+
         foreach($rows as $row) {
             $list[] = $row->d_gid;
+        }
+
+		if ($list != NULL) {
+			return array('list' => $list, 'count' => count($list));
+		} else {
+			return array('list' => KT_I18N::translate('None recorded'), 'count' => 0);
 		}
 
-		return array('list' => $list, 'count' => count($list));
 	}
 
     function totalUndatedBirths() {
         $total = $this->totalBirths();
         $dated = $this->totalDatedBirths();
-        $undated = array_diff($total['list'], $dated['list']);
-		return array('list' => $undated, 'count' => count($undated));
+
+		if ($total != NULL && $dated != NULL && !is_string($total['list']) && !is_string($dated['list'])) {
+			$undated = array_diff($total['list'], $dated['list']);
+
+			return array('list' => $undated, 'count' => count($undated));
+
+		} else {
+
+			return array('list' => KT_I18N::translate('None recorded'), 'count' => 0);
+
+		}
+
 	}
 
 	function totalDeaths() {
-		$rows = KT_DB::prepare("
+		$list = array();
+
+        $rows = KT_DB::prepare("
             SELECT DISTINCT i_id
             FROM `##individuals`
             WHERE `i_file`=?
@@ -628,19 +655,24 @@ class KT_Stats {
             ORDER BY i_id
         ")
         ->execute(array($this->_ged_id))
-			->fetchAll();
+        ->fetchAll();
 
-
-		foreach ($rows as $row) {
+        foreach($rows as $row) {
             $list[] = $row->i_id;
-			}
+        }
 
-		return array('list' => $list, 'count' => count($list));
+		if ($list != NULL) {
+			return array('list' => $list, 'count' => count($list));
+		} else {
+			return array('list' => KT_I18N::translate('None recorded'), 'count' => 0);
+		}
+
 	}
 
     function totalDatedDeaths() {
+		$list = array();
 
-		$rows = KT_DB::prepare("
+        $rows = KT_DB::prepare("
             SELECT DISTINCT d_gid
             FROM `##dates`
             WHERE d_file=?
@@ -648,38 +680,60 @@ class KT_Stats {
             AND d_fact='DEAT'
             AND d_type IN ('@#DGREGORIAN@', '@#DJULIAN@')
             ORDER BY d_gid
-			")->execute(array($this->_ged_id))
-			->fetchAll();
+		")->execute(array($this->_ged_id))
+		->fetchAll();
 
-
-		foreach ($rows as $row) {
+        foreach($rows as $row) {
             $list[] = $row->d_gid;
         }
-		return array('list' => $list, 'count' => count($list));
+
+		if ($list != NULL) {
+			return array('list' => $list, 'count' => count($list));
+		} else {
+			return array('list' => KT_I18N::translate('None recorded'), 'count' => 0);
+		}
+
 	}
+
     function totalUndatedDeaths() {
         $total = $this->totalDeaths();
         $dated = $this->totalDatedDeaths();
-        $list  = array();
-        $undated = array_diff($total['list'], $dated['list']);
 
-		return array('list'=>$undated, 'count'=>count($undated));
-			}
-    function totalEventsBirth() {
-		return $this->totalEvents(explode('|', KT_EVENTS_BIRT));
+		if ($total != NULL && $dated != NULL && !is_string($total['list']) && !is_string($dated['list'])) {
+			$undated = array_diff($total['list'], $dated['list']);
+
+			return array('list' => $undated, 'count' => count($undated));
+
+		} else {
+
+			return array('list' => KT_I18N::translate('None recorded'), 'count' => 0);
+
 		}
+	}
+	
+
+    function totalEventsBirth() {
+
+		return $this->totalEvents(explode('|', KT_EVENTS_BIRT));
+	}
 
 	function totalEventsDeath() {
+
 		return $this->totalEvents(explode('|',KT_EVENTS_DEAT));
 	}
+
 	function totalEventsMarriage() {
+
 		return $this->totalEvents(explode('|',KT_EVENTS_MARR));
 	}
+
 	function totalMarriages() {
+
 		return $this->totalEvents(array('MARR'));
 	}
 
 	function totalEventsDivorce() {
+
 		return $this->totalEvents(explode('|',KT_EVENTS_DIV));
 	}
 
@@ -694,6 +748,7 @@ class KT_Stats {
 			$fact = '!'.str_replace('\'', '', $fact);
 			$no_facts[] = $fact;
 		}
+
 		return $this->totalEvents($no_facts);
 	}
 
@@ -705,14 +760,17 @@ class KT_Stats {
 	}
 
 	function totalSexMales() {
+
 		return KT_I18N::number($this->_totalSexMales());
 	}
 
 	function totalSexMalesPercentage() {
+
 		return $this->_getPercentage($this->_totalSexMales(), 'individual');
 	}
 
 	function _totalSexFemales() {
+
 		return
 			KT_DB::prepare("SELECT COUNT(*) FROM `##individuals` WHERE i_file=? AND i_sex=?")
 			->execute(array($this->_ged_id, 'F'))
@@ -724,10 +782,12 @@ class KT_Stats {
 	}
 
 	function totalSexFemalesPercentage() {
+
 		return $this->_getPercentage($this->_totalSexFemales(), 'individual');
 	}
 
 	function _totalSexUnknown() {
+
 		return
 			KT_DB::prepare("SELECT COUNT(*) FROM `##individuals` WHERE i_file=? AND i_sex=?")
 			->execute(array($this->_ged_id, 'U'))
@@ -735,6 +795,7 @@ class KT_Stats {
 	}
 
 	function totalSexUnknown() {
+
 		return KT_I18N::number($this->_totalSexUnknown());
 	}
 
