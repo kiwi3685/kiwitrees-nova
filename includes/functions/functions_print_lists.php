@@ -326,8 +326,8 @@ function format_indi_table($datalist, $option='') {
 							<i class="' . $iconStyle . ' fa-bell"></i>
 						</th>
 						<th>' . KT_Gedcom_Tag::getLabel('PLAC') . '</th>
-						<th data-tooltip aria-haspopup="true" class="has-tip top" data-disable-hover="false" title="' . KT_I18N::translate('No. of children') . '">
-							<i class="' . $iconStyle . ' fa-child""></i>
+						<th data-tooltip aria-haspopup="true" class="has-tip top" data-disable-hover="false" title="' . KT_I18N::translate('Number of children') . '">
+							<i class="' . $iconStyle . ' fa-children"></i>
 						</th>
 						<th>NCHI</th>
 						<th>' . KT_I18N::translate('Date') . '</th>
