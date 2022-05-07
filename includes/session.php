@@ -306,10 +306,10 @@ define('KT_DATA_DIR', realpath(KT_Site::preference('INDEX_DIRECTORY') ? KT_Site:
 
 // Setup a regular expression to test a complex password
 define('KT_MINIMUM_PASSWORD_LENGTH', KT_Site::preference('PASSWORD_LENGTH') ? KT_Site::preference('PASSWORD_LENGTH') : 6);
-$passwordNumbers	=(KT_Site::preference('PASSWORD_NUMBERS') ? '(?=(.*\d))' : '');
-$passwordAlpha		= KT_Site::preference('PASSWORD_ALPHA') ? '(?=.*[a-z])(?=.*[A-Z])' : '';
-$passwordSpecial	= KT_Site::preference('PASSWORD_SPECIAL') ? '(?=.*[\!\@\#\$\%\^\&\*])' : '';
-$passwordLength		= KT_Site::preference('PASSWORD_LENGTH') ? '.{' . KT_MINIMUM_PASSWORD_LENGTH . ',}' : '';
+$passwordNumbers	=(KT_Site::preference('PASSWORD_NUMBERS') ? '(?=(.*\d))' : 0);
+$passwordAlpha		= KT_Site::preference('PASSWORD_ALPHA') ? '(?=.*[a-z])(?=.*[A-Z])' : 0;
+$passwordSpecial	= KT_Site::preference('PASSWORD_SPECIAL') ? '(?=.*[\!\@\#\$\%\^\&\*])' : 0;
+$passwordLength		= KT_Site::preference('PASSWORD_LENGTH') ? '.{' . KT_MINIMUM_PASSWORD_LENGTH . ',}' : 6;
 
 $passwordRegex = '^' . $passwordNumbers . $passwordAlpha . $passwordSpecial . $passwordLength . '$';
 
