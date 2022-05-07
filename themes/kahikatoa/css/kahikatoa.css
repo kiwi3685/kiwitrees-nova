@@ -8,7 +8,7 @@
 
 .accordion .accordion-item .accordion-title:before {
 	content: "";
-	font-family: "Font Awesome 5 Solid";
+	font-family: "Font Awesome 6 Solid";
 	display: none;
 }
 .accordion .accordion-item.is-active > .accordion-title:before {
@@ -9539,7 +9539,7 @@ div[id$=-page] button[type=submit] {
 #branches-page ul .expandable-hitarea::before,
 #branches-page ul .collapsable-hitarea::before {
 	display: inline-block;
-	font-family: "Font Awesome 5 Regular";
+	font-family: "Font Awesome 6 Regular";
 	overflow: hidden;
 	font-weight: 400;
 	line-height: 1;
@@ -9933,6 +9933,18 @@ div[id$=-page] button[type=submit] {
 	text-align: center;
 }
 
+#pedigreemap-page #pm_map,
+#pedigreemap-page #side_bar {
+	border: 0.125rem solid #331919;
+	height: 30rem;
+	width: 100%;
+}
+#pedigreemap-page #side_bar {
+	overflow: auto;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
 #placelist-page #place-list div.places {
 	background-color: #faf5e8;
 	border: 0.125rem solid #ab3334;
@@ -10035,6 +10047,12 @@ div.last_change label {
 	font-size: 1rem;
 }
 #statistics-page a.list_item {
+	font-weight: normal;
+}
+#statistics-page label.h6 {
+	margin-bottom: 0;
+}
+#statistics-page label.h6 span {
 	font-weight: normal;
 }
 #statistics-page div[id^=chart] .legend {
@@ -10720,7 +10738,7 @@ div.dataTables_wrapper table.dataTable thead tr th.has-tip {
 div.dataTables_wrapper table.dataTable thead tr th.sorting_asc::after, div.dataTables_wrapper table.dataTable thead tr th.sorting_desc::after, div.dataTables_wrapper table.dataTable thead tr th.sorting::after {
 	content: "";
 	display: none;
-	font-family: "Font Awesome 5 Solid";
+	font-family: "Font Awesome 6 Solid";
 	font-weight: 900;
 }
 div.dataTables_wrapper table.dataTable thead tr th.sorting_asc::after {
@@ -10737,7 +10755,7 @@ div.dataTables_wrapper table.dataTable thead tr th svg {
 	right: 0.125rem;
 	top: 0.5rem;
 }
-div.dataTables_wrapper table.dataTable thead tr th svg.fa-bell, div.dataTables_wrapper table.dataTable thead tr th svg.fa-child {
+div.dataTables_wrapper table.dataTable thead tr th svg.fa-bell, div.dataTables_wrapper table.dataTable thead tr th svg.fa-children {
 	right: auto;
 	left: 0.125rem;
 }

@@ -104,11 +104,11 @@ if (!defined('KT_KIWITREES')) {
     <h5><?php echo KT_I18N::translate('Individual events'); ?></h5>
     <div class="grid-x grid-margin-x grid-margin-y statisticSection">
         <div class="cell medium-6">
-            <label class="h6"><?php echo KT_I18N::translate('Total births'); ?>
-                <?php
+            <?php
                 $totals      = $stats->totalBirths();
                 $dated       = $stats->totalDatedBirths();
                 $undated     = $stats->totalUndatedBirths();
+				$noBirth	 = $stats->noBirthRecorded();
                 $totalsLink  = '<a class="jsConfirm" href="statisticsTables.php?ged=' . $GEDCOM . '&amp;table=totalBirths">' .
                     KT_I18n::number($totals['count']) . '
                 </a>';
@@ -117,15 +117,24 @@ if (!defined('KT_KIWITREES')) {
                 </a>';
                 $undatedLink = '<a class="jsConfirm" href="statisticsTables.php?ged=' . $GEDCOM . '&amp;table=undatedBirths">' .
                     KT_I18n::number($undated['count']) . '
-                </a>'; ?>
-                <?php echo KT_I18N::translate('%1s (%2s with a birth date and %3s without)', $totalsLink, $datedLink, $undatedLink); ?>
-            </label>
+                </a>';
+				$noRecordLink = '<a class="jsConfirm" href="statisticsTables.php?ged=' . $GEDCOM . '&amp;table=noRecordBirths">' .
+                    KT_I18n::number($noBirth['count']) . '
+                </a>';
+			?>
+			<label class="h6"><?php echo KT_I18N::translate('Total births = %1s', $totalsLink); ?>
+				<span>
+					<?php echo KT_I18N::translate('(%2s have a valid birth date,  %3s have no date)', $datedLink, $undatedLink); ?>
+				</span>
+			</label>
+			<span>
+				<?php echo KT_I18N::translate('%4s individuals have no birth record', $noRecordLink); ?>
+			</span>
             <div class="cell text-center"><?php echo KT_I18N::translate('Number of births in each century'); ?></div>
             <div class="cell" id="chartStatsBirth"></div>
         </div>
         <div class="cell medium-6">
-            <label class="h6"><?php echo KT_I18N::translate('Total deaths'); ?>
-                <?php
+            <?php
                 $totals      = $stats->totalDeaths();
                 $dated       = $stats->totalDatedDeaths();
                 $undated     = $stats->totalUndatedDeaths();
@@ -137,10 +146,15 @@ if (!defined('KT_KIWITREES')) {
                 </a>';
                 $undatedLink = '<a class="jsConfirm" href="statisticsTables.php?ged=' . $GEDCOM . '&amp;table=undatedDeaths">' .
                     KT_I18n::number($undated['count']) . '
-                </a>'; ?>
-                <?php echo KT_I18N::translate('%1s (%2s with a death date and %3s without)', $totalsLink, $datedLink, $undatedLink); ?>
+                </a>';
+			?>
+			<label class="h6"><?php echo KT_I18N::translate('Total deaths = %1s', $totalsLink); ?>
+				<span>
+					<?php echo KT_I18N::translate('(%2s have a valid death date,  %3s have no date)', $datedLink, $undatedLink); ?>
+				</span>
             </label>
-            <div class="cell text-center"><?php echo KT_I18N::translate('Number of deaths in each century'); ?></div>
+			<span>&nbsp;</span>
+	    	<div class="cell text-center"><?php echo KT_I18N::translate('Number of deaths in each century'); ?></div>
             <div class="cell" id="chartStatsDeath"></div>
         </div>
         <div class="cell medium-6">

@@ -214,6 +214,12 @@ switch ($table) {
         $title 		= KT_I18N::translate('Total undated births');
         $content	= format_indi_table($list['list']);
     break;
+	case 'noRecordBirths' :
+		$list       = $stats->noBirthRecorded();
+		$title 		= KT_I18N::translate('Individuals with no birth record');
+		$subtitle	= KT_I18N::translate('(Baptism or christening dates may be displayed instead of birth dates if available)');
+		$content	= format_indi_table($list['list']);
+	break;
     case 'totalDeaths' :
         $list       = $stats->totalDeaths();
         $title 		= KT_I18N::translate('Total deaths');
