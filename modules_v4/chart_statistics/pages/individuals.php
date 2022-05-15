@@ -130,7 +130,7 @@ if (!defined('KT_KIWITREES')) {
 			<span class="separator-center">
 				<?php echo KT_I18N::translate('%4s individuals have no birth record', $noRecordLink); ?>
 			</span>
-            <div class="cell text-center"><?php echo KT_I18N::translate('Number of births in each century'); ?></div>
+            <div class="cell text-center strong"><?php echo KT_I18N::translate('Number of births in each century'); ?></div>
             <div class="cell" id="chartStatsBirth"></div>
         </div>
         <div class="cell medium-6">
@@ -154,7 +154,7 @@ if (!defined('KT_KIWITREES')) {
 				</span>
             </label>
 			<span class="separator-center">&nbsp;</span>
-	    	<div class="cell text-center"><?php echo KT_I18N::translate('Number of deaths in each century'); ?></div>
+	    	<div class="cell text-center strong"><?php echo KT_I18N::translate('Number of deaths in each century'); ?></div>
             <div class="cell" id="chartStatsDeath"></div>
         </div>
         <div class="cell medium-6">

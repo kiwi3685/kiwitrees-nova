@@ -10639,7 +10639,7 @@ div.last_change label {
 #research_links-page ul li a {
 	margin: 0 1rem;
 }
-#research_links-page ul li a:after {
+#research_links-page ul li a::after {
 	left: -0.5rem;
 }
 #research_links-page ul li ul li {
@@ -10662,7 +10662,7 @@ div.last_change label {
 #statistics-page label.h6 span {
 	font-weight: normal;
 }
-#statistics-page span.separator-centerafter {
+#statistics-page span.separator-center::after {
 	width: 50%;
 }
 #statistics-page div[id^=chart] .legend {
