@@ -579,11 +579,16 @@ class KT_Stats {
 	function totalBirths() {
 		$list = array();
 
-        $rows = KT_DB::prepare("
+//		$rows = KT_DB::prepare("
+//            SELECT i_id
+//            FROM `##individuals`
+//            WHERE `i_file`=?
+//        ")
+		$rows = KT_DB::prepare("
             SELECT DISTINCT i_id
             FROM `##individuals`
             WHERE `i_file`=?
-			AND (`i_gedcom` REGEXP '\n1 BIRT Y\n' OR `i_gedcom` REGEXP '\n1 BIRT\n([2-9] .*\n)*2 (DATE|PLAC|SOUR)')
+			AND `i_gedcom` REGEXP '\n1 BIRT'
             ORDER BY i_id
         ")
         ->execute(array($this->_ged_id))
@@ -652,7 +657,7 @@ class KT_Stats {
 			SELECT *
 			FROM `##individuals`
 			WHERE `i_file` = ?
-			AND (`i_gedcom` NOT REGEXP '\n1 BIRT Y\n' AND `i_gedcom` NOT REGEXP '\n1 BIRT\n([2-9] .*\n)*2 (DATE|PLAC|SOUR)')
+			AND `i_gedcom` NOT REGEXP '\n1 BIRT'
 			ORDER BY `i_id`
 		")
 		->execute(array($this->_ged_id))
@@ -673,11 +678,11 @@ class KT_Stats {
 	function totalDeaths() {
 		$list = array();
 
-        $rows = KT_DB::prepare("
+		$rows = KT_DB::prepare("
             SELECT DISTINCT i_id
             FROM `##individuals`
             WHERE `i_file`=?
-			AND (`i_gedcom` REGEXP '\n1 DEAT Y\n' OR `i_gedcom` REGEXP '\n1 DEAT\n([2-9] .*\n)*2 (DATE|PLAC|SOUR)')
+			AND (`i_gedcom` REGEXP '\n1 DEAT Y\n' OR `i_gedcom` REGEXP '\n1 DEAT.*\n(([2-9] .*\n)*)?2 (DATE|PLAC|SOUR)')
             ORDER BY i_id
         ")
         ->execute(array($this->_ged_id))
