@@ -38,7 +38,6 @@ $user_realname		= KT_Filter::post('user_realname');
 $user_name			= KT_Filter::post('user_name', KT_REGEX_USERNAME);
 $user_email			= KT_Filter::post('user_email', KT_REGEX_EMAIL);
 $user_password01	= KT_Filter::post('user_password01', KT_REGEX_PASSWORD);
-$user_password02	= KT_Filter::post('user_password02', KT_REGEX_PASSWORD);
 $user_comments		= KT_Filter::post('user_comments');
 $user_password		= KT_Filter::post('user_password', KT_REGEX_UNSAFE); // Can use any password that was previously stored
 $user_hashcode		= KT_Filter::post('user_hashcode');
@@ -182,7 +181,7 @@ switch ($action) {
 						<div class="cell medium-8 medium-offset-2">
 							<label for="pass_word" class="h6"><?php echo KT_I18N::translate('Password'); ?></label>
 							<div class="input-group">
-								<input class="input-group-field" type="password" id="pass_word" name="password" placeholder="<?php echo KT_I18N::translate('Password'); ?>" required value="">
+								<input class="input-group-field" type="password" id="pass_word" name="password" placeholder="<?php echo KT_I18N::translate('Password'); ?>" required>
 								<span class="input-group-label unmask" title="<?php echo KT_I18N::translate('Show/Hide password to check content'); ?>">
 									<i class="<?php echo $iconStyle; ?> fa-eye"></i>
 								</span>
@@ -302,7 +301,7 @@ switch ($action) {
 		$tree_link	= '<a href="' . KT_SERVER_NAME . KT_SCRIPT_PATH . '?ged=' . KT_GEDCOM . '"><strong>' . strip_tags(KT_TREE_TITLE) . '</strong></a>';
 
 		// The form parameters are mandatory, and the validation errors are shown in the client.
-		if ($KT_SESSION->good_to_send && $user_name && $user_password01 && $user_password01 == $user_password02 && $user_realname && $user_email && $user_comments) {
+		if ($KT_SESSION->good_to_send && $user_name && $user_password01 && $user_realname && $user_email && $user_comments) {
 
 			if (KT_Site::preference('USE_RECAPTCHA')) {
 				if (isset($_POST['g-recaptcha-response']) && !empty($_POST['g-recaptcha-response'])) {
@@ -508,21 +507,6 @@ switch ($action) {
 								value="<?php echo htmlspecialchars($user_password01); ?>"
 								placeholder="<?php echo /* I18N: placeholder text for new-password field */ KT_I18N::plural('Password - Use at least %s character.', 'Password - Use at least %s characters.', KT_I18N::number(KT_MINIMUM_PASSWORD_LENGTH), KT_I18N::number(KT_MINIMUM_PASSWORD_LENGTH)); ?>"
 								required
-								pattern="<?php echo KT_REGEX_PASSWORD; ?>"
-								onchange="form.user_password02.pattern = regex_quote(this.value);"
-							>
-						</div>
-						<div class="cell medium-4">
-							<label for="user_password02" class="h6 middle"><?php echo KT_I18N::translate('Confirm password'); ?>
-						</div>
-						<div class="cell medium-8">
-							<input
-								type="password"
-								id="user_password02"
-								name="user_password02"
-								placeholder="<?php echo KT_I18N::translate('Confirm password'); ?>"
-								required
-								value="<?php echo htmlspecialchars($user_password02); ?>"
 								pattern="<?php echo KT_REGEX_PASSWORD; ?>"
 							>
 						</div>
