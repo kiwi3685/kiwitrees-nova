@@ -1528,7 +1528,7 @@ function get_newest_registered_user() {
 }
 
 function set_user_password($user_id, $password) {
-	if (version_compare(PHP_VERSION, '5.3')>0) {
+	if (version_compare(PHP_VERSION, '5.3') > 0) {
 		// This salt will select the BLOWFISH algorithm with 2^12 rounds
 		$salt		= '$2y$12$';
 		$salt_chars	= 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789./';
