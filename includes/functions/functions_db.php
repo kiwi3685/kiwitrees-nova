@@ -602,7 +602,7 @@ function search_fams($query, $geds, $match) {
 	}
 
 	$sql = "
-		SELECT 'FAM' AS type, f_id AS xref, f_file AS ged_id, f_gedcom AS gedrec 
+		SELECT 'FAM' AS type, f_id AS xref, f_file AS ged_id, f_gedcom AS gedrec
 		FROM `##families`
 		WHERE (" . implode(" {$match} ", $querysql) . ")
 		AND f_file IN (" . implode(',', $geds) . ")
@@ -1365,7 +1365,7 @@ function create_user($username, $realname, $email, $password) {
 		// Some PHP5.2 implementations of crypt() appear to be broken - #802316
 		// PHP5.3 will always support BLOWFISH - see php.net/crypt
 		// This salt will select the BLOWFISH algorithm with 2^12 rounds
-		$salt		= '$2a$12$';
+		$salt		= '$2y$12$';
 		$salt_chars	= 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789./';
 		for ($i = 0; $i < 22; ++$i) {
 			$salt .= substr($salt_chars, mt_rand(0,63), 1);
@@ -1534,19 +1534,19 @@ function set_user_password($user_id, $password) {
 		// Some PHP5.2 implementations of crypt() appear to be broken - #802316
 		// PHP5.3 will always support BLOWFISH - see php.net/crypt
 		// This salt will select the BLOWFISH algorithm with 2^12 rounds
-		$salt='$2a$12$';
+		$salt='$2y$12$';
 		$salt_chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789./';
-		for ($i=0;$i<22;++$i) {
-			$salt.=substr($salt_chars, mt_rand(0,63), 1);
+		for ($i = 0; $i < 22; ++$i) {
+			$salt .= substr($salt_chars, mt_rand(0,63), 1);
 		}
-		$password_hash=crypt($password, $salt);
+		$password_hash = crypt($password, $salt);
 	} else {
 		// Our prefered hash algorithm is not available.  Use the default.
-		$password_hash=crypt($password);
+		$password_hash = crypt($password);
 	}
 	KT_DB::prepare("UPDATE `##user` SET password=? WHERE user_id=?")
 		->execute(array($password_hash, $user_id));
-	AddToLog('User ID: '.$user_id. ' ('.get_user_name($user_id).') changed password', 'auth');
+	AddToLog('User ID: ' . $user_id . ' (' . get_user_name($user_id) . ') changed password', 'auth');
 }
 
 function check_user_password($user_id, $password) {
@@ -1555,9 +1555,9 @@ function check_user_password($user_id, $password) {
 		KT_DB::prepare("SELECT password FROM `##user` WHERE user_id=?")
 		->execute(array($user_id))
 		->fetchOne();
-	if (crypt($password, $password_hash)==$password_hash) {
+	if (crypt($password, $password_hash) == $password_hash) {
 		// Update older passwords to use BLOWFISH with 2^12 rounds
-		if (version_compare(PHP_VERSION, '5.3')>0 && substr($password_hash, 0, 7)!='$2a$12$') {
+		if (version_compare(PHP_VERSION, '5.3') > 0 && substr($password_hash, 0, 7)!='$2y$12$') {
 			set_user_password($user_id, $password);
 		}
 		return true;

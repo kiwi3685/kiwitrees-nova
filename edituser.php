@@ -30,8 +30,7 @@ require KT_ROOT . 'includes/functions/functions_edit.php';
 $form_action         = KT_Filter::post('form_action');
 $form_username       = KT_Filter::post('form_username', KT_REGEX_USERNAME);
 $form_realname       = KT_Filter::post('form_realname' );
-$form_pass1          = KT_Filter::post('form_pass1', KT_REGEX_PASSWORD);
-$form_pass2          = KT_Filter::post('form_pass2', KT_REGEX_PASSWORD);
+$password          = KT_Filter::post('password', KT_REGEX_PASSWORD);
 $form_email          = KT_Filter::post('form_email', KT_REGEX_EMAIL, 'email@example.com');
 $form_rootid         = KT_Filter::post('form_rootid', KT_REGEX_XREF, KT_USER_ROOT_ID   );
 $form_language       = KT_Filter::post('form_language', array_keys(KT_I18N::used_languages()), KT_LOCALE );
@@ -53,14 +52,10 @@ if ($form_action && KT_Filter::checkCsrf()) {
 					rename_user(KT_USER_ID, $form_username);
 				}
 
-				// Change password
-				if ($form_pass1 && $form_pass1 == $form_pass2) {
-					set_user_password(KT_USER_ID, $form_pass1);
-				}
-
 				// Change other settings
 				setUserFullName(KT_USER_ID, $form_realname);
 				setUserEmail   (KT_USER_ID, $form_email);
+				set_user_password(KT_USER_ID, $password);
 				set_user_setting(KT_USER_ID, 'language',       $form_language);
 				set_user_setting(KT_USER_ID, 'contactmethod',  $form_contact_method);
 				set_user_setting(KT_USER_ID, 'visibleonline',  $form_visible_online);
@@ -106,14 +101,9 @@ function checkform(frm) {
 		frm.form_realname.focus();
 		return false;
 	}
-	if (frm.form_pass1.value!=frm.form_pass2.value) {
-		alert("<?php echo KT_I18N::translate('Passwords do not match.'); ?>");
-		frm.form_pass1.focus();
-		return false;
-	}
-	if (frm.form_pass1.value.length > 0 && frm.form_pass1.value.length < 6) {
+	if (frm.password.value.length > 0 && frm.password.value.length < 6) {
 		alert("<?php echo KT_I18N::translate('Passwords must contain at least 6 characters.'); ?>");
-		frm.form_pass1.focus();
+		frm.password.focus();
 		return false;
 	}
 	return true;
@@ -170,15 +160,8 @@ function checkform(frm) {
 					<label for="form_password" class="text-left middle"><?php echo KT_I18N::translate('Password'); ?></label>
 				</div>
 				<div class="cell medium-9">
-					<input id="form_password" type="password" name="form_pass1">
+					<input id="form_password" type="password" name="password">
 					<span id="password" class="help-text"></span>
-				</div>
-				<div class="cell medium-3">
-					<label for="form_password2" class="text-left middle"><?php echo KT_I18N::translate('Confirm password'); ?></label>
-				</div>
-				<div class="cell medium-9">
-					<input id="form_password2" type="password" name="form_pass2">
-					<span id="password_confirm" class="help-text"></span>
 				</div>
 				<div class="cell medium-3">
 					<label for="form_language" class="text-left middle"><?php echo KT_I18N::translate('Language'); ?></label>
