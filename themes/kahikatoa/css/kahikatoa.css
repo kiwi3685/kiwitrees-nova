@@ -9268,7 +9268,7 @@ div [id$=_description] {
 }
 
 .shadow {
-	box-shadow: 0.125rem 0.125rem 0.5rem #cacaca, -0.125rem -0.125rem 0.5rem #cacaca;
+	box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
 }
 
 .strong {
@@ -9500,7 +9500,6 @@ footer .card .card-section .contact_links {
 
 /* Blocks */
 .block {
-	box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
 	margin-bottom: 1.875rem;
 	/* block_charts */
 	/* block_login */

@@ -27,7 +27,7 @@ if (!defined('KT_KIWITREES')) {
 }
 ?>
 
-<div id="<?php echo $id; ?>" class="block small-block">
+<div id="<?php echo $id; ?>" class="block small-block shadow">
 	<div class="blockheader">
 		<?php echo $title;
 		if (KT_USER_GEDCOM_ADMIN && $config) { ?>
