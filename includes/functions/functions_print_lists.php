@@ -318,7 +318,7 @@ function format_indi_table($datalist, $option='') {
 						<th data-tooltip aria-haspopup="true" class="has-tip top" data-disable-hover="false" title="' . KT_I18N::translate('Sort by surnames') . '">' . KT_Gedcom_Tag::getLabel('SURN') . '</th>
 						<th>GIVN</th>
 						<th>SURN</th>
-						<th>' . /* I18N: Abbreviation for “Sosa-Stradonitz number”.  This is an individual’s surname, so may need transliterating into non-latin alphabets. */ KT_I18N::translate('Sosa') . '</th>
+						<th class="table_sosa">' . /* I18N: Abbreviation for “Sosa-Stradonitz number”.  This is an individual’s surname, so may need transliterating into non-latin alphabets. */ KT_I18N::translate('Sosa') . '</th>
 						<th>SOSA</th>
 						<th>' . KT_I18N::translate('Date') . '</th>
 						<th>SORT_BIRT</th>

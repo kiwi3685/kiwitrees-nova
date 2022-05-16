@@ -78,6 +78,7 @@ class report_tree_completeness_KT_Module extends KT_Module implements KT_Module_
 		$controller = new KT_Controller_Individual();
 		$controller
 			->restrictAccess(KT_Module::isActiveReport(KT_GED_ID, $this->getName(), KT_USER_ACCESS_LEVEL))
+			->setPageTitle($this->getTitle())
 			->pageHeader()
 			->addExternalJavascript(KT_AUTOCOMPLETE_JS_URL)
 			->addInlineJavascript('autocomplete();');
@@ -88,8 +89,6 @@ class report_tree_completeness_KT_Module extends KT_Module implements KT_Module_
 		$root_id	= KT_Filter::post('root_id');
 		$rootid		= empty($root_id) ? $rootid : $root_id;
 		$person		= KT_Person::getInstance($rootid);
-
-		$controller->setPageTitle($this->getTitle());
 
 		?>
 		<!-- Start page layout  -->
@@ -138,7 +137,7 @@ class report_tree_completeness_KT_Module extends KT_Module implements KT_Module_
 			<div class="grid-x grid-margin-x">
 				<div class="cell large-10 large-offset-1">
 					<button class="button hollow">
-						<a href="module.php?mod=chart_ancestry&mod_action=show&rootid=<?php echo $rootid; ?>&generations=<?php echo $maxGen; ?>&chart_style=2">
+						<a href="module.php?mod=chart_ancestry&mod_action=show&rootid=<?php echo $rootid; ?>&generations=<?php echo $maxGen; ?>&chart_style=1">
 							<?php echo KT_I18N::translate('Go to a detailed list of these ancestors'); ?>
 						</a>
 					</button>
