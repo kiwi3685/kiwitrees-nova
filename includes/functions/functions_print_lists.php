@@ -161,7 +161,7 @@ function format_indi_table($datalist, $option='') {
 	$html = '
 		<div class="loading-image">&nbsp;</div>
 		<div class="indi-list clearfix" style="visibility: hidden;">
-			<table id="' . $table_id . '">
+			<table class="shadow" id="' . $table_id . '">
 				<thead>
 					<tr>
 						<th colspan="24">
@@ -719,7 +719,7 @@ function format_fam_table($datalist, $option = '') {
 	$html = '
 		<div class="loading-image">&nbsp;</div>
 		<div class="fam-list clearfix">
-			<table id="' . $table_id . '">
+			<table class="shadow" id="' . $table_id . '">
 				<thead>
 					<tr>
 						<th colspan="23">
@@ -1261,7 +1261,7 @@ function format_sour_table($datalist) {
 			<span class="sr-only">Loading...</span>
 		</div>
 		<div class="sour-list">
-			<table id="' . $table_id . '" style="visibility: hidden;">
+			<table class="shadow" id="' . $table_id . '" style="visibility: hidden;">
 				<thead>
 					<tr>
 						<th>' . KT_Gedcom_Tag::getLabel('TITL') . '</th>
@@ -1452,7 +1452,7 @@ function format_note_table($datalist) {
 		');
 
 	$html .= '<div class="cell text-center loading-image"><i class="' . $iconStyle . ' fa-spinner fa-spin fa-3x"></i><span class="sr-only">Loading...</span></div>
-	<table id="' . $table_id . '" style="visibility: hidden;">
+	<table class="shadow" id="' . $table_id . '" style="visibility: hidden;">
 		<thead>
 			<tr>
 				<th>' . KT_Gedcom_Tag::getLabel('TITL') . '</th>
@@ -1633,7 +1633,7 @@ function format_repo_table($repos) {
 			<span class="sr-only">Loading...</span>
 		</div>
 		<div class="repo-list">
-			<table id="' . $table_id . '">
+			<table class="shadow" id="' . $table_id . '">
 				<thead>
 					<tr>
 						<th>' . KT_I18N::translate('Repository name') . '</th>
@@ -1763,7 +1763,7 @@ function format_media_table($datalist) {
 	$html .= '<div class="loading-image">&nbsp;</div>';
 	$html .= '<div class="media-list">';
 	//-- table header
-	$html .= '<table id="'. $table_id . '"><thead><tr>';
+	$html .= '<table class="shadow" id="'. $table_id . '"><thead><tr>';
 	$html .= '<th>'. KT_I18N::translate('Media') . '</th>';
 	$html .= '<th>'. KT_Gedcom_Tag::getLabel('TITL') . '</th>';
 	$html .= '<th>'. KT_I18N::translate('File name') . '</th>';
@@ -1877,7 +1877,7 @@ function format_surname_table($surnames, $module_url = '', $sort = '2') {
 
 	$html .= '
 		<div class="loading-image">&nbsp;</div>
-		<table class="surname-list" style=visibility: hidden;>
+		<table class="surname-list shadow" style=visibility: hidden;>
 			<thead>
 				<tr>
 					<th>' . KT_Gedcom_Tag::getLabel('SURN') . '</th>
@@ -2030,7 +2030,7 @@ function format_surname_list($surnames, $style, $totals, $module_url) {
 		else if ($count > 18) $col = 3;
 		else if ($count > 6) $col = 2;
 		$newcol = ceil($count/$col);
-		$html2 = '<table class="list_table"><tr>';
+		$html2 = '<table class="list_table shadow"><tr>';
 		$html2 .= '<td class="list_value" style="padding: 14px;">';
 
 		foreach ($html as $surn=>$surns) {
@@ -2094,7 +2094,7 @@ function format_story_table($datalist) {
 	$html .= '
 		<div class="loading-image">&nbsp;</div>
 		<div class="story-list">
-			<table id="' . $table_id . '">
+			<table class="shadow" id="' . $table_id . '">
 				<thead>
 					<tr>
 						<th>' . KT_I18N::translate('Story title') . '</th>
@@ -2231,7 +2231,7 @@ function print_changes_table($change_ids, $sort) {
 
 		//-- table header
 		$html .= '
-			<table id="' . $table_id . '" class="width100">
+			<table class="shadow" id="' . $table_id . '" class="width100">
 				<thead>
 					<tr>
 						<th>&nbsp;</th>
@@ -2366,7 +2366,7 @@ function print_events_table($startjd, $endjd, $events='BIRT MARR DEAT', $only_li
 
 		if ($output==1) {
 			//-- table body
-			$html .= '<table id="'.$table_id.'" class="width100">';
+			$html .= '<table id="'.$table_id.'" class="width100 shadow">';
 			$html .= '<thead><tr>';
 			$html .= '<th>'.KT_I18N::translate('Record').'</th>';
 			$html .= '<th>NAME</th>'; //hidden by datatables code
