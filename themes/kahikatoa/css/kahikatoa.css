@@ -9845,6 +9845,9 @@ div[id$=-page] button[type=submit] {
 #indi-page ul#indiTabs {
 	margin-top: 1rem;
 }
+#indi-page .tabs-panel {
+	/* Census assistant */
+}
 #indi-page .tabs-panel .tabHeader {
 	border-bottom: 0.0125rem solid #ab3334;
 	padding: 0.5rem;
@@ -9939,6 +9942,9 @@ div[id$=-page] button[type=submit] {
 }
 #indi-page .tabs-panel #tabi_dna_content hr {
 	border: solid 0.025rem #faf5e8;
+}
+#indi-page .tabs-panel .census_text table {
+	font-size: 95%;
 }
 #indi-page .tabs-panel #tabi_changes_content {
 	padding-top: 0.25rem;
@@ -11046,9 +11052,12 @@ div.last_change label {
 	font-size: 1.25rem;
 }
 
-/* Census assistant */
-.census_text table {
-	font-size: 95%;
+#census_check-page .card {
+	font-size: 0.9rem;
+}
+#census_check-page .card .card-section span {
+	display: inline-block;
+	font-size: 0.8em;
 }
 
 /* Icon settings */
@@ -11317,6 +11326,9 @@ div.dataTables_wrapper div.bottom div.dt-buttons button {
 }
 div.dataTables_wrapper table.dataTable {
 	font-size: 0.9rem;
+}
+div.dataTables_wrapper table.dataTable#simpleIndiTable {
+	font-size: 100%;
 }
 div.dataTables_wrapper table.dataTable.surname-list {
 	margin: 0 auto !important;

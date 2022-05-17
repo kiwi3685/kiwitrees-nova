@@ -44,36 +44,36 @@ switch ($table) {
 	case 'totalIndis':
 		if ($option == NULL) {
 			$title 		= KT_I18N::translate('Total individuals');
-			$content	= format_indi_table($stats->individualsList($ged_id));
+			$content	= simple_indi_table($stats->individualsList($ged_id));
 		} else {
 			switch ($option){
 				case 'male':
 					$title 		= KT_I18N::translate('Total males');
-					$content	= format_indi_table($stats->individualsList($ged_id, 'male'));
+					$content	= simple_indi_table($stats->individualsList($ged_id, 'male'));
 				break;
 				case 'female':
 					$title 		= KT_I18N::translate('Total females');
-					$content	= format_indi_table($stats->individualsList($ged_id, 'female'));
+					$content	= simple_indi_table($stats->individualsList($ged_id, 'female'));
 				break;
 				case 'unknown':
 					$title 		= KT_I18N::translate('Total unknown gender');
-					$content	= format_indi_table($stats->individualsList($ged_id, 'unknown'));
+					$content	= simple_indi_table($stats->individualsList($ged_id, 'unknown'));
 				break;
 				case 'living':
 					$title 		= KT_I18N::translate('Total living');
-					$content	= format_indi_table($stats->individualsList($ged_id, 'living'));
+					$content	= simple_indi_table($stats->individualsList($ged_id, 'living'));
 				break;
 				case 'deceased':
 					$title 		= KT_I18N::translate('Total deceased');
-					$content	= format_indi_table($stats->individualsList($ged_id, 'deceased'));
+					$content	= simple_indi_table($stats->individualsList($ged_id, 'deceased'));
 				break;
 				case 'withsour':
 					$title 		= KT_I18N::translate('Individuals with sources');
-					$content	= format_indi_table($stats->individualsList($ged_id, 'withsour'));
+					$content	= simple_indi_table($stats->individualsList($ged_id, 'withsour'));
 				break;
 				case 'withoutsour':
 					$title 		= KT_I18N::translate('Individuals without sources');
-					$content	= format_indi_table($stats->individualsList($ged_id, 'withoutsour'));
+					$content	= simple_indi_table($stats->individualsList($ged_id, 'withoutsour'));
 				break;
 			}
 		}
@@ -114,7 +114,7 @@ switch ($table) {
 						$list[] = clone $person;
 				}
 				$title 		= KT_I18N::translate('Number of %s in the %s century', $label, $stats->_centuryName($option));
-				$content	= format_indi_table($list);
+				$content	= simple_indi_table($list);
 			break;
 			case 'marr':
 			case 'div':
@@ -205,38 +205,38 @@ switch ($table) {
     case 'totalBirths' :
         $list       = $stats->totalBirths();
         $title 		= KT_I18N::translate('Total births');
-        $content	= format_indi_table($list['list']);
+        $content	= simple_indi_table($list['list']);
     break;
     case 'datedBirths' :
         $list       = $stats->totaldatedBirths();
         $title 		= KT_I18N::translate('Total dated births');
-        $content	= format_indi_table($list['list']);
+        $content	= simple_indi_table($list['list']);
     break;
     case 'undatedBirths' :
         $list       = $stats->totalUndatedBirths();
         $title 		= KT_I18N::translate('Total undated births');
-        $content	= format_indi_table($list['list']);
+        $content	= simple_indi_table($list['list']);
     break;
 	case 'noRecordBirths' :
 		$list       = $stats->noBirthRecorded();
 		$title 		= KT_I18N::translate('Individuals with no birth record');
 		$subtitle	= KT_I18N::translate('(Baptism or christening dates may be displayed instead of birth dates if available)');
-		$content	= format_indi_table($list['list']);
+		$content	= simple_indi_table($list['list']);
 	break;
     case 'totalDeaths' :
         $list       = $stats->totalDeaths();
         $title 		= KT_I18N::translate('Total deaths');
-        $content	= format_indi_table($list['list']);
+        $content	= simple_indi_table($list['list']);
     break;
     case 'datedDeaths' :
         $list       = $stats->totaldatedDeaths();
         $title 		= KT_I18N::translate('Total dated deaths');
-        $content	= format_indi_table($list['list']);
+        $content	= simple_indi_table($list['list']);
     break;
     case 'undatedDeaths' :
         $list       = $stats->totalUndatedDeaths();
         $title 		= KT_I18N::translate('Total undated deaths');
-        $content	= format_indi_table($list['list']);
+        $content	= simple_indi_table($list['list']);
     break;
 	default:
 		$title 		= '';
@@ -257,7 +257,7 @@ switch ($table) {
 					}
 				}
 				$title 		= KT_I18N::translate('All individuals with the surname "%s"', $legend);
-				$content	= format_indi_table($list);
+				$content	= simple_indi_table($list);
 			break;
 			case 'givn':
 				$rows = KT_DB::prepare("
@@ -278,7 +278,7 @@ switch ($table) {
 				}
 				$title 		= KT_I18N::translate('All individuals with the given name "%s"', $tag);
 				$subtitle	= KT_I18N::translate('(Number may differ from chart where individuals have multiple names recorded)');
-				$content	= format_indi_table($list);
+				$content	= simple_indi_table($list);
 			break;
 		}
 	break;

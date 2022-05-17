@@ -57,10 +57,10 @@ function format_indi_table($datalist, $option='') {
 
 	$controller
 		->addInlineJavascript('
-		jQuery.fn.dataTableExt.oSort["unicode-asc"  ]=function(a,b) {return a.replace(/<[^<]*>/, "").localeCompare(b.replace(/<[^<]*>/, ""))};
-		jQuery.fn.dataTableExt.oSort["unicode-desc" ]=function(a,b) {return b.replace(/<[^<]*>/, "").localeCompare(a.replace(/<[^<]*>/, ""))};
-		jQuery.fn.dataTableExt.oSort["num-html-asc" ]=function(a,b) {a=parseFloat(a.replace(/<[^<]*>/, "")); b=parseFloat(b.replace(/<[^<]*>/, "")); return (a<b) ? -1 : (a>b ? 1 : 0);};
-		jQuery.fn.dataTableExt.oSort["num-html-desc"]=function(a,b) {a=parseFloat(a.replace(/<[^<]*>/, "")); b=parseFloat(b.replace(/<[^<]*>/, "")); return (a>b) ? -1 : (a<b ? 1 : 0);};
+			jQuery.fn.dataTableExt.oSort["unicode-asc"  ]=function(a,b) {return a.replace(/<[^<]*>/, "").localeCompare(b.replace(/<[^<]*>/, ""))};
+			jQuery.fn.dataTableExt.oSort["unicode-desc" ]=function(a,b) {return b.replace(/<[^<]*>/, "").localeCompare(a.replace(/<[^<]*>/, ""))};
+			jQuery.fn.dataTableExt.oSort["num-html-asc" ]=function(a,b) {a=parseFloat(a.replace(/<[^<]*>/, "")); b=parseFloat(b.replace(/<[^<]*>/, "")); return (a<b) ? -1 : (a>b ? 1 : 0);};
+			jQuery.fn.dataTableExt.oSort["num-html-desc"]=function(a,b) {a=parseFloat(a.replace(/<[^<]*>/, "")); b=parseFloat(b.replace(/<[^<]*>/, "")); return (a>b) ? -1 : (a<b ? 1 : 0);};
 			jQuery("#' . $table_id . '").dataTable({
 				dom: \'<"top"p' . $buttons . 'f<"clear">irl>t<"bottom"pl>\',
 				' . KT_I18N::datatablesI18N() . ',
@@ -579,6 +579,253 @@ function format_indi_table($datalist, $option='') {
 				' . print_chart_by_decade($deat_by_decade, KT_I18N::translate('Decade of death')) . '
 			</div>
 		</div>';
+
+	return $html;
+}
+
+// print a simplified table of individuals, similar to main indiList, but with many ddetailed columns removed
+// Used in Statistics tables
+function simple_indi_table($datalist) {
+	global $iconStyle, $GEDCOM, $SEARCH_SPIDER, $MAX_ALIVE_AGE, $controller;
+
+	$SHOW_EST_LIST_DATES = get_gedcom_setting(KT_GED_ID, 'SHOW_EST_LIST_DATES');
+
+	$controller
+		->addExternalJavascript(KT_DATATABLES_JS)
+		->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
+	;
+
+	if (KT_USER_CAN_EDIT) {
+		$controller
+			->addExternalJavascript(KT_DATATABLES_BUTTONS)
+			->addExternalJavascript(KT_DATATABLES_HTML5);
+		$buttons = 'B';
+	} else {
+		$buttons = '';
+	}
+
+	$html = '';
+
+	$controller
+		->addInlineJavascript('
+			jQuery.fn.dataTableExt.oSort["unicode-asc"  ]=function(a,b) {return a.replace(/<[^<]*>/, "").localeCompare(b.replace(/<[^<]*>/, ""))};
+			jQuery.fn.dataTableExt.oSort["unicode-desc" ]=function(a,b) {return b.replace(/<[^<]*>/, "").localeCompare(a.replace(/<[^<]*>/, ""))};
+			jQuery.fn.dataTableExt.oSort["num-html-asc" ]=function(a,b) {a=parseFloat(a.replace(/<[^<]*>/, "")); b=parseFloat(b.replace(/<[^<]*>/, "")); return (a<b) ? -1 : (a>b ? 1 : 0);};
+			jQuery.fn.dataTableExt.oSort["num-html-desc"]=function(a,b) {a=parseFloat(a.replace(/<[^<]*>/, "")); b=parseFloat(b.replace(/<[^<]*>/, "")); return (a>b) ? -1 : (a<b ? 1 : 0);};
+			jQuery("#simpleIndiTable").dataTable({
+				dom: \'<"top"p' . $buttons . 'f<"clear">irl>t<"bottom"pl>\',
+				' . KT_I18N::datatablesI18N() . ',
+				buttons: [{extend: "csvHtml5", exportOptions: {columns: [0,1,4,6,7,9] }}],
+				autoWidth: false,
+				processing: true,
+				retrieve: true,
+				displayLength: 20,
+				pagingType: "full_numbers",
+				stateSave: true,
+				stateSaveParams: function (settings, data) {
+					data.columns.forEach(function(column) {
+						delete column.search;
+					});
+				},
+				stateDuration: -1,
+				columns: [
+					/* 0 givn      */ { dataSort: 2, class: "indiListGivn", "width": "10%" },
+					/* 1 surn      */ { dataSort: 3, class: "indiListSurn", "width": "10%" },
+					/* 2 GIVN,SURN */ { type: "unicode", visible: false },
+					/* 3 SURN,GIVN */ { type: "unicode", visible: false },
+					/* 4 birt date */ { dataSort: 5, class: "show-for-medium", "width": "20%" },
+					/* 5 BIRT:DATE */ { visible: false },
+					/* 6 birt plac */ { type: "unicode", class: "show-for-medium", "width": "20%" },
+					/* 7 deat date */ { dataSort: 8, class: "show-for-medium", "width": "20%" },
+					/* 8 DEAT:DATE */ { visible: false },
+					/* 9 deat plac */ { type: "unicode", class: "show-for-medium", "width": "20%" },
+				],
+				columnDefs: [{
+					targets: "_all", width: "10%"
+				}],
+				sorting: [[1, "asc"]]
+			});
+
+			jQuery(".indi-list").css("visibility", "visible");
+			jQuery(".loading-image").css("display", "none");
+	');
+
+	$stats = new KT_Stats($GEDCOM);
+
+	// Bad data can cause "longest life" to be huge, blowing memory limits
+	if ($stats->LongestLifeAge()) {
+		$max_age = min($MAX_ALIVE_AGE, (int) $stats->LongestLifeAge()) + 1;
+	} else {
+		$max_age = 0;
+	}
+
+	// Inititialise chart data
+	for ($age = 0; $age <= $max_age; $age ++) {
+		$deat_by_age[$age] = '';
+	}
+	for ($year = 1550; $year < 2030; $year += 10) {
+		$birt_by_decade[$year] = '';
+		$deat_by_decade[$year] = '';
+	}
+
+	$html = '
+		<div class="loading-image">&nbsp;</div>
+		<div class="indi-list clearfix" style="visibility: hidden;">
+			<table class="shadow" id="simpleIndiTable">
+				<thead>
+					<tr>
+						<th colspan="4" class="text-center">' . KT_I18N::translate('Name') . '</th>
+						<th colspan="3" class="text-center show-for-medium">' . KT_Gedcom_Tag::getLabel('BIRT') . '</th>
+						<th colspan="3" class="text-center show-for-medium">' . KT_Gedcom_Tag::getLabel('DEAT') . '</th>
+					</tr>
+					<tr>
+						<th data-tooltip aria-haspopup="true" class="has-tip top" data-disable-hover="false" title="' . KT_I18N::translate('Sort by given names') . '">' . KT_Gedcom_Tag::getLabel('GIVN') . '</th>
+						<th data-tooltip aria-haspopup="true" class="has-tip top" data-disable-hover="false" title="' . KT_I18N::translate('Sort by surnames') . '">' . KT_Gedcom_Tag::getLabel('SURN') . '</th>
+						<th>GIVN</th>
+						<th>SURN</th>
+						<th>' . KT_I18N::translate('Date') . '</th>
+						<th>SORT_BIRT</th>
+						<th>' . KT_Gedcom_Tag::getLabel('PLAC') . '</th>
+						<th>' . KT_I18N::translate('Date') . '</th>
+						<th>SORT_DEAT</th>
+						<th>' . KT_Gedcom_Tag::getLabel('PLAC') . '</th>
+					</tr>
+				</thead>
+				<tbody>';
+
+	$d100y			= new KT_Date(date('Y')-100);  // 100 years ago
+	$unique_indis	= array(); // Don't double-count indis with multiple names.
+
+	foreach ($datalist as $key => $value) {
+		if (is_object($value)) { // Array of objects
+			$person = $value;
+		} elseif (!is_array($value)) { // Array of IDs
+			$person = KT_Person::getInstance($value);
+		} else { // Array of search results
+			$gid = $key;
+			if (isset($value['gid'])) $gid = $value['gid']; // from indilist
+			if (isset($value[4])) $gid = $value[4]; // from indilist ALL
+			$person = KT_Person::getInstance($gid);
+		}
+		if (is_null($person)) continue;
+		if ($person->getType() !== 'INDI') continue;
+		if (!$person->canDisplayName()) {
+			continue;
+		}
+		$html .= '<tr>';
+			//-- Indi name(s)
+			$html .= '<td colspan="2" class="nowrap">';
+				foreach ($person->getAllNames() as $num => $name) {
+					if ($name['type'] == 'NAME') {
+						$title = '';
+					} else {
+						$title = 'title="' . strip_tags(KT_Gedcom_Tag::getLabel($name['type'], $person)) . '"';
+					}
+					if ($num == $person->getPrimaryName()) {
+						$class		= ' class="name2"';
+						$sex_image	= $person->getSexImage();
+						list($surn, $givn)=explode(',', $name['sort']);
+					} else {
+						$class		= '';
+						$sex_image	= '';
+					}
+					$html .= '<a '. $title . ' href="'. $person->getHtmlUrl() . '"' . $class . '>' . $name['full'] . '</a>' . $sex_image . '<br>';
+				}
+			$html .= '</td>';
+			// Dummy column to match colspan in header
+			$html .= '<td hidden></td>';
+		//-- GIVN/SURN
+			// Use "AAAA" as a separator (instead of ",") as Javascript.localeCompare() ignores
+			// punctuation and "ANN,ROACH" would sort after "ANNE,ROACH", instead of before it.
+			// Similarly, @N.N. would sort as NN.
+			$html .= '<td>';
+				$html .= KT_Filter::escapeHtml(str_replace('@P.N.', 'AAAA', $givn)) . 'AAAA' . KT_Filter::escapeHtml(str_replace('@N.N.', 'AAAA', $surn));
+			$html .= '</td>';
+			$html .= '<td>';
+				$html .= KT_Filter::escapeHtml(str_replace('@N.N.', 'AAAA', $surn)) . 'AAAA' . KT_Filter::escapeHtml(str_replace('@P.N.', 'AAAA', $givn));
+			$html .= '</td>';
+			//-- Birth date
+			$html .= '<td>';
+				if ($birth_dates = $person->getAllBirthDates()) {
+					foreach ($birth_dates as $num => $birth_date) {
+						if ($num) {
+							$html .= '<br>';
+						}
+						$html .= $birth_date->Display(!$SEARCH_SPIDER);
+					}
+					if ($birth_dates[0]->gregorianYear() >= 1550 && $birth_dates[0]->gregorianYear() < 2030 && !isset($unique_indis[$person->getXref()])) {
+						$birt_by_decade[(int)($birth_dates[0]->gregorianYear() / 10) * 10] .= $person->getSex();
+					}
+				} else {
+					$birth_date = $person->getEstimatedBirthDate();
+					if ($SHOW_EST_LIST_DATES) {
+						$html .= $birth_date->Display(!$SEARCH_SPIDER);
+					} else {
+						$html .= '&nbsp;';
+					}
+					$birth_dates[0] = new KT_Date('');
+				}
+			$html .= '</td>';
+			//-- Event date (sortable)hidden by datatables code
+			$html .= '<td>';
+				$html .= $birth_date->JD();
+			$html .= '</td>';
+			//-- Birth place
+			$html .= '<td>';
+				foreach ($person->getAllBirthPlaces() as $n => $birth_place) {
+					$tmp = new KT_Place($birth_place, KT_GED_ID);
+					if ($n) {
+						$html .= '<br>';
+					}
+					$html .= '<a href="' . $tmp->getURL() . '" title="' . strip_tags($tmp->getFullName()) . '">' . $tmp->getShortName() . '</a>';
+				}
+			$html .= '</td>';
+			//-- Death date
+			$html .= '<td>';
+				if ($death_dates = $person->getAllDeathDates()) {
+					foreach ($death_dates as $num => $death_date) {
+						if ($num) {
+							$html .= '<br>';
+						}
+						$html .= $death_date->Display(!$SEARCH_SPIDER);
+					}
+					if ($death_dates[0]->gregorianYear() >= 1550 && $death_dates[0]->gregorianYear() < 2030 && !isset($unique_indis[$person->getXref()])) {
+						$deat_by_decade[(int)($death_dates[0]->gregorianYear() / 10) * 10] .= $person->getSex();
+					}
+				} else {
+					$death_date = $person->getEstimatedDeathDate();
+					// Estimated death dates are a fixed number of years after the birth date.
+					// Don't show estimates in the future.
+					if ($SHOW_EST_LIST_DATES && $death_date->MinJD() < KT_CLIENT_JD) {
+						$html .= $death_date->Display(!$SEARCH_SPIDER);
+					} else if ($person->isDead()) {
+						$html .= KT_I18N::translate('yes');
+					} else {
+						$html .= '&nbsp;';
+					}
+					$death_dates[0] = new KT_Date('');
+				}
+			$html .= '</td>';
+			//-- Event date (sortable)hidden by datatables code
+			$html .= '<td>';
+				$html .= $death_date->JD();
+			$html .= '</td>';
+			//-- Death place
+			$html .= '<td>';
+				foreach ($person->getAllDeathPlaces() as $n => $death_place) {
+					$tmp = new KT_Place($death_place, KT_GED_ID);
+					if ($n) {
+						$html .= '<br>';
+					}
+					$html .= '<a href="' . $tmp->getURL() . '" title="'. strip_tags($tmp->getFullName()) . '">' . $tmp->getShortName() . '</a>';
+				}
+			$html .= '</td>';
+		$html .= '</tr>';
+
+		$unique_indis[$person->getXref()] = true;
+	}
+
+	$html .= '</tbody></table></div>';
 
 	return $html;
 }
