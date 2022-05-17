@@ -42,37 +42,40 @@ $list	= array();
 
 switch ($table) {
 	case 'totalIndis':
-		$title 		= KT_I18N::translate('Total individuals');
-		$content	= format_indi_table($stats->individualsList($ged_id));
-		switch ($option){
-			case 'male':
-				$title 		= KT_I18N::translate('Total males');
-				$content	= format_indi_table($stats->individualsList($ged_id, 'male'));
-			break;
-			case 'female':
-				$title 		= KT_I18N::translate('Total females');
-				$content	= format_indi_table($stats->individualsList($ged_id, 'female'));
-			break;
-			case 'unknown':
-				$title 		= KT_I18N::translate('Total unknown gender');
-				$content	= format_indi_table($stats->individualsList($ged_id, 'unknown'));
-			break;
-			case 'living':
-				$title 		= KT_I18N::translate('Total living');
-				$content	= format_indi_table($stats->individualsList($ged_id, 'living'));
-			break;
-			case 'deceased':
-				$title 		= KT_I18N::translate('Total deceased');
-				$content	= format_indi_table($stats->individualsList($ged_id, 'deceased'));
-			break;
-			case 'withsour':
-				$title 		= KT_I18N::translate('Individuals with sources');
-				$content	= format_indi_table($stats->individualsList($ged_id, 'withsour'));
-			break;
-			case 'withoutsour':
-				$title 		= KT_I18N::translate('Individuals without sources');
-				$content	= format_indi_table($stats->individualsList($ged_id, 'withoutsour'));
-			break;
+		if ($option == NULL) {
+			$title 		= KT_I18N::translate('Total individuals');
+			$content	= format_indi_table($stats->individualsList($ged_id));
+		} else {
+			switch ($option){
+				case 'male':
+					$title 		= KT_I18N::translate('Total males');
+					$content	= format_indi_table($stats->individualsList($ged_id, 'male'));
+				break;
+				case 'female':
+					$title 		= KT_I18N::translate('Total females');
+					$content	= format_indi_table($stats->individualsList($ged_id, 'female'));
+				break;
+				case 'unknown':
+					$title 		= KT_I18N::translate('Total unknown gender');
+					$content	= format_indi_table($stats->individualsList($ged_id, 'unknown'));
+				break;
+				case 'living':
+					$title 		= KT_I18N::translate('Total living');
+					$content	= format_indi_table($stats->individualsList($ged_id, 'living'));
+				break;
+				case 'deceased':
+					$title 		= KT_I18N::translate('Total deceased');
+					$content	= format_indi_table($stats->individualsList($ged_id, 'deceased'));
+				break;
+				case 'withsour':
+					$title 		= KT_I18N::translate('Individuals with sources');
+					$content	= format_indi_table($stats->individualsList($ged_id, 'withsour'));
+				break;
+				case 'withoutsour':
+					$title 		= KT_I18N::translate('Individuals without sources');
+					$content	= format_indi_table($stats->individualsList($ged_id, 'withoutsour'));
+				break;
+			}
 		}
 	break;
 	case 'century': {
