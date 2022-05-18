@@ -118,12 +118,12 @@ class block_favorites_KT_Module extends KT_Module implements KT_Module_Block {
 			$style = 1;
 			$dropdownSize = ' medium';
 			$addFavorites = '';
-			$buttonGroup  = '';
+			$buttonGroup  = ' tiny align-center';
 		} else {
 			$style = 2; // 1 means "regular box", 2 means "wide box", 3 means "vertical box", 4 means "card"
 			$dropdownSize = ' large';
-			$addFavorites = ' medium-3';
-			$buttonGroup  = ' medium-9';
+			$addFavorites = ' medium-2';
+			$buttonGroup  = ' small medium-10';
 		}
 
 		if (KT_USER_ID) {
@@ -137,12 +137,12 @@ class block_favorites_KT_Module extends KT_Module implements KT_Module_Block {
 
 			$content .= '
 				<div id="box' . $uniqueID . '" class="grid-x favAdd">
-					<div class="cell ' . $addFavorites . '">' . KT_I18N::translate('Add a favourite') . '</div>
+					<p class="cell ' . $addFavorites . '">' . KT_I18N::translate('Add a favourite') . '</p>
 					<div class="cell' . $buttonGroup . ' button-group">
-						<button class="button small" data-toggle="add_favIndi' . $uniqueID . '">Individual</button>
-						<button class="button small" data-toggle="add_favFam' . $uniqueID . '">Family</button>
-						<button class="button small" data-toggle="add_favSour' . $uniqueID . '">Source</button>
-						<button class="button small" data-toggle="add_favUrl' . $uniqueID . '">URL</button>
+						<button class="button" data-toggle="add_favIndi' . $uniqueID . '">Individual</button>
+						<button class="button" data-toggle="add_favFam' . $uniqueID . '">Family</button>
+						<button class="button" data-toggle="add_favSour' . $uniqueID . '">Source</button>
+						<button class="button" data-toggle="add_favUrl' . $uniqueID . '">URL</button>
 					</div>
 
 					<div class="dropdown-pane' . $dropdownSize . '" data-closable data-position="bottom" data-alignment="top" id="add_favIndi' . $uniqueID . '" data-dropdown data-auto-focus="true">

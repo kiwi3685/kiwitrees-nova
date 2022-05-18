@@ -3437,7 +3437,7 @@ a.button:hover, a.button:focus {
 }
 
 .button-group {
-	margin-bottom: 1rem;
+	margin-bottom: 0.5rem;
 	display: flex;
 	flex-wrap: wrap;
 	align-items: stretch;
@@ -3457,8 +3457,8 @@ a.button:hover, a.button:focus {
 }
 .button-group .button {
 	margin: 0;
-	margin-right: 2rem;
-	margin-bottom: 2rem;
+	margin-right: 1rem;
+	margin-bottom: 1rem;
 	font-size: 0.9rem;
 	flex: 0 0 auto;
 }
@@ -9590,6 +9590,9 @@ footer .card .card-section .contact_links {
 	line-height: 2.5;
 	padding: 0.5rem 0.5rem 0.25rem;
 }
+.block .block_favorites div[id^=box].favAdd p {
+	margin-bottom: 0.125rem;
+}
 .block .block_favorites div[id^=box] .favInnerCell {
 	border-bottom: 0.125rem solid #e0e0e0;
 	margin-bottom: 0.25rem;
@@ -9626,6 +9629,9 @@ footer .card .card-section .contact_links {
 }
 .block .block_favorites .button-group {
 	margin-bottom: 0.25rem;
+}
+.block .block_favorites .button-group .button {
+	margin-bottom: 0;
 }
 
 .small-block {
