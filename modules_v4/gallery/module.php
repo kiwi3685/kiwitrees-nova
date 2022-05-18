@@ -335,7 +335,7 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 								<?php echo KT_I18N::translate('Save'); ?>
 							</button>
 							<button class="btn btn-primary cancel" type="button" onclick="window.location='<?php echo $this->getConfigLink(); ?>';" tabindex="8">
-								<i class="fa fa-times"></i>
+								<i class="fa fa-xmark"></i>
 								<?php echo KT_I18N::translate('cancel'); ?>
 							</button>
 						</p>

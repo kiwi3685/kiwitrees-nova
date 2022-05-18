@@ -9415,6 +9415,10 @@ body #admin-container {
 }
 
 /* Icons */
+.svg-inline--fa {
+	color: #fefefe;
+}
+
 .kiwitrees_logo {
 	background: url(../images/kiwitrees-nova_logo_white.png) no-repeat center left;
 	background-size: contain;
@@ -9431,6 +9435,9 @@ body #admin-container {
 }
 #admin-head .top-bar .top-bar-right .input-group {
 	margin-bottom: 0;
+}
+#admin-head .top-bar .top-bar-right .input-group svg.svg-inline--fa.fa-magnifying-glass {
+	color: #34689c;
 }
 #admin-head .top-bar .top-bar-left .menu a {
 	color: #fefefe;
@@ -9533,7 +9540,7 @@ body #admin-container {
 #admin-container #admin-menu .accordion-menu .is-accordion-submenu-parent .admin-menu-title:after {
 	content: "";
 	display: none;
-	font-family: "Font Awesome 5 Solid";
+	font-family: "Font Awesome 6 Solid";
 }
 #admin-container #admin-menu .accordion-menu .is-accordion-submenu-parent[aria-expanded=true] .admin-menu-title:after {
 	content: "";
@@ -9541,7 +9548,7 @@ body #admin-container {
 #admin-container #admin-menu .accordion-menu .is-accordion-submenu a::before {
 	content: "";
 	display: none;
-	font-family: "Font Awesome 5 Solid";
+	font-family: "Font Awesome 6 Solid";
 	margin-right: 0.5rem;
 }
 #admin-container #admin-content {
@@ -9591,7 +9598,7 @@ body #admin-container {
 }
 #admin-container #admin-content .accordion .accordion-item .accordion-title:before {
 	content: "";
-	font-family: "Font Awesome 5 Solid";
+	font-family: "Font Awesome 6 Solid";
 	display: none;
 }
 #admin-container #admin-content .accordion .accordion-item.is-active > .accordion-title:before {
@@ -9630,6 +9637,9 @@ body #admin-container {
 }
 #admin-container #admin-content .accordion .accordion-item .accordion-title .fa-layers.warning {
 	color: #ff0000;
+}
+#admin-container #admin-content .accordion .accordion-item .accordion-title .fa-layers-counter {
+	transform: scale(var(--fa-counter-scale, 0.35));
 }
 #admin-container #admin-content .accordion .accordion-item .accordion-title.icons svg {
 	position: initial;
@@ -9717,7 +9727,7 @@ body #admin-container {
 }
 #admin-container #admin-content .tabs-content .accordion .accordion-title:before {
 	content: "";
-	font-family: "Font Awesome 5 Solid";
+	font-family: "Font Awesome 6 Solid";
 	display: none;
 }
 #admin-container #admin-content .tabs-content .accordion.is-active > .accordion-title:before {

@@ -267,7 +267,7 @@ $changes = KT_DB::prepare(
 					<span><?php echo KT_I18N::translate('Users'); ?></span>
 					<span class="fa-layers fa-lg has-tip top" data-tooltip aria-haspopup="true" data-disable-hover="false" title="<?php echo KT_I18N::translate('Total number of users'); ?>">
 						<i class="<?php echo $iconStyle; ?> fa-users"></i>
-						<span class="fa-layers-counter fa-lg"><?php echo $total_users; ?></span>
+						<span class="fa-layers-counter"><?php echo $total_users; ?></span>
 					</span>
 					<?php if ($incomplete) { ?>
 						<span class="fa-layers fa-lg has-tip top warning" data-tooltip aria-haspopup="true" data-disable-hover="false" title="<?php echo KT_I18N::translate('Unverified or not approved users'); ?>">

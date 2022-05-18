@@ -174,7 +174,7 @@ $this
 				<div class="top-bar-right">
 					<ul class="menu">
 						<li>
-							<form action="search.php" method="post">
+							<form class="header-search"action="search.php" method="post">
 								<div class="input-group">
 									<input type="hidden" name="action" value="general">
 									<input type="hidden" name="topsearch" value="yes">
