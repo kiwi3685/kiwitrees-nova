@@ -201,7 +201,7 @@ class list_media_KT_Module extends KT_Module implements KT_Module_List {
 					<div class="grid-x grid-margin-x">
 						<div class="cell align-left button-group">
 							<button class="button" type="submit">
-								<i class="<?php echo $iconStyle; ?> fa-search"></i>
+								<i class="<?php echo $iconStyle; ?> fa-magnifying-glass"></i>
 								<?php echo KT_I18N::translate('Search'); ?>
 							</button>
 							<button class="button secondary" type="submit" name="reset" value="reset">

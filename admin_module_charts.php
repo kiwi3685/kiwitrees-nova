@@ -89,7 +89,7 @@ if ($action == 'update_mods' && KT_Filter::checkCsrf()) {
 								}
 								echo $module->getTitle();
 								if ( $module instanceof KT_Module_Config && array_key_exists($module->getName(), KT_Module::getActiveModules() ) ) {
-									echo ' <i class="' . $iconStyle . ' fa-cogs"></i></a>';
+									echo ' <i class="' . $iconStyle . ' fa-gears"></i></a>';
 								}
 								?>
 							</td>

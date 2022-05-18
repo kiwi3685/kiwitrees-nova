@@ -41,7 +41,7 @@ if (!defined('KT_KIWITREES')) {
 			</span>
 		</a>
 		<button class="float-right clear button show-for-medium" type="button" data-toggle="<?php echo $dataToggle; ?>">
-			<i class="<?php echo $iconStyle; ?> fa-search-plus fa-lg"></i>
+			<i class="<?php echo $iconStyle; ?> fa-magnifying-glass-plus fa-lg"></i>
 		</button>
 		<div id="birtdeat_<?php echo $boxID; ?>" style="max-height:<?php echo $bheight*.9; ?>px;">
 			<?php echo $BirthDeath; ?>

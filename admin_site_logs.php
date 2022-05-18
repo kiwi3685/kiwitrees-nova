@@ -258,7 +258,7 @@ uksort($users_array, 'strnatcasecmp');
 				</div>
 				<div class="cell medium-4">
 					<button type="submit" class="button">
-						<i class="<?php echo $iconStyle; ?> fa-search"></i>
+						<i class="<?php echo $iconStyle; ?> fa-magnifying-glass"></i>
 						<?php echo KT_I18N::translate('Search'); ?>
 					</button>
 					<button type="submit" class="button" <?php echo 'onclick="if (confirm(\'' . htmlspecialchars(KT_I18N::translate('Permanently delete these records?')) . '\')) {document.logs.action.value=\'delete\';return true;} else {return false;}"' . ($action=='show' ? '' : 'disabled="disabled"');?> >

@@ -131,7 +131,7 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 						<?php echo KT_I18N::translate('Click on highlighted links to see more details for each statistic.'); ?>
 					</div>
 					<button class="close-button" aria-label="Dismiss alert" type="button" data-close>
-						<span aria-hidden="true"><i class="<?php echo $iconStyle; ?> fa-times"></i></span>
+						<span aria-hidden="true"><i class="<?php echo $iconStyle; ?> fa-xmark"></i></span>
 					</button>
 				</div>
 			</div>

@@ -30,10 +30,10 @@ class KT_MenuBar {
 	public static function getGedcomMenu() {
 		if (count(KT_Tree::getAll()) === 1 || KT_Site::preference('ALLOW_CHANGE_GEDCOM') === '0') {
 			$menu = new KT_Menu(KT_I18N::translate('Home'), 'index.php?ged=' . KT_GEDURL, 'menu-tree');
-			$menu->addClass('', '', 'fa-home');
+			$menu->addClass('', '', 'fa-house');
 		} else {
 			$menu = new KT_Menu(KT_I18N::translate('Home'), '#', 'menu-tree');
-			$menu->addClass('', '', 'fa-home');
+			$menu->addClass('', '', 'fa-house');
 			foreach (KT_Tree::getAll() as $tree) {
 				$submenu = new KT_Menu(
 					$tree->tree_title_html,
@@ -111,7 +111,7 @@ class KT_MenuBar {
 	// Main menu Administration links (called by module "menu_admin_main")
 	public static function getAdminMenu() {
 		$menu = new KT_Menu(KT_I18N::translate('Administration'), 'admin.php', 'menu-admin');
-		$menu->addClass('', '', 'fa-cogs');
+		$menu->addClass('', '', 'fa-gears');
 
 		return $menu;
 
@@ -200,7 +200,7 @@ class KT_MenuBar {
 		}
 
 		$menu = new KT_Menu(KT_I18N::translate('Search'), 'search.php?ged=' . KT_GEDURL, 'menu-search');
-		$menu->addClass('', '', 'fa-search');
+		$menu->addClass('', '', 'fa-magnifying-glass');
 
 		return $menu;
 	}

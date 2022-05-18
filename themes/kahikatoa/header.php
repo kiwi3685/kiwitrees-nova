@@ -143,7 +143,7 @@
 										<input type="hidden" name="action" value="general">
 										<input type="hidden" name="topsearch" value="yes">
 										<input type="search"  name="query" placeholder="<?php echo KT_I18N::translate('Search family tree'); ?>" class="input-group-field">
-										<span class="input-group-label"><i class="<?php echo $iconStyle; ?> fa-search"></i></span>
+										<span class="input-group-label"><i class="<?php echo $iconStyle; ?> fa-magnifying-glass"></i></span>
 					                </div>
 								</form>
 							</li>

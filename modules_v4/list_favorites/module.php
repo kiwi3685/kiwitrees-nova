@@ -196,7 +196,7 @@ class list_favorites_KT_Module extends KT_Module implements KT_Module_List {
 											<input data-autocomplete-type="INDI" type="text" id="autocompleteInput-favIndi" placeholder="<?php echo KT_I18N::translate('Individual name'); ?>">
 											<span class="input-group-label">
 												<button class="clearAutocomplete autocomplete_icon">
-													<i class="<?php echo $iconStyle; ?> fa-times"></i>
+													<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 												</button>
 											</span>
 										</div>
@@ -234,7 +234,7 @@ class list_favorites_KT_Module extends KT_Module implements KT_Module_List {
 											<input data-autocomplete-type="FAM" type="text" id="autocompleteInput-favFam" placeholder="<?php echo KT_I18N::translate('Names of husband & wife'); ?>">
 											<span class="input-group-label">
 												<button class="clearAutocomplete autocomplete_icon">
-													<i class="<?php echo $iconStyle; ?> fa-times"></i>
+													<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 												</button>
 											</span>
 										</div>
@@ -272,7 +272,7 @@ class list_favorites_KT_Module extends KT_Module implements KT_Module_List {
 											<input data-autocomplete-type="SOUR" type="text" id="autocompleteInput-favSOUR" placeholder="<?php echo KT_I18N::translate('Source title'); ?>">
 											<span class="input-group-label">
 												<button class="clearAutocomplete autocomplete_icon">
-													<i class="<?php echo $iconStyle; ?> fa-times"></i>
+													<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 												</button>
 											</span>
 										</div>

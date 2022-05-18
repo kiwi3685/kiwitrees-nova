@@ -153,7 +153,7 @@ class block_favorites_KT_Module extends KT_Module implements KT_Module_Block {
 								<input data-autocomplete-type="INDI" type="text" id="autocompleteInput-favIndi" placeholder="' . KT_I18N::translate('Individual name') . '">
 								<span class="input-group-label">
 									<button class="clearAutocomplete autocomplete_icon">
-										<i class="' . $iconStyle . ' fa-times"></i>
+										<i class="' . $iconStyle . ' fa-xmark"></i>
 									</button>
 								</span>
 							</div>
@@ -167,7 +167,7 @@ class block_favorites_KT_Module extends KT_Module implements KT_Module_Block {
 								KT_I18N::translate('Save') . '
 							</button>
 							<button class="close-button" data-close>
-								<span aria-hidden="true"><i class="' . $iconStyle . ' fa-times"></i></span>
+								<span aria-hidden="true"><i class="' . $iconStyle . ' fa-xmark"></i></span>
 							</button>
 						</form>
 					</div>
@@ -180,7 +180,7 @@ class block_favorites_KT_Module extends KT_Module implements KT_Module_Block {
 								<input data-autocomplete-type="FAM" type="text" id="autocompleteInput-favFam" placeholder="' . KT_I18N::translate('Names of husband & wife') . '">
 								<span class="input-group-label">
 									<button class="clearAutocomplete autocomplete_icon">
-										<i class="' . $iconStyle . ' fa-times"></i>
+										<i class="' . $iconStyle . ' fa-xmark"></i>
 									</button>
 								</span>
 							</div>
@@ -194,7 +194,7 @@ class block_favorites_KT_Module extends KT_Module implements KT_Module_Block {
 								KT_I18N::translate('Save') . '
 							</button>
 							<button class="close-button" data-close>
-								<span aria-hidden="true"><i class="' . $iconStyle . ' fa-times"></i></span>
+								<span aria-hidden="true"><i class="' . $iconStyle . ' fa-xmark"></i></span>
 							</button>
 						</form>
 					</div>
@@ -207,7 +207,7 @@ class block_favorites_KT_Module extends KT_Module implements KT_Module_Block {
 								<input data-autocomplete-type="SOUR" type="text" id="autocompleteInput-favSour" placeholder="' . KT_I18N::translate('Source title') . '">
 								<span class="input-group-label">
 									<button class="clearAutocomplete autocomplete_icon">
-										<i class="' . $iconStyle . ' fa-times"></i>
+										<i class="' . $iconStyle . ' fa-xmark"></i>
 									</button>
 								</span>
 							</div>
@@ -221,7 +221,7 @@ class block_favorites_KT_Module extends KT_Module implements KT_Module_Block {
 								KT_I18N::translate('Save') . '
 							</button>
 							<button class="close-button" data-close>
-								<span aria-hidden="true"><i class="' . $iconStyle . ' fa-times"></i></span>
+								<span aria-hidden="true"><i class="' . $iconStyle . ' fa-xmark"></i></span>
 							</button>
 						</form>
 					</div>
@@ -241,7 +241,7 @@ class block_favorites_KT_Module extends KT_Module implements KT_Module_Block {
 								KT_I18N::translate('Save') . '
 							</button>
 							<button class="close-button" data-close>
-								<span aria-hidden="true"><i class="' . $iconStyle . ' fa-times"></i></span>
+								<span aria-hidden="true"><i class="' . $iconStyle . ' fa-xmark"></i></span>
 							</button>
 						</form>
 					</div>

@@ -311,7 +311,7 @@ class tabi_dna_KT_Module extends KT_Module implements KT_Module_IndiTab {
 										<input data-autocomplete-type="INDI" type="text" id="autocompleteInput-dna_id_b" value="" autofocus>
 										<span class="input-group-label">
 											<button class="clearAutocomplete">
-												<i class="<?php echo $iconStyle; ?> fa-times"></i>
+												<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 											</button>
 										</span>
 									</div>
@@ -326,7 +326,7 @@ class tabi_dna_KT_Module extends KT_Module implements KT_Module_IndiTab {
 										<input data-autocomplete-type="SOUR" type="text" id="autocompleteInput-source" value="">
 										<span class="input-group-label">
 											<button class="clearAutocomplete">
-												<i class="<?php echo $iconStyle; ?> fa-times"></i>
+												<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 											</button>
 										</span>
 										<input type="hidden" id="selectedValue-source" name="indi" >
@@ -395,7 +395,7 @@ class tabi_dna_KT_Module extends KT_Module implements KT_Module_IndiTab {
 										<?php }?>
 										<span class="input-group-label">
 											<button class="clearAutocomplete">
-												<i class="<?php echo $iconStyle; ?> fa-times"></i>
+												<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 											</button>
 										</span>
 									</div>
@@ -415,7 +415,7 @@ class tabi_dna_KT_Module extends KT_Module implements KT_Module_IndiTab {
 										<?php }?>
 										<span class="input-group-label">
 											<button class="clearAutocomplete">
-												<i class="<?php echo $iconStyle; ?> fa-times"></i>
+												<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 											</button>
 										</span>
 										<input type="hidden" id="selectedValue-source" name="indi" value="<?php echo $row->source; ?>">
@@ -486,7 +486,7 @@ class tabi_dna_KT_Module extends KT_Module implements KT_Module_IndiTab {
 								<?php echo KT_I18N::translate('Save'); ?>
 							</button>
 							<button class="button" type="button" onclick="window.close();">
-								<i class="<?php echo $iconStyle; ?> fa-times"></i>
+								<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 								<?php echo KT_I18N::translate('Cancel'); ?>
 							</button>
 						</form>

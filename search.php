@@ -165,7 +165,7 @@ $controller ->addInlineJavascript('
 					<?php echo search_trees(); ?>
 				</div>
 				<button class="btn btn-primary" type="submit">
-					<i class="fas fa-search"></i>
+					<i class="fas fa-magnifying-glass"></i>
 					<?php echo KT_I18N::translate('search'); ?>
 				</button>
 			</form>
@@ -212,7 +212,7 @@ $controller ->addInlineJavascript('
 					</div>
 				</div>
 				<button class="btn btn-primary" type="submit">
-					<i class="fas fa-search"></i>
+					<i class="fas fa-magnifying-glass"></i>
 					<?php echo KT_I18N::translate('search'); ?>
 				</button>
 			</form>
@@ -270,7 +270,7 @@ $controller ->addInlineJavascript('
 						</div>
 					</div>
 					<button class="btn btn-primary" type="submit">
-						<i class="fas fa-search"></i>
+						<i class="fas fa-magnifying-glass"></i>
 						<?php echo KT_I18N::translate('search'); ?>
 					</button>
 				</form>
@@ -538,7 +538,7 @@ $controller ->addInlineJavascript('
 					</table>
 					<p class="buttons">
 						<button class="btn btn-primary" type="submit">
-							<i class="fas fa-search"></i>
+							<i class="fas fa-magnifying-glass"></i>
 							<?php echo KT_I18N::translate('Search'); ?>
 						</button>
 						<button class="btn btn-primary" onclick="addFields(); return false;">

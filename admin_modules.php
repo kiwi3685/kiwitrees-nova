@@ -161,7 +161,7 @@ $controller
 												}
 												echo $module->getTitle();
 												if ( $module instanceof KT_Module_Config && array_key_exists( $module_name, KT_Module::getActiveModules() ) ) {
-													echo ' <i class="' . $iconStyle . ' fa-cogs"></i></a>';
+													echo ' <i class="' . $iconStyle . ' fa-gears"></i></a>';
 												}
 											echo '</td>
 											<td>' . $module->getDescription() . '</td>

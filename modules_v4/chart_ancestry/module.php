@@ -105,7 +105,7 @@ class chart_ancestry_KT_Module extends KT_Module implements KT_Module_Chart {
 							>
 							<span class="input-group-label">
 								<button class="clearAutocomplete autocomplete_icon">
-									<i class="<?php echo $iconStyle; ?> fa-times"></i>
+									<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 								</button>
 							</span>
 						</div>

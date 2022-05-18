@@ -289,7 +289,7 @@ switch ($table) {
 		<div class="callout alert small"  data-closable>
 			<div class="grid-x">
 				<button class="close-button" aria-label="Dismiss alert" type="button" data-close>
-					<span aria-hidden="true"><i class="<?php echo $iconStyle; ?> fa-times"></i></span>
+					<span aria-hidden="true"><i class="<?php echo $iconStyle; ?> fa-xmark"></i></span>
 				</button>
 				<div class="cell">
 					<?php echo KT_I18N::translate('Due to privacy settings the number of items in this list may be less than the number on the statistics chart'); ?>

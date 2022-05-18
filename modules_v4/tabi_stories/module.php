@@ -409,7 +409,7 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 												>
 												<span class="input-group-label">
 													<button class="clearAutocomplete autocomplete_icon">
-														<i class="<?php echo $iconStyle; ?> fa-times"></i>
+														<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 													</button>
 												</span>
 											</div>
@@ -444,7 +444,7 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 									<?php echo KT_I18N::translate('Save'); ?>
 								</button>
 								<button class="button secondary" type="button" onclick="window.location=\'<?php echo $this->getConfigLink(); ?>\';">
-									<i class="<?php echo $iconStyle; ?> fa-times"></i>
+									<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 									<?php echo KT_I18N::translate('Cancel'); ?>
 								</button>
 							</form>

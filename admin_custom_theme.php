@@ -246,7 +246,7 @@ if ($action == 'save') {
 								<?php echo KT_I18N::translate('Save'); ?>
 							</button>
 							<a class="button secondary" href="<?php echo KT_SCRIPT_NAME; ?>">
-								<i class="<?php echo $iconStyle; ?> fa-times"></i>
+								<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 								<?php echo KT_I18N::translate('Cancel'); ?>
 							</a>
 						</div>

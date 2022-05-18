@@ -205,7 +205,7 @@ if ($action == 'choose' && $paramok) {
 							<?php echo KT_I18N::translate('Save'); ?>
 						</button>
 						<button class="btn btn-primary" type="button"  onclick="window.close();">
-							<i class="fas fa-times"></i>
+							<i class="fas fa-xmark"></i>
 							<?php echo KT_I18N::translate('close'); ?>
 						</button>
 					</p>
@@ -234,7 +234,7 @@ if ($action == 'choose' && $paramok) {
 							<?php echo KT_I18N::translate('Set link'); ?>
 						</button>
 						<button class="btn btn-primary" type="button" onclick="closePopupAndReloadParent();">
-							<i class="fas fa-times"></i>
+							<i class="fas fa-xmark"></i>
 							<?php echo KT_I18N::translate('close'); ?>
 						</button>
 					</p>
@@ -437,7 +437,7 @@ if ($action == 'choose' && $paramok) {
 					cellbtn.setAttribute('align', 'center');
 				var btnEl = document.createElement('a');
 					btnEl.setAttribute('href', '#');
-					btnEl.setAttribute('class', 'fa fa-times');
+					btnEl.setAttribute('class', 'fa fa-xmark');
 					btnEl.setAttribute('alt', remove);
 					btnEl.setAttribute('title', remove);
 					btnEl.onclick = function () {deleteCurrentRow(this)};

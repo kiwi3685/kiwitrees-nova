@@ -290,7 +290,7 @@ switch (KT_Filter::get('action')) {
 										<?php echo KT_I18N::translate('Go to this family tree'); ?>
 									</a>
 									<a class="button hollow" href="admin_trees_config.php?ged=<?php echo $tree->tree_name_url; ?>">
-										<i class="<?php echo $iconStyle; ?> fa-cogs"></i>
+										<i class="<?php echo $iconStyle; ?> fa-gears"></i>
 										<?php echo KT_I18N::translate('Configure this family tree'); ?>
 									</a>
 									<?php if (count(KT_Tree::GetAll()) > 1) { ?>

@@ -91,7 +91,7 @@ if (array_key_exists('ckeditor', KT_Module::getActiveModules())) {
 				<?php echo KT_I18N::translate('Save'); ?>
 			</button>
 			<button class="button secondary" type="button" onclick="window.location.href='index.php'">
-				<i class="<?php echo $iconStyle; ?> fa-times"></i>
+				<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 				<?php echo KT_I18N::translate('Cancel'); ?>
 			</button>
 		</form>

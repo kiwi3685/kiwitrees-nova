@@ -234,7 +234,7 @@ class research_links_KT_Module extends KT_Module implements KT_Module_Config, KT
 			$html = '<ul id="research_status">';
 				if (KT_USER_IS_ADMIN) {
 					$html .= '<a style="float:right;" href="module.php?mod=' . $this->getName() . '&amp;mod_action=admin_config" target="_blank" rel="noopener noreferrer" class="noprint">
-						<i class="' . $iconStyle . ' fa-cogs"></i>
+						<i class="' . $iconStyle . ' fa-gears"></i>
 					</a>';
 				}
 				$i = 0;
@@ -365,7 +365,7 @@ class research_links_KT_Module extends KT_Module implements KT_Module_Config, KT
 					<?php echo $controller->getPageTitle(); ?>
 					<?php if (KT_USER_IS_ADMIN) { ?>
 						<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_config" target="_blank" rel="noopener noreferrer" class="noprint">
-							<i class="<?php echo $iconStyle; ?> fa-cogs"></i>
+							<i class="<?php echo $iconStyle; ?> fa-gears"></i>
 						</a>
 					<?php } ?>
 				</h3>
@@ -385,7 +385,7 @@ class research_links_KT_Module extends KT_Module implements KT_Module_Config, KT
 								<input data-autocomplete-type="INDI" type="text" id="autocompleteInput" value="<?php echo strip_tags($person->getLifespanName()); ?>">
 								<span class="input-group-label">
 									<button class="clearAutocomplete autocomplete_icon">
-										<i class="<?php echo $iconStyle; ?> fa-times"></i>
+										<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 									</button>
 								</span>
 							</div>

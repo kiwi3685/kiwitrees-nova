@@ -203,7 +203,7 @@ class extra_menus_KT_Module extends KT_Module implements KT_Module_Menu, KT_Modu
 								<?php echo KT_I18N::translate('Save'); ?>
 							</button>
 							<button class="btn btn-primary cancel" type="button" onclick="window.location='<?php echo $this->getConfigLink(); ?>';" tabindex="8">
-								<i class="' . $iconStyle . ' fa-times"></i>
+								<i class="' . $iconStyle . ' fa-xmark"></i>
 								<?php echo KT_I18N::translate('cancel'); ?>
 							</button>
 						</p>

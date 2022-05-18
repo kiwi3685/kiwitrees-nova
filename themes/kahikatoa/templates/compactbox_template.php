@@ -36,7 +36,7 @@ if ($missing) { ?>
 				<?php echo $shortname; ?>
 			</a>
 			<button class="float-right clear tiny button show-for-medium" type="button" data-toggle="<?php echo $dataToggle; ?>">
-				<i class="<?php echo $iconStyle; ?> fa-search-plus fa-lg"></i>
+				<i class="<?php echo $iconStyle; ?> fa-magnifying-glass-plus fa-lg"></i>
 			</button>
 			<p class="dates"><small><?php echo $person->getLifeSpan(); ?></small></p>
 			<p class="places"><small><?php echo $birthplace; ?></small></p>

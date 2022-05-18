@@ -32,7 +32,7 @@ if (!defined('KT_KIWITREES')) {
 		<?php echo $title;
 		if (KT_USER_GEDCOM_ADMIN && $config) { ?>
 			<a href="block_edit.php?block_id=<?php echo $block_id; ?>&amp;ged=<?php echo $KT_TREE->tree_name_url; ?>" title="<?php echo KT_I18N::translate('Configure'); ?>">
-				<i class="<?php echo $iconStyle; ?> fa-cogs"></i>
+				<i class="<?php echo $iconStyle; ?> fa-gears"></i>
 			</a>
 		<?php } ?>
 	</div>

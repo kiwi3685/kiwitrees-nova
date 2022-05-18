@@ -31,7 +31,7 @@ if (!defined('KT_KIWITREES')) {
  *
  * @param string $title name of page
  */
-function pageStart($title, $pageTitle = '', $includeTitle = 'y') {
+function pageStart($title, $pageTitle = '', $includeTitle = 'y', $subTitle = '') {
 	$pageTitle ? $pageTitle = $pageTitle : $pageTitle = $title;
 
 	if ($includeTitle == 'n') {
@@ -40,10 +40,13 @@ function pageStart($title, $pageTitle = '', $includeTitle = 'y') {
 		$pageTitle = '<h3>' . $pageTitle . '</h3>';
 	}
 
+	if ($subTitle !== '') {
+		$subTitle = '<h4>' . $subTitle . '</h4>';
+	}
 	return '
 		<div id="' . strtolower($title) . '-page" class="grid-x grid-padding-x">
 			<div class="cell large-10 large-offset-1">' .
-				$pageTitle;
+				$pageTitle . $subTitle;
 
 	// function pageClose() must be added after content to close this div element
 }
@@ -53,8 +56,7 @@ function pageStart($title, $pageTitle = '', $includeTitle = 'y') {
  *
  */
 function pageClose() {
-	echo '
-		</div>
-			</div><!-- close pageStart  -->
+	echo '</div>
+		</div><!-- close pageStart  -->
 	';
 }

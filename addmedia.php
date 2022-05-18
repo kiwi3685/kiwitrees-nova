@@ -816,7 +816,7 @@ switch ($action) {
 				<?php echo KT_I18N::translate('Save'); ?>
 			</button>
 			<button class="btn btn-primary" type="button" onclick="window.close();">
-				<i class="<?php echo $iconStyle; ?> fa-times"></i>
+				<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 				<?php echo KT_I18N::translate('Cancel'); ?>
 			</button>
 		</p>

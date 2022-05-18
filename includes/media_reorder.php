@@ -161,7 +161,7 @@ $controller->addInlineJavascript('
 				<?php echo KT_I18N::translate('Save'); ?>
 			</button>
 			<button class="btn btn-primary" type="button" onclick="window.close();">
-				<i class="' . $iconStyle . ' fa-times"></i>
+				<i class="' . $iconStyle . ' fa-xmark"></i>
 				<?php echo KT_I18N::translate('close'); ?>
 			</button>
 		</p>

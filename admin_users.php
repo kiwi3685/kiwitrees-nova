@@ -862,7 +862,7 @@ switch (KT_Filter::get('action')) {
 																>
 																<span class="input-group-label">
 																	<button id="<?php echo $varname; ?>" class="adminClearAutocomplete autocomplete_icon">
-																		<i class="<?php echo $iconStyle; ?> fa-times"></i>
+																		<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 																	</button>
 																</span>
 															</div>
@@ -892,7 +892,7 @@ switch (KT_Filter::get('action')) {
 																>
 																<span class="input-group-label">
 																	<button id="<?php echo $varname; ?>" class="adminClearAutocomplete autocomplete_icon">
-																		<i class="<?php echo $iconStyle; ?> fa-times"></i>
+																		<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 																	</button>
 																</span>
 															</div>
@@ -945,7 +945,7 @@ switch (KT_Filter::get('action')) {
 								 <?php echo KT_I18N::translate('Save'); ?>
 							</button>
 							<button class="button hollow" type="button" onclick="window.location.href='<?php echo KT_SERVER_NAME . KT_SCRIPT_PATH .  KT_SCRIPT_NAME; ?>'">
-								<i class="<?php echo  $iconStyle; ?> fa-times"></i>
+								<i class="<?php echo  $iconStyle; ?> fa-xmark"></i>
 								<?php echo KT_I18N::translate('Close'); ?>
 							</button>
 						</div>

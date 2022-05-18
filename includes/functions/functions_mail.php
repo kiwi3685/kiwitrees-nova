@@ -162,7 +162,7 @@ function messageForm ($to, $from_name, $from_email, $subject, $body, $url, $to_n
 							<?php echo KT_I18N::translate('Send'); ?>
 						</button>
 						<button class="button secondary" type="button" onclick="window.location='<?php echo $url; ?>';">
-							<i class="<?php echo $iconStyle; ?> fa-times"></i>
+							<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 							<?php echo KT_I18N::translate('Cancel'); ?>
 						</button>
 					</div>

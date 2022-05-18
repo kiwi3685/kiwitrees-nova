@@ -104,7 +104,7 @@ function addchild() {
 		<h4><?php echo KT_I18N::translate('Add an unlinked person'); ?></h4>
 		<?php echo print_indi_form('addchildaction', '', '', '', 'CHIL', ''); ?>
 		<button class="button secondary" type="button" data-toggle="indi">
-			<i class="<?php echo $iconStyle; ?> fa-times"></i>
+			<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 			<?php echo KT_I18N::translate('Cancel'); ?>
 		</button>
 	</div>
@@ -137,7 +137,7 @@ function addnewnote() {
 				<?php echo KT_I18N::translate('Save'); ?>
 			</button>
 			<button class="button secondary" type="button" data-toggle="note">
-				<i class="<?php echo $iconStyle; ?> fa-times"></i>
+				<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 				<?php echo KT_I18N::translate('Cancel'); ?>
 			</button>
 		</form>

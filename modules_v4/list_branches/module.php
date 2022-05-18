@@ -105,7 +105,7 @@ class list_branches_KT_Module extends KT_Module implements KT_Module_List {
 								<input data-autocomplete-type="SURN" type="text" id="autocompleteInput" value="<?php echo KT_Filter::escapeHtml($controller->surn); ?>">
 								<span class="input-group-label">
 									<button class="clearAutocomplete autocomplete_icon">
-										<i class="<?php echo $iconStyle; ?> fa-times"></i>
+										<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 									</button>
 								</span>
 							</div>

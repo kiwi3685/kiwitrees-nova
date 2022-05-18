@@ -106,7 +106,7 @@ class report_tree_completeness_KT_Module extends KT_Module implements KT_Module_
 							>
 							<span class="input-group-label">
 								<button class="clearAutocomplete autocomplete_icon">
-									<i class="<?php echo $iconStyle; ?> fa-times"></i>
+									<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 								</button>
 							</span>
 						</div>
@@ -152,7 +152,7 @@ class report_tree_completeness_KT_Module extends KT_Module implements KT_Module_
 						if ($duplicates) { ?>
 						    <div class="callout warning" data-closable>
 						        <button class="close-button" aria-label="Close alert" type="button" data-close>
-						            <span aria-hidden="true"><i class="<?php echo $iconStyle; ?> fa-times"></i></span>
+						            <span aria-hidden="true"><i class="<?php echo $iconStyle; ?> fa-xmark"></i></span>
 						        </button>
 						        <h5><?php echo KT_I18N::translate('Pedigree collapse'); ?></h5>
 						        <p>
@@ -182,7 +182,7 @@ class report_tree_completeness_KT_Module extends KT_Module implements KT_Module_
 						    </div>
 						<?php } ?>
 
-						<table id="completenessTable">
+						<table class="shadow" id="completenessTable">
 							<thead>
 								<tr>
 									<th colspan="2" class="text-center"><?php echo KT_I18N::translate('Generation'); ?></th>

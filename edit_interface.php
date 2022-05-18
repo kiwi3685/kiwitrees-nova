@@ -351,7 +351,7 @@ switch ($action) {
 						<?php echo KT_I18N::translate('Save'); ?>
 					</button>
 					<button class="btn btn-primary" type="button"  onclick="window.close();">
-						<i class="fa fa-times"></i>
+						<i class="fa fa-xmark"></i>
 						<?php echo KT_I18N::translate('close'); ?>
 					</button>
 				</p>
@@ -510,7 +510,7 @@ switch ($action) {
 						<?php echo KT_I18N::translate('Save'); ?>
 					</button>
 					<button class="btn btn-primary" type="button"  onclick="window.close();">
-						<i class="fa fa-times"></i>
+						<i class="fa fa-xmark"></i>
 						<?php echo KT_I18N::translate('close'); ?>
 					</button>
 				</p>
@@ -581,7 +581,7 @@ switch ($action) {
 						<?php echo KT_I18N::translate('Save'); ?>
 					</button>
 					<button class="btn btn-primary" type="button"  onclick="window.close();">
-						<i class="fa fa-times"></i>
+						<i class="fa fa-xmark"></i>
 						<?php echo KT_I18N::translate('close'); ?>
 					</button>
 				</p>
@@ -846,7 +846,7 @@ switch ($action) {
 						<?php echo KT_I18N::translate('Save'); ?>
 					</button>
 					<button class="btn btn-primary" type="button"  onclick="window.close();">
-						<i class="fa fa-times"></i>
+						<i class="fa fa-xmark"></i>
 						<?php echo KT_I18N::translate('close'); ?>
 					</button>
 				</p>
@@ -993,7 +993,7 @@ switch ($action) {
 						<?php echo KT_I18N::translate('Save'); ?>
 					</button>
 					<button class="btn btn-primary" type="button"  onclick="window.close();">
-						<i class="fa fa-times"></i>
+						<i class="fa fa-xmark"></i>
 						<?php echo KT_I18N::translate('close'); ?>
 					</button>
 				</p>
@@ -1193,7 +1193,7 @@ switch ($action) {
 						<?php echo KT_I18N::translate('Save'); ?>
 					</button>
 					<button class="btn btn-primary" type="button"  onclick="window.close();">
-						<i class="fa fa-times"></i>
+						<i class="fa fa-xmark"></i>
 						<?php echo KT_I18N::translate('close'); ?>
 					</button>
 				</p>
@@ -1323,7 +1323,7 @@ switch ($action) {
 						<?php echo KT_I18N::translate('Save'); ?>
 					</button>
 					<button class="btn btn-primary" type="button"  onclick="window.close();">
-						<i class="fa fa-times"></i>
+						<i class="fa fa-xmark"></i>
 						<?php echo KT_I18N::translate('close'); ?>
 					</button>
 				</p>
@@ -2415,7 +2415,7 @@ switch ($action) {
 						<?php echo KT_I18N::translate('sort by date'); ?>
 					</button>
 					<button class="btn btn-primary" type="button" onclick="window.close();">
-						<i class="fa fa-times"></i>
+						<i class="fa fa-xmark"></i>
 						<?php echo KT_I18N::translate('close'); ?>
 					</button>
 				</p>
@@ -2569,7 +2569,7 @@ switch ($action) {
 						<?php echo KT_I18N::translate('Save'); ?>
 					</button>
 					<button class="btn btn-primary" type="button" onclick="window.close();">
-						<i class="fa fa-times"></i>
+						<i class="fa fa-xmark"></i>
 						<?php echo KT_I18N::translate('close'); ?>
 					</button>
 				</p>
@@ -2838,7 +2838,7 @@ switch ($action) {
 						<?php echo KT_I18N::translate('sort by date'); ?>
 					</button>
 					<button class="btn btn-primary" type="button" onclick="window.close();">
-						<i class="fa fa-times"></i>
+						<i class="fa fa-xmark"></i>
 						<?php echo KT_I18N::translate('close'); ?>
 					</button>
 				</p>
@@ -2952,7 +2952,7 @@ switch ($action) {
         $html .= '
 				<p id="save-cancel">
 					<button class="btn btn-primary" type="button" onclick="window.close();">
-						<i class="fa fa-times"></i> ' .
+						<i class="fa fa-xmark"></i> ' .
                         KT_I18N::translate('close') . '
 					</button>
 				</p>

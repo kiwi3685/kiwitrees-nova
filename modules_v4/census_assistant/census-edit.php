@@ -123,7 +123,7 @@ $modules = KT_Module::getActiveModules(); // necessary to avoid error if no favo
 					<?php echo KT_I18N::translate('Save'); ?>
 				</button>
 				<button class="btn btn-primary" type="button" onclick="window.close();">
-					<i class="' . $iconStyle . ' fa-times"></i>
+					<i class="' . $iconStyle . ' fa-xmark"></i>
 					<?php echo KT_I18N::translate('close'); ?>
 				</button>
 			</div>
@@ -139,7 +139,7 @@ $modules = KT_Module::getActiveModules(); // necessary to avoid error if no favo
 							<td colspan="3">
 								<input id="personid" type="text" placeholder="<?php echo /* I18N: Placeholder for census assistant search field */ KT_I18N::translate('Search for other people'); ?>">
 								<button type="button" onclick="findindi()">
-									<i class="' . $iconStyle . ' fa-search" title="<?php echo /* I18N: A button label. */ KT_I18N::translate('search'); ?>"></i>
+									<i class="' . $iconStyle . ' fa-magnifying-glass" title="<?php echo /* I18N: A button label. */ KT_I18N::translate('search'); ?>"></i>
 								</button>
 							</td>
 						</tr>

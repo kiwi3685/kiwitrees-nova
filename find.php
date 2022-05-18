@@ -780,7 +780,7 @@ $options["form"][]		= "formspecialchar";
 		<?php }
 	} ?>
 	<button class="button" onclick="window.close();">
-		<i class="<?php echo $iconStyle; ?> fa-times"></i>
+		<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 		<?php echo KT_I18N::translate('Close'); ?>
 	</button>
 

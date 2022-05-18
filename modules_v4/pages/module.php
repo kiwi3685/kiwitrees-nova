@@ -477,7 +477,7 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 										<?php echo KT_I18N::translate('Save'); ?>
 									</button>
 									<button class="button secondary" type="submit" onclick="window.location='<?php echo $this->getConfigLink(); ?>';">
-										<i class="<?php echo $iconStyle; ?> fa-times"></i>
+										<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 										<?php echo KT_I18N::translate('Cancel'); ?>
 									</button>
 								</div>

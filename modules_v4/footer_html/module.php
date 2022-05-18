@@ -63,7 +63,7 @@ class footer_html_KT_Module extends KT_Module implements KT_Module_Footer {
 				<h5>' . get_block_setting($block_id, 'header', $default_header) . '</h5>';
 				if (KT_USER_GEDCOM_ADMIN && $config) {
 					$content .= '<a class="configure" href="block_edit.php?block_id=' . $block_id . '&amp;ged=' . $KT_TREE->tree_name_url . '" title="' . KT_I18N::translate('Configure') . '">
-						<i class="' . $iconStyle . ' fa-cogs"></i>
+						<i class="' . $iconStyle . ' fa-gears"></i>
 					</a>';
 				}
 			$content .= '</div>

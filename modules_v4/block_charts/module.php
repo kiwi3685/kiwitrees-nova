@@ -212,7 +212,7 @@ class block_charts_KT_Module extends KT_Module implements KT_Module_Block {
 				<input data-autocomplete-type="INDI" type="text" id="autocompleteInput-favIndi" value="<?php echo strip_tags($root->getLifespanName()); ?>" placeholder="<?php echo KT_I18N::translate('Individual name'); ?>">
 				<span class="input-group-label">
 					<button class="clearAutocomplete autocomplete_icon">
-						<i class="<?php echo $iconStyle; ?> fa-times"></i>
+						<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 					</button>
 				</span>
 			</div>

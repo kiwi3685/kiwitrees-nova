@@ -73,7 +73,7 @@ class tabf_census_KT_Module extends KT_Module implements KT_Module_FamTab {
 		// $icon styles
 		$nothing	= '<i class="fa-xs '   . $iconStyle . ' fa-minus"></i>';
 		$correct	= '<i class="success ' . $iconStyle . ' fa-check"></i>';
-		$missing	= '<i class="alert '   . $iconStyle . ' fa-times"></i>';
+		$missing	= '<i class="alert '   . $iconStyle . ' fa-xmark"></i>';
 		$unknown	= '<i class="warning ' . $iconStyle . ' fa-question"></i>';
 
 		ob_start();

@@ -43,7 +43,7 @@ if ($missing) { ?>
 			</div>
 		</div>
 		<button class="button clear tiny show-for-medium" type="button" data-toggle="<?php echo $dataToggle; ?>">
-			<i class="<?php echo $iconStyle; ?> fa-search-plus fa-lg"></i>
+			<i class="<?php echo $iconStyle; ?> fa-magnifying-glass-plus fa-lg"></i>
 		</button>
 	</div>
 

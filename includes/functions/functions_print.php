@@ -637,7 +637,7 @@ function print_note_record($text, $nlevel, $nrec, $textOnly = false) {
 							' . $first_line . '<br>' . $html . '
 							<button class="close-button" data-close aria-label="' . KT_I18N::translate('Close') . '" type="button">
 								<span aria-hidden="true">
-									<i class="' . $iconStyle . ' fa-times"></i>
+									<i class="' . $iconStyle . ' fa-xmark"></i>
 								</span>
 							</button>
 						</div>
@@ -766,7 +766,7 @@ function helpDropdown($help_topic, $module = false) {
 		</span>
 		<div class="help-text reveal" id="' . $help_topic . '" data-reveal>
 			<button class="close-button" data-close aria-label="Close modal" type="button">
-				<span aria-hidden="true"><i class="' . $iconStyle . ' fa-times alert"></i></span>
+				<span aria-hidden="true"><i class="' . $iconStyle . ' fa-xmark alert"></i></span>
 			</button>
 			<div id="help-' . $help_topic . '"></div>
 		</div>

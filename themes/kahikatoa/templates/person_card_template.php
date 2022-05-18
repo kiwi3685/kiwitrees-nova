@@ -52,7 +52,7 @@ if (!defined('KT_KIWITREES')) {
 		<div class="cell notes text-center">
 			<?php if ($detailedView) { ?>
 				<button class="button clear small expanded show-for-medium" type="button" data-toggle="<?php echo $dataToggle; ?>">
-					<i class="<?php echo $iconStyle; ?> fa-search-plus fa-lg"></i>
+					<i class="<?php echo $iconStyle; ?> fa-magnifying-glass-plus fa-lg"></i>
 				</button>
 			<?php } ?>
 		</div>

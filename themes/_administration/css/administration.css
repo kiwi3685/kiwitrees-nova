@@ -10102,6 +10102,9 @@ body #admin-container {
 	margin-top: 0.125rem;
 	font-weight: 600;
 }
+#admin-container #admin-content #editplaces-page a.button#new_pl_name1, #admin-container #admin-content #editplaces-page a.button#new_pl_name2 {
+	white-space: nowrap;
+}
 #admin-container #admin-content #editplaces-page .precision span {
 	margin: 0 0.75rem;
 }

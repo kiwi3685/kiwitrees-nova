@@ -1084,7 +1084,7 @@ function print_indi_form($nextaction, $famid, $linenum='', $namerec='', $famtag=
 				</button>
 			<?php } ?>
 			<button class="btn btn-primary" type="button"  onclick="window.close();">
-				<i class="' . $iconStyle . ' fa-times"></i>
+				<i class="' . $iconStyle . ' fa-xmark"></i>
 				<?php echo KT_I18N::translate('close'); ?>
 			</button>
 			<button class="btn btn-primary" type="button" onclick="check_duplicates();" title="<?php /* I18N: button hover title */ KT_I18N::translate('Check for possible duplicates'); ?>">
@@ -1740,7 +1740,7 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 								>
 								<span class="input-group-label">
 									<button class="clearAutocomplete autocomplete_icon">
-										<i class="<?php echo $iconStyle; ?> fa-times"></i>
+										<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 									</button>
 								</span>
 							</div>
@@ -2989,7 +2989,7 @@ function submitButtons() {
 			 . KT_I18N::translate('Save') .
 		'</button>
 			<button class="button hollow" type="submit" onclick="window.close();">
-				<i class="' . $iconStyle . ' fa-times"></i>'
+				<i class="' . $iconStyle . ' fa-xmark"></i>'
 				 . KT_I18N::translate('Cancel') .
 			'</button>
 		</div>

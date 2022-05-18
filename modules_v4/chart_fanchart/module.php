@@ -118,7 +118,7 @@ class chart_fanchart_KT_Module extends KT_Module implements KT_Module_Chart {
 							<input data-autocomplete-type="INDI" type="text" id="autocompleteInput" value="<?php echo strip_tags($person->getLifespanName()); ?>">
 							<span class="input-group-label">
 								<button class="clearAutocomplete autocomplete_icon">
-									<i class="<?php echo $iconStyle; ?> fa-times"></i>
+									<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 								</button>
 							</span>
 						</div>

@@ -41,7 +41,7 @@ $controller
 		<input type="hidden" name="go" value="1">
 		<?php echo select_edit_control('ged', KT_Tree::getNameList(), null, KT_GEDCOM); ?>
 		<button type="submit" class="btn btn-primary">
-			<i class="fas fa-search"></i>
+			<i class="fas fa-magnifying-glass"></i>
 			<?php echo $controller->getPageTitle(); ?>
 		</button>
 	 </form>

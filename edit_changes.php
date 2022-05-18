@@ -237,7 +237,7 @@ if ($changed_gedcoms) {
 		echo $output2, $output, $output2; ?>
 		<p id="save-cancel">
 			<button class="btn btn-primary" type="button" onclick="window.close();">
-				<i class="fas fa-times"></i>
+				<i class="fas fa-xmark"></i>
 				<?php echo KT_I18N::translate('close'); ?>
 			</button>
 		</p>

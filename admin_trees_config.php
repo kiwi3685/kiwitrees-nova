@@ -415,7 +415,7 @@ global $iconstyles;
 									>
 									<span class="input-group-label">
 										<button class="clearAutocomplete autocomplete_icon">
-											<i class="<?php echo $iconStyle; ?> fa-times"></i>
+											<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 										</button>
 									</span>
 								</div>
@@ -629,7 +629,7 @@ global $iconstyles;
 								<?php echo KT_I18N::translate('Save'); ?>
 							</button>
 							<a class="button hollow" href="<?php echo KT_SCRIPT_NAME . '#general'; ?>">
-								<i class="<?php echo $iconStyle; ?> fa-times"></i>
+								<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 								<?php echo KT_I18N::translate('Cancel'); ?>
 							</a>
 						</div>
@@ -667,7 +667,7 @@ global $iconstyles;
 								<?php echo KT_I18N::translate('Save'); ?>
 							</button>
 							<a class="button hollow" href="<?php echo KT_SCRIPT_NAME . '#general'; ?>">
-								<i class="<?php echo $iconStyle; ?> fa-times"></i>
+								<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 								<?php echo KT_I18N::translate('Cancel'); ?>
 							</a>
 						</div>
@@ -801,7 +801,7 @@ global $iconstyles;
 															>
 															<span class="input-group-label">
 																<button class="clearAutocomplete autocomplete_icon">
-																	<i class="<?php echo $iconStyle; ?> fa-times"></i>
+																	<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 																</button>
 															</span>
 														</div>
@@ -871,7 +871,7 @@ global $iconstyles;
 								<?php echo KT_I18N::translate('Save'); ?>
 							</button>
 							<a class="button hollow" href="<?php echo KT_SCRIPT_NAME . '#general'; ?>">
-								<i class="<?php echo $iconStyle; ?> fa-times"></i>
+								<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 								<?php echo KT_I18N::translate('Cancel'); ?>
 							</a>
 						</div>
@@ -1014,7 +1014,7 @@ global $iconstyles;
 								<?php echo KT_I18N::translate('Save'); ?>
 							</button>
 							<a class="button hollow" href="<?php echo KT_SCRIPT_NAME . '#general'; ?>">
-								<i class="<?php echo $iconStyle; ?> fa-times"></i>
+								<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 								<?php echo KT_I18N::translate('Cancel'); ?>
 							</a>
 						</div>
@@ -1227,7 +1227,7 @@ global $iconstyles;
 								<?php echo KT_I18N::translate('Save'); ?>
 							</button>
 							<a class="button hollow" href="<?php echo KT_SCRIPT_NAME . '#layout'; ?>">
-								<i class="<?php echo $iconStyle; ?> fa-times"></i>
+								<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 								<?php echo KT_I18N::translate('Cancel'); ?>
 							</a>
 						</div>
@@ -1384,7 +1384,7 @@ global $iconstyles;
 								<?php echo KT_I18N::translate('Save'); ?>
 							</button>
 							<a class="button hollow" href="<?php echo KT_SCRIPT_NAME . '#hide'; ?>">
-								<i class="<?php echo $iconStyle; ?> fa-times"></i>
+								<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 								<?php echo KT_I18N::translate('Cancel'); ?>
 							</a>
 						</div>
@@ -1433,7 +1433,7 @@ global $iconstyles;
 								<?php echo KT_I18N::translate('Save'); ?>
 							</button>
 							<a class="button hollow" href="<?php echo KT_SCRIPT_NAME . '#edit'; ?>">
-								<i class="<?php echo $iconStyle; ?> fa-times"></i>
+								<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 								<?php echo KT_I18N::translate('Cancel'); ?>
 							</a>
 						</div>
@@ -1488,7 +1488,7 @@ global $iconstyles;
 								<?php echo KT_I18N::translate('Save'); ?>
 							</button>
 							<a class="button hollow" href="<?php echo KT_SCRIPT_NAME . '#theme'; ?>">
-								<i class="<?php echo $iconStyle; ?> fa-times"></i>
+								<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 								<?php echo KT_I18N::translate('Cancel'); ?>
 							</a>
 						</div>

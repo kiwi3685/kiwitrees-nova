@@ -87,7 +87,7 @@ $generations = array(
     -1 => KT_I18N::translate('All')
 );
 
-$false = '<i class="alert ' . $iconStyle . ' fa-times"></i>';
+$false = '<i class="alert ' . $iconStyle . ' fa-xmark"></i>';
 $true  = '<i class="success ' . $iconStyle . ' fa-check"></i>';
 ?>
 
@@ -112,7 +112,7 @@ $true  = '<i class="success ' . $iconStyle . ' fa-check"></i>';
                         <input data-autocomplete-type="INDI" type="text" id="autocompleteInput-missing" value="<?php echo $personName; ?>">
                         <span class="input-group-label">
                             <button class="clearAutocomplete autocomplete_icon">
-                                <i class="<?php echo $iconStyle; ?> fa-times"></i>
+                                <i class="<?php echo $iconStyle; ?> fa-xmark"></i>
                             </button>
                         </span>
                     </div>
