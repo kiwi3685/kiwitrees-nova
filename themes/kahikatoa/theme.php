@@ -39,7 +39,7 @@ $headerfile = KT_THEME_DIR . 'header.php';
  * @ far	= regular
  * @ fal	= light
  */
-$iconStyle	= 'far'; // fontawesome style set. Must also be changed in scss file
+$iconStyle	= 'fas'; // fontawesome style set. Must also be changed in scss file
 
 //- main icons
 $KT_IMAGES = array(
