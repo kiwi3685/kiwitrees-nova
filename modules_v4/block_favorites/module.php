@@ -259,7 +259,7 @@ class block_favorites_KT_Module extends KT_Module implements KT_Module_Block {
 						class="removeFavourite"
 						onclick="confirm(\'' . KT_I18N::translate('Are you sure you want to remove this?') . '\');">
 						<small>
-							<i class="' . $iconStyle . ' fa-trash-alt"></i>' . KT_I18N::translate('Remove') . '
+							<i class="' . $iconStyle . ' fa-trash-can"></i>' . KT_I18N::translate('Remove') . '
 						</small>
 					</a>
 				';

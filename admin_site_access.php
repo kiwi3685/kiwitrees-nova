@@ -357,7 +357,7 @@ KT_DB::exec(
 		</div>
 		<div class="cell">
 			<button type="submit" class="button" <?php echo 'onclick="if (confirm(\''.htmlspecialchars(KT_I18N::translate('Are you sure you want to delete all visitors not recognised?')).'\')) { document.location=\''.KT_SCRIPT_NAME.'?action=purge\'; }"';?> >
-				<i class="<?php echo $iconStyle; ?> fa-trash-alt"></i>
+				<i class="<?php echo $iconStyle; ?> fa-trash-can"></i>
 				<?php echo KT_I18N::translate('Delete'); ?>
 			</button>
 		</div>

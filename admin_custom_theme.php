@@ -234,7 +234,7 @@ if ($action == 'save') {
 							<a href="#" <?php echo 'onclick="if (confirm(\''.htmlspecialchars(KT_I18N::translate('Are you sure you want to delete this translation?')) . '\')) { document.location=\'' . KT_SCRIPT_NAME . '?delete=delete_file&amp;filename=' . $path . '\'; }"'; ?>>
 								<?php echo KT_I18N::translate('Delete this custom file'); ?>
 								&nbsp;
-								<i class="<?php echo $iconStyle; ?> fa-trash-alt" ></i>
+								<i class="<?php echo $iconStyle; ?> fa-trash-can" ></i>
 							</a>
 						</div>
 						<div class="cell large-10 large-offset-1" id="textarea">

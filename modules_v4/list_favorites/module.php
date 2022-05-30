@@ -405,7 +405,7 @@ class list_favorites_KT_Module extends KT_Module implements KT_Module_List {
 		$removeFavourite = '<a href="index.php?delete=deletefav&amp;favorite_id=' . $key . '"
 			onclick="return confirm(\'' . KT_I18N::translate('Are you sure you want to remove this?') . '\');">
 			<span>
-				<i class="' . $iconStyle . ' fa-trash-alt"></i>' . KT_I18N::translate('Remove') . '
+				<i class="' . $iconStyle . ' fa-trash-can"></i>' . KT_I18N::translate('Remove') . '
 			</span>
 		</a>';
 		return $removeFavourite;

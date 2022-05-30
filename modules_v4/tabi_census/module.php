@@ -119,7 +119,7 @@ class tabi_census_KT_Module extends KT_Module implements KT_Module_IndiTab {
 														</span>
 													</a>
 													<a class="button clear" onclick="return delete_fact('<?php echo $xref; ?>', <?php echo $fact->getLineNumber(); ?>, '', '<?php echo KT_I18N::translate('Are you sure you want to delete this fact?'); ?>');" title="<?php echo KT_I18N::translate('Delete'); ?>">
-														<i class="<?php echo $iconStyle; ?> fa-trash-alt"></i>
+														<i class="<?php echo $iconStyle; ?> fa-trash-can"></i>
 														<span class="link_text" tabindex="3">
 															<?php echo KT_I18N::translate('Delete'); ?>
 														</span>

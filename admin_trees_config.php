@@ -855,7 +855,7 @@ global $iconstyles;
 														</td>
 														<td>
 															<button type="submit" class="button" onClick="document.configform-privacy.elements['action'].value='delete';if (confirm('<?php echo htmlspecialchars(KT_I18N::translate('Are you sure you want to delete “%s”?', KT_Gedcom_Tag::getLabel($row->tag_type))); ?>')) { document.configform-privacy.elements['default_resn_id'].value='<?php echo $row->default_resn_id; ?>';document.configform-privacy.submit();}">
-																<i class="<?php echo $iconStyle; ?> fa-trash-alt"></i>
+																<i class="<?php echo $iconStyle; ?> fa-trash-can"></i>
 																<?php echo KT_I18N::translate('delete'); ?>
 															</button>
 														</td>

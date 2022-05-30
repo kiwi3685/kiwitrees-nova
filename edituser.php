@@ -198,7 +198,7 @@ function checkform(frm) {
 		</form>
 		<?php if (!KT_USER_IS_ADMIN) { ?>
 			<button class="button" onclick="if (confirm('<?php echo htmlspecialchars(KT_I18N::translate('Are you sure you want to delete “%s”?', KT_USER_NAME)); ?>')) {jQuery('#form_action').val('delete'); document.editform.submit(); }">
-				<i class="fas fa-trash-alt"></i>
+				<i class="fas fa-trash-can"></i>
 		<?php echo KT_I18N::translate('Delete your account'); ?>
 			</button>
 		<?php } ?>

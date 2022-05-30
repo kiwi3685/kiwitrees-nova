@@ -92,7 +92,7 @@ class custom_js_KT_Module extends KT_Module implements KT_Module_Config, KT_Modu
 						    <?php echo KT_I18N::translate('Reset'); ?>
 						</button>
 						<button class="button" type="button" onclick="clearFields()">
-						    <i class="<?php echo $iconStyle; ?> fa-trash-alt"></i>
+						    <i class="<?php echo $iconStyle; ?> fa-trash-can"></i>
 						    <?php echo KT_I18N::translate('clear'); ?>
 						</button>
 					</form>

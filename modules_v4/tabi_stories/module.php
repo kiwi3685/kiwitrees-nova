@@ -388,7 +388,7 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 														if ($person) { ?>
 															<p><?php echo $person->getLifespanName() ?></p>
 															<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=remove_indi&amp;indi_ref=<?php echo $xref[$x]; ?>&amp;block_id=<?php echo $block_id; ?>" class="current" onclick="return confirm(\'<?php echo KT_I18N::translate('Are you sure you want to remove this?'); ?>\');">
-																<i class="<?php echo $iconStyle; ?> fa-trash-alt"></i>
+																<i class="<?php echo $iconStyle; ?> fa-trash-can"></i>
 																<?php echo KT_I18N::translate('Remove'); ?>
 															</a>
 														<?php } ?>
@@ -595,7 +595,7 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 													</td>
 													<td class="text-center">
 														<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_delete&amp;block_id=<?php echo $story->block_id; ?>" onclick="return confirm(\'<?php echo KT_I18N::translate('Are you sure you want to delete this story?'); ?>\');">
-															<i class="<?php echo $iconStyle; ?> fa-trash-alt"></i>
+															<i class="<?php echo $iconStyle; ?> fa-trash-can"></i>
 														</a>
 													</td>
 													<?php if ($new_xref) { ?>

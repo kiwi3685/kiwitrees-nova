@@ -105,7 +105,7 @@ foreach (KT_Tree::getAll() as $tree) {
 				$dir->close(); ?>
 			</ul>
 			<button class="button" type="submit">
-				<i class="<?php echo $iconStyle; ?> fa-trash-alt"></i>
+				<i class="<?php echo $iconStyle; ?> fa-trash-can"></i>
 				<?php echo KT_I18N::translate('Delete'); ?>
 			</button>
 		</div>

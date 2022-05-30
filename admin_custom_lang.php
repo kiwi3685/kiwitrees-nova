@@ -190,7 +190,7 @@ $custom_lang = custom_texts($language);
 											<div class="update">
 												<?php echo KT_I18N::translate('Last updated ') . htmlspecialchars($value->updated) ; ?>
 												<div class="trash">
-													<?php echo '<i class="' . $iconStyle . ' fa-trash-alt" onclick="if (confirm(\''.htmlspecialchars(KT_I18N::translate('Are you sure you want to delete this translation?')) . '\')) { document.location=\'' . KT_SCRIPT_NAME . '?delete=delete_item&amp;custom_lang_id=' . $value->custom_lang_id.'&amp;action=translate&amp;language=' . $language . '\'; }"></i>'; ?>
+													<?php echo '<i class="' . $iconStyle . ' fa-trash-can" onclick="if (confirm(\''.htmlspecialchars(KT_I18N::translate('Are you sure you want to delete this translation?')) . '\')) { document.location=\'' . KT_SCRIPT_NAME . '?delete=delete_item&amp;custom_lang_id=' . $value->custom_lang_id.'&amp;action=translate&amp;language=' . $language . '\'; }"></i>'; ?>
 												</div>
 											</div>
 											<textarea name="custom_text_edit[<?php echo $value->custom_lang_id; ?>]"><?php echo htmlspecialchars($value->custom_text); ?></textarea>

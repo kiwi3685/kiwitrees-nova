@@ -264,7 +264,7 @@ switch (KT_Filter::get('action')) {
 			$aData[11] = $aData[11] ? KT_I18N::translate('yes') : KT_I18N::translate('no');
 			// Add extra column for "delete" action
 			if ($user_id != KT_USER_ID) {
-				$aData[12]='<div class="' . $iconStyle . ' fa-trash-alt" onclick="if (confirm(\''.htmlspecialchars(KT_I18N::translate('Are you sure you want to delete “%s”?', $username)).'\')) { document.location=\''.KT_SCRIPT_NAME.'?action=deleteuser&username='.htmlspecialchars($username).'\'; }"></div>';
+				$aData[12]='<div class="' . $iconStyle . ' fa-trash-can" onclick="if (confirm(\''.htmlspecialchars(KT_I18N::translate('Are you sure you want to delete “%s”?', $username)).'\')) { document.location=\''.KT_SCRIPT_NAME.'?action=deleteuser&username='.htmlspecialchars($username).'\'; }"></div>';
 			} else {
 				// Do not delete ourself!
 				$aData[12]='';

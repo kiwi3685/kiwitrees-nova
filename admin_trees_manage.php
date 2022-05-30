@@ -329,7 +329,7 @@ switch (KT_Filter::get('action')) {
 										<?php echo KT_I18N::translate('Export a GEDCOM file'); ?>
 									</a>
 									<a class="button hollow" href="#" onclick="if (confirm('<?php echo KT_I18N::translate('Are you sure you want to delete “%s”?', KT_Filter::escapeJs($tree->tree_title)); ?>')) { document.delete_form<?php echo $tree->tree_id; ?>.submit(); } return false;">
-										<i class="<?php echo $iconStyle; ?> fa-trash-alt"></i>
+										<i class="<?php echo $iconStyle; ?> fa-trash-can"></i>
 										<?php echo KT_I18N::translate('Delete this family tree'); ?>
 									</a>
 									<form name="delete_form<?php echo $tree->tree_id; ?>" method="post" action="<?php echo KT_SCRIPT_NAME; ?>">

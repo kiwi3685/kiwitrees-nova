@@ -261,7 +261,7 @@ $html = '<div id="fancy_treeview_descendants-config">
 									<input data-autocomplete-type="INDI" type="text" name="NEW_FTV_PID[' . $key.']" id="NEW_FTV_PID[' . $key.']" value="' . $FTV_ITEM['PID'] . '" size="5" maxlength="20">
 								</td>
 								<td>' . edit_field_access_level('NEW_FTV_ACCESS_LEVEL[' . $key.']', $FTV_ITEM['ACCESS_LEVEL']) . '</td>
-								<td><a href="module.php?mod=' . $this->getName() . '&amp;mod_action=admin_delete&amp;key=' . $key . '"><i class="' . $iconStyle . ' fa-trash-alt"/></i></td>
+								<td><a href="module.php?mod=' . $this->getName() . '&amp;mod_action=admin_delete&amp;key=' . $key . '"><i class="' . $iconStyle . ' fa-trash-can"/></i></td>
 							</tr>';
 						else:
 							$html .= '<tr>

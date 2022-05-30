@@ -262,7 +262,7 @@ uksort($users_array, 'strnatcasecmp');
 						<?php echo KT_I18N::translate('Search'); ?>
 					</button>
 					<button type="submit" class="button" <?php echo 'onclick="if (confirm(\'' . htmlspecialchars(KT_I18N::translate('Permanently delete these records?')) . '\')) {document.logs.action.value=\'delete\';return true;} else {return false;}"' . ($action=='show' ? '' : 'disabled="disabled"');?> >
-						<i class="<?php echo $iconStyle; ?> fa-trash-alt"></i>
+						<i class="<?php echo $iconStyle; ?> fa-trash-can"></i>
 						<?php echo KT_I18N::translate('Delete results'); ?>
 					</button>
 				</div>
