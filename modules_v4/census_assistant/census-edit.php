@@ -49,12 +49,12 @@ $modules = KT_Module::getActiveModules(); // necessary to avoid error if no favo
 ?>
 
 <div id="census_assist-page">
-    <h2><?php echo $controller->getPageTitle(); ?>
+    <h4><?php echo $controller->getPageTitle(); ?>
         <a class="faq_link" href="<?php echo KT_KIWITREES_URL; ?>/faqs/modules/census-assistant/" alt="<?php echo KT_I18N::translate('View FAQ for this page.'); ?>" target="_blank" rel="noopener noreferrer">
             <?php echo KT_I18N::translate('View FAQ for this page.'); ?>
-            <i class="' . $iconStyle . ' fa-comments"></i>
+            <i class="<?php echo $iconStyle; ?> fa-comments"></i>
         </a>
-    </h2>
+    </h4>
     <div>
 		<form method="post" action="edit_interface.php" onsubmit="updateCensusText();">
 			<input type="hidden" name="action" value="addnoteaction_assisted">
