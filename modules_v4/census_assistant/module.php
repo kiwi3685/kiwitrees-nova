@@ -258,11 +258,12 @@ class census_assistant_KT_Module extends KT_Module {
 	 * @return string
 	 */
 	public static function censusTableRow($census, KT_Person $individual, KT_Person $head = null) {
+		global $iconStyle;
 		$html = '';
 		foreach ($census->columns() as $column) {
 			$html .= '<td><input type="text" value="' . $column->generate($individual, $head) . '"></td>';
 		}
-		return '<tr><td style="display:none;">' . $individual->getXref() . '</td>' . $html . '<td class="delete"><a class="icon-delete" href="#" title="' . KT_I18N::translate('Remove') . '"></a></td></tr>';
+		return '<tr><td style="display:none;">' . $individual->getXref() . '</td>' . $html . '<td class="delete"><a class="icon-delete" href="#" title="' . KT_I18N::translate('Remove') . '"><i class="' . $iconStyle . ' fa-trash-can"></i></a></td></tr>';
 	}
 
 	/**
@@ -275,7 +276,8 @@ class census_assistant_KT_Module extends KT_Module {
 	 * @return string
 	 */
 	public static function censusNavigatorFamily(KT_Census_CensusInterface $census, KT_Family $family, KT_Person $head) {
-		$headImg2 = '<i class="icon-button_head" title="' . KT_I18N::translate('Click to choose person as Head of family.') . '"></i>';
+		global $iconStyle;
+		$headImg2 = '<i class="' .  $iconStyle . ' fa-house-user" title="' . KT_I18N::translate('Click to choose person as Head of family.') . '"></i>';
 
 		foreach ($family->getSpouses() as $spouse) {
 			$menu = new KT_Menu(getCloseRelationshipName($head, $spouse));

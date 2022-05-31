@@ -2574,6 +2574,16 @@ function create_add_form($fact) {
 
 	$tags = array();
 
+	$label = strtolower(KT_Gedcom_Tag::getLabel($fact));
+	?>
+	<!-- Sub-heading for edit_interface page -->
+	<h4>
+		<?php echo KT_I18N::translate('Adding %s data', $label); ?>
+	</h4>
+	<hr>
+	<!-- end heading -->
+	<?php
+
 	// handle  MARRiage TYPE
 	if (substr($fact, 0, 5) == "MARR_") {
 		$tags[0] = "MARR";

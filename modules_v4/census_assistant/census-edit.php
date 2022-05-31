@@ -38,7 +38,7 @@ $controller->restrictAccess($census instanceof KT_Census_CensusInterface);
 $date = new KT_Date($census->censusDate());
 $year = $date->minimumDate()->format('%Y');
 
-$headImg = '<i class="icon-button_head"></i>';
+$headImg = '<i class="' .  $iconStyle . ' fa-house-user"></i>';
 
 $controller
 	->setPageTitle(KT_I18N::translate('Create a shared note using the census assistant'))
@@ -48,63 +48,76 @@ $controller
 $modules = KT_Module::getActiveModules(); // necessary to avoid error if no favorites menu and no favorites.
 ?>
 
-<div id="census_assist-page">
-    <h4><?php echo $controller->getPageTitle(); ?>
-        <a class="faq_link" href="<?php echo KT_KIWITREES_URL; ?>/faqs/modules/census-assistant/" alt="<?php echo KT_I18N::translate('View FAQ for this page.'); ?>" target="_blank" rel="noopener noreferrer">
-            <?php echo KT_I18N::translate('View FAQ for this page.'); ?>
-            <i class="<?php echo $iconStyle; ?> fa-comments"></i>
-        </a>
-    </h4>
-    <div>
-		<form method="post" action="edit_interface.php" onsubmit="updateCensusText();">
-			<input type="hidden" name="action" value="addnoteaction_assisted">
-			<input id="pid_array" type="hidden" name="pid_array" value="none">
-			<input type="hidden" name="NOTE" id="NOTE">
+<div class="grid-x" id="census_assist-page">
+	<div class="cell">
+	    <h4><?php echo $controller->getPageTitle(); ?>
+	        <a class="faq_link" href="<?php echo KT_KIWITREES_URL; ?>/faqs/modules/census-assistant/" alt="<?php echo KT_I18N::translate('View FAQ for this page.'); ?>" target="_blank" rel="noopener noreferrer">
+	            <?php echo KT_I18N::translate('View FAQ for this page.'); ?>
+	            <i class="<?php echo $iconStyle; ?> fa-comments"></i>
+	        </a>
+	    </h4>
+	</div>
+	<form class="cell" method="post" action="edit_interface.php" onsubmit="updateCensusText();">
+		<input type="hidden" name="action" value="addnoteaction_assisted">
+		<input id="pid_array" type="hidden" name="pid_array" value="none">
+		<input type="hidden" name="NOTE" id="NOTE">
 
-			<?php echo KT_Filter::getCsrf(); ?>
-			<!-- Header of assistant window ===================================================== -->
-			<div class="cens_left">
-				<div class="cens_header">
-					<h3>
+		<?php echo KT_Filter::getCsrf(); ?>
+		<!-- Header of assistant window ===================================================== -->
+		<div class="grid-x grid-margin-x grid-margin-y">
+			<div class="cell medium-9">
+				<div class="grid-x grid-margin-x">
+					<h5 class="cell">
 						<?php echo KT_I18N::translate('Head of Household:') . '&nbsp;' . $head->getFullName(); ?>
-					</h3>
-					<div class="head_summary">
-						<?php echo $head->format_first_major_fact(KT_EVENTS_BIRT, 2);
+					</h5>
+					<!-- Summary data -->
+					<div class="cell callout secondary head_summary">
+						<?php echo $head->format_first_major_fact(KT_EVENTS_BIRT, 4);
 						if (!$head->isDead()) {
 							// If alive display age
 							$bdate = $head->getBirthDate();
 							$age = KT_Date::GetAgeGedcom($bdate);
 							if ($age != '') { ?>
-								<dl>
-									<dt class="label"><?php echo KT_I18N::translate('Age'); ?></dt>
-									<dd class="field"><?php echo get_age_at_event($age, true); ?></dd>
-								</dl>
+								<label class="h6">
+									<span class="label"><?php echo KT_I18N::translate('Age'); ?></span>
+									<span class="field"><?php echo get_age_at_event($age, true); ?></span>
+								</label>
 							<?php }
 						}
-						echo $head->format_first_major_fact(KT_EVENTS_DEAT, 2); ?>
-						<dl>
-							<dt class="label"><?php echo KT_I18N::translate('Census date'); ?></dt>
-							<dd class="field"><span class="date"><?php echo $date->display(); ?></span></dd>
-						</dl>
+						echo $head->format_first_major_fact(KT_EVENTS_DEAT, 4); ?>
+						<label class="h6">
+							<span class="label"><?php echo KT_I18N::translate('Census date'); ?></span>
+							<span class="field"><?php echo $date->display(); ?></span>
+						</label>
 					</div>
 				</div>
 				<!-- Census source -->
-				<div class="cens_container">
-					<div class="input_group">
-						<label for="Titl"><?php echo KT_I18N::translate('Title'); ?></label>
-						<input id="Titl" type="text" value="<?php echo $year . ' ' . $census->censusPlace() . ' - ' . KT_I18N::translate('Census transcript') . ' - ' . strip_tags($head->getFullName()) . ' - ' . KT_I18N::translate('Household'); ?>">
-					</div>
-					<div class="input_group">
-						<label for="citation"><?php echo KT_Gedcom_Tag::getLabel('PAGE'); ?></label>
-						<input id="citation" type="text">
-					</div>
-					<div class="input_group">
-						<label for="locality"><?php echo KT_I18N::translate('Place'); ?></label>
-						<input id="locality" type="text">
-					</div>
-					<div class="input_group">
-						<label for="notes"><?php echo KT_I18N::translate('Notes'); ?></label>
-						<input id="notes" type="text">
+				<div class="callout secondary cens_source">
+					<div class="grid-x grid-margin-x">
+						<div class="cell medium-2">
+							<label class="h6 cell medium-4" for="Titl"><?php echo KT_I18N::translate('Title'); ?></label>
+						</div>
+						<div class="cell medium-10">
+							<input id="Titl" type="text" value="<?php echo $year . ' ' . $census->censusPlace() . ' - ' . KT_I18N::translate('Census transcript') . ' - ' . strip_tags($head->getFullName()) . ' - ' . KT_I18N::translate('Household'); ?>">
+						</div>
+						<div class="cell medium-2">
+							<label class="h6 cell medium-4" for="citation"><?php echo KT_Gedcom_Tag::getLabel('PAGE'); ?></label>
+						</div>
+						<div class="cell medium-10">
+							<input id="citation" type="text">
+						</div>
+						<div class="cell medium-2">
+							<label class="h6 cell medium-4" for="locality"><?php echo KT_I18N::translate('Place'); ?></label>
+						</div>
+						<div class="cell medium-10">
+							<input id="locality" type="text">
+						</div>
+						<div class="cell medium-2">
+							<label class="h6 cell medium-4" class="h6 cell medium-4" for="notes"><?php echo KT_I18N::translate('Notes'); ?></label>
+						</div>
+						<div class="cell medium-10">
+							<input id="notes" type="text">
+						</div>
 					</div>
 				</div>
 				<!--  Census data -->
@@ -118,42 +131,42 @@ $modules = KT_Module::getActiveModules(); // necessary to avoid error if no favo
 						</tbody>
 					</table>
 				</div>
-				<button class="btn btn-primary" type="submit" onclick="caSave();" >
-					<i class="' . $iconStyle . ' fa-save"></i>
-					<?php echo KT_I18N::translate('Save'); ?>
-				</button>
-				<button class="btn btn-primary" type="button" onclick="window.close();">
-					<i class="' . $iconStyle . ' fa-xmark"></i>
-					<?php echo KT_I18N::translate('close'); ?>
-				</button>
-			</div>
-			<div class="cens_right">
-				<!-- Search  and Add Family Members Area ============================================ -->
-				<h3>
-					<?php echo KT_I18N::translate('Add individuals'); ?>
-				</h3>
 
+				<?php echo submitButtons(); ?>
+
+			</div>
+			<div class="cell medium-3">
+				<!-- Search  and Add Family Members Area ============================================ -->
+				<h5>
+					<?php echo KT_I18N::translate('Add individuals'); ?>
+				</h5>
 				<div class="census-assistant-search">
-					<table>
+					<table class="nav_content">
 						<tr>
 							<td colspan="3">
-								<input id="personid" type="text" placeholder="<?php echo /* I18N: Placeholder for census assistant search field */ KT_I18N::translate('Search for other people'); ?>">
-								<button type="button" onclick="findindi()">
-									<i class="' . $iconStyle . ' fa-magnifying-glass" title="<?php echo /* I18N: A button label. */ KT_I18N::translate('search'); ?>"></i>
-								</button>
+								<div class="input-group">
+									<input id="personid" type="text" placeholder="<?php echo /* I18N: Placeholder for census assistant search field */ KT_I18N::translate('Search for other people'); ?>">
+									<span class="input-group-label">
+										<i
+											onclick="findindi()"
+											class="<?php echo $iconStyle; ?> fa-magnifying-glass"
+											title="<?php echo /* I18N: A button label. */ KT_I18N::translate('search'); ?>"
+										>
+										</i>
+									</span>
+								</div>
 							</td>
 						</tr>
 						<tr>
 							<td colspan="3">
-								<button type="button" onclick="return appendCensusRow('<?php echo KT_Filter::escapeHtml(census_assistant_KT_Module::censusTableEmptyRow($census)); ?>');">
+								<button class="button hollow" type="button" onclick="return appendCensusRow('<?php echo KT_Filter::escapeHtml(census_assistant_KT_Module::censusTableEmptyRow($census)); ?>');">
 									<?php echo KT_I18N::translate('Add a blank row'); ?>
 								</button>
 							</td>
 						</tr>
 						<tr>
 							<td colspan="3">
-								<?php $headImg  = '<i class="icon-button_head"></i>';
-								echo KT_I18N::translate('Click %s to choose person as Head of family.', $headImg); ?>
+								<?php echo KT_I18N::translate('Click %s to choose person as Head of family.', $headImg); ?>
 							</td>
 						</tr>
 						<?php foreach ($head->getChildFamilies() as $family) {
@@ -171,11 +184,12 @@ $modules = KT_Module::getActiveModules(); // necessary to avoid error if no favo
 					</table>
 				</div>
 			</div>
-		</form>
-	</div>
+		</div>
+	</form>
 </div>
-<script>
 
+<!-- FUNCTIONS -->
+<script>
 	function findindi() {
 		var findInput = document.getElementById('personid');
 		var txt = findInput.value;

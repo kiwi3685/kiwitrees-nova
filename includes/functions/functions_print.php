@@ -1385,7 +1385,7 @@ function print_specialchar_link($element_id) {
 	global $iconStyle;
 	return '
 		<span onclick="findSpecialChar(document.getElementById(\'' . $element_id . '\')); if (window.updatewholename) { updatewholename(); } return false;" title="'.KT_I18N::translate('Find a special character').'">
-			<i class="' . $iconStyle . ' fa-keyboard"></i>
+			<i class="' . $iconStyle . ' fa-keyboard fa-fw"></i>
 		</span>';
 }
 

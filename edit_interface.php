@@ -238,7 +238,7 @@ switch ($action) {
 		<div id="edit_interface-page" class="grid-x grid-padding-x">
 			<div class="cell large-10 large-offset-1">
 				<h3><?php echo $controller->getPageTitle(); ?></h3>
-                
+
 				<?php init_calendar_popup(); ?>
 				<form name="editform" method="post" action="edit_interface.php" enctype="multipart/form-data">
 					<input type="hidden" name="action" value="update">
@@ -249,7 +249,7 @@ switch ($action) {
 
 					<?php echo no_update_chan($record); ?>
 
-					<ul class="accordion" data-accordion data-allow-all-closed="true" data-multi-expand="true">
+					<ul class="accordion" data-accordion data-allow-all-closed="true" data-multi-expand="true" TEST>
 						<?php switch ($level0type) {
                             case 'OBJE':
                             case 'NOTE':
@@ -308,55 +308,53 @@ switch ($action) {
         $record = KT_GedcomRecord::getInstance($pid);
 
         $controller
-            ->setPageTitle(KT_I18N::translate('Add new fact') . ' - ' . KT_Gedcom_Tag::getLabel($fact, $record) . ' - ' . ($type == 'INDI' ? $record->getLifespanName() : $record->getFullName()))
+            ->setPageTitle($type == 'INDI' ? $record->getLifespanName() : $record->getFullName())
             ->pageHeader();
         ?>
-		<div id="edit_interface-page">
-			<h2><?php echo $controller->getPageTitle(); ?></h2>
-			<?php echo init_calendar_popup(); ?>
-			<form name="addform" method="post" action="edit_interface.php" enctype="multipart/form-data">
-				<input type="hidden" name="action" value="update">
-				<input type="hidden" name="linenum" value="new">
-				<input type="hidden" name="pid" value="<?php echo $pid; ?>">
-				<div id="add_facts">
-					<?php
-                    echo create_add_form($fact);
-                    echo no_update_chan($record);
-                    ?>
-				</div>
-				<?php // Genealogical facts (e.g. for INDI and FAM records) can have 2 SOUR/NOTE/OBJE/ASSO/RESN ...
-                if ($level0type === 'INDI' || $level0type === 'FAM') { ?>
-					<div id="additional_facts">
-						<?php // ... but not facts which are simply links to other records
-                        if ($fact !== 'OBJE' && $fact !== 'NOTE' && $fact !== 'SHARED_NOTE' && $fact !== 'REPO' && $fact !== 'SOUR' && $fact !== 'ASSO' && $fact !== 'ALIA') {
-                            echo '<p>' . print_add_layer('SOUR') . '</p>';
-                            echo '<p>' . print_add_layer('OBJE') . '</p>';
-                            // Don't add notes to notes!
-                            if ($fact != 'NOTE') {
-                                echo '<p>' . print_add_layer('NOTE') . '</p>';
-                                echo '<p>' . print_add_layer('SHARED_NOTE') . '</p>';
-                            }
-                            echo '<p>' . print_add_layer('ASSO') . '</p>';
-                            // allow to add godfather and godmother for CHR fact or best man and bridesmaid for MARR fact in one window
-                            if ($fact === 'BAPM' || $fact === 'CHR' || $fact === 'MARR') {
-                                echo '<p>' . print_add_layer('ASSO2') . '</p>';
-                            }
-                            echo '<p>' . print_add_layer('RESN') . '</p>';
-                        } ?>
-					</div>
-				<?php } ?>
-				<p id="save-cancel">
-					<button class="btn btn-primary" type="submit">
-						<i class="fa fa-save"></i>
-						<?php echo KT_I18N::translate('Save'); ?>
-					</button>
-					<button class="btn btn-primary" type="button"  onclick="window.close();">
-						<i class="fa fa-xmark"></i>
-						<?php echo KT_I18N::translate('close'); ?>
-					</button>
-				</p>
-			</form>
-		</div> <!-- id="edit_interface-page" -->
+
+        <div id="edit_interface-page" class="grid-x grid-padding-x">
+			<div class="cell large-10 large-offset-1">
+				<h3><?php echo $controller->getPageTitle(); ?></h3>
+
+				<?php init_calendar_popup(); ?>
+    			<form name="addform" method="post" action="edit_interface.php" enctype="multipart/form-data">
+    				<input type="hidden" name="action" value="update">
+    				<input type="hidden" name="linenum" value="new">
+    				<input type="hidden" name="pid" value="<?php echo $pid; ?>">
+    				<div id="add_facts">
+    					<?php
+                        echo create_add_form($fact);
+                        echo no_update_chan($record);
+                        ?>
+    				</div>
+    				<?php // Genealogical facts (e.g. for INDI and FAM records) can have 2 SOUR/NOTE/OBJE/ASSO/RESN ...
+                    if ($level0type === 'INDI' || $level0type === 'FAM') { ?>
+    					<div id="additional_facts">
+                            <ul class="accordion" data-accordion data-allow-all-closed="true" data-multi-expand="true">
+        						<?php // ... but not facts which are simply links to other records
+                                if ($fact !== 'OBJE' && $fact !== 'NOTE' && $fact !== 'SHARED_NOTE' && $fact !== 'REPO' && $fact !== 'SOUR' && $fact !== 'ASSO' && $fact !== 'ALIA') {
+                                    print_add_layer('SOUR');
+                                    print_add_layer('OBJE');
+                                    // Don't add notes to notes!
+                                    if ($fact != 'NOTE') {
+                                        print_add_layer('NOTE');
+                                        print_add_layer('SHARED_NOTE');
+                                    }
+                                    print_add_layer('ASSO');
+                                    // allow to add godfather and godmother for CHR fact or best man and bridesmaid for MARR fact in one window
+                                    if ($fact === 'BAPM' || $fact === 'CHR' || $fact === 'MARR') {
+                                        print_add_layer('ASSO2');
+                                    }
+                                    print_add_layer('RESN');
+                                } ?>
+                            </ul>
+    					</div>
+    				<?php } ?>
+                    <?php echo submitButtons(); ?>
+    			</form>
+		        </div>
+            </div>
+        </div>
 		<?php
         break;
 
@@ -376,7 +374,7 @@ switch ($action) {
         ?>
 
 		<div id="edit_interface-page">
-			<h2><?php echo $controller->getPageTitle(); ?></h2>
+			<h4><?php echo $controller->getPageTitle(); ?></h4>
 			<?php echo print_indi_form('addchildaction', $famid, '', '', 'CHIL', $gender); ?>
 		</div> <!-- id="edit_interface-page" -->
 		<?php
@@ -395,7 +393,7 @@ switch ($action) {
         $controller->pageHeader();
         ?>
 		<div id="edit_interface-page">
-			<h2><?php echo $controller->getPageTitle(); ?></h2>
+			<h4><?php echo $controller->getPageTitle(); ?></h4>
 			<?php echo print_indi_form('addspouseaction', $famid, '', '', $famtag); ?>
 		</div> <!-- id="edit_interface-page" -->
 		<?php
@@ -425,7 +423,7 @@ switch ($action) {
         ?>
 
 		<div id="edit_interface-page">
-			<h2><?php echo $controller->getPageTitle(); ?></h2>
+			<h4><?php echo $controller->getPageTitle(); ?></h4>
 			<?php echo print_indi_form('addnewparentaction', $famid, '', '', $famtag); ?>
 		</div> <!-- id="edit_interface-page" -->
 		<?php
@@ -442,7 +440,7 @@ switch ($action) {
             ->pageHeader();
         ?>
 		<div id="edit_interface-page">
-			<h2><?php echo $controller->getPageTitle(); ?></h2>
+			<h4><?php echo $controller->getPageTitle(); ?></h4>
 			<?php echo print_indi_form('addopfchildaction', $famid, '', '', 'CHIL'); ?>
 		</div> <!-- id="edit_interface-page" -->
 		<?php
@@ -463,7 +461,7 @@ switch ($action) {
         $controller->pageHeader();
         ?>
 		<div id="edit_interface-page">
-			<h2><?php echo $controller->getPageTitle(); ?></h2>
+			<h4><?php echo $controller->getPageTitle(); ?></h4>
 
 			<form method="post" name="addchildform" action="edit_interface.php">
 				<input type="hidden" name="action" value="linkfamaction">
@@ -532,7 +530,7 @@ switch ($action) {
         $controller->pageHeader();
         ?>
 		<div id="edit_interface-page">
-			<h2><?php echo $controller->getPageTitle(); ?></h2>
+			<h4><?php echo $controller->getPageTitle(); ?></h4>
 
 			<?php echo init_calendar_popup(); ?>
 			<form method="post" name="addchildform" action="edit_interface.php">
@@ -696,7 +694,7 @@ switch ($action) {
 		</script>
 
 		<div id="edit_interface-page">
-			<h2><?php echo $controller->getPageTitle(); ?></h2>
+			<h4><?php echo $controller->getPageTitle(); ?></h4>
 			<form method="post" action="edit_interface.php" onsubmit="return check_form(this);">
 				<input type="hidden" name="action" value="addsourceaction">
 				<input type="hidden" name="pid" value="newsour">
@@ -952,7 +950,7 @@ switch ($action) {
         ?>
 
 		<div id="edit_interface-page">
-			<h2><?php echo $controller->getPageTitle(); ?></h2>
+			<h4><?php echo $controller->getPageTitle(); ?></h4>
 			<form method="post" action="edit_interface.php" onsubmit="return check_form(this);">
 				<input type="hidden" name="action" value="addnoteaction">
 				<input type="hidden" name="noteid" value="newnote">
@@ -1110,8 +1108,10 @@ switch ($action) {
 
     					<?php echo no_update_chan(); ?>
 
+                        <?php echo print_add_layer("OBJE"); ?>
+
     				</div>
-                    <ul class="accordion" data-accordion="y6a1xd-accordion" data-allow-all-closed="true" data-multi-expand="true">
+                    <ul class="accordion" data-accordion data-allow-all-closed="true" data-multi-expand="true">
     					<!--  Add new source to fact -->
     					<?php
                         print_add_layer("OBJE");
@@ -1152,7 +1152,7 @@ switch ($action) {
         ?>
 
 		<div id="edit_interface-page">
-			<h2><?php echo $controller->getPageTitle(); ?></h2>
+			<h4><?php echo $controller->getPageTitle(); ?></h4>
 			<form method="post" action="edit_interface.php" >
 				<input type="hidden" name="action" value="update">
 				<input type="hidden" name="pid" value="<?php echo $pid; ?>">
@@ -1224,7 +1224,7 @@ switch ($action) {
 		</script>
 
 		<div id="edit_interface-page">
-			<h2><?php echo $controller->getPageTitle(); ?></h2>
+			<h4><?php echo $controller->getPageTitle(); ?></h4>
 			<form method="post" action="edit_interface.php" onsubmit="return check_form(this);">
 				<input type="hidden" name="action" value="addrepoaction">
 				<input type="hidden" name="pid" value="newrepo">
@@ -2224,7 +2224,7 @@ switch ($action) {
         ?>
 
 		<div id="edit_interface-page">
-			<h2><?php echo $controller->getPageTitle(); ?></h2>
+			<h4><?php echo $controller->getPageTitle(); ?></h4>
 			<?php
                 $person = KT_Person::getInstance($pid);
                 print_indi_form('update', '', 'new', 'NEW', '', $person->getSex());
@@ -2355,7 +2355,7 @@ switch ($action) {
         ?>
 
 		<div id="edit_interface-page">
-			<h2><?php echo $controller->getPageTitle(); ?></h2>
+			<h4><?php echo $controller->getPageTitle(); ?></h4>
 			<span class="help_content">
 				<?php echo KT_I18N::translate('Either click the "sort by date" button or click a row then drag-and-drop to re-order.'); ?>
 			</span>
@@ -2448,7 +2448,7 @@ switch ($action) {
         ?>
 
 		<div id="edit_interface-page">
-			<h2><?php echo $controller->getPageTitle(); ?></h2>
+			<h4><?php echo $controller->getPageTitle(); ?></h4>
 			<div class="help_text">
 				<p class="helpcontent">
 					<?php echo KT_I18N::translate('For family member you can use the "Select person" field to choose a different person from your tree to fill that role or add someone if the role is empty. Tick the Remove option to delete that person from the family. Click "Add a child" to create fields for more children.'); ?>
@@ -2802,7 +2802,7 @@ switch ($action) {
             ->pageHeader();
         ?>
 		<div id="edit_interface-page">
-			<h2><?php echo $controller->getPageTitle(); ?></h2>
+			<h4><?php echo $controller->getPageTitle(); ?></h4>
 			<span class="help_content">
 				<?php echo KT_I18N::translate('Either click the "sort by date" button or click a row then drag-and-drop to re-order.'); ?>
 			</span>

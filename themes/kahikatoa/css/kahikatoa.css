@@ -813,7 +813,7 @@ ul ul, ul ol, ol ul, ol ol {
 }
 
 dl {
-	margin-bottom: 1rem;
+	margin-bottom: 0;
 }
 dl dt {
 	margin-bottom: 0.3rem;
@@ -9259,6 +9259,7 @@ div [id$=_description] {
 	color: #0193b7;
 }
 
+/*-------------*/
 .radius {
 	border-radius: 0.1875rem;
 }
@@ -9276,7 +9277,10 @@ div [id$=_description] {
 }
 
 button .svg-inline--fa {
-	margin: 0 0.5rem 0 0;
+	margin: 0 0.5rem -0.1rem 0;
+}
+button.primary .svg-inline--fa {
+	color: #fffff4;
 }
 
 .button:hover svg, a:hover svg {
@@ -9294,6 +9298,12 @@ button .svg-inline--fa {
 }
 .first-line.is-shown {
 	display: none;
+}
+
+a.faq_link {
+	float: right;
+	font-size: 0.9rem;
+	padding: 0 1.25rem;
 }
 
 .search_hit {
@@ -9421,6 +9431,7 @@ nav .top-bar.second-top-bar .main-menu {
 	padding-top: 3rem;
 }
 nav .top-bar.second-top-bar .main-menu ul.menu.dropdown li .svg-inline--fa {
+	color: #fffff4;
 	font-size: 1.5rem;
 	margin: 0 auto 0.25rem;
 }
@@ -9904,6 +9915,9 @@ div[id$=-page] button[type=submit] {
 	font-size: 90%;
 	text-align: justify;
 }
+#indi-page .tabs-panel #tabi_dna_content hr {
+	border: solid 0.025rem #faf5e8;
+}
 #indi-page .tabs-panel #tabi_dna_content div#dnaTable_wrapper table.dataTable thead tr th.sorting,
 #indi-page .tabs-panel #tabi_dna_content div#dnaTable_wrapper table.dataTable thead tr th.sorting_asc,
 #indi-page .tabs-panel #tabi_dna_content div#dnaTable_wrapper table.dataTable thead tr th.sorting_desc {
@@ -9945,9 +9959,6 @@ div[id$=-page] button[type=submit] {
 #indi-page .tabs-panel .histo {
 	background-color: #faf5e8;
 	color: #0193b7;
-}
-#indi-page .tabs-panel #tabi_dna_content hr {
-	border: solid 0.025rem #faf5e8;
 }
 #indi-page .tabs-panel .census_text table {
 	font-size: 95%;
@@ -10240,6 +10251,72 @@ div[id$=-page] button[type=submit] {
 	margin-top: 0.5rem;
 }
 
+#census_assist-page .head_summary label {
+	margin-bottom: 0;
+	padding-top: 0;
+}
+#census_assist-page .head_summary label span.label {
+	background: transparent;
+	color: #331919;
+	font-size: 1rem;
+	width: 12rem;
+}
+#census_assist-page .head_summary label span.field {
+	font-size: 0.95rem;
+	font-weight: 400;
+	margin-left: 1rem;
+}
+#census_assist-page .cens_source input {
+	font-size: 0.95rem;
+	margin-bottom: 0;
+}
+#census_assist-page .census-assistant-search {
+	font-size: 0.9rem;
+}
+#census_assist-page .census-assistant-search .nav_content .famnavTitleContainer {
+	border-bottom: 0.075rem solid #ab3334;
+	border-top: 0.075rem solid #ab3334;
+	font-size: 0.95rem;
+	font-weight: 700;
+}
+#census_assist-page .census-assistant-search .nav_content .lifeSpan {
+	font-size: 0.7rem;
+}
+#census_assist-page .census-assistant-search .nav_content .submenu {
+	background-color: #faf5e8;
+	box-shadow: rgba(0, 0, 0, 0.16) 0px 5px 18px 0px, rgba(0, 0, 0, 0.1) 0px 0px 0px 1px;
+	font-size: 0.75rem;
+	padding: 0.5rem;
+}
+#census_assist-page .census-assistant-search .nav_content .submenu span.NAME:hover {
+	opacity: 0.4;
+}
+#census_assist-page .census-assistant-search input {
+	margin: 0;
+}
+#census_assist-page .table-census-inputs {
+	font-size: 0.95rem;
+}
+#census_assist-page .table-census-inputs thead,
+#census_assist-page .table-census-inputs tbody,
+#census_assist-page .table-census-inputs tfoot {
+	background-color: #e0e0e0;
+}
+#census_assist-page .table-census-inputs tbody tr {
+	background-color: #e0e0e0;
+}
+#census_assist-page .table-census-inputs tbody tr td {
+	padding: 0;
+}
+#census_assist-page .table-census-inputs tbody tr td input {
+	font-size: 0.95rem;
+	margin: 0;
+}
+#census_assist-page .table-census-inputs tbody tr td.delete {
+	background-color: transparent;
+	padding: 0 0 0 0.5rem;
+}
+
 #compact-page table.unstriped {
 	width: 100%;
 	text-align: center;
@@ -10298,7 +10375,7 @@ div[id$=-page] button[type=submit] {
 }
 #edit_interface-page .popup_links {
 	font-size: 1.25rem;
-	padding-top: 0.25rem;
+	padding: 0.25rem 0.25rem 0;
 }
 #edit_interface-page .popup_links a {
 	color: #331919;
@@ -11068,8 +11145,8 @@ div.last_change label {
 
 /* Icon settings */
 .svg-inline--fa {
-	color: #faf5e8;
-	margin: 0.25rem 0.5rem 0 0.75rem;
+	color: #ab3334;
+	margin: 0.25rem 0.5rem 0 0;
 }
 .svg-inline--fa.success {
 	color: #3adb76;

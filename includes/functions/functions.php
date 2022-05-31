@@ -1005,10 +1005,11 @@ function get_relationship_name($nodes) {
  * @return string
  */
 function getCloseRelationshipName(KT_Person $individual1, KT_Person $individual2, $family = '') {
+	global $iconStyle;
 	$family ? $include_pedi = true : $include_pedi = false;
 
 	if ($individual1->getXref() === $individual2->getXref()) {
-		$label = '<i class="icon-selected"></i>' . reflexivePronoun($individual1);
+		$label = '<i class="' . $iconStyle . ' fa-check success"></i>' . reflexivePronoun($individual1);
 	} else {
 		$label = get_relationship_name(get_relationship($individual1, $individual2));
 	}
