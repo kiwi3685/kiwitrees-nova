@@ -671,8 +671,9 @@ class KT_GedcomRecord {
 						return ' (<em>' . KT_Gedcom_Tag::getAbbreviation($event->getTag()) . ' ' . format_fact_date($event, $this, false, false) . '</em>)';
 					case 4:
 						return '
-							<label class="h6 text-left">' . $event->getLabel() . '
-								<span> ' . format_fact_date($event, $this, false, false) . ' ' . format_fact_place($event) . '</span>
+							<label class="h6">
+								<span class="label">' . $event->getLabel() . '</span>
+								<span class="field">' . format_fact_date($event, $this, false, false) . ' ' . format_fact_place($event) . '</span>
 							</label>
 						';
 				}
