@@ -2578,7 +2578,7 @@ function create_add_form($fact) {
 	?>
 	<!-- Sub-heading for edit_interface page -->
 	<h4>
-		<?php echo KT_I18N::translate('Adding %s data', $label); ?>
+		<?php echo KT_I18N::translate('Adding new %s data', $label); ?>
 	</h4>
 	<hr>
 	<!-- end heading -->
