@@ -9415,10 +9415,6 @@ body #admin-container {
 }
 
 /* Icons */
-.svg-inline--fa {
-	color: #fefefe;
-}
-
 .kiwitrees_logo {
 	background: url(../images/kiwitrees-nova_logo_white.png) no-repeat center left;
 	background-size: contain;
