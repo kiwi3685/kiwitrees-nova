@@ -127,13 +127,11 @@ function get_lati_long_placelocation ($place) {
 		$place_id = $pl_id;
 	}
 
-	$row=
-		// KT_DB::prepare("SELECT pl_lati, pl_long, pl_zoom, pl_icon, pl_level FROM `##placelocation` WHERE pl_id=? ORDER BY pl_place")
-		KT_DB::prepare("SELECT pl_media, sv_lati, sv_long, sv_bearing, sv_elevation, sv_zoom, pl_lati, pl_long, pl_zoom, pl_icon, pl_level FROM `##placelocation` WHERE pl_id=? ORDER BY pl_place")
+	$row = KT_DB::prepare("SELECT pl_media, pl_lati, pl_long, pl_zoom, pl_icon, pl_level FROM `##placelocation` WHERE pl_id=? ORDER BY pl_place")
 		->execute(array($place_id))
 		->fetchOneRow();
 	if ($row) {
-		return array('media'=>$row->pl_media, 'sv_lati'=>$row->sv_lati, 'sv_long'=>$row->sv_long, 'sv_bearing'=>$row->sv_bearing, 'sv_elevation'=>$row->sv_elevation, 'sv_zoom'=>$row->sv_zoom, 'lati'=>$row->pl_lati, 'long'=>$row->pl_long, 'zoom'=>$row->pl_zoom, 'icon'=>$row->pl_icon, 'level'=>$row->pl_level);
+		return array('media'=>$row->pl_media, 'lati'=>$row->pl_lati, 'long'=>$row->pl_long, 'zoom'=>$row->pl_zoom, 'icon'=>$row->pl_icon, 'level'=>$row->pl_level);
 	} else {
 		return array();
 	}
@@ -240,11 +238,6 @@ function build_indiv_map($indifacts, $famids) {
 						$markers[$i]['lati'] = str_replace(array('N', 'S', ','), array('', '-', '.') , $latlongval['lati']);
 						$markers[$i]['lng'] = str_replace(array('E', 'W', ','), array('', '-', '.') , $latlongval['long']);
 						$markers[$i]['media'] = $latlongval['media'];
-						$markers[$i]['sv_lati'] = $latlongval['sv_lati'];
-						$markers[$i]['sv_long'] = $latlongval['sv_long'];
-						$markers[$i]['sv_bearing'] = $latlongval['sv_bearing'];
-						$markers[$i]['sv_elevation'] = $latlongval['sv_elevation'];
-						$markers[$i]['sv_zoom'] = $latlongval['sv_zoom'];
 						$ctd = preg_match("/2 DATE (.+)/", $factrec, $match);
 						if ($ctd>0) {
 							$markers[$i]['date'] = $match[1];
@@ -347,11 +340,6 @@ function build_indiv_map($indifacts, $famids) {
 											}
 											$markers[$i]['name'] = $smatch[$j][1];
 											$markers[$i]['media'] = $latlongval['media'];
-											$markers[$i]['sv_lati'] = $latlongval['sv_lati'];
-											$markers[$i]['sv_long'] = $latlongval['sv_long'];
-											$markers[$i]['sv_bearing'] = $latlongval['sv_bearing'];
-											$markers[$i]['sv_elevation'] = $latlongval['sv_elevation'];
-											$markers[$i]['sv_zoom'] = $latlongval['sv_zoom'];
 										}
 									}
 								}

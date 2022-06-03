@@ -22,7 +22,6 @@
  */
 
  require KT_ROOT . 'includes/functions/functions_edit.php';
-
  global $iconStyle;
 
  $precision = [

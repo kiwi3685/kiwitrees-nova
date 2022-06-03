@@ -124,15 +124,12 @@ function create_map($placelevels) {
 	global $level, $iconStyle;
 	global $GOOGLEMAP_PH_XSIZE, $GOOGLEMAP_PH_YSIZE, $GOOGLEMAP_MAP_TYPE, $levelm, $plzoom, $controller;
 
-	// *** ENABLE STREETVIEW *** (boolean) =========================================================
-//	$STREETVIEW	= get_module_setting('googlemap', 'GM_USE_STREETVIEW');
-	// =============================================================================================
 	$parent		= KT_Filter::get('parent');
 
 	// create the map
 	$levelm = set_levelm($level, $parent);
 	$latlng =
-		KT_DB::prepare("SELECT pl_place, pl_id, pl_lati, pl_long, pl_zoom, sv_long, sv_lati, sv_bearing, sv_elevation, sv_zoom FROM `##placelocation` WHERE pl_id=?")
+		KT_DB::prepare("SELECT pl_place, pl_id, pl_lati, pl_long, pl_zoom FROM `##placelocation` WHERE pl_id=?")
 		->execute(array($levelm))
 		->fetch(PDO::FETCH_ASSOC);
 	// Map zoom level
@@ -144,7 +141,7 @@ function create_map($placelevels) {
 	?>
 	<div class="grid-x grid-margin-y">
 		<div class="cell medium-10 medium-offset-1 large-8 large-offset-2">
-			<div id="place_map">
+			<div class="shadow" id="place_map">
 				<i class="icon-loading-large"></i>
 				<script src="<?php echo KT_GM_SCRIPT; ?>"></script>
 			</div>

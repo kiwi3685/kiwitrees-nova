@@ -95,10 +95,10 @@ if ($action == 'ChangeFlag' && KT_Filter::post('FLAGS')) {
 	<script>
 <?php if (KT_Filter::post('selcountry') == 'Countries') { ?>
 			window.opener.document.editplaces.icon.value = 'places/flags/<?php echo KT_Filter::post('FLAGS'); ?>.png';
-			window.opener.document.getElementById('flagsDiv').innerHTML = "<img src=\"<?php echo KT_STATIC_URL, KT_MODULES_DIR; ?>googlemap/places/flags/<?php echo KT_Filter::post('FLAGS'); ?>.png\">&nbsp;&nbsp;<a href=\"#\" onclick=\"change_icon();return false;\"><?php echo KT_I18N::translate('Change flag'); ?></a>&nbsp;&nbsp;<a href=\"#\" onclick=\"remove_icon();return false;\"><?php echo KT_I18N::translate('Remove flag'); ?></a>";
+			window.opener.document.getElementById('flagsDiv').innerHTML = "<img src=\"<?php echo KT_STATIC_URL . KT_MODULES_DIR; ?>googlemap/places/flags/<?php echo KT_Filter::post('FLAGS'); ?>.png\">&nbsp;&nbsp;<a href=\"#\" onclick=\"change_icon();return false;\"><?php echo KT_I18N::translate('Change flag'); ?></a>&nbsp;&nbsp;<a href=\"#\" onclick=\"remove_icon();return false;\"><?php echo KT_I18N::translate('Remove flag'); ?></a>";
 <?php } elseif (KT_Filter::post('selstate') != "States"){ ?>
 			window.opener.document.editplaces.icon.value = 'places/<?php echo $countrySelected, '/flags/', $_POST['selstate'], '/', $flags_s[$_POST['FLAGS']]; ?>.png';
-			window.opener.document.getElementById('flagsDiv').innerHTML = "<img src=\"<?php echo KT_STATIC_URL, KT_MODULES_DIR; ?>googlemap/places/<?php echo $countrySelected, "/flags/", $_POST['selstate'], "/", $flags_s[$_POST['FLAGS']]; ?>.png\">&nbsp;&nbsp;<a href=\"#\" onclick=\"change_icon();return false;\"><?php echo KT_I18N::translate('Change flag'); ?></a>&nbsp;&nbsp;<a href=\"#\" onclick=\"remove_icon();return false;\"><?php echo KT_I18N::translate('Remove flag'); ?></a>";
+			window.opener.document.getElementById('flagsDiv').innerHTML = "<img src=\"<?php echo KT_STATIC_URL . KT_MODULES_DIR; ?>googlemap/places/<?php echo $countrySelected, "/flags/", $_POST['selstate'], "/", $flags_s[$_POST['FLAGS']]; ?>.png\">&nbsp;&nbsp;<a href=\"#\" onclick=\"change_icon();return false;\"><?php echo KT_I18N::translate('Change flag'); ?></a>&nbsp;&nbsp;<a href=\"#\" onclick=\"remove_icon();return false;\"><?php echo KT_I18N::translate('Remove flag'); ?></a>";
 <?php } else { ?>
 			window.opener.document.editplaces.icon.value = "places/<?php echo $countrySelected, "/flags/", KT_Filter::post('FLAGS'); ?>.png";
 			window.opener.document.getElementById('flagsDiv').innerHTML = "<img src=\"<?php echo KT_STATIC_URL, KT_MODULES_DIR; ?>googlemap/places/<?php echo $countrySelected, "/flags/", KT_Filter::post('FLAGS'); ?>.png\">&nbsp;&nbsp;<a href=\"#\" onclick=\"change_icon();return false;\"><?php echo KT_I18N::translate('Change flag'); ?></a>&nbsp;&nbsp;<a href=\"#\" onclick=\"remove_icon();return false;\"><?php echo KT_I18N::translate('Remove flag'); ?></a>";
@@ -206,7 +206,7 @@ if ($countrySelected != 'Countries') {
 									<?php echo KT_I18N::translate('Save'); ?>
 								</button>
 								<button class="button hollow" type="button" onclick="window.close();">
-									<i class="<?php echo $iconStyle; ?> fa-times"></i>
+									<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 									<?php echo KT_I18N::translate('Close'); ?>
 								</button>
 							</div>
@@ -283,7 +283,7 @@ if ($countrySelected != 'Countries') {
 				<?php echo KT_I18N::translate('Save'); ?>
 			</button>
 			<button class="button hollow" type="button" onclick="window.close();">
-				<i class="<?php echo $iconStyle; ?> fa-times"></i>
+				<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 				<?php echo KT_I18N::translate('Close'); ?>
 			</button>
 		</form>

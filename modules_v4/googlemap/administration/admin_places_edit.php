@@ -239,8 +239,8 @@ include_once KT_MODULES_DIR . 'googlemap/places_edit.js.php';?>
 					</div>
 					<div class="cell medium-6 input-group">
 						<input
-							id="place_name"
-							class="nput-group-field"
+							id="place_name"auto
+							class="input-group-field"
 							type="text" id="new_pl_name"
 							name="NEW_PLACE_NAME"
 							value="<?php echo htmlspecialchars($place_name); ?>"
@@ -474,7 +474,7 @@ include_once KT_MODULES_DIR . 'googlemap/places_edit.js.php';?>
 						<?php echo KT_I18N::translate('Save'); ?>
 					</button>
 					<button class="button hollow" type="button" onclick="window.close();">
-						<i class="<?php echo $iconStyle; ?> fa-times"></i>
+						<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 						<?php echo KT_I18N::translate('Close'); ?>
 					</button>
 				</div>

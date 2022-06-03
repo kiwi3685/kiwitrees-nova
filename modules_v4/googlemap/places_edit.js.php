@@ -174,7 +174,7 @@ if (!defined('KT_KIWITREES')) {
 			controlUI.appendChild(controlText);
 
 			// Setup the click event listeners: simply set the map to original LatLng
-			google.maps.event.addDomListener(controlUI, 'click', function() {
+			controlUI.addEventListener( 'click', function() {
 				map.setCenter(latlng),
 				map.setZoom(pl_zoom),
 				map.setMapTypeId(google.maps.MapTypeId.ROADMAP)

@@ -22,19 +22,9 @@
  *
  * @ Original author Brian Holland
 */
-#map_pane,
-#pm_map {
+#map_pane {
 	height: 30rem;
 	width: 100%;
-}
-#map_pane #side_bar #side_bar,
-#pm_map #side_bar #side_bar {
-	width: 18rem;
-	font-size: 0.9em;
-	overflow: auto;
-	overflow-x: hidden;
-	overflow-y: auto;
-	height: 30rem;
 }
 
 #gm_mapTab #map_content {
@@ -430,9 +420,6 @@ html[dir=rtl] .highlt_img .gallery img {
 	margin: 0 0 0 4px;
 }
 
-#pedigreemap_chart {
-	margin: 20px;
-}
 #pedigreemap_chart span.relationship {
 	font-weight: 600;
 	margin: auto 5px;

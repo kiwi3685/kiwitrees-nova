@@ -10636,14 +10636,29 @@ div[id$=-page] button[type=submit] {
 
 #pedigreemap-page #pm_map,
 #pedigreemap-page #side_bar {
-	border: 0.125rem solid #331919;
 	height: 30rem;
 	width: 100%;
 }
 #pedigreemap-page #side_bar {
+	font-size: 0.9rem;
 	overflow: auto;
 	overflow-x: hidden;
 	overflow-y: auto;
+}
+#pedigreemap-page #side_bar i.icon-silhouette-M,
+#pedigreemap-page #side_bar i.icon-silhouette-F,
+#pedigreemap-page #side_bar i.icon-silhouette-U {
+	float: left;
+	height: 2.5rem;
+	width: 2.5rem;
+	margin: 0.25rem 0.5rem 3rem;
+}
+#pedigreemap-page #side_bar img {
+	height: 1rem;
+	width: 1rem;
+}
+#pedigreemap-page #side_bar .relationship {
+	margin: 0 0.5rem;
 }
 
 #placelist-page #place-list div.places {
@@ -10658,7 +10673,6 @@ div[id$=-page] button[type=submit] {
 	font-weight: 400;
 }
 #placelist-page #place_map {
-	border: 1px solid;
 	height: 600px;
 	margin-bottom: 1rem;
 	width: 100%;

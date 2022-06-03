@@ -25,15 +25,8 @@ if (!defined('KT_KIWITREES')) {
 	header('HTTP/1.0 403 Forbidden');
 	exit;
 }
-// *** ENABLE STREETVIEW ***
-$STREETVIEW=get_module_setting('googlemap', 'GM_USE_STREETVIEW');
-
 ?>
 
-<script>var ie = 0;</script>
-<!--[if IE]>
-<script>ie = 1;</script>
-<![endif]-->
 <script>
 
 	// this variable will collect the html for the map icons and links
@@ -92,7 +85,7 @@ $STREETVIEW=get_module_setting('googlemap', 'GM_USE_STREETVIEW');
 	var placer = null;
 
 	// A function to create the marker and set up the event window
-	function createMarker(i, latlng, event, html, placed, index, tab, address, media, sv_lati, sv_long, sv_bearing, sv_elevation, sv_zoom, sv_point, marker_icon) {
+	function createMarker(i, latlng, event, html, placed, index, tab, address, media, marker_icon) {
 
 		var contentString = '<div id="iwcontent">'+html+'<\/div>';
 
@@ -111,12 +104,7 @@ $STREETVIEW=get_module_setting('googlemap', 'GM_USE_STREETVIEW');
 			var icon_shadow = iconShadow;
 		}
 
-		// Decide if marker point is Regular (latlng) or StreetView (sv_point) derived
-		if (sv_point == '(0, 0)' || sv_point == '(null, null)') {
-			placer = latlng;
-		} else {
-			placer = sv_point;
-		}
+		placer = latlng;
 
 		// Define the marker
 		var marker = new google.maps.Marker({
@@ -135,36 +123,7 @@ $STREETVIEW=get_module_setting('googlemap', 'GM_USE_STREETVIEW');
 		marker.myevent = event;
 		marker.myaddress = address;
 		marker.mymedia = media;
-		marker.sv_lati = sv_lati;
-		marker.sv_long = sv_long;
-		marker.sv_point = sv_point;
-
-		if (sv_bearing == '') {
-			marker.sv_bearing = 0;
-		} else {
-			marker.sv_bearing = sv_bearing;
-		}
-		if (sv_elevation == '') {
-			marker.sv_elevation = 5;
-		} else {
-			marker.sv_elevation = sv_elevation;
-			// marker.sv_elevation = 5;
-		}
-		if (sv_zoom == '' || sv_zoom == 0 || sv_zoom == 1) {
-			marker.sv_zoom = 1.2;
-		} else {
-			marker.sv_zoom = sv_zoom;
-		}
-
-		marker.sv_latlng = new google.maps.LatLng(sv_lati, sv_long);
 		gmarkers.push(marker);
-
-		var sv_dir = [];
-			sv_dir[i] = parseFloat(gmarkers[i].sv_bearing);
-		var sv_elev = [];
-			sv_elev[i] = parseFloat(gmarkers[i].sv_elevation);
-		var sv_zoom = [];
-			sv_zoom[i] = parseFloat(gmarkers[i].sv_zoom);
 
 		// Open infowindow when marker is clicked
 		google.maps.event.addListener(marker, 'click', function() {
@@ -178,12 +137,6 @@ $STREETVIEW=get_module_setting('googlemap', 'GM_USE_STREETVIEW');
 				navigationControl: false,
 				linksControl: false,
 				addressControl: false,
-				pov: {
-					heading: sv_dir[i],
-					pitch: sv_elev[i],
-					// pitch: 5,
-					zoom: sv_zoom[i]
-				}
 			};
 
 			// Use jquery for info window tabs
@@ -193,34 +146,16 @@ $STREETVIEW=get_module_setting('googlemap', 'GM_USE_STREETVIEW');
 					document.tabLayerEV = document.getElementById("EV");
 					document.tabLayerEV.style.background = '#ffffff';
 					document.tabLayerEV.style.paddingBottom = '1px';
-					<?php if ($STREETVIEW) { ?>
-					document.tabLayerSV = document.getElementById("SV");
-					document.tabLayerSV.style.background = '#cccccc';
-					document.tabLayerSV.style.paddingBottom = '0px';
-					<?php } ?>
 					document.panelLayer1 = document.getElementById("pane1");
 					document.panelLayer1.style.display = 'block';
-					<?php if ($STREETVIEW) { ?>
-					document.panelLayer2 = document.getElementById("pane2");
-					document.panelLayer2.style.display = 'none';
-					<?php } ?>
 				});
 
 				jQuery('#SV').click(function() {
 					document.tabLayerEV = document.getElementById("EV");
 					document.tabLayerEV.style.background = '#cccccc';
 					document.tabLayerEV.style.paddingBottom = '0px';
-					<?php if ($STREETVIEW) { ?>
-					document.tabLayerSV = document.getElementById("SV");
-					document.tabLayerSV.style.background = '#ffffff';
-					document.tabLayerSV.style.paddingBottom = '1px';
-					<?php } ?>
 					document.panelLayer1 = document.getElementById("pane1");
 					document.panelLayer1.style.display = 'none';
-					<?php if ($STREETVIEW) { ?>
-					document.panelLayer2 = document.getElementById("pane2");
-					document.panelLayer2.style.display = 'block';
-					<?php } ?>
 					var panorama = new google.maps.StreetViewPanorama(document.getElementById("pano"), panoramaOptions);
 					setTimeout(function() { panorama.setVisible(true); }, 100);
       				setTimeout(function() { panorama.setVisible(true); }, 500);
@@ -230,17 +165,8 @@ $STREETVIEW=get_module_setting('googlemap', 'GM_USE_STREETVIEW');
 					document.tabLayerEV = document.getElementById("EV");
 					document.tabLayerEV.style.background = '#cccccc';
 					document.tabLayerEV.style.paddingBottom = '0px';
-					<?php if ($STREETVIEW) { ?>
-					document.tabLayerSV = document.getElementById("SV");
-					document.tabLayerSV.style.background = '#cccccc';
-					document.tabLayerSV.style.paddingBottom = '0px';
-					<?php } ?>
 					document.panelLayer1 = document.getElementById("pane1");
 					document.panelLayer1.style.display = 'none';
-					<?php if ($STREETVIEW) { ?>
-					document.panelLayer2 = document.getElementById("pane2");
-					document.panelLayer2.style.display = 'none';
-					<?php } ?>
 				});
 		  	});
 		});
@@ -281,7 +207,7 @@ $STREETVIEW=get_module_setting('googlemap', 'GM_USE_STREETVIEW');
 		controlUI.appendChild(controlText);
 
 		// Setup the click event listeners: simply set the map to original LatLng
-		google.maps.event.addDomListener(controlUI, 'click', function() {
+		controlUI.addEventListener( 'click', function() {
 			loadMap();
 		});
 	}
@@ -295,7 +221,7 @@ $STREETVIEW=get_module_setting('googlemap', 'GM_USE_STREETVIEW');
 		var mapOptions = {
 			zoom: 0,
 			center: map_center,
-			mapTypeId: google.maps.MapTypeId.<?php echo $GOOGLEMAP_MAP_TYPE; ?>,					// ROADMAP, SATELLITE, HYBRID, TERRAIN
+			mapTypeId: google.maps.MapTypeId.<?php echo $GOOGLEMAP_MAP_TYPE; ?>, // ROADMAP, SATELLITE, HYBRID, TERRAIN
 			mapTypeControlOptions: {
 				style: google.maps.MapTypeControlStyle.DROPDOWN_MENU	// DEFAULT, DROPDOWN_MENU, HORIZONTAL_BAR
 			},
@@ -391,20 +317,11 @@ $STREETVIEW=get_module_setting('googlemap', 'GM_USE_STREETVIEW');
 
 					// Elements 14-20 Streetview parameters
 					"<?php if (!empty($gmark['media'])) { echo $gmark['media']; } ?>",
-					"<?php if (!empty($gmark['sv_lati'])) { echo $gmark['sv_lati']; } ?>",
-					"<?php if (!empty($gmark['sv_long'])) { echo $gmark['sv_long']; } ?>",
-					"<?php if (!empty($gmark['sv_bearing'])) { echo $gmark['sv_bearing']; } ?>",
-					"<?php if (!empty($gmark['sv_elevation'])) { echo $gmark['sv_elevation']; } ?>",
-					"<?php if (!empty($gmark['sv_zoom'])) { echo $gmark['sv_zoom']; } ?>",
 					"<?php if (!empty($gmark['icon'])) { echo $gmark['icon']; } ?>"
 				],
 
 			<?php } ?>
 		];
-		// Fix IE bug reporting one too many in locations.length statement
-		if (ie==1) {
-			locations.length=locations.length - 1;
-		}
 
 		// Set the Marker bounds
 		var bounds = new google.maps.LatLngBounds ();
@@ -443,13 +360,7 @@ $STREETVIEW=get_module_setting('googlemap', 'GM_USE_STREETVIEW');
 			var point = new google.maps.LatLng(lat,lng);			// Place Latitude, Longitude
 
 			var media = locations[i][14];							// media item
-			var sv_lati = locations[i][15];							// Street View latitude
-			var sv_long = locations[i][16];							// Street View longitude
-			var sv_bearing = locations[i][17];						// Street View bearing
-			var sv_elevation = locations[i][18];					// Street View elevation
-			var sv_zoom = locations[i][19];							// Street View zoom
 			var marker_icon = locations[i][20];						// Marker icon image (flag)
-			var sv_point = new google.maps.LatLng(sv_lati,sv_long); // StreetView Latitude and Longitide
 
 			// Employ of image tab function using an information image
 			if (media == null || media == '') {
@@ -491,28 +402,12 @@ $STREETVIEW=get_module_setting('googlemap', 'GM_USE_STREETVIEW');
 				'<div id = "gmtabs">',
 					'<ul class="tabs" >',
 						'<li><a href="#event" id="EV"><?php echo KT_I18N::translate('Events'); ?><\/a><\/li>',
-						<?php if ($STREETVIEW) { ?>
-						'<li><a href="#sview" id="SV"><?php echo KT_I18N::translate('Google Street View™'); ?><\/a><\/li>',
-						<?php } ?>
-
-					// To be used later === Do not delete
-					//	'<li><a href="#image" id="PH">Image<\/a><\/li>',
-					//	'<li><a href="#" id="SP">Aerial<\/a><\/li>',
-
 					'<\/ul>',
-
 					'<div class="panes">',
 						'<div id = "pane1">',
 							divhead,
 							event_tab,
 						'<\/div>',
-						<?php if ($STREETVIEW) { ?>
-						'<div id = "pane2">',
-							divhead,
-							'<div id="pano"><\/div>',
-						'<\/div>',
-						<?php } ?>
-
 					'<\/div>',
 				'<\/div>',
 			'<\/div>'
@@ -521,14 +416,8 @@ $STREETVIEW=get_module_setting('googlemap', 'GM_USE_STREETVIEW');
 			// create the marker
 			var html = multitabs;
 			var zoomLevel = <?php echo $GOOGLEMAP_MAX_ZOOM; ?>;
-			var marker = createMarker(i, point, event, html, placed, index, tab, addr2, media, sv_lati, sv_long, sv_bearing, sv_elevation, sv_zoom, sv_point, marker_icon);
-			// if streetview coordinates are available, use them for marker,
-			// else use the place coordinates
-			if (sv_point && sv_point != "(0, 0)") {
-				var myLatLng = sv_point;
-			} else {
-				var myLatLng = point;
-			}
+			var marker = createMarker(i, point, event, html, placed, index, tab, addr2, media, marker_icon);
+			var myLatLng = point;
 
 			// Correct zoom level when only one marker is present
 			if (i < 1) {

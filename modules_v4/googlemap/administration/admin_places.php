@@ -280,7 +280,7 @@ $controller
 									<?php } else { ?>
 										<td>
 											<div class="col7 text-center">
-												<i class="<?php echo $iconStyle; ?> fa-times alert"></i>
+												<i class="<?php echo $iconStyle; ?> fa-xmark alert"></i>
 											</div>
 										</td>
 									<?php } ?>
