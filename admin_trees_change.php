@@ -225,6 +225,8 @@ $controller
 	->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
 	->addExternalJavascript(KT_DATATABLES_BUTTONS)
 	->addExternalJavascript(KT_DATATABLES_HTML5)
+	->addExternalJavascript(KT_DATEPICKER_JS)
+	->addExternalJavascript(KT_DATEPICKER_JS_LOCALE)
 	->addInlineJavascript('
 		var oTable=jQuery("#change_list").dataTable( {
 			dom: \'<"top"pBf<"clear">irl>t<"bottom"pl>\',
@@ -247,6 +249,13 @@ $controller
 				/* 6 - Family tree */ {}
 			]
 		});
+
+		jQuery(".fdatepicker").fdatepicker({
+			startDate: "' . $earliest . '",
+			endDate: "' . $latest . '",
+			language: "' . KT_LOCALE . '"
+		});
+
 	');
 
 $url =
