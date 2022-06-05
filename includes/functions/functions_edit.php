@@ -1726,7 +1726,7 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 						}
 
 						if (strpos($extra_markup, 'data-autocomplete-type')) { ?>
-							<div class="input-group autocomplete_container XXX">
+							<div class="input-group autocomplete_container">
 								<input
 									type="text"
 									id="autocompleteInput-<?php echo $element_id; ?>"
