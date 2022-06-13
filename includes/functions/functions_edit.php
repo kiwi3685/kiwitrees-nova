@@ -28,6 +28,10 @@ if (!defined('KT_KIWITREES')) {
 
 require_once KT_ROOT.'includes/functions/functions_import.php';
 
+// Invoke the Carbon Autoloader, to make any Carbon date class available
+require KT_ROOT . 'library/Carbon/autoload.php';
+use Carbon\Carbon;
+
 // Create a link to faqs
 function faqLink($url) {
 	global $iconStyle;
@@ -442,15 +446,16 @@ function edit_field_rela($name, $selected='', $extra='') {
 *
 * @param string $pid The gedcom id of the record to check
 */
-function checkChangeTime($pid, $gedrec, $last_time) {
-	$change=KT_DB::prepare(
-		"SELECT UNIX_TIMESTAMP(change_time) AS change_time, user_name".
-		" FROM `##change`".
-		" JOIN `##user` USING (user_id)".
-		" WHERE status<>'rejected' AND gedcom_id=? AND xref=? AND change_time>?".
-		" ORDER BY change_id DESC".
-		" LIMIT 1"
-	)->execute(array(KT_GED_ID, $pid, $last_time))->fetchOneRow();
+function checkChangeTime($pid, $gedrec, $lastTime) {
+	$lastTime = Carbon::createFromTimestamp($lastTime)->toDateTimeString();
+	$change = KT_DB::prepare("
+		SELECT UNIX_TIMESTAMP(change_time) AS change_time, user_name
+		FROM `##change`
+		JOIN `##user` USING (user_id)
+		WHERE status<>'rejected' AND gedcom_id=? AND xref=? AND change_time>?
+		ORDER BY change_id DESC
+		LIMIT 1
+	")->execute(array(KT_GED_ID, $pid, $lastTime))->fetchOneRow();
 
 	if ($change) {
 		$changeTime=$change->change_time;
@@ -459,14 +464,15 @@ function checkChangeTime($pid, $gedrec, $last_time) {
 		$changeTime = 0;
 		$changeUser = '';
 	}
-	if (isset($_REQUEST['linenum']) && $changeTime!=0 && $last_time && $changeTime > $last_time) {
+	if (isset($_REQUEST['linenum']) && $changeTime != 0 && $lastTime && $changeTime > $lastTime) {
 		global $controller;
 		$controller->pageHeader();
-		echo '<p class="error">', KT_I18N::translate('The record with id %s was changed by another user since you last accessed it.', $pid), '</p>';
+		echo '<p class="error">', KT_I18N::translate('The record with id %s was changed by another user since you last accessed it.', $pid) . '</p>';
 		if (!empty($changeUser)) {
-			echo '<p>', /* I18N: %s placeholders are a user-ID and a timestamp */ KT_I18N::translate('This record was last changed by <i>%s</i> at %s', $changeUser, date("d M Y H:i:s", $changeTime)), '</p>';
+			echo '<p>' . KT_I18N::translate('This record was last changed by <i>%s</i> at %s', $changeUser, $changeTime), '</p>';
+			echo '<p>' . KT_I18N::translate('Current time is %s', $lastTime) . '</p>';
 		}
-		echo '<p>', KT_I18N::translate('Please reload the previous page to make sure you are working with the most recent record.'), "</p>";
+		echo '<p>' . KT_I18N::translate('Please reload the previous page to make sure you are working with the most recent record.') . "</p>";
 		exit;
 	}
 }
@@ -680,7 +686,7 @@ function print_indi_form($nextaction, $famid, $linenum='', $namerec='', $famtag=
 	global $pid, $WORD_WRAPPED_NOTES;
 	global $NPFX_accept, $SPFX_accept, $NSFX_accept, $FILE_FORM_accept;
 	global $bdm, $STANDARD_NAME_FACTS, $REVERSED_NAME_FACTS, $ADVANCED_NAME_FACTS, $ADVANCED_PLAC_FACTS;
-	global $QUICK_REQUIRED_FACTS, $QUICK_REQUIRED_FAMFACTS, $NO_UPDATE_CHAN, $controller;
+	global $QUICK_REQUIRED_FACTS, $QUICK_REQUIRED_FAMFACTS, $NO_UPDATE_CHAN, $controller, $iconStyle;
 
 	$SURNAME_TRADITION = get_gedcom_setting(KT_GED_ID, 'SURNAME_TRADITION');
 
@@ -1777,11 +1783,12 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 
 				}
 				// MARRiage TYPE : hide text field and show a selection list
-				if ($fact == 'TYPE' && $level == 2 && $tags[0] == 'MARR') {
-					echo '<script>
-						document.getElementById("' . $element_id . '").style.display="none"
+				if ($fact == 'TYPE' && $level == 2 && $tags[0] == 'MARR') { ?>
+					<script>
+						document.getElementById("<?php echo $element_id; ?>'").style.display="none"
 					</script>
-					<select id="' . $element_id . '_sel" onchange="document.getElementById(\'' . $element_id . '\').value=this.value;" >';
+					<select id="<?php echo $element_id; ?>'_sel" onchange="document.getElementById('<?php echo $element_id; ?>'\').value=this.value;" >
+						<?php
 						foreach (array("Unknown", "Civil", "Religious", "Partners", "Common") as $indexval => $key) {
 							if ($key == "Unknown") {
 								echo '<option value=""';
@@ -1797,9 +1804,9 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 							echo '>' .
 								KT_Gedcom_Tag::getLabel($tmp) . '
 							</option>';
-						}
-					echo '</select>';
-				} else if ($fact == 'TYPE' && $level == 0) {
+						} ?>
+					</select>
+				<?php } else if ($fact == 'TYPE' && $level == 0) {
 					// NAME TYPE : hide text field and show a selection list
 					$onchange = 'onchange="document.getElementById(\'' . $element_id . '\').value=this.value;"';
 					switch (KT_Person::getInstance($pid)->getSex()) {
@@ -1812,15 +1819,16 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 						default:
 							echo edit_field_name_type_u($element_name, $value, $onchange);
 							break;
-					}
-					echo '
-						<script>
-							document.getElementById("' . $element_id . '").style.display="none";
-						</script>
-					';
-				}
+					} ?>
 
-				echo '<div id="' . $element_id . '_description">';
+					<script>
+						document.getElementById("<?php echo $element_id; ?>'").style.display="none";
+					</script>
+
+				<?php } ?>
+
+				<div id="<?php echo $element_id; ?>_description">
+					<?php
 					// current value
 					if ($fact == 'DATE') {
 						$date = new KT_Date($value);
@@ -2097,40 +2105,56 @@ function print_add_layer($tag, $level=2) {
 			<div id="newsource" class="accordion-content" data-tab-content>
 				<div class="grid-x">
 					<div class="cell">
-						<?php $source = "SOUR @";
+						<?php
+						// 2 SOUR
+						$source = "SOUR @";
 						add_simple_tag("$level $source");
+						// 3 PAGE
 						$page = "PAGE";
 						add_simple_tag(($level + 1) . " $page");
+						// 3 DATA
+						// 4 TEXT
 						$text = "TEXT";
 						add_simple_tag(($level + 2) . " $text");
 						if ($FULL_SOURCES) {
+							// 4 DATE
 							add_simple_tag(($level + 2) . " DATE", '', KT_Gedcom_Tag::getLabel('DATA:DATE'));
+							// 3 QUAY
 							add_simple_tag(($level + 1) . " QUAY");
 						}
+						// 3 OBJE
 						add_simple_tag(($level + 1) . " OBJE");
-						add_simple_tag(($level + 1) . " SHARED_NOTE"); ?>
+						// 3 SHARED_NOTE
+						add_simple_tag(($level+1) . " SHARED_NOTE");
+						?>
 					</div>
 				</div>
 			</div>
 		</li>
 	<?php }
 	if ($tag == "ASSO" || $tag == "ASSO2") { ?>
-		<!--  Add an associate -->
+		<!-- Add an associate -->
 		<li class="accordion-item" data-accordion-item>
-			<a href="#" class="accordion-title"><?php echo KT_I18N::translate('Add associate'); ?></a>
 			<?php if ($tag == "ASSO") { ?>
+				<a href="#" class="accordion-title"><?php echo KT_I18N::translate('Add an associate'); ?></a>
 				<div id="newasso" class="accordion-content" data-tab-content>
 			<?php } else { ?>
+				<a href="#" class="accordion-title"><?php echo KT_I18N::translate('Add an associate'); ?></a>
 				<div id="newasso2" class="accordion-content" data-tab-content>
 			<?php } ?>
-			<div class="grid-x">
-				<div class="cell">
-					<?php
-					add_simple_tag(($level) ." ASSO @");
-					add_simple_tag(($level + 1) . " RELA");
-					add_simple_tag(($level + 1) . " NOTE");
-					add_simple_tag(($level + 1) . " SHARED_NOTE");
-					?>
+				<div class="grid-x">
+					<div class="cell">
+						<?php
+						// 2 ASSO
+						add_simple_tag(($level) ." ASSO @");
+						// 3 RELA
+						add_simple_tag(($level + 1) . " RELA");
+						// 3 NOTE
+						add_simple_tag(($level + 1) . " NOTE");
+						// 3 SHARED_NOTE
+						add_simple_tag(($level + 1) . " SHARED_NOTE");
+						?>
+					</div>
 				</div>
 			</div>
 		<li>
