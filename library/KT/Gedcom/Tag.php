@@ -93,7 +93,7 @@ class KT_Gedcom_Tag {
 		switch ($tag) {
 		case 'BIRT':  return KT_I18N::translate_c('Abbreviation for birth',            'b.');
 		case 'MARR':  return KT_I18N::translate_c('Abbreviation for marriage',         'm.');
-		case 'DIV':  return KT_I18N::translate_c('Abbreviation for divorce',           'dv.');
+		case 'DIV':   return KT_I18N::translate_c('Abbreviation for divorce',           'dv.');
 		case 'DEAT':  return KT_I18N::translate_c('Abbreviation for death',            'd.');
 		case 'PHON':  return KT_I18N::translate_c('Abbreviation for telephone number', 't.');
 		case 'FAX':   return KT_I18N::translate_c('Abbreviation for fax number',       'f.');
