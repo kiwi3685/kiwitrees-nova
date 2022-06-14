@@ -39,9 +39,15 @@ class KT_Gedcom_Tag {
 		'REFN',
 		'RFN',
 		'RIN',
-		'SSN'
+		'SSN',
 		'_UID',
 	);
+
+	// Get a list of attribute facts
+	public static function getAttributeFacts() {
+		return self::$ALL_ATTRIB_TAGS;
+	}
+
 
 	// All event tags that kiwitrees knows how to translate - including special/internal tags
 	// Only tags that can be used at level 1 in a record and that include dates
@@ -92,6 +98,11 @@ class KT_Gedcom_Tag {
 		'WILL',
 		'_TODO',
 	);
+
+	// Get a list of event facts
+	public static function getEventFacts() {
+		return self::$ALL_EVENT_TAGS;
+	}
 
 	// All non-attribute or event tags that kiwitrees knows how to translate - including special/internal tags
 	private static $ALL_OTHER_TAGS = array(
@@ -156,7 +167,6 @@ class KT_Gedcom_Tag {
 		'DESC',
 		'DESI',
 		'DEST',
-
 		'EDUC:AGNC',
 		'EMAI',
 		'EMAIL',
@@ -422,13 +432,25 @@ class KT_Gedcom_Tag {
 	);
 
 	// All tags that kiwitrees knows how to translate - including special/internal tags
-	private static $ALL_TAGS = array(
-		array_merge($ALL_ATTRIB_TAGS, $ALL_EVENT_TAGS, $ALL_OTHER_TAGS);
-);
+	public static function initVars() {
+	    self::$ALL_TAGS = array_merge(self::$ALL_ATTRIB_TAGS, self::$ALL_EVENT_TAGS, self::$ALL_OTHER_TAGS);
+	}
 
 	// Is $tag one of our known tags?
 	public static function isTag($tag) {
-		return in_array($tag, self::$ALL_TAGS);
+		return in_array($tag, array_merge(self::$ALL_ATTRIB_TAGS, self::$ALL_EVENT_TAGS, self::$ALL_OTHER_TAGS));
+	}
+
+	// Is $tag an attribute, event ot other??
+	public static function tagTypeArray($tag) {
+		if (in_array($tag, self::$ALL_ATTRIB_TAGS)) {
+			return in_array($tag, self::$ALL_ATTRIB_TAGS);
+		} elseif (in_array($tag, self::$ALL_EVEN_TAGS)) {
+			return in_array($tag, self::$ALL_EVEN_TAGS);
+		} else {
+			return in_array($tag, self::$ALL_OTHER_TAGS);
+		}
+
 	}
 
 	public static function getAbbreviation($tag) {

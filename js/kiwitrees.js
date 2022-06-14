@@ -282,10 +282,10 @@ function clear_family_box_timeout(boxid) {
 function expand_layer(sid) {
     if (jQuery("#" + sid + "_img").hasClass("fa-minimize")) {
         jQuery('#' + sid).slideDown("slow");
-        jQuery('#' + sid + "_img").removeClass("fa-minimize").addClass("fa-expand-arrows-alt");
+        jQuery('#' + sid + "_img").removeClass("fa-minimize").addClass("fa-maximize");
     } else {
         jQuery('#' + sid).slideUp("slow");
-        jQuery('#' + sid + "_img").removeClass("fa-expand-arrows-alt").addClass("fa-minimize");
+        jQuery('#' + sid + "_img").removeClass("fa-maximize").addClass("fa-minimize");
     }
     return false;
 }

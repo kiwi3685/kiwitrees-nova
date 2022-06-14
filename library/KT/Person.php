@@ -959,6 +959,24 @@ class KT_Person extends KT_GedcomRecord {
     }
 
     /**
+    * get event facts
+    * @return array
+    */
+    function getEventFacts() {
+        $this->parseFacts();
+        return $this->eventFacts;
+    }
+
+    /**
+    * get attribute facts
+    * @return array
+    */
+    function getAttributeFacts() {
+        $this->parseFacts();
+        return $this->attribFacts;
+    }
+
+    /**
     * get global facts
     * @return array
     */
@@ -966,6 +984,7 @@ class KT_Person extends KT_GedcomRecord {
         $this->parseFacts();
         return $this->globalfacts;
     }
+
     /**
     * get indi facts
     * @return array
@@ -1094,7 +1113,14 @@ class KT_Person extends KT_GedcomRecord {
         //-- sort the fact info into different categories for people
         foreach ($this->facts as $f => $event) {
             $fact = $event->getTag();
-            if ($fact == 'NAME') {
+
+            if (in_array($fact, KT_Gedcom_Tag::getEventFacts())) {
+                // -- handle special name fact case
+                $this->eventFacts[] = $event;
+            } elseif (in_array($fact, KT_Gedcom_Tag::getAttributeFacts())) {
+                // -- handle special name fact case
+                $this->attributeFacts[] = $event;
+            } elseif ($fact == 'NAME') {
                 // -- handle special name fact case
                 $this->globalfacts[] = $event;
             } elseif ($fact == 'SOUR') {
@@ -1733,7 +1759,7 @@ class KT_Person extends KT_GedcomRecord {
         } else {
             $sublevel = 1;
         }
-        
+
         $NPFX     = preg_match("/\n{$sublevel} NPFX (.+)/", $gedrec, $match) ? $match[1] : '';
         $GIVN     = preg_match("/\n{$sublevel} GIVN (.+)/", $gedrec, $match) ? $match[1] : '';
         $SURN     = preg_match("/\n{$sublevel} SURN (.+)/", $gedrec, $match) ? $match[1] : '';

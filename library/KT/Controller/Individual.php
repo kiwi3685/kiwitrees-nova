@@ -479,6 +479,17 @@ class KT_Controller_Individual extends KT_Controller_GedcomRecord {
 		}
 		return $this->globalfacts;
 	}
+
+	/**
+	* get the individual facts shown on tab 1
+	* @return array
+	*/
+	function getEventFacts() {
+		$eventfacts = $this->record->getEventFacts();
+		sort_facts($eventfacts);
+		return $eventfacts;
+	}
+
 	/**
 	* get the individual facts shown on tab 1
 	* @return array
@@ -488,6 +499,7 @@ class KT_Controller_Individual extends KT_Controller_GedcomRecord {
 		sort_facts($indifacts);
 		return $indifacts;
 	}
+
 	/**
 	* get the other facts shown on tab 2
 	* @return array

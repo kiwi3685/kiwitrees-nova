@@ -567,10 +567,10 @@ function print_note_record($text, $nlevel, $nrec, $textOnly = false) {
 				$first_line = $note->getFullName();
 			} else {
 				$first_line = '<a href="' . $note->getHtmlUrl() . '">' . $note->getFullName() . '</a>';
-				$revealText		= $note->getFullName();
+				$revealText	= $note->getFullName();
 			}
 
-			// special case required to display title for census shared notes when expanded by default
+			// special case required to display title for census shared notes when is-shown by default
 			if (preg_match('/<span id="title">.*<\/span>/', $html, $match)) {
 				if (KT_SCRIPT_NAME === 'note.php') {
 					$first_line = $match[0];
@@ -596,7 +596,7 @@ function print_note_record($text, $nlevel, $nrec, $textOnly = false) {
 					<span>
 						' . KT_Gedcom_Tag::getLabel($label) . ':
 					</span>
-					<span id="' . $element_id . '-alt">' .
+					<span id="' . $element_id . '">' .
 						$first_line . '
 					</span>
 					<div id="' . $element_id . '">
@@ -605,21 +605,24 @@ function print_note_record($text, $nlevel, $nrec, $textOnly = false) {
 				</div>
 			';
 		} else {
-			if ($noteType == 'standard_expandable') {
+			if ($noteType === 'standard_expandable') {
 				// togle display
 				$noteDisplay = '
 					<div class="fact_NOTE standard_expandable">
 						<span>
 							' . KT_Gedcom_Tag::getLabel($label) . ':
+							<a data-toggle="' . $element_id . '">
+								<i class="' . $iconStyle . ' fa-maximize"></i>
+							</a>
+							<span class="first-line">
+								' . $first_line . '
+							</span>
 						</span>
-						<span data-toggle="' . $element_id . '">
-							<span id="' . $element_id . '-alt" class="first-line" data-toggler=".is-shown">' . $first_line . '</span>
-							<i class="' . $iconStyle . ' fa-expand-arrows-alt"></i>
-						</span>
-						<div id="' . $element_id . '" class="callout secondary expandable" data-toggler=".is-shown">
+						<div id="' . $element_id . '" class="first-line is-shown" data-toggler=".is-shown">
 							' . $html . '
 						</div>
 					</div>
+					<br>
 				';
 
 			} else {
@@ -631,7 +634,7 @@ function print_note_record($text, $nlevel, $nrec, $textOnly = false) {
 						</span>
 						<a data-open="' . $element_id . '">
 							' . $revealText . '
-							<i class="' . $iconStyle . ' fa-expand-arrows-alt"></i>
+							<i class="' . $iconStyle . ' fa-maximize"></i>
 						</a>
 						<div class="reveal" id="' . $element_id . '" data-reveal>
 							' . $first_line . '<br>' . $html . '

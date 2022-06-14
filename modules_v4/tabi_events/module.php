@@ -81,7 +81,7 @@ class tabi_events_KT_Module extends KT_Module implements KT_Module_IndiTab {
 		');
 
 		ob_start();
-			$indifacts = $controller->getIndiFacts();
+			$indifacts = $controller->getEventFacts();
 			if (count($indifacts) == 0) { ?>
 				<div class="callout alert">
 					<?php echo KT_I18N::translate('There are no Facts for this individual.'); ?>
@@ -110,10 +110,10 @@ class tabi_events_KT_Module extends KT_Module implements KT_Module_IndiTab {
 						<div class="cell medium-2 date">
 							<label><?php echo KT_I18N::translate('Date'); ?></label>
 						</div>
-						<div class="cell medium-1 event">
+						<div class="cell medium-2 event">
 							<label><?php echo KT_I18N::translate('Event'); ?></label>
 						</div>
-						<div class="cell medium-3 place">
+						<div class="cell medium-2 place">
 							<label><?php echo KT_I18N::translate('Place'); ?></label>
 						</div>
 						<div class="cell <?php echo (KT_USER_CAN_EDIT ? 'medium-5' : 'auto'); ?> detail">
