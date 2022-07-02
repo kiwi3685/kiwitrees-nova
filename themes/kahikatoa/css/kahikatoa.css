@@ -9881,40 +9881,52 @@ div[id$=-page] button[type=submit] {
 	padding: 0;
 	text-align: left;
 }
-#indi-page .tabs-panel #tabi_events_content .indiFactHeader {
+#indi-page .tabs-panel #tabi_events_content .indiFactHeader,
+#indi-page .tabs-panel #tabi_attributes_content .indiFactHeader {
 	background: #e0e0e0;
 	border-bottom: 0.0125rem solid #ab3334;
 	padding: 0 0.5rem;
 }
-#indi-page .tabs-panel #tabi_events_content .indiFactHeader .event, #indi-page .tabs-panel #tabi_events_content .indiFactHeader .place, #indi-page .tabs-panel #tabi_events_content .indiFactHeader .detail, #indi-page .tabs-panel #tabi_events_content .indiFactHeader .edit {
+#indi-page .tabs-panel #tabi_events_content .indiFactHeader .event, #indi-page .tabs-panel #tabi_events_content .indiFactHeader .place, #indi-page .tabs-panel #tabi_events_content .indiFactHeader .detail, #indi-page .tabs-panel #tabi_events_content .indiFactHeader .edit,
+#indi-page .tabs-panel #tabi_attributes_content .indiFactHeader .event,
+#indi-page .tabs-panel #tabi_attributes_content .indiFactHeader .place,
+#indi-page .tabs-panel #tabi_attributes_content .indiFactHeader .detail,
+#indi-page .tabs-panel #tabi_attributes_content .indiFactHeader .edit {
 	padding: 0;
 }
-#indi-page .tabs-panel #tabi_events_content .indiFact .cell.edit {
+#indi-page .tabs-panel #tabi_events_content .indiFact .cell.edit,
+#indi-page .tabs-panel #tabi_attributes_content .indiFact .cell.edit {
 	margin: 0;
 	padding: 0;
 }
-#indi-page .tabs-panel #tabi_events_content .indiFact .cell.event span.h6 {
+#indi-page .tabs-panel #tabi_events_content .indiFact .cell.event span.h6,
+#indi-page .tabs-panel #tabi_attributes_content .indiFact .cell.event span.h6 {
 	line-height: 1;
 }
-#indi-page .tabs-panel #tabi_events_content .indiFact .media-display {
+#indi-page .tabs-panel #tabi_events_content .indiFact .media-display,
+#indi-page .tabs-panel #tabi_attributes_content .indiFact .media-display {
 	display: inline-block;
 	float: left;
 	padding: 0 1rem;
 	max-width: 12rem;
 	width: auto;
 }
-#indi-page .tabs-panel #tabi_events_content .indiFact .media-display .media-display-image {
+#indi-page .tabs-panel #tabi_events_content .indiFact .media-display .media-display-image,
+#indi-page .tabs-panel #tabi_attributes_content .indiFact .media-display .media-display-image {
 	line-height: 10rem;
 }
-#indi-page .tabs-panel #tabi_events_content .indiFact .media-display .media-display-image.single {
+#indi-page .tabs-panel #tabi_events_content .indiFact .media-display .media-display-image.single,
+#indi-page .tabs-panel #tabi_attributes_content .indiFact .media-display .media-display-image.single {
 	line-height: 0;
 }
-#indi-page .tabs-panel #tabi_events_content .indiFact .media-display .media-display-image a {
+#indi-page .tabs-panel #tabi_events_content .indiFact .media-display .media-display-image a,
+#indi-page .tabs-panel #tabi_attributes_content .indiFact .media-display .media-display-image a {
 	display: block;
 	margin: auto;
 	max-width: 6.5rem;
 }
-#indi-page .tabs-panel #tabi_events_content .indiFact .media-display .media-display-title {
+#indi-page .tabs-panel #tabi_events_content .indiFact .media-display .media-display-title,
+#indi-page .tabs-panel #tabi_attributes_content .indiFact .media-display .media-display-title {
 	font-size: 90%;
 	text-align: justify;
 }
@@ -10154,16 +10166,17 @@ div[id$=-page] button[type=submit] {
 #branches-page ul li {
 	counter-increment: section;
 	line-height: 2;
-	margin-left: 2.175rem;
 }
-#branches-page ul li.expandable, #branches-page ul li.collapsable {
-	margin-left: 1rem;
+#branches-page ul li.expandable::before, #branches-page ul li.collapsable::before {
+	margin-left: -0.35rem;
 }
 #branches-page ul li::before {
 	content: counters(section, ".") ". ";
 	display: inline-block;
-	width: auto;
 	margin-right: 1rem;
+	text-align: right;
+	min-width: 2rem;
+	width: auto;
 }
 #branches-page ul li ul {
 	margin-top: 0.5rem;
