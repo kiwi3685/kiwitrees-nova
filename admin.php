@@ -1906,6 +1906,10 @@ function old_paths() {
 		KT_ROOT . 'modules_v4/pages/help_text.php',
 		KT_ROOT . 'modules_v4/googlemap/admin_places.php',
 		KT_ROOT . 'modules_v4/googlemap/admin_places_edit.php',
+		KT_ROOT . 'modules_v4/chart_lifespan', // feature removed
+		KT_ROOT . 'lifespan.php', // feature removed
+		KT_ROOT . 'modules_v4/chart_timeline', // feature removed
+		KT_ROOT . 'timeline.php', // feature removed
 
 	);
 }
