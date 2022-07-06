@@ -137,15 +137,14 @@ class googlemap_KT_Module extends KT_Module implements KT_Module_Config, KT_Modu
 
 	// Implement KT_Module_IndiTab
 	public function getTabContent() {
-		global $controller, $iconStyle;
-
-		ob_start();
-		require_once KT_ROOT . KT_MODULES_DIR . 'googlemap/googlemap.php';
-		require_once KT_ROOT . KT_MODULES_DIR . 'googlemap/defaultconfig.php';
-		?>
+		global $controller, $iconStyle; ?>
 
 		<div class="grid-x grid-padding-y" id="<?php echo $this->getName(); ?>_content">
-			<?php if ($this->checkMapData()) { ?>
+			<?php if ($this->checkMapData()) {
+				ob_start();
+				require_once KT_ROOT . KT_MODULES_DIR . 'googlemap/googlemap.php';
+				require_once KT_ROOT . KT_MODULES_DIR . 'googlemap/defaultconfig.php';
+ 				?>
 				<div class="cell tabHeader">
 					<div class="grid-x">
 						<?php if (KT_USER_IS_ADMIN) { ?>

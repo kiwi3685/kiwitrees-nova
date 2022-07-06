@@ -37,7 +37,7 @@ if (!defined('KT_KIWITREES')) {
 	var map = null;
 	var head = '';
 	var dir = '';
-	var svzoom = '';
+//	var svzoom = '';
 
 	var infowindow = new google.maps.InfoWindow( {
 		// size: new google.maps.Size(150,50),
@@ -219,7 +219,7 @@ if (!defined('KT_KIWITREES')) {
 
 		// Create the map and mapOptions
 		var mapOptions = {
-			zoom: 0,
+			zoom: 7,
 			center: map_center,
 			mapTypeId: google.maps.MapTypeId.<?php echo $GOOGLEMAP_MAP_TYPE; ?>, // ROADMAP, SATELLITE, HYBRID, TERRAIN
 			mapTypeControlOptions: {
@@ -230,7 +230,7 @@ if (!defined('KT_KIWITREES')) {
 			position: google.maps.ControlPosition.TOP_RIGHT,	// BOTTOM, BOTTOM_LEFT, LEFT, TOP, etc
 			style: google.maps.NavigationControlStyle.SMALL		// ANDROID, DEFAULT, SMALL, ZOOM_PAN
 			},
-			streetViewControl: false,							// Show Pegman or not
+			streetViewControl: true,							// Show Pegman or not
 			scrollwheel: false
 		};
 		map = new google.maps.Map(document.getElementById('map_pane'), mapOptions);
@@ -358,7 +358,6 @@ if (!defined('KT_KIWITREES')) {
 			var placed = locations[i][9];							// Yes indicates multitab item
 			var name2 = locations[i][11];							// printable name for marker title
 			var point = new google.maps.LatLng(lat,lng);			// Place Latitude, Longitude
-
 			var media = locations[i][14];							// media item
 			var marker_icon = locations[i][20];						// Marker icon image (flag)
 
