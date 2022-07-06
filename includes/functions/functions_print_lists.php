@@ -1657,14 +1657,24 @@ function format_note_table($datalist) {
 	} else {
 		$table_id = 'noteTable';
 	}
+
+	$controller
+		->addExternalJavascript(KT_DATATABLES_JS)
+		->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
+	;
+
 	if (KT_USER_CAN_EDIT) {
+		$controller
+			->addExternalJavascript(KT_DATATABLES_BUTTONS)
+			->addExternalJavascript(KT_DATATABLES_HTML5);
 		$buttons = 'B';
 	} else {
 		$buttons = '';
 	}
 
+	$html = '';
+
 	$controller
-		->addExternalJavascript(KT_DATATABLES_JS)
 		->addInlineJavascript('
 			jQuery.fn.dataTableExt.oSort["unicode-asc" ]=function(a,b) {return a.replace(/<[^<]*>/, "").localeCompare(b.replace(/<[^<]*>/, ""))};
 			jQuery.fn.dataTableExt.oSort["unicode-desc"]=function(a,b) {return b.replace(/<[^<]*>/, "").localeCompare(a.replace(/<[^<]*>/, ""))};
@@ -1678,6 +1688,11 @@ function format_note_table($datalist) {
 				displayLength: 20,
 				pagingType: "full_numbers",
 				stateSave: true,
+				stateSaveParams: function (settings, data) {
+					data.columns.forEach(function(column) {
+						delete column.search;
+					});
+				},
 				stateDuration: -1,
 				columns: [
 					/*  0 title     */ { type: "unicode" },
