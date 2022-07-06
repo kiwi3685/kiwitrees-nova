@@ -955,11 +955,14 @@ switch ($action) {
 				<input type="hidden" name="action" value="addnoteaction">
 				<input type="hidden" name="noteid" value="newnote">
 				<div id="add_facts">
-					<div class="help_text">
-						<p class="help_content">
-							<?php echo KT_I18N::translate('Shared Notes are free-form text and will appear in the Fact Details section of the page.<br><br>Each shared note can be linked to more than one person, family, source, or event.'); ?>
-						</p>
-					</div>
+                    <div class="cell callout warning help_content">
+                        <?php echo KT_I18N::translate('
+                            Shared Notes are free-form text and will appear in the Fact Details section of the page.
+                            <br>
+                            Each shared note can be linked to more than one person, family, source, or event.
+                        '); ?>
+                    </div>
+
 					<div id="TITLE_factdiv">
 						<label>
 							<?php echo KT_I18N::translate('Shared note'); ?>
@@ -969,22 +972,9 @@ switch ($action) {
 							<?php echo print_specialchar_link('NOTE'); ?>
 						</div>
 					</div>
-					<?php if (KT_USER_IS_ADMIN) { ?>
-						<div class="last_change">
-							<label>
-								<?php echo KT_Gedcom_Tag::getLabel('CHAN'); ?>
-							</label>
-							<div class="input">
-								<?php if ($NO_UPDATE_CHAN) { ?>
-									<input type="checkbox" checked="checked" name="preserve_last_changed">
-								<?php } else { ?>
-									<input type="checkbox" name="preserve_last_changed">
-								<?php }
-                                echo KT_I18N::translate('Do not update the “last change” record'), help_link('no_update_CHAN'); ?>
-							</div>
-						</div>
-					<?php }?>
+                    <?php echo no_update_chan($record); ?>
 				</div>
+
 				<p id="save-cancel">
 					<button class="btn btn-primary" type="submit">
 						<i class="fa fa-save"></i>
@@ -1151,54 +1141,42 @@ switch ($action) {
             ->pageHeader();
         ?>
 
-		<div id="edit_interface-page">
-			<h4><?php echo $controller->getPageTitle(); ?></h4>
-			<form method="post" action="edit_interface.php" >
-				<input type="hidden" name="action" value="update">
-				<input type="hidden" name="pid" value="<?php echo $pid; ?>">
-				<div id="add_facts">
-					<div class="help_text">
-						<p class="help_content">
-							<?php echo KT_I18N::translate('Shared Notes are free-form text and will appear in the Fact Details section of the page.<br><br>Each shared note can be linked to more than one person, family, source, or event.'); ?>
-						</p>
-					</div>
-					<div id="TITLE_factdiv">
-						<label>
-							<?php echo KT_I18N::translate('Shared note'); ?>
-						</label>
-						<div class="input">
-							<textarea name="NOTE" id="NOTE" rows="15" cols="90"><?php echo htmlspecialchars($note_content); ?></textarea>
-						</div>
-						<?php if (KT_USER_IS_ADMIN) { ?>
-							<div class="last_change">
-								<label>
-									<?php echo KT_Gedcom_Tag::getLabel('CHAN'); ?>
-								</label>
-								<div class="input">
-									<?php if ($NO_UPDATE_CHAN) { ?>
-										<input type="checkbox" checked="checked" name="preserve_last_changed">
-									<?php } else { ?>
-										<input type="checkbox" name="preserve_last_changed">
-									<?php }
-                                    echo KT_I18N::translate('Do not update the “last change” record'), help_link('no_update_CHAN'); ?>
-								</div>
-							</div>
-						<?php }?>
-					</div>
-					<input type="hidden" name="num_note_lines" value="<?php echo $num_note_lines; ?>">
-				</div>
-				<p id="save-cancel">
-					<button class="btn btn-primary" type="submit">
-						<i class="fa fa-save"></i>
-						<?php echo KT_I18N::translate('Save'); ?>
-					</button>
-					<button class="btn btn-primary" type="button"  onclick="window.close();">
-						<i class="fa fa-xmark"></i>
-						<?php echo KT_I18N::translate('close'); ?>
-					</button>
-				</p>
-			</form>
-		</div> <!-- id="edit_interface-page" -->
+        <div id="edit_interface-page" class="grid-x grid-padding-x">
+			<div class="cell large-10 large-offset-1">
+				<h3><?php echo $controller->getPageTitle(); ?></h3>
+
+    			<form method="post" action="edit_interface.php" enctype="multipart/form-data">
+    				<input type="hidden" name="action" value="update">
+    				<input type="hidden" name="pid" value="<?php echo $pid; ?>">
+                    <input type="hidden" name="num_note_lines" value="<?php echo $num_note_lines; ?>">
+
+                    <div class="cell callout warning help_content">
+                        <?php echo KT_I18N::translate('
+                            Shared Notes are free-form text and will appear in the Fact Details section of the page.
+                            <br>
+                            Each shared note can be linked to more than one person, family, source, or event.
+                        '); ?>
+                    </div>
+
+                    <div class="cell" id="NOTE_factdiv">
+                		<div class="grid-x">
+                			<div class="cell small-12 medium-2">
+                				<label class="h5">
+                                     <?php echo KT_I18N::translate('Shared note'); ?>
+    						    </label>
+                            </div>
+    						<div class="cell small-12 medium-10">
+    							<textarea name="NOTE" id="NOTE" rows="15" cols="90"><?php echo htmlspecialchars($note_content); ?></textarea>
+    						</div>
+    					</div>
+    				</div>
+
+                    <?php echo no_update_chan($note); ?>
+
+                    <?php echo submitButtons(); ?>
+    			</form>
+            </div>
+		</div>
 		<?php
         break;
 
