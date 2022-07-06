@@ -9325,7 +9325,7 @@ ol.list-upper-roman {
 
 /* General */
 .lang-active {
-	color: #5da423;
+	color: #5da423 !important;
 	font-weight: 600;
 }
 

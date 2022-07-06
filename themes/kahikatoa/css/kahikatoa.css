@@ -9317,9 +9317,8 @@ form select {
 }
 
 .lang-active {
-	background-color: #e0e0e0;
-	color: #3adb76;
-	font-weight: 600;
+	color: #ab3334 !important;
+	font-weight: 700;
 }
 
 .vertList {
