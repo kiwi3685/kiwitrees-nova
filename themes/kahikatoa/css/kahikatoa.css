@@ -36,8 +36,8 @@
 	border-right: 0.25rem solid #ab3334;
 }
 .callout.secondary {
-	border-left: 0.25rem solid #ab3334;
-	border-right: 0.25rem solid #ab3334;
+	border-left: 0.25rem solid #faf5e8;
+	border-right: 0.25rem solid #faf5e8;
 }
 .callout.success {
 	border-left: 0.25rem solid #3adb76;

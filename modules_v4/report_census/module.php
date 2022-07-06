@@ -72,14 +72,11 @@ class report_census_KT_Module extends KT_Module implements KT_Module_Report {
 		global $controller, $GEDCOM, $iconStyle;
 
 		//-- args
-		$go 	= KT_Filter::post('go');
 		$surn	= KT_Filter::post('surn', '[^<>&%{};]*');
-		$plac	= KT_Filter::post('plac', '[^<>&%{};]*');
+		$plac	= KT_Filter::post('plac', '[^<>&%{};]*') ? KT_Filter::post('plac', '[^<>&%{};]*') : '';
 		$dat	= KT_Filter::post('dat', '[^<>&%{};]*');
-		$ged	= KT_Filter::post('ged');
-		if (empty($ged)) {
-			$ged = $GEDCOM;
-		}
+		$ged	= empty($ged) ? $GEDCOM : KT_Filter::post('ged');
+		$go 	= KT_Filter::post('go') ? KT_Filter::post('go') : "0";
 
 		foreach (KT_Census_Census::allCensusPlaces() as $census_place) {
 			//List of Places
@@ -103,24 +100,20 @@ class report_census_KT_Module extends KT_Module implements KT_Module_Report {
 			->addExternalJavascript(KT_AUTOCOMPLETE_JS_URL)
 			->addInlineJavascript('
 				autocomplete();
-
-				var plac = "' . $opt . '";
-				jQuery("optgroup").css("display", "none");
-				jQuery("optgroup#" + plac).css("display", "block");
-
-				jQuery("#cens_plac").on("change", function() {
-					sel = jQuery("select#cens_plac").val();
-					jQuery("optgroup").css("display", "none");
-					jQuery("optgroup#" + sel).css("display", "block");
-				});
-
 			'); ?>
 
 			<!-- Start page layout  -->
 			<?php echo pageStart('census_check', KT_I18N::translate('Individuals with missing census data', '', $this->getDescription())); ?>
 				<form class="noprint" name="surnlist" id="surnlist" method="post" action="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=show">
-					<input type="hidden" name="go" value="1">
 					<div class="grid-x grid-margin-x">
+						<div class="cell callout warning help_content">
+							<?php echo KT_I18N::translate('
+								Enter a surname, then select any combination of Census place and Census date.
+								<br>
+								Under Surname, you can also enter \'All\' for everyone, or leave it blank for all of your own ancestors.
+							'); ?>
+						</div>
+
 						<div class="cell medium-4">
 							<label class="h5" for="autocompleteInput"><?php echo KT_Gedcom_Tag::getLabel('SURN'); ?></label>
 							<div class="input-group autocomplete_container">
@@ -135,15 +128,13 @@ class report_census_KT_Module extends KT_Module implements KT_Module_Report {
 						</div>
 						<div class="cell medium-4">
 							<label class="h5" for="cens_plac"><?php echo KT_I18N::translate('Census Place'); ?></label>
-							<select name="plac" id="cens_plac">
-								<?php
-								echo '<option value="' . KT_I18N::translate('all') . '"';
-									if ($plac == KT_I18N::translate('all')) {
+							<select name="plac" id="cens_plac" onchange="this.form.submit();">
+								<?php echo '<option value="' . KT_I18N::translate('All') . '"';
+									if ($dat == KT_I18N::translate('All')) {
 										echo ' selected = "selected"';
 									}
-									echo KT_I18N::translate('all') . '
-								</option>';
-								foreach ($census_places as $census_place) {
+									echo '>' . KT_I18N::translate('All') . '
+								</option>';								foreach ($census_places as $census_place) {
 									echo '<option value="' . $census_place. '"';
 										if ($census_place == $plac) {
 											echo ' selected = "selected"';
@@ -157,28 +148,33 @@ class report_census_KT_Module extends KT_Module implements KT_Module_Report {
 						<div class="cell medium-4">
 							<label class="h5" for "cens_dat"><?php echo KT_I18N::translate('Census date'); ?></label>
 							<select name="dat"  id="cens_dat">
-								<?php echo '<option value="' . KT_I18N::translate('all') . '"';
-									if ($dat == KT_I18N::translate('all')) {
-										echo ' selected = "selected"';
-									}
-									echo '>' . KT_I18N::translate('all') . '
-								</option>';
-								foreach (KT_Census_Census::allCensusPlaces() as $census_place) {
-									echo '<optgroup id="' . str_replace(" ", "", $census_place->censusPlace()) . '" label="' . $census_place->censusPlace() . '">';
-										foreach ($census_place->allCensusDates() as $census) {
-											echo '<option value="' . $census->censusDate() . '"';
-												if ($dat == $census->censusDate()) {
-													echo ' selected="selected"';
-												}
-												echo '>' . $census->censusDate() . '
-											</option>';
+								<?php  if ($plac == '') {
+									echo '<option value="' . KT_I18N::translate('All') . '"';
+										if ($dat == KT_I18N::translate('All')) {
+											echo ' selected = "selected"';
 										}
-									echo '</optgroup>';
+									echo '>
+										' . KT_I18N::translate('All') . '
+									</option>';
+								}
+								foreach (KT_Census_Census::allCensusPlaces() as $census_place) {
+									if ($plac && $plac == $census_place->censusPlace()) {
+										echo '<optgroup id="' . str_replace(" ", "", $census_place->censusPlace()) . '" label="' . $census_place->censusPlace() . '">';
+											foreach ($census_place->allCensusDates() as $census) {
+												echo '<option value="' . $census->censusDate() . '"';
+													if ($dat == $census->censusDate()) {
+														echo ' selected="selected"';
+													}
+													echo '>' . $census->censusDate() . '
+												</option>';
+											}
+										echo '</optgroup>';
+									}
 								} ?>
 							</select>
 						</div>
 					</div>
-					<button class="button" type="submit">
+					<button class="button" type="submit" name="go" value="1">
 						<i class="<?php echo $iconStyle; ?> fa-eye"></i>
 						<?php echo KT_I18N::translate('Show'); ?>
 					</button>
@@ -203,7 +199,7 @@ class report_census_KT_Module extends KT_Module implements KT_Module_Report {
 					}
 				}
 
-				if ($surn == KT_I18N::translate('All') || $surn == KT_I18N::translate('all')) {
+				if ($surn == KT_I18N::translate('All') || $surn == KT_I18N::translate('All')) {
 					$indis = array_unique(KT_Query_Name::individuals('', '', '', false, false, KT_GED_ID));
 				} elseif ($surn) {
 					$indis = array_unique(KT_Query_Name::individuals($surn, '', '', false, false, KT_GED_ID));
@@ -223,7 +219,7 @@ class report_census_KT_Module extends KT_Module implements KT_Module_Report {
 				// Show sources to user
 				if ($go == 1) {
 					// Notes about the register
-					if (in_array($plac, array('England', 'Wales')) && ($dat === '29 SEP 1939' || $dat === KT_I18N::translate('all'))) { ?>
+					if (in_array($plac, array('England', 'Wales')) && ($dat === '29 SEP 1939' || $dat === KT_I18N::translate('All'))) { ?>
 						<div class="callout secondary">
 							<h5 style="margin: 0 auto;"><?php echo KT_I18N::translate('Notes:'); ?></h5>
 							<ol id="register_notes">
@@ -265,8 +261,8 @@ class report_census_KT_Module extends KT_Module implements KT_Module_Report {
 									foreach ($data_sources as $data_source) {
 									$check1 = $data_source['place'];
 									$check2 = $data_source['date'];
-										if($check1 == $plac || $plac == KT_I18N::translate('all')) {
-											if($check2 == $dat || $dat == KT_I18N::translate('all')) {
+										if($check1 == $plac || $plac == KT_I18N::translate('All')) {
+											if($check2 == $dat || $dat == KT_I18N::translate('All')) {
 												// Person not alive - skip
 												if ($data_source['jd'] < $birt_jd || $data_source['jd'] > $deat_jd)
 													continue;
@@ -338,15 +334,16 @@ class report_census_KT_Module extends KT_Module implements KT_Module_Report {
 										</div>
 									</div>
 
-									<?php ++$n;
+									<?php
+									++$n;
 									}
-								}
-								if ($n == 0 && $surn) { ?>
-									<div class="center error"><?php echo KT_I18N::translate('No missing records found'); ?></div>
-								<?php } else { ?>
-									<div class="center"><?php echo KT_I18N::plural('%s record found', '%s records found', $n, $n); ?></div>
-								<?php } ?>
+								} ?>
 							</div>
+							<?php if ($n == 0 && $surn) { ?>
+								<div class="cell callout alert "><?php echo KT_I18N::translate('No missing records found'); ?></div>
+							<?php } else { ?>
+								<div class="cell callout success"><?php echo KT_I18N::plural('%s record found', '%s records found', $n, $n); ?></div>
+							<?php } ?>
 						</div>
 					</div>
 				<?php }
