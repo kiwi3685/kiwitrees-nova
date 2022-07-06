@@ -81,7 +81,9 @@ class KT_Controller_Individual extends KT_Controller_GedcomRecord {
 
 		// If we can display the details, add them to the page header
 		if ($this->record && $this->record->canDisplayDetails()) {
-			$this->setPageTitle($this->record->getFullName() . ' ' . $this->record->getLifespan());
+//			$this->setPageTitle($this->record->getShortName(30));
+			$this->setPageTitle($this->record->getShortName(30) . ' ' . $this->record->getLifespan());
+//			$this->setPageTitle($this->record->getLifespanName());
 		}
 	}
 
@@ -478,6 +480,16 @@ class KT_Controller_Individual extends KT_Controller_GedcomRecord {
 			}
 		}
 		return $this->globalfacts;
+	}
+
+	/**
+	* get the individual facts shown on tab 1
+	* @return array
+	*/
+	function getAttributeFacts() {
+		$attributefacts = $this->record->getAttributeFacts();
+		sort_facts($attributefacts);
+		return $attributefacts;
 	}
 
 	/**

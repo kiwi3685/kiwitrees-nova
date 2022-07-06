@@ -90,11 +90,11 @@ class KT_Event {
 	// record, to allow editing
 	function __construct($subrecord, $parent, $lineNumber) {
 		if (preg_match('/^1 ('.KT_REGEX_TAG.') ?(.*)((\n2 CONT.*)*)/', $subrecord, $match)) {
-			$this->tag   =$match[1];
-			$this->detail=$match[2];
+			$this->tag   	= $match[1];
+			$this->detail	= $match[2];
 			// Some detail records contain multiple lines
 			if ($match[3]) {
-				$this->detail.=str_replace(array("\n2 CONT ", "\n2 CONT"), "\n", $match[3]);
+				$this->detail .= str_replace(array("\n2 CONT ", "\n2 CONT"), "\n", $match[3]);
 			}
 		} else {
 			// We are not ready for this yet.

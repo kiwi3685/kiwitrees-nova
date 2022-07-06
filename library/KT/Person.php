@@ -28,6 +28,8 @@ if (!defined('KT_KIWITREES')) {
 
 class KT_Person extends KT_GedcomRecord {
     var $indifacts        = array();
+    var $attributeFacts   = array();
+    var $eventFacts       = array();
     var $otherfacts       = array();
     var $globalfacts      = array();
     var $mediafacts       = array();
@@ -973,7 +975,7 @@ class KT_Person extends KT_GedcomRecord {
     */
     function getAttributeFacts() {
         $this->parseFacts();
-        return $this->attribFacts;
+        return $this->attributeFacts;
     }
 
     /**
@@ -1077,6 +1079,7 @@ class KT_Person extends KT_GedcomRecord {
         // I18N: %s is the spouse name
         return KT_I18N::translate('Family with %s', $spouse);
     }
+
     /**
     * get updated Person
     * If there is an updated individual record in the gedcom file
@@ -1097,6 +1100,7 @@ class KT_Person extends KT_GedcomRecord {
         }
         return null;
     }
+
     /**
     * Parse the facts from the individual record
     */
@@ -1113,14 +1117,7 @@ class KT_Person extends KT_GedcomRecord {
         //-- sort the fact info into different categories for people
         foreach ($this->facts as $f => $event) {
             $fact = $event->getTag();
-
-            if (in_array($fact, KT_Gedcom_Tag::getEventFacts())) {
-                // -- handle special name fact case
-                $this->eventFacts[] = $event;
-            } elseif (in_array($fact, KT_Gedcom_Tag::getAttributeFacts())) {
-                // -- handle special name fact case
-                $this->attributeFacts[] = $event;
-            } elseif ($fact == 'NAME') {
+            if ($fact == 'NAME') {
                 // -- handle special name fact case
                 $this->globalfacts[] = $event;
             } elseif ($fact == 'SOUR') {
@@ -1134,7 +1131,7 @@ class KT_Person extends KT_GedcomRecord {
                 $this->globalfacts[] = $event;
                 $sexfound            = true;
             } elseif ($fact == 'OBJE') {
-            }    else {
+            } else {
                 $this->indifacts[] = $event;
             }
         }
@@ -1143,6 +1140,7 @@ class KT_Person extends KT_GedcomRecord {
             $this->globalfacts[] = new KT_Event('1 SEX U', $this, 'new');
         }
     }
+
     /**
     * add facts from the family record
     * @param boolean $otherfacts whether or not to add other related facts such as parents facts, associated people facts, and historical facts

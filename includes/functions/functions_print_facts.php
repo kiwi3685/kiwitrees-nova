@@ -469,7 +469,7 @@ function print_timeline(KT_Event $fact, KT_GedcomRecord $record) {
 	global $HIDE_GEDCOM_ERRORS, $SHOW_FACT_ICONS, $iconStyle ;
 	static $n_chil = 0, $n_gchi = 0;
 
-	if (!$fact->canShow()) {
+	if (!$fact->canShow() || !KT_Gedcom_Tag::isTagEvent($fact->getTag())) {
 		return;
 	}
 
@@ -586,7 +586,7 @@ function print_timeline(KT_Event $fact, KT_GedcomRecord $record) {
 			<!-- Event name -->
 			<div class="cell small-10 medium-2 small-order-1 medium-order-2 event">
 				<?php if ($SHOW_FACT_ICONS) {
-//						echo $fact->Icon() . '&nbsp;';
+					// 	echo $fact->Icon() . '&nbsp;';
 				}
 				echo  '<span class="h6">' . $label . '</span>'; ?>
 			</div>
@@ -899,6 +899,207 @@ function print_timeline(KT_Event $fact, KT_GedcomRecord $record) {
 }
 //------------------- end print timeline function
 
+function print_attributes(KT_Event $fact, KT_GedcomRecord $record) {
+	global $HIDE_GEDCOM_ERRORS, $SHOW_FACT_ICONS, $iconStyle ;
+
+	$label	= '';
+	$detail	= '';
+
+	if (!$fact->canShow()) {
+		return;
+	}
+
+	if ($fact->getParentObject()) {
+		$pid = $fact->getParentObject()->getXref();
+	} else {
+		$pid = '';
+	}
+
+	// Who is this fact about?  Need it to translate fact label correctly
+	if ($fact->getSpouse()) {
+		// Event of close relative
+		$label_person = $fact->getSpouse();
+	} else if (preg_match('/2 _WTS @('.KT_REGEX_XREF.')@/', $fact->getGedcomRecord(), $match)) {
+		// Event of close relative
+		$label_person = KT_Person::getInstance($match[1]);
+	} else if ($fact->getParentObject() instanceof KT_Family) {
+		// Family event
+		$husb = $fact->getParentObject()->getHusband();
+		$wife = $fact->getParentObject()->getWife();
+		if (empty($wife) && !empty($husb)) $label_person = $husb;
+		else if (empty($husb) && !empty($wife)) $label_person = $wife;
+		else $label_person = $fact->getParentObject();
+	} else {
+		// The actual person
+		$label_person = $fact->getParentObject();
+	}
+
+	$styleadd = "";
+	if ($fact->getIsNew()) $styleadd = "change_new";
+	if ($fact->getIsOld()) $styleadd = "change_old";
+
+	// Does this fact have a type?
+	if (preg_match('/\n2 TYPE (.+)/', $fact->getGedcomRecord(), $match)) {
+		$type = $match[1];
+	} else {
+		$type='';
+	}
+
+
+	switch ($fact->getTag()) {
+		case 'FACT':
+			if (KT_Gedcom_Tag::isTag($type)) {
+				// Some users (just Meliza?) use "1 EVEN/2 TYPE BIRT".  Translate the TYPE.
+				$label	= KT_Gedcom_Tag::getLabel($type, $label_person);
+				$type	= ''; // Do not print this again
+			} elseif ($type) {
+				// We don't have a translation for $type - but a custom translation might exist.
+				$label	= KT_I18N::translate(htmlspecialchars($type));
+				$type	= ''; // Do not print this again
+			} else {
+				// An unspecified fact/event
+				$label = KT_Gedcom_Tag::getLabel($fact->getTag(), $label_person);
+			}
+			break;
+		default:
+			// Normal fact/event
+			$label = KT_Gedcom_Tag::getLabel($fact->getTag(), $label_person);
+			break;
+	}
+
+	if ($SHOW_FACT_ICONS) {
+		// 	$label =  $fact->Icon() . '&nbsp;';
+	}
+	// Print the value of this fact/event
+	switch ($fact->getTag()) {
+		case 'ADDR':
+			$detail =  print_address_structure($fact->getGedcomRecord(), 1);
+		break;
+		case 'AFN':
+			$detail = '<div class="field"><a href="https://familysearch.org/search/tree/results#count=20&query=afn:' . rawurlencode($fact->getDetail()) . '" target="new">' . htmlspecialchars($fact->getDetail()) . '</a></div>';
+		break;
+		case 'ASSO':
+			// we handle this later, in print_asso_rela_record()
+		break;
+		case 'EMAIL':
+		case 'EMAI':
+		case '_EMAIL':
+			$detail = '<div class="field"><a href="mailto:' . htmlspecialchars($fact->getDetail()) . '">' . htmlspecialchars($fact->getDetail()) . '</a></div>';
+		break;
+		case 'FILE':
+			if (KT_USER_CAN_EDIT || KT_USER_CAN_ACCEPT) {
+				$detail = '<div class="field">' . htmlspecialchars($fact->getDetail()) . '</div>';
+			}
+		break;
+		case 'RESN':
+			$detail = '<div class="field">';
+				switch ($fact->getDetail()) {
+					case 'none':
+						// Note: "1 RESN none" is not valid gedcom.
+						// However, kiwitrees privacy rules will interpret it as "show an otherwise private record to public".
+						$detail = '<i class="icon-resn-none"></i> ' . KT_I18N::translate('Show to visitors');
+					break;
+					case 'privacy':
+						$detail = '<i class="icon-class-none"></i> ' . KT_I18N::translate('Show to members');
+					break;
+					case 'confidential':
+						$detail = '<i class="icon-confidential-none"></i> ' . KT_I18N::translate('Show to managers');
+					break;
+					case 'locked':
+						$detail = '<i class="icon-locked-none"></i> ' . KT_I18N::translate('Only managers can edit');
+					break;
+					default:
+						$detail = htmlspecialchars($fact->getDetail());
+					break;
+				}
+			$detail .= '</div>';
+		break;
+		case 'PUBL': // Publication details might contain URLs.
+			$detail = '<div class="field">' . expand_urls(htmlspecialchars($fact->getDetail())) . '</div>';
+			break;
+		case 'REPO':
+			if (preg_match('/^@('.KT_REGEX_XREF.')@$/', $fact->getDetail(), $match)) {
+				print_repository_record($match[1]);
+			} else {
+				$detail = '<div class="error">' . htmlspecialchars($fact->getDetail()) . '</div>';
+			}
+			break;
+		case 'URL':
+		case '_URL':
+		case 'WWW':
+			$detail = '<div class="field"><a href="' . htmlspecialchars($fact->getDetail()) . '">' . htmlspecialchars($fact->getDetail()) . '</a></div>';
+			break;
+		case 'TEXT': // 0 SOUR / 1 TEXT
+			$detail = '<div class="field">' . nl2br(htmlspecialchars($fact->getDetail())) . '</div>';
+		break;
+		default:
+			// Display the value for all other facts/events
+			switch ($fact->getDetail()) {
+				case '':
+					// Nothing to display
+				break;
+				case 'N':
+					// Not valid GEDCOM
+					$detail = '<div class="field">' . KT_I18N::translate('No') . '</div>';
+				break;
+				case 'Y':
+					// Do not display "Yes".
+				break;
+				default:
+					if (preg_match('/^@('.KT_REGEX_XREF.')@$/', $fact->getDetail(), $match)) {
+						$target = KT_GedcomRecord::getInstance($match[1]);
+						if ($target) {
+							$detail = '<div><a href="' . $target->getHtmlUrl() . '">' . $target->getFullName() . '</a></div>';
+						} else {
+							$detail = '<div class="error">' . htmlspecialchars($fact->getDetail()) . '</div>';
+						}
+					} else {
+						$detail = '<div class="field"><span dir="auto">' . htmlspecialchars($fact->getDetail()) . '</span></div>';
+					}
+				break;
+			}
+		break;
+	}
+
+	// -- find source for each fact
+	$detail .= print_fact_sources($fact->getGedcomRecord(), 2);
+	// -- find notes for each fact
+	$detail .= print_fact_notes($fact->getGedcomRecord(), 2);
+	//-- find media objects
+	$detail .= print_media_links($fact->getGedcomRecord(), 2, $pid);
+
+	return array('label' => $label, 'detail' => $detail);
+}
+//------------------- end print attributes function
+
+function print_edit_icons() {
+	if (KT_USER_CAN_EDIT) { ?>
+		<div class="cell small-2 medium-1 medium-order-5 edit">
+			<?php if (KT_USER_CAN_EDIT && $styleadd != 'change_old' && $fact->getLineNumber() > 0 && $fact->canEdit()) { ?>
+				<div class="editfacts button-group stacked">
+					<a class="button clear" onclick="return edit_record('<?php echo $pid; ?>', <?php echo $fact->getLineNumber(); ?>);">
+						<i class="<?php echo $iconStyle; ?> fa-edit"></i>
+						<span class="link_text show-for-large" tabindex="1" title="<?php echo KT_I18N::translate('Edit'); ?>">
+							<?php echo KT_I18N::translate('Edit'); ?>
+						</span>
+					</a>
+					<a class="button clear" onclick="jQuery.post('action.php',{action:'copy-fact', type:'<?php echo $fact->getParentObject()->getType(); ?>',factgedcom:'<?php echo rawurlencode($fact->getGedcomRecord()); ?>'},function(){location.reload();})">
+						<i class="<?php echo $iconStyle; ?> fa-copy"></i>
+						<span class="link_text show-for-large" tabindex="2" title="<?php echo KT_I18N::translate('Copy'); ?>">
+							<?php echo KT_I18N::translate('Copy'); ?>
+						</span>
+					</a>
+					<a class="button clear" onclick="return delete_fact('<?php echo $pid; ?>', <?php echo $fact->getLineNumber(); ?>, '', '<?php echo KT_I18N::translate('Are you sure you want to delete this fact?'); ?>');">
+						<i class="<?php echo $iconStyle; ?> fa-trash-can"></i>
+						<span class="link_text show-for-large" tabindex="3" title="<?php echo KT_I18N::translate('Delete'); ?>">
+							<?php echo KT_I18N::translate('Delete'); ?>
+						</span>
+					</a>
+				</div>
+			<?php } ?>
+		</div>
+	<?php }
+}
 
 
 /**

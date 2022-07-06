@@ -1298,7 +1298,7 @@ global $iconstyles;
 											<div class="cell large-9">
 												<select id="NEW_CHART_BOX_TAGS" data-placeholder="Select facts..." multiple class="chosen_select" name="NEW_CHART_BOX_TAGS[]">
 													<?php $chartBoxTags = explode(",", get_gedcom_setting(KT_GED_ID, 'CHART_BOX_TAGS'));
-													foreach (KT_Gedcom_Tag::getPicklistFacts() as $factId => $factName) {
+													foreach (KT_Gedcom_Tag::getPicklistFacts('ALL') as $factId => $factName) {
 														$selected = in_array($factId, $chartBoxTags) ? ' selected=selected ' : ' ';
 														echo '<option' . $selected . 'value="' . $factId . '">' . $factName . '&nbsp;(' . $factId . ')&nbsp;</option>';
 													} ?>
@@ -1410,7 +1410,7 @@ global $iconstyles;
 											<div class="cell large-9">
 												<select id="NEW_INDI_FACTS_ADD" data-placeholder="Select facts..." multiple class="chosen_select" name="NEW_INDI_FACTS_ADD[]">
 													<?php $allIndiTags = explode(",", get_gedcom_setting(KT_GED_ID, 'INDI_FACTS_ADD'));
-													foreach (KT_Gedcom_Tag::getPicklistFacts() as $factId => $factName) {
+													foreach (KT_Gedcom_Tag::getPicklistFacts('ALL') as $factId => $factName) {
 														$selected = in_array($factId, $allIndiTags) ? ' selected=selected ' : ' ';
 														echo '<option' . $selected . 'value="' . $factId . '">' . $factName . '&nbsp;(' . $factId . ')&nbsp;</option>';
 													} ?>

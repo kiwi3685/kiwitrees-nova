@@ -81,10 +81,10 @@ class tabi_events_KT_Module extends KT_Module implements KT_Module_IndiTab {
 		');
 
 		ob_start();
-			$indifacts = $controller->getEventFacts();
-			if (count($indifacts) == 0) { ?>
+			$eventFacts = $controller->getIndiFacts();
+			if (count($eventFacts) == 0) { ?>
 				<div class="callout alert">
-					<?php echo KT_I18N::translate('There are no Facts for this individual.'); ?>
+					<?php echo KT_I18N::translate('There are no events for this individual.'); ?>
 				</div>
 			<?php } else { ?>
 				<div class="cell tabHeader">
@@ -127,21 +127,20 @@ class tabi_events_KT_Module extends KT_Module implements KT_Module_IndiTab {
 					</div>
 				</div>
 				<?php
-				foreach ($indifacts as $fact) {
+				foreach ($eventFacts as $fact) {
 					if ($fact->getParentObject() instanceof KT_Family) {
 						// Print all family facts
 						print_timeline($fact, $controller->record);
 					} else {
 						// Individual/reference facts (e.g. CHAN, IDNO, RFN, AFN, REFN, RIN, _UID) can be shown in the sidebar
-						if (!array_key_exists('extra_info', KT_Module::getActiveSidebars()) || !extra_info_KT_Module::showFact($fact)) {
+//						if (!array_key_exists('extra_info', KT_Module::getActiveSidebars()) || !extra_info_KT_Module::showFact($fact)) {
 							print_timeline($fact, $controller->record);
-						}
-
+//						}
 					}
 				}
 				//-- new fact link
 				if ($controller->record->canEdit()) {
-					print_add_new_fact($controller->record->getXref(), $indifacts, 'INDI');
+					print_add_new_fact($controller->record->getXref(), $eventFacts, 'INDI');
 				}
 			}
 
