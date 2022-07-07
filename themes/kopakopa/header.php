@@ -85,7 +85,7 @@
 	</head>
 	<body>
 		<?php if ($view !='simple') { ?>
-			<nav class="grid-x">
+			<nav class="grid-x noprint">
 				<div class="top-bar stack-for-small">
 					<div class="top-bar-left">
 						<ul class="dropdown menu align-top" data-dropdown-menu>
