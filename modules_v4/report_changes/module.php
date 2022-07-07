@@ -194,7 +194,7 @@ class report_changes_KT_Module extends KT_Module implements KT_Module_Report {
                     </div>
                     <div class="cell medium-3">
                         <label class="h5" for = "DATE1">' . KT_I18N::translate('Starting range of change dates') . '</label>
-                        <div class="date fdatepicker" id="start" data-date-format="dd MMM yyyy">
+                        <div class="date fdatepicker" id="start" data-date-format="dd M yyyy">
                             <div class="input-group">
                                 <input
                                     type="text"
@@ -212,7 +212,7 @@ class report_changes_KT_Module extends KT_Module implements KT_Module_Report {
                     </div>
                     <div class="cell medium-3">
                         <label class="h5" for = "DATE2">' . KT_I18N::translate('Ending range of change dates') . '</label>
-                        <div class="date fdatepicker" id="start" data-date-format="dd MMM yyyy">
+                        <div class="date fdatepicker" id="start" data-date-format="dd M yyyy">
                             <div class="input-group">
                                 <input
                                     type="text"
@@ -344,7 +344,12 @@ class report_changes_KT_Module extends KT_Module implements KT_Module_Report {
         } else {
             $content .= '
                 <div class="cell callout primary">' .
-                    KT_I18N::translate('There have been no changes within the last %s days.', KT_I18N::number($days)) . '
+                    KT_I18N::plural(
+                        'There have been no changes in the last day',
+                        'There have been no changes in the last %s days',
+                        KT_I18N::number($days), 
+                        KT_I18N::number($days)
+                    ) . '
                 </div>
             ';
         }

@@ -11142,34 +11142,41 @@ div.last_change label {
 
 /* REPORTS */
 /* Tree completeness */
-#tree_completeness-page form button .button {
+#report_tree_completeness-page form button .button {
 	margin: 0;
 }
-#tree_completeness-page table tbody {
+#report_tree_completeness-page table tbody {
 	border: 0.1rem solid #e0e0e0;
 }
-#tree_completeness-page table tbody td:first-child {
+#report_tree_completeness-page table tbody td:first-child {
 	width: 1rem;
 }
-#tree_completeness-page table tbody td:nth-child(2) {
+#report_tree_completeness-page table tbody td:nth-child(2) {
 	text-transform: capitalize;
 }
-#tree_completeness-page .callout {
+#report_tree_completeness-page .callout {
 	padding: 0 1rem;
 }
-#tree_completeness-page .callout button {
+#report_tree_completeness-page .callout button {
 	margin: 0 0.5rem 0.25rem;
 }
-#tree_completeness-page .callout button.close-button {
+#report_tree_completeness-page .callout button.close-button {
 	font-size: 1.25rem;
 }
 
-#census_check-page .card {
+#report_census-page .card {
 	font-size: 0.9rem;
 }
-#census_check-page .card .card-section span {
+#report_census-page .card .card-section span {
 	display: inline-block;
 	font-size: 0.8em;
+}
+
+#report_changes-page .input-group input[type=text] {
+	margin: 0;
+}
+#report_changes-page .input-group span.input-group-label {
+	height: 2.4rem;
 }
 
 /* Icon settings */
