@@ -282,7 +282,7 @@ uksort($users_array, 'strnatcasecmp');
 					<div class="date fdatepicker" id="from" data-date-format="yyyy-mm-dd">
 						<div class="input-group">
 							<input class="input-group-field" type="text" name="from" value="<?php echo htmlspecialchars($from); ?>">
-							<span class="postfix input-group-label"><i class="<?php echo $iconStyle; ?> fa-calendar-alt fa-lg"></i></span>
+							<span class="postfix input-group-label"><i class="<?php echo $iconStyle; ?> fa-calendar-days fa-lg"></i></span>
 						</div>
 					</div>
 				</div>
@@ -291,7 +291,7 @@ uksort($users_array, 'strnatcasecmp');
 					<div class="date fdatepicker" id="to" data-date-format="yyyy-mm-dd">
 						<div class="input-group">
 							<input class="input-group-field" type="text" name="to" value="<?php echo htmlspecialchars($to); ?>">
-							<span class="postfix input-group-label"><i class="<?php echo $iconStyle; ?> fa-calendar-alt fa-lg"></i></span>
+							<span class="postfix input-group-label"><i class="<?php echo $iconStyle; ?> fa-calendar-days fa-lg"></i></span>
 						</div>
 					</div>
 				</div>
