@@ -103,7 +103,7 @@ class report_census_KT_Module extends KT_Module implements KT_Module_Report {
 			'); ?>
 
 			<!-- Start page layout  -->
-			<?php echo pageStart('census_check', KT_I18N::translate('Individuals with missing census data', '', $this->getDescription())); ?>
+			<?php echo pageStart('report_census', KT_I18N::translate('Individuals with missing census data', '', $this->getDescription())); ?>
 				<form class="noprint" name="surnlist" id="surnlist" method="post" action="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=show">
 					<div class="grid-x grid-margin-x">
 						<div class="cell callout warning help_content">
