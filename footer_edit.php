@@ -286,7 +286,7 @@ $controller
 					</tr>
 				</tbody>
 			</table>
-			<div id="instructions" class="callout primary">
+			<div id="instructions" class="callout alert">
 				<?php echo KT_I18N::translate('Highlight a block name and then click on one of the arrow icons to move that highlighted block in the indicated direction.'); ?>
 			</div>
 			<div class="cell text-center">

@@ -309,7 +309,7 @@ KT_DB::exec(
 			<h5 class="inline"><?php echo /* I18N: http://en.wikipedia.org/wiki/User_agent */ KT_I18N::translate('Restrict access to the site, using IP addresses and user-agent strings'); ?></h5>
 			<?php echo faqLink('general/site-access-rules/'); ?>
 		</div>
-		<div class="cell callout primary">
+		<div class="cell callout alert">
 			<?php echo KT_I18N::translate('The following rules are used to decide whether a visitor is a human being (allow full access), a search-engine robot (allow restricted access) or an unwanted crawler (deny all access).'); ?>
 		</div>
 		<div class="cell">
@@ -335,7 +335,7 @@ KT_DB::exec(
 			</button>
 			<hr>
 		</div>
-		<div class="cell callout primary">
+		<div class="cell callout alert">
 			<?php echo KT_I18N::translate('The following visitors were not recognised, and were assumed to be search engines.'); ?>
 		</div>
 		<div class="cell">
