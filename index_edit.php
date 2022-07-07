@@ -255,7 +255,7 @@ $controller
 <div class="grid-x">
 	<div class="cell large-6 large-offset-3">
 		<h3 class="text-center"><?php echo $controller->getPageTitle(); ?></h3>
-		<div id="accessTip" class="callout secondary">
+		<div id="accessTip" class="callout warning">
 			<?php echo KT_I18N::translate('
 				Colour of items under "All available blocks" indicate current access setting, controlling who can see these blocks.<br>
 				<span class="strong alert">Red = No-one</span> | <span class="strong warning">Orange= Managers / admin only</span> | <span class="success">Green = All members</span> | <span class="strong information">Blue = Visitors</span><br>
@@ -343,7 +343,7 @@ $controller
 					</tr>
 				</tbody>
 			</table>
-			<div id="instructions" class="callout alert">
+			<div id="instructions" class="callout warning">
 				<p>
 					<?php echo KT_I18N::translate('Highlight a block name and then click on one of the arrow icons to move that highlighted block in the indicated direction.'); ?>
 				</p><p>

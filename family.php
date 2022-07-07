@@ -31,7 +31,7 @@ if ($controller->record && $controller->record->canDisplayDetails()) {
 
 	if ($controller->record->isMarkedDeleted()) {
 		if (KT_USER_CAN_ACCEPT) { ?>
-			<div class="callout secondary">
+			<div class="callout warning">
 				<?php echo /* I18N: %1$s is “accept”, %2$s is “reject”.  These are links. */ KT_I18N::translate(
 					'This family has been deleted.  You should review the deletion and then %1$s or %2$s it.',
 					'<a href="#" onclick="jQuery.post(\'action.php\',{action:\'accept-changes\',xref:\''.$controller->record->getXref().'\'},function(){location.reload();})">' . KT_I18N::translate_c('You should review the deletion and then accept or reject it.', 'accept') . '</a>',
@@ -40,14 +40,14 @@ if ($controller->record && $controller->record->canDisplayDetails()) {
 				' ', help_link('pending_changes'); ?>
 			</div>
 		<?php } elseif (KT_USER_CAN_EDIT) { ?>
-			<div class="callout secondary">
+			<div class="callout warning">
 				<?php echo KT_I18N::translate('This family has been deleted.  The deletion will need to be reviewed by a moderator.'),
 				' ', help_link('pending_changes'); ?>
 			</div>
 		<?php }
 	} elseif (find_updated_record($controller->record->getXref(), KT_GED_ID)!==null) {
 		if (KT_USER_CAN_ACCEPT) { ?>
-			<div class="callout secondary">
+			<div class="callout warning">
 				<?php echo /* I18N: %1$s is “accept”, %2$s is “reject”.  These are links. */ KT_I18N::translate(
 					'This family has been edited.  You should review the changes and then %1$s or %2$s them.',
 					'<a href="#" onclick="jQuery.post(\'action.php\',{action:\'accept-changes\',xref:\''.$controller->record->getXref().'\'},function(){location.reload();})">' . KT_I18N::translate_c('You should review the changes and then accept or reject them.', 'accept') . '</a>',
@@ -56,7 +56,7 @@ if ($controller->record && $controller->record->canDisplayDetails()) {
 				' ', help_link('pending_changes'); ?>
 			</div>
 		<?php } elseif (KT_USER_CAN_EDIT) { ?>
-			<div class="callout secondary">
+			<div class="callout warning">
 				<?php echo KT_I18N::translate('This family has been edited.  The changes need to be reviewed by a moderator.'),
 				' ', help_link('pending_changes'); ?>
 			</div>

@@ -221,7 +221,7 @@ class KT_Controller_Family extends KT_Controller_GedcomRecord {
 				</div>
 			</div>
 		<?php } else { ?>
-			<div class="callout secondary">
+			<div class="callout warning">
 				<?php echo KT_I18N::translate('No facts for this family.'); ?>
 			</div>
 		<?php }
