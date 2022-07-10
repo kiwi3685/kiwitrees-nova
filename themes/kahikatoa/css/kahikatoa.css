@@ -11890,7 +11890,7 @@ div.dataTables_paginate ul.pagination li.paginate_button.current {
 	}
 }
 @media print, screen and (max-width: 64em) {
-	.noprint {
+	.hide-for-print {
 		display: none;
 	}
 
@@ -11965,7 +11965,7 @@ div.dataTables_paginate ul.pagination li.paginate_button.current {
 #topMenu,
 #navbar,
 #sidebar,
-.noprint {
+.hide-for-print {
 		display: none !important;
 	}
 

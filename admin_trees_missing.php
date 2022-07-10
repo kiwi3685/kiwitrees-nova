@@ -97,7 +97,7 @@ $true  = '<i class="success ' . $iconStyle . ' fa-check"></i>';
     <div class="cell callout warning helpcontent">
         <?php echo /* I18N: Help content for missing data admin page */ KT_I18N::translate('Whenever possible names are followed by the individual\'s lifespan dates for ease of identification. Note that these may include dates of baptism, christening, burial and cremation if birth and death dates are missing.<br>The list also ignores any estimates of dates or ages, so living people will be listed as missing death dates and places.<br>Some facts such as "Religion" do not commonly have sub-tags like date, place or source, so here only the fact itself is checked for.<br><b>Limitations: </b>It is only practical for this tool to search for media objects directly linked to the selected event ("level 2 object"). Other media such as attached directly to the individual (level 1 object), or linked to a source itself linked to the event ("level 3 object"), will not be checked here.'); ?>
     </div>
-    <div class="grid-x grid-margin-x noprint">
+    <div class="grid-x grid-margin-x hide-for-print">
         <form class="cell" method="post" action="<?php echo KT_SCRIPT_NAME; ?>">
             <input type="hidden" name="go" value="1">
             <div class="grid-x grid-padding-x">

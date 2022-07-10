@@ -178,7 +178,7 @@ class report_changes_KT_Module extends KT_Module implements KT_Module_Report {
     $content = '
         <!-- Start page layout  -->
         ' . pageStart('report_changes', $this->getTitle(), 'y', $this->getDescription()) . '
-            <form class="noprint" name="changes" id="changes" method="post" action="module.php?mod=' . $this->getName() . '&mod_action=show">
+            <form class="hide-for-print" name="changes" id="changes" method="post" action="module.php?mod=' . $this->getName() . '&mod_action=show">
                 <input type="hidden" name="action" value="go">
                 <div class="grid-x grid-margin-x">
                     <div class="cell callout warning help_content">

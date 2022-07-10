@@ -103,7 +103,7 @@
 				<div class="cell off-canvas-content" data-off-canvas-content> <!-- closed in footer -->
 			<?php } ?>
 
-			<nav class="grid-x noprint">
+			<nav class="grid-x hide-for-print">
 				<div class="top-bar first-top-bar">
 					<div class="top-bar-left">
 						<ul class="dropdown menu" data-dropdown-menu>

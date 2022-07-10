@@ -104,7 +104,7 @@ class report_related_indi_KT_Module extends KT_Module implements KT_Module_Repor
 
 		?>
 		<div id="page" class="individual_report">
-			<div class="noprint">
+			<div class="hide-for-print">
 				<h2><?php echo $this->getTitle(); ?></h2>
 				<h5><?php echo $this->getDescription(); ?></h5>
 				<form name="resource" id="resource" method="post" action="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=show&amp;rootid=<?php echo $rootid; ?>&amp;ged=<?php echo KT_GEDURL; ?>">
@@ -128,7 +128,7 @@ class report_related_indi_KT_Module extends KT_Module implements KT_Module_Repor
 					</button>
 				</form>
 			</div>
-			<hr class="noprint" style="clear:both;">
+			<hr class="hide-for-print" style="clear:both;">
 			<!-- end of form -->
 			<?php
 			$controller

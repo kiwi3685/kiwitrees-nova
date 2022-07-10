@@ -57,7 +57,7 @@ class widget_quicklinks_KT_Module extends KT_Module implements KT_Module_Widget 
 		$content	= '';
 /*
 		if (KT_USER_IS_ADMIN) {
-			$content .= '<a style="float:right;" href="module.php?mod=' . $this->getName() . '&amp;mod_action=admin_config" target="_blank" rel="noopener noreferrer" class="noprint">
+			$content .= '<a style="float:right;" href="module.php?mod=' . $this->getName() . '&amp;mod_action=admin_config" target="_blank" rel="noopener noreferrer" class="hide-for-print">
 				<i class="' . $iconStyle . ' fa-gears"></i>
 			</a>';
 		}

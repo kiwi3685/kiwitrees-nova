@@ -113,7 +113,7 @@ class report_todo_KT_Module extends KT_Module implements KT_Module_Report {
 		$content = '
 			<div id="page" class="research_tasks">
 				<h2>' . $this->getTitle() . '</h2>
-				<div class="noprint">
+				<div class="hide-for-print">
 					<h5>' . $this->getDescription() . '</h5>
 					<form name="changes" id="changes" method="post" action="module.php?mod=' . $this->getName() . '&mod_action=show">
 						<input type="hidden" name="action" value="?">

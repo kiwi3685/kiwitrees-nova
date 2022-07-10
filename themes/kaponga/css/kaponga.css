@@ -8885,7 +8885,7 @@ table.dataTable .ui-state-active {
     height: 24rem; } }
 
 @media print, screen and (max-width: 64em) {
-  .noprint {
+  .hide-for-print {
     display: none; }
   nav .top-bar.first-top-bar ul.menu a {
     padding: 0.5rem 0.25rem; }

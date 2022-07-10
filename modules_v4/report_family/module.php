@@ -99,7 +99,7 @@ class report_family_KT_Module extends KT_Module implements KT_Module_Report {
 		?>
 		<div id="page" class="family_report">
 			<h2><?php echo $this->getTitle(); ?></h2>
-			<div class="noprint">
+			<div class="hide-for-print">
 				<h5><?php echo $this->getDescription(); ?></h5>
 				<form name="resource" id="resource" method="post" action="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=show&amp;rootid=<?php echo $rootid; ?>&amp;ged=<?php echo KT_GEDURL; ?>">
 					<div class="chart_options">

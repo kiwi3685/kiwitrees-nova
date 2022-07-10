@@ -53,7 +53,7 @@ class TreeView {
 		$html = '
 			<a name="tv_content"></a>
 			<div id="' . $this->name . '_out" class="tv_out">
-				<div id="tv_tools" class="noprint">
+				<div id="tv_tools" class="hide-for-print">
 					<ul>
 						<li id="tvbCompact" class="tv_button">
 							<img src="' . KT_STATIC_URL . KT_MODULES_DIR . 'tabi_tree/images/compact.png" alt="' . KT_I18N::translate('Use compact layout') . '" title="' . KT_I18N::translate('Use compact layout') . '">

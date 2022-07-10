@@ -28,7 +28,7 @@ if (!defined('KT_KIWITREES')) {
 ?>
 
 <!--<div id="out-<?php echo $boxID; ?>" class="<?php echo $outBoxAdd; ?>">-->
-	<div class="noprint" id="icons-<?php echo $boxID; ?>" style="<?php echo $iconsStyleAdd; ?>">
+	<div class="hide-for-print" id="icons-<?php echo $boxID; ?>" style="<?php echo $iconsStyleAdd; ?>">
 		<?php echo $icons; ?>
 	</div>
 	<div class="grid-x grid-padding-x person_box_template <?php echo $isF; ?>">

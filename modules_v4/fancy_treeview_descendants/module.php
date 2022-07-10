@@ -214,7 +214,7 @@ class fancy_treeview_descendants_KT_Module extends KT_Module implements KT_Modul
 			<div id="page">
 				<?php if (KT_USER_ID || !$type) { ?>
 					<h2><?php echo $this->getTitle(); ?></h2>
-					<div class="chart_options noprint">
+					<div class="chart_options hide-for-print">
 						<form id="change_root">
 							<div class="chart_options">
 								<label for = "new_rootid" class="label"><?php echo KT_I18N::translate('Individual'); ?></label>
@@ -226,7 +226,7 @@ class fancy_treeview_descendants_KT_Module extends KT_Module implements KT_Modul
 							</button>
 						</form>
 					</div>
-					<hr class="noprint">
+					<hr class="hide-for-print">
 				<?php } ?>
 				<div id="fancy_treeview_descendants-page">
 					<div id="error"></div>
@@ -234,7 +234,7 @@ class fancy_treeview_descendants_KT_Module extends KT_Module implements KT_Modul
 						<h2>
 							<?php echo $controller->getPageTitle() ?>
 							<?php if (KT_USER_IS_ADMIN) { ?>
-								<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_config" target="_blank" rel="noopener noreferrer" class="noprint">
+								<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_config" target="_blank" rel="noopener noreferrer" class="hide-for-print">
 									<i class="' . $iconStyle . ' fa-cog"></i>
 								</a>
 							<?php } ?>

@@ -132,7 +132,7 @@ for ($i=($controller->treesize-1); $i>=0; $i--) {
 			if ($i > (int)($controller->treesize/2) + (int)($controller->treesize/4)) {
 				$did++;
 			}
-			echo '<a href=pedigree.php?PEDIGREE_GENERATIONS=', $controller->PEDIGREE_GENERATIONS, '&amp;rootid=', $controller->treeid[$did], '&amp;show_full=', $controller->show_full, '&amp;talloffset=', $controller->talloffset, ' class="icon-uarrow noprint"></a>';
+			echo '<a href=pedigree.php?PEDIGREE_GENERATIONS=', $controller->PEDIGREE_GENERATIONS, '&amp;rootid=', $controller->treeid[$did], '&amp;show_full=', $controller->show_full, '&amp;talloffset=', $controller->talloffset, ' class="icon-uarrow hide-for-print"></a>';
 		}
 		echo '</div>';
 	}
@@ -160,11 +160,11 @@ for ($i=($controller->treesize-1); $i>=0; $i--) {
 		if ($TEXT_DIRECTION=="rtl") {$posn = 'right'; $arrow = 'icon-larrow';} else {$posn = 'left';	$arrow = 'icon-rarrow';	}
 		if ($talloffset==3) {
 			echo '<div class="ancestorarrow" style="position:absolute; ',$posn,':', $controller->pbwidth/2, 'px; top:', $controller->pbheight, 'px;">';
-				echo '<a href="pedigree.php?PEDIGREE_GENERATIONS='.$controller->PEDIGREE_GENERATIONS.'&amp;rootid='.$controller->treeid[$did].'&amp;show_full='.$controller->show_full.'&amp;talloffset='.$controller->talloffset.' class="icon-darrow noprint"></a>';
+				echo '<a href="pedigree.php?PEDIGREE_GENERATIONS='.$controller->PEDIGREE_GENERATIONS.'&amp;rootid='.$controller->treeid[$did].'&amp;show_full='.$controller->show_full.'&amp;talloffset='.$controller->talloffset.' class="icon-darrow hide-for-print"></a>';
 			echo '</div>';
 		} elseif ($talloffset < 2) {
 			echo '<div class="ancestorarrow" style="position:absolute; ',$posn,':', $controller->pbwidth+5, 'px; top:', ($controller->pbheight/2-10), 'px;">';
-			echo '<a href="pedigree.php?PEDIGREE_GENERATIONS='.$controller->PEDIGREE_GENERATIONS.'&amp;rootid='.$controller->treeid[$did].'&amp;show_full='.$controller->show_full.'&amp;talloffset='.$talloffset.'" class=" ',$arrow,' noprint"></a>';
+			echo '<a href="pedigree.php?PEDIGREE_GENERATIONS='.$controller->PEDIGREE_GENERATIONS.'&amp;rootid='.$controller->treeid[$did].'&amp;show_full='.$controller->show_full.'&amp;talloffset='.$talloffset.'" class=" ',$arrow,' hide-for-print"></a>';
 			echo '</div>';
 		}
 	}

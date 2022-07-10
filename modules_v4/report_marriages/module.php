@@ -125,11 +125,11 @@ class report_marriages_KT_Module extends KT_Module implements KT_Module_Report {
 		?>
 		<div id="page" class="marriages">
 			<h2><?php echo $this->getTitle(); ?></h2>
-			<div class="noprint">
+			<div class="hide-for-print">
 				<div class="help_text">
 					<div class="help_content">
 						<h5><?php echo $this->getDescription(); ?></h5>
-						<a href="#" class="more noprint"><i class="' . $iconStyle . ' fa-question-circle-o icon-help"></i></a>
+						<a href="#" class="more hide-for-print"><i class="' . $iconStyle . ' fa-question-circle-o icon-help"></i></a>
 						<div class="hidden">
 							<?php echo /* I18N: help for report facts and events module */ KT_I18N::translate('Date filters can be full (04 APR 1842) or 4-digit year only (1823). Name and place can be any string of characters you expect to find in those data fields. Autocomplete will find any given or surname that contains the characters you enter. To include all names or all places leave those fields empty.'); ?>
 						</div>
@@ -163,7 +163,7 @@ class report_marriages_KT_Module extends KT_Module implements KT_Module_Report {
 		            </button>
 				</form>
 			</div>
-			<hr class="noprint" style="clear:both;">
+			<hr class="hide-for-print" style="clear:both;">
 			<!-- end of form -->
 			<?php if ($action == 'go') {
 				$controller

@@ -52,7 +52,7 @@ $cells				= '1';
 
 </div></div></main><!-- close the main div -->
 <?php if ($view != 'simple') { ?>
-	<footer class="grid-x grid-padding-x noprint">
+	<footer class="grid-x grid-padding-x hide-for-print">
 		<?php if ($ct_footer_blocks > 0) {
 			foreach ($footer_blocks as $module_name => $module) {
 				switch ($ct_footer_blocks) {

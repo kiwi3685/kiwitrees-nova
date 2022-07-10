@@ -8699,7 +8699,7 @@ table.dataTable .ui-state-active {
     height: 24rem; } }
 
 @media print, screen and (max-width: 64em) {
-  .noprint {
+  .hide-for-print {
     display: none; }
   body {
     margin: 0.25rem; }

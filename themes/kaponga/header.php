@@ -99,7 +99,7 @@
 				<div class="cell off-canvas-content" data-off-canvas-content> <!-- closed in footer -->
 			<?php } ?>
 
-			<nav class="grid-x noprint">
+			<nav class="grid-x hide-for-print">
 				<div class="top-bar first-top-bar">
 					<div class="top-bar-left">
 						<div class="treetitle text-center medium-text-left"><?php echo KT_TREE_TITLE; ?>
