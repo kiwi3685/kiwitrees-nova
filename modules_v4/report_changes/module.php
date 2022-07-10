@@ -71,14 +71,12 @@ class report_changes_KT_Module extends KT_Module implements KT_Module_Report {
   // Implement class KT_Module_Menu
   public function show() {
     global $controller, $DATE_FORMAT, $GEDCOM, $iconStyle;
-    require_once KT_ROOT.'includes/functions/functions_print_lists.php';
     require_once KT_ROOT . 'includes/functions/functions_edit.php';
+
     $controller = new KT_Controller_Page();
     $controller
       ->setPageTitle($this->getTitle())
       ->pageHeader();
-
-    init_calendar_popup();
 
     //Configuration settings ===== //
     $action     = KT_Filter::post('action');
@@ -271,43 +269,42 @@ class report_changes_KT_Module extends KT_Module implements KT_Module_Report {
 
     	$html = '';
 
-    	$controller
-    		->addInlineJavascript('
-    			jQuery.fn.dataTableExt.oSort["unicode-asc"  ]=function(a,b) {return a.replace(/<[^<]*>/, "").localeCompare(b.replace(/<[^<]*>/, ""))};
-    			jQuery.fn.dataTableExt.oSort["unicode-desc" ]=function(a,b) {return b.replace(/<[^<]*>/, "").localeCompare(a.replace(/<[^<]*>/, ""))};
-    			jQuery.fn.dataTableExt.oSort["num-html-asc" ]=function(a,b) {a=parseFloat(a.replace(/<[^<]*>/, "")); b=parseFloat(b.replace(/<[^<]*>/, "")); return (a<b) ? -1 : (a>b ? 1 : 0);};
-    			jQuery.fn.dataTableExt.oSort["num-html-desc"]=function(a,b) {a=parseFloat(a.replace(/<[^<]*>/, "")); b=parseFloat(b.replace(/<[^<]*>/, "")); return (a>b) ? -1 : (a<b ? 1 : 0);};
-    			jQuery("#.changes").dataTable({
-    				dom: \'<"top"p' . $buttons . 'f<"clear">irl>t<"bottom"pl>\',
-    				' . KT_I18N::datatablesI18N() . ',
-    				buttons: [{extend: "csvHtml5", exportOptions: {columns: ":visible"}}],
-    				autoWidth: false,
-    				processing: true,
-    				retrieve: true,
-    				displayLength: 20,
-    				pagingType: "full_numbers",
-    				stateSave: true,
-    				stateSaveParams: function (settings, data) {
-    					data.columns.forEach(function(column) {
-    						delete column.search;
-    					});
-    				},
-    				stateDuration: -1,
-                    columns: [
-                        /* 0-Type */     {"bSortable": false, "sClass": "center"},
-                        /* 1-Record */   {"iDataSort": 5},
-                        /* 2-Change */   {"iDataSort": 4},
-                        /* 3-User */       null,
-                        /* 4-DATE */     {"bVisible": false},
-                        /* 5-SORTNAME */ {"sType": "unicode", "bVisible": false}
-                    ],
+    	$controller->addInlineJavascript('
+            jQuery.fn.dataTableExt.oSort["unicode-asc"  ]=function(a,b) {return a.replace(/<[^<]*>/, "").localeCompare(b.replace(/<[^<]*>/, ""))};
+            jQuery.fn.dataTableExt.oSort["unicode-desc" ]=function(a,b) {return b.replace(/<[^<]*>/, "").localeCompare(a.replace(/<[^<]*>/, ""))};
+            jQuery.fn.dataTableExt.oSort["num-html-asc" ]=function(a,b) {a=parseFloat(a.replace(/<[^<]*>/, "")); b=parseFloat(b.replace(/<[^<]*>/, "")); return (a<b) ? -1 : (a>b ? 1 : 0);};
+            jQuery.fn.dataTableExt.oSort["num-html-desc"]=function(a,b) {a=parseFloat(a.replace(/<[^<]*>/, "")); b=parseFloat(b.replace(/<[^<]*>/, "")); return (a>b) ? -1 : (a<b ? 1 : 0);};
+            jQuery("#.changes").dataTable({
+            	dom: \'<"top"p' . $buttons . 'f<"clear">irl>t<"bottom"pl>\',
+            	' . KT_I18N::datatablesI18N() . ',
+            	buttons: [{extend: "csvHtml5", exportOptions: {columns: ":visible"}}],
+            	autoWidth: false,
+            	processing: true,
+            	retrieve: true,
+            	displayLength: 20,
+            	pagingType: "full_numbers",
+            	stateSave: true,
+            	stateSaveParams: function (settings, data) {
+            		data.columns.forEach(function(column) {
+            			delete column.search;
+            		});
+            	},
+            	stateDuration: -1,
+                columns: [
+                    /* 0-Type */     {"bSortable": false, "sClass": "center"},
+                    /* 1-Record */   {"iDataSort": 5},
+                    /* 2-Change */   {"iDataSort": 4},
+                    /* 3-User */       null,
+                    /* 4-DATE */     {"bVisible": false},
+                    /* 5-SORTNAME */ {"sType": "unicode", "bVisible": false}
+                ],
 
-              });
+            });
 
-              jQuery(".changes").css("visibility", "visible");
-              jQuery(".loading-image").css("display", "none");
+            jQuery(".changes").css("visibility", "visible");
+            jQuery(".loading-image").css("display", "none");
 
-        ');
+    	');
 
           // Print pending changes
         if ($pending) {
@@ -347,7 +344,7 @@ class report_changes_KT_Module extends KT_Module implements KT_Module_Report {
                     KT_I18N::plural(
                         'There have been no changes in the last day',
                         'There have been no changes in the last %s days',
-                        KT_I18N::number($days), 
+                        KT_I18N::number($days),
                         KT_I18N::number($days)
                     ) . '
                 </div>

@@ -41,7 +41,7 @@ function pageStart($title, $pageTitle = '', $includeTitle = 'y', $subTitle = '')
 	}
 
 	if ($subTitle !== '') {
-		$subTitle = '<h4>' . $subTitle . '</h4>';
+		$subTitle = '<h4 class="noprint">' . $subTitle . '</h4>';
 	}
 	return '
 		<div id="' . strtolower($title) . '-page" class="grid-x grid-padding-x">

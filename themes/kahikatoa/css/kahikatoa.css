@@ -1008,10 +1008,6 @@ a:visited {
 		text-decoration: underline;
 	}
 
-	a[href]:after {
-		content: " (" attr(href) ")";
-	}
-
 	.ir a:after,
 a[href^="javascript:"]:after,
 a[href^="#"]:after {
@@ -11995,6 +11991,11 @@ input {
 		display: none;
 	}
 
+	div.dataTables_wrapper .top,
+div.dataTables_wrapper .bottom {
+		display: none;
+	}
+
 	table.dataTable,
 table.dataTable th,
 table.dataTable td {
@@ -12003,7 +12004,7 @@ table.dataTable td {
 	}
 
 	table.dataTable td {
-		font-size: 90%;
+		font-size: 1rem;
 	}
 
 	/* end print settings for datatables */
