@@ -150,15 +150,15 @@ class report_fact_KT_Module extends KT_Module implements KT_Module_Report {
 			');
 
 		echo pageStart('report_facts', $this->getTitle(), 'y', $this->getDescription()); ?>
-			<form class="cell noprint" name="resource" id="resource" method="post" action="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=show&amp;ged=<?php echo KT_GEDURL; ?>">
+			<form class="cell hide-for-print" name="resource" id="resource" method="post" action="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=show&amp;ged=<?php echo KT_GEDURL; ?>">
 				<input type="hidden" name="go" value="1">
 				<div class="grid-x grid-margin-x">
 					<div class="cell callout warning help_content">
 						<?php echo /* I18N: help for report facts and events module */
 							KT_I18N::translate('
 								The list of available facts and events are those set by the site administrator as
-								"All individual facts" and "Unique individual facts" at A
-								dministration > Family trees > <i>your family tree</i> > "Edit options" tab and
+								"All individual facts" and "Unique individual facts" at
+								Administration > Family trees > <i>your family tree</i> > "Edit options" tab and
 								therefore only GEDCOM first-level records.
 								Date filters must be 4-digit year only.
 								Place, type and detail filters can be any string of characters you expect to find in those data fields.
@@ -181,7 +181,7 @@ class report_fact_KT_Module extends KT_Module implements KT_Module_Report {
 						</select>
 					</div>
 					<div class="cell medium-3">
-						<label class="h5" for = "year_from"><?php echo  KT_I18N::translate('Year from'); ?></label>
+						<label class="h5" for="year_from"><?php echo  KT_I18N::translate('Year from'); ?></label>
 						<input type="text" id="year_from" name="year_from" placeholder="<?php echo KT_I18N::translate('Year from - 4 digits only'); ?>" value="<?php echo $year_from; ?>" pattern="\d{4}">
 					</div>
 					<div class="cell medium-3">
@@ -189,38 +189,38 @@ class report_fact_KT_Module extends KT_Module implements KT_Module_Report {
 						<input type="text" id="year_to" name="year_to" placeholder="<?php echo KT_I18N::translate('Year to - 4 digits only'); ?>" value="<?php echo $year_to; ?>" pattern="\d{4}">
 					</div>
 					<div class="cell medium-3">
-						<label class="h5" for="autocompleteInput"><?php echo KT_I18N::translate('Place'); ?></label>
+						<label class="h5" for="autocompleteInput-place"><?php echo KT_I18N::translate('Place'); ?></label>
 						<div class="input-group autocomplete_container">
 							<input
 								data-autocomplete-type="PLAC"
 								type="text"
-								id="autocompleteInput"
+								id="autocompleteInput-place"
 								value="<?php echo $place; ?>"
 							>
+							<input type="hidden" name="place" id="selectedValue-place">
 							<span class="input-group-label">
 								<button class="clearAutocomplete autocomplete_icon">
 									<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 								</button>
 							</span>
 						</div>
-						<input type="hidden" name="root_id" id="selectedValue" >
 					</div>
 					<div class="cell medium-3">
-						<label class="h5" for="autocompleteInput"><?php echo KT_I18N::translate('Type'); ?></label>
+						<label class="h5" for="autocompleteInput-type"><?php echo KT_I18N::translate('Type'); ?></label>
 						<div class="input-group autocomplete_container">
 							<input
 								data-autocomplete-type="EF_TYPE"
 								type="text"
-								id="autocompleteInput"
+								id="autocompleteInput-type"
 								value="<?php echo $type; ?>"
 							>
+							<input type="hidden" name="type" id="selectedValue-type" >
 							<span class="input-group-label">
 								<button class="clearAutocomplete autocomplete_icon">
 									<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 								</button>
 							</span>
 						</div>
-						<input type="hidden" name="root_id" id="selectedValue" >
 					</div>
 					<div class="cell medium-3">
 						<label class="h5" for="detail"><?php echo KT_I18N::translate('Details'); ?></label>
@@ -229,190 +229,188 @@ class report_fact_KT_Module extends KT_Module implements KT_Module_Report {
 					<?php echo resetButtons(); ?>
 				</div>
 			</form>
-			<hr>
 
 			<?php if ($go == 1) {
 				$rows = report_findfact($fact);
-				if(!$rows) {
-					echo KT_I18N::translate('No matching records found');
-				}
-				$data = array();
-				$x = 0;
-				$count_type = false;
-				$count_details = false;
-				foreach ($rows as $row) {
-					$person = KT_Person::getInstance($row->xref);
-					if ($person->canDisplayDetails()) { ?>
-						<?php $indifacts = $person->getIndiFacts();
-						foreach ($indifacts as $item) {
-							if ($item->getTag() == $fact) {
-								$filtered_facts = filter_facts($item, $person, $year_from, $year_to, $place, $detail, $type);
-								if ($filtered_facts) {
-									$factrec = $item->getGedcomRecord();
-									if (preg_match('/2 DATE (.+)/', $factrec, $match)) {
-										$date = new KT_Date($match[1]);
-									} else {
-										$date = new KT_Date('');
-									}
-									// Extract Given names and Surnames for sorting
-									list($surn_givn, $givn_surn) = $this->sortableNames($person);
-									$data[$x]['GIVN'] = KT_Filter::escapeHtml($givn_surn);
-									$data[$x]['SURN'] = KT_Filter::escapeHtml($surn_givn);
-									$data[$x]['NAME'] = '';
-									foreach ($person->getAllNames() as $num => $name) {
-										if ($name['type'] == 'NAME') {
-											$title='';
+				if(!$rows) { ?>
+					<div class="cell callout alert">
+						<?php echo KT_I18N::translate('No matching records found'); ?>
+					</div>
+				<?php } else {
+					$data = array();
+					$x = 0;
+					$count_type = false;
+					$count_details = false;
+					foreach ($rows as $row) {
+						$person = KT_Person::getInstance($row->xref);
+						if ($person->canDisplayDetails()) { ?>
+							<?php $indifacts = $person->getIndiFacts();
+							foreach ($indifacts as $item) {
+								if ($item->getTag() == $fact) {
+									$filtered_facts = filter_facts($item, $person, $year_from, $year_to, $place, $detail, $type);
+									if ($filtered_facts) {
+										$factrec = $item->getGedcomRecord();
+										if (preg_match('/2 DATE (.+)/', $factrec, $match)) {
+											$date = new KT_Date($match[1]);
 										} else {
-											$title='title="'.strip_tags(KT_Gedcom_Tag::getLabel($name['type'], $person)).'"';
+											$date = new KT_Date('');
 										}
-										if ($num == $person->getPrimaryName()) {
-											$class =' class="name2"';
-											$sex_image = $person->getSexImage();
-											[$surn, $givn] = explode(',', $name['sort']);
+										// Extract Given names and Surnames for sorting
+										list($surn_givn, $givn_surn) = $this->sortableNames($person);
+										$data[$x]['GIVN'] = KT_Filter::escapeHtml($givn_surn);
+										$data[$x]['SURN'] = KT_Filter::escapeHtml($surn_givn);
+										$data[$x]['NAME'] = '';
+										foreach ($person->getAllNames() as $num => $name) {
+											if ($num == $person->getPrimaryName() && $name['type'] == 'NAME') {
+												$sex_image = $person->getSexImage();
+												[$surn, $givn] = explode(',', $name['sort']);
+											}
+										}
+										$data[$x]['NAME'] .= '<a href="'. $person->getHtmlUrl(). '">'. $name['full'] . '</a>'. $sex_image;
+										$data[$x]['B_DATE'] = $person->getBirthDate()->JD();
+										$data[$x]['O_DATE'] = $date->JD();
+										$data[$x]['BIRTH'] = $person->getBirthDate()->Display();
+										$data[$x]['FACT_DATE'] = format_fact_date($item, $person, false, true, false);
+										$data[$x]['FACT_PLACE'] = format_fact_place($item, true);
+										$ct = preg_match("/2 TYPE (.*)/", $item->getGedcomRecord(), $ematch);
+										if ($ct > 0) {
+											$factname = trim($ematch[1]);
+											$data[$x]['TYPE'] = $factname;
+											$count_type = true;
 										} else {
-											$class = '';
-											$sex_image = '';
+											$data[$x]['TYPE'] = '';
 										}
-										$data[$x]['NAME'] .= '<a '. $title. ' href="'. $person->getHtmlUrl(). '"'. $class. '>'. $name['full'] . '</a>';
-									}
-									$data[$x]['B_DATE'] = $person->getBirthDate()->JD();
-									$data[$x]['O_DATE'] = $date->JD();
-									$data[$x]['BIRTH'] = $person->getBirthDate()->Display();
-									$data[$x]['FACT_DATE'] = format_fact_date($item, $person, false, true, false);
-									$data[$x]['FACT_PLACE'] = format_fact_place($item, true);
-									$ct = preg_match("/2 TYPE (.*)/", $item->getGedcomRecord(), $ematch);
-									if ($ct > 0) {
-										$factname = trim($ematch[1]);
-										$data[$x]['TYPE'] = $factname;
-										$count_type = true;
-									} else {
-										$data[$x]['TYPE'] = '';
-									}
-									if (print_resourcefactDetails($item, $person)){
-										$data[$x]['DETAILS'] = print_resourcefactDetails($item, $person);
-										$count_details = true;
-									} else {
-										$data[$x]['DETAILS'] = '';
+										if (print_resourcefactDetails($item, $person)){
+											$data[$x]['DETAILS'] = print_resourcefactDetails($item, $person);
+											$count_details = true;
+										} else {
+											$data[$x]['DETAILS'] = '';
+										}
 									}
 								}
 							}
 						}
+						$x++;
 					}
-					$x++;
-				}
 
-				$controller
-		    		->addExternalJavascript(KT_DATATABLES_JS)
-		    		->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
-		    	;
+					($fact) ? $filter1						= '<span>' . /* I18N: A filter on the facts and events report page */ KT_I18N::translate('Fact or event: <span>%1s</span>', KT_Gedcom_Tag::getLabel($fact)) . '</span><br>' : $filter1 = '';
+					($year_from && !$year_to) ? $filter2	= '<span>' . /* I18N: A filter on the facts and events report page */ KT_I18N::translate('Date from: <span>%1s</span>', $year_from) . '</span><br>' : $filter2 = '';
+					(!$year_from && $year_to) ? $filter3	= '<span>' . /* I18N: A filter on the facts and events report page */ KT_I18N::translate('Date to <span>%1s</span>', $year_to) . '</span><br>' : $filter3 = '';
+					($year_from && $year_to) ? $filter4		= '<span>' . /* I18N: A filter on the facts and events report page */ KT_I18N::translate('Dates between <span>%1s</span> and <span>%2s</span> ', $year_from, $year_to) . '</span><br>' : $filter4 = '';
+					($place) ? $filter5						= '<span>' . /* I18N: A filter on the facts and events report page */ KT_I18N::translate('Place: <span>%1s</span>', $place) . '</span><br>' : $filter5 = '';
+					($type) ? $filter6						= '<span>' . /* I18N: A filter on the facts and events report page */ KT_I18N::translate('Type: <span>%1s</span>', $type) . '</span><br>' : $filter6 = '';
+					($detail) ? $filter7					= '<span>' . /* I18N: A filter on the facts and events report page */ KT_I18N::translate('Details: <span>%1s</span>', $detail) . '</span><br>' : $filter7 = '';
 
-		    	if (KT_USER_CAN_EDIT) {
-		    		$controller
-		    			->addExternalJavascript(KT_DATATABLES_BUTTONS)
-		    			->addExternalJavascript(KT_DATATABLES_HTML5);
-		    		$buttons = 'B';
-		    	} else {
-		    		$buttons = '';
-		    	}
+					$filter_list = $filter1 . $filter2 . $filter3 . $filter4 . $filter5 . $filter6 . $filter7;
 
-				$controller->addInlineJavascript('
-		            jQuery.fn.dataTableExt.oSort["unicode-asc"  ]=function(a,b) {return a.replace(/<[^<]*>/, "").localeCompare(b.replace(/<[^<]*>/, ""))};
-		            jQuery.fn.dataTableExt.oSort["unicode-desc" ]=function(a,b) {return b.replace(/<[^<]*>/, "").localeCompare(a.replace(/<[^<]*>/, ""))};
-		            jQuery.fn.dataTableExt.oSort["num-html-asc" ]=function(a,b) {a=parseFloat(a.replace(/<[^<]*>/, "")); b=parseFloat(b.replace(/<[^<]*>/, "")); return (a<b) ? -1 : (a>b ? 1 : 0);};
-		            jQuery.fn.dataTableExt.oSort["num-html-desc"]=function(a,b) {a=parseFloat(a.replace(/<[^<]*>/, "")); b=parseFloat(b.replace(/<[^<]*>/, "")); return (a>b) ? -1 : (a<b ? 1 : 0);};
-		            jQuery("#' . $table_id . '").dataTable( {
-		            	dom: \'<"top"p' . $buttons . 'f<"clear">irl>t<"bottom"pl>\',
-		            	' . KT_I18N::datatablesI18N() . ',
-		            	buttons: [{extend: "csvHtml5", exportOptions: {columns: ":visible"}}],
-		            	autoWidth: false,
-		            	processing: true,
-						sorting: [[1,"asc"], [0,"asc"]],
-		            	retrieve: true,
-		            	displayLength: 20,
-		            	pagingType: "full_numbers",
-		            	stateSave: true,
-		            	stateSaveParams: function (settings, data) {
-		            		data.columns.forEach(function(column) {
-		            			delete column.search;
-		            		});
-		            	},
-		            	stateDuration: -1,
-						columns: [
-							/*  0-GIVN */  		{ type: "unicode", visible: false },
-							/*  1-SURN */ 		{ type: "unicode", visible: false },
-							/*  2-BIRT_DATE */ 	{ visible: false },
-							/*  3-OTHER_DATE */ { visible: false },
-							/*  4-Given name */	{ dataSort: 0, class: "nowrap" },
-							/*  5-Surname */	{ dataSort: 1, class: "nowrap" },
-							/*  6-DoB */		{ dataSort: 2, class: "nowrap" },
-							/*  7-Date */ 		{ dataSort: 3, class: "nowrap" },
-							/*  8-Place */ 		null,
-							/*  9-Type */ 		' . ($count_type ? 'null' : '{ visible: false }') . ',
-							/* 10-Details */ 	' . ($count_details ? 'null' : '{ visible: false }') . ',
-						]
-					});
 
-					jQuery("#output").css("visibility", "visible");
-					jQuery(".loading-image").css("display", "none");
+					$controller
+			    		->addExternalJavascript(KT_DATATABLES_JS)
+			    		->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
+			    	;
 
-				');
+			    	if (KT_USER_CAN_EDIT) {
+			    		$controller
+			    			->addExternalJavascript(KT_DATATABLES_BUTTONS)
+			    			->addExternalJavascript(KT_DATATABLES_HTML5);
+			    		$buttons = 'B';
+			    	} else {
+			    		$buttons = '';
+			    	}
 
-				($fact) ? $filter1						= '<p>' . /* I18N: A filter on the facts and events report page */ KT_I18N::translate('Fact or event: <span>%1s</span>', KT_Gedcom_Tag::getLabel($fact)) . '</p>' : $filter1 = '';
-				($year_from && !$year_to) ? $filter2	= '<p>' . /* I18N: A filter on the facts and events report page */ KT_I18N::translate('Date from: <span>%1s</span>', $year_from) . '</p>' : $filter2 = '';
-				(!$year_from && $year_to) ? $filter3	= '<p>' . /* I18N: A filter on the facts and events report page */ KT_I18N::translate('Date to <span>%1s</span>', $year_to) . '</p>' : $filter3 = '';
-				($year_from && $year_to) ? $filter4		= '<p>' . /* I18N: A filter on the facts and events report page */ KT_I18N::translate('Dates between <span>%1s</span> and <span>%2s</span> ', $year_from, $year_to) . '</p>' : $filter4 = '';
-				($place) ? $filter5						= '<p>' . /* I18N: A filter on the facts and events report page */ KT_I18N::translate('Place: <span>%1s</span>', $place) . '</p>' : $filter5 = '';
-				($type) ? $filter6						= '<p>' . /* I18N: A filter on the facts and events report page */ KT_I18N::translate('Type: <span>%1s</span>', $type) . '</p>' : $filter6 = '';
-				($detail) ? $filter7					= '<p>' . /* I18N: A filter on the facts and events report page */ KT_I18N::translate('Details: <span>%1s</span>', $detail) . '</p>' : $filter7 = '';
+					$controller->addInlineJavascript('
+			            jQuery.fn.dataTableExt.oSort["unicode-asc"  ]=function(a,b) {return a.replace(/<[^<]*>/, "").localeCompare(b.replace(/<[^<]*>/, ""))};
+			            jQuery.fn.dataTableExt.oSort["unicode-desc" ]=function(a,b) {return b.replace(/<[^<]*>/, "").localeCompare(a.replace(/<[^<]*>/, ""))};
+			            jQuery.fn.dataTableExt.oSort["num-html-asc" ]=function(a,b) {a=parseFloat(a.replace(/<[^<]*>/, "")); b=parseFloat(b.replace(/<[^<]*>/, "")); return (a<b) ? -1 : (a>b ? 1 : 0);};
+			            jQuery.fn.dataTableExt.oSort["num-html-desc"]=function(a,b) {a=parseFloat(a.replace(/<[^<]*>/, "")); b=parseFloat(b.replace(/<[^<]*>/, "")); return (a>b) ? -1 : (a<b ? 1 : 0);};
+			            jQuery("#' . $table_id . '").dataTable( {
+			            	dom: \'<"top"p' . $buttons . 'f<"clear">irl>t<"bottom"pl>\',
+			            	' . KT_I18N::datatablesI18N() . ',
+			            	buttons: [{extend: "csvHtml5", exportOptions: {columns: ":visible"}}],
+			            	autoWidth: false,
+			            	processing: true,
+							sorting: [[1,"asc"], [0,"asc"]],
+			            	retrieve: true,
+			            	displayLength: 20,
+			            	pagingType: "full_numbers",
+			            	stateSave: true,
+			            	stateSaveParams: function (settings, data) {
+			            		data.columns.forEach(function(column) {
+			            			delete column.search;
+			            		});
+			            	},
+			            	stateDuration: -1,
+							columns: [
+								/*  0-GIVN */  		{ type: "unicode", visible: false },
+								/*  1-SURN */ 		{ type: "unicode", visible: false },
+								/*  2-BIRT_DATE */ 	{ visible: false },
+								/*  3-OTHER_DATE */ { visible: false },
+								/*  4-Given name */	{ dataSort: 0, class: "nowrap" },
+								/*  5-Surname */	{ dataSort: 1, class: "nowrap" },
+								/*  6-DoB */		{ dataSort: 2, class: "nowrap" },
+								/*  7-Date */ 		{ dataSort: 3, class: "nowrap" },
+								/*  8-Place */ 		null,
+								/*  9-Type */ 		' . ($count_type ? 'null' : '{ visible: false }') . ',
+								/* 10-Details */ 	' . ($count_details ? 'null' : '{ visible: false }') . ',
+							]
+						});
 
-				$filter_list = $filter1 . $filter2 . $filter3 . $filter4 . $filter5 . $filter6 . $filter7;
+						jQuery("#output").css("visibility", "visible");
+						jQuery(".loading-image").css("display", "none");
 
-				 ?>
-				 <div class="grid-x">
-					 <div class="cell callout warning medium-4">
-	 					<h6><?php echo KT_I18N::translate('Listing individuals based on these filters'); ?></h6>
-	 					<p><?php echo $filter_list; ?></p>
-	 				</div>
-					<div class="cell loading-image">&nbsp;</div>
-					<div class="cell" id="output" style="visibility:hidden;">
-						<table id="<?php echo $table_id; ?>"style="width:100%;">
-							<thead>
-								<tr>
-									<th>BIRT_DATE</th><!-- hidden cell for sorting -->
-									<th>OTHER_DATE</th><!-- hidden cell for sorting -->
-									<th>GIVN</th><!-- hidden cell for sorting -->
-									<th>SURN</th><!-- hidden cell for sorting -->
-									<th data-tooltip aria-haspopup="true" class="has-tip top" data-disable-hover="false" title="<?php echo KT_I18N::translate('Sort by given names'); ?>"><?php echo KT_Gedcom_Tag::getLabel('GIVN'); ?></th>
-									<th data-tooltip aria-haspopup="true" class="has-tip top" data-disable-hover="false" title="<?php echo KT_I18N::translate('Sort by surnames'); ?>"><?php echo KT_Gedcom_Tag::getLabel('SURN'); ?></th>
-									<th><?php echo KT_Gedcom_Tag::getLabel('BIRT:DATE'); ?></th>
-									<th><?php echo KT_I18N::translate('Date'); ?></th>
-									<th><?php echo KT_I18N::translate('Place'); ?></th>
-									<th><?php echo KT_I18N::translate('Type'); ?></th>
-									<th><?php echo KT_I18N::translate('Details'); ?></th>
-								</tr>
-							</thead>
-							<tbody>
-								<?php
-								foreach ($data as $row) { ?>
+					');
+
+					 ?>
+
+					 <div class="grid-x">
+						 <div class="callout">
+		 					<h6><?php echo KT_I18N::translate('Listing individuals based on these filters'); ?></h6>
+		 					<?php echo $filter_list; ?>
+		 				</div>
+						<div class="cell loading-image">&nbsp;</div>
+						<div class="cell" id="output" style="visibility:hidden;">
+							<table id="<?php echo $table_id; ?>"style="width:100%;">
+								<thead>
 									<tr>
-										<td hidden><?php echo $row['GIVN']; ?></td><!-- hidden cell - birth date -->
-										<td hidden><?php echo $row['SURN']; ?></td><!-- hidden cell - other date -->
-										<td hidden><?php echo $row['B_DATE']; ?></td><!-- hidden cell - birth date -->
-										<td hidden><?php echo $row['O_DATE']; ?></td><!-- hidden cell- other date -->
-										<td colspan="2"><?php echo $row['NAME']; ?></td>
-										<td hidden></td>
-										<td><?php echo $row['BIRTH']; ?></td>
-										<td><?php echo $row['FACT_DATE']; ?></td>
-										<td><?php echo $row['FACT_PLACE']; ?></td>
-										<td class="field"><?php echo $row['TYPE']; ?></td>
-										<td class="field"><?php echo $row['DETAILS']; ?></td>
+										<th>BIRT_DATE</th><!-- hidden cell for sorting -->
+										<th>OTHER_DATE</th><!-- hidden cell for sorting -->
+										<th>GIVN</th><!-- hidden cell for sorting -->
+										<th>SURN</th><!-- hidden cell for sorting -->
+										<th><?php echo KT_Gedcom_Tag::getLabel('GIVN'); ?></th>
+										<th><?php echo KT_Gedcom_Tag::getLabel('SURN'); ?></th>
+										<th><?php echo KT_Gedcom_Tag::getLabel('BIRT:DATE'); ?></th>
+										<th><?php echo KT_I18N::translate('Date'); ?></th>
+										<th><?php echo KT_I18N::translate('Place'); ?></th>
+										<th><?php echo KT_I18N::translate('Type'); ?></th>
+										<th><?php echo KT_I18N::translate('Details'); ?></th>
 									</tr>
-								<?php } ?>
-							</tbody>
-						</table>
+								</thead>
+								<tbody>
+									<?php
+									foreach ($data as $row) { ?>
+										<tr>
+
+											<td hidden><?php echo $row['GIVN']; ?></td>    <!-- hidden cell for sorting -->
+											<td hidden><?php echo $row['SURN']; ?></td>    <!-- hidden cell for sorting -->
+											<td hidden><?php echo $row['B_DATE']; ?></td>  <!-- hidden cell for sorting -->
+											<td hidden><?php echo $row['O_DATE']; ?></td>  <!-- hidden cell for sorting -->
+											<td colspan="2"><?php echo $row['NAME']; ?></td>
+											<td hidden></td>
+											<td><?php echo $row['BIRTH']; ?></td>
+											<td><?php echo $row['FACT_DATE']; ?></td>
+											<td><?php echo $row['FACT_PLACE']; ?></td>
+											<td class="field"><?php echo $row['TYPE']; ?></td>
+											<td class="field"><?php echo $row['DETAILS']; ?></td>
+
+
+										</tr>
+									<?php } ?>
+								</tbody>
+							</table>
+						</div>
 					</div>
-				</div>
-			<?php }
+				<?php }
+			}
 
 		echo pageClose();
 	}
