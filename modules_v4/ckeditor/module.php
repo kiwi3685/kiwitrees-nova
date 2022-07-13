@@ -51,7 +51,7 @@ class ckeditor_KT_Module extends KT_Module {
 			->addInlineJavascript('
 				jQuery(".html-edit").ckeditor(function(){}, {
                     extraPlugins: "slideshow,footnotes",
-                    contentsCss: ["' . $themedir . '/style.css", "' . $mystyles . '"],
+                    contentsCss: ["' . $themedir . '/css/kahikatoa.css", "' . $mystyles . '"],
 					skin: "moonocolor",
 					allowedContent: true,
 					width: "100%",

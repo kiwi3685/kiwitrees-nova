@@ -9344,6 +9344,9 @@ label.radio_inline {
 button {
 	min-width: 6rem;
 }
+button .svg-inline--fa {
+	margin: 0 0.5rem -0.1rem 0;
+}
 
 #flash-messages {
 	margin: 1rem;

@@ -29,7 +29,6 @@ global $iconStyle;
 
 $controller = new KT_Controller_Page();
 $controller
-	->addExternalJavascript(KT_KIWITREES_ADMIN_JS_URL)
 	->restrictAccess(KT_USER_IS_ADMIN)
 	->setPageTitle(KT_I18N::translate('Manage family trees'));
 

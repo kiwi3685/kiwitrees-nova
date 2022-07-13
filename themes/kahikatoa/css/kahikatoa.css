@@ -4252,7 +4252,7 @@ table.hover:not(.unstriped) tr:nth-of-type(even):hover {
 }
 
 .dropdown-pane.xlarge {
-	width: 500px;
+	width: 80%;
 }
 
 .pagination {
@@ -10411,7 +10411,7 @@ div[id$=-page] button[type=submit] {
 #edit_interface-page .fdatepicker .input-group-label .svg-inline--fa:hover {
 	color: #ab3334;
 }
-#edit_interface-page .dropdown-pane.is-open {
+#edit_interface-page .dropdown-pane.is-open :not(.help-text) {
 	background-color: #fffff4;
 	border-left: 0.25rem solid #ab3334;
 	border-right: 0.25rem solid #ab3334;
@@ -11352,9 +11352,10 @@ input[type=search] {
 /* Help texts */
 .dropdown-pane.help-text {
 	background-color: #fffff4;
-	font-size: 85%;
-	max-width: 75%;
-	width: auto;
+	border: none;
+	box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+	font-weight: normal;
+	max-width: 80%;
 }
 
 .reveal.help-text {

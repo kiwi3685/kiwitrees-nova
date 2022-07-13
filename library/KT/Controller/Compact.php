@@ -37,7 +37,7 @@ class KT_Controller_Compact extends KT_Controller_Chart {
 		parent::__construct();
 
 		// Extract the request parameters
-		$this->show_thumbs = safe_GET_bool('show_thumbs');
+		$this->show_thumbs = KT_Filter::postBool('show_thumbs');
 
 		if ($this->root && $this->root->canDisplayName()) {
 			$this->setPageTitle(

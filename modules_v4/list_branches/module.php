@@ -101,15 +101,15 @@ class list_branches_KT_Module extends KT_Module implements KT_Module_List {
 					<div class="grid-x grid-margin-x">
 						<div class="cell medium-4">
 							<label class="h5" for="autocompleteInput"><?php echo KT_Gedcom_Tag::getLabel('SURN'); ?></label>
-							<div class="input-group autocomplete_container">
-								<input data-autocomplete-type="SURN" type="text" id="autocompleteInput" value="<?php echo KT_Filter::escapeHtml($controller->surn); ?>">
-								<span class="input-group-label">
-									<button class="clearAutocomplete autocomplete_icon">
-										<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
-									</button>
-								</span>
-							</div>
-							<input type="hidden" id="selectedValue" name="surname" >
+							<?php echo autocompleteHtml(
+								'branches', // id
+								'SURN', // TYPE
+								'', // autocomplete-ged
+								KT_Filter::escapeHtml($controller->surn), // input value
+								'', // placeholder
+								'surname', // hidden input name
+								'' // hidden input value
+							); ?>
 						</div>
 						<div class="cell medium-4">
 							<label class="h5"><?php echo KT_I18N::translate('Phonetic search'); ?></label>

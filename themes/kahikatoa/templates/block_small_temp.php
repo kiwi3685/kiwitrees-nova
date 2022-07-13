@@ -25,6 +25,11 @@ if (!defined('KT_KIWITREES')) {
 	header('HTTP/1.0 403 Forbidden');
 	exit;
 }
+
+// content not used in all blocks
+if (!$subtitle) {
+	$subtitle = '';
+}
 ?>
 
 <div id="<?php echo $id; ?>" class="block small-block shadow">
@@ -37,6 +42,7 @@ if (!defined('KT_KIWITREES')) {
 		<?php } ?>
 	</div>
 	<div class="blockcontent <?php echo $class; ?>">
+		<h6><?php echo $subtitle; ?></h6>
 		<?php echo $content; ?>
 	</div>
 </div>

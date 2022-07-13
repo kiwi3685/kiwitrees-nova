@@ -27,6 +27,7 @@ if (!defined('KT_KIWITREES')) {
 }
 
 global $iconStyle;
+include 'templates/commonElements.php';
 
 /**
  * Array of site administration menu items
@@ -93,6 +94,7 @@ $module_cats = array(
 asort($module_cats);
 
 $this
+	->addExternalJavascript(KT_KIWITREES_ADMIN_JS_URL)
 	->addExternalJavascript(KT_JQUERY_COLORBOX_URL)
 	->addExternalJavascript(KT_JQUERY_WHEELZOOM_URL)
 	->addExternalJavascript(KT_JQUERY_AUTOSIZE)

@@ -114,15 +114,15 @@ class chart_fanchart_KT_Module extends KT_Module implements KT_Module_Chart {
 				<div class="grid-x grid-margin-x">
 					<div class="cell medium-4">
 						<label class="h5" for="autocompleteInput"><?php echo KT_I18N::translate('Individual'); ?></label>
-						<div class="input-group autocomplete_container">
-							<input data-autocomplete-type="INDI" type="text" id="autocompleteInput" value="<?php echo strip_tags($person->getLifespanName()); ?>">
-							<span class="input-group-label">
-								<button class="clearAutocomplete autocomplete_icon">
-									<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
-								</button>
-							</span>
-						</div>
-						<input type="hidden" id="selectedValue" name="rootid">
+						<?php echo autocompleteHtml(
+							'fan', // id
+							'INDI', // TYPE
+							'', // autocomplete-ged
+							strip_tags($person->getLifespanName()), // input value
+							'', // placeholder
+							'rootid', // hidden input name
+							'' // hidden input value
+						); ?>
 					</div>
 					<div class="cell medium-4">
 						<label class="h5" for="generations"><?php echo KT_I18N::translate('Generations'); ?></label>

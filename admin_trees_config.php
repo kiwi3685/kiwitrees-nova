@@ -401,24 +401,17 @@ global $iconstyles;
 								<label for="autocompleteInput-default"><?php echo KT_I18N::translate('Default individual'); ?></label>
 							</div>
 							<div class="cell large-9">
-								<div class="input-group autocomplete_container">
-									<input type="hidden" id="selectedValue-rootid" name="NEW_PEDIGREE_ROOT_ID">
-									<?php
-										$person = KT_Person::getInstance(get_gedcom_setting(KT_GED_ID, 'PEDIGREE_ROOT_ID'));
-										$lifeSpan = $person ? strip_tags($person->getLifespanName()) : '';
-									?>
-									<input
-										data-autocomplete-type="INDI"
-										type="text"
-										id="autocompleteInput-default"
-										value="<?php echo $lifeSpan; ?>"
-									>
-									<span class="input-group-label">
-										<button class="clearAutocomplete autocomplete_icon">
-											<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
-										</button>
-									</span>
-								</div>
+								<?php
+									$person = KT_Person::getInstance(get_gedcom_setting(KT_GED_ID, 'PEDIGREE_ROOT_ID'));
+									$lifeSpan = $person ? strip_tags($person->getLifespanName()) : '';
+								echo autocompleteHtml(
+									'default',
+									'INDI',
+									'',
+									$lifeSpan,
+									'',
+									'NEW_PEDIGREE_ROOT_ID'
+								);?>
 								<div class="cell callout warning helpcontent">
 									<?php echo KT_I18N::translate('This individual will be selected by default when viewing charts and reports.'); ?>
 								</div>

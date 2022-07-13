@@ -190,37 +190,27 @@ class report_fact_KT_Module extends KT_Module implements KT_Module_Report {
 					</div>
 					<div class="cell medium-3">
 						<label class="h5" for="autocompleteInput-place"><?php echo KT_I18N::translate('Place'); ?></label>
-						<div class="input-group autocomplete_container">
-							<input
-								data-autocomplete-type="PLAC"
-								type="text"
-								id="autocompleteInput-place"
-								value="<?php echo $place; ?>"
-							>
-							<input type="hidden" name="place" id="selectedValue-place">
-							<span class="input-group-label">
-								<button class="clearAutocomplete autocomplete_icon">
-									<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
-								</button>
-							</span>
-						</div>
+						<?php echo autocompleteHtml(
+							'place', // id
+							'PLAC', // TYPE
+							'', // autocomplete-ged
+							$place, // input value
+							'', // placeholder
+							'place', // hidden input name
+							$place // hidden input value
+						); ?>
 					</div>
 					<div class="cell medium-3">
 						<label class="h5" for="autocompleteInput-type"><?php echo KT_I18N::translate('Type'); ?></label>
-						<div class="input-group autocomplete_container">
-							<input
-								data-autocomplete-type="EF_TYPE"
-								type="text"
-								id="autocompleteInput-type"
-								value="<?php echo $type; ?>"
-							>
-							<input type="hidden" name="type" id="selectedValue-type" >
-							<span class="input-group-label">
-								<button class="clearAutocomplete autocomplete_icon">
-									<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
-								</button>
-							</span>
-						</div>
+						<?php echo autocompleteHtml(
+							'type', // id
+							'EF_TYPE', // TYPE
+							'', // autocomplete-ged
+							$type, // input value
+							'', // placeholder
+							'type', // hidden input name
+							$type // hidden input value
+						); ?>
 					</div>
 					<div class="cell medium-3">
 						<label class="h5" for="detail"><?php echo KT_I18N::translate('Details'); ?></label>

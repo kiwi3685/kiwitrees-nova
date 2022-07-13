@@ -400,20 +400,15 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 									</div>
 									<?php for ($x = 0; $x < $count_xref; $x++) { ?>
 										<div class="cell medium-6 large-3 add_indi">
-											<div class="input-group autocomplete_container">
-												<input
-													data-autocomplete-type="INDI"
-													type="text"
-													id="autocompleteInput-<?php echo $x; ?>"
-													placeholder="<?php echo KT_I18N::translate('Add an individual'); ?>"
-												>
-												<span class="input-group-label">
-													<button class="clearAutocomplete autocomplete_icon">
-														<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
-													</button>
-												</span>
-											</div>
-											<input type="hidden" id="selectedValue-<?php echo $x; ?>" name="xref[]">
+											<?php echo autocompleteHtml(
+		 										'number' . $x, // id
+		 										'INDI', // TYPE
+		 										'', // autocomplete-ged
+		 										'', // input value
+		 										KT_I18N::translate('Add an individual'), // placeholder
+		 										'xref[]', // hidden input name
+		 										'', // hidden input value
+		 									); ?>
 										</div>
 										<br>
 									<?php } ?>
@@ -422,8 +417,6 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 											<?php echo KT_I18N::translate('Add another individual'); ?>
 										</button>
 									</div>
-
-
 									<div class="cell">
 										<hr>
 										<label class="h5">
@@ -437,16 +430,8 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 									</div>
 								</div>
 
+								<?php echo submitButtons('window.location=\'' . $this->getConfigLink() . '\''); ?>
 
-
-								<button class="button" type="submit">
-									<i class="<?php echo $iconStyle; ?> fa-save"></i>
-									<?php echo KT_I18N::translate('Save'); ?>
-								</button>
-								<button class="button secondary" type="button" onclick="window.location=\'<?php echo $this->getConfigLink(); ?>\';">
-									<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
-									<?php echo KT_I18N::translate('Cancel'); ?>
-								</button>
 							</form>
 						</div>
 					</div>

@@ -99,30 +99,25 @@ class chart_compact_KT_Module extends KT_Module implements KT_Module_Chart {
 
 		<!-- Start page layout  -->
 		<?php echo pageStart('compact', $controller->getPageTitle()); ?>
-			<form name="people" id="people" method="get" action="?">
+			<form name="people" id="people" method="post">
 				<input type="hidden" name="mod" value="<?php echo $this->getName(); ?>">
 				<input type="hidden" name="mod_action" value="show">
 				<div class="grid-x grid-margin-x">
 					<label class="h5 cell medium-6 large-4" for="autocompleteInput"><?php echo KT_I18N::translate('Individual'); ?>
-						<div class="input-group autocomplete_container">
-							<input
-								data-autocomplete-type="INDI"
-								type="text"
-								id="autocompleteInput"
-								value="<?php echo strip_tags($person->getLifespanName()); ?>"
-							>
-							<span class="input-group-label">
-								<button class="clearAutocomplete autocomplete_icon">
-									<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
-								</button>
-							</span>
-						</div>
-						<input type="hidden" name="rootid" id="selectedValue" value="<?php echo $controller->rootid; ?>">
+						<?php echo autocompleteHtml(
+							'compact', // id
+							'INDI', // TYPE
+							'', // autocomplete-ged
+							strip_tags($person->getLifespanName()), // input value
+							'', // placeholder
+							'rootid', // hidden input name
+							$controller->rootid // hidden input value
+						); ?>
 					</label>
 					<?php if ($SHOW_HIGHLIGHT_IMAGES) { ?>
 						<label class="h5 cell medium-6 large-4" for="show_thumbs"><?php echo KT_I18N::translate('Show photo in people boxes'); ?>
 							<div class="switch">
-							  <input class="switch-input" id="show_thumbs" type="checkbox" name="show_thumbs" <?php echo $controller->show_thumbs ? 'checked="checked"' : ''; ?>>
+							  <input class="switch-input" id="show_thumbs" type="checkbox" name="show_thumbs" <?php echo $controller->show_thumbs ? 'checked' : ''; ?>>
 							  <label class="switch-paddle" for="show_thumbs">
 								  <span class="show-for-sr"><?php echo KT_I18N::translate('Show thumbs'); ?></span>
 							      <span class="switch-active" aria-hidden="true"><?php echo KT_I18N::translate('Yes'); ?></span>
@@ -132,10 +127,9 @@ class chart_compact_KT_Module extends KT_Module implements KT_Module_Chart {
 						</label>
 					<?php } ?>
 				</div>
-				<button class="button" type="submit">
-					<i class="<?php echo $iconStyle; ?> fa-eye"></i>
-					<?php echo KT_I18N::translate('Show'); ?>
-				</button>
+
+				<?php echo singleButton(); ?>
+
 			</form>
 			<hr>
 

@@ -98,20 +98,15 @@ class chart_descendancy_KT_Module extends KT_Module implements KT_Module_Chart {
 				<input type="hidden" name="mod_action" value="show">
 				<div class="grid-x grid-margin-x">
 					<label class="h5 cell medium-6 large-4" for="autocompleteInput"><?php echo KT_I18N::translate('Individual'); ?>
-						<div class="input-group autocomplete_container">
-							<input
-								data-autocomplete-type="INDI"
-								type="text"
-								id="autocompleteInput"
-								value="<?php echo strip_tags($person->getLifespanName()); ?>"
-							>
-							<span class="input-group-label">
-								<button class="clearAutocomplete autocomplete_icon">
-									<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
-								</button>
-							</span>
-						</div>
-						<input type="hidden" name="rootid" id="selectedValue" value="<?php echo $controller->rootid; ?>">
+						<?php echo autocompleteHtml(
+							'descendancy', // id
+							'INDI', // TYPE
+							'', // autocomplete-ged
+							strip_tags($person->getLifespanName()), // input value
+							'', // placeholder
+							'rootid', // hidden input name
+							$controller->rootid // hidden input value
+						); ?>
 					</label>
 					<label class="h5 cell medium-6 large-4" for="generations"><?php echo KT_I18N::translate('Generations'); ?>
 						<div class="grid-x grid-padding-x">

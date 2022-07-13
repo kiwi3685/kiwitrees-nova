@@ -1440,11 +1440,6 @@ function autocomplete(selector) {
             jQuery(this).data("autocomplete-ged", KT_GEDCOM);
         }
 
-        var person = jQuery(this).data("autocomplete-person");  // rootid or gedcomid
-        if (typeof(person) === "undefined") {
-            jQuery(this).data("autocomplete-person", "");
-        }
-
         var self = jQuery(this);
         self.autocomplete({
             // Cannot use a simple URL, as the data-autocomplete-xxxx parameters may change.
@@ -1458,7 +1453,6 @@ function autocomplete(selector) {
                 jQuery.getJSON("autocomplete.php", {
                     field: self.data("autocomplete-type"),
                     ged:   self.data("autocomplete-ged"),
-                    person: self.data("autocomplete-person"),
                     extra: extra,
                     term:  request.term
                 }, response);
@@ -1467,11 +1461,7 @@ function autocomplete(selector) {
                 var item_html = jQuery("<p>" + ui.item.label + "</p>").text();
                 jQuery(self).val(item_html);//Display label in input field
 
-                if (person && (person.includes("rootid") || person.includes("gedcomid"))) {
-                    jQuery("input[id=selectedValue-" + person + "]").val(ui.item.value);//Saving the selected id in hidden field
-                } else {
-                    jQuery("input[id^=selectedValue]").val(ui.item.value);//Saving the selected id in hidden field
-                }
+                jQuery(self).nextAll("input[id^=selectedValue]").val(ui.item.value);//Saving the selected id in hidden field
 
                 return false;
             },
@@ -1482,8 +1472,11 @@ function autocomplete(selector) {
 
 // Clear autocomplete input field.
 jQuery(".clearAutocomplete").click(function() {
-    jQuery("input[id*=selectedValue]").val("");
-    jQuery("input[id*=autocompleteInput]").val("").focus();
+    var clickElement = jQuery(this).attr("id");
+
+    jQuery("input[id=selectedValue-" + clickElement + "]").val("");
+    jQuery("input[id=autocompleteInput-" + clickElement + "]").val("").focus();
+
     return false;
 });
 

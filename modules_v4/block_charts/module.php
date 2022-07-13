@@ -56,13 +56,13 @@ class block_charts_KT_Module extends KT_Module implements KT_Module_Block {
 		}
 
 		// Override the request
-		$_GET['rootid'] = $pid;
+		$_GET['rootid']				= $pid;
 
-		$savePedigreeFullDetails = $PEDIGREE_FULL_DETAILS;
-		$show_full = 0;
-		$PEDIGREE_FULL_DETAILS = $show_full;
+		$savePedigreeFullDetails	= $PEDIGREE_FULL_DETAILS;
+		$show_full					= 0;
+		$PEDIGREE_FULL_DETAILS		= $show_full;
+		$person						= KT_Person::getInstance($pid);
 
-		$person = KT_Person::getInstance($pid);
 		if (!$person) {
 			$pid = $PEDIGREE_ROOT_ID;
 			set_block_setting($block_id, 'pid', $pid);
@@ -74,24 +74,25 @@ class block_charts_KT_Module extends KT_Module implements KT_Module_Block {
 			$controller->setupJavascript();
 		}
 
-		$id		= $this->getName() . $block_id;
-		$class	= $this->getName();
-		$config	= true;
-		$title	= KT_I18N::translate('Title required');
+		$id			= $this->getName() . $block_id;
+		$class		= $this->getName();
+		$config		= true;
+		$title		= KT_I18N::translate('Title required');
+		$subtitle	= KT_I18N::translate('For %s : ', $person->getFullName());
 
 		if ($person) {
 			switch($type) {
 				case 'pedigree':
-					$title = KT_I18N::translate('Pedigree of %s', $person->getFullName());
+					$title = KT_I18N::translate('Pedigree chart');
 					break;
 				case 'descendants':
-					$title = KT_I18N::translate('Descendants of %s', $person->getFullName());
+					$title = KT_I18N::translate('Descendants chart');
 					break;
 				case 'hourglass':
-					$title = KT_I18N::translate('Hourglass chart of %s', $person->getFullName());
+					$title = KT_I18N::translate('Hourglass chart');
 					break;
 				case 'treenav':
-					$title = KT_I18N::translate('Interactive tree of %s', $person->getFullName());
+					$title = KT_I18N::translate('Interactive tree ');
 					break;
 			}
 
@@ -185,7 +186,7 @@ class block_charts_KT_Module extends KT_Module implements KT_Module_Block {
 
 		$type	= get_block_setting($block_id, 'type',    'pedigree');
 		$pid	= get_block_setting($block_id, 'pid', KT_USER_ID ? (KT_USER_GEDCOM_ID ? KT_USER_GEDCOM_ID : $PEDIGREE_ROOT_ID) : $PEDIGREE_ROOT_ID);
-		$root 	= KT_Person::getInstance($pid);
+		$person = KT_Person::getInstance($pid);
 		$controller
 			->addExternalJavascript(KT_AUTOCOMPLETE_JS_URL)
 			->addInlineJavascript('autocomplete();
@@ -208,15 +209,15 @@ class block_charts_KT_Module extends KT_Module implements KT_Module_Block {
 			 <label><?php echo KT_I18N::translate('Individual'); ?></label>
 		</div>
 		<div class="cell medium-7">
-			<div class="input-group autocomplete_container">
-				<input data-autocomplete-type="INDI" type="text" id="autocompleteInput-favIndi" value="<?php echo strip_tags($root->getLifespanName()); ?>" placeholder="<?php echo KT_I18N::translate('Individual name'); ?>">
-				<span class="input-group-label">
-					<button class="clearAutocomplete autocomplete_icon">
-						<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
-					</button>
-				</span>
-			</div>
-			<input type="hidden" id="selectedValue-indi" name="pid">
+				<?php echo autocompleteHtml(
+					'favIndi', // id
+					'INDI', // TYPE
+					'', // autocomplete-ged
+					strip_tags($person->getLifespanName()), // input value
+					KT_I18N::translate('Individual name'), // placeholder
+					'pid', // hidden input name
+					'' // hidden input value
+				); ?>
 		</div>
 		<hr>
 

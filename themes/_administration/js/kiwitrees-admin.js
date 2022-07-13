@@ -35,20 +35,12 @@
  	}
  }
 
- // Clear autocomplete input field.
- jQuery(".adminClearAutocomplete").click(function() {
-     var clickElement = jQuery(this).attr("id");
+// Clear autocomplete input field.
+jQuery(".adminClearAutocomplete").click(function() {
+    var clickElement = jQuery(this).attr("id");
 
-     // Special case for User Gedcom settings
-     if (clickElement.indexOf("rootid") != -1 || clickElement.indexOf("gedcom") != -1) {
-         jQuery("input[id=selectedValue-"+clickElement+"]").val("");
-         jQuery("input[id=autocompleteInput-"+clickElement+"]").val("").focus();
-         return false;
-     } else {
-        jQuery("input[id$=selectedValue]").val("");
-        jQuery("input[id$=autocompleteInput]").val("").focus();
-        return false;
-     }
+    jQuery("input[id=selectedValue-" + clickElement + "]").val("");
+    jQuery("input[id=autocompleteInput-" + clickElement + "]").val("").focus();
 
-     return false;
- });
+    return false;
+});

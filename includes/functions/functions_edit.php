@@ -3007,60 +3007,6 @@ function no_update_chan(KT_GedcomRecord $record = null) {
 	}
 }
 
-// BUTTON GROUPS //
-// =================== //
-
-	/**
-	 * A stadard "Save / Cancel" pair of buttons, used on many pages
-	 *
-	 * @return string[]
-	 */
-	function submitButtons() {
-		global $iconStyle;
-
-		$buttonHtml = '
-			<div class="cell align-left button-group">
-				<button class="button primary" type="submit">
-					<i class="' . $iconStyle . ' fa-save"></i>'
-					 . KT_I18N::translate('Save') .
-				'</button>
-				<button class="button hollow" type="submit" onclick="window.close();">
-					<i class="' . $iconStyle . ' fa-xmark"></i>'
-					 . KT_I18N::translate('Cancel') .
-				'</button>
-			</div>
-		';
-
-		return $buttonHtml;
-
-	}
-
-	/**
-	 * A stadard "Show / Reset" pair of buttons, used on report pages
-	 *
-	 * @return string[]
-	 */
-	function resetButtons() {
-		global $iconStyle;
-
-		$buttonHtml = '
-			<div class="cell align-left button-group">
-				<button class="button primary" type="submit">
-					<i class="' . $iconStyle . ' fa-eye"></i>'
-					 . KT_I18N::translate('Show') .
-				'</button>
-				<button class="button hollow" type="submit" name="reset" value="reset">
-					<i class="' . $iconStyle . ' fa-rotate"></i>'
-					 . KT_I18N::translate('Reset') .
-				'</button>
-			</div>
-		';
-
-		return $buttonHtml;
-
-	}
-// =============== //
-
 /**
  * Remove a complete directory
  * used in site-clean and

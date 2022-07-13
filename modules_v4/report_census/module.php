@@ -78,6 +78,14 @@ class report_census_KT_Module extends KT_Module implements KT_Module_Report {
 		$ged	= empty($ged) ? $GEDCOM : KT_Filter::post('ged');
 		$go 	= KT_Filter::post('go') ? KT_Filter::post('go') : "0";
 
+		if (KT_Filter::post('reset')) {
+			$surn	= '';
+			$plac	= '';
+			$dat	= '';
+			$ged	= '';
+			$go 	= '0';
+		}
+
 		foreach (KT_Census_Census::allCensusPlaces() as $census_place) {
 			//List of Places
 			$census_places[] = $census_place->censusPlace();
@@ -89,8 +97,6 @@ class report_census_KT_Module extends KT_Module implements KT_Module_Report {
 				$data_sources[]	= array('event'=>'CENS', 'date'=>$census->censusDate(), 'place'=>$census_place->censusPlace(), 'jd'=>$jd);
 			}
 		}
-
-		$dat ? $opt = str_replace(" ", "", $plac) : $opt = 'xyz';
 
 		$controller = new KT_Controller_Page();
 		$controller
@@ -113,18 +119,17 @@ class report_census_KT_Module extends KT_Module implements KT_Module_Report {
 								Under Surname, you can also enter \'All\' for everyone, or leave it blank for all of your own ancestors.
 							'); ?>
 						</div>
-
 						<div class="cell medium-4">
 							<label class="h5" for="autocompleteInput"><?php echo KT_Gedcom_Tag::getLabel('SURN'); ?></label>
-							<div class="input-group autocomplete_container">
-								<input data-autocomplete-type="SURN" type="text" id="autocompleteInput" value="<?php echo $surn; ?>">
-								<span class="input-group-label">
-									<button class="clearAutocomplete autocomplete_icon">
-										<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
-									</button>
-								</span>
-							</div>
-							<input type="hidden" id="selectedValue" name="surn" >
+							<?php echo autocompleteHtml(
+								'surname', // id
+								'SURN', // TYPE
+								'', // autocomplete-ged
+								$surn, // input value
+								'', // placeholder
+								'surn', // hidden input name
+								$surn // hidden input value
+							); ?>
 						</div>
 						<div class="cell medium-4">
 							<label class="h5" for="cens_plac"><?php echo KT_I18N::translate('Census Place'); ?></label>
@@ -134,7 +139,8 @@ class report_census_KT_Module extends KT_Module implements KT_Module_Report {
 										echo ' selected = "selected"';
 									}
 									echo '>' . KT_I18N::translate('All') . '
-								</option>';								foreach ($census_places as $census_place) {
+								</option>';
+								foreach ($census_places as $census_place) {
 									echo '<option value="' . $census_place. '"';
 										if ($census_place == $plac) {
 											echo ' selected = "selected"';
@@ -156,10 +162,29 @@ class report_census_KT_Module extends KT_Module implements KT_Module_Report {
 									echo '>
 										' . KT_I18N::translate('All') . '
 									</option>';
+									foreach (KT_Census_Census::allCensusPlaces() as $census_place) {
+										echo '<optgroup id="' . str_replace(" ", "", $census_place->censusPlace()) . '" label="' . $census_place->censusPlace() . '">';
+											foreach ($census_place->allCensusDates() as $census) {
+												echo '<option value="' . $census->censusDate() . '"';
+													if ($dat == $census->censusDate()) {
+														echo ' selected="selected"';
+													}
+													echo '>' . $census->censusDate() . '
+												</option>';
+											}
+										echo '</optgroup>';
+									}
 								}
 								foreach (KT_Census_Census::allCensusPlaces() as $census_place) {
 									if ($plac && $plac == $census_place->censusPlace()) {
 										echo '<optgroup id="' . str_replace(" ", "", $census_place->censusPlace()) . '" label="' . $census_place->censusPlace() . '">';
+											echo '<option value="' . KT_I18N::translate('All') . '"';
+												if ($dat == KT_I18N::translate('All')) {
+													echo ' selected = "selected"';
+												}
+											echo '>
+												' . KT_I18N::translate('All') . '
+											</option>';
 											foreach ($census_place->allCensusDates() as $census) {
 												echo '<option value="' . $census->censusDate() . '"';
 													if ($dat == $census->censusDate()) {
@@ -174,10 +199,9 @@ class report_census_KT_Module extends KT_Module implements KT_Module_Report {
 							</select>
 						</div>
 					</div>
-					<button class="button" type="submit" name="go" value="1">
-						<i class="<?php echo $iconStyle; ?> fa-eye"></i>
-						<?php echo KT_I18N::translate('Show'); ?>
-					</button>
+
+					<?php echo resetButtons(); ?>
+
 				</form>
 				<hr style="clear:both;">
 				<!-- end of form -->

@@ -120,7 +120,7 @@ class tabi_dna_KT_Module extends KT_Module implements KT_Module_IndiTab {
 			<div class="cell tabHeader">
 				<div class="grid-x">
 					<div class="cell">
-						<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=add-dna&amp;pid=<?php echo $xref; ?>&amp;ged=<?php echo KT_GEDCOM; ?>" target="_blank">
+						<a href="#" onclick="window.open('module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=add-dna&amp;pid=<?php echo $xref; ?>&amp;ged=<?php echo KT_GEDCOM; ?>', '_blank')" title="<?php echo KT_I18N::translate('Add DNA data'); ?>">
 							<i class="<?php echo $iconStyle; ?> fa-dna"></i>
 							<?php echo KT_I18N::translate('Add DNA data'); ?>
 						</a>
@@ -135,7 +135,7 @@ class tabi_dna_KT_Module extends KT_Module implements KT_Module_IndiTab {
 					<?php echo $this->getDescription(); ?>
 					<i class="<?php echo $iconStyle; ?> fa-question-circle alert"></i>
 				</p>
-				<div class="dropdown-pane" id="help-dropdown" data-dropdown data-close-on-click="true">
+				<div class="dropdown-pane xlarge help-text" data-position="top" data-alignment="left" id="help-dropdown" data-dropdown data-close-on-click="true">
 					<?php echo $this->DNAhelp('cms'); ?>
 					<br><br>
 					<?php echo $this->DNAhelp('seg'); ?>
@@ -219,7 +219,7 @@ class tabi_dna_KT_Module extends KT_Module implements KT_Module_IndiTab {
 									<?php echo timestamp_to_gedcom_date(strtotime($row->date))->Display(); ?>
 								</td>
 								<td>
-									<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=edit-dna&amp;pid=<?php echo $xref; ?>&amp;ged=<?php echo KT_GEDCOM; ?>&amp;dna-id=<?php echo $row->dna_id; ?>" target="_blank" title="<?php echo KT_I18N::translate('Edit DNA data'); ?>">
+									<a href="#" onclick="window.open('module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=edit-dna&amp;pid=<?php echo $xref; ?>&amp;ged=<?php echo KT_GEDCOM; ?>&amp;dna-id=<?php echo $row->dna_id; ?>', '_blank')" title="<?php echo KT_I18N::translate('Edit DNA data'); ?>">
 										<i class="<?php echo $iconStyle; ?> fa-edit fa-lg"></i>
 									</a>
 								</td>
@@ -307,30 +307,30 @@ class tabi_dna_KT_Module extends KT_Module implements KT_Module_IndiTab {
 									<label class="h5" for="autocompleteInput-dna_id_b"><?php echo KT_I18N::translate('Person connected by DNA'); ?></label>
 								</div>
 								<div class="cell small-10 medium-6">
-									<div class="input-group autocomplete_container">
-										<input data-autocomplete-type="INDI" type="text" id="autocompleteInput-dna_id_b" value="" autofocus>
-										<span class="input-group-label">
-											<button class="clearAutocomplete">
-												<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
-											</button>
-										</span>
-									</div>
-									<input type="hidden" id="selectedValue-dna_id_b" name="indi" >
+									<?php echo autocompleteHtml(
+										'dna_id_b', // id
+										'INDI', // TYPE
+										'', // autocomplete-ged
+										'', // input value
+										'', // placeholder
+										'dna_id_b', // hidden input name
+										'' // hidden input value
+									); ?>
 								</div>
 								<div class="cell small-1 medium-2"></div>
 								<div class="cell medium-3">
 									<label class="h5" for="autocompleteInput-source"><?php echo KT_I18N::translate('Source'); ?></label>
 								</div>
 								<div class="cell small-10 medium-6">
-									<div class="input-group autocomplete_container">
-										<input data-autocomplete-type="SOUR" type="text" id="autocompleteInput-source" value="">
-										<span class="input-group-label">
-											<button class="clearAutocomplete">
-												<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
-											</button>
-										</span>
-										<input type="hidden" id="selectedValue-source" name="indi" >
-									</div>
+									<?php echo autocompleteHtml(
+										'source', // id
+										'SOUR', // TYPE
+										'', // autocomplete-ged
+										'', // input value
+										'', // placeholder
+										'source', // hidden input name
+										'' // hidden input value
+									); ?>
 								</div>
 								<div class="cell small-1 medium-2">
 									<a href="#" onclick="addnewsource(document.getElementById('SOUR')); return false;" title="Create a new source">
@@ -368,12 +368,12 @@ class tabi_dna_KT_Module extends KT_Module implements KT_Module_IndiTab {
 							WHERE dna_id	= ?
 						"
 					)->execute(array($dna_id_b, $cms, $seg, $percent, $source, $note, $dna_id));
-					echo "
-						<script>
+
+					echo '<script>
 							opener.location.reload();
 							window.close();
 						</script>
-					";
+					';
 				} ?>
 
 				<div id="edit_interface-page" class="grid-x">
@@ -387,19 +387,15 @@ class tabi_dna_KT_Module extends KT_Module implements KT_Module_IndiTab {
 									<label class="h5" for="autocompleteInput-dna_id_b"><?php echo KT_I18N::translate('Person connected by DNA'); ?></label>
 								</div>
 								<div class="cell small-10 medium-6">
-									<div class="input-group autocomplete_container">
-										<?php if ($person_b) { ?>
-											<input data-autocomplete-type="INDI" type="text" id="autocompleteInput-dna_id_b" value="<?php echo strip_tags(($person_b ? $person_b->getLifespanName() : '')); ?>">
-										<?php } else { ?>
-											<input class="error" data-autocomplete-type="INDI" type="text" id="autocompleteInput-dna_id_b" value="<?php echo strip_tags(($person_b ? $person_b->getLifespanName() : '')); ?>">
-										<?php }?>
-										<span class="input-group-label">
-											<button class="clearAutocomplete">
-												<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
-											</button>
-										</span>
-									</div>
-									<input type="hidden" id="selectedValue-dna_id_b" name="indi" value="<?php echo $dna_id_b; ?>">
+									<?php echo autocompleteHtml(
+										'dna_id_b', // id
+										'INDI', // TYPE
+										'', // autocomplete-ged
+										strip_tags(($person_b ? $person_b->getLifespanName() : '')), // input value
+										'', // placeholder
+										'dna_id_b', // hidden input name
+										$dna_id_b // hidden input value
+									); ?>
 								</div>
 								<div class="cell small-1 medium-2"></div>
 
@@ -407,19 +403,15 @@ class tabi_dna_KT_Module extends KT_Module implements KT_Module_IndiTab {
 									<label class="h5" for="autocompleteInput-source"><?php echo KT_I18N::translate('Source'); ?></label>
 								</div>
 								<div class="cell small-10 medium-6">
-									<div class="input-group autocomplete_container">
-										<?php if ($source_b) { ?>
-											<input data-autocomplete-type="SOUR" type="text" id="autocompleteInput-source" value="<?php echo ($source_b ? strip_tags($source_b->getFullName()) : ''); ?>">
-										<?php } else { ?>
-											<input class="error" data-autocomplete-type="SOUR" type="text" id="autocompleteInput-source" value="<?php echo ($source_b ? strip_tags($source_b->getFullName()) : ''); ?>">
-										<?php }?>
-										<span class="input-group-label">
-											<button class="clearAutocomplete">
-												<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
-											</button>
-										</span>
-										<input type="hidden" id="selectedValue-source" name="indi" value="<?php echo $row->source; ?>">
-									</div>
+									<?php echo autocompleteHtml(
+										'source', // id
+										'SOUR', // TYPE
+										'', // autocomplete-ged
+										strip_tags(($source_b ? $source_b->getFullName() : '')), // input value
+										'', // placeholder
+										'source', // hidden input name
+										$row->source // hidden input value
+									); ?>
 								</div>
 								<div class="cell small-1 medium-2">
 									<a href="#" onclick="addnewsource(document.getElementById('SOUR')); return false;" title="Create a new source">
@@ -434,7 +426,7 @@ class tabi_dna_KT_Module extends KT_Module implements KT_Module_IndiTab {
 											<?php echo KT_I18N::translate('CentiMorgans'); ?>
 											<i class="<?php echo $iconStyle; ?> fa-question-circle alert"></i>
 										</span>
-										<div class="dropdown-pane" id="help-dropdown-cms" data-dropdown data-close-on-click="true">
+										<div class="dropdown-pane xlarge help-text" id="help-dropdown-cms" data-dropdown data-close-on-click="true">
 											<?php echo $this->DNAhelp('cms'); ?>
 										</div>
 									</label>
@@ -449,7 +441,7 @@ class tabi_dna_KT_Module extends KT_Module implements KT_Module_IndiTab {
 											<?php echo KT_I18N::translate('Segments'); ?>
 											<i class="<?php echo $iconStyle; ?> fa-question-circle alert"></i>
 										</span>
-										<div class="dropdown-pane" id="help-dropdown-seg" data-dropdown data-close-on-click="true">
+										<div class="dropdown-pane xlarge help-text" id="help-dropdown-seg" data-dropdown data-close-on-click="true">
 											<?php echo $this->DNAhelp('seg'); ?>
 										</div>
 									</label>
@@ -464,7 +456,7 @@ class tabi_dna_KT_Module extends KT_Module implements KT_Module_IndiTab {
 											<?php echo KT_I18N::translate('Percentage DNA shared'); ?>
 											<i class="<?php echo $iconStyle; ?> fa-question-circle alert"></i>
 										</span>
-										<div class="dropdown-pane" id="help-dropdown-pdna" data-dropdown data-close-on-click="true">
+										<div class="dropdown-pane xlarge help-text" id="help-dropdown-pdna" data-dropdown data-close-on-click="true">
 											<?php echo $this->DNAhelp('pdna'); ?>
 										</div>
 									</label>
@@ -481,14 +473,9 @@ class tabi_dna_KT_Module extends KT_Module implements KT_Module_IndiTab {
 								</div>
 								<div class="cell small-1 medium-2"></div>
 							</div>
-							<button class="button" type="submit">
-								<i class="<?php echo $iconStyle; ?> fa-save"></i>
-								<?php echo KT_I18N::translate('Save'); ?>
-							</button>
-							<button class="button" type="button" onclick="window.close();">
-								<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
-								<?php echo KT_I18N::translate('Cancel'); ?>
-							</button>
+
+							<?php echo submitButtons(); ?>
+
 						</form>
 					</div>
 				</div>

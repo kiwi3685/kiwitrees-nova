@@ -312,7 +312,6 @@ switch (KT_Filter::get('action')) {
 
 		$controller
 			->pageHeader()
-			->addExternalJavascript(KT_KIWITREES_ADMIN_JS_URL)
 			->addExternalJavascript(KT_AUTOCOMPLETE_JS_URL)
 			->addExternalJavascript(KT_PASSWORDSCHECK)
 			->addInlineJavascript('
@@ -844,28 +843,14 @@ switch (KT_Filter::get('action')) {
 															} else {
 																$rootName = '';
 															}
-															?>
-															<div class="input-group autocomplete_container">
-																<input
-																	type="hidden"
-																	id="selectedValue-<?php echo $varname; ?>"
-																	name="<?php echo $varname; ?>"
-																>
-																<input
-																	id="autocompleteInput-<?php echo $varname; ?>"
-																	data-autocomplete-type="INDI"
-																	data-autocomplete-ged="<?php echo $tree->tree_name_html; ?>"
-																	data-autocomplete-person="<?php echo $varname; ?>"
-																	type="text"
-																	value="<?php echo $rootName; ?>"
-																	placeholder="<?php echo KT_I18N::translate('Individual name'); ?>"
-																>
-																<span class="input-group-label">
-																	<button id="<?php echo $varname; ?>" class="adminClearAutocomplete autocomplete_icon">
-																		<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
-																	</button>
-																</span>
-															</div>
+															echo autocompleteHtml(
+																$varname,
+																'INDI',
+																$tree->tree_name_html,
+																$rootName,
+																KT_I18N::translate('Individual name'),
+																$varname
+															);?>
 														</td>
 
 														<!-- GEDCOM INDI Record ID -->
@@ -879,29 +864,14 @@ switch (KT_Filter::get('action')) {
 															} else {
 																$gedcomName = '';
 															}
-															?>
-															<div class="input-group autocomplete_container">
-																<input
-																	id="autocompleteInput-<?php echo $varname; ?>"
-																	data-autocomplete-type="INDI"
-																	data-autocomplete-ged="<?php echo $tree->tree_name_html; ?>"
-																	data-autocomplete-person="<?php echo $varname; ?>"
-																	type="text"
-																	value="<?php echo $gedcomName; ?>"
-																	placeholder="<?php echo KT_I18N::translate('Individual name'); ?>"
-																>
-																<span class="input-group-label">
-																	<button id="<?php echo $varname; ?>" class="adminClearAutocomplete autocomplete_icon">
-																		<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
-																	</button>
-																</span>
-															</div>
-															<input
-																type="hidden"
-																name="<?php echo $varname; ?>"
-																id="selectedValue-<?php echo $varname; ?>"
-																value="<?php echo $tree->userPreference($user_id, 'gedcomid'); ?>"
-															>
+															echo autocompleteHtml(
+																$varname,
+																'INDI',
+																$tree->tree_name_html,
+																$gedcomName,
+																KT_I18N::translate('Individual name'),
+																$varname
+															); ?>
 														</td>
 
 														<!-- ROLE -->

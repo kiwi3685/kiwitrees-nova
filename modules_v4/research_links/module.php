@@ -64,10 +64,13 @@ class research_links_KT_Module extends KT_Module implements KT_Module_Config, KT
 	// Implement KT_Module_List
 	public function getListMenus() {
 		global $controller;
+
+		$indi_xref = $controller->getSignificantIndividual()->getXref();
+
 		$menus = array();
 		$menu  = new KT_Menu(
 			$this->getTitle(),
-			'module.php?mod=' . $this->getName() . '&amp;mod_action=show',
+			'module.php?mod=' . $this->getName() . '&amp;mod_action=show&amp;rootid=' . $indi_xref . '&amp;ged=' . KT_GEDURL,
 			'menu-research_links'
 		);
 		$menus[] = $menu;
@@ -162,7 +165,7 @@ class research_links_KT_Module extends KT_Module implements KT_Module_Config, KT
 						</div>
 						<div class="cell">
 							<input id="checkbox1" type="checkbox" onclick="toggle_select(this)">
-							<label for="checkbox1" class="h6"><?php echo KT_I18N::translate('Select all'); ?></label>						
+							<label for="checkbox1" class="h6"><?php echo KT_I18N::translate('Select all'); ?></label>
 						</div>
 						<div class="cell">
 							<button class="button" type="submit">
@@ -335,9 +338,18 @@ class research_links_KT_Module extends KT_Module implements KT_Module_Config, KT
 	private function show() {
 		global $controller, $iconStyle;
 
+		$controller = new KT_Controller_Page();
+		$controller
+			->restrictAccess(KT_Module::isActiveList(KT_GED_ID, $this->getName(), KT_USER_ACCESS_LEVEL))
+			->setPageTitle($this->getTitle())
+			->pageHeader()
+			->addExternalJavascript(KT_AUTOCOMPLETE_JS_URL)
+			->addInlineJavascript('autocomplete();');
+
+		$rootid 		= KT_Filter::get('rootid');
 		$all_plugins 	= $this->getPluginList();
 		$action 		= KT_Filter::post('action');
-		$indi			= KT_Filter::post('indi', KT_REGEX_XREF, '');
+		$indi			= KT_Filter::post('indi', KT_REGEX_XREF, $rootid);
 		$surn			= KT_Filter::post('surn', null, '');
 		$givn			= KT_Filter::post('givn', null, '');
 		$sdate			= KT_Filter::post('sdate', null, '');
@@ -347,16 +359,7 @@ class research_links_KT_Module extends KT_Module implements KT_Module_Config, KT
 		$reset 			= KT_Filter::post('reset');
 		if ($reset) {unset($_POST);}
 
-		$controller = new KT_Controller_Page();
-		$controller
-			->restrictAccess(KT_Module::isActiveList(KT_GED_ID, $this->getName(), KT_USER_ACCESS_LEVEL))
-			->setPageTitle($this->getTitle())
-			->pageHeader()
-			->addExternalJavascript(KT_AUTOCOMPLETE_JS_URL)
-			->addInlineJavascript('autocomplete();');
-
-		$person	= KT_Person::getInstance($indi);
-
+		$person		= KT_Person::getInstance($indi);
 		?>
 
 		<div id="research_links-page" class="grid-x grid-padding-x">
@@ -377,19 +380,19 @@ class research_links_KT_Module extends KT_Module implements KT_Module_Config, KT
 						</p>
 					</div>
 				</div>
-				<form name="research_options" id="research_options" method="post" action="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=show&amp;ged=<?php echo KT_GEDURL; ?>">
+				<form name="research_options" id="research_options" method="post" action="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=show&amp;rootid=<?php echo $indi; ?>&amp;ged=<?php echo KT_GEDURL; ?>">
 					<input type="hidden" name="action" value="1">
 					<div class="grid-x grid-margin-x">
 						<div class="cell medium-4 shrink">
-							<div class="input-group autocomplete_container">
-								<input data-autocomplete-type="INDI" type="text" id="autocompleteInput" value="<?php echo strip_tags($person->getLifespanName()); ?>">
-								<span class="input-group-label">
-									<button class="clearAutocomplete autocomplete_icon">
-										<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
-									</button>
-								</span>
-							</div>
-							<input type="hidden" id="selectedValue" name="indi">
+							<?php echo autocompleteHtml(
+								'links', // id
+								'INDI', // TYPE
+								'', // autocomplete-ged
+								strip_tags($person->getLifespanName()), // input value
+								'', // placeholder
+								'indi', // hidden input name
+								'' // hidden input value
+							); ?>
 						</div>
 					</div>
 					<div class="grid-x grid-margin-x">

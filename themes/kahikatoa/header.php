@@ -52,7 +52,7 @@
  	');
 
  global $ALL_CAPS, $iconStyle;
- include 'functions.php';
+ include 'templates/commonElements.php';
 
  if ($ALL_CAPS) {
  	$this->addInlineJavascript('all_caps();');

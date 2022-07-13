@@ -75,7 +75,7 @@ class report_tree_completeness_KT_Module extends KT_Module implements KT_Module_
 		global $controller, $MAX_PEDIGREE_GENERATIONS, $iconStyle;
 		require KT_ROOT . 'includes/functions/functions_resource.php';
 
-		$controller = new KT_Controller_Individual();
+		$controller = new KT_Controller_Page();
 		$controller
 			->restrictAccess(KT_Module::isActiveReport(KT_GED_ID, $this->getName(), KT_USER_ACCESS_LEVEL))
 			->setPageTitle($this->getTitle())
@@ -86,31 +86,26 @@ class report_tree_completeness_KT_Module extends KT_Module implements KT_Module_
 		//-- args
 		$maxGen		= empty(KT_Filter::post('generations')) ? $MAX_PEDIGREE_GENERATIONS : KT_Filter::post('generations');
 		$rootid 	= KT_Filter::get('rootid');
-		$root_id	= KT_Filter::post('root_id');
-		$rootid		= empty($root_id) ? $rootid : $root_id;
-		$person		= KT_Person::getInstance($rootid);
+		$indi	= KT_Filter::post('root_id', KT_REGEX_XREF, $rootid);
+//		$rootid		= empty($indi) ? $rootid : $indi;
+		$person		= KT_Person::getInstance($indi);
 
 		?>
 		<!-- Start page layout  -->
 		<?php echo pageStart('report_tree_completeness-page', KT_I18N::translate('%1s for %2s', $this->getTitle(), $person->getFullName())); ?>
-			<form name="complete" id="complete" method="post" action="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=show&amp;rootid=<?php echo $rootid; ?>&amp;ged=<?php echo KT_GEDURL; ?>">
+			<form name="complete" id="complete" method="post" action="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=show&amp;rootid=<?php echo $indi; ?>&amp;ged=<?php echo KT_GEDURL; ?>">
 				<div class="grid-x grid-margin-x">
 					<div class="cell medium-4">
 						<label class="h5" for="autocompleteInput"><?php echo KT_I18N::translate('Individual'); ?></label>
-						<div class="input-group autocomplete_container">
-							<input
-								data-autocomplete-type="INDI"
-								type="text"
-								id="autocompleteInput"
-								value="<?php echo strip_tags($person->getLifespanName()); ?>"
-							>
-							<span class="input-group-label">
-								<button class="clearAutocomplete autocomplete_icon">
-									<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
-								</button>
-							</span>
-						</div>
-						<input type="hidden" name="root_id" id="selectedValue" >
+						<?php echo autocompleteHtml(
+							'completeness', // id
+							'INDI', // TYPE
+							'', // autocomplete-ged
+							strip_tags($person->getLifespanName()), // input value
+							'', // placeholder
+							'root_id', // hidden input name
+							'' // hidden input value
+						); ?>
 					</div>
 					<div class="cell medium-4">
 						<label class="h5" for="generations"><?php echo KT_I18N::translate('Generations'); ?></label>
