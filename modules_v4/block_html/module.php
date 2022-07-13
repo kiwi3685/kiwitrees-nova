@@ -75,6 +75,7 @@ class block_html_KT_Module extends KT_Module implements KT_Module_Block {
 		*/
 		$title_tmp	= get_block_setting($block_id, 'title');
 		$html		= get_block_setting($block_id, 'html');
+		$subtitle	= '';
 
 		if ( (strpos($title_tmp, '#') !== false) || (strpos($html, '#') !== false) ) {
 			$stats		= new KT_Stats($GEDCOM);

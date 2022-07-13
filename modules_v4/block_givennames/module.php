@@ -65,6 +65,7 @@ class block_givennames_KT_Module extends KT_Module implements KT_Module_Block {
 			// I18N: Title for a list of the most common given names, %s is a number.  Note that a separate translation exists when %s is 1
 			$title = KT_I18N::plural('Top %s given name', 'Top %s given names', $num, KT_I18N::number($num));
 		}
+		$subtitle = '';
 
 		$content = '<div class="grid-x">
 			<div class="cell">';

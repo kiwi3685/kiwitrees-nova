@@ -85,6 +85,7 @@ class block_news_KT_Module extends KT_Module implements KT_Module_Block {
 			$title = '';
 		}
 		$title	.= $this->getTitle();
+		$subtitle = '';
 		$content = '';
 		if (count($usernews)==0) {
 			$content .= KT_I18N::translate('No News articles have been submitted.').'<br>';

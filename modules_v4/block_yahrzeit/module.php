@@ -61,6 +61,7 @@ class block_yahrzeit_KT_Module extends KT_Module implements KT_Module_Block {
 		$class		= $this->getName();
 		$config		= true;
 		$title		= $this->getTitle();
+		$subtitle	= '';
 		$content	= '<div class="grid-x">
 			<div class="cell">';
 				// The standard anniversary rules cover most of the Yahrzeit rules, we just

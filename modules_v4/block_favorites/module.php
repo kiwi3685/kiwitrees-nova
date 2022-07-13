@@ -112,6 +112,7 @@ class block_favorites_KT_Module extends KT_Module implements KT_Module_Block {
 		$class	= $this->getName();
 		$config	= true;
 		$title	= $this->getTitle();
+		$subtitle = '';
 		$content = '';
 
 		if (get_block_location($block_id) === 'side') {

@@ -110,6 +110,7 @@ class block_statistics_KT_Module extends KT_Module implements KT_Module_Block {
 		$id			= $this->getName() . $block_id;
 		$class		= $this->getName();
 		$title 		= $this->getTitle();
+		$subtitle	= '';
 		$config		= true;
 		$content	= '';
 		$stats		= new KT_Stats(KT_GEDCOM);

@@ -97,6 +97,7 @@ class block_pending_KT_Module extends KT_Module implements KT_Module_Block {
 				$class	= $this->getName();
 				$config	= true;
 				$title	= $this->getTitle();
+				$subtitle = '';
 
 				$content = '';
 				if (KT_USER_CAN_ACCEPT) {

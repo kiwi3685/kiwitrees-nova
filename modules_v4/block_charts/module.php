@@ -78,7 +78,7 @@ class block_charts_KT_Module extends KT_Module implements KT_Module_Block {
 		$class		= $this->getName();
 		$config		= true;
 		$title		= KT_I18N::translate('Title required');
-		$subtitle	= KT_I18N::translate('For %s : ', $person->getFullName());
+		$subtitle	= KT_I18N::translate('For: %s ', $person->getFullName());
 
 		if ($person) {
 			switch($type) {

@@ -80,6 +80,7 @@ class block_surnames_KT_Module extends KT_Module implements KT_Module_Block {
 
 		$id		= $this->getName() . $block_id;
 		$class	= $this->getName();
+		$subtitle		= '';
 
 		if ($num == 1) {
 			// I18N: i.e. most popular surname.

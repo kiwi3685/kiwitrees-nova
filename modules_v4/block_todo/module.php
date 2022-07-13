@@ -58,6 +58,7 @@ class block_todo_KT_Module extends KT_Module implements KT_Module_Block {
 		$class	= $this->getName();
 		$config	= true;
 		$title	= $this->getTitle();
+		$subtitle		= '';
 
 		$table_id = 'ID'.(int)(microtime(true)*1000000); // create a unique ID
 		$controller

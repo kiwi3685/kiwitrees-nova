@@ -65,6 +65,7 @@ class block_upcoming_KT_Module extends KT_Module implements KT_Module_Block {
 		$class		= $this->getName().'_block';
 		$config		= true;
 		$title		= $this->getTitle();
+		$subtitle		= '';
 
 		$content = '';
 		switch ($infoStyle) {

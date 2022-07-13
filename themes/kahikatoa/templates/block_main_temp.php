@@ -37,6 +37,7 @@ if (!defined('KT_KIWITREES')) {
 		<?php } ?>
 	</div>
 	<div class="blockcontent <?php echo $class; ?>">
+		<?php echo $subtitle ? '<h6>' . $subtitle . '</h6>' : ''; ?>
 		<?php echo $content; ?>
 	</div>
 </div>

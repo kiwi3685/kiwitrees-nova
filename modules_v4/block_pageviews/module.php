@@ -57,6 +57,7 @@ class block_pageviews_KT_Module extends KT_Module implements KT_Module_Block {
 		$class		= $this->getName();
 		$config		= true;
 		$title		= $this->getTitle();
+		$subtitle	= '';
 		$content	= '';
 
 		// load the lines from the file

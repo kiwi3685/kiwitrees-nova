@@ -70,6 +70,7 @@ class block_recent_changes_KT_Module extends KT_Module implements KT_Module_Bloc
 		$class		= $this->getName();
 		$config		= true;
 		$title		= $this->getTitle();
+		$subtitle	= '';
 		$content	= '';
 
 		// Print block content

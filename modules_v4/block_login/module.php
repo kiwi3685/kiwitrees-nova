@@ -45,6 +45,7 @@ class block_login_KT_Module extends KT_Module implements KT_Module_Block {
 		$class	= $this->getName();
 		$config = false;
 		$url	= KT_LOGIN_URL . '?url=' . rawurlencode(get_query_url());
+		$subtitle		= '';
 
 		if (KT_USER_ID) {
 			$title		= KT_I18N::translate('Logout');

@@ -67,6 +67,7 @@ class block_today_KT_Module extends KT_Module implements KT_Module_Block {
 		$class		= $this->getName();
 		$config		= true;
 		$title 		= $this->getTitle();
+		$subtitle		= '';
 		$content	= '';
 
 		switch ($infoStyle) {

@@ -117,6 +117,7 @@ class block_media_KT_Module extends KT_Module implements KT_Module_Block {
 		} else {
 			$title = KT_I18N::translate('Random image');
 		}
+		$subtitle		= '';
 
 		if ($block_media) {
 			$content = '<div id="block_media_container' . $block_id . '" class="grid-x">

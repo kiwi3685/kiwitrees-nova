@@ -51,6 +51,7 @@ class block_welcome_KT_Module extends KT_Module implements KT_Module_Block {
 		$class			= $this->getName();
 		$config			= true;
 		$title			= '<span dir="auto">' . KT_TREE_TITLE . '</span>';
+		$subtitle		= '';
 		$default_text	= '<strong>' . KT_I18N::translate('Welcome to our family tree.') . '</strong>';
 
 		$content	= '

@@ -47,6 +47,7 @@ class block_logged_in_KT_Module extends KT_Module implements KT_Module_Block {
 		$id			= $this->getName() . $block_id;
 		$class		= $this->getName();
 		$title		= $this->getTitle();
+		$subtitle	= '';
 		$config		= false;
 		$content	= '<div>' . whoisonline() . '</div>';
 
