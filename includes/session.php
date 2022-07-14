@@ -44,14 +44,14 @@ define('KT_STATIC_URL', '');
 define ('KT_USE_CDN', false);
 
 if (KT_USE_CDN) {
-	define('KT_FOUNDATION_JS',				'https://cdn.jsdelivr.net/npm/foundation-sites@6.7.4/dist/js/foundation.min.js" crossorigin="anonymous"'); //6.7.4
+	define('KT_FOUNDATION_JS',				'https://cdn.jsdelivr.net/npm/foundation-sites@6.7.5/dist/js/foundation.min.js" crossorigin="anonymous"'); //6.7.4
 	define('KT_JQUERY_JS',					'https://code.jquery.com/jquery-3.6.0.min.js"   integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="   crossorigin="anonymous"'); //3.6.0
 	define('KT_JQUERYUI_JS',				'https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.1/jquery-ui.min.js'); // 1.13.1
 	define('KT_DATEPICKER_JS',				'https://cdn.jsdelivr.net/npm/foundation-datepicker@1.5.6/js/foundation-datepicker.min.js'); //1.5.6
 	define('KT_DATATABLES_JS',				'https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js'); //1.10.20
 	define('KT_DATATABLES_CSS',				'https://cdn.datatables.net/1.10.20/css/dataTables.foundation.min.css'); //1.10.20
 } else {
-	define('KT_FOUNDATION_JS',				KT_STATIC_URL . 'library/foundation/dist/js/foundation.min.js'); // 6.7.4 07 Nov 2021
+	define('KT_FOUNDATION_JS',				KT_STATIC_URL . 'library/foundation/dist/js/foundation.min.js'); // 6.7.5 14-07-22
 	define('KT_JQUERY_JS',					KT_STATIC_URL . 'library/jquery/jquery-3.6.0.min.js'); // 3.6.0 10 Sep 2021
 	define('KT_JQUERYUI_JS',				KT_STATIC_URL . 'js/jquery-ui.min.js');	 // 1.12.1 (all options. Also requires some css in individual theme stylesheets)
 	define('KT_DATEPICKER_JS',				KT_STATIC_URL . 'library/foundation-datepicker/js/foundation-datepicker.min.js'); // 1.5.6
