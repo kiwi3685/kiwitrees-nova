@@ -131,7 +131,7 @@ switch (KT_Filter::post('action')) {
 
     case 'delete-dna':
 		$dna_id = KT_Filter::post('dna_id');
-		$sql = "DELETE FROM `##dna` WHERE dna_id IN ('$dna_id')";
+		"DELETE FROM `##dna` WHERE dna_id IN ('$dna_id')";
 		KT_DB::prepare($sql)->execute();
 		KT_FlashMessages::addMessage(KT_I18N::translate('DNA data deleted'));
 		break;
@@ -143,6 +143,13 @@ switch (KT_Filter::post('action')) {
 			AddToLog('deleted user ->' . get_user_name($user_id) . '<-', 'auth');
 			delete_user($user_id);
 		}
+		break;
+
+	case 'delete-resn':
+		$default_resn_id = KT_Filter::post('default_resn_id');
+		$sql = "DELETE FROM `##default_resn` WHERE default_resn_id IN ('$default_resn_id')";
+		KT_DB::prepare($sql)->execute();
+		KT_FlashMessages::addMessage(KT_I18N::translate('Restrictions deleted'));
 		break;
 
 	case 'reject-changes':

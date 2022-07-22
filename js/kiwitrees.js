@@ -1557,6 +1557,9 @@ function checkbox_delete(type) {
             case "dna":
                 jQuery.post("action.php",{action:"delete-dna",dna_id:delete_list[i]},function(){location.reload();});
                 break;
+            case "resn":
+                jQuery.post("action.php",{action:"delete-resn",default_resn_id:delete_list[i]},function(){location.reload();});
+                break;
         }
     }
 }
