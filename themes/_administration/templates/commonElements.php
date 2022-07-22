@@ -71,11 +71,26 @@ function pageClose() {
  * @param string $placeHolder : variable used as placeholder in visible input field
  *
  * Returns :  $html
+ *
+ * Example:
+ *  <?php echo autocompleteHtml(
+ * 	 'dna_id_b', // id
+ * 	 'INDI', // TYPE
+ * 	 '', // autocomplete-ged
+ * 	 strip_tags(($person_b ? $person_b->getLifespanName() : '')), // input value
+ * 	 '', // placeholder
+ * 	 'dna_id_b', // hidden input name
+ * 	 $dna_id_b // hidden input value
+ * ); ?>
+ *
  */
 function autocompleteHtml($suffix, $type, $tree, $valueInput, $placeHolder, $inputName ) {
 	global $iconStyle;
+
+	$class = KT_SCRIPT_NAME == 'admin_trees_config.php' ? 'hidden' : '';
+
 	$html = '
-		<div class="input-group autocomplete_container">
+		<div id="select-' . $suffix . '" class="input-group autocomplete_container ' . $class . '">
 			<input
 				id="autocompleteInput-' . $suffix . '"
 				data-autocomplete-type="' . $type . '"';

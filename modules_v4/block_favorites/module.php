@@ -149,24 +149,21 @@ class block_favorites_KT_Module extends KT_Module implements KT_Module_Block {
 					<div class="dropdown-pane' . $dropdownSize . '" data-closable data-position="bottom" data-alignment="top" id="add_favIndi' . $uniqueID . '" data-dropdown data-auto-focus="true">
 						<form name="addfavform" method="post" action="index.php">
 							<input type="hidden" name="action" value="addfav">
-							<input type="hidden" name="ged" value="' . KT_GEDCOM . '">
-							<div class="input-group autocomplete_container">
-								<input data-autocomplete-type="INDI" type="text" id="autocompleteInput-favIndi" placeholder="' . KT_I18N::translate('Individual name') . '">
-								<span class="input-group-label">
-									<button class="clearAutocomplete autocomplete_icon">
-										<i class="' . $iconStyle . ' fa-xmark"></i>
-									</button>
-								</span>
-							</div>
-							<input type="hidden" id="selectedValue-indi" name="gid">
+							<input type="hidden" name="ged" value="' . KT_GEDCOM . '">' .
+							autocompleteHtml(
+								'favIndi', // id
+								'INDI', // TYPE
+								'', // autocomplete-ged
+								'', // input value
+								KT_I18N::translate('Individual name'), // placeholder
+								'gid', // hidden input name
+								'' // hidden input value
+							) . '
 							<div class="cell">
 								<label class="h6">' . KT_I18N::translate('Enter an optional note') . '</label>
 								<textarea name="favnote" rows="6" cols="50"></textarea>
-							</div>
-							<button class="button" type="submit">
-								<i class="' . $iconStyle . ' fa-save"></i>' .
-								KT_I18N::translate('Save') . '
-							</button>
+							</div>' .
+							singleButton() . '
 							<button class="close-button" data-close>
 								<span aria-hidden="true"><i class="' . $iconStyle . ' fa-xmark"></i></span>
 							</button>
@@ -176,24 +173,21 @@ class block_favorites_KT_Module extends KT_Module implements KT_Module_Block {
 					<div class="dropdown-pane' . $dropdownSize . '" data-closable data-position="bottom" data-alignment="top" id="add_favFam' . $uniqueID . '" data-dropdown data-auto-focus="true">
 						<form name="addfavform" method="post" action="index.php">
 							<input type="hidden" name="action" value="addfav">
-							<input type="hidden" name="ged" value="' . KT_GEDCOM . '">
-							<div class="input-group autocomplete_container">
-								<input data-autocomplete-type="FAM" type="text" id="autocompleteInput-favFam" placeholder="' . KT_I18N::translate('Names of husband & wife') . '">
-								<span class="input-group-label">
-									<button class="clearAutocomplete autocomplete_icon">
-										<i class="' . $iconStyle . ' fa-xmark"></i>
-									</button>
-								</span>
-							</div>
-							<input type="hidden" id="selectedValue-fam" name="gid">
+							<input type="hidden" name="ged" value="' . KT_GEDCOM . '">' .
+							autocompleteHtml(
+								'favFam', // id
+								'FAM', // TYPE
+								'', // autocomplete-ged
+								'', // input value
+								KT_I18N::translate('Names of husband & wife'), // placeholder
+								'gid', // hidden input name
+								'' // hidden input value
+							) . '
 							<div class="cell">
 								<label class="h6">' . KT_I18N::translate('Enter an optional note') . '</label>
 								<textarea name="favnote" rows="6" cols="50"></textarea>
-							</div>
-							<button class="button" type="submit">
-								<i class="' . $iconStyle . ' fa-save"></i>' .
-								KT_I18N::translate('Save') . '
-							</button>
+							</div>' .
+							singleButton() . '
 							<button class="close-button" data-close>
 								<span aria-hidden="true"><i class="' . $iconStyle . ' fa-xmark"></i></span>
 							</button>
@@ -203,24 +197,21 @@ class block_favorites_KT_Module extends KT_Module implements KT_Module_Block {
 					<div class="dropdown-pane' . $dropdownSize . '" data-closable data-position="bottom" data-alignment="top" id="add_favSour' . $uniqueID . '" data-dropdown data-auto-focus="true">
 						<form name="addfavform" method="post" action="index.php">
 							<input type="hidden" name="action" value="addfav">
-							<input type="hidden" name="ged" value="' . KT_GEDCOM . '">
-							<div class="input-group autocomplete_container">
-								<input data-autocomplete-type="SOUR" type="text" id="autocompleteInput-favSour" placeholder="' . KT_I18N::translate('Source title') . '">
-								<span class="input-group-label">
-									<button class="clearAutocomplete autocomplete_icon">
-										<i class="' . $iconStyle . ' fa-xmark"></i>
-									</button>
-								</span>
-							</div>
-							<input type="hidden" id="selectedValue-fam" name="gid">
+							<input type="hidden" name="ged" value="' . KT_GEDCOM . '">' .
+							autocompleteHtml(
+								'favSour', // id
+								'SOUR', // TYPE
+								'', // autocomplete-ged
+								'', // input value
+								KT_I18N::translate('Source title'), // placeholder
+								'gid', // hidden input name
+								'' // hidden input value
+							) . '
 							<div class="cell">
 								<label class="h6">' . KT_I18N::translate('Enter an optional note') . '</label>
 								<textarea name="favnote" rows="6" cols="50"></textarea>
-							</div>
-							<button class="button" type="submit">
-								<i class="' . $iconStyle . ' fa-save"></i>' .
-								KT_I18N::translate('Save') . '
-							</button>
+							</div>' .
+							singleButton() . '
 							<button class="close-button" data-close>
 								<span aria-hidden="true"><i class="' . $iconStyle . ' fa-xmark"></i></span>
 							</button>
@@ -236,11 +227,8 @@ class block_favorites_KT_Module extends KT_Module implements KT_Module_Block {
 							<div class="cell">
 								<label class="h6">' . KT_I18N::translate('Enter an optional note') . '</label>
 								<textarea name="favnote" rows="6" cols="50"></textarea>
-							</div>
-							<button class="button" type="submit">
-								<i class="' . $iconStyle . ' fa-save"></i>' .
-								KT_I18N::translate('Save') . '
-							</button>
+							</div>' .
+							singleButton() . '
 							<button class="close-button" data-close>
 								<span aria-hidden="true"><i class="' . $iconStyle . ' fa-xmark"></i></span>
 							</button>

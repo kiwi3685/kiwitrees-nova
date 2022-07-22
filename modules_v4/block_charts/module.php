@@ -209,15 +209,15 @@ class block_charts_KT_Module extends KT_Module implements KT_Module_Block {
 			 <label><?php echo KT_I18N::translate('Individual'); ?></label>
 		</div>
 		<div class="cell medium-7">
-				<?php echo autocompleteHtml(
-					'favIndi', // id
-					'INDI', // TYPE
-					'', // autocomplete-ged
-					strip_tags($person->getLifespanName()), // input value
-					KT_I18N::translate('Individual name'), // placeholder
-					'pid', // hidden input name
-					'' // hidden input value
-				); ?>
+			<?php echo autocompleteHtml(
+				'blockChart', // id
+				'INDI', // TYPE
+				'', // autocomplete-ged
+				strip_tags($person->getLifespanName()), // input value
+				KT_I18N::translate('Individual name'), // placeholder
+				'pid', // hidden input name
+				'' // hidden input value
+			); ?>
 		</div>
 		<hr>
 

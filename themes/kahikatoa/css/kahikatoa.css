@@ -9529,12 +9529,19 @@ footer .card .card-section .contact_links {
 }
 .block .blockcontent {
 	background-color: #faf5e8;
-	padding: 0 1rem;
+	padding: 0 1rem 1.5rem;
 	/* block_media */
 	/* block_statistics */
 	/* block_today */
 }
 .block .blockcontent h6 {
+	color: #331919;
+}
+.block .blockcontent a svg {
+	color: #faf5e8;
+	float: right;
+}
+.block .blockcontent a:hover svg {
 	color: #331919;
 }
 .block .blockcontent .block_media_content {
@@ -9602,13 +9609,13 @@ footer .card .card-section .contact_links {
 .block .block_favorites div[id^=box] .favInnerCell {
 	border-bottom: 0.125rem solid #e0e0e0;
 	margin-bottom: 0.25rem;
+	padding: 0.5rem 1.5rem;
 }
 .block .block_favorites div[id^=box] .favInnerCell.Url {
 	border-top: 0.125rem solid #e0e0e0;
 	border-left: 0.125rem solid #e0e0e0;
 	border-right: 0.125rem solid #e0e0e0;
 	font-size: 1rem;
-	padding: 0.5rem;
 }
 .block .block_favorites div[id^=box] .favInnerCell.Url .person_box_template {
 	border: none;

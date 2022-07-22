@@ -214,7 +214,7 @@ $this
 							<i class="<?php echo $iconStyle; ?> background fa-circle fa-stack-2x"></i>
 							<i class="<?php echo $iconStyle; ?> foreground fa-tachometer-alt fa-fw fa-stack-1x"></i>
 						</span>
-						<span <?php echo (KT_SCRIPT_NAME == "admin.php" ? 'class="current" ' : ''); ?>><?php echo KT_I18N::translate('Dashboard'); ?></span>
+						<span <?php echo (KT_SCRIPT_NAME == "admin.php" ? 'class="current dashboard" ' : ''); ?>><?php echo KT_I18N::translate('Dashboard'); ?></span>
 					</a>
 				</li>
 				<?php if (KT_USER_IS_ADMIN) { ?>
