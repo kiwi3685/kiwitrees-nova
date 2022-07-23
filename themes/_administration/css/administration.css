@@ -9684,6 +9684,9 @@ body #admin-container {
 	display: inline;
 	width: auto;
 }
+#admin-container #admin-content .tabs-content .theme_box {
+	margin: 0 0.25rem;
+}
 #admin-container #admin-content .tabs-content .theme_box.current_theme {
 	border-color: #5da423;
 }
