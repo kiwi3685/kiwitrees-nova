@@ -30,7 +30,7 @@ if (!defined('KT_KIWITREES')) {
 	exit;
 }
 
-class database_backup_KT_Module extends KT_Module implements KT_Module_Config {
+class backup_database_KT_Module extends KT_Module implements KT_Module_Config {
 	// Extend class KT_Module
 	public function getTitle() {
 		return KT_I18N::translate('Database backup');
@@ -63,7 +63,7 @@ class database_backup_KT_Module extends KT_Module implements KT_Module_Config {
 			->setPageTitle(KT_I18N::translate('Database backup'))
 			->pageHeader();
 		echo '
-			<div id="database_backup">
+			<div class="cell" id="database_backup">
 				<iframe src="' . KT_MODULES_DIR . $this->getName() . '/index.php" width="100%" height="700">
 					<p>Sorry, your browser does not support iframes</p>
 				</iframe>

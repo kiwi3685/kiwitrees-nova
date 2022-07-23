@@ -118,6 +118,27 @@ function autocompleteHtml($suffix, $type, $tree, $valueInput, $placeHolder, $inp
 }
 
 /**
+ * A basic "Show" single submit buttons
+ *
+ * @return string[]
+ */
+function singleButton() {
+   global $iconStyle;
+
+   $buttonHtml = '
+	  <div class="cell align-left button-group">
+		  <button class="button primary" type="submit">
+			  <i class="' . $iconStyle . ' fa-save"></i>'
+			   . KT_I18N::translate('Save') .
+		  '</button>
+	  </div>
+   ';
+
+   return $buttonHtml;
+
+}
+
+/**
  * A standard "Save / Cancel" pair of buttons, used on many pages
  *
  * @return string[]
