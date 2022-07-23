@@ -1533,14 +1533,14 @@ global $iconstyles;
 					<form method="post" name="configform-hide" action="<?php echo KT_SCRIPT_NAME . '#theme'; ?>" data-abide novalidate>
 						<?php echo KT_Filter::getCsrf(); ?>
 						<input type="hidden" name="action" value="update-theme">
-						<div class="grid-x grid-margin-x">
+						<div class="grid-x grid-margin-x grid-margin-y">
 							<div data-abide-error class="alert callout" style="display: none;">
 								<p><i class="fi-alert"></i><?php echo /* I18N: A general error message for forms */ KT_I18N::translate('There are some errors in your form.'); ?></p>
 							</div>
 							<?php $current_themedir = get_gedcom_setting(KT_GED_ID, 'THEME_DIR');
 							foreach (get_theme_names() as $themename => $themedir) {
 								$selectClass = ($current_themedir == $themedir ? 'current_theme' : ''); ?>
-								<div class="card large-3 theme_box <?php echo $selectClass; ?>">
+								<div class="cell card large-3 theme_box <?php echo $selectClass; ?>">
 									<div class="card-divider">
 										<p class="h5"><?php echo get_theme_display($themename); ?></p>
 										<p class="select text-right">
@@ -1571,15 +1571,9 @@ global $iconstyles;
 								</div>
 
 							<?php } ?>
-							<div class="cell expand"></div>
-							<button type="submit" class="button primary">
-								<i class="<?php echo $iconStyle; ?> fa-save"></i>
-								<?php echo KT_I18N::translate('Save'); ?>
-							</button>
-							<a class="button hollow" href="<?php echo KT_SCRIPT_NAME . '#theme'; ?>">
-								<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
-								<?php echo KT_I18N::translate('Cancel'); ?>
-							</a>
+
+							<?php echo submitButtons($onClick = "window.location.href = 'admin_trees_config.php#theme'"); ?>
+
 						</div>
 					</form>
 				</div>
