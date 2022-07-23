@@ -879,8 +879,9 @@ global $iconstyles;
 									</tbody>
 								</table>
 							</div>
-							<?php //echo submitButtons("window.location.href = 'admin_trees_config.php#restriction'"); ?>
+
 							<?php echo submitButtons("jQuery('.autocomplete_container').addClass('hidden')"); ?>
+
 							<hr class="cell">
 							<!-- Existing restrictions table -->
 							<div class="cell">
