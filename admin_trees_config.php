@@ -565,10 +565,9 @@ global $iconstyles;
 									</div>
 								</div>
 							</div>
-							<button type="submit" class="button primary">
-								<i class="<?php echo $iconStyle; ?> fa-save"></i>
-								<?php echo KT_I18N::translate('Save'); ?>
-							</button>
+
+							<?php echo singleButton(); ?>
+
 						</div>
 					</form>
 				</div>
@@ -636,14 +635,9 @@ global $iconstyles;
 									<?php echo KT_I18N::translate('The person to be contacted about technical questions or errors encountered on your site.'); ?>
 								</div>
 							</div>
-							<button type="submit" class="button primary">
-								<i class="<?php echo $iconStyle; ?> fa-save"></i>
-								<?php echo KT_I18N::translate('Save'); ?>
-							</button>
-							<a class="button hollow" href="<?php echo KT_SCRIPT_NAME . '#general'; ?>">
-								<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
-								<?php echo KT_I18N::translate('Cancel'); ?>
-							</a>
+
+							<?php echo singleButton(); ?>
+
 						</div>
 					</form>
 				</div>
@@ -675,14 +669,9 @@ global $iconstyles;
 									<?php echo KT_I18N::translate('The value to place in the “meta description” tag in the HTML page header. Leave this field empty to use the name of the currently active family tree.'); ?>
 								</div>
 							</div>
-							<button type="submit" class="button primary">
-								<i class="<?php echo $iconStyle; ?> fa-save"></i>
-								<?php echo KT_I18N::translate('Save'); ?>
-							</button>
-							<a class="button hollow" href="<?php echo KT_SCRIPT_NAME . '#general'; ?>">
-								<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
-								<?php echo KT_I18N::translate('Cancel'); ?>
-							</a>
+
+							<?php echo singleButton(); ?>
+
 						</div>
 					</form>
 				</div>
@@ -766,7 +755,7 @@ global $iconstyles;
 							</div>
 						</div>
 
-						<?php echo submitButtons($onClick = "window.location.href = 'admin_trees_config.php#privacy'"); ?>
+						<?php echo singleButton(); ?>
 
 					</form>
 				</div>
@@ -1094,14 +1083,9 @@ global $iconstyles;
 									</div>
 								</div>
 							</div>
-							<button type="submit" class="button primary">
-								<i class="<?php echo $iconStyle; ?> fa-save"></i>
-								<?php echo KT_I18N::translate('Save'); ?>
-							</button>
-							<a class="button hollow" href="<?php echo KT_SCRIPT_NAME . '#general'; ?>">
-								<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
-								<?php echo KT_I18N::translate('Cancel'); ?>
-							</a>
+
+							<?php echo singleButton(); ?>
+
 						</div>
 					</form>
 				</div>
@@ -1283,15 +1267,15 @@ global $iconstyles;
 														'<div class="cell medium-4 large-2">' .
 															select_edit_control('NEW_SHOW_PEDIGREE_PLACES',
 																array(
-																	1=>KT_I18N::number(1),
-																	2=>KT_I18N::number(2),
-																	3=>KT_I18N::number(3),
-																	4=>KT_I18N::number(4),
-																	5=>KT_I18N::number(5),
-																	6=>KT_I18N::number(6),
-																	7=>KT_I18N::number(7),
-																	8=>KT_I18N::number(8),
-																	9=>KT_I18N::number(9),
+																	1 => KT_I18N::number(1),
+																	2 => KT_I18N::number(2),
+																	3 => KT_I18N::number(3),
+																	4 => KT_I18N::number(4),
+																	5 => KT_I18N::number(5),
+																	6 => KT_I18N::number(6),
+																	7 => KT_I18N::number(7),
+																	8 => KT_I18N::number(8),
+																	9 => KT_I18N::number(9),
 																),
 																null,
 																get_gedcom_setting(KT_GED_ID, 'SHOW_PEDIGREE_PLACES')
@@ -1308,14 +1292,9 @@ global $iconstyles;
 									</div>
 								</li>
 							</ul>
-							<button type="submit" class="button primary">
-								<i class="<?php echo $iconStyle; ?> fa-save"></i>
-								<?php echo KT_I18N::translate('Save'); ?>
-							</button>
-							<a class="button hollow" href="<?php echo KT_SCRIPT_NAME . '#layout'; ?>">
-								<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
-								<?php echo KT_I18N::translate('Cancel'); ?>
-							</a>
+
+							<?php echo singleButton(); ?>
+
 						</div>
 					</form>
 				</div>
@@ -1466,14 +1445,9 @@ global $iconstyles;
 									</div>
 								</li>
 							</ul>
-							<button type="submit" class="button primary">
-								<i class="<?php echo $iconStyle; ?> fa-save"></i>
-								<?php echo KT_I18N::translate('Save'); ?>
-							</button>
-							<a class="button hollow" href="<?php echo KT_SCRIPT_NAME . '#hide'; ?>">
-								<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
-								<?php echo KT_I18N::translate('Cancel'); ?>
-							</a>
+
+							<?php echo singleButton(); ?>
+
 						</div>
 					</form>
 				</div>
@@ -1507,23 +1481,13 @@ global $iconstyles;
 													<?php echo KT_I18N::translate('This is the list of GEDCOM facts that your users can add to individuals. You can modify this list by removing or adding fact names, even custom ones, as necessary. <span style="color: #ff0000;">Fact names that appear in this list must not also appear in the <b>Unique individual facts</b> list.</span>'); ?>
 												</div>
 											</div>
-
-
-
-
-
 										</div>
 									</div>
 								</li>
 							</ul>
-							<button type="submit" class="button primary">
-								<i class="<?php echo $iconStyle; ?> fa-save"></i>
-								<?php echo KT_I18N::translate('Save'); ?>
-							</button>
-							<a class="button hollow" href="<?php echo KT_SCRIPT_NAME . '#edit'; ?>">
-								<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
-								<?php echo KT_I18N::translate('Cancel'); ?>
-							</a>
+
+							<?php echo singleButton(); ?>
+
 						</div>
 					</form>
 				</div>
@@ -1572,7 +1536,7 @@ global $iconstyles;
 
 							<?php } ?>
 
-							<?php echo submitButtons($onClick = "window.location.href = 'admin_trees_config.php#theme'"); ?>
+							<?php echo singleButton(); ?>
 
 						</div>
 					</form>
