@@ -33,7 +33,7 @@ if (!defined('KT_KIWITREES')) {
 class backup_database_KT_Module extends KT_Module implements KT_Module_Config {
 	// Extend class KT_Module
 	public function getTitle() {
-		return KT_I18N::translate('Database backup');
+		return KT_I18N::translate('Backup database');
 	}
 
 	// Extend class KT_Module
@@ -60,7 +60,7 @@ class backup_database_KT_Module extends KT_Module implements KT_Module_Config {
 		$controller	= new KT_Controller_Page();
 		$controller
 			->requireAdminLogin()
-			->setPageTitle(KT_I18N::translate('Database backup'))
+			->setPageTitle(KT_I18N::translate('Backup database'))
 			->pageHeader();
 		echo '
 			<div class="cell" id="database_backup">
