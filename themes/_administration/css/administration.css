@@ -9808,6 +9808,9 @@ body #admin-container {
 #admin-container #admin-content #admin_media .media-folders {
 	height: 3rem;
 }
+#admin-container #admin-content #admin_media table.dataTable td {
+	vertical-align: top;
+}
 #admin-container #admin-content #custom_language-page .card .card-section {
 	padding-top: 0.5rem;
 }
