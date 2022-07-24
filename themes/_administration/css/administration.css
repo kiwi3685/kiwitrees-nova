@@ -9555,6 +9555,7 @@ body #admin-container {
 	/* Media upload */
 	/* SITE config */
 	/* TREE config */
+	/* MANAGE NEDIA */
 	/* CUSTOM LANG */
 	/* CUSTOM THEME */
 	/* SITE CLEAN */
@@ -9803,6 +9804,9 @@ body #admin-container {
 }
 #admin-container #admin-content #family_tree_config #restriction .callout.help_content {
 	font-size: 0.95rem !important;
+}
+#admin-container #admin-content #admin_media .media-folders {
+	height: 3rem;
 }
 #admin-container #admin-content #custom_language-page .card .card-section {
 	padding-top: 0.5rem;

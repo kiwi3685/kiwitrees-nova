@@ -177,7 +177,7 @@ function radio_switch_group($name, $values, $selected) {
 		foreach ($values as $key => $value) {
 			$uniqueID = $name . (int)(microtime(true) * 1000000);
 			$html .= '
-				<div class="switch cell small-8 medium-4 large-3">
+				<div class="switch cell small-8 medium-4 large-2">
 					<label>' . $value . '</label>
 					<input class="switch-input" id="' . $uniqueID . '" type="radio" name="' . $name . '" value="' . htmlspecialchars($key) . '"';
 						if ((string)$key === (string)$selected) {
@@ -207,7 +207,7 @@ function checkbox_switch_group($name, $values, $selected) {
 		foreach ($values as $key => $value) {
 			$uniqueID = $key . (int)(microtime(true) * 1000000);
 			$html .= '
-				<div class="switch cell small-4 medium-2">
+				<div class="switch cell small-4 medium-3">
 					<label>' . $value . '</label>
 					<input class="switch-input" id="' . $uniqueID . '" type="radio" value="' . htmlspecialchars($key) . '"';
 						if ((string)$key === (string)$selected) {
