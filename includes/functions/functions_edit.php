@@ -32,24 +32,6 @@ require_once KT_ROOT.'includes/functions/functions_import.php';
 require KT_ROOT . 'library/Carbon/autoload.php';
 use Carbon\Carbon;
 
-// Create a link to faqs
-function faqLink($url) {
-	global $iconStyle;
-	$link = KT_KIWITREES_URL . '/faqs/' . $url;
-	return '
-		<a
-			class="current faq_link show-for-large"
-			href="' . $link . '"
-			target="_blank"
-			rel="noopener noreferrer"
-			title="' . KT_I18N::translate('View FAQ for this page.') . '"
-		>' .
-			KT_I18N::translate('View FAQ for this page.') . '
-			<i class="' . $iconStyle . ' fa-comments"></i>
-		</a>
-	';
-}
-
 // Create an edit control for inline editing using jeditable
 function edit_field_inline($name, $value, $controller=null) {
 	$html='<span class="editable" id="' . $name . '">' . KT_Filter::escapeHtml($value) . '</span>';

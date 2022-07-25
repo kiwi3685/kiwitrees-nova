@@ -191,3 +191,25 @@ function resetButtons() {
    return $buttonHtml;
 
 }
+
+/**
+ * Create a link to faqs
+ *
+ * @return string[]
+ */
+function faqLink($url) {
+	global $iconStyle;
+	$link = KT_KIWITREES_URL . '/faqs/' . $url;
+	return '
+		<a
+			class="current faq_link show-for-large"
+			href="' . $link . '"
+			target="_blank"
+			rel="noopener noreferrer"
+			title="' . KT_I18N::translate('View FAQ for this page.') . '"
+		>' .
+			KT_I18N::translate('View FAQ for this page.') . '
+			<i class="' . $iconStyle . ' fa-comments"></i>
+		</a>
+	';
+}
