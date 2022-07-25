@@ -57,7 +57,7 @@ function pageStart($title, $pageTitle = '', $includeTitle = 'y', $subTitle = '')
  */
 function pageClose() {
 	'</div>
-		</div><!-- close pageStart  -->
+		</div>
 	';
 }
 

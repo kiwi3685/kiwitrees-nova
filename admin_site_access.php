@@ -301,65 +301,60 @@ KT_DB::exec(
 	" AND unknown.ip_address_start BETWEEN known.ip_address_start AND known.ip_address_end"
 );
 
-?>
-<div id="site_access-page" class="cell">
-	<h4><?php echo $controller->getPageTitle(); ?></h4>
-	<div class="grid-x grid-margin-y">
-		<div class="cell">
-			<h5 class="inline"><?php echo /* I18N: http://en.wikipedia.org/wiki/User_agent */ KT_I18N::translate('Restrict access to the site, using IP addresses and user-agent strings'); ?></h5>
-			<?php echo faqLink('general/site-access-rules/'); ?>
-		</div>
-		<div class="cell callout alert">
-			<?php echo KT_I18N::translate('The following rules are used to decide whether a visitor is a human being (allow full access), a search-engine robot (allow restricted access) or an unwanted crawler (deny all access).'); ?>
-		</div>
-		<div class="cell">
-			<table id="site_access_rules">
-				<thead>
-					<tr>
-						<th><?php echo /* I18N: [...] of a range of addresses */ KT_I18N::translate('Start IP address'); ?></th>
-						<th>-</th>
-						<th><?php echo /* I18N: [...] of a range of addresses */ KT_I18N::translate('End IP address'); ?></th>
-						<th>-</th>
-						<th><?php echo /* I18N: http://en.wikipedia.org/wiki/User_agent_string */ KT_I18N::translate('User-agent string'); ?></th>
-						<th><?php echo /* I18N: noun */ KT_I18N::translate('Rule'); ?></th>
-						<th><?php echo KT_I18N::translate('Comment'); ?></th>
-						<th><?php echo KT_I18N::translate('Delete'); ?></th>
-					</tr>
-				</thead>
-			</table>
-		</div>
-		<div class="cell">
-			<button type="submit" class="button" <?php echo 'onclick="if (confirm(\''.htmlspecialchars(KT_I18N::translate('This will delete all your access rules and replace with basic kiwitrees defaults. Are you sure?')).'\')) { document.location=\''.KT_SCRIPT_NAME.'?action=reset\'; }"';?> >
-				<i class="<?php echo $iconStyle; ?> fa-undo"></i>
-				<?php echo KT_I18N::translate('Reset'); ?>
-			</button>
-			<hr>
-		</div>
-		<div class="cell callout alert">
-			<?php echo KT_I18N::translate('The following visitors were not recognised, and were assumed to be search engines.'); ?>
-		</div>
-		<div class="cell">
-			<table id="unknown_site_visitors">
-		<thead>
-			<tr>
-				<th rowspan="2"><?php /* I18N: http://en.wikipedia.org/wiki/IP_address */ echo KT_I18N::translate('IP address'); ?></th>
-				<th rowspan="2">-</th>
-				<th rowspan="2"><?php echo KT_I18N::translate('User-agent string'); ?></th>
-				<th colspan="3"><?php echo KT_I18N::translate('Create a new rule'); ?></th>
-			</tr>
-			<tr>
-				<th><?php echo KT_I18N::translate('allow'); ?></th>
-				<th><?php echo KT_I18N::translate('deny'); ?></th>
-				<th><?php echo KT_I18N::translate('robot'); ?></th>
-			</tr>
-		</thead>
-	</table>
-		</div>
-		<div class="cell">
-			<button type="submit" class="button" <?php echo 'onclick="if (confirm(\''.htmlspecialchars(KT_I18N::translate('Are you sure you want to delete all visitors not recognised?')).'\')) { document.location=\''.KT_SCRIPT_NAME.'?action=purge\'; }"';?> >
-				<i class="<?php echo $iconStyle; ?> fa-trash-can"></i>
-				<?php echo KT_I18N::translate('Delete'); ?>
-			</button>
-		</div>
+echo pageStart('site_access-page', $controller->getPageTitle()); ?>
+
+	<?php echo faqLink('general-topics/site-access-rules/'); ?>
+	<div class="cell callout warning">
+		<?php echo KT_I18N::translate('The following rules are used to decide whether a visitor is a human being (allow full access), a search-engine robot (allow restricted access) or an unwanted crawler (deny all access).'); ?>
 	</div>
-</div>
+	<div class="cell">
+		<table id="site_access_rules">
+			<thead>
+				<tr>
+					<th><?php echo /* I18N: [...] of a range of addresses */ KT_I18N::translate('Start IP address'); ?></th>
+					<th>-</th>
+					<th><?php echo /* I18N: [...] of a range of addresses */ KT_I18N::translate('End IP address'); ?></th>
+					<th>-</th>
+					<th><?php echo /* I18N: http://en.wikipedia.org/wiki/User_agent_string */ KT_I18N::translate('User-agent string'); ?></th>
+					<th><?php echo /* I18N: noun */ KT_I18N::translate('Rule'); ?></th>
+					<th><?php echo KT_I18N::translate('Comment'); ?></th>
+					<th><?php echo KT_I18N::translate('Delete'); ?></th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+	<div class="cell">
+		<button type="submit" class="button" <?php echo 'onclick="if (confirm(\''.htmlspecialchars(KT_I18N::translate('This will delete all your access rules and replace with basic kiwitrees defaults. Are you sure?')).'\')) { document.location=\''.KT_SCRIPT_NAME.'?action=reset\'; }"';?> >
+			<i class="<?php echo $iconStyle; ?> fa-undo"></i>
+			<?php echo KT_I18N::translate('Reset'); ?>
+		</button>
+		<hr>
+	</div>
+	<div class="cell callout warning">
+		<?php echo KT_I18N::translate('The following visitors were not recognised, and were assumed to be search engines.'); ?>
+	</div>
+	<div class="cell">
+		<table id="unknown_site_visitors">
+			<thead>
+				<tr>
+					<th rowspan="2"><?php /* I18N: http://en.wikipedia.org/wiki/IP_address */ echo KT_I18N::translate('IP address'); ?></th>
+					<th rowspan="2">-</th>
+					<th rowspan="2"><?php echo KT_I18N::translate('User-agent string'); ?></th>
+					<th colspan="3"><?php echo KT_I18N::translate('Create a new rule'); ?></th>
+				</tr>
+				<tr>
+					<th><?php echo KT_I18N::translate('allow'); ?></th>
+					<th><?php echo KT_I18N::translate('deny'); ?></th>
+					<th><?php echo KT_I18N::translate('robot'); ?></th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+	<div class="cell">
+		<button type="submit" class="button" <?php echo 'onclick="if (confirm(\''.htmlspecialchars(KT_I18N::translate('Are you sure you want to delete all visitors not recognised?')).'\')) { document.location=\''.KT_SCRIPT_NAME.'?action=purge\'; }"';?> >
+			<i class="<?php echo $iconStyle; ?> fa-trash-can"></i>
+			<?php echo KT_I18N::translate('Delete'); ?>
+		</button>
+	</div>
+
+<?php pageClose();

@@ -218,14 +218,14 @@ $this
 					</a>
 				</li>
 				<?php if (KT_USER_IS_ADMIN) { ?>
-					<a href="admin_site_administration.php"><?php echo KT_I18N::translate('Website administration'); ?></a>
+					<a href="adminSummary_site.php"><?php echo KT_I18N::translate('Website'); ?></a>
 					<li>
 			        	<a href="#" class="admin-menu-title">
 							<span class="fa-stack" style="vertical-align: top;">
 								<i class="<?php echo $iconStyle; ?> background fa-circle fa-stack-2x"></i>
 								<i class="<?php echo $iconStyle; ?> foreground fa-cog fa-fw fa-stack-1x"></i>
 							</span>
-							<span><?php echo KT_I18N::translate('Website administration'); ?></span>
+							<span><?php echo KT_I18N::translate('Website'); ?></span>
 						</a>
 					    <ul class="menu vertical">
 							<?php foreach ($site_tools as $file=>$title) { ?>
@@ -234,6 +234,7 @@ $this
 						</ul>
 					</li>
 				<?php } ?>
+				<a href="adminSummary_trees.php"><?php echo KT_I18N::translate('Family trees'); ?></a>
 			    <li>
 			        <a href="#" class="admin-menu-title">
 						<span class="fa-stack" style="vertical-align: top;">
@@ -276,6 +277,7 @@ $this
 					</ul>
 				</li>
 				<?php if (KT_USER_IS_ADMIN) { ?>
+					<a href="adminSummary_users.php"><?php echo KT_I18N::translate('User management'); ?></a>
 					<li>
 						<a href="#" class="admin-menu-title">
 							<span class="fa-stack" style="vertical-align: top;">

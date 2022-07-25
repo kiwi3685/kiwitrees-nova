@@ -44,9 +44,9 @@ function pageStart($title, $pageTitle = '', $includeTitle = 'y', $subTitle = '')
 		$subTitle = '<h4 class="hide-for-print">' . $subTitle . '</h4>';
 	}
 	return '
-		<div id="' . strtolower($title) . '-page" class="grid-x grid-padding-x">
-			<div class="cell large-10 large-offset-1">' .
-				$pageTitle . $subTitle;
+		<div id="' . strtolower($title) . '-page" class="cell">' .
+			$pageTitle . $subTitle . '
+			<div class="grid-x grid-margin-y">';
 
 	// function pageClose() must be added after content to close this div element
 }
@@ -56,7 +56,7 @@ function pageStart($title, $pageTitle = '', $includeTitle = 'y', $subTitle = '')
  */
 function pageClose() {
 	'</div>
-		</div><!-- close pageStart  -->
+		</div>ß
 	';
 }
 
@@ -192,6 +192,9 @@ function resetButtons() {
 
 }
 
+https://www.kiwitrees.net/faqs/general-topics/site-access-rules/
+
+
 /**
  * Create a link to faqs
  *
@@ -201,15 +204,17 @@ function faqLink($url) {
 	global $iconStyle;
 	$link = KT_KIWITREES_URL . '/faqs/' . $url;
 	return '
-		<a
-			class="current faq_link show-for-large"
-			href="' . $link . '"
-			target="_blank"
-			rel="noopener noreferrer"
-			title="' . KT_I18N::translate('View FAQ for this page.') . '"
-		>' .
-			KT_I18N::translate('View FAQ for this page.') . '
-			<i class="' . $iconStyle . ' fa-comments"></i>
-		</a>
+		<div class="cell">
+			<a
+				class="current faq_link show-for-large"
+				href="' . $link . '"
+				target="_blank"
+				rel="noopener noreferrer"
+				title="' . KT_I18N::translate('View FAQ for this page.') . '"
+			>' .
+				KT_I18N::translate('View FAQ for this page.') . '
+				<i class="' . $iconStyle . ' fa-comments"></i>
+			</a>
+		</div>
 	';
 }

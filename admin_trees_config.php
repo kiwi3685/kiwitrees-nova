@@ -336,7 +336,11 @@ global $iconstyles;
 		<div class="cell">
 			<?php echo faqLink('administration/family_tree_config'); ?>
 			<h4 class="inline"><?php echo KT_I18N::translate('Family tree configuration'); ?></h4>
-			<h6>&nbsp;<?php echo $tree->tree_title_html; ?></h6>
+		</div>
+		<div class="cell medium-4">
+			<form method="post" action="#" name="tree">
+				<?php echo select_edit_control('ged', KT_Tree::getNameList(), null, KT_GEDCOM, ' onchange="tree.submit();"'); ?>
+			</form>
 		</div>
 		<div class="cell">
 			<ul id="tree_config_tabs" class="tabs" data-responsive-accordion-tabs="tabs small-accordion large-tabs" data-allow-all-closed="true" data-deep-link="true">

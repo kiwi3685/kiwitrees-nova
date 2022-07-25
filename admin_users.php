@@ -1140,29 +1140,37 @@ switch (KT_Filter::get('action')) {
 			');
 		?>
 		<div id="user-list" class="cell">
-			<h4><?php echo KT_I18N::translate('User administration'); ?></h4>
-			<table id="list" style="width: 100%;">
-				<thead>
-					<tr>
-						<th><?php echo KT_I18N::translate('Edit'); ?></th>
-						<th>user-id</th>
-						<th><?php echo KT_I18N::translate('Username'); ?></th>
-						<th><?php echo KT_I18N::translate('Real name'); ?></th>
-						<th><?php echo KT_I18N::translate('Email'); ?></th>
-						<th><?php echo KT_I18N::translate('Language'); ?></th>
-						<th>date_registered</th>
-						<th><?php echo KT_I18N::translate('Date registered'); ?></th>
-						<th>last_login</th>
-						<th><?php echo KT_I18N::translate('Last logged in'); ?></th>
-						<th><?php echo KT_I18N::translate('Verified'); ?></th>
-						<th><?php echo KT_I18N::translate('Approved'); ?></th>
-						<th colspan="2"><?php echo KT_I18N::translate('Options'); ?></th>
-					</tr>
-				</thead>
-				<tbody>
-				</tbody>
-			</table>
-		</div>
+			<div class="grid-x">
+				<div class="cell medium-6 text-left">
+					<h4><?php echo KT_I18N::translate('User administration'); ?></h4>
+				</div>
+				<div class="cell medium-6 text-right">
+					<a href="admin_users.php?action=edit"><?php echo KT_I18N::translate('Add a new user'); ?></a>
+				</div>
+				<div class="cell">
+					<table id="list" style="width: 100%;">
+						<thead>
+							<tr>
+								<th><?php echo KT_I18N::translate('Edit'); ?></th>
+								<th>user-id</th>
+								<th><?php echo KT_I18N::translate('Username'); ?></th>
+								<th><?php echo KT_I18N::translate('Real name'); ?></th>
+								<th><?php echo KT_I18N::translate('Email'); ?></th>
+								<th><?php echo KT_I18N::translate('Language'); ?></th>
+								<th>date_registered</th>
+								<th><?php echo KT_I18N::translate('Date registered'); ?></th>
+								<th>last_login</th>
+								<th><?php echo KT_I18N::translate('Last logged in'); ?></th>
+								<th><?php echo KT_I18N::translate('Verified'); ?></th>
+								<th><?php echo KT_I18N::translate('Approved'); ?></th>
+								<th colspan="2"><?php echo KT_I18N::translate('Options'); ?></th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+			</div>
 		<?php
 		break;
 
