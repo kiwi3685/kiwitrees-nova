@@ -88,16 +88,18 @@ class KT_MenuBar {
 				$menu->addSubmenu($submenu);
 		}
 
-		//-- change home page blocks submenu
-		if (KT_SCRIPT_NAME === 'index.php') {
-			$submenu = new KT_Menu(KT_I18N::translate('Change the home page blocks'), 'index_edit.php?gedcom_id=' . KT_GED_ID,'menu-change-blocks');
-			$menu->addSubmenu($submenu);
-		}
+		if (KT_USER_IS_ADMIN) {
+			//-- change home page blocks submenu
+			if (KT_SCRIPT_NAME === 'index.php') {
+				$submenu = new KT_Menu(KT_I18N::translate('Change the home page blocks'), 'index_edit.php?gedcom_id=' . KT_GED_ID,'menu-change-blocks');
+				$menu->addSubmenu($submenu);
+			}
 
-		//-- change footer blocks submenu
-		if (KT_SCRIPT_NAME === 'index.php') {
-			$submenu = new KT_Menu(KT_I18N::translate('Change the footer blocks'), 'footer_edit.php?gedcom_id=' . KT_GED_ID,'menu-change-blocks');
-			$menu->addSubmenu($submenu);
+			//-- change footer blocks submenu
+			if (KT_SCRIPT_NAME === 'index.php') {
+				$submenu = new KT_Menu(KT_I18N::translate('Change the footer blocks'), 'footer_edit.php?gedcom_id=' . KT_GED_ID,'menu-change-blocks');
+				$menu->addSubmenu($submenu);
+			}
 		}
 
 		//-- logout

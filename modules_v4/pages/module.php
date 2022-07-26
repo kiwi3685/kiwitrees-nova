@@ -269,7 +269,7 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 								<div class="cell medium-6">
 									<div class="input-group">
 										<span class="input-group-label"><?php echo KT_I18N::translate('Family tree'); ?></span>
-										<?php echo select_edit_control('ged', KT_Tree::getNameList(), null, KT_GEDCOM, 'class="input-group-field"'); ?>
+										<?php echo select_ged_control('ged', KT_Tree::getNameList(), null, KT_GEDCOM, 'class="input-group-field"'); ?>
 										<div class="input-group-button">
 											<button class="button" type="submit">
 												<i class="<?php echo $iconStyle; ?> fa-save"></i>

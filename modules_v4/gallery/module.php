@@ -500,7 +500,7 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 						<label><?php echo KT_I18N::translate('Family tree');?></label>
 						<input type="hidden" name="mod" value="<?php echo $this->getName();?>">
 						<input type="hidden" name="mod_action" value="admin_config">
-						<?php echo select_edit_control('ged', KT_Tree::getNameList(), null, KT_GEDCOM);?>
+						<?php echo select_ged_control('ged', KT_Tree::getNameList(), null, KT_GEDCOM);?>
 						<button class="btn btn-primary show" type="submit">
 							<i class="fa fa-eye"></i>
 							<?php echo KT_I18N::translate('show'); ?>

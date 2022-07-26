@@ -218,3 +218,38 @@ function faqLink($url) {
 		</div>
 	';
 }
+
+// Create a <select> control for a form to choose GEDCOM file
+// $name     - the ID for the form element
+// $values   - array of value=>display items
+// $empty    - if not null, then add an entry ""=>$empty
+// $selected - the currently selected item (if any)
+// $access    - extra markup for field (e.g. tab key sequence)
+function select_ged_control($name, $values, $empty, $selected, $extra='') {
+	if (is_null($empty)) {
+		$html = '';
+	} else {
+		if (empty($selected)) {
+			$html = '<option value="" selected="selected">'.htmlspecialchars($empty).'</option>';
+		} else {
+			$html = '<option value="">'.htmlspecialchars($empty).'</option>';
+		}
+	}
+	// A completely empty list would be invalid, and break various things
+	if (empty($values) && empty($html)) {
+		$html = '<option value=""></option>';
+	}
+	foreach ($values as $key=>$value) {
+		if (userGedcomAdmin(KT_USER_ID, KT_TREE::getIdFromName(htmlspecialchars($key))->getTreeId())) {
+			if ((string)$key === (string)$selected) { // Because "0" != ""
+				$html .= '<option value="' . htmlspecialchars($key) . '" selected="selected" dir="auto">' . htmlspecialchars($value) . '</option>';
+			} else {
+				$html .= '<option value="' . htmlspecialchars($key) . '" dir="auto">' . htmlspecialchars($value) . '</option>';
+			}
+		}
+	}
+
+	$element_id = $name . '-' . (int)(microtime(true)*1000000);
+
+	return '<select id="' . $element_id.'" name="' . $name . '" ' . $extra .'>' . $html . '</select>';
+}

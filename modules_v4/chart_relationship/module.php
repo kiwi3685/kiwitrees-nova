@@ -204,7 +204,7 @@ class chart_relationship_KT_Module extends KT_Module implements KT_Module_Chart,
 			<form method="post" action="#" name="tree">
 				<div class="config_options">
 					<label><?php echo KT_I18N::translate('Family tree'); ?></label>
-					<?php echo select_edit_control('ged', KT_Tree::getNameList(), null, KT_GEDCOM, ' onchange="tree.submit();"'); ?>
+					<?php echo select_ged_control('ged', KT_Tree::getNameList(), null, KT_GEDCOM, ' onchange="tree.submit();"'); ?>
 				</div>
 			</form>
 			<form method="post" name="rela_form" action="<?php echo $this->getConfigLink(); ?>">

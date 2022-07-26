@@ -137,7 +137,7 @@ $controller
 			<div class="grid-x">
 				<div class="cell medium-3">
 					<label><?php echo KT_I18N::translate('Family tree'); ?></label>
-					<?php echo select_edit_control('ged', KT_Tree::getNameList(), null, KT_GEDCOM); ?>
+					<?php echo select_ged_control('ged', KT_Tree::getNameList(), null, KT_GEDCOM); ?>
 				</div>
 			</div>
 			<div class="grid-x grid-padding-x">
