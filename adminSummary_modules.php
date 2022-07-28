@@ -29,7 +29,7 @@ require './includes/session.php';
 $controller = new KT_Controller_Page();
 $controller
 	->restrictAccess(KT_USER_IS_ADMIN)
-	->setPageTitle(KT_I18N::translate('Media objects'))
+	->setPageTitle(KT_I18N::translate('Modules'))
 	->pageHeader();
 
 /**
