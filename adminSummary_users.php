@@ -24,9 +24,7 @@
 define('KT_SCRIPT_NAME', 'adminSummary_users.php');
 
 global $iconStyle;
-
 require './includes/session.php';
-require KT_ROOT . 'includes/functions/functions_edit.php';
 
 $controller = new KT_Controller_Page();
 $controller
@@ -72,10 +70,10 @@ echo pageStart('user_admin', $controller->getPageTitle()); ?>
 			Add, delete, edit and manage users
 		'); ?>
 	</div>
-	<div class="grid-x grid-margin-x grid-margin-y small-up-1 medium-up-3 large-up-4">
-		<?php foreach ($user_tools as $title => $file) { ?>
-			<div class="cell">
-				<div class="card">
+	<div class="cell">
+		<div class="grid-x grid-margin-x grid-margin-y">
+			<?php foreach ($user_tools as $title => $file) { ?>
+				<div class="card cell">
 					<div class="card-divider">
 						<a href="<?php echo $title; ?>">
 							<?php echo $file[0]; ?>
@@ -86,8 +84,8 @@ echo pageStart('user_admin', $controller->getPageTitle()); ?>
 						<?php echo $file[1]; ?>
 					</div>
 				</div>
-			</div>
-		<?php } ?>
+			<?php } ?>
+		</div>
 	</div>
 
 <?php pageClose();

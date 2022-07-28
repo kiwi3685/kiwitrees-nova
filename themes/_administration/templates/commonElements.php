@@ -46,7 +46,7 @@ function pageStart($title, $pageTitle = '', $includeTitle = 'y', $subTitle = '')
 	return '
 		<div id="' . strtolower($title) . '-page" class="cell">' .
 			$pageTitle . $subTitle . '
-			<div class="grid-x grid-margin-y">';
+			<div class="grid-x grid-margin-x grid-margin-y">';
 
 	// function pageClose() must be added after content to close this div element
 }
@@ -56,7 +56,7 @@ function pageStart($title, $pageTitle = '', $includeTitle = 'y', $subTitle = '')
  */
 function pageClose() {
 	'</div>
-		</div>ß
+		</div>
 	';
 }
 

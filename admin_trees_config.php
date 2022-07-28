@@ -336,8 +336,6 @@ global $iconstyles;
 		<div class="cell">
 			<?php echo faqLink('administration/family_tree_config'); ?>
 			<h4 class="inline"><?php echo KT_I18N::translate('Family tree configuration'); ?></h4>
-<?php //echo "TREE: " . var_dump(KT_Tree::getAll()) . "<br>"; ?>
-<?php //echo "TREE: " . KT_Tree::getIdFromName('Osborne Family Tree'); ?>
 		</div>
 		<div class="cell medium-4">
 			<form method="post" action="#" name="tree">

@@ -24,13 +24,11 @@
 define('KT_SCRIPT_NAME', 'adminSummary_trees.php');
 
 global $iconStyle;
-
 require './includes/session.php';
-require KT_ROOT . 'includes/functions/functions_edit.php';
 
 $controller = new KT_Controller_Page();
 $controller
-	->restrictAccess(KT_USER_IS_ADMIN)
+	->restrictAccess(KT_USER_GEDCOM_ADMIN)
 	->setPageTitle(KT_I18N::translate('Family trees'))
 	->pageHeader();
 
@@ -84,19 +82,19 @@ $ft_tools = array(
 	),
 	"admin_trees_merge.php"			=> array(
 		KT_I18N::translate('Merge records'),
-		KT_I18N::translate('Merge two similar revords, such as individuals, families, sources etc., within a single family tree'),
+		KT_I18N::translate('Merge two similar records, such as individuals, families, sources, within a single family tree'),
 		KT_I18N::translate('Administrator or Managers authorized for specific trees'),
 		'warning'
 	),
 	"admin_trees_renumber.php"		=> array(
 		KT_I18N::translate('Renumber family tree'),
-		KT_I18N::translate('Change the record IDs in a family trree to avoid clashes between identical references when appending one tree to another with the \'Append family tree\' tool'),
+		KT_I18N::translate('Change IDs to prevent clashes between identical references, when appending one tree to another with the \'Append family tree\' tool'),
 		KT_I18N::translate('Administrator or Managers authorized for specific trees'),
 		'warning'
 	),
 	"admin_trees_append.php"		=> array(
 		KT_I18N::translate('Append family tree'),
-		KT_I18N::translate('Add one GEDCOM file to another, creating a combined tree.<br><small>Note: This is NOT merging. No duplication checks are done, so significant tidying up may be required</small>'),
+		KT_I18N::translate('Add one GEDCOM file to another, creating a combined tree.<br><small>Note: This is NOT merging. No duplication checks are done, so significant clean up may be required</small>'),
 		KT_I18N::translate('Administrator or Managers authorized for specific trees'),
 		'warning'
 	),
@@ -108,7 +106,7 @@ $ft_tools = array(
 	),
 	"admin_trees_findunlinked.php"	=> array(
 		KT_I18N::translate('Find unlinked records'),
-		KT_I18N::translate('List records that are not linked to any other records.<br><small>Note: It does not include Families as a family record cannot exist without at least one family member</small>'),
+		KT_I18N::translate('List records that are not linked to any other records.<br><small>Note: It does not include Families as a family record cannot exist without linking to at least one individual</small>'),
 		KT_I18N::translate('Administrator or Managers authorized for specific trees'),
 		'warning'
 	),
@@ -120,7 +118,7 @@ $ft_tools = array(
 	),
 	"admin_trees_source.php"		=> array(
 		KT_I18N::translate('Sources - review'),
-		KT_I18N::translate('Display a list of facts, events or records where the selected source is used. Facts or events are items like birth, marriage, death. Records are items like individuals, families, media'),
+		KT_I18N::translate('Display a list of facts, events or records where a selected source is used'),
 		KT_I18N::translate('Administrator or Managers authorized for specific trees'),
 		'warning'
 	),
@@ -139,9 +137,6 @@ $ft_tools = array(
 );
 asort($ft_tools);
 
-$disabled = '';
-
-
 echo pageStart('tree_admin', $controller->getPageTitle()); ?>
 
 	<div class="cell callout warning help_content">
@@ -149,41 +144,43 @@ echo pageStart('tree_admin', $controller->getPageTitle()); ?>
 			All of the configuration settings and tools necessary to manage all family trees on your website
 		'); ?>
 	</div>
-	<div class="grid-x grid-margin-x medium-up-2">
-		<?php foreach ($ftrees as $title => $file) { ?>
+	<div class="cell">
+		<div class="grid-x grid-margin-x grid-margin-y">
+			<?php foreach ($ftrees as $title => $file) {
+				if (($file[3] == 'alert' && KT_USER_IS_ADMIN) || ($file[3] != 'alert' && KT_USER_GEDCOM_ADMIN)) { ?>
+					<div class="card cell">
+						<div class="card-divider">
+							<a href="<?php echo $title; ?>">
+								<?php echo $file[0]; ?>
+							</a>
+							<span class="<?php echo $file[3]; ?>" data-tooltip title="<?php echo $file[2]; ?>" data-position="top" data-alignment="right"><i class="<?php echo $iconStyle; ?> fa-user"></i>
+						</div>
+						<div class="card-section">
+							<?php echo $file[1]; ?>
+						</div>
+					</div>
+				<?php }
+			} ?>
+			<hr class="cell">
 			<div class="cell">
-				<div class="card">
-					<div class="card-divider">
-						<a href="<?php echo $title; ?>" class="<?php echo $disabled; ?>">
-							<?php echo $file[0]; ?>
-						</a>
-						<span class="<?php echo $file[3]; ?>" data-tooltip title="<?php echo $file[2]; ?>" data-position="top" data-alignment="right"><i class="<?php echo $iconStyle; ?> fa-user"></i>
-					</div>
-					<div class="card-section">
-						<?php echo $file[1]; ?>
-					</div>
-				</div>
+				<h4><?php echo KT_I18N::translate('Family tree tools'); ?></h4>
 			</div>
-		<?php } ?>
-	</div>
-	<hr class="cell">
-	<h4><?php echo KT_I18N::translate('Family tree tools'); ?></h4>
-	<div class="grid-x grid-margin-x grid-margin-y medium-up-3 large-up-4">
-		<?php foreach ($ft_tools as $title => $file) { ?>
-			<div class="cell medium-3">
-				<div class="card">
-					<div class="card-divider">
-						<a href="<?php echo $title; ?>">
-							<?php echo $file[0]; ?>
-						</a>
-						<span class="<?php echo $file[3]; ?>" data-tooltip title="<?php echo $file[2]; ?>" data-position="top" data-alignment="right"><i class="<?php echo $iconStyle; ?> fa-user"></i>
+			<?php foreach ($ft_tools as $title => $file) {
+				if (($file[3] == 'alert' && KT_USER_IS_ADMIN) || ($file[3] != 'alert' && KT_USER_GEDCOM_ADMIN)) { ?>
+					<div class="card cell">
+						<div class="card-divider">
+							<a href="<?php echo $title; ?>">
+								<?php echo $file[0]; ?>
+							</a>
+							<span class="<?php echo $file[3]; ?>" data-tooltip title="<?php echo $file[2]; ?>" data-position="top" data-alignment="right"><i class="<?php echo $iconStyle; ?> fa-user"></i>
+						</div>
+						<div class="card-section">
+							<?php echo $file[1]; ?>
+						</div>
 					</div>
-					<div class="card-section">
-						<?php echo $file[1]; ?>
-					</div>
-				</div>
-			</div>
-		<?php } ?>
+				<?php }
+			} ?>
+		</div>
 	</div>
 
 <?php pageClose();

@@ -146,15 +146,12 @@ $notes = KT_DB::prepare(
 $changes = KT_DB::prepare(
 	"SELECT g.gedcom_id, COUNT(change_id) AS count FROM `##gedcom` AS g LEFT JOIN `##change` AS c ON g.gedcom_id = c.gedcom_id AND status = 'pending' GROUP BY g.gedcom_id"
 )->fetchAssoc();
-?>
 
-
-<div id="admin" class="cell">
-	<h4><?php echo KT_I18N::translate('Dashboard'); ?></h4>
-	<h6 class="subheader">
+echo pageStart('admin', KT_I18N::translate('Dashboard')); ?>
+	<div class="cell callout warning help_content">
 		<?php echo KT_I18N::translate('These pages provide access to all the configuration settings and management tools for this kiwitrees site.'); ?><br>
 		<?php echo /* I18N: %s is a URL/link to the project website */ KT_I18N::translate('Support is available at %s.', ' <a class="current" href="' . KT_KIWITREES_URL . '/forums/">kiwitrees.net forums</a>'); ?>
-	</h6>
+	</div>
 	<?php // Server warnings
 	if ($server_warnings): ?>
 		<div class="callout warning">
@@ -196,358 +193,358 @@ $changes = KT_DB::prepare(
 	<?php } ?>
 	<!-- End // Accordion block for DELETE OLD FILES -->
 
-</div>
 
-<!-- Summary family tree information blocks -->
-<div class="cell">
-	<div class="grid-x grid-margin-x">
-		<div class="cell accordion" data-accordion data-allow-all-closed="true" data-multi-open="false" data-slide-speed="500">
-			<div class="accordion-item is-active" data-accordion-item>
-				<a href="#" class="accordion-title">
-					<span><?php echo KT_I18N::translate('System status'); ?></span>
-				</a>
-				<div class="accordion-content" data-tab-content>
-					<div  id="system-status" class="grid-x grid-margin-x grid-margin-y">
-						<div class="cell medium-2 large-1">
-							<label class="h6"><?php echo KT_I18N::translate('Website'); ?></label>
-						</div>
-						<div class="cell medium-10 large-11">
-							<p><?php echo KT_I18N::translate('URL'); ?>: <span><?php echo KT_SERVER_NAME; ?></span></p>
-						</div>
-						<div class="cell medium-2 large-1">
-							<label class="h6"><?php echo KT_I18N::translate('Server'); ?></label>
-						</div>
-						<div class="cell medium-10 large-11">
-							<p><?php echo KT_I18N::translate('Server'); ?>: <span><?php echo $_SERVER["SERVER_SOFTWARE"]; ?></span></p>
-							<p><?php echo KT_I18N::translate('Operating System'); ?>: <span><?php echo PHP_OS; ?></span><p>
-							<p><?php echo KT_I18N::translate('Hostname'); ?>: <span><?php echo $_SERVER['SERVER_NAME']; ?></span><p>
-							<p><?php echo KT_I18N::translate('IP and Port'); ?>: <span><?php echo $_SERVER['SERVER_ADDR'] . ' (' . $_SERVER['SERVER_PORT']; ?>)</span><p>
-						</div>
-						<div class="cell medium-2 large-1">
-							<label class="h6"><?php echo KT_I18N::translate('Software'); ?></label>
-						</div>
-						<div class="cell medium-10 large-11">
-							<p><?php echo KT_I18N::translate('PHP Version'); ?>: <span><?php echo phpversion(); ?></span></p>
-							<p><?php echo KT_I18N::translate('SQL Version'); ?>: <span><?php echo $version; ?></span></p>
-							<p><?php echo KT_I18N::translate('Kiwitrees-nova'); ?>: <span><?php echo KT_VERSION; ?></span></p>
-						</div>
-						<?php // Alerts
-						if (KT_USER_IS_ADMIN) {
-							// Kiwitrees version check
-							if ($latest_version) {
-								if (version_compare(KT_VERSION, $latest_version) < 0) { ?>
-									<div class="callout large-4 alert">
-										<?php echo /* I18N: %s is a URL/link to the project website */ KT_I18N::translate('Version %s of kiwitrees is now available at %s.', $latest_version, ' <a class="current" href="' . KT_KIWITREES_URL . '/services/downloads/">kiwitrees.net downloads</a>'); ?>
-									</div>
-								<?php } else { ?>
-									<div class="callout large-4 success">
-										<?php echo /* I18N: %s is a URL/link to the project website */ KT_I18N::translate('Your version of kiwitrees is the latest available.'); ?>
-									</div>
-								<?php }
-							} else { ?>
-								<div class="callout large-4 warning">
-									<?php echo /* I18N: %s is a URL/link to the project website */ KT_I18N::translate('No kiwitrees upgrade information is available.'); ?>
-								</div>
-							<?php }
-							// PHP version check
-							if (version_compare(phpversion(), '8.1', '<')) {
-								if (version_compare(phpversion(), '7.3', '<')) { ?>
-									<div class="callout large-4 alert">
-										<?php echo  KT_I18N::translate('Kiwitrees is no longer compatible with versions of PHP older than 7.0'); ?>
-									</div>
-								<?php } else { ?>
-									<div class="callout large-4 success">
-										<?php echo  KT_I18N::translate('Kiwitrees is compatible with this version of PHP.'); ?>
+	<!-- Summary family tree information blocks -->
+	<div class="cell">
+		<div class="grid-x grid-margin-x">
+			<div class="cell accordion" data-accordion data-allow-all-closed="true" data-multi-open="false" data-slide-speed="500">
+				<div class="accordion-item is-active" data-accordion-item>
+					<a href="#" class="accordion-title">
+						<span><?php echo KT_I18N::translate('System status'); ?></span>
+					</a>
+					<div class="accordion-content" data-tab-content>
+						<div  id="system-status" class="grid-x grid-margin-x grid-margin-y">
+							<div class="cell medium-2 large-1">
+								<label class="h6"><?php echo KT_I18N::translate('Website'); ?></label>
+							</div>
+							<div class="cell medium-10 large-11">
+								<p><?php echo KT_I18N::translate('URL'); ?>: <span><?php echo KT_SERVER_NAME; ?></span></p>
+							</div>
+							<div class="cell medium-2 large-1">
+								<label class="h6"><?php echo KT_I18N::translate('Server'); ?></label>
+							</div>
+							<div class="cell medium-10 large-11">
+								<p><?php echo KT_I18N::translate('Server'); ?>: <span><?php echo $_SERVER["SERVER_SOFTWARE"]; ?></span></p>
+								<p><?php echo KT_I18N::translate('Operating System'); ?>: <span><?php echo PHP_OS; ?></span><p>
+								<p><?php echo KT_I18N::translate('Hostname'); ?>: <span><?php echo $_SERVER['SERVER_NAME']; ?></span><p>
+								<p><?php echo KT_I18N::translate('IP and Port'); ?>: <span><?php echo $_SERVER['SERVER_ADDR'] . ' (' . $_SERVER['SERVER_PORT']; ?>)</span><p>
+							</div>
+							<div class="cell medium-2 large-1">
+								<label class="h6"><?php echo KT_I18N::translate('Software'); ?></label>
+							</div>
+							<div class="cell medium-10 large-11">
+								<p><?php echo KT_I18N::translate('PHP Version'); ?>: <span><?php echo phpversion(); ?></span></p>
+								<p><?php echo KT_I18N::translate('SQL Version'); ?>: <span><?php echo $version; ?></span></p>
+								<p><?php echo KT_I18N::translate('Kiwitrees-nova'); ?>: <span><?php echo KT_VERSION; ?></span></p>
+							</div>
+							<?php // Alerts
+							if (KT_USER_IS_ADMIN) {
+								// Kiwitrees version check
+								if ($latest_version) {
+									if (version_compare(KT_VERSION, $latest_version) < 0) { ?>
+										<div class="callout large-4 alert">
+											<?php echo /* I18N: %s is a URL/link to the project website */ KT_I18N::translate('Version %s of kiwitrees is now available at %s.', $latest_version, ' <a class="current" href="' . KT_KIWITREES_URL . '/services/downloads/">kiwitrees.net downloads</a>'); ?>
+										</div>
+									<?php } else { ?>
+										<div class="callout large-4 success">
+											<?php echo /* I18N: %s is a URL/link to the project website */ KT_I18N::translate('Your version of kiwitrees is the latest available.'); ?>
+										</div>
+									<?php }
+								} else { ?>
+									<div class="callout large-4 warning">
+										<?php echo /* I18N: %s is a URL/link to the project website */ KT_I18N::translate('No kiwitrees upgrade information is available.'); ?>
 									</div>
 								<?php }
-							} else { ?>
-								<div class="callout large-4 warning">
-									<?php echo  KT_I18N::translate('Kiwitrees is not yet tested for compatibility with your version of PHP. It might work, but if you find any issues please report them on the <a class="current" href="%s" target="_blank">kiwitrees support forum</a>', KT_SUPPORT_URL); ?>
-								</div>
-							<?php }
-						} ?>
+								// PHP version check
+								if (version_compare(phpversion(), '8.1', '<')) {
+									if (version_compare(phpversion(), '7.3', '<')) { ?>
+										<div class="callout large-4 alert">
+											<?php echo  KT_I18N::translate('Kiwitrees is no longer compatible with versions of PHP older than 7.0'); ?>
+										</div>
+									<?php } else { ?>
+										<div class="callout large-4 success">
+											<?php echo  KT_I18N::translate('Kiwitrees is compatible with this version of PHP.'); ?>
+										</div>
+									<?php }
+								} else { ?>
+									<div class="callout large-4 warning">
+										<?php echo  KT_I18N::translate('Kiwitrees is not yet tested for compatibility with your version of PHP. It might work, but if you find any issues please report them on the <a class="current" href="%s" target="_blank">kiwitrees support forum</a>', KT_SUPPORT_URL); ?>
+									</div>
+								<?php }
+							} ?>
+						</div>
 					</div>
 				</div>
-			</div>
-			<div class="accordion-item" data-accordion-item>
-				<a href="#" class="accordion-title">
-					<span><?php echo KT_I18N::translate('Users'); ?></span>
-					<span class="fa-layers fa-lg has-tip top" data-tooltip aria-haspopup="true" data-disable-hover="false" title="<?php echo KT_I18N::translate('Total number of users'); ?>">
-						<i class="<?php echo $iconStyle; ?> fa-users"></i>
-						<span class="fa-layers-counter"><?php echo $total_users; ?></span>
-					</span>
-					<?php if ($incomplete) { ?>
-						<span class="fa-layers fa-lg has-tip top warning" data-tooltip aria-haspopup="true" data-disable-hover="false" title="<?php echo KT_I18N::translate('Unverified or not approved users'); ?>">
-							<i class="<?php echo $iconStyle; ?> fa-user-secret"></i>
-							<span class="fa-layers-counter fa-lg"><?php echo $incomplete; ?></span>
+				<div class="accordion-item" data-accordion-item>
+					<a href="#" class="accordion-title">
+						<span><?php echo KT_I18N::translate('Users'); ?></span>
+						<span class="fa-layers fa-lg has-tip top" data-tooltip aria-haspopup="true" data-disable-hover="false" title="<?php echo KT_I18N::translate('Total number of users'); ?>">
+							<i class="<?php echo $iconStyle; ?> fa-users"></i>
+							<span class="fa-layers-counter"><?php echo $total_users; ?></span>
 						</span>
-					<?php } ?>
-				</a>
-				<div class="accordion-content" data-tab-content>
-					<table class="admin_users">
-						<tbody>
-							<tr>
-								<th><a href="admin_users.php" ><?php echo KT_I18N::translate('Total number of users'); ?></a></th>
-								<td><a href="admin_users.php" ><?php echo $total_users; ?></a></td>
-							</td>
-							<tr>
-								<th><?php echo KT_I18N::translate('Administrators'); ?></h>
-								<td>
-									<?php foreach ($administrators as $n => $user) { ?>
+						<?php if ($incomplete) { ?>
+							<span class="fa-layers fa-lg has-tip top warning" data-tooltip aria-haspopup="true" data-disable-hover="false" title="<?php echo KT_I18N::translate('Unverified or not approved users'); ?>">
+								<i class="<?php echo $iconStyle; ?> fa-user-secret"></i>
+								<span class="fa-layers-counter fa-lg"><?php echo $incomplete; ?></span>
+							</span>
+						<?php } ?>
+					</a>
+					<div class="accordion-content" data-tab-content>
+						<table class="admin_users">
+							<tbody>
+								<tr>
+									<th><a href="admin_users.php" ><?php echo KT_I18N::translate('Total number of users'); ?></a></th>
+									<td><a href="admin_users.php" ><?php echo $total_users; ?></a></td>
+								</td>
+								<tr>
+									<th><?php echo KT_I18N::translate('Administrators'); ?></h>
+									<td>
+										<?php foreach ($administrators as $n => $user) { ?>
+											<?php echo $n ? KT_I18N::$list_separator : ''; ?>
+											<a href="admin_users.php?action=edit&user_id=<?php echo $user->user_id; ?>">
+												<?php echo KT_Filter::escapeHtml($user->real_name); ?>
+											</a>
+										<?php } ?>
+									</td>
+								</tr>
+								<tr>
+									<th><?php echo KT_I18N::translate('Managers'); ?></th>
+									<td>
+										<?php foreach ($managers as $n => $user) { ?>
+											<?php echo $n ? KT_I18N::$list_separator : ''; ?>
+											<a href="admin_users.php?action=edit&user_id=<?php echo $user->user_id; ?>">
+												<?php echo KT_Filter::escapeHtml($user->real_name); ?>
+											</a>
+										<?php } ?>
+									</td>
+								</tr>
+								<tr>
+									<th><?php echo KT_I18N::translate('Moderators'); ?></th>
+									<td>
+										<?php foreach ($moderators as $n => $user) { ?>
+											<?php echo $n ? KT_I18N::$list_separator : ''; ?>
+											<a href="admin_users.php?action=edit&user_id=<?php echo $user->user_id; ?>">
+												<?php echo KT_Filter::escapeHtml($user->real_name); ?>
+											</a>
+										<?php } ?>
+									</td>
+								</tr>
+								<tr class="<?php echo $unverified ? 'warning' : ''; ?>">
+									<th>
+										<?php echo KT_I18N::translate('Not verified by user'); ?>
+									</th>
+									<td>
+										<?php foreach ($unverified as $n => $user): ?>
+											<?php echo $n ? KT_I18N::$list_separator : ''; ?>
+											<a href="admin_users.php?action=edit&user_id=<?php echo $user->user_id; ?>">
+												<?php echo KT_Filter::escapeHtml($user->real_name); ?>
+											</a>
+										<?php endforeach; ?>
+									</td>
+								</tr>
+								<tr class="<?php echo $unapproved ? 'warning' : ''; ?>">
+									<th><?php echo KT_I18N::translate('Not approved by administrator'); ?></th>
+									<td>
+										<?php foreach ($unapproved as $n => $user): ?>
+											<?php echo $n ? KT_I18N::$list_separator : ''; ?>
+											<a href="admin_users.php?action=edit&user_id=<?php echo $user->user_id; ?>">
+												<?php echo KT_Filter::escapeHtml($user->real_name); ?>
+											</a>
+										<?php endforeach; ?>
+									</td>
+								</tr>
+								<tr>
+									<th><?php echo KT_I18N::translate('Users logged in'); ?></th>
+									<td>
+										<?php foreach ($logged_in as $n => $user): ?>
 										<?php echo $n ? KT_I18N::$list_separator : ''; ?>
-										<a href="admin_users.php?action=edit&user_id=<?php echo $user->user_id; ?>">
-											<?php echo KT_Filter::escapeHtml($user->real_name); ?>
-										</a>
-									<?php } ?>
-								</td>
-							</tr>
-							<tr>
-								<th><?php echo KT_I18N::translate('Managers'); ?></th>
-								<td>
-									<?php foreach ($managers as $n => $user) { ?>
-										<?php echo $n ? KT_I18N::$list_separator : ''; ?>
-										<a href="admin_users.php?action=edit&user_id=<?php echo $user->user_id; ?>">
-											<?php echo KT_Filter::escapeHtml($user->real_name); ?>
-										</a>
-									<?php } ?>
-								</td>
-							</tr>
-							<tr>
-								<th><?php echo KT_I18N::translate('Moderators'); ?></th>
-								<td>
-									<?php foreach ($moderators as $n => $user) { ?>
-										<?php echo $n ? KT_I18N::$list_separator : ''; ?>
-										<a href="admin_users.php?action=edit&user_id=<?php echo $user->user_id; ?>">
-											<?php echo KT_Filter::escapeHtml($user->real_name); ?>
-										</a>
-									<?php } ?>
-								</td>
-							</tr>
-							<tr class="<?php echo $unverified ? 'warning' : ''; ?>">
-								<th>
-									<?php echo KT_I18N::translate('Not verified by user'); ?>
-								</th>
-								<td>
-									<?php foreach ($unverified as $n => $user): ?>
-										<?php echo $n ? KT_I18N::$list_separator : ''; ?>
-										<a href="admin_users.php?action=edit&user_id=<?php echo $user->user_id; ?>">
-											<?php echo KT_Filter::escapeHtml($user->real_name); ?>
-										</a>
-									<?php endforeach; ?>
-								</td>
-							</tr>
-							<tr class="<?php echo $unapproved ? 'warning' : ''; ?>">
-								<th><?php echo KT_I18N::translate('Not approved by administrator'); ?></th>
-								<td>
-									<?php foreach ($unapproved as $n => $user): ?>
-										<?php echo $n ? KT_I18N::$list_separator : ''; ?>
-										<a href="admin_users.php?action=edit&user_id=<?php echo $user->user_id; ?>">
-											<?php echo KT_Filter::escapeHtml($user->real_name); ?>
-										</a>
-									<?php endforeach; ?>
-								</td>
-							</tr>
-							<tr>
-								<th><?php echo KT_I18N::translate('Users logged in'); ?></th>
-								<td>
-									<?php foreach ($logged_in as $n => $user): ?>
-									<?php echo $n ? KT_I18N::$list_separator : ''; ?>
-										<a href="admin_users.php?action=edit&user_id=<?php echo $user->user_id; ?>">
-											<?php echo KT_Filter::escapeHtml($user->real_name); ?>
-										</a>
-									<?php endforeach; ?>
-								</td>
-							</tr>
-						</tbody>
-					</table>
+											<a href="admin_users.php?action=edit&user_id=<?php echo $user->user_id; ?>">
+												<?php echo KT_Filter::escapeHtml($user->real_name); ?>
+											</a>
+										<?php endforeach; ?>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
 				</div>
-			</div>
-			<div class="accordion-item" data-accordion-item>
-				<a href="#" class="accordion-title"><?php echo KT_I18N::translate('Family tree statistics'); ?></a>
-				<div class="accordion-content" data-tab-content>
-					<table class="admin_trees scroll">
-						<thead>
-							<tr>
-								<th><?php echo KT_I18N::translate('Family tree'); ?></th>
-								<th class="text-right"><?php echo KT_I18N::translate('Pending changes'); ?></th>
-								<th class="text-right"><?php echo KT_I18N::translate('Individuals'); ?></th>
-								<th class="text-right"><?php echo KT_I18N::translate('Families'); ?></th>
-								<th class="text-right"><?php echo KT_I18N::translate('Sources'); ?></th>
-								<th class="text-right"><?php echo KT_I18N::translate('Repositories'); ?></th>
-								<th class="text-right"><?php echo KT_I18N::translate('Media objects'); ?></th>
-								<th class="text-right"><?php echo KT_I18N::translate('Shared notes'); ?></th>
-							</tr>
-						</thead>
-						<tbody>
-							<?php foreach (KT_Tree::getAll() as $tree) { ?>
+				<div class="accordion-item" data-accordion-item>
+					<a href="#" class="accordion-title"><?php echo KT_I18N::translate('Family tree statistics'); ?></a>
+					<div class="accordion-content" data-tab-content>
+						<table class="admin_trees scroll">
+							<thead>
+								<tr>
+									<th><?php echo KT_I18N::translate('Family tree'); ?></th>
+									<th class="text-right"><?php echo KT_I18N::translate('Pending changes'); ?></th>
+									<th class="text-right"><?php echo KT_I18N::translate('Individuals'); ?></th>
+									<th class="text-right"><?php echo KT_I18N::translate('Families'); ?></th>
+									<th class="text-right"><?php echo KT_I18N::translate('Sources'); ?></th>
+									<th class="text-right"><?php echo KT_I18N::translate('Repositories'); ?></th>
+									<th class="text-right"><?php echo KT_I18N::translate('Media objects'); ?></th>
+									<th class="text-right"><?php echo KT_I18N::translate('Shared notes'); ?></th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php foreach (KT_Tree::getAll() as $tree) { ?>
+									<tr>
+										<td>
+											<a href="index.php?ged=<?php echo $tree->tree_name_url; ?>">
+												<?php echo $tree->tree_name_html; ?>
+												-
+												<?php echo $tree->tree_title_html; ?>
+											</a>
+										</td>
+										<td class="text-right">
+											<?php if ($changes[$tree->tree_id]) { ?>
+												<a href="edit_changes.php?ged=<?php echo $tree->tree_name_url; ?>" target="_blank" rel="noopener noreferrer">
+													<?php echo KT_I18N::number($changes[$tree->tree_id]); ?>
+												</a>
+											<?php } else { ?>
+												-
+											<?php } ?>
+										</td>
+										<td class="text-right">
+											<?php if ($individuals[$tree->tree_id]) { ?>
+												<a href="module.php?mod=list_individuals&amp;mod_action=show&amp;ged=<?php echo $tree->tree_name_url; ?>" target="_blank" rel="noopener noreferrer">
+													<?php echo KT_I18N::number($individuals[$tree->tree_id]); ?>
+												</a>
+											<?php } else { ?>
+												-
+											<?php } ?>
+										</td>
+										<td class="text-right">
+											<?php if ($families[$tree->tree_id]) { ?>
+												<a href="module.php?mod=list_families&amp;mod_action=show&amp;ged=<?php echo $tree->tree_name_url; ?>" target="_blank" rel="noopener noreferrer">
+													<?php echo KT_I18N::number($families[$tree->tree_id]); ?>
+												</a>
+											<?php } else { ?>
+												-
+											<?php } ?>
+										</td>
+										<td class="text-right">
+											<?php if ($sources[$tree->tree_id]) { ?>
+												<a href="module.php?mod=list_sources&amp;mod_action=show&amp;ged=<?php echo $tree->tree_name_url; ?>" target="_blank" rel="noopener noreferrer">
+													<?php echo KT_I18N::number($sources[$tree->tree_id]); ?>
+												</a>
+											<?php } else { ?>
+												-
+											<?php } ?>
+										</td>
+										<td class="text-right">
+											<?php if ($repositories[$tree->tree_id]) { ?>
+												<a href="module.php?mod=list_repositories&amp;mod_action=show&amp;ged=<?php echo $tree->tree_name_url; ?>" target="_blank" rel="noopener noreferrer">
+													<?php echo KT_I18N::number($repositories[$tree->tree_id]); ?>
+												</a>
+											<?php } else { ?>
+												-
+											<?php } ?>
+										</td>
+										<td class="text-right">
+											<?php if ($media[$tree->tree_id]) { ?>
+												<a href="module.php?mod=list_media&amp;mod_action=show&amp;ged=<?php echo $tree->tree_name_url; ?>" target="_blank" rel="noopener noreferrer">
+													<?php echo KT_I18N::number($media[$tree->tree_id]); ?>
+												</a>
+											<?php } else { ?>
+												-
+											<?php } ?>
+										</td>
+										<td class="text-right">
+											<?php if ($notes[$tree->tree_id]) { ?>
+												<a href="module.php?mod=list_shared_notes&amp;mod_action=show&amp;ged=<?php echo $tree->tree_name_url; ?>" target="_blank" rel="noopener noreferrer">
+													<?php echo KT_I18N::number($notes[$tree->tree_id]); ?>
+												</a>
+											<?php } else { ?>
+												-
+											<?php } ?>
+										</td>
+									</tr>
+								<?php } ?>
+							</tbody>
+							<tfoot>
 								<tr>
 									<td>
-										<a href="index.php?ged=<?php echo $tree->tree_name_url; ?>">
-											<?php echo $tree->tree_name_html; ?>
-											-
-											<?php echo $tree->tree_title_html; ?>
-										</a>
+										<?php echo KT_I18N::translate('Total'); ?>
+										-
+										<?php echo KT_I18N::plural('%s family tree', '%s family trees', count(KT_Tree::getAll()), KT_I18N::number(count(KT_Tree::getAll()))); ?>
 									</td>
 									<td class="text-right">
-										<?php if ($changes[$tree->tree_id]) { ?>
-											<a href="edit_changes.php?ged=<?php echo $tree->tree_name_url; ?>" target="_blank" rel="noopener noreferrer">
-												<?php echo KT_I18N::number($changes[$tree->tree_id]); ?>
-											</a>
-										<?php } else { ?>
-											-
-										<?php } ?>
+										<?php echo KT_I18N::number(array_sum($changes)); ?>
 									</td>
 									<td class="text-right">
-										<?php if ($individuals[$tree->tree_id]) { ?>
-											<a href="module.php?mod=list_individuals&amp;mod_action=show&amp;ged=<?php echo $tree->tree_name_url; ?>" target="_blank" rel="noopener noreferrer">
-												<?php echo KT_I18N::number($individuals[$tree->tree_id]); ?>
-											</a>
-										<?php } else { ?>
-											-
-										<?php } ?>
+										<?php echo KT_I18N::number(array_sum($individuals)); ?>
 									</td>
 									<td class="text-right">
-										<?php if ($families[$tree->tree_id]) { ?>
-											<a href="module.php?mod=list_families&amp;mod_action=show&amp;ged=<?php echo $tree->tree_name_url; ?>" target="_blank" rel="noopener noreferrer">
-												<?php echo KT_I18N::number($families[$tree->tree_id]); ?>
-											</a>
-										<?php } else { ?>
-											-
-										<?php } ?>
+										<?php echo KT_I18N::number(array_sum($families)); ?>
 									</td>
 									<td class="text-right">
-										<?php if ($sources[$tree->tree_id]) { ?>
-											<a href="module.php?mod=list_sources&amp;mod_action=show&amp;ged=<?php echo $tree->tree_name_url; ?>" target="_blank" rel="noopener noreferrer">
-												<?php echo KT_I18N::number($sources[$tree->tree_id]); ?>
-											</a>
-										<?php } else { ?>
-											-
-										<?php } ?>
+										<?php echo KT_I18N::number(array_sum($sources)); ?>
 									</td>
 									<td class="text-right">
-										<?php if ($repositories[$tree->tree_id]) { ?>
-											<a href="module.php?mod=list_repositories&amp;mod_action=show&amp;ged=<?php echo $tree->tree_name_url; ?>" target="_blank" rel="noopener noreferrer">
-												<?php echo KT_I18N::number($repositories[$tree->tree_id]); ?>
-											</a>
-										<?php } else { ?>
-											-
-										<?php } ?>
+										<?php echo KT_I18N::number(array_sum($repositories)); ?>
 									</td>
 									<td class="text-right">
-										<?php if ($media[$tree->tree_id]) { ?>
-											<a href="module.php?mod=list_media&amp;mod_action=show&amp;ged=<?php echo $tree->tree_name_url; ?>" target="_blank" rel="noopener noreferrer">
-												<?php echo KT_I18N::number($media[$tree->tree_id]); ?>
-											</a>
-										<?php } else { ?>
-											-
-										<?php } ?>
+										<?php echo KT_I18N::number(array_sum($media)); ?>
 									</td>
 									<td class="text-right">
-										<?php if ($notes[$tree->tree_id]) { ?>
-											<a href="module.php?mod=list_shared_notes&amp;mod_action=show&amp;ged=<?php echo $tree->tree_name_url; ?>" target="_blank" rel="noopener noreferrer">
-												<?php echo KT_I18N::number($notes[$tree->tree_id]); ?>
-											</a>
-										<?php } else { ?>
-											-
-										<?php } ?>
+										<?php echo KT_I18N::number(array_sum($notes)); ?>
 									</td>
 								</tr>
-							<?php } ?>
-						</tbody>
-						<tfoot>
-							<tr>
-								<td>
-									<?php echo KT_I18N::translate('Total'); ?>
-									-
-									<?php echo KT_I18N::plural('%s family tree', '%s family trees', count(KT_Tree::getAll()), KT_I18N::number(count(KT_Tree::getAll()))); ?>
-								</td>
-								<td class="text-right">
-									<?php echo KT_I18N::number(array_sum($changes)); ?>
-								</td>
-								<td class="text-right">
-									<?php echo KT_I18N::number(array_sum($individuals)); ?>
-								</td>
-								<td class="text-right">
-									<?php echo KT_I18N::number(array_sum($families)); ?>
-								</td>
-								<td class="text-right">
-									<?php echo KT_I18N::number(array_sum($sources)); ?>
-								</td>
-								<td class="text-right">
-									<?php echo KT_I18N::number(array_sum($repositories)); ?>
-								</td>
-								<td class="text-right">
-									<?php echo KT_I18N::number(array_sum($media)); ?>
-								</td>
-								<td class="text-right">
-									<?php echo KT_I18N::number(array_sum($notes)); ?>
-								</td>
-							</tr>
-						</tfoot>
-					</table>
+							</tfoot>
+						</table>
+					</div>
 				</div>
-			</div>
-			<div class="accordion-item" data-accordion-item>
-				<a href="#" class="accordion-title"><?php echo KT_I18N::translate('Recent changes'); ?></a>
-				<div class="accordion-content" data-tab-content>
-					<table class="admin_recent scroll">
-						<thead>
-							<tr>
-								<th colspan="2"><?php echo KT_I18N::translate('Family tree'); ?></th>
-								<th class="text-right"><?php echo KT_I18N::translate('Individuals'); ?></th>
-								<th class="text-right"><?php echo KT_I18N::translate('Families'); ?></th>
-								<th class="text-right"><?php echo KT_I18N::translate('Sources'); ?></th>
-								<th class="text-right"><?php echo KT_I18N::translate('Repositories'); ?></th>
-								<th class="text-right"><?php echo KT_I18N::translate('Media objects'); ?></th>
-								<th class="text-right"><?php echo KT_I18N::translate('Notes'); ?></th>
-							</tr>
-						</thead>
-						<tbody>
-							<?php foreach (KT_Tree::getAll() as $tree) { ?>
+				<div class="accordion-item" data-accordion-item>
+					<a href="#" class="accordion-title"><?php echo KT_I18N::translate('Recent changes'); ?></a>
+					<div class="accordion-content" data-tab-content>
+						<table class="admin_recent scroll">
+							<thead>
 								<tr>
-									<td rowspan="3">
-										<a href="index.php?ged=<?php echo $tree->tree_name_url; ?>">
-											<?php echo $tree->tree_name_html; ?>
-											-
-											<?php echo $tree->tree_title_html; ?>
-										</a>
-									</td>
-									<td><?php echo KT_I18N::translate('Day'); ?></td>
-									<td class="text-right"><?php echo KT_Query_Admin::countIndiChangesToday($tree->tree_id); ?></td>
-									<td class="text-right"><?php echo KT_Query_Admin::countFamChangesToday($tree->tree_id); ?></td>
-									<td class="text-right"><?php echo KT_Query_Admin::countSourChangesToday($tree->tree_id); ?></td>
-									<td class="text-right"><?php echo KT_Query_Admin::countRepoChangesToday($tree->tree_id); ?></td>
-									<td class="text-right"><?php echo KT_Query_Admin::countObjeChangesToday($tree->tree_id); ?></td>
-									<td class="text-right"><?php echo KT_Query_Admin::countNoteChangesToday($tree->tree_id); ?></td>
+									<th colspan="2"><?php echo KT_I18N::translate('Family tree'); ?></th>
+									<th class="text-right"><?php echo KT_I18N::translate('Individuals'); ?></th>
+									<th class="text-right"><?php echo KT_I18N::translate('Families'); ?></th>
+									<th class="text-right"><?php echo KT_I18N::translate('Sources'); ?></th>
+									<th class="text-right"><?php echo KT_I18N::translate('Repositories'); ?></th>
+									<th class="text-right"><?php echo KT_I18N::translate('Media objects'); ?></th>
+									<th class="text-right"><?php echo KT_I18N::translate('Notes'); ?></th>
 								</tr>
-								<tr>
-									<td><?php echo KT_I18N::translate('Week'); ?></td>
-									<td class="text-right"><?php echo KT_Query_Admin::countIndiChangesWeek($tree->tree_id); ?></td>
-									<td class="text-right"><?php echo KT_Query_Admin::countFamChangesWeek($tree->tree_id); ?></td>
-									<td class="text-right"><?php echo KT_Query_Admin::countSourChangesWeek($tree->tree_id); ?></td>
-									<td class="text-right"><?php echo KT_Query_Admin::countRepoChangesWeek($tree->tree_id); ?></td>
-									<td class="text-right"><?php echo KT_Query_Admin::countObjeChangesWeek($tree->tree_id); ?></td>
-									<td class="text-right"><?php echo KT_Query_Admin::countNoteChangesWeek($tree->tree_id); ?></td>
-								</tr>
-								<tr>
-									<td><?php echo KT_I18N::translate('Month'); ?></td>
-									<td class="text-right"><?php echo KT_Query_Admin::countIndiChangesMonth($tree->tree_id); ?></td>
-									<td class="text-right"><?php echo KT_Query_Admin::countFamChangesMonth($tree->tree_id); ?></td>
-									<td class="text-right"><?php echo KT_Query_Admin::countSourChangesMonth($tree->tree_id); ?></td>
-									<td class="text-right"><?php echo KT_Query_Admin::countRepoChangesMonth($tree->tree_id); ?></td>
-									<td class="text-right"><?php echo KT_Query_Admin::countObjeChangesMonth($tree->tree_id); ?></td>
-									<td class="text-right"><?php echo KT_Query_Admin::countNoteChangesMonth($tree->tree_id); ?></td>
-								</tr>
-							<?php } ?>
-						</tbody>
-					</table>
+							</thead>
+							<tbody>
+								<?php foreach (KT_Tree::getAll() as $tree) { ?>
+									<tr>
+										<td rowspan="3">
+											<a href="index.php?ged=<?php echo $tree->tree_name_url; ?>">
+												<?php echo $tree->tree_name_html; ?>
+												-
+												<?php echo $tree->tree_title_html; ?>
+											</a>
+										</td>
+										<td><?php echo KT_I18N::translate('Day'); ?></td>
+										<td class="text-right"><?php echo KT_Query_Admin::countIndiChangesToday($tree->tree_id); ?></td>
+										<td class="text-right"><?php echo KT_Query_Admin::countFamChangesToday($tree->tree_id); ?></td>
+										<td class="text-right"><?php echo KT_Query_Admin::countSourChangesToday($tree->tree_id); ?></td>
+										<td class="text-right"><?php echo KT_Query_Admin::countRepoChangesToday($tree->tree_id); ?></td>
+										<td class="text-right"><?php echo KT_Query_Admin::countObjeChangesToday($tree->tree_id); ?></td>
+										<td class="text-right"><?php echo KT_Query_Admin::countNoteChangesToday($tree->tree_id); ?></td>
+									</tr>
+									<tr>
+										<td><?php echo KT_I18N::translate('Week'); ?></td>
+										<td class="text-right"><?php echo KT_Query_Admin::countIndiChangesWeek($tree->tree_id); ?></td>
+										<td class="text-right"><?php echo KT_Query_Admin::countFamChangesWeek($tree->tree_id); ?></td>
+										<td class="text-right"><?php echo KT_Query_Admin::countSourChangesWeek($tree->tree_id); ?></td>
+										<td class="text-right"><?php echo KT_Query_Admin::countRepoChangesWeek($tree->tree_id); ?></td>
+										<td class="text-right"><?php echo KT_Query_Admin::countObjeChangesWeek($tree->tree_id); ?></td>
+										<td class="text-right"><?php echo KT_Query_Admin::countNoteChangesWeek($tree->tree_id); ?></td>
+									</tr>
+									<tr>
+										<td><?php echo KT_I18N::translate('Month'); ?></td>
+										<td class="text-right"><?php echo KT_Query_Admin::countIndiChangesMonth($tree->tree_id); ?></td>
+										<td class="text-right"><?php echo KT_Query_Admin::countFamChangesMonth($tree->tree_id); ?></td>
+										<td class="text-right"><?php echo KT_Query_Admin::countSourChangesMonth($tree->tree_id); ?></td>
+										<td class="text-right"><?php echo KT_Query_Admin::countRepoChangesMonth($tree->tree_id); ?></td>
+										<td class="text-right"><?php echo KT_Query_Admin::countObjeChangesMonth($tree->tree_id); ?></td>
+										<td class="text-right"><?php echo KT_Query_Admin::countNoteChangesMonth($tree->tree_id); ?></td>
+									</tr>
+								<?php } ?>
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
 
-<?php
+<?php pageClose();
+
 // Delete a file or folder, ignoring errors
 function delete_recursively($path) {
 	@chmod($path, 0777);

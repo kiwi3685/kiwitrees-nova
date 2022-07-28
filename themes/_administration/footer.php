@@ -26,16 +26,15 @@ if (!defined('KT_KIWITREES')) {
 	exit;
 }
 ?>
-		 <!-- close the content-container -->
-		</div>
-	<!-- close the admin-content -->
-	</div>
- <!-- close the admin-container -->
 </div>
-<footer class="grid-x grid-padding-x grid-padding-y">
-	<div class="cell logo">
-		<a href="<?php echo KT_KIWITREES_URL; ?>" target="_blank" rel="noopener noreferrer" title="<?php echo KT_KIWITREES_URL; ?>">
-			<?php echo /*I18N: kiwitrees logo on page footer */ KT_I18N::translate('Powered by %s', KT_KIWITREES); ?><span>&trade;</span>
-		</a>
+</main>
+
+<footer class="cell">
+	<div class="grid-x grid-padding-x grid-padding-y">
+		<div class="cell logo">
+			<a href="<?php echo KT_KIWITREES_URL; ?>" target="_blank" rel="noopener noreferrer" title="<?php echo KT_KIWITREES_URL; ?>">
+				<?php echo /*I18N: kiwitrees logo on page footer */ KT_I18N::translate('Powered by %s', KT_KIWITREES); ?><span>&trade;</span>
+			</a>
+		</div>
 	</div>
 </footer>
