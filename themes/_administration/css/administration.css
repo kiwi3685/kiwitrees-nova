@@ -9343,6 +9343,10 @@ label.radio_inline {
 	padding-left: 1.25rem;
 }
 
+a:hover {
+	color: #5da423;
+}
+
 button {
 	min-width: 6rem;
 }

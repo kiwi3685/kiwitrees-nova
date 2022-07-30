@@ -48,13 +48,11 @@ if ($action == 'update_mods' && KT_Filter::checkCsrf()) {
 	}
 }
 
-?>
-<div id="charts" class="cell">
-	<div class="grid-x grid-margin-x">
-		<form class="cell" method="post" action="<?php echo KT_SCRIPT_NAME; ?>">
+echo pageStart('charts', $controller->getPageTitle()); ?>
+
+	<form class="cell" method="post" action="<?php echo KT_SCRIPT_NAME; ?>">
 			<input type="hidden" name="action" value="update_mods">
 			<?php echo KT_Filter::getCsrf(); ?>
-			<h4><?php echo $controller->getPageTitle(); ?></h4>
 			<div class="grid-x show-for-medium">
 				<div class="cell medium-10">
 					<div class="cell callout warning helpcontent">
@@ -127,5 +125,5 @@ if ($action == 'update_mods' && KT_Filter::checkCsrf()) {
 				<?php echo KT_I18N::translate('Save'); ?>
 			</button>
 		</form>
-	</div>
-</div>
+
+<?php pageClose();
