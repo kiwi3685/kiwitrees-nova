@@ -36,93 +36,135 @@ $controller
  * Array of Module menu items
  * $module_cats [array]
  */
-$modules = array(
+$module_cat = array(
+	"admin_modules.php"		=> array(
+	   KT_I18N::translate('Module administration'),
+	   KT_I18N::translate('A sortable list of all available modules.<br>Enable or disable them to suit your preferences.'),
+	   KT_I18N::translate('Administrator access only'),
+	   'alert',
+	   ''
+   ),
 	"admin_module_menus.php"		=> array(
 	   KT_I18N::translate('Top level menu items'),
-	   KT_I18N::translate(''),
+	   '',
 	   KT_I18N::translate('Administrator access only'),
-	   'alert'
+	   'alert',
+	   'Top menu.png'
    ),
+   "admin_module_blocks.php"	=> array(
+	  KT_I18N::translate('Home page blocks'),
+	  '',
+	  KT_I18N::translate('Administrator access only'),
+	  'alert',
+	  'Home blocks.png'
+  ),
+	"admin_module_footers.php"	=> array(
+		KT_I18N::translate('Footer blocks'),
+		'',
+		KT_I18N::translate('Administrator access only'),
+		'alert',
+		'Footer blocks.png'
+	),
+	 "admin_module_widgets.php"	=> array(
+		KT_I18N::translate('Widget bar modules'),
+		'',
+		KT_I18N::translate('Administrator access only'),
+		'alert',
+		'Widget blocks.png'
+	),
 	"admin_module_tabs_indi.php"	=> array(
-	   KT_I18N::translate('Tabs for individual page'),
-	   KT_I18N::translate(''),
-	   KT_I18N::translate('Administrator access only'),
-	   'alert'
-   ),
-	"admin_module_blocks.php"	=> array(
-	   KT_I18N::translate('Home page blocks'),
-	   KT_I18N::translate(''),
-	   KT_I18N::translate('Administrator access only'),
-	   'alert'
-   ),
-	"admin_module_widgets.php"	=> array(
-	   KT_I18N::translate('Widget bar modules'),
-	   KT_I18N::translate(''),
-	   KT_I18N::translate('Administrator access only'),
-	   'alert'
+		KT_I18N::translate('Tabs for individual page'),
+		'',
+		KT_I18N::translate('Administrator access only'),
+		'alert',
+		'Indi tabs.png'
    ),
 	"admin_module_sidebar.php"	=> array(
-	   KT_I18N::translate('Sidebar modules'),
-	   KT_I18N::translate(''),
-	   KT_I18N::translate('Administrator access only'),
-	   'alert'
+		KT_I18N::translate('Sidebar modules'),
+		'',
+		KT_I18N::translate('Administrator access only'),
+		'alert',
+		'Sidebar modules.png'
    ),
-	"admin_module_reports.php"	=> array(
-	   KT_I18N::translate('Menu - Report items'),
-	   KT_I18N::translate(''),
+   "admin_module_tabs_fam.php"	=> array(
+	   KT_I18N::translate('Tabs for family page'),
+	   '',
 	   KT_I18N::translate('Administrator access only'),
-	   'alert'
-   ),
-	"admin_module_charts.php"	=> array(
-	   KT_I18N::translate('Menu - Chart items'),
-	   KT_I18N::translate(''),
-	   KT_I18N::translate('Administrator access only'),
-	   'alert'
-   ),
+	   'alert',
+	   'Family tabs.png'
+  ),
+   "admin_module_charts.php"	=> array(
+		KT_I18N::translate('Menu - Chart items'),
+		'',
+		KT_I18N::translate('Administrator access only'),
+		'alert',
+		'Chart menus.png'
+  ),
 	"admin_module_lists.php"	=> array(
 	   KT_I18N::translate('Menu - List  items'),
-	   KT_I18N::translate(''),
+	   '',
 	   KT_I18N::translate('Administrator access only'),
-	   'alert'
+	   'alert',
+	   'List menus.png'
    ),
-	"admin_module_footers.php"	=> array(
-	   KT_I18N::translate('Footer blocks'),
-	   KT_I18N::translate(''),
-	   KT_I18N::translate('Administrator access only'),
-	   'alert'
-   ),
-	"admin_module_tabs_fam.php"	=> array(
-	   KT_I18N::translate('Tabs for family page'),
-	   KT_I18N::translate(''),
-	   KT_I18N::translate('Administrator access only'),
-	   'alert'
-   ),
+	"admin_module_reports.php"	=> array(
+		KT_I18N::translate('Menu - Report items'),
+		'',
+		KT_I18N::translate('Administrator access only'),
+		'alert',
+ 	   'Report menus.png'
+  ),
 );
-asort($modules);
 
 echo pageStart('modules_admin', $controller->getPageTitle()); ?>
 
 	<div class="cell callout warning help_content">
 		<?php echo KT_I18N::translate('
-			Enable modules, set access levels, and adjust their locations.
+			Enable or disable modules, set access levels, and adjust their locations.
 		'); ?>
 	</div>
 	<div class="cell">
 		<div class="grid-x grid-margin-x grid-margin-y">
-			<?php foreach ($modules as $title => $file) { ?>
+			<?php $x = 1;
+			foreach ($module_cat as $title => $file) { ?>
 				<div class="card cell">
 					<div class="card-divider">
 						<a href="<?php echo $title; ?>">
 							<?php echo $file[0]; ?>
 						</a>
-						<span class="<?php echo $file[3]; ?>" data-tooltip title="<?php echo $file[2]; ?>" data-position="top" data-alignment="right"><i class="<?php echo $iconStyle; ?> fa-user"></i>
+						<span class="<?php echo $file[3]; ?>" data-tooltip title="<?php echo $file[2]; ?>" data-position="top" data-alignment="right">
+							<i class="<?php echo $iconStyle; ?> fa-user"></i>
+						</span>
 					</div>
 					<div class="card-section">
-						<?php echo $file[1]; ?>
+						<?php if($title == 'admin_modules.php') {
+							echo $file[1];
+						} else { ?>
+							<a class="thumbnail" href="#" data-open="moduleImage<?php echo $x; ?>">
+								<img src="<?php echo KT_THEME_DIR . 'images/module-categories/' . $file[4]; ?>" alt="<?php echo $file[1]; ?>">
+							</a>
+						<?php } ?>
 					</div>
 				</div>
-			<?php } ?>
+				<!-- hidden reveal - main image -->
+				<div class="reveal" id="moduleImage<?php echo $x; ?>" data-reveal>
+					<h6 class="text-center">
+						<?php echo $file[0]; ?>
+						<button class="close-button" aria-label="Dismiss image" type="button" data-close>
+							<span aria-hidden="true">
+								<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
+							</span>
+						</button>
+					</h6>
+					<img src="<?php echo KT_THEME_DIR . 'images/module-categories/' . $file[4]; ?>">
+				</div>
+				<?php $x ++;
+			} ?>
 		</div>
 	</div>
+
+
+
+
 
 <?php pageClose();
