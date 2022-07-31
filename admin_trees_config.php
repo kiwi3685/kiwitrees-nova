@@ -1313,7 +1313,7 @@ global $iconstyles;
 								<p><i class="fi-alert"></i><?php echo /* I18N: A general error message for forms */ KT_I18N::translate('There are some errors in your form.'); ?></p>
 							</div>
 							<ul class="cell accordion" data-accordion data-allow-all-closed="true">
-								<li class="accordion-item is-active" data-accordion-item> <!--  Chart settings  -->
+								<li class="accordion-item" data-accordion-item> <!--  Chart settings  -->
 									<a href="#" class="accordion-title"><?php echo KT_I18N::translate('Chart settings'); ?></a>
 									<div class="accordion-content" data-tab-content>
 										<div class="grid-x grid-margin-x">
