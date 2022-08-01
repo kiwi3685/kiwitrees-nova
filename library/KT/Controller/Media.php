@@ -78,7 +78,7 @@ class KT_Controller_Media extends KT_Controller_GedcomRecord {
 		// edit menu
 		$menu = new KT_Menu(KT_I18N::translate('Edit'), 'addmedia.php?action=editmedia&amp;pid=' . $this->record->getXref(), 'menu-obje');
 		$menu->addTarget('_blank');
-		$menu->addClass('', '', 'fa-edit');
+		$menu->addClass('', '', 'fa-pen-to-square');
 
 		if (KT_USER_CAN_EDIT) {
 			$submenu = new KT_Menu(KT_I18N::translate('Edit media object'), 'addmedia.php?action=editmedia&amp;pid=' . $this->record->getXref(), 'menu-obje-edit');
@@ -168,7 +168,7 @@ class KT_Controller_Media extends KT_Controller_GedcomRecord {
 			$html .= $menu->getMenuAsList();
 
 			$menu = new KT_Menu(KT_I18N::translate('Edit details'), 'addmedia.php?action=editmedia&amp;pid=' . $mediaobject->getXref(), 'menu-obje-edit');
-			$menu->addClass('', '', 'fa-edit');
+			$menu->addClass('', '', 'fa-pen-to-square');
 			$menu->addTarget('_blank');
 			$html .= $menu->getMenuAsList();
 		$html .= '</ul>';

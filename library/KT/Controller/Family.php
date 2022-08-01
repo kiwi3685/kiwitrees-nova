@@ -119,7 +119,7 @@ class KT_Controller_Family extends KT_Controller_GedcomRecord {
 		// edit menu
 		$menu = new KT_Menu(KT_I18N::translate('Edit'), '#', 'menu-fam');
 		$menu->addLabel($menu->label, 'down');
-		$menu->addClass('', '', 'fa-edit');
+		$menu->addClass('', '', 'fa-pen-to-square');
 
 		if (KT_USER_CAN_EDIT) {
 			// edit_fam / members

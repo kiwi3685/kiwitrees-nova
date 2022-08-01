@@ -9830,7 +9830,7 @@ div[id$=-page] button[type=submit] {
 #indi-page .indiHeader span.link_text {
 	font-size: 0.9rem;
 }
-#indi-page .indiHeader svg.fa-edit {
+#indi-page .indiHeader svg.fa-pen-to-square {
 	margin-right: 0.35rem;
 }
 #indi-page .indiHeader label {

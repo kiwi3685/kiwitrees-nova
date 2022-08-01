@@ -220,7 +220,7 @@ class tabi_dna_KT_Module extends KT_Module implements KT_Module_IndiTab {
 								</td>
 								<td>
 									<a href="#" onclick="window.open('module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=edit-dna&amp;pid=<?php echo $xref; ?>&amp;ged=<?php echo KT_GEDCOM; ?>&amp;dna-id=<?php echo $row->dna_id; ?>', '_blank')" title="<?php echo KT_I18N::translate('Edit DNA data'); ?>">
-										<i class="<?php echo $iconStyle; ?> fa-edit fa-lg"></i>
+										<i class="<?php echo $iconStyle; ?> fa-pen-to-square fa-lg"></i>
 									</a>
 								</td>
 								<?php //-- Select & delete

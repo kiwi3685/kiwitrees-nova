@@ -75,7 +75,7 @@ class KT_Controller_Note extends KT_Controller_GedcomRecord {
 
 		// edit menu
 		$menu = new KT_Menu(KT_I18N::translate('Edit'), '#', 'menu-note');
-		$menu->addClass('', '', 'fa-edit');
+		$menu->addClass('', '', 'fa-pen-to-square');
 
 		if (KT_USER_CAN_EDIT) {
 			$submenu = new KT_Menu(KT_I18N::translate('Edit note'), '#', 'menu-note-edit');

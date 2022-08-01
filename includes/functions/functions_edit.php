@@ -1638,7 +1638,7 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 						<?php echo htmlspecialchars($value); ?>
 					</span>
 					<a href="#edit_name" onclick="convertHidden(\'<?php echo $element_id; ?>\'); return false;" title="<?php echo KT_I18N::translate('Edit name'); ?>">
-						<i class="<?php echo $iconStyle; ?> fa-edit"></i>
+						<i class="<?php echo $iconStyle; ?> fa-pen-to-square"></i>
 					</a>
 				<?php } else { ?>
 					<!-- textarea -->

@@ -157,7 +157,7 @@ function print_fact(KT_Event $fact, KT_GedcomRecord $record) {
 				<?php if (KT_USER_CAN_EDIT && $styleadd != 'change_old' && $fact->getLineNumber() > 0 && $fact->canEdit()) { ?>
 					<div class="editfacts button-group">
 						<a class="button clear" onclick="return edit_record('<?php echo $pid; ?>', <?php echo $fact->getLineNumber(); ?>);">
-							<i class="<?php echo $iconStyle; ?> fa-edit"></i>
+							<i class="<?php echo $iconStyle; ?> fa-pen-to-square"></i>
 							<span class="link_text" tabindex="1" title="<?php echo KT_I18N::translate('Edit'); ?>">
 								<?php echo KT_I18N::translate('Edit'); ?>
 							</span>
@@ -872,7 +872,7 @@ function print_timeline(KT_Event $fact, KT_GedcomRecord $record) {
 					<?php if (KT_USER_CAN_EDIT && $styleadd != 'change_old' && $fact->getLineNumber() > 0 && $fact->canEdit()) { ?>
 						<div class="editfacts button-group stacked">
 							<a class="button clear" onclick="return edit_record('<?php echo $pid; ?>', <?php echo $fact->getLineNumber(); ?>);">
-								<i class="<?php echo $iconStyle; ?> fa-edit"></i>
+								<i class="<?php echo $iconStyle; ?> fa-pen-to-square"></i>
 								<span class="link_text show-for-large" tabindex="1" title="<?php echo KT_I18N::translate('Edit'); ?>">
 									<?php echo KT_I18N::translate('Edit'); ?>
 								</span>
@@ -1208,7 +1208,7 @@ function print_attributes(KT_Event $fact, KT_GedcomRecord $record) {
 					<?php if (KT_USER_CAN_EDIT && $styleadd != 'change_old' && $fact->getLineNumber() > 0 && $fact->canEdit()) { ?>
 						<div class="editfacts button-group stacked">
 							<a class="button clear" onclick="return edit_record('<?php echo $pid; ?>', <?php echo $fact->getLineNumber(); ?>);">
-								<i class="<?php echo $iconStyle; ?> fa-edit"></i>
+								<i class="<?php echo $iconStyle; ?> fa-pen-to-square"></i>
 								<span class="link_text show-for-large" tabindex="1" title="<?php echo KT_I18N::translate('Edit'); ?>">
 									<?php echo KT_I18N::translate('Edit'); ?>
 								</span>
@@ -1242,7 +1242,7 @@ function print_edit_icons() {
 			<?php if (KT_USER_CAN_EDIT && $styleadd != 'change_old' && $fact->getLineNumber() > 0 && $fact->canEdit()) { ?>
 				<div class="editfacts button-group stacked">
 					<a class="button clear" onclick="return edit_record('<?php echo $pid; ?>', <?php echo $fact->getLineNumber(); ?>);">
-						<i class="<?php echo $iconStyle; ?> fa-edit"></i>
+						<i class="<?php echo $iconStyle; ?> fa-pen-to-square"></i>
 						<span class="link_text show-for-large" tabindex="1" title="<?php echo KT_I18N::translate('Edit'); ?>">
 							<?php echo KT_I18N::translate('Edit'); ?>
 						</span>

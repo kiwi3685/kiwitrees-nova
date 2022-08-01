@@ -257,7 +257,7 @@ $controller
 												onclick="edit_place_location(<?php echo $place['place_id']; ?>);return false;"
 												title="<?php echo KT_I18N::translate('Edit'); ?>"
 											>
-												<i class="<?php echo $iconStyle; ?> fa-edit"></i>
+												<i class="<?php echo $iconStyle; ?> fa-pen-to-square"></i>
 											</a>
 										</div>
 									</td>

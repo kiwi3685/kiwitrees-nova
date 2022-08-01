@@ -233,7 +233,7 @@ switch (KT_Filter::get('action')) {
 			$user_id	= $aData[1];
 			$username	= $aData[2];
 
-			$aData[0] = '<a href="?action=edit&amp;user_id=' . $user_id . '" title="'. KT_I18N::translate('Edit user').'"><i class="' . $iconStyle . ' fa-edit"></i></a>';
+			$aData[0] = '<a href="?action=edit&amp;user_id=' . $user_id . '" title="'. KT_I18N::translate('Edit user').'"><i class="' . $iconStyle . ' fa-pen-to-square"></i></a>';
 			// $aData[1] is the user ID (not displayed)
 			// $aData[2] is the username
 			$aData[2] = '<a href="?action=edit&amp;user_id=' . $user_id . '" title="'. KT_I18N::translate('Edit user').'"><span dir="auto">' . KT_Filter::escapeHtml($aData[2]) . '</span></a>';

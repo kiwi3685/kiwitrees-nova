@@ -122,7 +122,7 @@ $controller->pageHeader(); ?>
 							<?php echo KT_I18N::translate('Shared note'); ?></a>
 							<div class="editfacts button-group">
 								<a class="button clear has-tip" onclick="return edit_note('<?php echo $controller->record->getXref(); ?>')" title="<?php echo KT_I18N::translate('Edit'); ?>" data-tooltip aria-haspopup="true" data-click-open="false" data-disable-hover="false">
-									<i class="fas fa-edit"></i>
+									<i class="fas fa-pen-to-square"></i>
 									<span class="link_text"><?php echo KT_I18N::translate('Edit'); ?></span>
 								</a>
 							</div>

@@ -249,7 +249,7 @@ class KT_Controller_Individual extends KT_Controller_GedcomRecord {
 							<div class="editlink">
 								<a href="edit_interface.php?action=editname&amp;pid=<?php echo $this->record->getXref(); ?>&amp;linenum=<?php echo $linenum; ?>&amp;accesstime=<?php echo KT_TIMESTAMP; ?>&amp;ged=<?php echo KT_GEDCOM; ?>" target="_blank" title="<?php echo KT_I18N::translate('Edit name'); ?>">
 									<span class="link_text"><?php echo KT_I18N::translate('Edit name'); ?></span>
-									<i class="<?php echo $iconStyle; ?> fa-edit"></i>
+									<i class="<?php echo $iconStyle; ?> fa-pen-to-square"></i>
 								</a>
 							</div>
 							<div class="deletelink">
@@ -349,7 +349,7 @@ class KT_Controller_Individual extends KT_Controller_GedcomRecord {
 		// edit menu
 		$menu = new KT_Menu(KT_I18N::translate('Edit'), '#', 'menu-indi');
 		$menu->addLabel($menu->label, 'down');
-		$menu->addClass('', '', 'fa-edit');
+		$menu->addClass('', '', 'fa-pen-to-square');
 
 		$this->getGlobalFacts(); // sets NAME_LINENUM and SEX_LINENUM.  individual.php doesn't do it early enough for us....
 

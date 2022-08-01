@@ -575,7 +575,7 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 													</td>
 													<td class="text-center">
 														<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit&amp;block_id=<?php echo $story->block_id; ?>">
-															<i class="<?php echo $iconStyle; ?> fa-edit"></i>
+															<i class="<?php echo $iconStyle; ?> fa-pen-to-square"></i>
 														</a>
 													</td>
 													<td class="text-center">

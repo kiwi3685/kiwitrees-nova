@@ -320,7 +320,7 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 															<input type="number" size="3" value="<?php echo $item->block_order; ?>" name="order-<?php echo $item->block_id; ?>">
 														</td>
 														<td class="text-center">
-															<!--edit--><a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit&amp;block_id=<?php echo $item->block_id; ?>"><i class="<?php echo $iconStyle; ?> fa-edit"></i></a>
+															<!--edit--><a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit&amp;block_id=<?php echo $item->block_id; ?>"><i class="<?php echo $iconStyle; ?> fa-pen-to-square"></i></a>
 														</td>
 														<td class="text-center">
 															<!--delete--><a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_delete&amp;block_id=<?php echo $item->block_id; ?>" onclick="return confirm('<?php echo KT_I18N::translate('Are you sure you want to delete this page?'); ?>');"><i class="<?php echo $iconStyle; ?> fa-trash-can"></i></a>

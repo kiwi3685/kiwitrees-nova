@@ -107,7 +107,7 @@ class tabi_census_KT_Module extends KT_Module implements KT_Module_IndiTab {
 											<td>
 												<div class="editfacts button-group stacked">
 													<a class="button clear" onclick="return edit_record('<?php echo $xref; ?>', <?php echo $fact->getLineNumber(); ?>);" title="<?php echo KT_I18N::translate('Edit'); ?>">
-														<i class="<?php echo $iconStyle; ?> fa-edit"></i>
+														<i class="<?php echo $iconStyle; ?> fa-pen-to-square"></i>
 														<span class="link_text" tabindex="1">
 															<?php echo KT_I18N::translate('Edit'); ?>
 														</span>
