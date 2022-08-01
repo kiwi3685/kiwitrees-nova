@@ -26,6 +26,9 @@
  	exit;
  }
 
+ global $ALL_CAPS, $iconStyle;
+ include 'templates/commonElements.php';
+
  $this
  	->addExternalJavascript (KT_JQUERY_COLORBOX_URL)
  	->addExternalJavascript (KT_JQUERY_WHEELZOOM_URL)
@@ -33,8 +36,11 @@
  	->addInlineJavascript ('
  		activate_colorbox();
  		jQuery.extend(jQuery.colorbox.settings, {
- 			slideshowStart	:"' . KT_I18N::translate('Play') . '",
+ 		    slideshowStart	:"' . KT_I18N::translate('Play') . '",
  			slideshowStop	:"' . KT_I18N::translate('Stop') . '",
+            previous        :"<i class=\"' . $iconStyle . ' fa-angle-left\"></i>",
+            next            :"<i class=\"' . $iconStyle . ' fa-angle-right\"></i>",
+            close           :"<i class=\"' . $iconStyle . ' fa-xmark\"></i>",
  		});
  		// Add colorbox to pdf-files
  		jQuery("body").on("click", "a.gallery", function(event) {
@@ -50,9 +56,6 @@
 
  		jQuery("textarea").autosize();
  	');
-
- global $ALL_CAPS, $iconStyle;
- include 'templates/commonElements.php';
 
  if ($ALL_CAPS) {
  	$this->addInlineJavascript('all_caps();');

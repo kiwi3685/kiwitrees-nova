@@ -441,7 +441,7 @@ class KT_Media extends KT_GedcomRecord {
 
 		return
 			'<a' .
-			' class="'          . 'gallery'                          . '"' .
+			' class="'          . 'gallery thumbnail'                          . '"' .
 			' href="'           . $this->getHtmlUrlDirect('main')    . '"' .
 			' type="'           . $this->mimeType()                  . '"' .
 			' data-obje-url="'  . $this->getHtmlUrl()                . '"' .
