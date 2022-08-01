@@ -70,7 +70,6 @@ class tabi_attributes_KT_Module extends KT_Module implements KT_Module_IndiTab {
 	// Implement KT_Module_IndiTab
 	public function getTabContent() {
 		global $controller,$SHOW_COUNTER, $SEARCH_SPIDER;
-		require_once KT_ROOT . KT_MODULES_DIR . $this->getName() . '/functions/functions.php';
 
 		ob_start();
 			$indifacts = $controller->getIndiFacts();
@@ -91,8 +90,7 @@ class tabi_attributes_KT_Module extends KT_Module implements KT_Module_IndiTab {
 					<?php echo KT_I18N::translate('There are no attributes for this individual.'); ?>
 				</div>
 			<?php } else { ?>
-				<div class="cell tabHeader">
-				</div>
+				<div class="cell tabHeader"></div>
 				<div class="cell show-for-medium indiFactHeader">
 					<div class="grid-x">
 						<div class="cell medium-3 event">
@@ -108,6 +106,7 @@ class tabi_attributes_KT_Module extends KT_Module implements KT_Module_IndiTab {
 						<?php } ?>
 					</div>
 				</div>
+				<!-- Xref id -->
 				<div class="cell indiFact">
 					<div class="grid-x">
 						<div class="cell small-10 medium-3 small-order-1 medium-order-1 event">
@@ -118,16 +117,7 @@ class tabi_attributes_KT_Module extends KT_Module implements KT_Module_IndiTab {
 						</div>
 					</div>
 				</div>
-				<div class="cell indiFact">
-					<div class="grid-x">
-						<div class="cell small-10 medium-3 small-order-1 medium-order-1 event">
-							<span class="h6"><?php echo $hitData['label']; ?></span>
-						</div>
-						<div class="cell <?php echo (KT_USER_CAN_EDIT ? 'small-10 medium-8' : 'auto'); ?> small-order-5 medium-order-4 detail">
-							<?php echo $hitData['detail']; ?>
-						</div>
-					</div>
-				</div>
+				<!-- Privacy status -->
 				<div class="cell indiFact">
 					<div class="grid-x">
 						<div class="cell small-10 medium-3 small-order-1 medium-order-1 event">
@@ -138,28 +128,26 @@ class tabi_attributes_KT_Module extends KT_Module implements KT_Module_IndiTab {
 						</div>
 					</div>
 				</div>
-
-
-
-
-				<?php foreach ($indifacts as $fact) {
+				<?php
+				//- All GEDCOM attribute facts -//
+				foreach ($indifacts as $fact) {
 					if (KT_Gedcom_Tag::isTagAttribute($fact->getTag())) {
-						$data = print_attributes($fact, $controller->record); ?>
-
-						<div class="cell indiFact">
-							<div class="grid-x">
-								<div class="cell small-10 medium-3 small-order-1 medium-order-1 event">
-									<span class="h6"><?php echo $data['label']; ?></span>
-								</div>
-								<div class="cell <?php echo (KT_USER_CAN_EDIT ? 'small-10 medium-8' : 'auto'); ?> small-order-5 medium-order-4 detail">
-									<?php echo $data['detail']; ?>
-								</div>
-							</div>
-						</div>
-
-					<?php }
+						print_attributes($fact, $controller->record);
+					}
 				}
-
+				?>
+				<!-- Hit count -->
+				<div class="cell indiFact">
+					<div class="grid-x">
+						<div class="cell small-10 medium-3 small-order-1 medium-order-1 event">
+							<span class="h6"><?php echo $hitData['label']; ?></span>
+						</div>
+						<div class="cell <?php echo (KT_USER_CAN_EDIT ? 'small-10 medium-8' : 'auto'); ?> small-order-5 medium-order-4 detail">
+							<?php echo $hitData['detail']; ?>
+						</div>
+					</div>
+				</div>
+				<?php
 				//-- new fact link
 				if ($controller->record->canEdit()) {
 					print_add_new_fact($controller->record->getXref(), $indifacts, 'INDI_ATTRIB');
@@ -197,7 +185,7 @@ class tabi_attributes_KT_Module extends KT_Module implements KT_Module_IndiTab {
 	            $html .= '<dd>' . $this->isDeadDetail() . '</dd>';
 	        } else {
 	            $html .= '<dt>' . KT_I18N::translate('Living') . help_link('privacy_status', $this->getName()) . '</dt>';
-	            $html .= '<dd>' . $this->isDead() . '</dd>';
+	            $html .= '<dd>' . $this->isDeadDetail() . '</dd>';
 	        }
 	        $death_dates[0]=new KT_Date('');
 	    }

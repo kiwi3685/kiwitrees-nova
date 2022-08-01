@@ -132,10 +132,7 @@ class tabi_events_KT_Module extends KT_Module implements KT_Module_IndiTab {
 						// Print all family facts
 						print_timeline($fact, $controller->record);
 					} else {
-						// Individual/reference facts (e.g. CHAN, IDNO, RFN, AFN, REFN, RIN, _UID) can be shown in the sidebar
-//						if (!array_key_exists('extra_info', KT_Module::getActiveSidebars()) || !extra_info_KT_Module::showFact($fact)) {
-							print_timeline($fact, $controller->record);
-//						}
+						print_timeline($fact, $controller->record);
 					}
 				}
 				//-- new fact link

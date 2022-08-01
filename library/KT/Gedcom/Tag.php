@@ -31,7 +31,7 @@ class KT_Gedcom_Tag {
 	// All attribute tags that kiwitrees knows how to translate - including special/internal tags
 	// Only include tags that can be used at level 1 in a record
 	private static $ALL_ATTRIB_TAGS = array(
-		'AFN', 'CAST', 'CHAN', 'CHAN:DATE', 'CHAN:_KT_USER', 'FACT', 'IDNO', 'REFN', 'RFN', 'RIN', 'SSN', '_HAIR', '_HEIG', '_UID',
+		'AFN', 'CAST', 'CHAN', 'FACT', 'IDNO', 'REFN', 'RFN', 'RIN', 'SSN', '_HAIR', '_HEIG', '_UID',
 	);
 
 	// All event tags that kiwitrees knows how to translate - including special/internal tags
@@ -50,7 +50,7 @@ class KT_Gedcom_Tag {
 		'AGNC', 'ALIA', 'ANCE', 'ANCI', 'ASSO', 'AUTH', 'BAPL:DATE', 'BAPL:PLAC',
 		'BAPM:DATE', 'BAPM:PLAC', 'BARM:PLAC', 'BASM:DATE', 'BASM:PLAC', 'BIRT:DATE',
 		'BIRT:PLAC', 'BLES:DATE', 'BLES:PLAC', 'BLOB', 'BURI:DATE', 'BURI:PLAC',
-		'CALN', 'CAUS', 'CEME', 'CENS:DATE', 'CENS:PLAC',
+		'CALN', 'CAUS', 'CEME', 'CENS:DATE', 'CENS:PLAC', 'CHAN:DATE', 'CHAN:_KT_USER', 
 		'CHAR', 'CHIL', 'CHR:DATE', 'CHR:PLAC', 'CITN', 'CITY', 'COMM', 'CONC',
 		'CONT', 'CONF:DATE', 'CONF:PLAC', 'CONL', 'COPR', 'CORP', 'CREM:DATE',
 		'CREM:PLAC', 'CTRY', 'DATA', 'DATA:DATE', 'DATE', 'DEAT:CAUS', 'DEAT:DATE',
@@ -990,12 +990,6 @@ class KT_Gedcom_Tag {
 		uasort($facts, 'utf8_strcasecmp');
 		return $facts;
 	}
-
-	// Get a list of reference facts that will be displayed in the "Extra information" sidebar module, and at the same time excluded from the factsandevents module
-	public static function getReferenceFacts() {
-		return array('CHAN', 'IDNO', 'RFN', 'AFN', 'REFN', 'RIN', '_UID', 'SSN');
-	}
-
 
 	//////////////////////////////////////////////////////////////////////////////
 	// Definitions for Object, File, Format, Types

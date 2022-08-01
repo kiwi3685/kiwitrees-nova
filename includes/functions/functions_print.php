@@ -566,7 +566,11 @@ function print_note_record($text, $nlevel, $nrec, $textOnly = false) {
 			if (KT_SCRIPT_NAME === 'note.php') {
 				$first_line = $note->getFullName();
 			} else {
-				$first_line = '<a href="' . $note->getHtmlUrl() . '">' . $note->getFullName() . '</a>';
+				$first_line = '
+					<a href="' . $note->getHtmlUrl() . '">' .
+						$note->getFullName();
+						if (KT_USER_CAN_EDIT) {echo '<i class="' . $iconStyle . ' fa-pencil"></i>';}
+					'</a>';
 				$revealText	= $note->getFullName();
 			}
 
@@ -575,7 +579,10 @@ function print_note_record($text, $nlevel, $nrec, $textOnly = false) {
 				if (KT_SCRIPT_NAME === 'note.php') {
 					$first_line = $match[0];
 				} else {
-					$first_line = '<a href="' . $note->getHtmlUrl() . '">' . $match[0] . '</a>';
+					$first_line = '
+						<a href="' . $note->getHtmlUrl() . '">' .
+							$match[0] . '
+						</a>';
 				}
 				$html = preg_replace('/<span id="title">.*<\/span>/', '', $html);
 			}

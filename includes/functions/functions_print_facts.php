@@ -902,9 +902,6 @@ function print_timeline(KT_Event $fact, KT_GedcomRecord $record) {
 function print_attributes(KT_Event $fact, KT_GedcomRecord $record) {
 	global $HIDE_GEDCOM_ERRORS, $SHOW_FACT_ICONS, $iconStyle ;
 
-	$label	= '';
-	$detail	= '';
-
 	if (!$fact->canShow()) {
 		return;
 	}
@@ -965,110 +962,277 @@ function print_attributes(KT_Event $fact, KT_GedcomRecord $record) {
 			// Normal fact/event
 			$label = KT_Gedcom_Tag::getLabel($fact->getTag(), $label_person);
 			break;
-	}
+	} ?>
 
-	if ($SHOW_FACT_ICONS) {
-		// 	$label =  $fact->Icon() . '&nbsp;';
-	}
-	// Print the value of this fact/event
-	switch ($fact->getTag()) {
-		case 'ADDR':
-			$detail =  print_address_structure($fact->getGedcomRecord(), 1);
-		break;
-		case 'AFN':
-			$detail = '<div class="field"><a href="https://familysearch.org/search/tree/results#count=20&query=afn:' . rawurlencode($fact->getDetail()) . '" target="new">' . htmlspecialchars($fact->getDetail()) . '</a></div>';
-		break;
-		case 'ASSO':
-			// we handle this later, in print_asso_rela_record()
-		break;
-		case 'EMAIL':
-		case 'EMAI':
-		case '_EMAIL':
-			$detail = '<div class="field"><a href="mailto:' . htmlspecialchars($fact->getDetail()) . '">' . htmlspecialchars($fact->getDetail()) . '</a></div>';
-		break;
-		case 'FILE':
-			if (KT_USER_CAN_EDIT || KT_USER_CAN_ACCEPT) {
-				$detail = '<div class="field">' . htmlspecialchars($fact->getDetail()) . '</div>';
-			}
-		break;
-		case 'RESN':
-			$detail = '<div class="field">';
-				switch ($fact->getDetail()) {
-					case 'none':
-						// Note: "1 RESN none" is not valid gedcom.
-						// However, kiwitrees privacy rules will interpret it as "show an otherwise private record to public".
-						$detail = '<i class="icon-resn-none"></i> ' . KT_I18N::translate('Show to visitors');
+	<div class="cell indiFact <?php echo $styleadd; ?>">
+		<div class="grid-x">
+			<div class="cell small-10 medium-3 small-order-1 medium-order-1 event">
+				<?php if ($SHOW_FACT_ICONS) {
+					// 	echo $fact->Icon() . '&nbsp;';
+				}
+				echo  '<span class="h6">' . $label . '</span>'; ?>
+			</div>
+			<div class="cell <?php echo (KT_USER_CAN_EDIT ? 'small-10 medium-8' : 'auto'); ?> small-order-5 medium-order-4 detail">
+				<?php switch ($fact->getTag()) {
+					case 'CHAN':
+						echo htmlspecialchars($fact->getDetail());
+						echo format_fact_date($fact, $record, true, true);
 					break;
-					case 'privacy':
-						$detail = '<i class="icon-class-none"></i> ' . KT_I18N::translate('Show to members');
+					case 'ADDR':
+						echo print_address_structure($fact->getGedcomRecord(), 1);
 					break;
-					case 'confidential':
-						$detail = '<i class="icon-confidential-none"></i> ' . KT_I18N::translate('Show to managers');
+					case 'AFN':
+						echo '<div class="field"><a href="https://familysearch.org/search/tree/results#count=20&query=afn:' . rawurlencode($fact->getDetail()) . '" target="new">' . htmlspecialchars($fact->getDetail()) . '</a></div>';
 					break;
-					case 'locked':
-						$detail = '<i class="icon-locked-none"></i> ' . KT_I18N::translate('Only managers can edit');
+					case 'ASSO':
+						// we handle this later, in print_asso_rela_record()
+					break;
+					case 'EMAIL':
+					case 'EMAI':
+					case '_EMAIL':
+						echo '<div class="field"><a href="mailto:' . htmlspecialchars($fact->getDetail()) . '">' . htmlspecialchars($fact->getDetail()) . '</a></div>';
+					break;
+					case 'FILE':
+						if (KT_USER_CAN_EDIT || KT_USER_CAN_ACCEPT) {
+							echo '<div class="field">' . htmlspecialchars($fact->getDetail()) . '</div>';
+						}
+					break;
+					case 'RESN':
+						echo '<div class="field">';
+							switch ($fact->getDetail()) {
+								case 'none':
+									// Note: "1 RESN none" is not valid gedcom.
+									// However, kiwitrees privacy rules will interpret it as "show an otherwise private record to public".
+									echo '<i class="icon-resn-none"></i> ' . KT_I18N::translate('Show to visitors');
+								break;
+								case 'privacy':
+									echo '<i class="icon-class-none"></i> ' . KT_I18N::translate('Show to members');
+								break;
+								case 'confidential':
+									echo '<i class="icon-confidential-none"></i> ' . KT_I18N::translate('Show to managers');
+								break;
+								case 'locked':
+									echo '<i class="icon-locked-none"></i> ' . KT_I18N::translate('Only managers can edit');
+								break;
+								default:
+									echo htmlspecialchars($fact->getDetail());
+								break;
+							}
+						echo '</div>';
+					break;
+					case 'PUBL': // Publication details might contain URLs.
+						echo '<div class="field">' . expand_urls(htmlspecialchars($fact->getDetail())) . '</div>';
+						break;
+					case 'REPO':
+						if (preg_match('/^@('.KT_REGEX_XREF.')@$/', $fact->getDetail(), $match)) {
+							print_repository_record($match[1]);
+						} else {
+							echo '<div class="error">' . htmlspecialchars($fact->getDetail()) . '</div>';
+						}
+						break;
+					case 'URL':
+					case '_URL':
+					case 'WWW':
+						echo '<div class="field"><a href="' . htmlspecialchars($fact->getDetail()) . '">' . htmlspecialchars($fact->getDetail()) . '</a></div>';
+						break;
+					case 'TEXT': // 0 SOUR / 1 TEXT
+						echo '<div class="field">' . nl2br(htmlspecialchars($fact->getDetail())) . '</div>';
 					break;
 					default:
-						$detail = htmlspecialchars($fact->getDetail());
+						// Display the value for all other facts/events
+						switch ($fact->getDetail()) {
+							case '':
+								// Nothing to display
+							break;
+							case 'N':
+								// Not valid GEDCOM
+								echo '<div class="field">' . KT_I18N::translate('No') . '</div>';
+							break;
+							case 'Y':
+								// Do not display "Yes".
+							break;
+							default:
+								if (preg_match('/^@('.KT_REGEX_XREF.')@$/', $fact->getDetail(), $match)) {
+									$target = KT_GedcomRecord::getInstance($match[1]);
+									if ($target) {
+										echo '<div><a href="' . $target->getHtmlUrl() . '">' . $target->getFullName() . '</a></div>';
+									} else {
+										echo '<div class="error">' . htmlspecialchars($fact->getDetail()) . '</div>';
+									}
+								} else {
+									echo '<div class="field"><span dir="auto">' . htmlspecialchars($fact->getDetail()) . '</span></div>';
+								}
+							break;
+						}
 					break;
 				}
-			$detail .= '</div>';
-		break;
-		case 'PUBL': // Publication details might contain URLs.
-			$detail = '<div class="field">' . expand_urls(htmlspecialchars($fact->getDetail())) . '</div>';
-			break;
-		case 'REPO':
-			if (preg_match('/^@('.KT_REGEX_XREF.')@$/', $fact->getDetail(), $match)) {
-				print_repository_record($match[1]);
-			} else {
-				$detail = '<div class="error">' . htmlspecialchars($fact->getDetail()) . '</div>';
-			}
-			break;
-		case 'URL':
-		case '_URL':
-		case 'WWW':
-			$detail = '<div class="field"><a href="' . htmlspecialchars($fact->getDetail()) . '">' . htmlspecialchars($fact->getDetail()) . '</a></div>';
-			break;
-		case 'TEXT': // 0 SOUR / 1 TEXT
-			$detail = '<div class="field">' . nl2br(htmlspecialchars($fact->getDetail())) . '</div>';
-		break;
-		default:
-			// Display the value for all other facts/events
-			switch ($fact->getDetail()) {
-				case '':
-					// Nothing to display
-				break;
-				case 'N':
-					// Not valid GEDCOM
-					$detail = '<div class="field">' . KT_I18N::translate('No') . '</div>';
-				break;
-				case 'Y':
-					// Do not display "Yes".
-				break;
-				default:
-					if (preg_match('/^@('.KT_REGEX_XREF.')@$/', $fact->getDetail(), $match)) {
-						$target = KT_GedcomRecord::getInstance($match[1]);
-						if ($target) {
-							$detail = '<div><a href="' . $target->getHtmlUrl() . '">' . $target->getFullName() . '</a></div>';
-						} else {
-							$detail = '<div class="error">' . htmlspecialchars($fact->getDetail()) . '</div>';
-						}
-					} else {
-						$detail = '<div class="field"><span dir="auto">' . htmlspecialchars($fact->getDetail()) . '</span></div>';
+
+				// Print any other "2 XXXX" attributes, in the order in which they appear.
+				preg_match_all('/\n2 ('.KT_REGEX_TAG.') (.+)/', $fact->getGedcomRecord(), $matches, PREG_SET_ORDER);
+				foreach ($matches as $match) {
+					switch ($match[1]) {
+						case 'DATE':
+						case 'TIME':
+						case 'AGE':
+						case 'PLAC':
+						case 'ADDR':
+						case 'ALIA':
+						case 'ASSO':
+						case '_ASSO':
+						case 'DESC':
+						case 'RELA':
+						case 'STAT':
+						case 'TEMP':
+						case 'TYPE':
+						case 'FAMS':
+						case '_WTS':
+						case '_WTFS':
+						case 'CONT':
+							// These were already shown at the beginning
+						break;
+						case 'NOTE':
+						case 'OBJE':
+						case 'SOUR':
+							// These will be shown at the end
+						break;
+						case '_UID':
+							// These shouldn't be displayed at all.
+						case 'RIN':
+							// These don't belong at level 2, so do not display them.
+							// They are only shown when editing.
+						break;
+						case 'EVEN': // 0 SOUR / 1 DATA / 2 EVEN / 3 DATE / 3 PLAC
+							$events = array();
+							foreach (preg_split('/ *, */', $match[2]) as $event) {
+								$events[] = KT_Gedcom_Tag::getLabel($event);
+							}
+							if (count($events) == 1) echo KT_Gedcom_Tag::getLabelValue('EVEN', $event);
+							else echo KT_Gedcom_Tag::getLabelValue('EVEN', implode(KT_I18N::$list_separator, $events));
+							if (preg_match('/\n3 DATE (.+)/', $fact->getGedcomRecord(), $date_match)) {
+								$date=new KT_Date($date_match[1]);
+								echo KT_Gedcom_Tag::getLabelValue('DATE', $date->Display());
+							}
+							if (preg_match('/\n3 PLAC (.+)/', $fact->getGedcomRecord(), $plac_match)) {
+								echo KT_Gedcom_Tag::getLabelValue('PLAC', $plac_match[1]);
+							}
+						break;
+						case 'FAMC': // 0 INDI / 1 ADOP / 2 FAMC / 3 ADOP
+							$family = KT_Family::getInstance(str_replace('@', '', $match[2]));
+							if ($family) { // May be a pointer to a non-existant record
+								echo KT_Gedcom_Tag::getLabelValue('FAM', '<a href="'.$family->getHtmlUrl().'">'.$family->getFullName().'</a>');
+								if (preg_match('/\n3 ADOP (HUSB|WIFE|BOTH)/', $fact->getGedcomRecord(), $match)) {
+									echo KT_Gedcom_Tag::getLabelValue('ADOP', KT_Gedcom_Code_Adop::getValue($match[1], $label_person));
+								}
+							} else {
+								echo KT_Gedcom_Tag::getLabelValue('FAM', '<span class="error">'.$match[2].'</span>');
+							}
+						break;
+						case '_KT_USER':
+							$fullname=getUserFullname(get_user_id($match[2])); // may not exist
+							if ($fullname) {
+								echo KT_Gedcom_Tag::getLabelValue('_KT_USER', $fullname);
+							} else {
+								echo KT_Gedcom_Tag::getLabelValue('_KT_USER', htmlspecialchars($match[2]));
+							}
+						break;
+						case 'PEDI':
+				             echo KT_Gedcom_Tag::getLabelValue('PEDI', KT_Gedcom_Code_Pedi::getValue($match[2]));
+				        break;
+						case 'RESN':
+							switch ($match[2]) {
+								case 'none':
+									// Note: "2 RESN none" is not valid gedcom.
+									// However, kiwitrees privacy rules will interpret it as "show an otherwise private fact to public".
+									echo KT_Gedcom_Tag::getLabelValue('RESN', '<i class="icon-resn-none"></i> '.KT_I18N::translate('Show to visitors'));
+								break;
+								case 'privacy':
+									echo KT_Gedcom_Tag::getLabelValue('RESN', '<i class="icon-resn-privacy"></i> '.KT_I18N::translate('Show to members'));
+								break;
+								case 'confidential':
+									echo KT_Gedcom_Tag::getLabelValue('RESN', '<i class="icon-resn-confidential"></i> '.KT_I18N::translate('Show to managers'));
+								break;
+								case 'locked':
+									echo KT_Gedcom_Tag::getLabelValue('RESN', '<i class="icon-resn-locked"></i> '.KT_I18N::translate('Only managers can edit'));
+								break;
+								default:
+									echo KT_Gedcom_Tag::getLabelValue('RESN', htmlspecialchars($match[2]));
+								break;
+							}
+						break;
+						case 'CALN':
+							echo KT_Gedcom_Tag::getLabelValue('CALN', expand_urls($match[2]));
+						break;
+						case 'FORM': // 0 OBJE / 1 FILE / 2 FORM / 3 TYPE
+							echo KT_Gedcom_Tag::getLabelValue('FORM', $match[2]);
+							if (preg_match('/\n3 TYPE (.+)/', $fact->getGedcomRecord(), $type_match)) {
+								echo KT_Gedcom_Tag::getLabelValue('TYPE', KT_Gedcom_Tag::getFileFormTypeValue($type_match[1]));
+							}
+						break;
+						case 'URL':
+						case '_URL':
+						case 'WWW':
+							$link = '<a href="' . KT_Filter::escapeHtml($match[2]) . '">' . KT_Filter::escapeHtml($match[2]) . '</a>';
+							echo KT_Gedcom_Tag::getLabelValue($fact->getTag().':'.$match[1], $link);
+						break;
+						default:
+							if (!$HIDE_GEDCOM_ERRORS || KT_Gedcom_Tag::isTag($match[1])) {
+								if (preg_match('/^@(' . KT_REGEX_XREF . ')@$/', $match[2], $xmatch)) {
+									// Links
+									$linked_record = KT_GedcomRecord::getInstance($xmatch[1]);
+									if ($linked_record) {
+										$link = '<a href="' .$linked_record->getHtmlUrl()  . '">' . $linked_record->getFullName() . '</a>';
+										echo KT_Gedcom_Tag::getLabelValue($fact->getTag().':'.$match[1], $link);
+									} else {
+										echo KT_Gedcom_Tag::getLabelValue($fact->getTag().':'.$match[1], htmlspecialchars($match[2]));
+									}
+								} else {
+									// Non links
+									echo KT_Gedcom_Tag::getLabelValue($fact->getTag().':'.$match[1], htmlspecialchars($match[2]));
+								}
+							}
+						break;
 					}
-				break;
-			}
-		break;
-	}
+				}
 
-	// -- find source for each fact
-	$detail .= print_fact_sources($fact->getGedcomRecord(), 2);
-	// -- find notes for each fact
-	$detail .= print_fact_notes($fact->getGedcomRecord(), 2);
-	//-- find media objects
-	$detail .= print_media_links($fact->getGedcomRecord(), 2, $pid);
+				// -- find source for each fact
+				echo print_fact_sources($fact->getGedcomRecord(), 2);
+				// -- find notes for each fact
+				echo print_fact_notes($fact->getGedcomRecord(), 2);
+				//-- find media objects
+				echo print_media_links($fact->getGedcomRecord(), 2, $pid);
+				?>
 
-	return array('label' => $label, 'detail' => $detail);
+			</div>
+			<?php if (KT_USER_CAN_EDIT) { ?>
+				<div class="cell small-2 medium-1 medium-order-5 edit">
+					<?php if (KT_USER_CAN_EDIT && $styleadd != 'change_old' && $fact->getLineNumber() > 0 && $fact->canEdit()) { ?>
+						<div class="editfacts button-group stacked">
+							<a class="button clear" onclick="return edit_record('<?php echo $pid; ?>', <?php echo $fact->getLineNumber(); ?>);">
+								<i class="<?php echo $iconStyle; ?> fa-edit"></i>
+								<span class="link_text show-for-large" tabindex="1" title="<?php echo KT_I18N::translate('Edit'); ?>">
+									<?php echo KT_I18N::translate('Edit'); ?>
+								</span>
+							</a>
+							<a class="button clear" onclick="jQuery.post('action.php',{action:'copy-fact', type:'<?php echo $fact->getParentObject()->getType(); ?>',factgedcom:'<?php echo rawurlencode($fact->getGedcomRecord()); ?>'},function(){location.reload();})">
+								<i class="<?php echo $iconStyle; ?> fa-copy"></i>
+								<span class="link_text show-for-large" tabindex="2" title="<?php echo KT_I18N::translate('Copy'); ?>">
+									<?php echo KT_I18N::translate('Copy'); ?>
+								</span>
+							</a>
+							<a class="button clear" onclick="return delete_fact('<?php echo $pid; ?>', <?php echo $fact->getLineNumber(); ?>, '', '<?php echo KT_I18N::translate('Are you sure you want to delete this fact?'); ?>');">
+								<i class="<?php echo $iconStyle; ?> fa-trash-can"></i>
+								<span class="link_text show-for-large" tabindex="3" title="<?php echo KT_I18N::translate('Delete'); ?>">
+									<?php echo KT_I18N::translate('Delete'); ?>
+								</span>
+							</a>
+						</div>
+					<?php } ?>
+				</div>
+			<?php } ?>
+		</div>
+	</div>
+	<?php
+
 }
 //------------------- end print attributes function
 
