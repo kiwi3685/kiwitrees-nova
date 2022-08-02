@@ -282,4 +282,4 @@ $this
 				</ul>
 			</aside>
 			<div id="admin-content" class="cell large-10">
-				<?phpecho KT_FlashMessages::getHtmlMessages(); // Feedback from asynchronous actions ?>
+				<?php echo KT_FlashMessages::getHtmlMessages(); // Feedback from asynchronous actions ?>
