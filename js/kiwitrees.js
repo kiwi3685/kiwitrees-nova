@@ -1372,7 +1372,7 @@ function activate_colorbox(config) {
             fixed: false,
             maxWidth: '95%',
             maxHeight: '95%',
-            minWidth: "250",
+            minWidth: "320",
             slideshowSpeed: 5000,
             slideshow: true,
             slideshowAuto: false,

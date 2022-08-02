@@ -566,11 +566,12 @@ function print_note_record($text, $nlevel, $nrec, $textOnly = false) {
 			if (KT_SCRIPT_NAME === 'note.php') {
 				$first_line = $note->getFullName();
 			} else {
+				KT_USER_CAN_EDIT ? $editIcon = '<i class="' . $iconStyle . ' fa-pen-to-square"></i>' : $editIcon = '';
 				$first_line = '
 					<a href="' . $note->getHtmlUrl() . '">' .
-						$note->getFullName();
-						if (KT_USER_CAN_EDIT) {echo '<i class="' . $iconStyle . ' fa-pencil"></i>';}
-					'</a>';
+						$note->getFullName() .
+						$editIcon . '
+					</a>';
 				$revealText	= $note->getFullName();
 			}
 
@@ -1441,7 +1442,7 @@ function print_findfact_link($element_id) {
 
 function print_findfact_edit_link($element_id) {
 	return '<a href="#" onclick="findFact(document.getElementById(\'' . $element_id . '\'), \''.KT_GEDURL.'\'); return false;" title="'.KT_I18N::translate('Find a fact or event').'">
-				<i class="' . $iconStyle . ' fa-edit"></i>' . KT_I18N::translate('Edit'). '
+				<i class="' . $iconStyle . ' fa-pen-to-square"></i>' . KT_I18N::translate('Edit'). '
 			</a>';
 }
 

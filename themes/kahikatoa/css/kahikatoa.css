@@ -5748,7 +5748,7 @@ html.is-reveal-open body {
 	left: 0;
 	z-index: 1005;
 	display: none;
-	background-color: rgba(51, 25, 25, 0.1);
+	background-color: rgba(224, 224, 224, 0.85);
 	overflow-y: auto;
 	-webkit-overflow-scrolling: touch;
 }
@@ -9830,7 +9830,7 @@ div[id$=-page] button[type=submit] {
 #indi-page .indiHeader span.link_text {
 	font-size: 0.9rem;
 }
-#indi-page .indiHeader svg.fa-pen-to-square {
+#indi-page .indiHeader svg.fa-edit {
 	margin-right: 0.35rem;
 }
 #indi-page .indiHeader label {
@@ -11696,7 +11696,7 @@ div.dataTables_wrapper table.dataTable thead tr th svg.fa-bell, div.dataTables_w
 */
 #cboxOverlay {
 	background: #e0e0e0;
-	opacity: 1;
+	opacity: 0.85;
 }
 
 #colorbox {
@@ -11707,9 +11707,7 @@ div.dataTables_wrapper table.dataTable thead tr th svg.fa-bell, div.dataTables_w
 	background: #fffff4;
 	box-shadow: 0.25rem 0.25rem 0.5rem 0 #8a8a8a;
 	margin: 2rem;
-	overflow: hidden;
 	padding: 2rem 1rem;
-	overflow: hidden;
 	/* these elements are buttons, and may need to have additional styles reset to avoid unwanted base styles */
 	/* avoid outlines on : active (mouseclick), but preserve outlines on : focus (tabbed navigating) */
 }
@@ -11724,12 +11722,16 @@ div.dataTables_wrapper table.dataTable thead tr th svg.fa-bell, div.dataTables_w
 	margin: 0.5rem 0;
 }
 #colorbox #cboxContent #cboxTitle {
+	background: #fffff4;
 	color: #ab3334;
 	left: 0;
+	overflow-y: auto;
+	padding-left: 1rem;
+	padding-right: 1rem;
 	position: absolute;
 	text-align: center;
 	top: 8px;
-	width: 100%;
+	width: 80%;
 }
 #colorbox #cboxContent #cboxPrevious,
 #colorbox #cboxContent #cboxNext,
@@ -11782,7 +11784,7 @@ div.dataTables_wrapper table.dataTable thead tr th svg.fa-bell, div.dataTables_w
 	color: #ab3334;
 	font-size: 1.5rem;
 	position: absolute;
-	right: 10px;
+	right: 0;
 	top: 8px;
 }
 #colorbox #cboxContent #cboxClose .svg-inline--fa:hover {
