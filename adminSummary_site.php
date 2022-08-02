@@ -102,4 +102,4 @@ echo pageStart('site_admin', $controller->getPageTitle()); ?>
 		</div>
 	</div>
 
-<?php pageClose();
+<?php echo pageClose();

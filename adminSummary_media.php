@@ -76,4 +76,4 @@ echo pageStart('media_admin', $controller->getPageTitle()); ?>
 		</div>
 	</div>
 
-<?php pageClose();
+<?php echo pageClose();

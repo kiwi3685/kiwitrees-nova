@@ -126,4 +126,4 @@ echo pageStart('blocks', $controller->getPageTitle()); ?>
 		</button>
 	</form>
 
-<?php pageClose();
+<?php echo pageClose();

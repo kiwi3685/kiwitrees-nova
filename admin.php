@@ -543,7 +543,7 @@ echo pageStart('admin', KT_I18N::translate('Dashboard')); ?>
 		</div>
 	</div>
 
-<?php pageClose();
+<?php echo pageClose();
 
 // Delete a file or folder, ignoring errors
 function delete_recursively($path) {

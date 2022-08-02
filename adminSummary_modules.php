@@ -167,4 +167,4 @@ echo pageStart('modules_admin', $controller->getPageTitle()); ?>
 
 
 
-<?php pageClose();
+<?php echo pageClose();

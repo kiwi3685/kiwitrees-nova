@@ -157,4 +157,4 @@ echo pageStart('menus', $controller->getPageTitle()); ?>
 			</button>
 		</form>
 
-<?php pageClose();
+<?php echo pageClose();

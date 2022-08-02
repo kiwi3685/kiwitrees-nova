@@ -183,4 +183,4 @@ echo pageStart('tree_admin', $controller->getPageTitle()); ?>
 		</div>
 	</div>
 
-<?php pageClose();
+<?php echo pageClose();

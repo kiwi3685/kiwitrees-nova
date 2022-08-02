@@ -357,4 +357,4 @@ echo pageStart('site_access-page', $controller->getPageTitle()); ?>
 		</button>
 	</div>
 
-<?php pageClose();
+<?php echo pageClose();

@@ -157,4 +157,4 @@ echo pageStart('famtabs', $controller->getPageTitle()); ?>
 			</button>
 		</form>
 
-<?php pageClose();
+<?php echo pageClose();

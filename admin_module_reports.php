@@ -126,4 +126,4 @@ echo pageStart('reports', $controller->getPageTitle()); ?>
 			</button>
 		</form>
 
-<?php pageClose();
+<?php echo pageClose();

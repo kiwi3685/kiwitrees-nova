@@ -88,4 +88,4 @@ echo pageStart('user_admin', $controller->getPageTitle()); ?>
 		</div>
 	</div>
 
-<?php pageClose();
+<?php echo pageClose();

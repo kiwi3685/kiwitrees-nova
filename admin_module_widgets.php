@@ -156,4 +156,4 @@ echo pageStart('widgets', $controller->getPageTitle()); ?>
 			</button>
 		</form>
 
-<?php pageClose();
+<?php echo pageClose();

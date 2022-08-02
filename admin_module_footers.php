@@ -148,4 +148,4 @@ echo pageStart('footers', $controller->getPageTitle()); ?>
 			</button>
 		</form>
 
-<?php pageClose();
+<?php echo pageClose();
