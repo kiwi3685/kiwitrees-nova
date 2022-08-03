@@ -31,8 +31,9 @@ if (!defined('KT_KIWITREES')) {
  *
  * @param string $title name of page
  */
-function pageStart($title, $pageTitle = '', $includeTitle = 'y', $subTitle = '') {
+function pageStart($title, $pageTitle = '', $includeTitle = 'y', $subTitle = '', $url = '') {
 	$pageTitle ? $pageTitle = $pageTitle : $pageTitle = $title;
+	$url ? $url = faqLink($url) : $url = '';
 
 	if ($includeTitle == 'n') {
 		$pageTitle = '';
@@ -41,12 +42,14 @@ function pageStart($title, $pageTitle = '', $includeTitle = 'y', $subTitle = '')
 	}
 
 	if ($subTitle !== '') {
-		$subTitle = '<h4 class="hide-for-print">' . $subTitle . '</h4>';
+		$subTitle = '<h4>' . $subTitle . '</h4>';
 	}
 	return '
 		<div id="' . strtolower($title) . '-page" class="cell">' .
-			$pageTitle . $subTitle . '
-			<div class="grid-x grid-margin-x grid-margin-y">';
+		 	$url .
+			$pageTitle .
+			$subTitle .
+			'<div class="grid-x grid-margin-x grid-margin-y 25">';
 
 	// function pageClose() must be added after content to close this div element
 }
@@ -122,16 +125,16 @@ function autocompleteHtml($suffix, $type, $tree, $valueInput, $placeHolder, $inp
  *
  * @return string[]
  */
-function singleButton() {
+function singleButton($firstButton  = '') {
    global $iconStyle;
 
+   $firstButton ? $firstButton = KT_I18N::translate($firstButton) : $firstButton = KT_I18N::translate('Save');
+
    $buttonHtml = '
-	  <div class="cell align-left button-group">
-		  <button class="button primary" type="submit">
-			  <i class="' . $iconStyle . ' fa-save"></i>'
-			   . KT_I18N::translate('Save') .
-		  '</button>
-	  </div>
+	  <button class="button primary" type="submit">
+		  <i class="' . $iconStyle . ' fa-save"></i>'
+		   . $firstButton .
+	  '</button>
    ';
 
    return $buttonHtml;
@@ -168,7 +171,7 @@ function submitButtons($onClick = '') {
 }
 
 /**
- * A stadard "Show / Reset" pair of buttons, used on report pages
+ * A standard "Show / Reset" pair of buttons, used on report pages
  *
  * @return string[]
  */
@@ -181,7 +184,7 @@ function resetButtons() {
 			   <i class="' . $iconStyle . ' fa-eye"></i>'
 				. KT_I18N::translate('Show') .
 		   '</button>
-		   <button class="button hollow" type="submit" name="reset" value="reset">
+		   <button class="button hollow" type="submit" name="reset" value="1">
 			   <i class="' . $iconStyle . ' fa-rotate"></i>'
 				. KT_I18N::translate('Reset') .
 		   '</button>
@@ -252,4 +255,13 @@ function select_ged_control($name, $values, $empty, $selected, $extra='') {
 	$element_id = $name . '-' . (int)(microtime(true)*1000000);
 
 	return '<select id="' . $element_id.'" name="' . $name . '" ' . $extra .'>' . $html . '</select>';
+}
+
+function loadingImage() {
+	return '
+	<div class="cell loading-image">
+		<div class="fa-2x">
+		  <i class="<?php echo $iconStyle; ?> fa-spinner fa-spin-pulse"></i>
+		</div>
+	</div>';
 }

@@ -370,7 +370,7 @@ function identical_name() {
 }
 
 function query_age($tag_array, $age) {
-	$html		= '<ul>';
+	$html		= '';
 	$count		= 0;
 	$tag_count	= count($tag_array);
 	$start		= microtime(true);
@@ -543,7 +543,8 @@ function query_age($tag_array, $age) {
 					if ($person) {
 						$link_url	= $person->getHtmlUrl();
 						$link_name	= $person->getFullName();
-						$result 	= KT_I18N::translate('married in %1s at age %2s years', $row->marryear, $row->age);
+						$result1	= $row->marryear;
+						$result2	= $row->age;
 					}
 					break;
 				case 'FAMS';
@@ -595,16 +596,17 @@ function query_age($tag_array, $age) {
 					}
 					break;
 			}
-				if ($link_url && $link_name && $result) {
-					$html .= '
-						<li>
-							<a href="' . $link_url. '" target="_blank" rel="noopener noreferrer">' . $link_name. '</a>
-							<span class="details"> ' . $result . '</span>
-						</li>';
-					$count ++;
-				}
+			if ($link_url && $link_name) {
+				$html .= '
+					<tr>
+						<td><a href="' . $link_url. '" target="_blank" rel="noopener noreferrer">' . $link_name. '</a></td>
+						<td>' . $result1 . '</td>
+						<td>' . $result2 . '</td>
+					</tr>';
+				$count ++;
+			}
 		}
-		$html .= '</ul>';
+
 		$time_elapsed_secs = number_format((microtime(true) - $start), 2);
 	}
 	return array('html' => $html, 'count' => $count, 'time' => $time_elapsed_secs);

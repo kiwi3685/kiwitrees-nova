@@ -9354,6 +9354,12 @@ button .svg-inline--fa {
 	margin: 0 0.5rem -0.1rem 0;
 }
 
+.loading-image {
+	height: 2rem;
+	text-align: center;
+	color: #34689c;
+}
+
 #flash-messages {
 	margin: 1rem;
 }
@@ -10040,52 +10046,48 @@ main #admin-content #change_list table.DifferencesSideBySide tbody.ChangeReplace
 	color: blue;
 	text-decoration: initial;
 }
-main #admin-content #sanity_check ul {
-	margin-left: 0;
-}
-main #admin-content #sanity_check ul li {
-	font-size: 0.9rem;
-	line-height: 1.5rem;
-}
-main #admin-content #sanity_check ul li input[type=checkbox] {
-	margin: 0;
-}
-main #admin-content #sanity_check ul li input[type=text] {
-	clear: both;
-	float: right;
-	font-size: 0.8rem;
+main #admin-content #sanity_check-page div.input-group {
+	font-size: 90%;
 	height: 1.5rem;
 	margin: 0;
-	max-width: 2.25rem;
-	padding: 0 0.25rem;
-	text-align: center;
 }
-main #admin-content #sanity_check .first, main #admin-content #sanity_check .second, main #admin-content #sanity_check .third {
-	display: inline-block;
-	width: 20rem;
+main #admin-content #sanity_check-page div.input-group input.input-group-field {
+	height: 1.5rem;
+	display: block;
+	font-size: 90%;
 }
-main #admin-content #sanity_check .third {
-	width: auto;
+main #admin-content #sanity_check-page div.input-group input.input-group-field.check {
+	width: 8%;
 }
-main #admin-content #sanity_check .third a {
-	padding: 0 2.25rem;
+main #admin-content #sanity_check-page div.input-group input.input-group-field.size {
+	width: 10%;
 }
-main #admin-content #sanity_check .accordion .accordion-item .accordion-title {
-	font-size: 0.8rem;
+main #admin-content #sanity_check-page div.input-group span.input-group-label {
+	border: none;
+	background: none;
+	color: initial;
+	height: 1.5rem;
+	padding: 0;
+	text-align: left;
+	width: 92%;
 }
-main #admin-content #sanity_check .accordion .accordion-item .accordion-content {
-	font-size: 0.9rem;
+main #admin-content #sanity_check-page div.input-group span.input-group-label.size {
+	width: 80%;
 }
-main #admin-content #sanity_check .accordion .accordion-item .accordion-content .grid-x {
-	border-bottom: 0.125rem solid #e6e6e6;
+main #admin-content #sanity_check-page button.reset {
+	margin-left: 10rem;
+	margin-top: -6.25rem;
 }
-main #admin-content #sanity_check button.button {
-	margin-top: 2rem;
+main #admin-content #sanity_check-page div.sanityList {
+	visibility: hidden;
 }
-main #admin-content #sanity_check .resetButton {
-	position: relative;
-	left: 8rem;
-	bottom: 4.7rem;
+main #admin-content #sanity_check-page div.sanityList .accordion .accordion-item .accordion-title {
+	font-weight: initial;
+	padding-bottom: 0.5rem;
+	padding-right: 4rem;
+}
+main #admin-content #sanity_check-page div.sanityList .accordion .dataTables-wrapper div.bottom {
+	margin-bottom: 2.5rem;
 }
 main #admin-content #unlinked-records-page button {
 	margin: 1rem;
