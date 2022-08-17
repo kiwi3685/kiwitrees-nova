@@ -126,10 +126,10 @@ function select_edit_control_inline($name, $values, $empty, $selected, $controll
 * @param string $inactiveText - label for inactive response
 *
 */
-function simple_switch($name, $value, $selected, $disabled = '', $activeText = '', $inactiveText = '') {
+function simple_switch($name, $value, $selected, $disabled = '', $activeText = '', $inactiveText = '', $size = '') {
 	$html = '
 		<div class="grid-x grid-margin-y">
-			<div class="switch cell small-8 medium-4 large-2">
+			<div class="switch ' . $size . ' cell small-8 medium-4 large-2">
 				<input class="switch-input" ' . $disabled . ' id="' . $name . '" type="checkbox" name="' . $name . '"';
 					if ((string)$value === (string)$selected) {
 						$html .= ' checked';

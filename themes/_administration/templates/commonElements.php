@@ -47,9 +47,11 @@ function pageStart($title, $pageTitle = '', $includeTitle = 'y', $subTitle = '',
 	return '
 		<div id="' . strtolower($title) . '-page" class="cell">' .
 		 	$url .
-			$pageTitle .
-			$subTitle .
-			'<div class="grid-x grid-margin-x grid-margin-y 25">';
+			'<div class="cell titles">' .
+				$pageTitle .
+				$subTitle .
+			'</div>' .
+			'<div class="grid-x grid-margin-x grid-margin-y">';
 
 	// function pageClose() must be added after content to close this div element
 }
@@ -107,6 +109,7 @@ function autocompleteHtml($suffix, $type, $tree, $valueInput, $placeHolder, $inp
 				type="hidden"
 				name="' . $inputName . '"
 				id="selectedValue-' . $suffix . '"
+				value="' . $valueInput . '"
 			>
 			<span class="input-group-label">
 				<button id="' . $suffix . '" type="button" class="adminClearAutocomplete autocomplete_icon">
@@ -121,7 +124,7 @@ function autocompleteHtml($suffix, $type, $tree, $valueInput, $placeHolder, $inp
 }
 
 /**
- * A basic "Show" single submit buttons
+ * A basic "Show" single submit  s
  *
  * @return string[]
  */
@@ -180,7 +183,7 @@ function resetButtons() {
 
    $buttonHtml = '
 	   <div class="cell align-left button-group">
-		   <button class="button primary" type="submit">
+		   <button id="buttonSubmit" class="button primary" type="submit">
 			   <i class="' . $iconStyle . ' fa-eye"></i>'
 				. KT_I18N::translate('Show') .
 		   '</button>

@@ -9534,6 +9534,7 @@ main #admin-content {
 	/* SANITY CHECKS */
 	/* ADD UNLINKED */
 	/* MISSING DATA */
+	/* FIND DUPLICATES */
 	/* RESEARCH LINKS */
 	/* Googlemaps Admin */
 	/* CLEAN UP TABLE */
@@ -10111,6 +10112,22 @@ main #admin-content #missing_data-page button.button {
 main #admin-content #missing_data-page .input-group.autocomplete_container .ui-autocomplete-input,
 main #admin-content #missing_data-page .input-group.autocomplete_container .input-group-label {
 	height: 2.4375rem;
+}
+main #admin-content #find_duplicates-page div.tinySwitch {
+	padding-top: 0.625rem;
+}
+main #admin-content #find_duplicates-page .titles {
+	margin-bottom: 1.625rem;
+}
+main #admin-content #find_duplicates-page .button-group .button {
+	margin-bottom: 0;
+}
+main #admin-content #find_duplicates-page table th a {
+	word-wrap: normal;
+}
+main #admin-content #find_duplicates-page table th svg {
+	right: 1rem;
+	top: 1.5rem;
 }
 main #admin-content #research-links-page button {
 	margin: 1rem;
