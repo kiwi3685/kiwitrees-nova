@@ -447,4 +447,4 @@ echo pageStart('find_duplicates', $controller->getPageTitle()); ?>
 		<?php }
 	}
 
-echo pageClose() ?>
+echo pageClose();
