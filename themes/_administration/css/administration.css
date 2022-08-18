@@ -9535,6 +9535,7 @@ main #admin-content {
 	/* ADD UNLINKED */
 	/* MISSING DATA */
 	/* FIND DUPLICATES */
+	/* MMERGE RECORDS */
 	/* RESEARCH LINKS */
 	/* Googlemaps Admin */
 	/* CLEAN UP TABLE */
@@ -10128,6 +10129,38 @@ main #admin-content #find_duplicates-page table th a {
 main #admin-content #find_duplicates-page table th svg {
 	right: 1rem;
 	top: 1.5rem;
+}
+main #admin-content #merge_records-page div.matched div {
+	border: 0.125rem solid #e6e6e6;
+	vertical-align: top;
+}
+main #admin-content #merge_records-page div.matched div:not(:nth-child(1)):not(:nth-child(2)) {
+	border-top: 0;
+}
+main #admin-content #merge_records-page div.matched div:nth-child(2n) {
+	border-left: 0;
+}
+main #admin-content #merge_records-page div.unmatched div.header {
+	background-color: #e6e6e6;
+	font-weight: 500;
+	padding: 0.625rem;
+}
+main #admin-content #merge_records-page div.unmatched div.unmatchedL,
+main #admin-content #merge_records-page div.unmatched div.unmatchedR {
+	border-bottom: 0.125rem solid #e6e6e6;
+	border-left: 0.125rem solid #e6e6e6;
+	border-right: 0.125rem solid #e6e6e6;
+	font-size: 90%;
+	padding-top: 1rem;
+}
+main #admin-content #merge_records-page div.unmatched div.unmatchedR {
+	border-left: 0;
+}
+main #admin-content #merge_records-page div.unmatched hr {
+	margin: 0.5rem auto;
+}
+main #admin-content #merge_records-page div.unmatched hr:last-child {
+	display: none;
 }
 main #admin-content #research-links-page button {
 	margin: 1rem;

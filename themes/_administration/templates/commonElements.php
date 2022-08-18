@@ -236,9 +236,9 @@ function select_ged_control($name, $values, $empty, $selected, $extra='') {
 		$html = '';
 	} else {
 		if (empty($selected)) {
-			$html = '<option value="" selected="selected">'.htmlspecialchars($empty).'</option>';
+			$html = '<option value="" selected="selected">' . htmlspecialchars($empty) . '</option>';
 		} else {
-			$html = '<option value="">'.htmlspecialchars($empty).'</option>';
+			$html = '<option value="">' . htmlspecialchars($empty) . '</option>';
 		}
 	}
 	// A completely empty list would be invalid, and break various things
