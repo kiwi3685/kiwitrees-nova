@@ -39,7 +39,7 @@ $controller
 $ftrees = array(
 	"admin_trees_manage.php"			=> array(
 		KT_I18N::translate('Manage all family trees'),
-		KT_I18N::translate('Create or delete trees and import / export GEDCOM files'),
+		KT_I18N::translate('Import or export GEDCOM files and <br>create or delete family trees '),
 		KT_I18N::translate('Administrator access only'),
 		'alert'
 	),
@@ -124,7 +124,7 @@ $ft_tools = array(
 	),
 	"admin_trees_sourcecite.php"	=> array(
 		KT_I18N::translate('Sources - review citations'),
-		KT_I18N::translate('Display a list of citations attached to any chosen source record. Used to review citations for accuracy and consistency'),
+		KT_I18N::translate('Display a list of citations attached to any chosen source record. Usefull for reviewing citations for accuracy and consistency'),
 		KT_I18N::translate('Administrator or Managers authorized for specific trees'),
 		'warning'
 	),
