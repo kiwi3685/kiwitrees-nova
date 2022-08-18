@@ -28,11 +28,13 @@ if (!defined('KT_KIWITREES')) {
 
 global $iconStyle;
 include 'templates/commonElements.php';
+include 'templates/RelatedPages.php';
 
 /**
  * Array of site administration menu items
  * $site_tools [array]
  */
+
 $site_tools = [
 	"adminSummary_site.php",
 	"admin_site_config.php",

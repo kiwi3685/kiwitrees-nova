@@ -49,8 +49,8 @@ $user_tools = array(
 		KT_I18N::translate('Administrator access only'),
 		'alert'
 	),
-	 "admin_users_bulk.php"		=> array(
-		KT_I18N::translate('Send broadcast messages'),
+	 "admin_users.php?action=messaging"		=> array(
+		KT_I18N::translate('Broadcast messages'),
 		KT_I18N::translate('Send an email message to various bulk groups of users, based on the length of their membership'),
 		KT_I18N::translate('Administrator access only'),
 		'alert'

@@ -198,9 +198,6 @@ function resetButtons() {
 
 }
 
-https://www.kiwitrees.net/faqs/general-topics/site-access-rules/
-
-
 /**
  * Create a link to faqs
  *

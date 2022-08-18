@@ -9399,6 +9399,25 @@ div[id$=-page] {
 	padding: 1rem;
 }
 
+div[id^=admin_users] {
+	padding-top: 0;
+	margin-top: -0.5rem;
+}
+
+div.relatedPages {
+	margin-top: 0.125rem;
+}
+div.relatedPages span {
+	font-weight: 600;
+	font-size: 0.95rem;
+}
+div.relatedPages .button.large-down-expanded {
+	display: inline block;
+	width: 10%;
+	margin-right: 0;
+	margin-left: 0;
+}
+
 /* standard colors as classes */
 .alert {
 	color: #ff0000;
@@ -9956,47 +9975,51 @@ main #admin-content .php-info img {
 	float: right;
 	width: 4rem;
 }
-main #admin-content #user_details label.admin {
+main #admin-content #user_list-page a.button {
+	margin-top: -5rem;
+	margin-right: 0;
+}
+main #admin-content #user_details-page label.admin {
 	font-size: 1rem;
 	padding-bottom: 1rem;
 	padding-top: 0.25rem;
 }
-main #admin-content #user_details label.offset {
+main #admin-content #user_details-page label.offset {
 	padding: 0.2rem 2rem 0;
 }
-main #admin-content #user_details table thead th:nth-child(4) {
+main #admin-content #user_details-page table thead th:nth-child(4) {
 	max-width: 5rem;
 }
-main #admin-content #user_details table thead th:nth-child(5) {
+main #admin-content #user_details-page table thead th:nth-child(5) {
 	width: 15rem;
 }
-main #admin-content #user_details dl dl {
+main #admin-content #user_details-page dl dl {
 	margin-left: 3rem;
 	margin-right: 3rem;
 }
-main #admin-content #user_details #password-checker {
+main #admin-content #user_details-page #password-checker {
 	height: 3rem;
 }
-main #admin-content #user_details #password-checker span {
+main #admin-content #user_details-page #password-checker span {
 	font-size: 0.9rem;
 }
-main #admin-content #user_details #password-checker .fa-check {
+main #admin-content #user_details-page #password-checker .fa-check {
 	color: #5da423;
 }
-main #admin-content #user_details #password-checker .progress {
+main #admin-content #user_details-page #password-checker .progress {
 	height: 0.5rem;
 	margin-bottom: 0;
 }
-main #admin-content #user_details #password-checker .progress .progress-bar {
+main #admin-content #user_details-page #password-checker .progress .progress-bar {
 	height: 0.5rem;
 }
-main #admin-content #user_details #password-checker .progress .progress-bar-danger {
+main #admin-content #user_details-page #password-checker .progress .progress-bar-danger {
 	background-color: #ff0000;
 }
-main #admin-content #user_details #password-checker .progress .progress-bar-warning {
+main #admin-content #user_details-page #password-checker .progress .progress-bar-warning {
 	background-color: #ffae00;
 }
-main #admin-content #user_details #password-checker .progress .progress-bar-success {
+main #admin-content #user_details-page #password-checker .progress .progress-bar-success {
 	background-color: #5da423;
 }
 main #admin-content #log_list th {
