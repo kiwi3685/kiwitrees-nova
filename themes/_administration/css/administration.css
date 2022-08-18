@@ -19,6 +19,7 @@
 .callout.alert {
 	border-left: 0.25rem solid #ff0000;
 	border-right: 0.25rem solid #ff0000;
+	margin-top: 1rem;
 }
 
 div[id^=moduleImage] button.close-button {

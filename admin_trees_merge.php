@@ -265,9 +265,9 @@ echo pageStart('merge_records', $controller->getPageTitle());
 
 							<?php if ($GEDCOM == $ged2) {
 								$success = delete_gedrec($gid2, KT_GED_ID); ?>
-								<p>
+								<div class="cell">
 									<?php echo KT_I18N::translate('GEDCOM record successfully deleted.'); ?>
-								</p>
+								</div>
 
 								<?php
 								// replace all the records that linked to gid2 //
@@ -275,9 +275,9 @@ echo pageStart('merge_records', $controller->getPageTitle());
 
 								foreach ($ids as $id) {
 									$record = find_gedcom_record($id, KT_GED_ID, true); ?>
-									<p>
+									<div class="cell">
 										<?php echo KT_I18N::translate('Updating linked record'); ?>
-									</p>
+									</div>
 
 									<?php
 									$newrec = str_replace("@$gid2@", "@$gid1@", $record);
@@ -321,43 +321,43 @@ echo pageStart('merge_records', $controller->getPageTitle());
 								if (isset($facts1[$i])) {
 									if (in_array($i, $keep1)) {
 										$newgedrec .= $facts1[$i]['subrec']."\n"; ?>
-										<p>
+										<div class="cell">
 											<?php echo
 											KT_I18N::translate('Adding') . ' ' .
 											$facts1[$i]['fact'] . ' ' .
 											KT_I18N::translate('from') . ' ' .
 											$gid1; ?>
-										</p>
+										</div>
 									<?php }
 								}
 
 								if (isset($facts2[$i])) {
 									if (in_array($i, $keep2)) {
 										$newgedrec .= $facts2[$i]['subrec']."\n"; ?>
-										<p>
+										<div class="cell">
 											<?php echo
 											KT_I18N::translate('Adding') . ' ' .
 											$facts2[$i]['fact'] . ' ' .
 											KT_I18N::translate('from') . ' ' .
 											$gid2; ?>
-										</p>
+										</div>
 									<?php }
 								}
 							}
 
 							replace_gedrec($gid1, KT_GED_ID, $newgedrec);
 							$rec = KT_GedcomRecord::getInstance($gid1); ?>
-							<p>
+							<div class="cell">
 								<?php echo KT_I18N::translate('Record %s successfully updated.', '<a href="' . $rec->getHtmlUrl() . '">' . $rec->getXref() . '</a>' ); ?>
-							</p>
+							</div>
 
 							<?php
 							$fav_count = update_favorites($gid2, $gid1);
 
 							if ($fav_count > 0) { ?>
-								<p>
+								<div class="cell">
 									<?php echo KT_I18N::plural('%s favorite updated', '%s favorites updated', $fav_count, $fav_count); ?>
-								<p>
+								</div>
 							<?php } ?>
 
 					<?php }
