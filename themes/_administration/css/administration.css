@@ -9975,7 +9975,7 @@ main #admin-content .php-info img {
 	float: right;
 	width: 4rem;
 }
-main #admin-content #user_list-page a.button {
+main #admin-content #admin_users_list-page a.button {
 	margin-top: -5rem;
 	margin-right: 0;
 }
