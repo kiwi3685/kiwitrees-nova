@@ -396,7 +396,11 @@ switch (KT_Filter::get('action')) {
 
 			');
 
-		echo relatedPages($links = array('admin_users.php', 'admin_users.php?action=messaging', 'admin_users.php?action=cleanup'));
+		echo relatedPages($links = array(
+			'admin_users.php',
+			'admin_users.php?action=messaging',
+			'admin_users.php?action=cleanup',
+		));
 
 		echo pageStart('admin_users_edit', $controller->getPageTitle()); ?>
 

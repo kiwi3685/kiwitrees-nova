@@ -28,7 +28,7 @@ if (!defined('KT_KIWITREES')) {
 
 global $iconStyle;
 include 'templates/commonElements.php';
-include 'templates/RelatedPages.php';
+include 'templates/relatedPages.php';
 
 /**
  * Array of site administration menu items
@@ -278,6 +278,14 @@ $this
 							<a class="<?php echo $class ?>" href="adminSummary_tools.php">
 								<i class="<?php echo $iconStyle; ?> fa-screwdriver-wrench"></i>
 								<?php echo KT_I18N::translate('Tools'); ?>
+							</a>
+						</li>
+
+						<li class="admin-menu-title">
+							<?php $class = (in_array(KT_SCRIPT_NAME, $tools) || in_array(KT_Filter::get('mod'), $tools) ? 'current' : ''); ?>
+							<a class="<?php echo $class ?>" href="adminSearch.php">
+								<i class="<?php echo $iconStyle; ?> fa-magnifying-glass"></i>
+								<?php echo KT_I18N::translate('Search administration pages'); ?>
 							</a>
 						</li>
 					<?php } ?>

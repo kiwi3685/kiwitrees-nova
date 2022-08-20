@@ -30,7 +30,23 @@ $controller
 	->requireManagerLogin()
 	->setPageTitle(KT_I18N::translate('Check for errors'))
 	->pageHeader();
-?>
+
+echo relatedPages($links = array(
+    'admin_trees_manage.php',
+    'admin_trees_config.php',
+    'admin_trees_change.php',
+    'admin_trees_addunlinked.php',
+    'admin_trees_places.php',
+    'admin_trees_merge.php',
+    'admin_trees_renumber.php',
+    'admin_trees_append.php',
+    'admin_trees_duplicates.php',
+    'admin_trees_findunlinked.php',
+    'admin_trees_sanity.php',
+    'admin_trees_source.php',
+    'admin_trees_sourcecite.php',
+    'admin_trees_missing.php',
+));?>
 
 <div id="check_errors">
 	<a class="current faq_link" href="<?php echo KT_KIWITREES_URL; ?>/faqs/modules-faqs/check-for-errors/" target="_blank" rel="noopener noreferrer" title="<?php echo KT_I18N::translate('View FAQ for this page.'); ?>"><?php echo KT_I18N::translate('View FAQ for this page.'); ?>

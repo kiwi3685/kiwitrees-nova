@@ -26,6 +26,7 @@ if (!defined('KT_KIWITREES')) {
 	exit;
 }
 
+
 /**
  * Print links to related admin pages
  *
@@ -34,22 +35,38 @@ if (!defined('KT_KIWITREES')) {
 function relatedPages($links) {
 	global $iconStyle;
 
-	$user_tools = array(
-    	 "admin_users.php"						=> KT_I18N::translate('Manage users'),
-    	 "admin_users.php?action=edit"			=> KT_I18N::translate('Add a new user'),
-    	 "admin_users.php?action=messaging"		=> KT_I18N::translate('Broadcast messages'),
-    	 "admin_users.php?action=cleanup"		=> KT_I18N::translate('Delete inactive users'),
-    );
+	$pagesList = array(
+		 'admin_users.php'					=> KT_I18N::translate('Manage users'),
+		 'admin_users.php?action=edit'		=> KT_I18N::translate('Add a new user'),
+		 'admin_users.php?action=messaging'	=> KT_I18N::translate('Broadcast messages'),
+		 'admin_users.php?action=cleanup'	=> KT_I18N::translate('Delete inactive users'),
+
+		 'admin_trees_manage.php'			=> KT_I18N::translate('Manage all family trees'),
+		 'admin_trees_config.php'			=> KT_I18N::translate('Configure each family tree'),
+		 'admin_trees_check.php'			=> KT_I18N::translate('Check for GEDCOM errors'),
+		 'admin_trees_change.php'			=> KT_I18N::translate('Changes log'),
+		 'admin_trees_addunlinked.php'		=> KT_I18N::translate('Add unlinked records'),
+		 'admin_trees_places.php'			=> KT_I18N::translate('Place name editing'),
+		 'admin_trees_merge.php'			=> KT_I18N::translate('Merge records'),
+		 'admin_trees_renumber.php'			=> KT_I18N::translate('Renumber family tree'),
+		 'admin_trees_append.php'			=> KT_I18N::translate('Append family tree'),
+		 'admin_trees_duplicates.php'		=> KT_I18N::translate('Find duplicate individuals'),
+		 'admin_trees_findunlinked.php'		=> KT_I18N::translate('Find unlinked records'),
+		 'admin_trees_sanity.php'			=> KT_I18N::translate('Sanity check'),
+		 'admin_trees_source.php'			=> KT_I18N::translate('Sources - review'),
+		 'admin_trees_sourcecite.php'		=> KT_I18N::translate('Sources - review citations'),
+		 'admin_trees_missing.php'			=> KT_I18N::translate('Missing fact or event details'),
+	);
+	asort($pagesList);
 
 	$html =  '
-		<div class="grid-x relatedPages">
+		<div class="grid-x relatedPages show-for-medium">
 			<div class="cell text-right">
-				<span>
-					' . KT_I18N::translate('Related pages') . '
-					<i class="' . $iconStyle . ' fa-angles-right"></i>
-				</span>';
+				<label>' .
+					KT_I18N::translate('Related pages') . '
+				</label>';
 
-				foreach ($user_tools as $link => $title) {
+				foreach ($pagesList as $link => $title) {
 					if (in_array($link, $links)) {
 						$html .= '
 							<a href="' . $link. '" target="_blank" class="button small large-down-expanded">

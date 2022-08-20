@@ -159,6 +159,23 @@ $sql .= 'ORDER BY n_sort ASC';
 
 $SHOW_EST_LIST_DATES=get_gedcom_setting(KT_GED_ID, 'SHOW_EST_LIST_DATES');
 
+echo relatedPages($links = array(
+    'admin_trees_manage.php',
+    'admin_trees_config.php',
+    'admin_trees_check.php',
+    'admin_trees_change.php',
+    'admin_trees_addunlinked.php',
+    'admin_trees_places.php',
+    'admin_trees_merge.php',
+    'admin_trees_renumber.php',
+    'admin_trees_append.php',
+    'admin_trees_findunlinked.php',
+    'admin_trees_sanity.php',
+    'admin_trees_source.php',
+    'admin_trees_sourcecite.php',
+    'admin_trees_missing.php',
+));
+
 echo pageStart('find_duplicates', $controller->getPageTitle()); ?>
 
 	<form class="cell" method="get" name="duplicates_form" action="<?php echo KT_SCRIPT_NAME; ?>">

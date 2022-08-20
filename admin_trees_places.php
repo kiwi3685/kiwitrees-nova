@@ -89,7 +89,24 @@ $controller
 	->pageHeader()
 	->addExternalJavascript(KT_AUTOCOMPLETE_JS_URL)
 	->addInlineJavascript('autocomplete();');
-?>
+
+echo relatedPages($links = array(
+    'admin_trees_manage.php',
+    'admin_trees_config.php',
+    'admin_trees_check.php',
+    'admin_trees_change.php',
+    'admin_trees_addunlinked.php',
+    'admin_trees_merge.php',
+    'admin_trees_renumber.php',
+    'admin_trees_append.php',
+    'admin_trees_duplicates.php',
+    'admin_trees_findunlinked.php',
+    'admin_trees_sanity.php',
+    'admin_trees_source.php',
+    'admin_trees_sourcecite.php',
+    'admin_trees_missing.php',
+));?>
+
 <div id="places">
 	<h2>
 		<?php echo KT_I18N::translate('Update all the place names in a family tree'); ?>

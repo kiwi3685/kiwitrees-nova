@@ -51,6 +51,23 @@ $keep1  = KT_Filter::postArray('keep1');
 $keep2  = KT_Filter::postArray('keep2');
 $type	= KT_Filter::post('record_type');
 
+echo relatedPages($links = array(
+    'admin_trees_manage.php',
+    'admin_trees_config.php',
+    'admin_trees_check.php',
+    'admin_trees_change.php',
+    'admin_trees_addunlinked.php',
+    'admin_trees_places.php',
+    'admin_trees_renumber.php',
+    'admin_trees_append.php',
+    'admin_trees_duplicates.php',
+    'admin_trees_findunlinked.php',
+    'admin_trees_sanity.php',
+    'admin_trees_source.php',
+    'admin_trees_sourcecite.php',
+    'admin_trees_missing.php',
+));
+
 echo pageStart('merge_records', $controller->getPageTitle());
 
 	if ($action != 'choose') {

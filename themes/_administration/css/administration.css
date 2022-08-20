@@ -9399,23 +9399,21 @@ div[id$=-page] {
 	padding: 1rem;
 }
 
-div[id^=admin_users] {
-	padding-top: 0;
-	margin-top: -0.5rem;
-}
-
 div.relatedPages {
+	border-bottom: 0.125rem solid #e6e6e6;
+	box-shadow: 0.25rem 0.25rem 0.5rem 0 #8a8a8a;
+	bottom: 1rem;
 	margin-top: 0.125rem;
 }
-div.relatedPages span {
+div.relatedPages label {
+	display: inline-block;
 	font-weight: 600;
-	font-size: 0.95rem;
+	padding-left: 2rem;
+	padding-right: 2rem;
 }
 div.relatedPages .button.large-down-expanded {
-	display: inline block;
-	width: 10%;
-	margin-right: 0;
-	margin-left: 0;
+	width: 12%;
+	margin: 0 0.125rem 0.125rem 0;
 }
 
 /* standard colors as classes */
@@ -10102,7 +10100,7 @@ main #admin-content #sanity_check-page div.input-group span.input-group-label.si
 }
 main #admin-content #sanity_check-page button.reset {
 	margin-left: 10rem;
-	margin-top: -6.25rem;
+	margin-top: -3.5rem;
 }
 main #admin-content #sanity_check-page div.sanityList {
 	visibility: hidden;

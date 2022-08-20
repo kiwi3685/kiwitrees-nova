@@ -172,6 +172,23 @@ $controller
 		jQuery(".loading-image").css("display", "none");
 ');
 
+echo relatedPages($links = array(
+    'admin_trees_manage.php',
+    'admin_trees_config.php',
+    'admin_trees_check.php',
+    'admin_trees_change.php',
+    'admin_trees_addunlinked.php',
+    'admin_trees_places.php',
+    'admin_trees_merge.php',
+    'admin_trees_renumber.php',
+    'admin_trees_append.php',
+    'admin_trees_duplicates.php',
+    'admin_trees_findunlinked.php',
+    'admin_trees_source.php',
+    'admin_trees_sourcecite.php',
+    'admin_trees_missing.php',
+));
+
 // Start settings form
 echo pageStart('sanity_check', $controller->getPageTitle(), 'y', KT_I18N::translate('%s checks to help you monitor the quality of your family history data', count($checks)), 'general-topics/sanity-check/'); ?>
 	<div class="cell callout warning help-content">
