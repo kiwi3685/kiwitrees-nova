@@ -253,8 +253,8 @@ class KT_Controller_Individual extends KT_Controller_GedcomRecord {
 								</a>
 							</div>
 							<div class="deletelink">
-								<a href="#" onclick="return delete_fact('<?php echo $this->record->getXref(); ?>', '', <?php echo $linenum; ?>, '<?php echo KT_I18N::translate('Are you sure you want to delete this fact?'); ?>');" title="<?php echo KT_I18N::translate('Delete name'); ?>">
-									<span class="link_text"><?php echo KT_I18N::translate('Delete name'); ?></span>
+								<a href="#" onclick="return delete_fact('<?php echo $this->record->getXref(); ?>', '', <?php echo $linenum; ?>, '<?php echo KT_I18N::translate('Are you sure you want to delete this fact?'); ?>');" title="<?php echo KT_I18N::translate('Remove name'); ?>">
+									<span class="link_text"><?php echo KT_I18N::translate('Remove name'); ?></span>
 									<i class="<?php echo $iconStyle; ?> fa-trash-can"></i>
 								</a>
 							</div>
