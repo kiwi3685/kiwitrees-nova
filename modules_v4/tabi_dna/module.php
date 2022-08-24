@@ -107,10 +107,10 @@ class tabi_dna_KT_Module extends KT_Module implements KT_Module_IndiTab {
 						/*  6 source			*/ null,
 						/*  7 note				*/ null,
 						/*  9 date added		*/ null,
-						/*  9 edit				*/ { className: "text-center" },
-						/* 10 delete			*/ { className: "text-center" },
+						/*  9 edit				*/ { orderable: false, className: "text-center" },
+						/* 10 delete			*/ { orderable: false, className: "text-center" },
 					],
-					sorting: [[2,"desc"]],
+					order: [[2,"desc"]],
 				});
 			');
 
@@ -160,7 +160,13 @@ class tabi_dna_KT_Module extends KT_Module implements KT_Module_IndiTab {
 							if (KT_USER_GEDCOM_ADMIN) { ?>
 								<th>
                                     <div class="delete_dna">
-                                        <button type="submit" class="button tiny" onclick="if (confirm('<?php echo htmlspecialchars(KT_I18N::translate('Permanently delete these records?')); ?>')) {return checkbox_delete('dna');} else {return false;}">
+                                        <button
+											type="submit"
+											class="button tiny"
+											onclick="
+												if (confirm('<?php echo htmlspecialchars(KT_I18N::translate('Permanently delete these records?')); ?>')) {return checkbox_delete('dna');} else {return false;}
+											"
+										>
                                             <?php echo KT_I18N::translate('Delete'); ?>
                                         </button>
                                         <input type="checkbox" onclick="toggle_select(this)">
@@ -219,7 +225,11 @@ class tabi_dna_KT_Module extends KT_Module implements KT_Module_IndiTab {
 									<?php echo timestamp_to_gedcom_date(strtotime($row->date))->Display(); ?>
 								</td>
 								<td>
-									<a href="#" onclick="window.open('module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=edit-dna&amp;pid=<?php echo $xref; ?>&amp;ged=<?php echo KT_GEDCOM; ?>&amp;dna-id=<?php echo $row->dna_id; ?>', '_blank')" title="<?php echo KT_I18N::translate('Edit DNA data'); ?>">
+									<a
+										href="#"
+										onclick="window.open('module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=edit-dna&amp;pid=<?php echo $xref; ?>&amp;ged=<?php echo KT_GEDCOM; ?>&amp;dna-id=<?php echo $row->dna_id; ?>', '_blank')"
+										title="<?php echo KT_I18N::translate('Edit DNA data'); ?>"
+									>
 										<i class="<?php echo $iconStyle; ?> fa-pen-to-square fa-lg"></i>
 									</a>
 								</td>
@@ -227,7 +237,13 @@ class tabi_dna_KT_Module extends KT_Module implements KT_Module_IndiTab {
 								if (KT_USER_GEDCOM_ADMIN) { ?>
 									<td>
 										<div class="delete_src">
-											<input type="checkbox" name="del_places[]" class="check" value="<?php echo $row->dna_id; ?>" title="<?php echo KT_I18N::translate('Delete'); ?>">
+											<input
+												type="checkbox"
+												name="del_places[]"
+												class="check"
+												value="<?php echo $row->dna_id; ?>"
+												title="<?php echo KT_I18N::translate('Delete'); ?>"
+											>
 										</div>
 									</td>
 								<?php } ?>
@@ -299,9 +315,15 @@ class tabi_dna_KT_Module extends KT_Module implements KT_Module_IndiTab {
 				<div id="edit_interface-page" class="grid-x">
 					<div class="cell large-10 large-offset-1">
 						<h4><?php echo $controller->getPageTitle(); ?></h4>
-						<form name="adddna_form" method="post" action="">
+						<form name="adddna_form" method="post" action="" data-abide novalidate>
 							<input type="hidden" name="action" value="update_dna">
 							<input type="hidden" name="pid" value="<?php echo $pid; ?>">
+							<div data-abide-error class="alert callout" aria-live="assertive" style="display: none;">
+							  	<p>
+									<i class="<?php echo $iconStyle; ?> fa-triangle-exclamation"></i>
+									<?php echo KT_I18N::translate('There are some errors in your form.'); ?>
+								</p>
+							</div>
 							<div class="grid-x">
 								<div class="cell medium-3">
 									<label class="h5" for="autocompleteInput-dna_id_b"><?php echo KT_I18N::translate('Person connected by DNA'); ?></label>
@@ -314,8 +336,12 @@ class tabi_dna_KT_Module extends KT_Module implements KT_Module_IndiTab {
 										'', // input value
 										'', // placeholder
 										'dna_id_b', // hidden input name
-										'' // hidden input value
+										'', // hidden input value
+										'required', // required
 									); ?>
+									<span class="form-error" data-form-error-for="autocompleteInput-dna_id_b" data-form-error-on="required">
+										  <?php echo KT_I18N::translate('This is a required field'); ?>
+									</span>
 								</div>
 								<div class="cell small-1 medium-2"></div>
 								<div class="cell medium-3">
@@ -329,11 +355,15 @@ class tabi_dna_KT_Module extends KT_Module implements KT_Module_IndiTab {
 										'', // input value
 										'', // placeholder
 										'source', // hidden input name
-										'' // hidden input value
+										'', // hidden input value
 									); ?>
 								</div>
 								<div class="cell small-1 medium-2">
-									<a href="#" onclick="addnewsource(document.getElementById('SOUR')); return false;" title="Create a new source">
+									<a
+										href="#"
+										onclick="addnewsource(document.getElementById('SOUR')); return false;"
+										title="Create a new source"
+									>
 										<i class="<?php echo $iconStyle; ?> fa-book-medical fa-lg vertical"></i>
 									</a>
 								</div>
@@ -379,9 +409,15 @@ class tabi_dna_KT_Module extends KT_Module implements KT_Module_IndiTab {
 				<div id="edit_interface-page" class="grid-x">
 					<div class="cell large-10 large-offset-1">
 						<h4><?php echo $controller->getPageTitle(); ?></h4>
-						<form name="adddna_form" method="post" action="">
+						<form name="adddna_form" method="post" action="" data-abide novalidate>
 							<input type="hidden" name="action" value="update_dna">
 							<input type="hidden" name="pid" value="<?php echo $pid; ?>">
+							<div data-abide-error class="alert callout" aria-live="assertive" style="display: none;">
+							  	<p>
+									<i class="<?php echo $iconStyle; ?> fa-triangle-exclamation"></i>
+									<?php echo KT_I18N::translate('There are some errors in your form.'); ?>
+								</p>
+							</div>
 							<div class="grid-x">
 								<div class="cell medium-3">
 									<label class="h5" for="autocompleteInput-dna_id_b"><?php echo KT_I18N::translate('Person connected by DNA'); ?></label>
@@ -394,7 +430,8 @@ class tabi_dna_KT_Module extends KT_Module implements KT_Module_IndiTab {
 										strip_tags(($person_b ? $person_b->getLifespanName() : '')), // input value
 										'', // placeholder
 										'dna_id_b', // hidden input name
-										$dna_id_b // hidden input value
+										$dna_id_b, // hidden input value
+										'required', // required
 									); ?>
 								</div>
 								<div class="cell small-1 medium-2"></div>
@@ -432,7 +469,18 @@ class tabi_dna_KT_Module extends KT_Module implements KT_Module_IndiTab {
 									</label>
 								</div>
 								<div class="cell small-10 medium-6">
-									<input class="addDna_form" type="number" name="cms" id="cms" min="1" max="7500" value="<?php echo $cms; ?>" placeholder="<?php echo KT_I18N::translate('A whole number between 1 and 7500'); ?>">
+									<input
+										class="addDna_form"
+										type="text"
+										name="cms"
+										id="cms"
+										value="<?php echo $cms; ?>"
+										placeholder="<?php echo KT_I18N::translate('A whole number between 1 and 7500'); ?>"
+										pattern="integer"
+									>
+									<span class="form-error" data-form-error-for="cms" data-form-error-on="pattern">
+									      <?php echo KT_I18N::translate('Only enter digits, with no other characters'); ?>
+									</span>
 								</div>
 								<div class="cell small-1 medium-2"></div>
 								<div class="cell medium-3">
@@ -447,7 +495,20 @@ class tabi_dna_KT_Module extends KT_Module implements KT_Module_IndiTab {
 									</label>
 								</div>
 								<div class="cell small-10 medium-6">
-									<input class="addDna_form" type="number" name="seg" id="seg" min="1" max="22" value="<?php echo $seg; ?>" placeholder="<?php echo KT_I18N::translate('A whole number, between 1 and 22'); ?>">
+									<input
+										class="addDna_form"
+										type="text"
+										name="seg"
+										id="seg"
+										min="1"
+										max="22"
+										value="<?php echo $seg; ?>"
+										placeholder="<?php echo KT_I18N::translate('A whole number, between 1 and 22'); ?>"
+										pattern="integer"
+									>
+									<span class="form-error" data-form-error-for="seg" data-form-error-on="pattern">
+									      <?php echo KT_I18N::translate('Only enter digits, with no other characters'); ?>
+									</span>
 								</div>
 								<div class="cell small-1 medium-2"></div>
 								<div class="cell medium-3">
@@ -462,7 +523,18 @@ class tabi_dna_KT_Module extends KT_Module implements KT_Module_IndiTab {
 									</label>
 								</div>
 								<div class="cell small-10 medium-6">
-									<input class="addDna_form" type="number" name="percent" id="percent" min="1" max="100" value="<?php echo $percent; ?>"placeholder="<?php echo KT_I18N::translate('A whole number, between 1 and 100'); ?>">
+									<input
+										class="addDna_form"
+										type="text"
+										name="percent"
+										id="percent"
+										value="<?php echo $percent; ?>"
+										placeholder="<?php echo KT_I18N::translate('A whole number, between 1 and 100'); ?>"
+										pattern="integer"
+									>
+									<span class="form-error" data-form-error-for="percent" data-form-error-on="pattern">
+									      <?php echo KT_I18N::translate('Only enter digits, with no other characters'); ?>
+									</span>
 								</div>
 								<div class="cell small-1 medium-2"></div>
 								<div class="cell medium-3">

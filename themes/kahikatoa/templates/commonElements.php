@@ -85,7 +85,7 @@ function pageClose() {
  * ); ?>
  *
  */
- function autocompleteHtml($suffix, $type, $tree, $valueInput, $placeHolder, $inputName, $valueHidden ) {
+ function autocompleteHtml($suffix, $type, $tree, $valueInput, $placeHolder, $inputName, $valueHidden, $required = '' ) {
  	global $iconStyle;
  	$html = '
  		<div class="input-group autocomplete_container">
@@ -97,6 +97,7 @@ function pageClose() {
  				type="text"
  				value="' . $valueInput . '"';
  				if ($placeHolder) {$html .= 'placeholder="' . $placeHolder . '"';}
+				if ($required) {$html .= 'required';}
  			$html .= '>
  			<input
  				type="hidden"
