@@ -85,7 +85,9 @@ switch (KT_Filter::post('action')) {
     				} else {
 					    setUserEmail ($user_id, $email);
                     }
-					set_user_password($user_id, $password);
+					if ($password) {
+						set_user_password($user_id, $password);
+					}
 				}
 			}
 
