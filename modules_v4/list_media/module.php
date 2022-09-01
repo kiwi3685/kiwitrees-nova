@@ -90,7 +90,7 @@ class list_media_KT_Module extends KT_Module implements KT_Module_List {
 			$sortby = 'title';
 		}
 
-		$per_page = array(9, 18, 30, 42, 51, 78, 99, 123, 150, 198);
+		$per_page 		= array(9, 18, 30, 42, 51, 78, 99, 123, 150, 198);
 		$start          = KT_Filter::getInteger('start');
 		$max            = KT_Filter::get('max' , implode("|", $per_page), '18');
 		$folder         = KT_Filter::get('folder' , null, ''); // MySQL needs an empty string, not NULL
@@ -110,8 +110,6 @@ class list_media_KT_Module extends KT_Module implements KT_Module_List {
 			$filter		= '';
 			$form_type	= '';
 		}
-
-		$url = 'module.php?mod=' . $this->getName() . '&amp;mod_action=show&amp;ged=' . KT_GEDURL;
 
 		// A list of all subfolders used by this tree
 		$folders = KT_Query_Media::folderList();
@@ -161,10 +159,10 @@ class list_media_KT_Module extends KT_Module implements KT_Module_List {
 								<label class="h6" for="folder"><?php echo KT_I18N::translate('Sort order'); ?></label>
 								<select name="sortby" id="sortby">
 									<option value="title" <?php echo ($sortby == 'title') ? 'selected="selected"' : ''; ?>>
-										<?php echo /* I18N: An option in a list-box */ KT_I18N::translate('sort by title'); ?>
+										<?php echo /* I18N: A sorting option in a list-box */ KT_I18N::translate('By title'); ?>
 									</option>
 									<option value="file" <?php echo ($sortby == 'file') ? 'selected="selected"' : ''; ?>>
-										<?php echo /* I18N: An option in a list-box */ KT_I18N::translate('sort by filename'); ?>
+										<?php echo /* I18N: A sorting option in a list-box */ KT_I18N::translate('By filename'); ?>
 									</option>
 								</select>
 							</div>
@@ -231,72 +229,11 @@ class list_media_KT_Module extends KT_Module implements KT_Module_List {
 						$ct = '0';
 					}
 
-					if ($ct > 0) {
-						echo '<div class="grid-x">';
-							// Prepare pagination details
-							$currentPage	= ((int) ($start / $max)) + 1;
-							$lastPage		= (int) (($ct + $max - 1) / $max);
-
-							$pagination = '<p class="text-left">';
-								if ($TEXT_DIRECTION == 'ltr') {
-									if ($ct > $max) {
-										if ($currentPage > 1) {
-											$pagination .= '<a href="' . $url . '&amp;action=no&amp;search=no&amp;folder=' . rawurlencode($folder). '&amp;sortby=' . $sortby. '&amp;subdirs=' . $subdirs. '&form_type=' . $form_type. '&amp;filter=' . rawurlencode($filter). '&amp;apply_filter=' . $apply_filter. '&amp;start=0&amp;max=' . $max. '" class="fa fa-lg fa-angle-double-left"></a>';
-										}
-										if ($start>0) {
-											$newstart = $start-$max;
-											if ($start<0) $start = 0;
-											$pagination .= '<a href="' . $url . '&amp;action=no&amp;search=no&amp;folder=' . rawurlencode($folder). '&amp;sortby=' . $sortby. '&amp;subdirs=' . $subdirs. '&form_type=' . $form_type. '&amp;filter=' . rawurlencode($filter). '&amp;apply_filter=' . $apply_filter. '&amp;start=' . $newstart. '&amp;max=' . $max. '" class="fa fa-lg fa-angle-left"></a>';
-										}
-									}
-								} else {
-									if ($ct > $max) {
-										if ($currentPage < $lastPage) {
-											$lastStart = ((int) ($ct / $max)) * $max;
-											$pagination .= '<a href="' . $url . '&amp;action=no&amp;search=no&amp;folder=' . rawurlencode($folder). '&amp;sortby=' . $sortby. '&amp;subdirs=' . $subdirs. '&form_type=' . $form_type. '&amp;filter=' . rawurlencode($filter). '&amp;apply_filter=' . $apply_filter. '&amp;start=' . $lastStart. '&amp;max=' . $max. '" class="fa fa-lg fa-angle-double-right"></a>';
-										}
-										if ($start+$max < $ct) {
-											$newstart = $start+$count;
-											if ($start<0) $start = 0;
-											$pagination .= '<a href="' . $url . '&amp;action=no&amp;search=no&amp;folder=' . rawurlencode($folder). '&amp;sortby=' . $sortby. '&amp;subdirs=' . $subdirs. '&form_type=' . $form_type. '&amp;filter=' . rawurlencode($filter). '&amp;apply_filter=' . $apply_filter. '&amp;start=' . $newstart. '&amp;max=' . $max. '" class="fa fa-lg fa-angle-right"></a>';
-										}
-									}
-								}
-							$pagination .= '</p>
-							<p class="text-center">' . KT_I18N::translate('Page %s of %s' , $currentPage, $lastPage). '</p>
-							<p class="text-right">';
-								if ($TEXT_DIRECTION == 'ltr') {
-									if ($ct>$max) {
-										if ($start + $max < $ct) {
-											$newstart = $start+$count;
-											if ($start < 0) $start = 0;
-											$pagination .= '<a href="' . $url . '&amp;action=no&amp;search=no&amp;folder=' . rawurlencode($folder). '&amp;sortby=' . $sortby. '&amp;subdirs=' . $subdirs. '&form_type=' . $form_type. '&amp;filter=' . rawurlencode($filter). '&amp;apply_filter=' . $apply_filter. '&amp;start=' . $newstart. '&amp;max=' . $max. '" class="fa fa-lg fa-angle-right"></a>';
-										}
-										if ($currentPage < $lastPage) {
-											$lastStart = ((int) ($ct / $max)) * $max;
-											$pagination .= '<a href="' . $url . '&amp;action=no&amp;search=no&amp;folder=' . rawurlencode($folder). '&amp;sortby=' . $sortby. '&amp;subdirs=' . $subdirs. '&form_type=' . $form_type. '&amp;filter=' . rawurlencode($filter). '&amp;apply_filter=' . $apply_filter. '&amp;start=' . $lastStart. '&amp;max=' . $max. '" class="fa fa-lg fa-angle-double-right"></a>';
-										}
-									}
-								} else {
-									if ($ct > $max) {
-										if ($start>0) {
-											$newstart = $start-$max;
-											if ($start < 0) $start = 0;
-											$pagination .= '<a href="' . $url . '&amp;action=no&amp;search=no&amp;folder=' . rawurlencode($folder). '&amp;sortby=' . $sortby. '&amp;subdirs=' . $subdirs. '&form_type=' . $form_type. '&amp;filter=' . rawurlencode($filter). '&amp;apply_filter=' . $apply_filter. '&amp;start=' . $newstart. '&amp;max=' . $max. '" class="fa fa-lg fa-angle-left"></a>';
-										}
-										if ($currentPage > 1) {
-											$lastStart = ((int) ($ct / $max)) * $max;
-											$pagination .= '<a href="' . $url . '&amp;action=no&amp;search=no&amp;folder=' . rawurlencode($folder). '&amp;sortby=' . $sortby. '&amp;subdirs=' . $subdirs. '&form_type=' . $form_type. '&amp;filter=' . rawurlencode($filter). '&amp;apply_filter=' . $apply_filter. '&amp;start=0&amp;max=' . $max. '" class="fa fa-lg fa-angle-double-left"></a>';
-										}
-									}
-								}
-							$pagination .= '</p>'; ?>
-
-							<!-- Output display -->
-							<h4><?php echo KT_I18N::translate('%s media objects found', KT_I18N::number($ct)); ?></h4>
-							<div class="cell">
-								<?php echo $pagination; ?>
-							</div>
+					if ($ct > 0) { ?>
+						<!-- Output display -->
+						<div class="grid-x">
+							<h5 class="cell"><?php echo KT_I18N::translate('%s media objects found', KT_I18N::number($ct)); ?></h5>
+							<?php echo $this->pagination($folder, $sortby, $subdirs, $form_type, $filter, $apply_filter, $max, $start, $ct, $count); ?>
 							<div class="cell">
 								<div class="grid-x grid-margin-x grid-margin-y">
 									<?php for ($i = $start, $n = 0; $i < $start + $count; $i ++) {
@@ -304,104 +241,202 @@ class list_media_KT_Module extends KT_Module implements KT_Module_List {
 										<div class="cell medium-4">
 											<div class="card">
 												<div class="card-divider">
-													<div class="cell">
-													<div class="grid-x grid-padding-x">
-														<?php if (KT_USER_CAN_EDIT) { ?>
-															<div class="cell medialist_menu">
-																<?php echo KT_Controller_Media::getMediaListMenu($mediaobject); ?>
-															</div>
-														<?php } ?>
-														<div class="cell small-3 medialist_image">
-															<?php echo $mediaobject->displayImage(); ?>
+													<?php if (KT_USER_CAN_EDIT) { ?>
+														<div class="cell medialist_menu">
+															<?php echo KT_Controller_Media::getMediaListMenu($mediaobject); ?>
 														</div>
-														<div class="cell auto medialist_title">
-															<?php // If sorting by title, highlight the title. If sorting by filename, highlight the filename
-															if ($sortby == 'title') { ?>
+													<?php } ?>
+												</div>
+												<div class="cell medialist_image text-center">
+													<?php echo $mediaobject->displayImage(); ?>
+													<div class="cell auto medialist_title text-center">
+														<?php // If sorting by title, highlight the title. If sorting by filename, highlight the filename
+														if ($sortby == 'title') { ?>
+															<a href="<?php echo $mediaobject->getHtmlUrl(); ?>">
+																<?php echo $mediaobject->getFullName(); ?>
+															</a>
+														<?php } else { ?>
+															<b>
 																<a href="<?php echo $mediaobject->getHtmlUrl(); ?>">
-																	<?php echo $mediaobject->getFullName(); ?>
+																	<?php echo basename($mediaobject->getFilename()); ?>
 																</a>
-															<?php } else { ?>
-																<b>
-																	<a href="<?php echo $mediaobject->getHtmlUrl(); ?>">
-																		<?php echo basename($mediaobject->getFilename()); ?>
-																	</a>
-																</b>
-																<?php echo KT_Gedcom_Tag::getLabelValue('TITL' , $mediaobject->getFullName());
-															} ?>
-														</div>
-														</div>
+															</b>
+															<?php echo KT_Gedcom_Tag::getLabelValue('TITL' , $mediaobject->getFullName());
+														} ?>
 													</div>
 												</div>
 												<div class="card-section">
-													<?php if ($mediaobject->isExternal()) {
-														echo KT_Gedcom_Tag::getLabelValue('URL' , $mediaobject->getFilename());
-													} else {
-														if ($mediaobject->fileExists()) {
-															if (KT_USER_CAN_EDIT || KT_USER_CAN_ACCEPT) {
-																echo KT_Gedcom_Tag::getLabelValue('FILE' , $mediaobject->getFilename());
-															}
-															echo KT_Gedcom_Tag::getLabelValue('FORM' , $mediaobject->mimeType());
-															echo KT_Gedcom_Tag::getLabelValue('TYPE' , KT_Gedcom_Tag::getFileFormTypeValue($mediaobject->getMediaType()));
-															switch ($mediaobject->isPrimary()) {
-																case 'Y':
-																	echo KT_Gedcom_Tag::getLabelValue('_PRIM', KT_I18N::translate('yes'));
-																	break;
-																case 'N':
-																	echo KT_Gedcom_Tag::getLabelValue('_PRIM', KT_I18N::translate('no'));
-																	break;
-															}
-															echo KT_Gedcom_Tag::getLabelValue('__FILE_SIZE__' , $mediaobject->getFilesize());
-															$imgsize = $mediaobject->getImageAttributes();
-															if ($imgsize['WxH']) {
-																echo KT_Gedcom_Tag::getLabelValue('__IMAGE_SIZE__' , $imgsize['WxH']);
-															}
-														} else { ?>
-															<p class="ui-state-error">
-																<?php echo /* I18N: %s is a filename */ KT_I18N::translate('The file “%s” does not exist.' , $mediaobject->getFilename()); ?>
-															</p>
-														<?php }
-													}
-													if (is_null(print_fact_sources($mediaobject->getGedcomRecord(), 1)) && is_null(print_fact_notes($mediaobject->getGedcomRecord(), 1)) ) { ?>
-														<div class="media-list-sources" style="display:none">
-													<?php } else { ?>
-														<div class="media-list-sources">
-													<?php }
-														echo print_fact_sources($mediaobject->getGedcomRecord(), 1),
-														print_fact_notes($mediaobject->getGedcomRecord(), 1); ?>
+													<button class="button expanded" data-toggle="<?php echo $mediaobject->getXref(); ?>">
+														<?php echo KT_I18N::translate('Click here for more information'); ?>
+													</button>
+													<div class="dropdown-pane" id="<?php echo $mediaobject->getXref(); ?>" data-dropdown data-close-on-click="true" data-position="bottom" data-alignment="center">
+														<?php if ($mediaobject->isExternal()) {
+															echo KT_Gedcom_Tag::getLabelValue('URL' , $mediaobject->getFilename());
+														} else {
+															if ($mediaobject->fileExists()) {
+																if (KT_USER_CAN_EDIT || KT_USER_CAN_ACCEPT) {
+																	echo KT_Gedcom_Tag::getLabelValue('FILE' , $mediaobject->getFilename());
+																}
+																echo KT_Gedcom_Tag::getLabelValue('FORM' , $mediaobject->mimeType());
+																echo KT_Gedcom_Tag::getLabelValue('TYPE' , KT_Gedcom_Tag::getFileFormTypeValue($mediaobject->getMediaType()));
+																switch ($mediaobject->isPrimary()) {
+																	case 'Y':
+																		echo KT_Gedcom_Tag::getLabelValue('_PRIM', KT_I18N::translate('yes'));
+																		break;
+																	case 'N':
+																		echo KT_Gedcom_Tag::getLabelValue('_PRIM', KT_I18N::translate('no'));
+																		break;
+																}
+																echo KT_Gedcom_Tag::getLabelValue('__FILE_SIZE__' , $mediaobject->getFilesize());
+																$imgsize = $mediaobject->getImageAttributes();
+																if ($imgsize['WxH']) {
+																	echo KT_Gedcom_Tag::getLabelValue('__IMAGE_SIZE__' , $imgsize['WxH']);
+																}
+															} else { ?>
+																<p class="ui-state-error">
+																	<?php echo /* I18N: %s is a filename */ KT_I18N::translate('The file “%s” does not exist.' , $mediaobject->getFilename()); ?>
+																</p>
+															<?php }
+														}
+														if (is_null(print_fact_sources($mediaobject->getGedcomRecord(), 1)) && is_null(print_fact_notes($mediaobject->getGedcomRecord(), 1)) ) {
+															$style ='style="display:none"';
+														} else {
+															$style = '';
+														} ?>
+														<div class="media-list-sources" <?php echo $style; ?>>
+															<?php echo print_fact_sources($mediaobject->getGedcomRecord(), 1),
+															print_fact_notes($mediaobject->getGedcomRecord(), 1); ?>
+														</div>
+														<div class="cell">
+															<?php foreach ($mediaobject->fetchLinkedIndividuals('OBJE') as $individual) { ?>
+																<a class="media-list-link" href="<?php echo $individual->getHtmlUrl(); ?>">
+																	<?php echo KT_I18N::translate('View person'); ?> — <?php echo $individual->getFullname(); ?>
+																</a>
+																<br>
+															<?php }
+															foreach ($mediaobject->fetchLinkedFamilies('OBJE') as $family) { ?>
+																<a class="media-list-link" href="<?php echo $family->getHtmlUrl(); ?>">
+																	<?php echo KT_I18N::translate('View family'); ?> — <?php echo $family->getFullname(); ?>
+																</a>
+																<br>
+															<?php }
+															foreach ($mediaobject->fetchLinkedSources('OBJE') as $source) { ?>
+																<a class="media-list-link" href="<?php echo $source->getHtmlUrl(); ?>">
+																	<?php echo KT_I18N::translate('View source'); ?> — <?php echo $source->getFullname(); ?>
+																</a>
+																<br>
+															<?php } ?>
+														</div>
 													</div>
-													<?php foreach ($mediaobject->fetchLinkedIndividuals('OBJE') as $individual) { ?>
-														<a class="media-list-link" href="<?php echo $individual->getHtmlUrl(); ?>">
-															<?php echo KT_I18N::translate('View person'); ?> — <?php echo $individual->getFullname(); ?>
-														</a>
-														<br>
-													<?php }
-													foreach ($mediaobject->fetchLinkedFamilies('OBJE') as $family) { ?>
-														<a class="media-list-link" href="<?php echo $family->getHtmlUrl(); ?>">
-															<?php echo KT_I18N::translate('View family'); ?> — <?php echo $family->getFullname(); ?>
-														</a>
-														<br>
-													<?php }
-													foreach ($mediaobject->fetchLinkedSources('OBJE') as $source) { ?>
-														<a class="media-list-link" href="<?php echo $source->getHtmlUrl(); ?>">
-															<?php echo KT_I18N::translate('View source'); ?> — <?php echo $source->getFullname(); ?>
-														</a>
-														<br>
-													<?php } ?>
 												</div>
 											</div>
 										</div>
 									<?php } ?>
 								</div>
 							</div>
-							<div class="cell">
-								<?php echo $pagination; ?>
-							</div>
-						</div>
+							<?php echo $this->pagination($folder, $sortby, $subdirs, $form_type, $filter, $apply_filter, $max, $start, $ct, $count); ?>
 					<?php }
 				} ?>
 			</div>
 		</div>
 
 	<?php }
+
+	private function pagination($folder, $sortby, $subdirs, $form_type, $filter, $apply_filter, $max, $start, $ct, $count) {
+		global $TEXT_DIRECTION, $iconStyle;
+
+		$url = 'module.php?mod=' . $this->getName() . '&amp;mod_action=show&amp;ged=' . KT_GEDURL;
+
+		$currentPage	= ((int) ($start / $max)) + 1;
+		$lastPage		= (int) (($ct + $max - 1) / $max);
+
+		$pagination = '<div class="cell small-2 text-left">';
+			if ($TEXT_DIRECTION == 'ltr') {
+				if ($ct > $max) {
+					if ($currentPage > 1) {
+						$pagination .= '
+							<a  href="' . $url . '&amp;action=no&amp;search=no&amp;folder=' . rawurlencode($folder). '&amp;sortby=' . $sortby. '&amp;subdirs=' . $subdirs. '&form_type=' . $form_type. '&amp;filter=' . rawurlencode($filter). '&amp;apply_filter=' . $apply_filter. '&amp;start=0&amp;max=' . $max. '">
+									<i class="' . $iconStyle . ' fa-lg fa-angle-double-left"></i>
+							</a>
+						';
+					}
+					if ($start>0) {
+						$newstart = $start-$max;
+						if ($start<0) $start = 0;
+						$pagination .= '
+							<a href="' . $url . '&amp;action=no&amp;search=no&amp;folder=' . rawurlencode($folder). '&amp;sortby=' . $sortby. '&amp;subdirs=' . $subdirs. '&form_type=' . $form_type. '&amp;filter=' . rawurlencode($filter). '&amp;apply_filter=' . $apply_filter. '&amp;start=' . $newstart. '&amp;max=' . $max. '">
+								<i class="' . $iconStyle . ' fa-lg fa-angle-left"></i>
+							</a>
+						';
+					}
+				}
+			} else {
+				if ($ct > $max) {
+					if ($currentPage < $lastPage) {
+						$lastStart = ((int) ($ct / $max)) * $max;
+						$pagination .= '
+							<a href="' . $url . '&amp;action=no&amp;search=no&amp;folder=' . rawurlencode($folder). '&amp;sortby=' . $sortby. '&amp;subdirs=' . $subdirs. '&form_type=' . $form_type. '&amp;filter=' . rawurlencode($filter). '&amp;apply_filter=' . $apply_filter. '&amp;start=' . $lastStart. '&amp;max=' . $max. '">
+								<i class="' . $iconStyle . ' fa-lg fa-angle-double-right"></i>
+							 </a>
+						';
+					}
+					if ($start+$max < $ct) {
+						$newstart = $start + $count;
+						if ($start<0) $start = 0;
+						$pagination .= '
+							<a href="' . $url . '&amp;action=no&amp;search=no&amp;folder=' . rawurlencode($folder). '&amp;sortby=' . $sortby. '&amp;subdirs=' . $subdirs. '&form_type=' . $form_type. '&amp;filter=' . rawurlencode($filter). '&amp;apply_filter=' . $apply_filter. '&amp;start=' . $newstart. '&amp;max=' . $max. '">
+								<i class="' . $iconStyle . ' fa-lg fa-angle-right"></i>
+							</a>
+						';
+					}
+				}
+			}
+		$pagination .= '</div>
+		<div class="cell small-8 text-center">' . KT_I18N::translate('Page %s of %s' , $currentPage, $lastPage). '</div>
+		<div class="cell small-2 text-right">';
+			if ($TEXT_DIRECTION == 'ltr') {
+				if ($ct > $max) {
+					if ($start + $max < $ct) {
+						$newstart = $start+$count;
+						if ($start < 0) $start = 0;
+						$pagination .= '
+							<a href="' . $url . '&amp;action=no&amp;search=no&amp;folder=' . rawurlencode($folder). '&amp;sortby=' . $sortby. '&amp;subdirs=' . $subdirs. '&form_type=' . $form_type. '&amp;filter=' . rawurlencode($filter). '&amp;apply_filter=' . $apply_filter. '&amp;start=' . $newstart. '&amp;max=' . $max. '">
+								<i class="' . $iconStyle . ' fa-lg fa-angle-right"></i>
+							 </a>
+						';
+					}
+					if ($currentPage < $lastPage) {
+						$lastStart = ((int) ($ct / $max)) * $max;
+						$pagination .= '
+							<a href="' . $url . '&amp;action=no&amp;search=no&amp;folder=' . rawurlencode($folder). '&amp;sortby=' . $sortby. '&amp;subdirs=' . $subdirs. '&form_type=' . $form_type. '&amp;filter=' . rawurlencode($filter). '&amp;apply_filter=' . $apply_filter. '&amp;start=' . $lastStart. '&amp;max=' . $max. '">
+								<i class="' . $iconStyle . ' fa-lg fa-angle-double-right"></i>
+							 </a>
+						';
+					}
+				}
+			} else {
+				if ($ct > $max) {
+					if ($start > 0) {
+						$newstart = $start-$max;
+						if ($start < 0) $start = 0;
+						$pagination .= '
+							<a href="' . $url . '&amp;action=no&amp;search=no&amp;folder=' . rawurlencode($folder). '&amp;sortby=' . $sortby. '&amp;subdirs=' . $subdirs. '&form_type=' . $form_type. '&amp;filter=' . rawurlencode($filter). '&amp;apply_filter=' . $apply_filter. '&amp;start=' . $newstart. '&amp;max=' . $max. '">
+								 <i class="' . $iconStyle . ' fa-lg fa-angle-left"></i>
+							 </a>';
+					}
+					if ($currentPage > 1) {
+						$lastStart = ((int) ($ct / $max)) * $max;
+						$pagination .= '
+							<a href="' . $url . '&amp;action=no&amp;search=no&amp;folder=' . rawurlencode($folder). '&amp;sortby=' . $sortby. '&amp;subdirs=' . $subdirs. '&form_type=' . $form_type. '&amp;filter=' . rawurlencode($filter). '&amp;apply_filter=' . $apply_filter. '&amp;start=0&amp;max=' . $max. '">
+								 <i class="' . $iconStyle . ' fa-lg fa-angle-double-left"></i>
+							</a>
+						';
+					}
+				}
+			}
+		$pagination .= '</div>';
+
+		return $pagination;
+	}
 
 }

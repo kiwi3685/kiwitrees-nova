@@ -10500,31 +10500,43 @@ div[id$=-page] button[type=submit] {
 	background-color: #fffff4;
 	padding: 0.2rem;
 }
+#medialist-page .card {
+	margin: 0;
+}
 #medialist-page .card .card-divider {
 	font-size: 0.9rem;
+	padding: 0.25rem;
+}
+#medialist-page .card .medialist_image {
+	padding: 1rem;
+}
+#medialist-page .card .medialist_image a.thumbnail {
+	margin: 0;
+}
+#medialist-page .card .medialist_image img {
 	height: 10rem;
-	padding-top: 0;
 }
-#medialist-page .card .card-divider .medialist_menu {
-	background-color: #cacaca;
-}
-#medialist-page .card .card-divider .medialist_image {
-	padding-top: 0.25rem;
-}
-#medialist-page .card .card-divider .medialist_title {
+#medialist-page .card .medialist_image .medialist_title {
 	padding-top: 1rem;
 }
 #medialist-page .card .card-section {
+	padding: 0;
+}
+#medialist-page .card .card-section button.button.expanded {
+	margin: 0;
+}
+#medialist-page .card .card-section div.dropdown-pane {
+	width: 27rem !important;
+}
+#medialist-page .card .card-section div.dropdown-pane div {
 	font-size: 0.8rem;
-	height: 14rem;
 	overflow: auto;
-	padding: 1rem;
 	word-break: break-all;
 }
-#medialist-page .card .card-section span {
+#medialist-page .card .card-section div.dropdown-pane div span {
 	font-weight: 600;
 }
-#medialist-page .card .card-section span.field {
+#medialist-page .card .card-section div.dropdown-pane div span.field {
 	font-size: 0.875rem;
 	font-weight: 400;
 }
