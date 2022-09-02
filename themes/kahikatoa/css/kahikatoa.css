@@ -4724,7 +4724,7 @@ table.hover:not(.unstriped) tr:nth-of-type(even):hover {
 	margin-bottom: 1rem;
 	border: solid 4px #fffff4;
 	border-radius: 0;
-	box-shadow: 0 0 0 1px rgba(51, 25, 25, 0.2);
+	box-shadow: 0.25rem 0.25rem 0.5rem 0 #8a8a8a;
 	line-height: 0;
 }
 
