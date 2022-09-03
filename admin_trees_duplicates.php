@@ -25,6 +25,7 @@ define('KT_SCRIPT_NAME', 'admin_trees_duplicates.php');
 
 require './includes/session.php';
 require KT_ROOT.'includes/functions/functions_edit.php';
+include KT_THEME_URL . 'templates/adminData.php';
 
 global $iconStyle;
 

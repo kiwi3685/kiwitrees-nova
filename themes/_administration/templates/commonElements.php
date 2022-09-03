@@ -89,7 +89,7 @@ function pageClose() {
  * ); ?>
  *
  */
-function autocompleteHtml($suffix, $type, $tree, $valueInput, $placeHolder, $inputName ) {
+ function autocompleteHtml($suffix, $type, $tree, $valueInput, $placeHolder, $inputName, $valueHidden, $required = '', $other = '' ) {
 	global $iconStyle;
 
 	$class = KT_SCRIPT_NAME == 'admin_trees_config.php' ? 'hidden' : '';
@@ -104,13 +104,15 @@ function autocompleteHtml($suffix, $type, $tree, $valueInput, $placeHolder, $inp
 				type="text"
 				value="' . $valueInput . '"';
 				if ($placeHolder) {$html .= 'placeholder="' . $placeHolder . '"';}
+				if ($required) {$html .= ' required ';}
+				if ($other) {$html .= $other;}
 			$html .= '>
 			<input
-				type="hidden"
-				name="' . $inputName . '"
-				id="selectedValue-' . $suffix . '"
-				value="' . $valueInput . '"
-			>
+ 				type="hidden"
+ 				name="' . $inputName . '"
+ 				id="selectedValue-' . $suffix . '"';
+				if ($valueHidden) {$html .= 'value="' . $valueHidden . '"';}
+			$html .= '>
 			<span class="input-group-label">
 				<button id="' . $suffix . '" type="button" class="adminClearAutocomplete autocomplete_icon">
 					<i class="' . $iconStyle . ' fa-xmark"></i>

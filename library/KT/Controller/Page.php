@@ -228,6 +228,8 @@ class KT_Controller_Page extends KT_Controller_Base {
 			});
 
 			// Initialise foundation
+				// Set default options
+				Foundation.Abide.defaults.validators["not_equalTo"] = myNotEqualalidator;
 			jQuery(document).foundation();
 
 		');
