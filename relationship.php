@@ -91,20 +91,25 @@ $chart7 = ($find == 7) || (boolval(get_gedcom_setting(KT_GED_ID, 'CHART_7', '0')
 	</h2>
 	<form name="people" method="get" action="?">
 		<?php if ($beforeJD !== null): ?>
-			<input type="hidden" name="beforeJD" value="<?php echo $beforeJD ?>">
+			<input type="hidden" name="beforeJD" value="<?php echo $beforeJD; ?>">
 		<?php endif; ?>
 		<input type="hidden" name="ged" value="<?php echo KT_GEDCOM; ?>">
 		<div id="row1">
 			<div class="chart_options">
 				<label for = "pid1"><?php echo KT_I18N::translate('Individual 1') ?></label>
-				<input class="pedigree_form" data-autocomplete-type="INDI" type="text" name="pid1" id="pid1" value="<?php echo $pid1 ?>">
+				<input class="pedigree_form" data-autocomplete-type="INDI" type="text" name="pid1" id="pid1" value="<?php echo $pid1; ?>">
 			</div>
 			<div class="chart_options">
 				<label for = "pid2"><?php echo KT_I18N::translate('Individual 2') ?></label>
-				<input class="pedigree_form" data-autocomplete-type="INDI" type="text" name="pid2" id="pid2" value="<?php echo $pid2 ?>">
+				<input class="pedigree_form" data-autocomplete-type="INDI" type="text" name="pid2" id="pid2" value="<?php echo $pid2; ?>">
 			</div>
 			<div class="chart_options swap">
-				<a href="#" onclick="var x = jQuery('#pid1').val(); jQuery('#pid1').val(jQuery('#pid2').val()); jQuery('#pid2').val(x); return false;"><?php echo /* I18N: Reverse the order of two individuals */ KT_I18N::translate('Swap individuals') ?></a>
+				<a
+					href="#"
+					onclick="var x = jQuery('#pid1').val(); jQuery('#pid1').val(jQuery('#pid2').val()); jQuery('#pid2').val(x); return false;"
+				>
+					<?php echo /* I18N: Reverse the order of two individuals */ KT_I18N::translate('Swap individuals') ?>
+				</a>
 			</div>
 			<div class="chart_options">
 				<label for = "show_full"><?php echo KT_I18N::translate('Show details') ?></label>
