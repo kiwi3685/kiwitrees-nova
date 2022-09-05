@@ -188,10 +188,13 @@ $class='';
 
 						<li class="admin-menu-title">
 							<?php// $class = (array_key_exists(KT_SCRIPT_NAME, $tools) || in_array(KT_Filter::get('mod'), $tools) ? 'current' : ''); ?>
-							<a class="<?php echo $class ?>" href="adminSearch.php">
-								<i class="<?php echo $iconStyle; ?> fa-magnifying-glass"></i>
-								<?php echo KT_I18N::translate('Search administration pages'); ?>
-							</a>
+							<form method="post" action="adminSearch.php">
+								<div class="input-group">
+									<input type="search" name="admin_query" value="<?php echo KT_Filter::post('admin_query'); ?>" placeholder="<?php echo KT_I18N::translate('Administration search'); ?>" class="input-group-field">
+									<span class="input-group-label"><i class="<?php echo $iconStyle; ?> fa-magnifying-glass"></i></span>
+								</div>
+							</form>
+
 						</li>
 					<?php } ?>
 				</ul>

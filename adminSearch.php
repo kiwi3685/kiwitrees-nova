@@ -31,51 +31,57 @@ $controller
 	->setPageTitle(KT_I18N::translate('Administration search results'))
 	->pageHeader();
 
-echo pageStart('admin_search', $controller->getPageTitle());
+$searchTerm = KT_Filter::post('admin_query');
+$result = adminSearch($searchTerm);
 
-	$result = array_unique(adminSearch('sanity'));
-	if ($result) {
-		foreach ($result as $output) {
-			echo '<div class="cell">' . $output . '</div>';
+echo pageStart('admin_search', $controller->getPageTitle()); ?>
+	<h5><?php echo KT_I18N::translate('Searching for: %s', $searchTerm); ?></h5>
+
+    <?php if ($result) {
+        foreach ($result as $page) {
+			foreach ($page as $file => $count)  { ?>
+	            <div class="cell">
+					<a href="<?php echo $file; ?>">
+						<?php echo 'This is the page name'; ?>
+					</a>
+					<span><?php echo KT_I18N::translate('(%s results)', $count); ?></span>
+				</div>
+	        <?php }
 		}
-	} else {
-		echo '<div class="cell">' . KT_I18N::translate('Nothing found') . '</div>';
-	}
+    } else { ?>
+        <div class="cell"><?php echo KT_I18N::translate('Nothing found'); ?></div>
+    <?php }
 
 echo pageClose();
-
-
 
 /**
  * Print links to related admin pages
  *
  * //@param string $title name of page
  */
-function adminSearch() {
+function adminSearch($searchfor) {
 
 	$files	= scandir(KT_ROOT);
-	$result	= array();
-
-	$searchfor = 'sanity';
+	$result = array();
 
 	foreach($files as $file) {
 		$filename = basename($file);
-		if(is_file($file) && strpos($filename, 'admin_') === 0) {
-
+		if (is_file($file) && strpos($filename, 'admin_') === 0) {
 			$contents = file_get_contents($file);
 			if (strpos($contents, $searchfor) !== false) {
-				$lines=array();
-				$fp=fopen($file, 'r');
+				$count = 0;
+				$fp = fopen($file, 'r');
 				while (!feof($fp)) {
-				    $line=fgets($fp);
-					if (preg_match('/(KT_I18N::translate\(.*(' . $searchfor . ').*\))/i', trim($line), $match)) {
-						$result[] = $filename;
-				    }
+				    $line = fgets($fp);
+					if (preg_match_all('/(KT_I18N::translate\(.*(' . $searchfor . ').*\))/i', trim($line), $match)) {
+						$count ++;
+					}
 				}
 				fclose($fp);
-
+				if ($count > 0) {
+					$result[] = array($filename => $count);
+				}
 			}
-
 		}
 	}
 
