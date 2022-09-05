@@ -26,108 +26,10 @@ if (!defined('KT_KIWITREES')) {
 	exit;
 }
 
-global $iconStyle;
 include 'templates/commonElements.php';
 include 'templates/relatedPages.php';
-
-/**
- * Array of site administration menu items
- * $site_tools [array]
- */
-
-$site_tools = [
-	"adminSummary_site.php",
-	"admin_site_config.php",
-	"admin_site_logs.php",
-	"admin_site_info.php",
-	"admin_site_access.php",
-	"admin_site_clean.php",
-	"admin_site_use.php",
-];
-
-/**
- * Array of Family tree tool menu items
- * $trees [array]
- */
-$trees = [
-	"adminSummary_trees.php",
-	"admin_trees_manage.php",
-	"admin_trees_config.php",
-	"admin_trees_check.php",
-	"admin_trees_change.php",
-	"admin_trees_addunlinked.php",
-	"admin_trees_places.php",
-	"admin_trees_merge.php",
-	"admin_trees_renumber.php",
-	"admin_trees_append.php",
-	"admin_trees_duplicates.php",
-	"admin_trees_findunlinked.php",
-	"admin_trees_sanity.php",
-	"admin_trees_source.php",
-	"admin_trees_sourcecite.php",
-	"admin_trees_missing.php",
-];
-
-/**
- * Array of site administration menu items
- * $site_tools [array]
- */
-$users = [
-	"adminSummary_users.php",
-	"admin_users.php",
-	"admin_users_bulk.php",
-];
-
-/**
- * Array of family tree administration menu items
- * $ft_tools [array]
- */
-$media = [
-	"adminSummary_media.php",
-	"admin_media.php",
-	"admin_media_upload.php",
-];
-
-/**
- * Array of Module menu items
- * $module_cats [array]
- */
-$module_config = [
-	"adminSummary_modules.php",
-	"admin_module_menus.php",
-	"admin_module_tabs_indi.php",
-	"admin_module_blocks.php",
-	"admin_module_widgets.php",
-	"admin_module_sidebar.php",
-	"admin_module_reports.php",
-	"admin_module_charts.php",
-	"admin_module_lists.php",
-	"admin_module_footers.php",
-	"admin_module_tabs_fam.php",
-];
-
-/**
- * Array of site administration menu items
- * $custom [array]
- */
- $custom = [
-	"adminSummary_custom.php",
-	"admin_custom_lang.php",
-	"admin_custom_theme.php",
- ];
-
- /**
-  * Array of site administration menu items
-  * $tools [array]
-  */
-$tools = ["adminSummary_tools.php"];
-foreach (KT_Module::getActiveModules(true) as $tool) {
-	if ($tool instanceof KT_Module_Config && $tool->getName() !== 'custom_js') {
-		$tools[] = $tool->getName();
-	}
-}
-
-$class='';
+include 'templates/adminData.php';
+global $iconStyle;
 
 $this
 	->addExternalJavascript(KT_KIWITREES_ADMIN_JS_URL)
@@ -135,8 +37,11 @@ $this
 	->addExternalJavascript(KT_JQUERY_WHEELZOOM_URL)
 	->addExternalJavascript(KT_JQUERY_AUTOSIZE)
 	->addInlineJavascript('jQuery("textarea").autosize();');
-?>
 
+
+$class='';
+
+?>
 <!DOCTYPE html>
 <html <?php echo KT_I18N::html_markup(); ?>>
 	<head>
@@ -229,14 +134,14 @@ $this
 					</li>
 					<?php if (KT_USER_IS_ADMIN) { ?>
 						<li class="admin-menu-title">
-							<a <?php echo (in_array(KT_SCRIPT_NAME, $site_tools) ? 'class="current" ' : ''); ?>href="adminSummary_site.php">
+							<a <?php echo (array_key_exists(KT_SCRIPT_NAME, $site_tools) ? 'class="current" ' : ''); ?>href="adminSummary_site.php">
 								<i class="<?php echo $iconStyle; ?> fa-display"></i>
 								<?php echo KT_I18N::translate('Website'); ?>
 							</a>
 						</li>
 					<?php } ?>
 				    <li class="admin-menu-title">
-						<a <?php echo (in_array(KT_SCRIPT_NAME, $trees) ? 'class="current" ' : ''); ?>href="adminSummary_trees.php">
+						<a <?php echo (array_key_exists(KT_SCRIPT_NAME, $trees) ? 'class="current" ' : ''); ?>href="adminSummary_trees.php">
 							<i class="<?php echo $iconStyle; ?> fa-tree"></i>
 							<?php echo KT_I18N::translate('Family trees'); ?>
 						</a>
@@ -244,21 +149,21 @@ $this
 					</li>
 					<?php if (KT_USER_IS_ADMIN) { ?>
 						<li class="admin-menu-title">
-							<a <?php echo (in_array(KT_SCRIPT_NAME, $users) ? 'class="current" ' : ''); ?>href="adminSummary_users.php">
+							<a <?php echo (array_key_exists(KT_SCRIPT_NAME, $users) ? 'class="current" ' : ''); ?>href="adminSummary_users.php">
 								<i class="<?php echo $iconStyle; ?> fa-users-gear"></i>
 								<?php echo KT_I18N::translate('User management'); ?>
 							</a>
 						</li>
 
 						<li class="admin-menu-title">
-							<a <?php echo (in_array(KT_SCRIPT_NAME, $media) ? 'class="current" ' : ''); ?>href="adminSummary_media.php">
+							<a <?php echo (array_key_exists(KT_SCRIPT_NAME, $media) ? 'class="current" ' : ''); ?>href="adminSummary_media.php">
 								<i class="<?php echo $iconStyle; ?> fa-photo-film"></i>
 								<?php echo KT_I18N::translate('Media objects'); ?>
 							</a>
 						</li>
 
 						<li class="admin-menu-title">
-							<?php $class = (in_array(KT_SCRIPT_NAME, $module_config) ? 'current' : ''); ?>
+							<?php $class = (array_key_exists(KT_SCRIPT_NAME, $module_config) ? 'current' : ''); ?>
 							<a class="<?php echo $class ?>" href="adminSummary_modules.php">
 								<i class="<?php echo $iconStyle; ?> fa-cubes"></i>
 								<?php echo KT_I18N::translate('Modules'); ?>
@@ -266,7 +171,7 @@ $this
 						</li>
 
 						<li class="admin-menu-title">
-							<?php $class = (in_array(KT_SCRIPT_NAME, $custom) || KT_Filter::get('mod') === 'custom_js' ? 'current' : ''); ?>
+							<?php $class = (array_key_exists(KT_SCRIPT_NAME, $custom) || KT_Filter::get('mod') === 'custom_js' ? 'current' : ''); ?>
 							<a class="<?php echo $class ?>" href="adminSummary_custom.php">
 								<i class="<?php echo $iconStyle; ?> fa-paint-brush"></i>
 								<?php echo KT_I18N::translate('Customizing'); ?>
@@ -274,7 +179,7 @@ $this
 						</li>
 
 						<li class="admin-menu-title">
-							<?php $class = (in_array(KT_SCRIPT_NAME, $tools) || in_array(KT_Filter::get('mod'), $tools) ? 'current' : ''); ?>
+							<?php $class = (array_key_exists(KT_SCRIPT_NAME, $tools) || in_array(KT_Filter::get('mod'), $tools) ? 'current' : ''); ?>
 							<a class="<?php echo $class ?>" href="adminSummary_tools.php">
 								<i class="<?php echo $iconStyle; ?> fa-screwdriver-wrench"></i>
 								<?php echo KT_I18N::translate('Tools'); ?>
@@ -282,7 +187,7 @@ $this
 						</li>
 
 						<li class="admin-menu-title">
-							<?php $class = (in_array(KT_SCRIPT_NAME, $tools) || in_array(KT_Filter::get('mod'), $tools) ? 'current' : ''); ?>
+							<?php// $class = (array_key_exists(KT_SCRIPT_NAME, $tools) || in_array(KT_Filter::get('mod'), $tools) ? 'current' : ''); ?>
 							<a class="<?php echo $class ?>" href="adminSearch.php">
 								<i class="<?php echo $iconStyle; ?> fa-magnifying-glass"></i>
 								<?php echo KT_I18N::translate('Search administration pages'); ?>

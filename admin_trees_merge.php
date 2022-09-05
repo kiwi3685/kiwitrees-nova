@@ -38,23 +38,7 @@ $controller
 	->requireManagerLogin()
 	->setPageTitle(KT_I18N::translate('Merge records'))
 	->addExternalJavascript(KT_AUTOCOMPLETE_JS_URL)
-	->addInlineJavascript('
-		autocomplete();
-
-		function myNotEqualalidator(
-		  $el,      /* jQuery element to validate */
-		  required, /* is the element required according to the `[required]` attribute */
-		  parent    /* parent of the jQuery element `$el` */
-		) {
-			if (!required) return true;
-			var from = jQuery("#" + $el.attr("data-not-equalTo")).val(),
-				to = $el.val();
-			return (to !== from);
-		};
-
-	');
-
-
+	->addInlineJavascript('autocomplete();');
 
 $action  = KT_Filter::post('action', 'data_type|choose|select|merge', 'data_type');
 $type	 = KT_Filter::post('record_type');
@@ -185,7 +169,7 @@ echo pageStart('merge_records', $controller->getPageTitle()); ?>
 					    ' required ' , // required
 					    ' data-validator="not_equalTo" data-not-equalTo="autocompleteInput-gid1" ' //other
 					); ?>
-					<div class="cell alert callout" data-abide-error data-form-error-on="not_equal" style="display: none;">
+					<div class="cell alert callout" data-abide-error data-form-error-on="not_equalTo" style="display: none;">
 						<?php echo KT_I18N::translate('You cannot merge the same records.'); ?>
 					</div>
 				</div>
@@ -309,7 +293,7 @@ echo pageStart('merge_records', $controller->getPageTitle()); ?>
 
                 <hr class="cell">
 
-                <div class="cell callout success">
+                <div class="cell callout warning">
                     <?php echo KT_I18N::translate('
                         The following facts did not match.
                         Select the information you would like to keep
@@ -319,10 +303,10 @@ echo pageStart('merge_records', $controller->getPageTitle()); ?>
                 <div class="cell">
                     <div class="grid-x grid-padding-x unmatched">
                         <div class="cell small-6 text-center header">
-                            <?php echo KT_I18N::translate('Record') . ' ' . $gid1 . ' - ' . $name1; ?>
+                            <?php echo KT_I18N::translate('From record') . ' ' . $gid1 . ' - ' . $name1; ?>
                         </div>
                         <div class="cell small-6 text-center header">
-                            <?php echo KT_I18N::translate('Record') . ' ' . $gid2 . ' - ' . $name2; ?>
+                            <?php echo KT_I18N::translate('To record') . ' ' . $gid2 . ' - ' . $name2; ?>
                         </div>
                         <div class="cell small-6">
                             <div class="grid-x grid-margin-x unmatchedL">

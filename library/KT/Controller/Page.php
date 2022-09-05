@@ -209,27 +209,15 @@ class KT_Controller_Page extends KT_Controller_Base {
 		', self::JS_PRIORITY_HIGH);
 
 		$this->addInlineJavascript('
-			// Temporary fix for access to main menu hover elements on android/blackberry touch devices
-			if(navigator.userAgent.match(/Android|PlayBook/i)) {
-				jQuery("#main-menu > li > a").attr("href", "#");
-				jQuery("a.icon_arrow").attr("href", "#");
-			}
-
-			// Common help_content shortening scripts
-			jQuery(".helpcontent").shorten({
-			    showChars: 900,
-				moreText: "' . KT_I18N::translate('Read more') . '",
-				lessText: "' . KT_I18N::translate('Read less') . '"
-			});
-			jQuery(".shortenMedium").shorten({
-			    showChars: 350,
-				moreText: "' . KT_I18N::translate('Read more') . '",
-				lessText: "' . KT_I18N::translate('Read less') . '"
-			});
-
 			// Initialise foundation
 				// Set default options
-				Foundation.Abide.defaults.validators["not_equalTo"] = myNotEqualalidator;
+				function myNotEqualValidator($el, required, parent) {
+					if (!required) return true;
+					var from = jQuery("#" + $el.attr("data-not-equalTo")).val(),
+						to = $el.val();
+					return (to !== from);
+				};
+				Foundation.Abide.defaults.validators["not_equalTo"] = myNotEqualValidator;
 			jQuery(document).foundation();
 
 		');
