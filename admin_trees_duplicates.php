@@ -208,12 +208,13 @@ echo pageStart('find_duplicates', $controller->getPageTitle()); ?>
 			</div>
 			<div class="cell medium-4">
 				<?php echo autocompleteHtml(
-					'surname',
-					'SURN',
-					'',
-					htmlspecialchars($surn),
-					KT_I18N::translate('A full or partial surname'),
-					'surname'
+					'surname', // id
+					'SURN', // TYPE
+					'', // autocomplete-ged
+					htmlspecialchars($surn), // input value
+					KT_I18N::translate('A full or partial surname'), // placeholder
+					'surname', // hidden input name
+					'', // hidden input value
 				); ?>
 			</div>
 			<div class="cell shrink">
@@ -228,12 +229,13 @@ echo pageStart('find_duplicates', $controller->getPageTitle()); ?>
 			</div>
 			<div class="cell medium-4">
 				<?php echo autocompleteHtml(
-					'given',
-					'GIVN',
-					'',
-					htmlspecialchars($givn),
-					KT_I18N::translate('The full or partial given name(s)'),
-					'given'
+					'given', // id
+					'GIVN', // TYPE
+					'', // autocomplete-ged
+					htmlspecialchars($givn), // input value
+					KT_I18N::translate('The full or partial given name(s)'), // placeholder
+					'given', // hidden input name
+					'', // hidden input value
 				); ?>
 			</div>
 			<div class="cell shrink">

@@ -448,7 +448,8 @@ echo relatedPages($links = array(
 									'',
 									$lifeSpan,
 									'',
-									'NEW_PEDIGREE_ROOT_ID'
+									'NEW_PEDIGREE_ROOT_ID',
+									''
 								);?>
 								<div class="cell callout warning helpcontent">
 									<?php echo KT_I18N::translate('This individual will be selected by default when viewing charts and reports.'); ?>

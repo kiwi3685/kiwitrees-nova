@@ -852,7 +852,8 @@ switch (KT_Filter::get('action')) {
 														$tree->tree_name_html,
 														$rootName,
 														KT_I18N::translate('Individual name'),
-														$varname
+														$varname,
+														''
 													);?>
 												</td>
 
@@ -873,7 +874,8 @@ switch (KT_Filter::get('action')) {
 														$tree->tree_name_html,
 														$gedcomName,
 														KT_I18N::translate('Individual name'),
-														$varname
+														$varname,
+														''
 													); ?>
 												</td>
 
