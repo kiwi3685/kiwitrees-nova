@@ -86,7 +86,7 @@ echo relatedPages($links = array(
 			<h4 class="inline"><?php echo KT_I18N::translate('Add unlinked records'); ?></h4>
 		</div>
 		<form method="post" action="#" name="tree">
-			<?php echo select_ged_control('ged', KT_Tree::getNameList(), null, KT_GEDCOM, ' onchange="tree.submit();"'); ?>
+			<?php echo select_ged_control('ged', KT_Tree::getIdList(), null, KT_GEDCOM, ' onchange="tree.submit();"'); ?>
 		</form>
 		<div class="cell grid-x">
 			<div class="cell medium-2">

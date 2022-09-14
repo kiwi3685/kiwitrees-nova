@@ -355,7 +355,7 @@ echo relatedPages($links = array(
 		</div>
 		<div class="cell medium-4">
 			<form method="post" action="#" name="tree">
-				<?php echo select_ged_control('ged', KT_Tree::getNameList(), null, KT_GEDCOM, ' onchange="tree.submit();"'); ?>
+				<?php echo select_ged_control('ged', KT_Tree::getIdList(), null, KT_GEDCOM, ' onchange="tree.submit();"'); ?>
 			</form>
 		</div>
 		<div class="cell">

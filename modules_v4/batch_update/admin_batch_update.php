@@ -65,7 +65,7 @@ class batch_update {
 					<input type="hidden" name="data"   value="">
 					<label>
 						<span>' . KT_I18N::translate('Family tree') . '</span>' .
-						select_ged_control('ged', KT_Tree::getNameList(), '', KT_GEDCOM, 'onchange="reset_reload();"') . '
+						select_ged_control('ged', KT_Tree::getIdList(), '', KT_GEDCOM, 'onchange="reset_reload();"') . '
 					</label>
 					<label>
 						<span>' . KT_I18N::translate('Batch update tool') . '</span>

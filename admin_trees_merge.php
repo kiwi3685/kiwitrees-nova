@@ -135,7 +135,9 @@ echo pageStart('merge_records', $controller->getPageTitle()); ?>
 					<label for="ged"><?php echo KT_I18N::translate('Merge to:'); ?></label>
 				</div>
 				<div class="cell medium-4">
-					<?php echo select_ged_control('ged', KT_Tree::getNameList(), null, KT_GEDCOM, ' onchange="merge.submit();"'); ?>
+					<form method="post" action="#" name="tree">
+						<?php echo select_ged_control('ged', KT_Tree::getIdList(), null, KT_GEDCOM, ' onchange="tree.submit();"'); ?>
+					</form>
 				</div>
 				<div class="cell medium-4">
 					<?php echo autocompleteHtml(
@@ -155,7 +157,9 @@ echo pageStart('merge_records', $controller->getPageTitle()); ?>
 					<label for="ged"><?php echo KT_I18N::translate('Merge from:'); ?></label>
 				</div>
 				<div class="cell medium-4">
-					<?php echo select_ged_control('ged2', KT_Tree::getNameList(), null, KT_GEDCOM, ' onchange="merge.submit();"'); ?>
+					<form method="post" action="#" name="tree">
+						<?php echo select_ged_control('ged', KT_Tree::getIdList(), null, KT_GEDCOM, ' onchange="tree.submit();"'); ?>
+					</form>
 				</div>
 				<div class="cell medium-4">
 					<?php echo autocompleteHtml(

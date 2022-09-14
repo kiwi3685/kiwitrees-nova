@@ -55,7 +55,7 @@ echo relatedPages($links = array(
 	<h2><?php echo $controller->getPageTitle(); ?></h2>
 	<form method="get" action="<?php echo KT_SCRIPT_NAME; ?>">
 		<input type="hidden" name="go" value="1">
-		<?php echo select_ged_control('ged', KT_Tree::getNameList(), null, KT_GEDCOM); ?>
+		<?php echo select_ged_control('ged', KT_Tree::getIdList(), null, KT_GEDCOM); ?>
 		<button type="submit" class="btn btn-primary">
 			<i class="fas fa-magnifying-glass"></i>
 			<?php echo $controller->getPageTitle(); ?>

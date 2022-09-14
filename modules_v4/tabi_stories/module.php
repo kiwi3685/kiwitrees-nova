@@ -512,7 +512,7 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 								<input type="hidden" name="mod", value="<?php echo $this->getName(); ?>">
 								<input type="hidden" name="mod_action", value="admin_config">
 								<div class="input-group">
-									<?php echo select_ged_control('ged', KT_Tree::getNameList(), null, KT_GEDCOM); ?>
+									<?php echo select_ged_control('ged', KT_Tree::getIdList(), null, KT_GEDCOM); ?>
 									<div class="input-group-button">
 										<button class="button" type="submit">
 											<i class="<?php echo $iconStyle; ?> fa-eye"></i>

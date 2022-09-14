@@ -199,7 +199,9 @@ echo pageStart('find_duplicates', $controller->getPageTitle()); ?>
 				<label for="ged"><?php echo KT_I18N::translate('Family tree'); ?></label>
 			</div>
 			<div class="cell medium-4">
-				<?php echo select_ged_control('ged', KT_Tree::getNameList(), null, KT_GEDCOM, ' onchange="tree.submit();"'); ?>
+				<form method="post" action="#" name="tree">
+					<?php echo select_ged_control('ged', KT_Tree::getIdList(), null, KT_GEDCOM, ' onchange="tree.submit();"'); ?>
+				</form>
 			</div>
 			<div class="cell medium-6"></div>
 			<!-- Surnames -->

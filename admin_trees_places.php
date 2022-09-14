@@ -118,7 +118,7 @@ echo relatedPages($links = array(
 		<div id="admin_options">
 			<div class="input">
 				<label><?php echo KT_I18N::translate('Family tree'); ?></label>
-				<?php echo select_ged_control('ged', KT_Tree::getNameList(), null, KT_GEDCOM); ?>
+				<?php echo select_ged_control('ged', KT_Tree::getIdList(), null, KT_GEDCOM); ?>
 			</div>
 			<div class="input">
 				<label for="search"><?php echo KT_I18N::translate('Search for'); ?></label>

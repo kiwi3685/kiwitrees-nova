@@ -180,8 +180,12 @@ function submitButtons($onClick = '') {
  *
  * @return string[]
  */
-function resetButtons() {
+function resetButtons($onClick = '') {
    global $iconStyle;
+
+   if($onClick) {
+	   $onClickHtml = 'onclick="' . $onClick . ';"';
+   }
 
    $buttonHtml = '
 	   <div class="cell align-left button-group">
@@ -189,7 +193,7 @@ function resetButtons() {
 			   <i class="' . $iconStyle . ' fa-eye"></i>'
 				. KT_I18N::translate('Show') .
 		   '</button>
-		   <button class="button hollow" type="submit" name="reset" value="1">
+		   <button class="button hollow" type="submit" name="reset" value="1" ' . $onClickHtml . '>
 			   <i class="' . $iconStyle . ' fa-rotate"></i>'
 				. KT_I18N::translate('Reset') .
 		   '</button>
@@ -245,7 +249,7 @@ function select_ged_control($name, $values, $empty, $selected, $extra='') {
 		$html = '<option value=""></option>';
 	}
 	foreach ($values as $key=>$value) {
-		if (userGedcomAdmin(KT_USER_ID, KT_TREE::getIdFromName(htmlspecialchars($key))->getTreeId())) {
+		if (userGedcomAdmin(KT_USER_ID, $key)) {
 			if ((string)$key === (string)$selected) { // Because "0" != ""
 				$html .= '<option value="' . htmlspecialchars($key) . '" selected="selected" dir="auto">' . htmlspecialchars($value) . '</option>';
 			} else {
@@ -260,10 +264,12 @@ function select_ged_control($name, $values, $empty, $selected, $extra='') {
 }
 
 function loadingImage() {
+	global $iconStyle;
+
 	return '
 	<div class="cell loading-image">
 		<div class="fa-2x">
-		  <i class="<?php echo $iconStyle; ?> fa-spinner fa-spin-pulse"></i>
+		  <i class="' . $iconStyle . ' fa-spinner fa-spin-pulse"></i>
 		</div>
 	</div>';
 }

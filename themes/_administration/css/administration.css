@@ -503,7 +503,7 @@ legend {
 
 .fieldset {
 	margin: 1.125rem 0;
-	padding: 1.25rem;
+	padding: 0.75rem;
 	border: 1px solid #cacaca;
 }
 .fieldset legend {
@@ -10070,48 +10070,49 @@ main #admin-content #change_list table.DifferencesSideBySide tbody.ChangeReplace
 	color: blue;
 	text-decoration: initial;
 }
-main #admin-content #sanity_check-page div.input-group {
+main #admin-content #sanity_check-page fieldset.fieldset {
+	border-radius: 0.625rem;
+}
+main #admin-content #sanity_check-page fieldset.fieldset .input-group {
 	font-size: 90%;
-	height: 1.5rem;
+	line-height: 2;
 	margin: 0;
 }
-main #admin-content #sanity_check-page div.input-group input.input-group-field {
+main #admin-content #sanity_check-page fieldset.fieldset .input-group input.input-group-field {
 	height: 1.5rem;
 	display: block;
 	font-size: 90%;
 }
-main #admin-content #sanity_check-page div.input-group input.input-group-field.check {
-	width: 8%;
-}
-main #admin-content #sanity_check-page div.input-group input.input-group-field.size {
+main #admin-content #sanity_check-page fieldset.fieldset .input-group input.input-group-field.check {
 	width: 10%;
 }
-main #admin-content #sanity_check-page div.input-group span.input-group-label {
+main #admin-content #sanity_check-page fieldset.fieldset .input-group input.input-group-field.size {
+	width: 10%;
+}
+main #admin-content #sanity_check-page fieldset.fieldset .input-group span.input-group-label {
 	border: none;
 	background: none;
 	color: initial;
-	height: 1.5rem;
+	height: auto;
 	padding: 0;
 	text-align: left;
-	width: 92%;
+	vertical-align: text-top;
+	width: 90%;
+	white-space: normal;
 }
-main #admin-content #sanity_check-page div.input-group span.input-group-label.size {
-	width: 80%;
+main #admin-content #sanity_check-page fieldset.fieldset .input-group span.input-group-label.size {
+	width: 75%;
 }
-main #admin-content #sanity_check-page button.reset {
-	margin-left: 10rem;
+main #admin-content #sanity_check-page form[name=rela_form] {
 	margin-top: -3.5rem;
 }
-main #admin-content #sanity_check-page div.sanityList {
-	visibility: hidden;
-}
-main #admin-content #sanity_check-page div.sanityList .accordion .accordion-item .accordion-title {
+main #admin-content #sanity_check-page div#sanityList .accordion .accordion-item .accordion-title {
 	font-weight: initial;
 	padding-bottom: 0.5rem;
 	padding-right: 4rem;
 }
-main #admin-content #sanity_check-page div.sanityList .accordion .dataTables-wrapper div.bottom {
-	margin-bottom: 2.5rem;
+main #admin-content #sanity_check-page div#sanityList .accordion .accordion-item .accordion-title svg.svg-inline--fa {
+	margin-top: 0.6rem;
 }
 main #admin-content #unlinked-records-page button {
 	margin: 1rem;
