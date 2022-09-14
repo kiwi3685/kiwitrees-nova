@@ -53,32 +53,33 @@ class block_welcome_KT_Module extends KT_Module implements KT_Module_Block {
 		$title			= '<span dir="auto">' . KT_TREE_TITLE . '</span>';
 		$subtitle		= '';
 		$default_text	= '<strong>' . KT_I18N::translate('Welcome to our family tree.') . '</strong>';
+		$width	 		= (KT_Site::preference('USE_REGISTRATION_MODULE') && !KT_USER_ID) ? '4' : '6';
 
 		$content	= '
 			<div class="grid-x">
 				<div class="cell">
-					<p>' .
+					<span>' .
 						get_block_setting($block_id, 'text', $default_text) . '
-					</p>
+					</span>
 				</div>
-				<div class="cell small-4 text-center">
+				<div class="cell small-' . $width . ' text-center">
 					<a href="module.php?mod=chart_pedigree&mod_action=show&rootid=' . $indi_xref . '&amp;ged=' . KT_GEDURL . '">
-						<i class="' . $iconStyle . ' fa-sitemap fa-2x"></i>
-						<p>' . KT_I18N::translate('Default chart') . '</p>
+						<i class="' . $iconStyle . ' fa-sitemap fa-2x"></i><br>
+						<span>' . KT_I18N::translate('Default chart') . '</span>
 					</a>
 				</div>
-				<div class="cell small-4 text-center">
+				<div class="cell small-' . $width . ' text-center">
 					<a href="individual.php?pid=' . $indi_xref . '&amp;ged=' . KT_GEDURL . '">
-						<i class="' . $iconStyle . ' fa-street-view fa-2x"></i>
-						<p>' . KT_I18N::translate('Default individual') . '</p>
+						<i class="' . $iconStyle . ' fa-street-view fa-2x"></i><br>
+						<span>' . KT_I18N::translate('Default individual') . '</span>
 					</a>
 				</div>';
 				if (KT_Site::preference('USE_REGISTRATION_MODULE') && !KT_USER_ID) {
 					$content .= '
 						<div class="cell small-4 text-center">
 							<a href="' . KT_LOGIN_URL . '?action=register">
-								<i class="' . $iconStyle . ' fa-user-plus fa-2x"></i>
-								<p>' . KT_I18N::translate('Request new user account') . '</p>
+								<i class="' . $iconStyle . ' fa-user-plus fa-2x"></i><br>
+								<span>' . KT_I18N::translate('Request account') . '</span>
 							</a>
 						</div>';
 				}
