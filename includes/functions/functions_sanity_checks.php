@@ -32,18 +32,26 @@ if (!defined('KT_KIWITREES')) {
  * @param array $tag_array - an array of vaild GEDCOM tags for comparison
  * @param string $tag2 - a single secondary tag where $tag_array is FAMS, FAMC, etc (e.g. array('FAMS'), 'CHIL');)
  */
-function birth_comparisons($tag_array, $tag2 = '') {
-	$html = '';
-	$count = 0;
-	$tag_count = count($tag_array);
-	$start = microtime(true);
+function birth_comparisons($gedID, $tag_array, $tag2 = '') {
+	$html		= '';
+	$count		= 0;
+	$tag_count	= count($tag_array);
+	$start		= microtime(true);
+	$sql		= "
+					SELECT i_id AS xref
+					FROM `##individuals`
+					WHERE `i_file` = ?
+					AND `i_gedcom` LIKE CONCAT('%1 ', ?, '%')
+					AND `i_gedcom` NOT LIKE CONCAT('%1 ', ?, ' Y%')
+				  ";
+
 	for ($i = 0; $i < $tag_count; $i ++) {
-		$rows = KT_DB::prepare(
-			"SELECT i_id AS xref, i_gedcom AS gedrec FROM `##individuals` WHERE `i_file` = ? AND `i_gedcom` LIKE CONCAT('%1 ', ?, '%') AND `i_gedcom` NOT LIKE CONCAT('%1 ', ?, ' Y%')"
-		)->execute(array(KT_GED_ID, $tag_array[$i], $tag_array[$i]))->fetchAll();
+		$rows = KT_DB::prepare($sql)->execute(array($gedID, $tag_array[$i], $tag_array[$i]))->fetchAll();
+
 		foreach ($rows as $row) {
 			$person		= KT_Person::getInstance($row->xref);
 			$birth_date = $person->getBirthDate();
+
 			switch ($tag_array[$i]) {
 				case ('FAMS'):
 					switch ($tag2) {
@@ -53,11 +61,11 @@ function birth_comparisons($tag_array, $tag2 = '') {
 								$age_diff	= KT_Date::Compare($event_date, $birth_date);
 								if ($event_date->MinJD() && $birth_date->MinJD() && ($age_diff < 0)) {
 									$html .= '
-										<div class="grid-x">
-											<div class="cell small-6 medium-4"><a href="' . $person->getHtmlUrl(). '" target="_blank" rel="noopener noreferrer">' . $person->getFullName() . '</a></div>
-											<div class="cell small-6 medium-4"><span class="label">' . KT_Gedcom_Tag::getLabel('BIRT') . '</span>' . $birth_date->Display() . '</div>
-											<div class="cell auto"><span class="label">' . KT_Gedcom_Tag::getLabel($tag2) . '</span>' . $event_date->Display() . '</div>
-										</div>';
+										<tr>
+											<td><a href="' . $person->getHtmlUrl(). '" target="_blank" rel="noopener noreferrer">' . $person->getFullName() . '</a></td>
+											<td>' . $birth_date->Display() . '</td>
+											<td>' . $event_date->Display() . '</td>
+										</tr>';
 									$count ++;
 								}
 							}
@@ -70,12 +78,52 @@ function birth_comparisons($tag_array, $tag2 = '') {
 									$age_diff	= KT_Date::Compare($event_date, $birth_date);
 									if ($event_date->MinJD() && $birth_date->MinJD() && ($age_diff < 0)) {
 										$html .= '
-											<div class="grid-x">
-												<div class="cell small-6 medium-4"><a href="' . $person->getHtmlUrl(). '" target="_blank" rel="noopener noreferrer">' . $person->getFullName() . '</a></div>
-												<div class="cell small-6 medium-4"><span class="label">' . KT_Gedcom_Tag::getLabel('BIRT') . '</span>' . $birth_date->Display() . '</div>
-												<div class="cell auto"><span class="label">' . KT_Gedcom_Tag::getLabel($tag2) . '<a href="' . $child->getHtmlUrl(). '" target="_blank" rel="noopener noreferrer">' . $child->getFullName(). '</a>' . KT_Gedcom_Tag::getLabel('BIRT') . '</span>' . $event_date->Display() . '</div>
-											</div>';
+											<tr>
+												<td><a href="' . $person->getHtmlUrl(). '" target="_blank" rel="noopener noreferrer">' . $person->getFullName() . '</a></td>
+												<td>' . $birth_date->Display() . '</td>
+												<td><a href="' . $child->getHtmlUrl(). '" target="_blank" rel="noopener noreferrer">' . $child->getFullName() . '</a>' . '</td>
+												<td>' . $event_date->Display() . '</td>
+											</tr>';
 										$count ++;
+									}
+								}
+							}
+						break;
+						case 'CHIL_AGES':
+							$families		= array();
+							$dates			= array();
+							$differences	= array();
+							foreach ($person->getSpouseFamilies() as $family) {
+								if (!in_array($family->getXref(), $families)) {
+									$families[]	= $family->getXref();
+									$children	= $family->getChildren();
+									if (count($children) > 1) {
+										foreach ($children as $child) {
+											$dates[$child->getXref()] = $child->getBirthDate()->MinJD();
+										}
+									}
+									if ($dates) {
+										asort($dates);
+										foreach ($dates as $xref => $day) {
+											$xrefs[] = $xref;
+											foreach ($dates as $xref2 => $day2) {
+												if ($xref <> $xref2 && !in_array($xref2, $xrefs)) {
+													$diff = $day2 - $day;
+													if ($diff > 1 && $diff < (365 / 12 * 9)) { // more than 1 daye & less than 9 months
+														$months		= round($diff / (365 / 12), 0);
+														$person1	= KT_Person::getInstance($xref);
+														$person2	= KT_Person::getInstance($xref2);
+														$html .= '
+															<tr>
+																<td><a href="' . $person1->getHtmlUrl(). '#relatives" target="_blank" rel="noopener noreferrer">' . $person1->getFullName() . '</a></td>
+																<td><a href="' . $person2->getHtmlUrl(). '#relatives" target="_blank" rel="noopener noreferrer">' . $person2->getFullName() . '</a></td>
+																<td>' . KT_I18N::plural('%s month', '%s months', $months, $months) . '</td>
+															</tr>';
+														$count ++;
+													}
+												}
+											}
+										}
 									}
 								}
 							}
@@ -91,11 +139,11 @@ function birth_comparisons($tag_array, $tag2 = '') {
 						$age_diff	= KT_Date::Compare($event_date, $birth_date);
 						if ($event_date->MinJD() && $birth_date->MinJD() && ($age_diff < 0)) {
 							$html .= '
-								<div class="grid-x">
-									<div class="cell small-6 medium-4"><a href="' . $person->getHtmlUrl(). '" target="_blank" rel="noopener noreferrer">' . $person->getFullName() . '</a></div>
-									<div class="cell small-6 medium-4"><span class="label">' . KT_Gedcom_Tag::getLabel('BIRT') . '</span>' . $birth_date->Display() . '</div>
-									<div class="cell auto"><span class="label">' . KT_Gedcom_Tag::getLabel($tag_array[$i]) . '</span>' . $event_date->Display() . '</div>
-								</div>';
+								<tr>
+									<td><a href="' . $person->getHtmlUrl(). '" target="_blank" rel="noopener noreferrer">' . $person->getFullName() . '</a></td>
+									<td>' . $birth_date->Display() . '</td>
+									<td>' . $event_date->Display() . '</td>
+								</tr>';
 							$count ++;
 						}
 					}
@@ -104,18 +152,26 @@ function birth_comparisons($tag_array, $tag2 = '') {
 		}
 	}
 	$time_elapsed_secs = number_format((microtime(true) - $start), 2);
+
 	return array('html' => $html, 'count' => $count, 'time' => $time_elapsed_secs);
 }
 
-function death_comparisons($tag_array) {
+function death_comparisons($gedID, $tag_array) {
 	$html		= '';
 	$count		= 0;
 	$tag_count	= count($tag_array);
 	$start		= microtime(true);
+	$sql		= "
+					SELECT i_id AS xref
+					FROM `##individuals`
+					WHERE `i_file` = ?
+					AND `i_gedcom` LIKE CONCAT('%1 ', ?, '%')
+					AND `i_gedcom` NOT LIKE CONCAT('%1 ', ?, ' Y%')
+				  ";
+
 	for ($i = 0; $i < $tag_count; $i ++) {
-		$rows = KT_DB::prepare(
-			"SELECT i_id AS xref, i_gedcom AS gedrec FROM `##individuals` WHERE `i_file` = ? AND `i_gedcom` LIKE CONCAT('%1 ', ?, '%') AND `i_gedcom` NOT LIKE CONCAT('%1 ', ?, ' Y%')"
-		)->execute(array(KT_GED_ID, $tag_array[$i], $tag_array[$i]))->fetchAll();
+		$rows = KT_DB::prepare($sql)->execute(array($gedID, $tag_array[$i], $tag_array[$i]))->fetchAll();
+
 		foreach ($rows as $row) {
 			$person		= KT_Person::getInstance($row->xref);
 			$death_date = $person->getDeathDate();
@@ -125,255 +181,27 @@ function death_comparisons($tag_array) {
 				$age_diff	= KT_Date::Compare($event_date, $death_date);
 				if ($event_date->MinJD() && $death_date->MinJD() && ($age_diff < 0)) {
 					$html .= '
-						<div class="grid-x">
-							<div class="cell small-6 medium-4"><a href="' . $person->getHtmlUrl(). '" target="_blank" rel="noopener noreferrer">' . $person->getFullName() . '</a></div>
-							<div class="cell small-6 medium-4"><span class="label">' . KT_Gedcom_Tag::getLabel($tag_array[$i]) . '</span>' . $event_date->Display() . '</div>
-							<div class="cell auto"><span class="label">' . KT_Gedcom_Tag::getLabel('DEAT') . '</span>' . $death_date->Display() . '</div>
-						</div>';
+						<tr>
+							<td><a href="' . $person->getHtmlUrl(). '" target="_blank" rel="noopener noreferrer">' . $person->getFullName() . '</a></td>
+							<td>' . $event_date->Display() . '</td>
+							<td>' . $death_date->Display() . '</td>
+						</tr>';
 					$count ++;
 				}
 			}
 		}
 	}
 	$time_elapsed_secs = number_format((microtime(true) - $start), 2);
+
 	return array('html' => $html, 'count' => $count, 'time' => $time_elapsed_secs);
 }
 
-function missing_tag($tag) {
-	$html	= '<ul>';
-	$count	= 0;
-	$start	= microtime(true);
-	$rows	= KT_DB::prepare("
-		SELECT i_id AS xref, i_gedcom AS gedrec
-			FROM `##individuals`
-			WHERE `i_file` = ? AND `i_gedcom`
-			NOT REGEXP CONCAT('\n[0-9] ' , ?)
-		")->execute(array(KT_GED_ID, $tag))->fetchAll();
-	foreach ($rows as $row) {
-		$person = KT_Person::getInstance($row->xref);
-		$html 	.= '
-			<li>
-				<a href="' . $person->getHtmlUrl(). '" target="_blank" rel="noopener noreferrer">' . $person->getFullName() . '</a>
-			</li>';
-		$count	++;
-	}
-	$html .= '</ul>';
-	$time_elapsed_secs = number_format((microtime(true) - $start), 2);
-	return array('html' => $html, 'count' => $count, 'time' => $time_elapsed_secs);
-}
-
-function invalid_age() {
-	$html		= '<ul>';
-	$count		= 0;
-	$start		= microtime(true);
-
-	// Individuals
-	$rows	= KT_DB::prepare("
-		SELECT i_id AS xref, i_gedcom AS gedrec
-			FROM `##individuals`
-			WHERE `i_file` = ?
-			AND `i_gedcom` REGEXP CONCAT('[0-9] ', 'AGE') COLLATE utf8_bin
-			AND `i_gedcom` NOT REGEXP CONCAT('[0-9] ', 'AGE', ' [0-9]{1,3}[a-z]{1}') COLLATE utf8_bin
-		")->execute(array(KT_GED_ID))->fetchAll();
-	foreach ($rows as $row) {
-		$gedrec	= '';
-		$person = KT_Person::getInstance($row->xref);
-		if (preg_match('/\n\d AGE.*\n/i', $row->gedrec, $match)) {
-			$gedrec = preg_replace('/\d AGE /', '', $match[0]);
-		}
-		$html 	.= '
-			<li>
-				<a href="' . $person->getHtmlUrl(). '" target="_blank" rel="noopener noreferrer">' . $person->getFullName() . '</a>
-				&nbsp;(
-				<span>' . $gedrec . '</span>
-				&nbsp;)
-			</li>';
-		$count	++;
-	}
-	// Families (HUSB, WIFE)
- 	$rows	= KT_DB::prepare("
-		SELECT f_id AS xref, f_gedcom AS gedrec
-			FROM `##families`
-			WHERE `f_file` = ?
-			AND BINARY `f_gedcom` REGEXP CONCAT('\n[0-9] ', 'AGE') COLLATE utf8_bin
-			AND BINARY `f_gedcom` NOT REGEXP CONCAT('[0-9] ', 'AGE', ' [0-9]{1,3}[a-z]{1}') COLLATE utf8_bin
-		")->execute(array(KT_GED_ID))->fetchAll();
-	foreach ($rows as $row) {
-		$gedrec	= '';
-		$family = KT_Family::getInstance($row->xref);
-		if (preg_match_all('/\n\d AGE.*/', $row->gedrec, $match)) {
-			foreach ($match[0] as $value) {
-				$gedrec .= preg_replace('/\d AGE /', '', $value);
-			}
-		}
-		$html 	.= '
-			<li>
-				<a href="' . $family->getHtmlUrl(). '" target="_blank" rel="noopener noreferrer">' . $family->getFullName() . '</a>
-				&nbsp;(
-				<span>' . $gedrec . '</span>
-				&nbsp;)
-			</li>';
-		$count	++;
-	}
-	$html .= '</ul>';
-	$time_elapsed_secs = number_format((microtime(true) - $start), 2);
-	return array('html' => $html, 'count' => $count, 'time' => $time_elapsed_secs);
-}
-
-function duplicate_tag($tag) {
-	$html	= '<ul>';
-	$count	= 0;
-	$start	= microtime(true);
-	switch ($tag) {
-		case 'BAPM' :
-		case 'CHR' :
-			$rows = KT_DB::prepare("
-				SELECT i_id AS xref FROM `##individuals` WHERE `i_file`= ? AND (
-					(`i_gedcom` LIKE BINARY CONCAT('%1 ', 'BAPM','%1 ', 'BAPM', '%')) OR
-					(`i_gedcom` LIKE BINARY CONCAT('%1 ', 'BAPM','%1 ', 'CHR', '%')) OR
-					(`i_gedcom` LIKE BINARY CONCAT('%1 ', 'CHR','%1 ', 'CHR', '%')) OR
-					(`i_gedcom` LIKE BINARY CONCAT('%1 ', 'CHR','%1 ', 'BAPM', '%'))
-				)
-			")->execute(array(KT_GED_ID))->fetchAll();
-		break;
-		default :
-			$rows = KT_DB::prepare("SELECT i_id AS xref FROM `##individuals` WHERE `i_file`= ? AND `i_gedcom` LIKE BINARY CONCAT('%1 ', ?,'%1 ', ?, '%')"
-			)->execute(array(KT_GED_ID, $tag, $tag))->fetchAll();
-	}
-	foreach ($rows as $row) {
-		$person	= KT_Person::getInstance($row->xref);
-		$html	.= '
-			<li>
-				<a href="' . $person->getHtmlUrl(). '" target="_blank" rel="noopener noreferrer">' . $person->getFullName() . '</a>
-			</li>
-		';
-		$count	++;
-	}
-	$html .= '</ul>';
-	$time_elapsed_secs = number_format((microtime(true) - $start), 2);
-	return array('html' => $html, 'count' => $count, 'time' => $time_elapsed_secs);
-}
-
-function duplicate_famtag($tag) {
-	$html	= '<ul>';
-	$count	= 0;
-	$start	= microtime(true);
-	$rows	= KT_DB::prepare("SELECT f_id AS xref FROM `##families` WHERE `f_file`= ? AND `f_gedcom` LIKE BINARY CONCAT('%1 ', ?,'%1 ', ?, '%')")->execute(array(KT_GED_ID, $tag, $tag))->fetchAll();
-
-	foreach ($rows as $row) {
-		$family	= KT_Family::getInstance($row->xref);
-		$html	.= '
-			<li>
-				<a href="' . $family->getHtmlUrl(). '" target="_blank" rel="noopener noreferrer">' . $family->getFullName() . '</a>
-			</li>
-		';
-		$count	++;
-	}
-	$html .= '</ul>';
-	$time_elapsed_secs = number_format((microtime(true) - $start), 2);
-	return array('html' => $html, 'count' => $count, 'time' => $time_elapsed_secs);
-}
-
-
-function duplicate_child() {
-	$html	= '<ul>';
-	$count	= 0;
-	$start	= microtime(true);
-	$rows	= KT_DB::prepare(
-		"SELECT f_id AS xref FROM `##families` WHERE `f_file`= ? AND ROUND((LENGTH(`f_gedcom`) - LENGTH(REPLACE(`f_gedcom`, '1 CHIL @', '')))/LENGTH('1 CHIL @')) > 1"
-	)->execute(array(KT_GED_ID))->fetchAll();
-	foreach ($rows as $row) {
-		$names = array();
-		$new_children = array();
-		$family	= KT_Family::getInstance($row->xref);
-		$children = $family->getChildren();
-		foreach ($children as $child) {
-			$names[]							= $child->getFullName();
-			$new_children[$child->getXref()]	= $child->getFullName();
-		}
-		asort($new_children);
-		if (count(array_unique($names)) < count($names)) {
-			$single_names = array_diff($names, array_diff_assoc($names, array_unique($names)));
-			$html .= '<li><a href="' . $family->getHtmlUrl() . '" target="_blank" rel="noopener noreferrer">' . $family->getFullName() . '</a>';
-			foreach ($new_children as $xref => $name) {
-				if (!in_array($name, $single_names)) {
-					$person	= KT_Person::getInstance($xref);
-					$html	.= '<ul class="indent"><li>' . $person->getSexImage('small') . ' - ' . $person->getLifespanName() . '</li></ul>';
-				}
-			}
-			$html	.= '</li>';
-			$count	++;
-		}
-	}
-	$html .= '</ul>';
-	$time_elapsed_secs = number_format((microtime(true) - $start), 2);
-	return array('html' => $html, 'count' => $count, 'time' => $time_elapsed_secs);
-}
-
-function empty_tag() {
-	global $emptyfacts;
-	$html			= '<ul>';
-	$count			= 0;
-	$start			= microtime(true);
-	$person_list	= array();
-	$rows			= KT_DB::prepare( "SELECT i_id AS xref FROM `##individuals` WHERE `i_file` = ?" )->execute(array(KT_GED_ID))->fetchAll();
-	foreach ($rows as $row) {
-		$person		= KT_Person::getInstance($row->xref);
-		$indifacts	= $person->getIndiFacts();
-		$tag_list	= array();
-		foreach ($indifacts as $key=>$value) {
-			$fact	= $value->getDetail();
-			$tag	= $value->getTag();
-			if (!in_array($tag, $emptyfacts) && $fact == '') {
-				$tag_list[] = $tag;
-				$tag_count = array_count_values($tag_list)[$tag];
-				if (!in_array($person->getXref(), $person_list)) {
-					$count	++;
-					$person_list[] = $person->getXref();
-					$html .= '<li><a href="' . $person->getHtmlUrl(). '" target="_blank" rel="noopener noreferrer">' . $person->getFullName() . '</a>';
-				}
-				$html .= '<ul class="indent">';
-					if ($tag_count == 1) {
-						$html .= '<li><span>' . KT_I18N::translate('One or more empty %s tags ', $tag) . '</span></li>';
-					}
-				$html .= '</ul>';
-				$html .= '</li>';
-
-			}
-		}
-	}
-	$html .= '</ul>';
-	$time_elapsed_secs = number_format((microtime(true) - $start), 2);
-	return array('html' => $html, 'count' => $count, 'time' => $time_elapsed_secs);
-}
-
-function identical_name() {
-	$html	= '<ul>';
-	$count	= 0;
-	$start	= microtime(true);
-	$rows	= KT_DB::prepare(
-		"SELECT n_id AS xref, COUNT(*) as count FROM `##name` WHERE `n_file`= ? AND `n_type`= 'NAME' GROUP BY `n_id`, `n_sort` HAVING COUNT(*) > 1 "
- 	)->execute(array(KT_GED_ID))->fetchAll();
-	foreach ($rows as $row) {
-		$person	= KT_Person::getInstance($row->xref);
-		$html	.= '
-			<li>
-				<a href="' . $person->getHtmlUrl(). '" target="_blank" rel="noopener noreferrer">' . $person->getFullName() . '</a>
-			</li>
-		';
-		$count	++;
-	}
-
-	$html .= '</ul>';
-	$time_elapsed_secs = number_format((microtime(true) - $start), 2);
-	return array('html' => $html, 'count' => $count, 'time' => $time_elapsed_secs);
-}
-
-function query_age($tag_array, $age) {
+function query_age($gedID, $tag_array, $age) {
 	$html		= '';
 	$count		= 0;
 	$tag_count	= count($tag_array);
 	$start		= microtime(true);
+
 	for ($i = 0; $i < $tag_count; $i ++) {
 		switch ($tag_array[$i]) {
 			case ('DEAT'):
@@ -396,7 +224,7 @@ function query_age($tag_array, $age) {
 					GROUP BY xref, birthyear
 					ORDER BY age DESC
 				";
-				$rows		= KT_DB::prepare($sql)->execute(array(KT_GED_ID, $age))->fetchAll();
+				$rows		= KT_DB::prepare($sql)->execute(array($gedID, $age))->fetchAll();
 				$result_tag	= $tag_array[$i];
 			break;
 			case ('MARR'):
@@ -420,7 +248,7 @@ function query_age($tag_array, $age) {
 					GROUP BY xref, marryear, birth.d_year
 					ORDER BY age DESC
 				";
-				$rows		= KT_DB::prepare($sql)->execute(array(KT_GED_ID, KT_GED_ID, KT_GED_ID, $age))->fetchAll();
+				$rows		= KT_DB::prepare($sql)->execute(array($gedID, $gedID, $gedID, $age))->fetchAll();
 				$result_tag	= $tag_array[$i];
 			break;
 			case ('FAMS'):
@@ -442,7 +270,7 @@ function query_age($tag_array, $age) {
 					 GROUP BY xref
 					 ORDER BY age DESC
 				";
-				$rows		= KT_DB::prepare($sql)->execute(array(KT_GED_ID, KT_GED_ID, KT_GED_ID, $age))->fetchAll();
+				$rows		= KT_DB::prepare($sql)->execute(array($gedID, $gedID, $gedID, $age))->fetchAll();
 				$result_tag	= $tag_array[$i];
 			break;
 			case ('CHIL_1'):
@@ -470,7 +298,7 @@ function query_age($tag_array, $age) {
 					GROUP BY xref, xref2
 					ORDER BY age ASC
 				";
-				$rows		= KT_DB::prepare($sql)->execute(array(KT_GED_ID, KT_GED_ID, KT_GED_ID, KT_GED_ID, ($age * 365.25)))->fetchAll();
+				$rows		= KT_DB::prepare($sql)->execute(array($gedID, $gedID, $gedID, $gedID, ($age * 365.25)))->fetchAll();
 				$result_tag	= $tag_array[$i];
 			break;
 			case ('CHIL_2'):
@@ -498,7 +326,7 @@ function query_age($tag_array, $age) {
 					GROUP BY xref, xref2
 					ORDER BY age ASC
 				";
-				$rows		= KT_DB::prepare($sql)->execute(array(KT_GED_ID, KT_GED_ID, KT_GED_ID, KT_GED_ID, ($age * 365.25)))->fetchAll();
+				$rows		= KT_DB::prepare($sql)->execute(array($gedID, $gedID, $gedID, $gedID, ($age * 365.25)))->fetchAll();
 				$result_tag	= $tag_array[$i];
 			break;
 			default:
@@ -522,7 +350,7 @@ function query_age($tag_array, $age) {
 					 GROUP BY xref, birtyear, tag.d_year
 					 ORDER BY age DESC
 				";
-				$rows		= KT_DB::prepare($sql)->execute(array(KT_GED_ID, $tag_array[$i], $age))->fetchAll();
+				$rows		= KT_DB::prepare($sql)->execute(array($gedID, $tag_array[$i], $age))->fetchAll();
 				$result_tag	= $tag_array[$i];
 			break;
 		}
@@ -535,8 +363,10 @@ function query_age($tag_array, $age) {
 					if ($person && !$person->getAllDeathDates()) {
 						$link_url	= $person->getHtmlUrl();
 						$link_name	= $person->getFullName();
-						$result 	= KT_I18N::translate('born in %1s, now aged %2s years', $row->birthyear, $row->age);
-					}
+						$result1	= $row->birthyear;
+						$result2	= $row->age;
+						$result3	= false;
+		}
 					break;
 				case 'MARR';
 					$person = KT_Person::getInstance($row->xref);
@@ -545,6 +375,7 @@ function query_age($tag_array, $age) {
 						$link_name	= $person->getFullName();
 						$result1	= $row->marryear;
 						$result2	= $row->age;
+						$result3	= false;
 					}
 					break;
 				case 'FAMS';
@@ -552,7 +383,9 @@ function query_age($tag_array, $age) {
 					if ($family) {
 						$link_url	= $family->getHtmlUrl();
 						$link_name	= $family->getFullName();
-						$result 	= KT_I18N::translate('Age difference = %1s years', $row->age);
+						$result1	= $row->age;
+						$result2	= false;
+						$result3	= false;
 					}
 					break;
 				case 'CHIL_1';
@@ -564,27 +397,33 @@ function query_age($tag_array, $age) {
 						$link_name	= $person->getFullName();
 						$link_name2	= $person2->getFullName();
 						$child		= '<a href="' . $link_url2. '" target="_blank" rel="noopener noreferrer">' . $link_name2 . '</a>';
-						$result 	= KT_I18N::translate('gave birth before age %1s years to %2s in %3s', (int)($row->age / 365.25), $child, $row->dob);
+						$result1	= (int)($row->age / 365.25);
+						$result2	= $child;
+						$result3	= $row->dob;
 					}
 					break;
-					case 'CHIL_2';
-						$person = KT_Person::getInstance($row->xref);
-						$person2 = KT_Person::getInstance($row->xref2);
-						if ($person && $person2) {
-							$link_url	= $person->getHtmlUrl();
-							$link_url2	= $person2->getHtmlUrl();
-							$link_name	= $person->getFullName();
-							$link_name2	= $person2->getFullName();
-							$child		= '<a href="' . $link_url2. '" target="_blank" rel="noopener noreferrer">' . $link_name2 . '</a>';
-							$result 	= KT_I18N::translate('gave birth after age %1s years to %2s in %3s', (int)($row->age / 365.25), $child, $row->dob);
-						}
-						break;
+				case 'CHIL_2';
+					$person = KT_Person::getInstance($row->xref);
+					$person2 = KT_Person::getInstance($row->xref2);
+					if ($person && $person2) {
+						$link_url	= $person->getHtmlUrl();
+						$link_url2	= $person2->getHtmlUrl();
+						$link_name	= $person->getFullName();
+						$link_name2	= $person2->getFullName();
+						$child		= '<a href="' . $link_url2. '" target="_blank" rel="noopener noreferrer">' . $link_name2 . '</a>';
+						$result1	= (int)($row->age / 365.25);
+						$result2	= $child;
+						$result3	= $row->dob;
+					}
+					break;
 				case 'BAPM';
 					$person = KT_Person::getInstance($row->xref);
 					if ($person) {
 						$link_url	= $person->getHtmlUrl();
 						$link_name	= $person->getFullName();
-						$result 	= KT_I18N::translate('born in %1s, baptised at age %2s years', $row->birtyear, $row->age);
+						$result1	= $row->birtyear;
+						$result2	= $row->age;
+						$result3	= false;
 					}
 					break;
 				case 'CHR';
@@ -592,7 +431,9 @@ function query_age($tag_array, $age) {
 					if ($person) {
 						$link_url	= $person->getHtmlUrl();
 						$link_name	= $person->getFullName();
-						$result 	= KT_I18N::translate('born in %1s, christened at age %2s years', $row->birtyear, $row->age);
+						$result1	= $row->birtyear;
+						$result2	= $row->age;
+						$result3	= false;
 					}
 					break;
 			}
@@ -600,9 +441,10 @@ function query_age($tag_array, $age) {
 				$html .= '
 					<tr>
 						<td><a href="' . $link_url. '" target="_blank" rel="noopener noreferrer">' . $link_name. '</a></td>
-						<td>' . $result1 . '</td>
-						<td>' . $result2 . '</td>
-					</tr>';
+						<td>' . $result1 . '</td>';
+						$result2 ? $html .= '<td>' . $result2 . '</td>' : '<td></td>';
+						$result3 ? $html .= '<td>' . $result3 . '</td>' : '<td></td>';
+					$html .= '</tr>';
 				$count ++;
 			}
 		}
@@ -612,90 +454,161 @@ function query_age($tag_array, $age) {
 	return array('html' => $html, 'count' => $count, 'time' => $time_elapsed_secs);
 }
 
-function child_order() {
+function duplicate_tag($gedID, $tag) {
 	$html	= '';
 	$count	= 0;
 	$start	= microtime(true);
-	$dates	= array();
-	// Families
- 	$rows	= KT_DB::prepare("
-		SELECT f_id AS xref, f_gedcom AS gedrec
-			FROM `##families`
-			WHERE `f_file` = ?
-			AND `f_numchil` > 1
-		")->execute(array(KT_GED_ID))->fetchAll();
-	foreach ($rows as $row) {
-		$family		= KT_Family::getInstance($row->xref);
-		$children	= $family->getChildren();
-		$dates_original	= array();
-		$dates_sorted	= array();
-		foreach ($children as $child) {
-			$bdate = $child->getBirthDate();
-			if ($bdate->isOK()) {
-				$date = $bdate->MinJD();
-			} else {
-				$date = 1e8; // birth date missing => sort last
-			}
-			$dates_original[]	= $date;
-			$dates_sorted[]		= $date;
-		}
-		asort($dates_sorted);
+	$sql1	= "
+				SELECT i_id AS xref
+				FROM `##individuals`
+				WHERE `i_file`= ?
+				AND (
+					(`i_gedcom` LIKE BINARY CONCAT('%1 ', 'BAPM','%1 ', 'BAPM', '%')) OR
+					(`i_gedcom` LIKE BINARY CONCAT('%1 ', 'BAPM','%1 ', 'CHR', '%')) OR
+					(`i_gedcom` LIKE BINARY CONCAT('%1 ', 'CHR','%1 ', 'CHR', '%')) OR
+					(`i_gedcom` LIKE BINARY CONCAT('%1 ', 'CHR','%1 ', 'BAPM', '%'))
+				)
+			 ";
+	 $sql2	= "
+ 				SELECT i_id AS xref
+				FROM `##individuals`
+				WHERE `i_file`= ?
+				AND `i_gedcom` LIKE BINARY CONCAT('%1 ', ?,'%1 ', ?, '%')
+ 			 ";
 
-		if ($dates_original !== $dates_sorted) {
-			$html .= '
-				<div class="grid-x">
-					<div class="cell small-6 medium-4"><a href="' . $family->getHtmlUrl() . '" target="_blank" rel="noopener noreferrer">' . $family->getFullName() . '</a></div>
-					<div class="cell small-6 medium-4" style="font-size:90%; font-style:italic;"><a href="edit_interface.php?action=reorder_children&pid=' . $family->getXref() . '&amp;ged=KT_GEDCOM" target="_blank">click to update order</a></div>
-				</div>';
-			$count ++;
-		}
+	switch ($tag) {
+		case 'BAPM' :
+		case 'CHR' :
+			$rows = KT_DB::prepare($sql1)->execute(array($gedID))->fetchAll();
+		break;
+		default :
+			$rows = KT_DB::prepare($sql2)->execute(array($gedID, $tag, $tag))->fetchAll();
 	}
 
+	foreach ($rows as $row) {
+		$person	= KT_Person::getInstance($row->xref);
+		$html	.= '
+			<tr>
+				<td>
+					<a href="' . $person->getHtmlUrl(). '" target="_blank" rel="noopener noreferrer">' . $person->getFullName() . '</a>
+				</td>
+			</tr>
+		';
+		$count	++;
+	}
 	$time_elapsed_secs = number_format((microtime(true) - $start), 2);
+
 	return array('html' => $html, 'count' => $count, 'time' => $time_elapsed_secs);
 }
 
-function fam_order() {
-	$html	= '<ul>';
+function identical_name($gedID) {
+	$html	= '';
 	$count	= 0;
 	$start	= microtime(true);
-	$dates	= array();
-	// Individuals with FAMS records
-	$rows	= KT_DB::prepare(
-		"SELECT i_id AS xref, i_gedcom AS gedrec FROM `##individuals` WHERE `i_file` = ? AND `i_gedcom` LIKE '%1 FAMS @%'"
-	)->execute(array(KT_GED_ID))->fetchAll();
+	$sql 	= "
+				SELECT n_id AS xref, COUNT(*) as count
+				FROM `##name`
+				WHERE `n_file`= ?
+				AND `n_type`= 'NAME'
+				GROUP BY `n_id`, `n_sort`
+				HAVING COUNT(*) > 1
+			  ";
+	$rows	= KT_DB::prepare($sql)->execute(array($gedID))->fetchAll();
+
 	foreach ($rows as $row) {
-		$person = KT_Person::getInstance($row->xref);
-		if (count($person->getSpouseFamilies()) > 1) {
-			$dates_original	= array();
-			$dates_sorted	= array();
-			foreach ($person->getSpouseFamilies() as $family) {
-				$mdate	= $family->getMarriageDate();
-				if ($mdate->isOK()) {
-					$date = $mdate->MinJD();
-				} else {
-					$date = 1e8; // birth date missing => sort last
-				}
-				$dates_original[]	= $date;
-				$dates_sorted[]		= $date;
-			}
-			sort($dates_sorted);
-			if ($dates_original !== $dates_sorted) {
-				$html .= '
-				<div class="grid-x">
-					<div class="cell small-6 medium-4"><a href="individual.php?pid=' . $person->getXref(). '&amp;ged=' . KT_GEDCOM . '#relatives" target="_blank" rel="noopener noreferrer">' . $person->getFullName() . '</a></div>
-					<div class="cell small-6 medium-4" style="font-size:90%; font-style:italic;"><a href="edit_interface.php?action=reorder_fams&pid=' . $person->getXref() . '&amp;ged=' . KT_GEDCOM . '" target="_blank">click to update order</a></div>
-				</div>';
-				$count ++;
-			}
-		}
+		$person	= KT_Person::getInstance($row->xref);
+		$html	.= '
+			<tr>
+				<td>
+					<a href="' . $person->getHtmlUrl(). '" target="_blank" rel="noopener noreferrer">' . $person->getFullName() . '</a>
+				</td>
+			</tr>
+		';
+		$count	++;
 	}
-	$html .= '</ul>';
+
 	$time_elapsed_secs = number_format((microtime(true) - $start), 2);
 	return array('html' => $html, 'count' => $count, 'time' => $time_elapsed_secs);
 }
 
-function missing_vital($tag, $DateTag, $PlacTag, $SourTag) {
+function duplicate_famtag($gedID, $tag) {
+	$html	= '';
+	$count	= 0;
+	$start	= microtime(true);
+	$sql 	= "
+				SELECT f_id AS xref
+				FROM `##families`
+				WHERE `f_file`= ?
+				AND `f_gedcom` LIKE BINARY CONCAT('%1 ', ?,'%1 ', ?, '%')
+			  ";
+
+	$rows	= KT_DB::prepare($sql)->execute(array($gedID, $tag, $tag))->fetchAll();
+
+	foreach ($rows as $row) {
+		$family	= KT_Family::getInstance($row->xref);
+		$html	.= '
+			<tr>
+				<td>
+					<a href="' . $family->getHtmlUrl(). '" target="_blank" rel="noopener noreferrer">' . $family->getFullName() . '</a>
+				</td>
+			</tr>
+		';
+		$count	++;
+	}
+	$time_elapsed_secs = number_format((microtime(true) - $start), 2);
+
+	return array('html' => $html, 'count' => $count, 'time' => $time_elapsed_secs);
+}
+
+function duplicate_child($gedID) {
+	$html	= '';
+	$count	= 0;
+	$start	= microtime(true);
+	$sql 	= "
+				SELECT f_id AS xref
+				FROM `##families`
+				WHERE `f_file`= ?
+				AND ROUND((LENGTH(`f_gedcom`) - LENGTH(REPLACE(`f_gedcom`, '1 CHIL @', '')))/LENGTH('1 CHIL @')) > 1
+			  ";
+
+	$rows	= KT_DB::prepare($sql)->execute(array($gedID))->fetchAll();
+
+	foreach ($rows as $row) {
+		$names = array();
+		$new_children = array();
+		$family	= KT_Family::getInstance($row->xref);
+		$children = $family->getChildren();
+		foreach ($children as $child) {
+			$names[]							= $child->getFullName();
+			$new_children[$child->getXref()]	= $child->getFullName();
+		}
+		asort($new_children);
+		if (count(array_unique($names)) < count($names)) {
+			$single_names = array_diff($names, array_diff_assoc($names, array_unique($names)));
+			$html .= '
+				<tr>
+					<td>
+						<a href="' . $family->getHtmlUrl() . '" target="_blank" rel="noopener noreferrer">' . $family->getFullName() . '</a>
+					</td>
+					<td>';
+						foreach ($new_children as $xref => $name) {
+							if (!in_array($name, $single_names)) {
+								$person	= KT_Person::getInstance($xref);
+								$html	.= '<p>' . $person->getSexImage('small') . ' - ' . $person->getLifespanName() . '</p>';
+							}
+						}
+					$html .= '</td>
+				</tr>
+			';
+			$count	++;
+		}
+	}
+	$time_elapsed_secs = number_format((microtime(true) - $start), 2);
+
+	return array('html' => $html, 'count' => $count, 'time' => $time_elapsed_secs);
+}
+
+function missing_vital($gedID, $tag, $DateTag, $PlacTag, $SourTag) {
 	$html		= '';
 	$count		= 0;
 	$start		= microtime(true);
@@ -703,15 +616,29 @@ function missing_vital($tag, $DateTag, $PlacTag, $SourTag) {
 	$subTags	= trim($DateTag . '|' . $PlacTag . '|' . $SourTag, "|");
 	$subTags	= str_replace("||", "|", $subTags);
 	$results 	= array();
+	$sql1 		= "
+					SELECT i_id AS xref, i_gedcom AS gedrec
+					FROM `##individuals`
+					WHERE `i_file` = ?
+					AND `i_gedcom` NOT REGEXP '\n1 " . $tag . "'
+				  ";
+	$sql2 		= "
+					SELECT i_id AS xref, i_gedcom AS gedrec
+					FROM `##individuals`
+					WHERE `i_file` = ?
+					AND `i_gedcom` REGEXP '\n1 " . $tag . " Y\n1'
+				  ";
+	$sql3 		= "
+					SELECT i_id AS xref, i_gedcom AS gedrec
+					FROM `##individuals`
+					WHERE `i_file` = ?
+					AND `i_gedcom` REGEXP '\n1 " . $tag . "'
+				  ";
 
 	// no <<$tag>> record at all
-	$rows_1 = KT_DB::prepare("
-		SELECT i_id AS xref, i_gedcom AS gedrec
-			FROM `##individuals`
-			WHERE `i_file` = ?
-			AND `i_gedcom` NOT REGEXP '\n1 " . $tag . "'
-	")->execute(array(KT_GED_ID))->fetchAll();
-	foreach ($rows_1 as $row) {
+	$rows1 = KT_DB::prepare($sql1)->execute(array($gedID))->fetchAll();
+
+	foreach ($rows1 as $row) {
 		$person = KT_Person::getInstance($row->xref);
 		if ($tag != 'DEAT' || ($tag == 'DEAT' && $person->isDead())) {
 			$results[] = array(
@@ -723,13 +650,9 @@ function missing_vital($tag, $DateTag, $PlacTag, $SourTag) {
 	}
 
 	// <<$tag>> record with only <<Y>>
-	$rows_2 = KT_DB::prepare("
-		SELECT i_id AS xref, i_gedcom AS gedrec
-			FROM `##individuals`
-			WHERE `i_file` = ?
-			AND `i_gedcom` REGEXP '\n1 " . $tag . " Y\n1'
-	")->execute(array(KT_GED_ID))->fetchAll();
-	foreach ($rows_2 as $row) {
+	$rows2 = KT_DB::prepare($sql2)->execute(array($gedID))->fetchAll();
+
+	foreach ($rows2 as $row) {
 		$person = KT_Person::getInstance($row->xref);
 		if ($tag != 'DEAT' || ($tag == 'DEAT' && $person->isDead())) {
 			$results[] = array(
@@ -741,13 +664,9 @@ function missing_vital($tag, $DateTag, $PlacTag, $SourTag) {
 	}
 
 	// <<$tag>> record with or without <<Y>> but without any of the sub-tags specified
-	$rows_3 = KT_DB::prepare("
-		SELECT i_id AS xref, i_gedcom AS gedrec
-			FROM `##individuals`
-			WHERE `i_file` = ?
-			AND `i_gedcom` REGEXP '\n1 " . $tag . "'
-	")->execute(array(KT_GED_ID))->fetchAll();
-	foreach ($rows_3 as $row) {
+	$rows3 = KT_DB::prepare($sql3)->execute(array($gedID))->fetchAll();
+
+	foreach ($rows3 as $row) {
 		preg_match('/\n(1 ' . $tag . '.*\n([2-9] (?!' . $subTags . ').*\n)+)1/i', $row->gedrec, $match2);
 		if ($match2) {
 			$person = KT_Person::getInstance($row->xref);
@@ -765,15 +684,266 @@ function missing_vital($tag, $DateTag, $PlacTag, $SourTag) {
 
 	foreach ($results as $result) {
 		$html 	.= '
-			<p>
-				<div class="first"><a href="' . $result['HtmlUrl'] . '" target="_blank" rel="noopener noreferrer">' . $result['FullName'] . '</a></div>
-				<div class="second" style="font-size:90%; font-style:italic; vertical-align:top;"><pre style="margin:0;">' . $result['gedrec'] . '</pre></div>
-			</p>
-			<hr>
+			<tr>
+				<td><a href="' . $result['HtmlUrl'] . '" target="_blank" rel="noopener noreferrer">' . $result['FullName'] . '</a></td>
+				<td><pre>' . $result['gedrec'] . '</pre></td>
+			</tr>
 		';
 		$count	++;
 	}
 
 	$time_elapsed_secs = number_format((microtime(true) - $start), 2);
+	return array('html' => $html, 'count' => $count, 'time' => $time_elapsed_secs);
+}
+
+function missing_tag($gedID, $tag) {
+	$html	= '';
+	$count	= 0;
+	$start	= microtime(true);
+	$sql 	= "
+				SELECT i_id AS xref, i_gedcom AS gedrec
+				FROM `##individuals`
+				WHERE `i_file` = ?
+				AND `i_gedcom`
+				NOT REGEXP CONCAT('\n[0-9] ' , ?)
+			  ";
+
+	$rows	= KT_DB::prepare($sql)->execute(array($gedID, $tag))->fetchAll();
+
+	foreach ($rows as $row) {
+		$person = KT_Person::getInstance($row->xref);
+		$html 	.= '
+			<tr>
+				<td>
+					<a href="' . $person->getHtmlUrl(). '" target="_blank" rel="noopener noreferrer">' . $person->getFullName() . '</a>
+				</td>
+			</tr';
+		$count	++;
+	}
+	$time_elapsed_secs = number_format((microtime(true) - $start), 2);
+
+	return array('html' => $html, 'count' => $count, 'time' => $time_elapsed_secs);
+}
+
+function invalid_age($gedID) {
+	$html		= '';
+	$count		= 0;
+	$start		= microtime(true);
+	$sql1 	= "
+				SELECT i_id AS xref, i_gedcom AS gedrec
+				FROM `##individuals`
+				WHERE `i_file` = ?
+				AND `i_gedcom` REGEXP CONCAT('[0-9] ', 'AGE') COLLATE utf8_bin
+				AND `i_gedcom` NOT REGEXP CONCAT('[0-9] ', 'AGE', ' [0-9]{1,3}[a-z]{1}') COLLATE utf8_bin
+			  ";
+	$sql2 	= "
+				SELECT f_id AS xref, f_gedcom AS gedrec
+				FROM `##families`
+				WHERE `f_file` = ?
+				AND BINARY `f_gedcom` REGEXP CONCAT('\n[0-9] ', 'AGE') COLLATE utf8_bin
+				AND BINARY `f_gedcom` NOT REGEXP CONCAT('[0-9] ', 'AGE', ' [0-9]{1,3}[a-z]{1}') COLLATE utf8_bin
+			  ";
+
+	// Individuals
+	$rows	= KT_DB::prepare($sql1)->execute(array($gedID))->fetchAll();
+
+	foreach ($rows as $row) {
+		$gedrec	= '';
+		$person = KT_Person::getInstance($row->xref);
+		if (preg_match('/\n\d AGE.*\n/i', $row->gedrec, $match)) {
+			$gedrec = $match[0];
+		}
+		$html 	.= '
+			<tr>
+				<td>
+					<a href="' . $person->getHtmlUrl(). '" target="_blank" rel="noopener noreferrer">' . $person->getFullName() . '</a>
+				</td>
+				<td>
+					' . $gedrec . '
+				</td>
+			</tr>';
+		$count	++;
+	}
+	// Families (HUSB, WIFE)
+ 	$rows	= KT_DB::prepare($sql2)->execute(array($gedID))->fetchAll();
+
+	foreach ($rows as $row) {
+		$gedrec	= '';
+		$family = KT_Family::getInstance($row->xref);
+		if (preg_match_all('/\n\d AGE.*/', $row->gedrec, $match)) {
+			foreach ($match[0] as $value) {
+				$gedrec .= '<p>' . $value . '</p>';
+			}
+		}
+		$html 	.= '
+			<tr>
+				<td>
+					<a href="' . $family->getHtmlUrl(). '" target="_blank" rel="noopener noreferrer">' . $family->getFullName() . '</a>
+				</td>
+				<td>
+					' . $gedrec . '
+				</td>
+			</tr>';
+		$count	++;
+	}
+	$time_elapsed_secs = number_format((microtime(true) - $start), 2);
+
+	return array('html' => $html, 'count' => $count, 'time' => $time_elapsed_secs);
+}
+
+function empty_tag($gedID) {
+	global $emptyfacts;
+
+	$html			= '<ul>';
+	$count			= 0;
+	$start			= microtime(true);
+	$person_list	= array();
+	$sql 			= "
+						SELECT i_id AS xref
+						FROM `##individuals`
+						WHERE `i_file` = ?
+					  ";
+
+	$rows			= KT_DB::prepare($sql)->execute(array($gedID))->fetchAll();
+
+	foreach ($rows as $row) {
+		$person		= KT_Person::getInstance($row->xref);
+		$indifacts	= $person->getIndiFacts();
+		$tag_list	= array();
+		foreach ($indifacts as $key=>$value) {
+			$fact	= $value->getDetail();
+			$tag	= $value->getTag();
+			if (!in_array($tag, $emptyfacts) && $fact == '') {
+				$tag_list[] = $tag;
+				$tag_count = array_count_values($tag_list)[$tag];
+				if (!in_array($person->getXref(), $person_list)) {
+					$count	++;
+					$person_list[] = $person->getXref();
+					$html .= '
+						</tr>
+							<td>
+								<a href="' . $person->getHtmlUrl(). '" target="_blank" rel="noopener noreferrer">' . $person->getFullName() . '</a>
+							</td>
+					';
+				}
+				$html .= '<td>';
+					if ($tag_count == 1) {
+						$html .= '<span>' . KT_I18N::translate('One or more empty %s tags ', $tag) . '</span>';
+					}
+				$html .= '</td>';
+				$html .= '</tr>';
+
+			}
+		}
+	}
+	$time_elapsed_secs = number_format((microtime(true) - $start), 2);
+
+	return array('html' => $html, 'count' => $count, 'time' => $time_elapsed_secs);
+}
+
+function child_order($gedID) {
+	$html	= '';
+	$count	= 0;
+	$start	= microtime(true);
+	$dates	= array();
+	$sql 	= "
+				SELECT f_id AS xref, f_gedcom AS gedrec
+				FROM `##families`
+				WHERE `f_file` = ?
+				AND `f_numchil` > 1
+			  ";
+
+	// Families
+ 	$rows	= KT_DB::prepare($sql)->execute(array($gedID))->fetchAll();
+
+	foreach ($rows as $row) {
+		$family			= KT_Family::getInstance($row->xref);
+		$children		= $family->getChildren();
+		$dates_original	= array();
+		$dates_sorted	= array();
+		$gedName		= KT_Tree::getNameFromId($gedID);
+
+		foreach ($children as $child) {
+			$bdate = $child->getBirthDate();
+			if ($bdate->isOK()) {
+				$date = $bdate->MinJD();
+			} else {
+				$date = 1e8; // birth date missing => sort last
+			}
+			$dates_original[]	= $date;
+			$dates_sorted[]		= $date;
+		}
+		asort($dates_sorted);
+
+		if ($dates_original !== $dates_sorted) {
+			$html .= '
+				<tr>
+					<td>
+						<a href="' . $family->getHtmlUrl() . '" target="_blank" rel="noopener noreferrer">' . $family->getFullName() . '</a>
+					</td>
+					<td>
+						<a href="edit_interface.php?action=reorder_children&pid=' . $family->getXref() . '&amp;ged=' . $gedName . '" target="_blank">' . KT_I18N::translate('Click to update order') . '</a>
+					</td>
+				</tr>
+			';
+			$count ++;
+		}
+	}
+	$time_elapsed_secs = number_format((microtime(true) - $start), 2);
+
+	return array('html' => $html, 'count' => $count, 'time' => $time_elapsed_secs);
+}
+
+function fam_order($gedID) {
+	$html	= '';
+	$count	= 0;
+	$start	= microtime(true);
+	$dates	= array();
+	$sql 	= "
+				SELECT i_id AS xref, i_gedcom AS gedrec
+				FROM `##individuals`
+				WHERE `i_file` = ?
+				AND `i_gedcom` LIKE '%1 FAMS @%'
+			  ";
+
+	// Individuals with FAMS records
+	$rows	= KT_DB::prepare($sql)->execute(array($gedID))->fetchAll();
+
+	foreach ($rows as $row) {
+		$person = KT_Person::getInstance($row->xref);
+
+		if (count($person->getSpouseFamilies()) > 1) {
+			$dates_original	= array();
+			$dates_sorted	= array();
+
+			foreach ($person->getSpouseFamilies() as $family) {
+				$mdate	= $family->getMarriageDate();
+				if ($mdate->isOK()) {
+					$date = $mdate->MinJD();
+				} else {
+					$date = 1e8; // birth date missing => sort last
+				}
+				$dates_original[]	= $date;
+				$dates_sorted[]		= $date;
+			}
+			sort($dates_sorted);
+
+			if ($dates_original !== $dates_sorted) {
+				$html .= '
+					<tr>
+						<td>
+							<a href="individual.php?pid=' . $person->getXref(). '&amp;ged=' . KT_GEDCOM . '#tabi_families" target="_blank" rel="noopener noreferrer">' . $person->getFullName() . '</a>
+						</td>
+						<td>
+							<a href="edit_interface.php?action=reorder_fams&pid=' . $person->getXref() . '&amp;ged=' . KT_GEDCOM . '" target="_blank">' . KT_I18N::translate('Click to update order') . '</a>
+						</td>
+					</tr>
+				';
+				$count ++;
+			}
+		}
+	}
+	$time_elapsed_secs = number_format((microtime(true) - $start), 2);
+
 	return array('html' => $html, 'count' => $count, 'time' => $time_elapsed_secs);
 }

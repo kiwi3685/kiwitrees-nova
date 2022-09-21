@@ -10071,40 +10071,50 @@ main #admin-content #change_list table.DifferencesSideBySide tbody.ChangeReplace
 	text-decoration: initial;
 }
 main #admin-content #sanity_check-page fieldset.fieldset {
-	border-radius: 0.625rem;
+	border-radius: 1rem;
+	margin-top: -1rem;
 }
 main #admin-content #sanity_check-page fieldset.fieldset .input-group {
 	font-size: 90%;
-	line-height: 2;
+	line-height: 1.5;
 	margin: 0;
 }
 main #admin-content #sanity_check-page fieldset.fieldset .input-group input.input-group-field {
 	height: 1.5rem;
 	display: block;
+	flex: unset;
 	font-size: 90%;
 }
-main #admin-content #sanity_check-page fieldset.fieldset .input-group input.input-group-field.check {
-	width: 10%;
+main #admin-content #sanity_check-page fieldset.fieldset .input-group input[type=checkbox].input-group-field {
+	width: 1rem;
 }
-main #admin-content #sanity_check-page fieldset.fieldset .input-group input.input-group-field.size {
-	width: 10%;
+main #admin-content #sanity_check-page fieldset.fieldset .input-group span.switches {
+	margin: 0 0.25rem;
+	width: 3rem;
+}
+main #admin-content #sanity_check-page fieldset.fieldset .input-group input[type=text].input-group-field {
+	width: 3rem;
 }
 main #admin-content #sanity_check-page fieldset.fieldset .input-group span.input-group-label {
 	border: none;
 	background: none;
-	color: initial;
+	display: inline-block;
 	height: auto;
-	padding: 0;
+	padding: 0 0.25rem;
 	text-align: left;
-	vertical-align: text-top;
-	width: 90%;
+	vertical-align: top;
 	white-space: normal;
+	width: 18rem;
 }
-main #admin-content #sanity_check-page fieldset.fieldset .input-group span.input-group-label.size {
-	width: 75%;
+main #admin-content #sanity_check-page fieldset.fieldset .input-group span.input-group-label .svg-inline--fa {
+	margin: 0 0.5rem;
 }
 main #admin-content #sanity_check-page form[name=rela_form] {
 	margin-top: -3.5rem;
+}
+main #admin-content #sanity_check-page div#sanityList .accordion .accordion-item.is-active a.accordion-title {
+	background-color: #e1f5d1;
+	color: #1B1212;
 }
 main #admin-content #sanity_check-page div#sanityList .accordion .accordion-item .accordion-title {
 	font-weight: initial;
@@ -10113,6 +10123,9 @@ main #admin-content #sanity_check-page div#sanityList .accordion .accordion-item
 }
 main #admin-content #sanity_check-page div#sanityList .accordion .accordion-item .accordion-title svg.svg-inline--fa {
 	margin-top: 0.6rem;
+}
+main #admin-content #sanity_check-page div#sanityList .accordion .accordion-content table td p {
+	margin-bottom: 0;
 }
 main #admin-content #unlinked-records-page button {
 	margin: 1rem;

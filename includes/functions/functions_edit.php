@@ -130,7 +130,7 @@ function simple_switch($name, $value, $selected, $disabled = '', $activeText = '
 	$html = '
 		<div class="grid-x grid-margin-y">
 			<div class="switch ' . $size . ' cell small-8 medium-4 large-2">
-				<input class="switch-input" ' . $disabled . ' id="' . $name . '" type="checkbox" name="' . $name . '"';
+				<input class="switch-input" ' . $disabled . ' id="' . $name . '" type="checkbox" name="' . $name . '" value="' . $value . '"';
 					if ((string)$value === (string)$selected) {
 						$html .= ' checked';
 					}
