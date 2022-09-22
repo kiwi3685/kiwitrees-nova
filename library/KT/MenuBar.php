@@ -116,13 +116,14 @@ class KT_MenuBar {
 		$menu->addClass('', '', 'fa-gears');
 
 		$adminMenus = [
-			KT_I18N::translate('Website') 			=> "adminSummary_site.php",
-			KT_I18N::translate('Family trees') 		=> "adminSummary_trees.php",
-			KT_I18N::translate('User management') 	=> "adminSummary_users.php",
-			KT_I18N::translate('Media objects') 	=> "adminSummary_media.php",
-			KT_I18N::translate('Modules') 			=> "adminSummary_modules.php",
-			KT_I18N::translate('Customizing') 		=> "adminSummary_custom.php",
-			KT_I18N::translate('Tools') 			=> "adminSummary_tools.php"
+			KT_I18N::translate('Dashboard') 		=> "admin.php",
+			KT_I18N::translate('Website') 			=> "admin_summary_site.php",
+			KT_I18N::translate('Family trees') 		=> "admin_summary_trees.php",
+			KT_I18N::translate('User management') 	=> "admin_summary_users.php",
+			KT_I18N::translate('Media objects') 	=> "admin_summary_media.php",
+			KT_I18N::translate('Modules') 			=> "admin_summary_modules.php",
+			KT_I18N::translate('Customizing') 		=> "admin_summary_custom.php",
+			KT_I18N::translate('Tools') 			=> "admin_summary_tools.php"
 		];
 		foreach ($adminMenus as $key => $value) {
 			$submenu = new KT_Menu($key, $value, '');

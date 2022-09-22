@@ -55,7 +55,11 @@ define('KT_GM_SCRIPT', 'https://maps.google.com/maps/api/js?v=3&amp;language=' .
 class googlemap_KT_Module extends KT_Module implements KT_Module_Config, KT_Module_IndiTab, KT_Module_Chart {
 	// Extend KT_Module
 	public function getTitle() {
-		return /* I18N: The name of a module.  Google Maps™ is a trademark.  Do not translate it? http://en.wikipedia.org/wiki/Google_maps */ KT_I18N::translate('Google Maps™');
+		return
+			/* I18N: The name of a module.  Google Maps™ is a trademark.
+			Do not translate it? http://en.wikipedia.org/wiki/Google_maps */
+			KT_I18N::translate('Google Maps™')
+		;
 	}
 
 	// Extend KT_Module
@@ -85,8 +89,12 @@ class googlemap_KT_Module extends KT_Module implements KT_Module_Config, KT_Modu
 	}
 
 	// Implement KT_Module_Config
-	public function getConfigLink() {
-		return 'module.php?mod='.$this->getName() . '&amp;mod_action=admin_preferences';
+	public function getConfigLink($option = '') {
+		if ($option) {
+			return 'module.php?mod='.$this->getName() . '&amp;mod_action=' . $option;
+		} else {
+			return 'module.php?mod='.$this->getName() . '&amp;mod_action=admin_preferences';
+		}
 	}
 
 	// Implement KT_Module_Chart

@@ -134,14 +134,14 @@ $class='';
 					</li>
 					<?php if (KT_USER_IS_ADMIN) { ?>
 						<li class="admin-menu-title">
-							<a <?php echo (array_key_exists(KT_SCRIPT_NAME, $site_tools) ? 'class="current" ' : ''); ?>href="adminSummary_site.php">
+							<a <?php echo (array_key_exists(KT_SCRIPT_NAME, $site_tools) ? 'class="current" ' : ''); ?>href="admin_summary_site.php">
 								<i class="<?php echo $iconStyle; ?> fa-display"></i>
 								<?php echo KT_I18N::translate('Website'); ?>
 							</a>
 						</li>
 					<?php } ?>
 				    <li class="admin-menu-title">
-						<a <?php echo (array_key_exists(KT_SCRIPT_NAME, $trees) ? 'class="current" ' : ''); ?>href="adminSummary_trees.php">
+						<a <?php echo (array_key_exists(KT_SCRIPT_NAME, $trees) ? 'class="current" ' : ''); ?>href="admin_summary_trees.php">
 							<i class="<?php echo $iconStyle; ?> fa-tree"></i>
 							<?php echo KT_I18N::translate('Family trees'); ?>
 						</a>
@@ -149,14 +149,14 @@ $class='';
 					</li>
 					<?php if (KT_USER_IS_ADMIN) { ?>
 						<li class="admin-menu-title">
-							<a <?php echo (array_key_exists(KT_SCRIPT_NAME, $users) ? 'class="current" ' : ''); ?>href="adminSummary_users.php">
+							<a <?php echo (array_key_exists(KT_SCRIPT_NAME, $users) ? 'class="current" ' : ''); ?>href="admin_summary_users.php">
 								<i class="<?php echo $iconStyle; ?> fa-users-gear"></i>
 								<?php echo KT_I18N::translate('User management'); ?>
 							</a>
 						</li>
 
 						<li class="admin-menu-title">
-							<a <?php echo (array_key_exists(KT_SCRIPT_NAME, $media) ? 'class="current" ' : ''); ?>href="adminSummary_media.php">
+							<a <?php echo (array_key_exists(KT_SCRIPT_NAME, $media) ? 'class="current" ' : ''); ?>href="admin_summary_media.php">
 								<i class="<?php echo $iconStyle; ?> fa-photo-film"></i>
 								<?php echo KT_I18N::translate('Media objects'); ?>
 							</a>
@@ -164,7 +164,7 @@ $class='';
 
 						<li class="admin-menu-title">
 							<?php $class = (array_key_exists(KT_SCRIPT_NAME, $module_config) ? 'current' : ''); ?>
-							<a class="<?php echo $class ?>" href="adminSummary_modules.php">
+							<a class="<?php echo $class ?>" href="admin_summary_modules.php">
 								<i class="<?php echo $iconStyle; ?> fa-cubes"></i>
 								<?php echo KT_I18N::translate('Modules'); ?>
 							</a>
@@ -172,7 +172,7 @@ $class='';
 
 						<li class="admin-menu-title">
 							<?php $class = (array_key_exists(KT_SCRIPT_NAME, $custom) || KT_Filter::get('mod') === 'custom_js' ? 'current' : ''); ?>
-							<a class="<?php echo $class ?>" href="adminSummary_custom.php">
+							<a class="<?php echo $class ?>" href="admin_summary_custom.php">
 								<i class="<?php echo $iconStyle; ?> fa-paint-brush"></i>
 								<?php echo KT_I18N::translate('Customizing'); ?>
 							</a>
@@ -180,18 +180,17 @@ $class='';
 
 						<li class="admin-menu-title">
 							<?php $class = (array_key_exists(KT_SCRIPT_NAME, $tools) || in_array(KT_Filter::get('mod'), $tools) ? 'current' : ''); ?>
-							<a class="<?php echo $class ?>" href="adminSummary_tools.php">
+							<a class="<?php echo $class ?>" href="admin_summary_tools.php">
 								<i class="<?php echo $iconStyle; ?> fa-screwdriver-wrench"></i>
 								<?php echo KT_I18N::translate('Tools'); ?>
 							</a>
 						</li>
 
 						<li class="admin-menu-title">
-							<?php// $class = (array_key_exists(KT_SCRIPT_NAME, $tools) || in_array(KT_Filter::get('mod'), $tools) ? 'current' : ''); ?>
-							<form method="post" action="adminSearch.php">
+							<form method="post" action="adminSearch.php" name="adminSearch">
 								<div class="input-group">
 									<input type="search" name="admin_query" value="<?php echo KT_Filter::post('admin_query'); ?>" placeholder="<?php echo KT_I18N::translate('Administration search'); ?>" class="input-group-field">
-									<span class="input-group-label"><i class="<?php echo $iconStyle; ?> fa-magnifying-glass"></i></span>
+									<span class="input-group-label"><a href="#" onclick="adminSearch.submit()"><i class="<?php echo $iconStyle; ?> fa-magnifying-glass"></i></a></span>
 								</div>
 							</form>
 

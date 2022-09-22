@@ -21,7 +21,7 @@
  * along with Kiwitrees. If not, see <http://www.gnu.org/licenses/>.
  */
 
-define('KT_SCRIPT_NAME', 'adminSummary_tools.php');
+define('KT_SCRIPT_NAME', 'admin_summary_tools.php');
 
 global $iconStyle;
 require './includes/session.php';

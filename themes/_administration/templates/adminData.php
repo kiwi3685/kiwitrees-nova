@@ -32,13 +32,13 @@ if (!defined('KT_KIWITREES')) {
  */
 
 $site_tools = [
-	'adminSummary_site.php'=>'',
-	'admin_site_config.php'=>'',
-	'admin_site_logs.php'=>'',
-	'admin_site_info.php'=>'',
-	'admin_site_access.php'=>'',
-	'admin_site_clean.php'=>'',
-	'admin_site_use.php'=>'',
+	'admin_summary_site.php'	=> KT_I18N::translate('Website'),
+	'admin_site_config.php'		=> KT_I18N::translate('Configuration'),
+	'admin_site_logs.php'		=> KT_I18N::translate('%s logs', KT_KIWITREES),
+	'admin_site_info.php'		=> KT_I18N::translate('Server information'),
+	'admin_site_access.php'		=> KT_I18N::translate('Access rules'),
+	'admin_site_clean.php'		=> KT_I18N::translate('Data folder management'),
+	'admin_site_use.php'		=> KT_I18N::translate('Server usage'),
 ];
 
 /**
@@ -46,7 +46,7 @@ $site_tools = [
  * $trees [array]
  */
 $trees = [
-	'adminSummary_trees.php'			=> KT_I18N::translate('Family trees'),
+	'admin_summary_trees.php'			=> KT_I18N::translate('Family trees'),
 	'admin_trees_manage.php'			=> KT_I18N::translate('Manage all family trees'),
 	'admin_trees_config.php'			=> KT_I18N::translate('Configure each family tree'),
 	'admin_trees_check.php'				=> KT_I18N::translate('Check for GEDCOM errors'),
@@ -69,7 +69,7 @@ $trees = [
  * $site_tools [array]
  */
 $users = [
-	'adminSummary_users.php'			=> KT_I18N::translate('User management'),
+	'admin_summary_users.php'			=> KT_I18N::translate('User management'),
 	'admin_users.php'					=> KT_I18N::translate('Manage users'),
 	'admin_users.php?action=edit'		=> KT_I18N::translate('Add a new user'),
 	'admin_users.php?action=messaging'	=> KT_I18N::translate('Broadcast messages'),
@@ -81,49 +81,68 @@ $users = [
  * $ft_tools [array]
  */
 $media = [
-	'adminSummary_media.php'=>'',
-	'admin_media.php'=>'',
-	'admin_media_upload.php'=>'',
+	'admin_summary_media.php'	=> KT_I18N::translate('Media objects'),
+	'admin_media.php'			=> KT_I18N::translate('Manage media'),
+	'admin_media_upload.php'	=> KT_I18N::translate('Upload media objects'),
 ];
 
 /**
  * Array of Module menu items
  * $module_cats [array]
+ * Manually ordered for logical grouping
  */
 $module_config = [
-	'adminSummary_modules.php'=>'',
-	'admin_module_menus.php'=>'',
-	'admin_module_tabs_indi.php'=>'',
-	'admin_module_blocks.php'=>'',
-	'admin_module_widgets.php'=>'',
-	'admin_module_sidebar.php'=>'',
-	'admin_module_reports.php'=>'',
-	'admin_module_charts.php'=>'',
-	'admin_module_lists.php'=>'',
-	'admin_module_footers.php'=>'',
-	'admin_module_tabs_fam.php'=>'',
+	'admin_summary_modules.php'		=> KT_I18N::translate('Modules'),
+	'admin_modules.php'				=> KT_I18N::translate('Module administration'),
+	'admin_module_menus.php'		=> KT_I18N::translate('Top level menu items'),
+	'admin_module_tabs_indi.php'	=> KT_I18N::translate('Tabs for individual page'),
+	'admin_module_blocks.php'		=> KT_I18N::translate('Home page blocks'),
+	'admin_module_widgets.php'		=> KT_I18N::translate('Widget bar modules'),
+	'admin_module_sidebar.php'		=> KT_I18N::translate('Sidebar modules'),
+	'admin_module_reports.php'		=> KT_I18N::translate('Menu - Report items'),
+	'admin_module_charts.php'		=> KT_I18N::translate('Menu - Chart items'),
+	'admin_module_lists.php'		=> KT_I18N::translate('Menu - List  items'),
+	'admin_module_footers.php'		=> KT_I18N::translate('Footer blocks'),
+	'admin_module_tabs_fam.php'		=> KT_I18N::translate('Tabs for family page'),
 ];
 
 /**
  * Array of site administration menu items
  * $custom [array]
+ * Excludes "Custom javascript' page as that is not an "admin_xxxxx.php" file that can be searched
  */
  $custom = [
-	'adminSummary_custom.php'=>'',
-	'admin_custom_lang.php'=>'',
-	'admin_custom_theme.php'=>'',
+	'admin_summary_custom.php'	=> KT_I18N::translate('Customizing'),
+	'admin_custom_lang.php'		=> KT_I18N::translate('Custom translation'),
+	'admin_custom_theme.php'	=> KT_I18N::translate('Custom file editing'),
  ];
 
  /**
   * Array of site administration menu items
   * $tools [array]
   */
-$tools = ['adminSummary_tools.php'];
+$tools = ['admin_summary_tools.php' => KT_I18N::translate('Tools')];
 foreach (KT_Module::getActiveModules(true) as $tool) {
-	if ($tool instanceof KT_Module_Config && $tool->getName() !== 'custom_js') {
-		$tools[] = $tool->getName();
-	}
+	$tools[0] = $tool->getName();
+	$tools[1] = $tool->getTitle();
 }
+
+/**
+ * Array of items used in admin, but not as primary files
+ * $other [array]
+ */
+ $other_admin_files = [
+	'admin_trees_download.php'				=> KT_I18N::translate('Export a GEDCOM file'),
+	'admin_batch_update.php' 				=> KT_I18N::translate('Batch update'),
+	'admin_databasebackup.php'				=> KT_I18N::translate('Database backup'),
+	'admin_flags.php'						=> KT_I18N::translate('Googlemap flags'),
+	'admin_places.php'						=> KT_I18N::translate('Googlemap places'),
+	'admin_placecheck.php'					=> KT_I18N::translate('Googlemap place check'),
+	'admin_places_edit.php'					=> KT_I18N::translate('Googlemap places edit'),
+	'admin_preferences.php'					=> KT_I18N::translate('Googlemap preferences'),
+	'admin_fancy_treeview_ancestors.php'	=> KT_I18N::translate('FancyTreeView ancesters'),
+	'admin_fancy_treeview_descendants.php'	=> KT_I18N::translate('FancyTreeView descendants'),
+];
 
 $adminPagesList = array_merge(
 	$site_tools,
@@ -136,28 +155,30 @@ $adminPagesList = array_merge(
 );
 asort($adminPagesList);
 
-/*
-$pagesList = array(
-	 'admin_users.php'					=> KT_I18N::translate('Manage users'),
-	 'admin_users.php?action=edit'		=> KT_I18N::translate('Add a new user'),
-	 'admin_users.php?action=messaging'	=> KT_I18N::translate('Broadcast messages'),
-	 'admin_users.php?action=cleanup'	=> KT_I18N::translate('Delete inactive users'),
-
-	 'admin_trees_manage.php'			=> KT_I18N::translate('Manage all family trees'),
-	 'admin_trees_config.php'			=> KT_I18N::translate('Configure each family tree'),
-	 'admin_trees_check.php'			=> KT_I18N::translate('Check for GEDCOM errors'),
-	 'admin_trees_change.php'			=> KT_I18N::translate('Changes log'),
-	 'admin_trees_addunlinked.php'		=> KT_I18N::translate('Add unlinked records'),
-	 'admin_trees_places.php'			=> KT_I18N::translate('Place name editing'),
-	 'admin_trees_merge.php'			=> KT_I18N::translate('Merge records'),
-	 'admin_trees_renumber.php'			=> KT_I18N::translate('Renumber family tree'),
-	 'admin_trees_append.php'			=> KT_I18N::translate('Append family tree'),
-	 'admin_trees_duplicates.php'		=> KT_I18N::translate('Find duplicate individuals'),
-	 'admin_trees_findunlinked.php'		=> KT_I18N::translate('Find unlinked records'),
-	 'admin_trees_sanity.php'			=> KT_I18N::translate('Sanity check'),
-	 'admin_trees_source.php'			=> KT_I18N::translate('Sources - review'),
-	 'admin_trees_sourcecite.php'		=> KT_I18N::translate('Sources - review citations'),
-	 'admin_trees_missing.php'			=> KT_I18N::translate('Missing fact or event details'),
+$searchAdminFiles = array_merge(
+	$site_tools,
+	$trees,
+	$users,
+	$media,
+	$module_config,
+	$custom,
+	$tools,
+	$other_admin_files,
 );
-asort($pagesList);
-*/
+asort($searchAdminFiles);
+
+/**
+ * Array of items where file cannot be accessed directly
+ * file name => module name
+ */
+ $indirectAccess = [
+	'admin_batch_update.php' 				=> 'batch_update',
+	'admin_databasebackup.php'				=> 'backup_database',
+	'admin_flags.php'						=> 'googlemap',
+	'admin_places.php'						=> 'googlemap',
+	'admin_placecheck.php'					=> 'googlemap',
+	'admin_places_edit.php'					=> 'googlemap',
+	'admin_preferences.php'					=> 'googlemap',
+	'admin_fancy_treeview_ancestors.php'	=> 'fancy_treeview_ancesters',
+	'admin_fancy_treeview_descendants.php'	=> 'fancy_treeview_descendants',
+];

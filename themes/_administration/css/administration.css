@@ -9534,6 +9534,13 @@ main aside ul#admin-menu li a svg {
 	margin: 0 0.5rem;
 	width: 1.25rem;
 }
+main aside ul#admin-menu form .input-group .input-group-label {
+	padding: 0 0.5rem;
+}
+main aside ul#admin-menu form .input-group .input-group-label a {
+	margin: 0;
+	padding: 0;
+}
 main #admin-content {
 	/* Dashboard */
 	/* Media upload */
@@ -9549,6 +9556,7 @@ main #admin-content {
 	/* MANAGE USERS */
 	/* SITE LOGS */
 	/* TREE CHANGES LOG */
+	/* SEARCH REDSULTS */
 	/* SANITY CHECKS */
 	/* ADD UNLINKED */
 	/* MISSING DATA */
@@ -10069,6 +10077,15 @@ main #admin-content #change_list table.DifferencesSideBySide tbody.ChangeReplace
 main #admin-content #change_list table.DifferencesSideBySide tbody.ChangeReplace del, main #admin-content #change_list table.DifferencesSideBySide tbody.ChangeInsert del, main #admin-content #change_list table.DifferencesSideBySide tbody.ChangeDelete del {
 	color: blue;
 	text-decoration: initial;
+}
+main #admin-content #admin_search-page .searchTerm {
+	font-style: italic;
+	background-color: #ffd780;
+	padding: 0.125rem 1rem;
+}
+main #admin-content #admin_search-page table {
+	border: 0.125rem solid #e6e6e6;
+	border-collapse: unset;
 }
 main #admin-content #sanity_check-page fieldset.fieldset {
 	border-radius: 1rem;

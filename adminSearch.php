@@ -23,6 +23,8 @@
 
 define('KT_SCRIPT_NAME', 'adminSearch.php');
 require './includes/session.php';
+include KT_THEME_URL . 'templates/adminData.php';
+
 global $iconStyle;
 
 $controller = new KT_Controller_Page();
@@ -35,37 +37,63 @@ $searchTerm = KT_Filter::post('admin_query');
 $result = adminSearch($searchTerm);
 
 echo pageStart('admin_search', $controller->getPageTitle()); ?>
-	<h5><?php echo KT_I18N::translate('Searching for: %s', $searchTerm); ?></h5>
+	<div class="cell">
+		<div class="grid-x grid-margin-x grid-margin-y">
+			<div class="cell">
+				<h5><?php echo KT_I18N::translate('Searching for term: '); ?><span class="searchTerm"><?php echo $searchTerm; ?></span></h5>
+			</div>
+			<div class="cell medium-8 medium-offset-1">
+		    	<?php if ($result) { ?>
+					<table>
+						<thead>
+							<tr>
+								<th><?php echo KT_I18N::translate('Page name'); ?></th>
+								<th><?php echo KT_I18N::translate('Results'); ?></th>
+							</tr>
+						</thead>
+						<tbody>
+					        <?php foreach ($result as $page) {
+								foreach ($page as $file => $count)  {
+									if (array_key_exists($file, $indirectAccess)) {
+										$modules = KT_Module::getActiveModules(KT_GED_ID, KT_PRIV_HIDE);
+										foreach ($modules as $module) {
+											if ( $module->getName() === $indirectAccess[$file]) {
+												$link = '<a href="' . $module->getConfigLink(str_replace(".php", "", $file)) . '">' . $searchAdminFiles[$file] . '</a>';
+											}
+										}
+									} else {
+										$link = '<a href="' . $file . '">' . $searchAdminFiles[$file] . '</a>';
+									} ?>
+									<tr>
+										<td><?php echo $link; ?></td>
+										<td><span><?php echo KT_I18N::plural('%s result', '%s results', $count, $count); ?></span></td>
+									</tr>
+						        <?php }
+							} ?>
+						</tbody>
+					</table>
+			    <?php } else { ?>
+			        <div class="cell callout warning"><?php echo KT_I18N::translate('Nothing found'); ?></div>
+			    <?php } ?>
+			</div>
+		</div>
+	</div>
 
-    <?php if ($result) {
-        foreach ($result as $page) {
-			foreach ($page as $file => $count)  { ?>
-	            <div class="cell">
-					<a href="<?php echo $file; ?>">
-						<?php echo 'This is the page name'; ?>
-					</a>
-					<span><?php echo KT_I18N::translate('(%s results)', $count); ?></span>
-				</div>
-	        <?php }
-		}
-    } else { ?>
-        <div class="cell"><?php echo KT_I18N::translate('Nothing found'); ?></div>
-    <?php }
+<?php echo pageClose();
 
-echo pageClose();
 
 /**
  * Print links to related admin pages
  *
- * //@param string $title name of page
+ * @param string $title name of page
  */
 function adminSearch($searchfor) {
 
-	$files	= scandir(KT_ROOT);
-	$result = array();
+	$files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(KT_ROOT), RecursiveIteratorIterator::SELF_FIRST );
 
-	foreach($files as $file) {
+	foreach ($files as $file ) {
 		$filename = basename($file);
+
 		if (is_file($file) && strpos($filename, 'admin_') === 0) {
 			$contents = file_get_contents($file);
 			if (strpos($contents, $searchfor) !== false) {
@@ -86,4 +114,28 @@ function adminSearch($searchfor) {
 	}
 
 	return $result;
+}
+
+
+/**
+* @param string $directory
+*
+* @return SplFileInfo[]
+*/
+function getAllFiles(): array {
+//	$files	= scandir(KT_ROOT);
+	 $result = [];
+
+	 $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(KT_ROOT), RecursiveIteratorIterator::SELF_FIRST );
+
+	 foreach ($files as $file ) {
+
+		 $filename = basename($file);
+
+		 if (is_file($file) && strpos($filename, 'admin_') === 0) {
+			$result[] = $filename;
+		 }
+	 }
+
+	 return $result;
 }

@@ -44,31 +44,16 @@ class backup_database_KT_Module extends KT_Module implements KT_Module_Config {
 	// Implement KT_Module_Config
 	public function getConfigLink() {
 		return 'module.php?mod=' . $this->getName() . '&amp;mod_action=admin_databasebackup';
+
 	}
 
 	// Extend KT_Module
 	public function modAction($mod_action) {
 		switch($mod_action) {
-		case 'admin_databasebackup':
-			$this->config();
-			break;
+			case 'admin_databasebackup':
+				require KT_ROOT . KT_MODULES_DIR . $this->getName() . '/administration/' . $mod_action . '.php';
+				break;
 		}
-	}
-
-	private function config() {
-		$action		= KT_Filter::post("action");
-		$controller	= new KT_Controller_Page();
-		$controller
-			->requireAdminLogin()
-			->setPageTitle(KT_I18N::translate('Backup database'))
-			->pageHeader();
-		echo '
-			<div class="cell" id="database_backup">
-				<iframe src="' . KT_MODULES_DIR . $this->getName() . '/index.php" width="100%" height="700">
-					<p>Sorry, your browser does not support iframes</p>
-				</iframe>
-			</div>
-		';
 	}
 
 }

@@ -21,7 +21,7 @@
  * along with Kiwitrees. If not, see <http://www.gnu.org/licenses/>.
  */
 
-define('KT_SCRIPT_NAME', 'adminSummary_site.php');
+define('KT_SCRIPT_NAME', 'admin_summary_media.php');
 
 global $iconStyle;
 require './includes/session.php';
@@ -29,64 +29,38 @@ require './includes/session.php';
 $controller = new KT_Controller_Page();
 $controller
 	->restrictAccess(KT_USER_IS_ADMIN)
-	->setPageTitle(KT_I18N::translate('Website'))
+	->setPageTitle(KT_I18N::translate('Media objects'))
 	->pageHeader();
 
 /**
- * Array of site administration menu items
- * $site_tools [array]
+ * Array of family tree administration menu items
+ * $ft_tools [array]
  */
-$site_tools = array(
-	 "admin_site_config.php"	=> array(
-		KT_I18N::translate('Configuration'),
-		KT_I18N::translate('Global settings that apply to all family trees'),
+$media = array(
+	"admin_media.php"			=> array(
+		KT_I18N::translate('Manage media'),
+		KT_I18N::translate('List, filter, and edit all media objects'),
 		KT_I18N::translate('Administrator access only'),
 		'alert'
 	),
-	 "admin_site_logs.php"		=> array(
-		KT_I18N::translate('%s logs', KT_KIWITREES),
-		KT_I18N::translate('A filterable log of site-wide activities'),
+	"admin_media_upload.php"	=> array(
+		KT_I18N::translate('Upload media objects'),
+		KT_I18N::translate('Upload small batches of media objects at one time (1 to 6)'),
 		KT_I18N::translate('Administrator access only'),
 		'alert'
 	),
-	 "admin_site_info.php"		=> array(
-		KT_I18N::translate('Server information'),
-		KT_I18N::translate('Information about the configuration of your PHP and SQL installation'),
-		KT_I18N::translate('Administrator access only'),
-		'alert'
-	),
-	 "admin_site_access.php"	=> array(
-		KT_I18N::translate('Access rules'),
-		KT_I18N::translate('Restrict access to the site, using IP addresses and user-agent strings'),
-		KT_I18N::translate('Administrator access only'),
-		'alert'
-	),
-	 "admin_site_clean.php"		=> array(
-		KT_I18N::translate('Data folder management'),
-		KT_I18N::translate('Delete any files or folders no longer required from the \'data\' folder'),
-		KT_I18N::translate('Administrator access only'),
-		'alert'
-	),
-	 "admin_site_use.php"		=> array(
-		KT_I18N::translate('Server usage'),
-		KT_I18N::translate('A quick summary of the space currently being used on your web server'),
-		KT_I18N::translate('Administrator access only'),
-		'alert'
-	)
 );
-//var_dump($site_tools);
-asort($site_tools);
 
-echo pageStart('site_admin', $controller->getPageTitle()); ?>
+echo pageStart('media_admin', $controller->getPageTitle()); ?>
 
 	<div class="cell callout warning help_content">
 		<?php echo KT_I18N::translate('
-		Configuration, management, logs, and other activities related to the overall website.
+		Add, delete, edit and manage site-wide media objects
 		'); ?>
 	</div>
 	<div class="cell">
 		<div class="grid-x grid-margin-x grid-margin-y">
-			<?php foreach ($site_tools as $title => $file) { ?>
+			<?php foreach ($media as $title => $file) { ?>
 				<div class="card cell">
 					<div class="card-divider">
 						<a href="<?php echo $title; ?>">
