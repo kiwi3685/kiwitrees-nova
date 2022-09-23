@@ -9474,7 +9474,7 @@ footer {
 	max-height: 20rem;
 }
 footer .kiwitrees_logo {
-	background: url(../images/kiwitrees-nova-logo.png) no-repeat center -0.5rem;
+	background: url(../images/kiwitrees-nova-logo.png) no-repeat center;
 	background-size: contain;
 	height: 2rem;
 	width: 100%;
@@ -9488,7 +9488,7 @@ footer .card .card-divider {
 	background: none;
 	border-bottom: 0.05rem solid;
 	color: #faf5e8;
-	height: 3rem;
+	height: 3.5rem;
 }
 footer .card .card-divider h5 {
 	color: #faf5e8;
