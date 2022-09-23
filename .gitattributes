@@ -17,6 +17,7 @@ text=auto
 
 .git*                       export-ignore
 .DS_Store                   export-ignore
+_MACOSX                   export-ignore
 Makefile                    export-ignore
 build/                      export-ignore
 js/kiwitrees.js	      			export-ignore
