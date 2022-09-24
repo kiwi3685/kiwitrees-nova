@@ -23,6 +23,7 @@
 
 define('KT_SCRIPT_NAME', 'admin_users.php');
 require './includes/session.php';
+include KT_THEME_URL . 'templates/adminData.php';
 
 $controller = new KT_Controller_Page();
 $controller
@@ -398,11 +399,7 @@ switch (KT_Filter::get('action')) {
 
 			');
 
-		echo relatedPages($links = array(
-			'admin_users.php',
-			'admin_users.php?action=messaging',
-			'admin_users.php?action=cleanup',
-		));
+		echo relatedPages($users, 'admin_users.php?action=edit');
 
 		echo pageStart('admin_users_edit', $controller->getPageTitle()); ?>
 
@@ -943,7 +940,7 @@ switch (KT_Filter::get('action')) {
 		$range		= "1,2,3,4,5,6,7,8,9,10,11,12,18,24,36,48,60";
 		$monthRange	= explode( ',', $range );
 
-		echo relatedPages($links = array('admin_users.php', 'admin_users.php?action=edit', 'admin_users.php?action=messaging'));
+		echo relatedPages($users, 'admin_users.php?action=cleanup');
 
 		echo pageStart('admin_users_cleanup', $controller->getPageTitle()); ?>
 
@@ -1106,7 +1103,7 @@ switch (KT_Filter::get('action')) {
 			->setPageTitle(KT_I18N::translate('Broadcast messages'))
 			->pageHeader();
 
-		echo relatedPages($links = array('admin_users.php', 'admin_users.php?action=edit', 'admin_users.php?action=cleanup'));
+		echo relatedPages($users, 'admin_users.php?action=messaging');
 
 		echo pageStart('admin_users_bulk', $controller->getPageTitle()); ?>
 
@@ -1174,7 +1171,7 @@ switch (KT_Filter::get('action')) {
 				.fnFilter("' . KT_Filter::get('filter') . '"); // View the details of a newly created user
 			');
 
-		echo relatedPages($links = array('admin_users.php?action=edit', 'admin_users.php?action=messaging', 'admin_users.php?action=cleanup'));
+		echo relatedPages($users, KT_SCRIPT_NAME);
 
 		echo pageStart('admin_users_list', $controller->getPageTitle()); ?>
 
