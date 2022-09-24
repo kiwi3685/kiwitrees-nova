@@ -26,6 +26,7 @@ define('KT_SCRIPT_NAME', 'admin_trees_places.php');
 require './includes/session.php';
 require KT_ROOT . 'includes/functions/functions_import.php';
 require KT_ROOT . 'includes/functions/functions_edit.php';
+include KT_THEME_URL . 'templates/adminData.php';
 
 $search  = KT_Filter::post('search', null, KT_Filter::get('search'));
 $replace = KT_Filter::post('replace');
@@ -90,22 +91,7 @@ $controller
 	->addExternalJavascript(KT_AUTOCOMPLETE_JS_URL)
 	->addInlineJavascript('autocomplete();');
 
-echo relatedPages($links = array(
-    'admin_trees_manage.php',
-    'admin_trees_config.php',
-    'admin_trees_check.php',
-    'admin_trees_change.php',
-    'admin_trees_addunlinked.php',
-    'admin_trees_merge.php',
-    'admin_trees_renumber.php',
-    'admin_trees_append.php',
-    'admin_trees_duplicates.php',
-    'admin_trees_findunlinked.php',
-    'admin_trees_sanity.php',
-    'admin_trees_source.php',
-    'admin_trees_sourcecite.php',
-    'admin_trees_missing.php',
-));?>
+echo relatedPages($trees, KT_SCRIPT_NAME);?>
 
 <div id="places">
 	<h2>

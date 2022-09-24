@@ -25,6 +25,7 @@ define('KT_SCRIPT_NAME', 'admin_trees_source.php');
 require './includes/session.php';
 require KT_ROOT.'includes/functions/functions_edit.php';
 require KT_ROOT.'includes/functions/functions_print_facts.php';
+include KT_THEME_URL . 'templates/adminData.php';
 
 $sid	= KT_Filter::post('source');
 $stype	= KT_Filter::post('stype');
@@ -52,23 +53,7 @@ $controller
 
 	');
 
-	echo relatedPages($links = array(
-	    'admin_trees_manage.php',
-	    'admin_trees_config.php',
-	    'admin_trees_check.php',
-	    'admin_trees_change.php',
-	    'admin_trees_addunlinked.php',
-	    'admin_trees_places.php',
-	    'admin_trees_merge.php',
-	    'admin_trees_renumber.php',
-	    'admin_trees_append.php',
-	    'admin_trees_duplicates.php',
-	    'admin_trees_findunlinked.php',
-	    'admin_trees_sanity.php',
-	    'admin_trees_sourcecite.php',
-	    'admin_trees_missing.php',
-	));
-?>
+echo relatedPages($trees, KT_SCRIPT_NAME); ?>
 
 <div id="source_check">
 	<h2><?php echo $controller->getPageTitle(); ?></h2>

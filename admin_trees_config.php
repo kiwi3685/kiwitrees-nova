@@ -25,6 +25,7 @@ define('KT_SCRIPT_NAME', 'admin_trees_config.php');
 
 require './includes/session.php';
 require KT_ROOT . 'includes/functions/functions_edit.php';
+include KT_THEME_URL . 'templates/adminData.php';
 
 $controller = new KT_Controller_Page();
 $controller
@@ -330,22 +331,7 @@ $controller
 
 global $iconstyles;
 
-echo relatedPages($links = array(
-    'admin_trees_manage.php',
-    'admin_trees_check.php',
-    'admin_trees_change.php',
-    'admin_trees_addunlinked.php',
-    'admin_trees_places.php',
-    'admin_trees_merge.php',
-    'admin_trees_renumber.php',
-    'admin_trees_append.php',
-    'admin_trees_duplicates.php',
-    'admin_trees_findunlinked.php',
-    'admin_trees_sanity.php',
-    'admin_trees_source.php',
-    'admin_trees_sourcecite.php',
-    'admin_trees_missing.php',
-));?>
+echo relatedPages($trees, KT_SCRIPT_NAME);?>
 
 <div id="family_tree_config" class="cell">
 	<div class="grid-x grid-padding-x grid-padding-y">

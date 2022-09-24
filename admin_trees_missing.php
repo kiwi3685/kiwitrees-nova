@@ -25,6 +25,8 @@ define('KT_SCRIPT_NAME', 'admin_trees_missing.php');
 require './includes/session.php';
 require KT_ROOT . 'includes/functions/functions_edit.php';
 require KT_ROOT . 'includes/functions/functions_print_facts.php';
+include KT_THEME_URL . 'templates/adminData.php';
+
 global $DEFAULT_PEDIGREE_GENERATIONS, $iconStyle;
 
 $controller = new KT_Controller_Page();
@@ -90,22 +92,7 @@ $generations = array(
 $false = '<i class="alert ' . $iconStyle . ' fa-xmark"></i>';
 $true  = '<i class="success ' . $iconStyle . ' fa-check"></i>';
 
-echo relatedPages($links = array(
-    'admin_trees_manage.php',
-    'admin_trees_config.php',
-    'admin_trees_check.php',
-    'admin_trees_change.php',
-    'admin_trees_addunlinked.php',
-    'admin_trees_places.php',
-    'admin_trees_merge.php',
-    'admin_trees_renumber.php',
-    'admin_trees_append.php',
-    'admin_trees_duplicates.php',
-    'admin_trees_findunlinked.php',
-    'admin_trees_sanity.php',
-    'admin_trees_source.php',
-    'admin_trees_sourcecite.php',
-));?>
+echo relatedPages($trees, KT_SCRIPT_NAME);?>
 
 <div id="missing_data-page" class="cell">
     <h4><?php echo $controller->getPageTitle(); ?></h4>

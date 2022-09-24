@@ -32,6 +32,7 @@ $controller
 require KT_ROOT.'includes/functions/functions_edit.php';
 require_once KT_ROOT.'library/php-diff/lib/Diff.php';
 require_once KT_ROOT.'library/php-diff/lib/Diff/Renderer/Html/SideBySide.php';
+include KT_THEME_URL . 'templates/adminData.php';
 
 $statuses = array(
 	''			=> KT_I18N::translate('All'),
@@ -271,22 +272,7 @@ $url =
 $users_array=array_combine(get_all_users(), get_all_users());
 uksort($users_array, 'strnatcasecmp');
 
-echo relatedPages($links = array(
-    'admin_trees_manage.php',
-    'admin_trees_config.php',
-    'admin_trees_check.php',
-    'admin_trees_addunlinked.php',
-    'admin_trees_places.php',
-    'admin_trees_merge.php',
-    'admin_trees_renumber.php',
-    'admin_trees_append.php',
-    'admin_trees_duplicates.php',
-    'admin_trees_findunlinked.php',
-    'admin_trees_sanity.php',
-    'admin_trees_source.php',
-    'admin_trees_sourcecite.php',
-    'admin_trees_missing.php',
-));?>
+echo relatedPages($trees, KT_SCRIPT_NAME);?>
 
 <div id="tree_changes-page" class="cell">
 	<h4><?php echo $controller->getPageTitle(); ?></h4>

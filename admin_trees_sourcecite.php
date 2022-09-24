@@ -25,6 +25,7 @@ define('KT_SCRIPT_NAME', 'admin_trees_sourcecite.php');
 require './includes/session.php';
 require KT_ROOT.'includes/functions/functions_edit.php';
 require KT_ROOT.'includes/functions/functions_print_facts.php';
+include KT_THEME_URL . 'templates/adminData.php';
 
 $controller = new KT_Controller_Page();
 $controller

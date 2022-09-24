@@ -24,6 +24,7 @@
 define('KT_SCRIPT_NAME', 'admin_trees_append.php');
 require './includes/session.php';
 require KT_ROOT.'includes/functions/functions_edit.php';
+include KT_THEME_URL . 'templates/adminData.php';
 
 $controller = new KT_Controller_Page();
 $controller
@@ -31,22 +32,7 @@ $controller
 	->setPageTitle(KT_I18N::translate('Append family trees'))
 	->pageHeader();
 
-echo relatedPages($links = array(
-    'admin_trees_manage.php',
-    'admin_trees_config.php',
-    'admin_trees_check.php',
-    'admin_trees_change.php',
-    'admin_trees_addunlinked.php',
-    'admin_trees_places.php',
-    'admin_trees_merge.php',
-    'admin_trees_renumber.php',
-    'admin_trees_duplicates.php',
-    'admin_trees_findunlinked.php',
-    'admin_trees_sanity.php',
-    'admin_trees_source.php',
-    'admin_trees_sourcecite.php',
-    'admin_trees_missing.php',
-));
+echo relatedPages($trees, KT_SCRIPT_NAME);
 
 echo '<h2>', $controller->getPageTitle(), '</h2>
 	<a class="current faq_link" href="' . KT_KIWITREES_URL . '/faqs/modules-faqs/merging-family-trees/" target="_blank" rel="noopener noreferrer" title="'. KT_I18N::translate('View FAQ for this page.'). '">'. KT_I18N::translate('View FAQ for this page.'). '<i class="fas fa-comments"></i></a>
