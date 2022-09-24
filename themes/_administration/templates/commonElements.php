@@ -279,13 +279,13 @@ function loadingImage() {
  *
  * //@param string $title name of page
  */
-function relatedPages($links, $self) {
+function relatedPages($links, $self = '') {
 	global $iconStyle;
 	include KT_THEME_URL . 'templates/adminData.php';
 
 	// remove summary page
 	foreach ($links as $key => $item) {
-	    if (strstr($key, 'admin_summary_') || strstr($key, $self)) {
+	    if (strstr($key, 'admin_summary_') || $key = $self) {
 	        unset($links[$key]);
 		}
 	}
