@@ -21,7 +21,7 @@
  * along with Kiwitrees. If not, see <http://www.gnu.org/licenses/>.
  */
 
-define('KT_SCRIPT_NAME', 'admin_trees_download.php');
+define('KT_SCRIPT_NAME', 'adminDownload.php');
 require './includes/session.php';
 require KT_ROOT.'includes/functions/functions_export.php';
 
@@ -99,7 +99,7 @@ $controller->pageHeader();
 ?>
 <div id="tree-download" class="cell">
 	<h4><?php echo $controller->getPageTitle(); ?> - <?php echo $tree->tree_title_html; ?></h4>
-	<form id="tree-export" method="post" action="admin_trees_export.php">
+	<form id="tree-export" method="post" action="adminExport.php">
 		<?php echo KT_Filter::getCsrf(); ?>
 		<input type="hidden" name="ged" value="<?php echo $tree->tree_name_url; ?>">
 		<div class="grid-x grid-margin-y">
@@ -107,7 +107,7 @@ $controller->pageHeader();
 				<?php echo KT_I18N::translate('A file on the server'); ?>
 			</div>
 			<div class="cell medium-3 h5">
-				<button id="submit-export" class="button" type="submit" onclick="return modalDialog('admin_trees_export.php?ged=<?php echo $tree->tree_name_url; ?>', '<?php echo KT_I18N::translate('Export'); ?>');">
+				<button id="submit-export" class="button" type="submit" onclick="return modalDialog('adminExport.php?ged=<?php echo $tree->tree_name_url; ?>', '<?php echo KT_I18N::translate('Export'); ?>');">
 					<i class="<?php echo $iconStyle; ?> fa-play"></i>
 					<?php echo KT_I18N::translate('Continue'); ?>
 				</button>

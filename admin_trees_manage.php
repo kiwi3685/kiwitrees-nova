@@ -325,7 +325,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 										<i class="<?php echo $iconStyle; ?> fa-upload"></i>
 										<?php echo KT_I18N::translate('Import a GEDCOM file'); ?>
 									</a>
-									<a class="button hollow" href="admin_trees_download.php?ged=<?php echo $tree->tree_name_url; ?>">
+									<a class="button hollow" href="adminDownload.php?ged=<?php echo $tree->tree_name_url; ?>">
 										<i class="<?php echo $iconStyle; ?> fa-download"></i>
 										<?php echo KT_I18N::translate('Export a GEDCOM file'); ?>
 									</a>

@@ -129,10 +129,12 @@ foreach (KT_Module::getActiveModules(true) as $tool) {
 
 /**
  * Array of items used in admin, but not as primary files
+ * Needed for admin search tool
  * $other [array]
  */
  $other_admin_files = [
-	'admin_trees_download.php'				=> KT_I18N::translate('Export a GEDCOM file'),
+	'adminDownload.php'						=> KT_I18N::translate('Download a GEDCOM file'),
+	'adminExport.php'						=> KT_I18N::translate('Export a GEDCOM file'),
 	'admin_batch_update.php' 				=> KT_I18N::translate('Batch update'),
 	'admin_databasebackup.php'				=> KT_I18N::translate('Database backup'),
 	'admin_flags.php'						=> KT_I18N::translate('Googlemap flags'),

@@ -21,7 +21,7 @@
  * along with Kiwitrees. If not, see <http://www.gnu.org/licenses/>.
  */
 
-define('KT_SCRIPT_NAME', 'admin_trees_export.php');
+define('KT_SCRIPT_NAME', 'adminExport.php');
 require './includes/session.php';
 
 $controller = new KT_Controller_Ajax();
