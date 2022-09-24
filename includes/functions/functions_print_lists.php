@@ -1484,13 +1484,13 @@ function format_sour_table($datalist) {
 					/*  0 title     */ { dataSort: 1 },
 					/*  1 TITL      */ { visible: false, type: "unicode" },
 					/*  2 author    */ { type: "unicode" },
-					/*  3 #indi     */ { dataSort: 4, class: "text-center show-for-medium" },
+					/*  3 #indi     */ { dataSort: 4, class: "minWidth text-center show-for-medium" },
 					/*  4 #INDI     */ { type: "num", visible: false },
-					/*  5 #fam      */ { dataSort: 6, class: "text-center show-for-medium" },
+					/*  5 #fam      */ { dataSort: 6, class: "minWidth text-center show-for-medium" },
 					/*  6 #FAM      */ { type: "num", visible: false },
-					/*  7 #obje     */ { dataSort: 8, class: "text-center show-for-medium" },
+					/*  7 #obje     */ { dataSort: 8, class: "minWidth text-center show-for-medium" },
 					/*  8 #OBJE     */ { type: "num", visible: false },
-					/*  9 #note     */ { dataSort: 10, class: "text-center show-for-medium" },
+					/*  9 #note     */ { dataSort: 10, class: "minWidth text-center show-for-medium" },
 					/* 10 #NOTE     */ { type: "num", visible: false },
 					/* 11 CHAN      */ { dataSort: 12, visible: ' . ($SHOW_LAST_CHANGE ? 'true' : 'false') . ', class: "text-center show-for-medium" },
 					/* 12 CHAN_sort */ { visible: false },
@@ -1508,7 +1508,7 @@ function format_sour_table($datalist) {
 			<span class="sr-only">Loading...</span>
 		</div>
 		<div class="sour-list">
-			<table class="shadow" id="' . $table_id . '" style="visibility: hidden;">
+			<table class="shadow" id="' . $table_id . '">
 				<thead>
 					<tr>
 						<th>' . KT_Gedcom_Tag::getLabel('TITL') . '</th>
@@ -1650,8 +1650,6 @@ function format_note_table($datalist) {
 		"SELECT CONCAT(l_to, '@', l_file), COUNT(*) FROM `##sources` JOIN `##link` ON l_from = s_id AND l_file = s_file AND l_type = 'NOTE' GROUP BY l_to, l_file"
 	)->fetchAssoc();
 
-	$html = '';
-
 	if (KT_SCRIPT_NAME == 'search.php') {
 		$table_id = 'ID' . (int)(microtime(true)*1000000); // lists requires a unique ID in case there are multiple lists per page
 	} else {
@@ -1714,7 +1712,7 @@ function format_note_table($datalist) {
 		');
 
 	$html .= '<div class="cell text-center loading-image"><i class="' . $iconStyle . ' fa-spinner fa-spin fa-3x"></i><span class="sr-only">Loading...</span></div>
-	<table class="shadow" id="' . $table_id . '" style="visibility: hidden;">
+	<table class="shadow" id="' . $table_id . '">
 		<thead>
 			<tr>
 				<th>' . KT_Gedcom_Tag::getLabel('TITL') . '</th>
@@ -1834,7 +1832,7 @@ function format_repo_table($repos) {
 	)->fetchAssoc();
 
 	if (KT_SCRIPT_NAME == 'search.php') {
-		$table_id = 'ID'.(int)(microtime(true)*1000000); // lists requires a unique ID in case there are multiple lists per page
+		$table_id = 'ID' . (int)(microtime(true)*1000000); // lists requires a unique ID in case there are multiple lists per page
 	} else {
 		$table_id = 'repoTable';
 	}
@@ -1881,7 +1879,7 @@ function format_repo_table($repos) {
 					/* 2 #SOUR     */ { type: "num", visible: false },
 					/* 3 CHAN      */ { dataSort: 4, visible: ' . ($SHOW_LAST_CHANGE?'true':'false') . ' },
 					/* 4 CHAN_sort */ { visible: false },
-					/* 5 DELETE    */ { visible: ' . (KT_USER_GEDCOM_ADMIN?'true':'false') . ', sortable: false, class: "text-center" }
+					/* 5 DELETE    */ { visible: ' . (KT_USER_GEDCOM_ADMIN ? 'true':'false') . ', sortable: false, class: "text-center" }
 				]
 			});
 			jQuery("#' . $table_id . '").css("visibility", "visible");
@@ -1903,11 +1901,14 @@ function format_repo_table($repos) {
 						<th>#SOUR</th>
 						<th' . ($SHOW_LAST_CHANGE ? '' : '') . '>' . KT_Gedcom_Tag::getLabel('CHAN') . '</th>
 						<th' . ($SHOW_LAST_CHANGE ? '' : '') . '>CHAN</th>
-						<th>
-							<div class="delete_src">
-								<input type="button" value="' . KT_I18N::translate('Delete') . '" onclick="if (confirm(\'' . htmlspecialchars(KT_I18N::translate('Permanently delete these records?')) . '\')) {return checkbox_delete(\'repos\');} else {return false;}">
-								<input type="checkbox" onclick="toggle_select(this)" style="vertical-align:middle;">
-							</div>
+						<th class="delete_src" style="' . (KT_USER_GEDCOM_ADMIN ? '' : 'display: none;') . '">
+							<input
+								type="button"
+								value = "' . KT_I18N::translate('Delete'). '"
+								class="button tiny"
+								onclick="if (confirm(\'' . htmlspecialchars(KT_I18N::translate('Permanently delete these records?')) . '\')) {return checkbox_delete(\'repos\');} else {return false;}"
+							>
+							<input type="checkbox" onclick="toggle_select(this)" style="vertical-align:middle;">
 						</th>
 					</tr>
 				</thead>
@@ -1951,18 +1952,13 @@ function format_repo_table($repos) {
 								$html .= '<td>&nbsp;</td>';
 							}
 							//-- Select & delete
-							if (KT_USER_GEDCOM_ADMIN) {
-								$html .= '
-									<td>
-										<div class="delete_src">
-											<input type="checkbox" name="del_places[]" class="check" value="' . $repo->getXref() . '" title="' . KT_I18N::translate('Delete') . '">
-										</div>
-									</td>';
-							} else {
-								$html .= '<td>&nbsp;</td>';
-							}
-						$html .= '</tr>';
-						}
+							$html .= '<td style="' . (KT_USER_GEDCOM_ADMIN ? '' : 'display: none;') . '">
+								<div class="delete_src">
+									<input type="checkbox" name="del_places[]" class="check" value="' . $repo->getXref() . '" title="' . KT_I18N::translate('Delete') . '">
+								</div>
+							</td>
+						</tr>';
+					}
 				$html .= '</tbody>
 			</table>
 		</div>';
@@ -2139,7 +2135,7 @@ function format_surname_table($surnames, $module_url = '', $sort = '2') {
 
 	$html .= '
 		<div class="loading-image">&nbsp;</div>
-		<table class="surname-list shadow" style=visibility: hidden;>
+		<table class="surname-list shadow">
 			<thead>
 				<tr>
 					<th>' . KT_Gedcom_Tag::getLabel('SURN') . '</th>
@@ -2493,7 +2489,7 @@ function print_changes_table($change_ids, $sort) {
 
 		//-- table header
 		$html .= '
-			<table class="shadow" id="' . $table_id . '" class="width100">
+			<table class="shadow" id="' . $table_id . '">
 				<thead>
 					<tr>
 						<th>&nbsp;</th>
@@ -2628,7 +2624,7 @@ function print_events_table($startjd, $endjd, $events='BIRT MARR DEAT', $only_li
 
 		if ($output==1) {
 			//-- table body
-			$html .= '<table id="'.$table_id.'" class="width100 shadow">';
+			$html .= '<table class="shadow" id="' . $table_id . '">';
 			$html .= '<thead><tr>';
 			$html .= '<th>'.KT_I18N::translate('Record').'</th>';
 			$html .= '<th>NAME</th>'; //hidden by datatables code
