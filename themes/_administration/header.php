@@ -27,7 +27,6 @@ if (!defined('KT_KIWITREES')) {
 }
 
 include 'templates/commonElements.php';
-include 'templates/relatedPages.php';
 include 'templates/adminData.php';
 global $iconStyle;
 

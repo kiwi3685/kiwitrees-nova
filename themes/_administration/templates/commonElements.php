@@ -273,3 +273,41 @@ function loadingImage() {
 		</div>
 	</div>';
 }
+
+/**
+ * Print links to related admin pages
+ *
+ * //@param string $title name of page
+ */
+function relatedPages($links, $self) {
+	global $iconStyle;
+	include KT_THEME_URL . 'templates/adminData.php';
+
+	// remove summary page
+	foreach ($links as $key => $item) {
+	    if (strstr($key, 'admin_summary_') || strstr($key, $self)) {
+	        unset($links[$key]);
+		}
+	}
+
+	$html =  '
+		<div class="grid-x relatedPages show-for-medium">
+			<div class="cell text-right">
+				<label>' .
+					KT_I18N::translate('Related pages') . '
+				</label>';
+
+				foreach ($links as $link => $title) {
+						$html .= '
+							<a href="' . $link. '" target="_blank" class="button small large-down-expanded">
+							' . $title . '
+						</a>';
+				}
+
+			$html .= '</div>
+		</div>
+	';
+
+	return $html;
+
+}
