@@ -163,7 +163,7 @@ function format_indi_table($datalist, $option='') {
 		<div class="indi-list clearfix" style="visibility: hidden;">
 			<table class="shadow" id="' . $table_id . '">
 				<thead>
-					<tr>
+					<tr class="first-row-header">
 						<th colspan="24">
 							<div class="grid-x grid-margin-x">
 								<div class="cell medium-2 expanded button-group">
@@ -307,13 +307,13 @@ function format_indi_table($datalist, $option='') {
 							</div>
 						</th>
 					</tr>
-					<tr class="first-row-header">
+					<tr class="second-row-header">
 						<th colspan="6" class="text-center">' . KT_I18N::translate('Name') . '</th>
 						<th colspan="6" class="text-center show-for-medium">' . KT_Gedcom_Tag::getLabel('BIRT') . '</th>
 						<th colspan="6" class="text-center show-for-medium">' . KT_Gedcom_Tag::getLabel('DEAT') . '</th>
 						<th colspan="6"></th>
 					</tr>
-					<tr>
+					<tr class="third-row-header">
 						<th data-tooltip aria-haspopup="true" class="has-tip top" data-disable-hover="false" title="' . KT_I18N::translate('Sort by given names') . '">' . KT_Gedcom_Tag::getLabel('GIVN') . '</th>
 						<th data-tooltip aria-haspopup="true" class="has-tip top" data-disable-hover="false" title="' . KT_I18N::translate('Sort by surnames') . '">' . KT_Gedcom_Tag::getLabel('SURN') . '</th>
 						<th>GIVN</th>
