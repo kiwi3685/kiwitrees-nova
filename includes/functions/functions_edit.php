@@ -154,7 +154,7 @@ function simple_switch($name, $value, $selected, $disabled = '', $activeText = '
 * @param string $selected - the currently selected item (if any)
 *
 */
-function radio_switch_group($name, $values, $selected) {
+function radio_switch_group($name, $values, $selected, $extra = '') {
 	$html = '<div class="grid-x grid-margin-y">';
 		foreach ($values as $key => $value) {
 			$uniqueID = $name . (int)(microtime(true) * 1000000);
@@ -164,6 +164,9 @@ function radio_switch_group($name, $values, $selected) {
 					<input class="switch-input" id="' . $uniqueID . '" type="radio" name="' . $name . '" value="' . htmlspecialchars($key) . '"';
 						if ((string)$key === (string)$selected) {
 							$html .= ' checked';
+						}
+						if ($extra ) {
+							$html .= ' ' . $extra;
 						}
 					$html .= '>' . '
 					<label class="switch-paddle" for="' . $uniqueID . '">

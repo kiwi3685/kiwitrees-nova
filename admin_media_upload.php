@@ -24,6 +24,7 @@
 define('KT_SCRIPT_NAME', 'admin_media_upload.php');
 require './includes/session.php';
 require_once KT_ROOT.'includes/functions/functions_mediadb.php';
+include KT_THEME_URL . 'templates/adminData.php';
 
 $controller = new KT_Controller_Page();
 $controller
@@ -188,6 +189,8 @@ $mediaFolders = KT_Query_Media::folderListAll();
 // Determine file size limit
 $filesize = detectMaxUploadFileSize();
 if (empty($filesize)) $filesize = "2M";
+
+echo relatedPages($media, KT_SCRIPT_NAME);
 
 // Print the form ?>
 <div id="admin_media" class="cell">

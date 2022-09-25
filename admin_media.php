@@ -24,6 +24,7 @@
 define('KT_SCRIPT_NAME', 'admin_media.php');
 require './includes/session.php';
 require KT_ROOT . 'includes/functions/functions_edit.php';
+include KT_THEME_URL . 'templates/adminData.php';
 
 // type of file/object to include
 $files = KT_Filter::get('files', 'local|external|unused', 'local');
@@ -555,34 +556,29 @@ $controller
 // Array for switch fggroup
 if (externalMedia() > 0){
 	$filesArray = array(
-		'local'		=> KT_I18N::translate('Local files'),
-		'external'	=> KT_I18N::translate('External files'),
-		'unused'	=> KT_I18N::translate('Unused files')
+		'local'		=> KT_I18N::translate('Local'),
+		'external'	=> KT_I18N::translate('External'),
+		'unused'	=> KT_I18N::translate('Unused')
 	);
 } else {
 	$filesArray = array(
-		'local'		=> KT_I18N::translate('Local files'),
-		'unused'	=> KT_I18N::translate('Unused files')
+		'local'		=> KT_I18N::translate('Local'),
+		'unused'	=> KT_I18N::translate('Unused')
 	);
 }
 
-?>
+
+echo relatedPages($media, KT_SCRIPT_NAME);?>
 
 <!-- Start page display -->
 <div id="admin_media" class="cell">
 	<h4><?php echo KT_I18N::translate('Manage media'); ?></h4>
 	<form method="get" action="<?php echo KT_SCRIPT_NAME; ?>">
 		<div class="grid-x">
-			<div class="cell medium-3">
-				<label class="h5"><?php echo KT_I18N::translate('Media files'); ?></label>
-				<?php echo radio_switch_group (
-					'files',
-					$filesArray,
-					$files
-				); ?>
-			</div>
-			<div class="cell medium-8">
+			<div class="cell medium-2">
 				<label class="h5"><?php echo KT_I18N::translate('Media folders'); ?></label>
+			</div>
+			<div class="cell medium-9">
 				<div class="grid-x">
 					<?php switch ($files) {
 						case 'local':
@@ -604,33 +600,48 @@ if (externalMedia() > 0){
 									</label>
 								<?php } ?>
 							</div>
-							<div class="cell auto media-folders">
-								<?php // Don’t show a list of subfolders if it just contains one subfolder
-								if (count($media_paths) > 1) { ?>
-									<?php echo select_edit_control('media_path', $media_paths, null, $media_path, $extra); ?>
-								<?php } else { ?>
-									<?php echo $media_path . '<input type="hidden" name="media_path" value="', htmlspecialchars($media_path) . '">'; ?>
-								<?php } ?>
-							</div>
-							<div class="cell">
-								<?php echo radio_switch_group (
-									'subfolders',
-									array(
-										'include' => KT_I18N::translate('Include subfolders'),
-										'exclude' => KT_I18N::translate('Exclude subfolders')
-									),
-									$subfolders
-								); ?>
-							</div>
 							<?php
 						break;
-						case 'external':
-							echo KT_I18N::translate('External media files have a URL instead of a filename.');
-							echo '<input type="hidden" name="media_folder" value="', htmlspecialchars($media_folder), '">';
-							echo '<input type="hidden" name="media_path" value="',   htmlspecialchars($media_path),   '">';
-						break;
+						case 'external': ?>
+							<?php echo KT_I18N::translate('External media files have a URL instead of a filename.'); ?>
+							<input type="hidden" name="media_folder" value="'<?php echo htmlspecialchars($media_folder); ?>">
+							<input type="hidden" name="media_path" value="'<?php echo htmlspecialchars($media_path); ?>">
+						<?php break;
 					} ?>
+					<div class="cell auto media-folders">
+						<?php // Don’t show a list of subfolders if it just contains one subfolder
+						if (count($media_paths) > 1) { ?>
+							<?php echo select_edit_control('media_path', $media_paths, null, $media_path, $extra); ?>
+						<?php } else { ?>
+							<?php echo $media_path . '<input type="hidden" name="media_path" value="', htmlspecialchars($media_path) . '">'; ?>
+						<?php } ?>
+					</div>
 				</div>
+			</div>
+			<div class="cell medium-2">
+				<label class="h6"><?php echo KT_I18N::translate('Subfolders'); ?></label>
+			</div>
+			<div class="cell medium-9">
+				<?php echo radio_switch_group (
+					'subfolders',
+					array(
+						'include' => KT_I18N::translate('Include subfolders'),
+						'exclude' => KT_I18N::translate('Exclude subfolders')
+					),
+					$subfolders,
+					'onchange="this.form.submit();"',
+				); ?>
+			</div>
+			<div class="cell medium-2">
+				<label class="h5"><?php echo KT_I18N::translate('Media files'); ?></label>
+			</div>
+			<div class="cell medium-9">
+				<?php echo radio_switch_group (
+					'files',
+					$filesArray,
+					$files,
+					'onchange="this.form.submit();"',
+				); ?>
 			</div>
 		</div>
 	</form>

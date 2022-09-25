@@ -281,7 +281,6 @@ function loadingImage() {
  */
 function relatedPages($links, $self = '') {
 	global $iconStyle;
-	include KT_THEME_URL . 'templates/adminData.php';
 
 	// remove summary page
 	foreach ($links as $key => $item) {
