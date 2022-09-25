@@ -174,6 +174,7 @@ case 'loadrows':
 				media_file_info($media_folder, $media_path, $row['media_path']),
 				$media->displayImage(),
 				media_object_info($media),
+				media_object_edit($media),
 				$highlight,
 				KT_Gedcom_Tag::getFileFormTypeValue($media->getMediaType()),
 			);
@@ -245,6 +246,7 @@ case 'loadrows':
 			 	KT_Gedcom_Tag::getLabelValue('URL', $row['m_filename']),
 				$media->displayImage(),
 				media_object_info($media),
+				media_object_edit($media),
 				$highlight,
 				KT_Gedcom_Tag::getFileFormTypeValue($media->getMediaType()),
 			);
@@ -333,6 +335,7 @@ case 'loadrows':
 				media_file_info($media_folder, $media_path, $unused_file) . $delete_link,
 				$img,
 				$create_form,
+				'',
 				'',
 				'',
 			);
@@ -458,28 +461,26 @@ function media_file_info($media_folder, $media_path, $file) {
 	return $html;
 }
 
-function media_object_info(KT_Media $media) {
+function media_object_edit(KT_Media $media) {
 	$xref   = $media->getXref();
 	$gedcom = KT_Tree::getNameFromId($media->getGedId());
 	$name   = $media->getFullName();
 	$conf   = KT_Filter::escapeJS(KT_I18N::translate('Are you sure you want to delete “%s”?', strip_tags($name)));
 
+	return '
+		<a href="' . $media->getHtmlUrl() . '">' . KT_I18N::translate('View') . '</a>
+		<a href="addmedia.php?action=editmedia&amp;pid=' . $xref . '&ged=' . $gedcom . '" target="_blank" >' . KT_I18N::Translate('Edit') . '</a>
+		<a onclick="if (confirm(\'' . $conf . '\')) jQuery.post(\'action.php\',{action:\'delete-media\',xref:\'' . $xref . '\',ged:\'' . $gedcom . '\'},function(){location.reload();})" href="#">' . KT_I18N::Translate('Delete') . '</a>
+		<a href="inverselink.php?mediaid=' . $xref . '&amp;linkto=manage" target="_blank">' . KT_I18N::Translate('Manage links') . '</a>
+	';
+}
+
+function media_object_info(KT_Media $media) {
+	$name   = $media->getFullName();
 	$html   =
 		'<b>' . $name . '</b>' .
 		'<div><i>' . htmlspecialchars($media->getNote()) . '</i></div>' .
-		'<br>' .
-		'<a href="' . $media->getHtmlUrl() . '">' . KT_I18N::translate('View') . '</a>';
-
-	$html .=
-		' - ' .
-		'<a href="addmedia.php?action=editmedia&amp;pid=' . $xref . '&ged=' . $gedcom . '" target="_blank" >' . KT_I18N::Translate('Edit') . '</a>' .
-		' - ' .
-		'<a onclick="if (confirm(\'' . $conf . '\')) jQuery.post(\'action.php\',{action:\'delete-media\',xref:\'' . $xref . '\',ged:\'' . $gedcom . '\'},function(){location.reload();})" href="#">' . KT_I18N::Translate('Delete') . '</a>' .
-		' - ';
-
-
-	$html .= '<a href="inverselink.php?mediaid=' . $xref . '&amp;linkto=manage" target="_blank">' . KT_I18N::Translate('Manage links') . '</a>';
-	$html .= '<br><br>';
+		'<br>';
 
 	$linked = array();
 	foreach ($media->fetchLinkedIndividuals() as $link) {
@@ -526,7 +527,7 @@ $controller = new KT_Controller_Page();
 $controller
 	->pageHeader()
 	->restrictAccess(KT_USER_IS_ADMIN)
-	->setPageTitle(KT_I18N::translate('Media'))
+	->setPageTitle(KT_I18N::translate('Manage media'))
 	->addExternalJavascript(KT_DATATABLES_JS)
 	->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
 	->addExternalJavascript(KT_DATATABLES_BUTTONS)
@@ -535,8 +536,8 @@ $controller
 		jQuery("#media-table-' . $table_id . '").dataTable({
 			dom: \'<"top"pBf<"clear">irl>t<"bottom"pl>\',
 			' . KT_I18N::datatablesI18N(array(5, 10, 20, 50, 100, 500, 1000, -1)) . ',
-			buttons: [{extend: "csvHtml5", exportOptions: {columns: [0,1,2,3,4] }}],
-			autoWidth: true,
+			buttons: [{extend: "csvHtml5", exportOptions: {columns: [0,1,2,3,4,5] }}],
+			autoWidth: false,
 			processing: true,
 			serverSide: true,
 			ajaxSource: " ' . KT_SCRIPT_NAME . '?action=loadrows&files=' . $files . '&media_folder=' . $media_folder . '&media_path=' . $media_path . '&subfolders=' . $subfolders . '",
@@ -544,16 +545,17 @@ $controller
 			stateSave: true,
 			stateDuration: 300,
 			columns: [
-				/*0 - media file */		{width: "35rem"},
-				/*1 - media object */	{sortable: false, class: "center", width: "8rem"},
+				/*0 - media file */		{},
+				/*1 - media object */	{sortable: false, class: "center"},
 				/*2 - media name */		{sortable: ' . ($files === 'unused' ? 'false' : 'true') . '},
-				/*3 - highlighted? */	{},
-				/*4 - media type */		{}
+				/*3 - edit links */		{},
+				/*4 - highlighted? */	{},
+				/*5 - media type */		{}
 			]
 		});
 	');
 
-// Array for switch fggroup
+// Array for switch group
 if (externalMedia() > 0){
 	$filesArray = array(
 		'local'		=> KT_I18N::translate('Local'),
@@ -567,13 +569,12 @@ if (externalMedia() > 0){
 	);
 }
 
+// Start page display
+echo relatedPages($media, KT_SCRIPT_NAME);
 
-echo relatedPages($media, KT_SCRIPT_NAME);?>
+echo pageStart('admin_media', $controller->getPageTitle()); ?>
 
-<!-- Start page display -->
-<div id="admin_media" class="cell">
-	<h4><?php echo KT_I18N::translate('Manage media'); ?></h4>
-	<form method="get" action="<?php echo KT_SCRIPT_NAME; ?>">
+	<form class="cell" method="get" action="<?php echo KT_SCRIPT_NAME; ?>">
 		<div class="grid-x">
 			<div class="cell medium-2">
 				<label class="h5"><?php echo KT_I18N::translate('Media folders'); ?></label>
@@ -632,6 +633,7 @@ echo relatedPages($media, KT_SCRIPT_NAME);?>
 					'onchange="this.form.submit();"',
 				); ?>
 			</div>
+			<hr class="cell">
 			<div class="cell medium-2">
 				<label class="h5"><?php echo KT_I18N::translate('Media files'); ?></label>
 			</div>
@@ -645,13 +647,14 @@ echo relatedPages($media, KT_SCRIPT_NAME);?>
 			</div>
 		</div>
 	</form>
-	<hr>
-	<table class="media_table" id="media-table-<?php echo $table_id ?>">
+	<hr class="cell">
+	<table class="media_table stack" id="media-table-<?php echo $table_id ?>">
 		<thead>
 			<tr>
 				<th><?php echo KT_I18N::translate('Media file'); ?></th>
 				<th><?php echo KT_I18N::translate('Media'); ?></th>
 				<th><?php echo KT_I18N::translate('Media object'); ?></th>
+				<th><?php echo KT_I18N::translate('Actions'); ?></th>
 				<th><?php echo KT_I18N::translate('Highlight'); ?></th>
 				<th><?php echo KT_I18N::translate('Media type'); ?></th>
 			</tr>
@@ -660,3 +663,5 @@ echo relatedPages($media, KT_SCRIPT_NAME);?>
 		</tbody>
 	</table>
 </div>
+
+<?php echo pageClose(); ?>

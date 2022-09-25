@@ -9879,11 +9879,27 @@ main #admin-content #family_tree_config #restriction div.dataTables_wrapper tabl
 main #admin-content #family_tree_config #restriction .callout.help_content {
 	font-size: 0.95rem !important;
 }
-main #admin-content #admin_media .media-folders {
+main #admin-content #admin_media-page .media-folders {
 	height: 3rem;
 }
-main #admin-content #admin_media table.dataTable td {
+main #admin-content #admin_media-page table.dataTable {
+	width: 100%;
+}
+main #admin-content #admin_media-page table.dataTable th:nth-of-type(2) {
+	min-width: 10rem;
+	padding: 0 1rem;
+}
+main #admin-content #admin_media-page table.dataTable th:nth-of-type(n + 4) {
+	min-width: 6.5rem;
+}
+main #admin-content #admin_media-page table.dataTable td {
 	vertical-align: top;
+}
+main #admin-content #admin_media-page table.dataTable td:nth-of-type(2) {
+	text-align: center;
+}
+main #admin-content #admin_media-page table.dataTable td:nth-of-type(4) a {
+	display: block;
 }
 main #admin-content #custom_language-page .card .card-section {
 	padding-top: 0.5rem;
