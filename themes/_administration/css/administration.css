@@ -9734,6 +9734,7 @@ main #admin-content .tabs-content .accordion.is-active > .accordion-title:before
 main #admin-content .faq_link {
 	float: right;
 	font-size: 0.9rem;
+	margin-top: -2.5rem;
 	padding: 0 1.25rem;
 }
 main #admin-content h4.inline {

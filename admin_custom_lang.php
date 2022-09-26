@@ -24,13 +24,14 @@
 define('KT_SCRIPT_NAME', 'admin_custom_lang.php');
 require './includes/session.php';
 require KT_ROOT.'includes/functions/functions_edit.php';
+include KT_THEME_URL . 'templates/adminData.php';
 
 global $iconStyle;
 
 $controller = new KT_Controller_Page();
 $controller
 	->restrictAccess(KT_USER_IS_ADMIN)
-	->setPageTitle(KT_I18N::translate('Custom translation'))
+	->setPageTitle(KT_I18N::translate('Manage custom translations'))
 	->pageHeader();
 
 $action				= KT_Filter::post('action');
@@ -83,69 +84,118 @@ function custom_texts($language) {
 }
 
 $custom_lang = custom_texts($language);
-?>
 
-<div id="custom_language-page" class="cell">
-	<div class="grid-x grid-margin-x grid-margin-y">
-		<div class="cell">
-			<h4 class="inline"><?php echo KT_I18N::translate('Manage custom translations'); ?></h4>
-			<?php echo faqLink('customisation/custom-translations/'); ?>
-		</div>
-		<div class="cell">
-			<!-- SELECT LANGUAGE -->
-			<form method="post" action="">
-				<input type="hidden" name="action" value="translate">
-				<div class="grid-x">
-					<div class="cell medium-2 h5">
-						<?php echo KT_I18N::translate('Select language'); ?>
-					</div>
-					<div class="cell medium-9">
-						<div class="grid-x">
-							<select id="nav-select" class="cell medium-4" name="language" onchange="this.form.submit();">
-								<option value=''></option>
-								<?php
-								foreach (KT_I18N::installed_languages() as $code=>$name) {
-									$style = ($code == $language ? ' selected=selected ' : '');
-									if (in_array($code, $languages)) {
-										echo '<option' . $style . ' value="' . $code . '">' . KT_I18N::translate($name) . '</option>';
-									}
+echo relatedPages($custom, KT_SCRIPT_NAME);
+
+echo pageStart('custom_language', $controller->getPageTitle()); ?>
+
+	<?php echo faqLink('customisation/custom-translations/'); ?>
+	<div class="cell">
+		<!-- SELECT LANGUAGE -->
+		<form method="post" action="">
+			<input type="hidden" name="action" value="translate">
+			<div class="grid-x">
+				<div class="cell medium-2 h5">
+					<?php echo KT_I18N::translate('Select language'); ?>
+				</div>
+				<div class="cell medium-9">
+					<div class="grid-x">
+						<select id="nav-select" class="cell medium-4" name="language" onchange="this.form.submit();">
+							<option value=''></option>
+							<?php
+							foreach (KT_I18N::installed_languages() as $code=>$name) {
+								$style = ($code == $language ? ' selected=selected ' : '');
+								if (in_array($code, $languages)) {
+									echo '<option' . $style . ' value="' . $code . '">' . KT_I18N::translate($name) . '</option>';
 								}
-								?>
-							</select>
-						</div>
+							}
+							?>
+						</select>
 					</div>
 				</div>
+			</div>
+		</form>
+	</div>
+	<div class="cell">
+		<?php if ($action == 'translate') { ?>
+			<!-- ADD NEW TRANSLATION -->
+			<form method="post" action="">
+				<input type="hidden" name="action" value="translate">
+				<input type="hidden" name="language" value=<?php echo $language; ?>>
+				<div class="grid-x">
+					<div class="cell h5">
+						<?php echo KT_I18N::translate('Add a new translation'); ?>
+					</div>
+					<div class="cell cell medium-5">
+						<div class="card">
+							<div class="card-divider">
+								<?php echo KT_I18N::translate('Standard text'); ?>
+							</div>
+							<div class="card-section">
+								<textarea  name="new_standard_text" placeholder="<?php echo KT_I18N::translate('Paste the standard text (US  English) here'); ?>"></textarea>
+							</div>
+						</div>
+					</div>
+					<div class="cell cell small-1"></div>
+					<div class="cell cell medium-5">
+						<div class="card">
+							<div class="card-divider">
+								<?php echo KT_I18N::translate('Manage custom translations'); ?>
+							</div>
+							<div class="card-section">
+								<textarea  name="new_custom_text" placeholder="<?php echo KT_I18N::translate('Add your custom translation here'); ?>"></textarea>
+							</div>
+						</div>
+					</div>
+					<div class="cell cell small-1"></div>
+				</div>
+				<button class="button" type="submit">
+					<i class="<?php echo $iconStyle; ?> fa-save"></i>
+					<?php echo KT_I18N::translate('Save'); ?>
+				</button>
 			</form>
-		</div>
-		<div class="cell">
-			<?php if ($action == 'translate') { ?>
-				<!-- ADD NEW TRANSLATION -->
+			<?php if ($custom_lang) { ?>
+				<hr>
+				<!-- EDIT TRANSLATIONS -->
 				<form method="post" action="">
 					<input type="hidden" name="action" value="translate">
 					<input type="hidden" name="language" value=<?php echo $language; ?>>
 					<div class="grid-x">
 						<div class="cell h5">
-							<?php echo KT_I18N::translate('Add a new translation'); ?>
+							<?php echo KT_I18N::translate('Edit existing translations'); ?>
 						</div>
 						<div class="cell cell medium-5">
 							<div class="card">
 								<div class="card-divider">
 									<?php echo KT_I18N::translate('Standard text'); ?>
 								</div>
-								<div class="card-section">
-									<textarea  name="new_standard_text" placeholder="<?php echo KT_I18N::translate('Paste the standard text (US  English) here'); ?>"></textarea>
-								</div>
+								<?php foreach ($custom_lang as $key => $value){ ?>
+									<div class="card-section">
+										<div class="update"></div>
+										<textarea readonly><?php echo htmlspecialchars($value->standard_text); ?></textarea>
+										<hr>
+									</div>
+								<?php } ?>
 							</div>
 						</div>
 						<div class="cell cell small-1"></div>
 						<div class="cell cell medium-5">
 							<div class="card">
 								<div class="card-divider">
-									<?php echo KT_I18N::translate('Custom translation'); ?>
+									<?php echo KT_I18N::translate('Manage custom translations'); ?>
 								</div>
-								<div class="card-section">
-									<textarea  name="new_custom_text" placeholder="<?php echo KT_I18N::translate('Add your custom translation here'); ?>"></textarea>
-								</div>
+								<?php foreach ($custom_lang as $key => $value){ ?>
+									<div class="card-section">
+										<div class="update">
+											<?php echo KT_I18N::translate('Last updated ') . htmlspecialchars($value->updated) ; ?>
+											<div class="trash">
+												<?php echo '<i class="' . $iconStyle . ' fa-trash-can" onclick="if (confirm(\''.htmlspecialchars(KT_I18N::translate('Are you sure you want to delete this translation?')) . '\')) { document.location=\'' . KT_SCRIPT_NAME . '?delete=delete_item&amp;custom_lang_id=' . $value->custom_lang_id.'&amp;action=translate&amp;language=' . $language . '\'; }"></i>'; ?>
+											</div>
+										</div>
+										<textarea name="custom_text_edit[<?php echo $value->custom_lang_id; ?>]"><?php echo htmlspecialchars($value->custom_text); ?></textarea>
+										<hr>
+									</div>
+								<?php } ?>
 							</div>
 						</div>
 						<div class="cell cell small-1"></div>
@@ -155,60 +205,8 @@ $custom_lang = custom_texts($language);
 						<?php echo KT_I18N::translate('Save'); ?>
 					</button>
 				</form>
-				<?php if ($custom_lang) { ?>
-					<hr>
-					<!-- EDIT TRANSLATIONS -->
-					<form method="post" action="">
-						<input type="hidden" name="action" value="translate">
-						<input type="hidden" name="language" value=<?php echo $language; ?>>
-						<div class="grid-x">
-							<div class="cell h5">
-								<?php echo KT_I18N::translate('Edit existing translations'); ?>
-							</div>
-							<div class="cell cell medium-5">
-								<div class="card">
-									<div class="card-divider">
-										<?php echo KT_I18N::translate('Standard text'); ?>
-									</div>
-									<?php foreach ($custom_lang as $key => $value){ ?>
-										<div class="card-section">
-											<div class="update"></div>
-											<textarea readonly><?php echo htmlspecialchars($value->standard_text); ?></textarea>
-											<hr>
-										</div>
-									<?php } ?>
-								</div>
-							</div>
-							<div class="cell cell small-1"></div>
-							<div class="cell cell medium-5">
-								<div class="card">
-									<div class="card-divider">
-										<?php echo KT_I18N::translate('Custom translation'); ?>
-									</div>
-									<?php foreach ($custom_lang as $key => $value){ ?>
-										<div class="card-section">
-											<div class="update">
-												<?php echo KT_I18N::translate('Last updated ') . htmlspecialchars($value->updated) ; ?>
-												<div class="trash">
-													<?php echo '<i class="' . $iconStyle . ' fa-trash-can" onclick="if (confirm(\''.htmlspecialchars(KT_I18N::translate('Are you sure you want to delete this translation?')) . '\')) { document.location=\'' . KT_SCRIPT_NAME . '?delete=delete_item&amp;custom_lang_id=' . $value->custom_lang_id.'&amp;action=translate&amp;language=' . $language . '\'; }"></i>'; ?>
-												</div>
-											</div>
-											<textarea name="custom_text_edit[<?php echo $value->custom_lang_id; ?>]"><?php echo htmlspecialchars($value->custom_text); ?></textarea>
-											<hr>
-										</div>
-									<?php } ?>
-								</div>
-							</div>
-							<div class="cell cell small-1"></div>
-						</div>
-						<button class="button" type="submit">
-							<i class="<?php echo $iconStyle; ?> fa-save"></i>
-							<?php echo KT_I18N::translate('Save'); ?>
-						</button>
-					</form>
-				<?php }
-			} ?>
-		</div>
+			<?php }
+		} ?>
 	</div>
-</div>
-<?php
+
+<?php echo pageClose();
