@@ -23,6 +23,7 @@
 
 define('KT_SCRIPT_NAME', 'admin_site_info.php');
 require './includes/session.php';
+include KT_THEME_URL . 'templates/adminData.php';
 
 $controller = new KT_Controller_Page();
 $controller
@@ -37,10 +38,12 @@ ob_start();
 phpinfo(INFO_ALL & ~INFO_CREDITS & ~INFO_LICENSE);
 preg_match('%<body>(.*)</body>%s', ob_get_clean(), $matches);
 $html = $matches[1];
-?>
-<div id="server-info" class="cell">
-	<h4><?php echo $controller->getPageTitle(); ?></h4>
-	<ul id="server_info_tabs" class="tabs" data-responsive-accordion-tabs="tabs small-accordion medium-tabs">
+
+echo relatedPages($site_tools, KT_SCRIPT_NAME);
+
+echo pageStart('server_info', $controller->getPageTitle()); ?>
+
+	<ul id="server_info_tabs" class="cell tabs" data-responsive-accordion-tabs="tabs small-accordion medium-tabs">
 		<li class="tabs-title is-active">
 			<a href="#php" aria-selected="true"><?php echo KT_I18N::translate('PHP'); ?></a>
 		</li>
@@ -48,7 +51,7 @@ $html = $matches[1];
 			<a href="#sql"><?php echo KT_I18N::translate('SQL'); ?></a>
 		</li>
 	</ul>
-	<div class="tabs-content" data-tabs-content="server_info_tabs">
+	<div class="cell tabs-content" data-tabs-content="server_info_tabs">
 		<!-- PHP tab -->
 		<div id="php" class="tabs-panel is-active php-info" >
 			<?php echo $html; ?>
@@ -76,4 +79,5 @@ $html = $matches[1];
 			</table>
 		</div>
 	</div>
-</div>
+
+<?php echo pageClose();

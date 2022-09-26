@@ -22,11 +22,11 @@
  */
 
 define('KT_SCRIPT_NAME', 'admin_site_access.php');
-
-global $iconStyle;
-
 require './includes/session.php';
 require KT_ROOT . 'includes/functions/functions_edit.php';
+include KT_THEME_URL . 'templates/adminData.php';
+
+global $iconStyle;
 
 $controller = new KT_Controller_Page();
 $controller
@@ -301,7 +301,9 @@ KT_DB::exec(
 	" AND unknown.ip_address_start BETWEEN known.ip_address_start AND known.ip_address_end"
 );
 
-echo pageStart('site_access-page', $controller->getPageTitle()); ?>
+echo relatedPages($site_tools, KT_SCRIPT_NAME);
+
+echo pageStart('site_access', $controller->getPageTitle()); ?>
 
 	<?php echo faqLink('general-topics/site-access-rules/'); ?>
 	<div class="cell callout warning">

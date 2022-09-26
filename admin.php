@@ -148,6 +148,7 @@ $changes = KT_DB::prepare(
 )->fetchAssoc();
 
 echo pageStart('admin', KT_I18N::translate('Dashboard')); ?>
+
 	<div class="cell callout warning help_content">
 		<?php echo KT_I18N::translate('These pages provide access to all the configuration settings and management tools for this kiwitrees site.'); ?><br>
 		<?php echo /* I18N: %s is a URL/link to the project website */ KT_I18N::translate('Support is available at %s.', ' <a class="current" href="' . KT_KIWITREES_URL . '/forums/">kiwitrees.net forums</a>'); ?>

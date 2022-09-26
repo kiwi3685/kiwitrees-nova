@@ -22,11 +22,11 @@
  */
 
 define('KT_SCRIPT_NAME', 'admin_site_config.php');
-
-global $iconStyle;
-
 require './includes/session.php';
 require KT_ROOT . 'includes/functions/functions_edit.php';
+include KT_THEME_URL . 'templates/adminData.php';
+
+global $iconStyle;
 
 $controller = new KT_Controller_Page();
 $controller
@@ -186,11 +186,12 @@ $controller
 			};
 		});
 	');
-?>
 
-<div id="site_config" class="cell">
-	<h4><?php echo KT_I18N::translate('Site configuration'); ?></h4>
-	<ul id="site_admin_tabs" class="tabs" data-responsive-accordion-tabs="tabs small-accordion medium-tabs" data-deep-link="true">
+echo relatedPages($site_tools, KT_SCRIPT_NAME);
+
+echo pageStart('site_config', $controller->getPageTitle()); ?>
+
+	<ul id="site_admin_tabs" class="cell tabs" data-responsive-accordion-tabs="tabs small-accordion medium-tabs" data-deep-link="true">
 		<li class="tabs-title is-active">
 			<a href="#site" aria-selected="true"><?php echo KT_I18N::translate('Website settings'); ?></a>
 		</li>
@@ -207,7 +208,7 @@ $controller
 			<a href="#lang"><?php echo KT_I18N::translate('Languages'); ?></a>
 		</li>
 	</ul>
-	<div class="tabs-content" data-tabs-content="site_admin_tabs">
+	<div class="cell tabs-content" data-tabs-content="site_admin_tabs">
 		<!-- Site configuration tab -->
 		<div class="tabs-panel is-active" id="site">
 			<form method="post" name="configform" action="<?php echo KT_SCRIPT_NAME; ?>#site" data-abide novalidate>
@@ -659,4 +660,5 @@ $controller
 			</form>
 		</div>
 	</div>
-</div>
+
+<?php echo pageClose();

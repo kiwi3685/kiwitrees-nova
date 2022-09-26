@@ -23,6 +23,7 @@
 
 define('KT_SCRIPT_NAME', 'admin_site_clean.php');
 require './includes/session.php';
+include KT_THEME_URL . 'templates/adminData.php';
 
 global $iconStyle;
 
@@ -50,10 +51,12 @@ foreach (KT_Tree::getAll() as $tree) {
 		$locked_by_context[] = $tmp[0];
 	}
 }
-?>
-<div id="server-info" class="cell">
-	<h4><?php echo $controller->getPageTitle(); ?></h4>
-	<div class="callout alert">
+
+echo relatedPages($site_tools, KT_SCRIPT_NAME);
+
+echo pageStart('site_clean', $controller->getPageTitle()); ?>
+
+	<div class="cell callout alert">
 		<?php echo KT_I18N::translate('Files marked with %s are required for proper operation and cannot be removed.', '<i class="alert ' . $iconStyle . ' fa-ban"></i>'); ?>
 	</div>
 
@@ -73,7 +76,7 @@ foreach (KT_Tree::getAll() as $tree) {
 		</div>
 	<?php } ?>
 
-	<form name="delete_form" method="post" action="">
+	<form class="cell" name="delete_form" method="post" action="">
 		<div id="cleanup" class="grid-x">
 			<ul class="cell medium-offset-1">
 				<?php
@@ -110,5 +113,5 @@ foreach (KT_Tree::getAll() as $tree) {
 			</button>
 		</div>
 	</form>
-</div>
-<?php
+
+<?php echo pageClose();

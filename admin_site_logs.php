@@ -23,6 +23,7 @@
 
 define('KT_SCRIPT_NAME', 'admin_site_logs.php');
 require './includes/session.php';
+include KT_THEME_URL . 'templates/adminData.php';
 
 global $iconStyle;
 
@@ -208,67 +209,66 @@ $controller
 		});
 	');
 
-$users_array=array_combine(get_all_users(), get_all_users());
+$users_array = array_combine(get_all_users(), get_all_users());
 uksort($users_array, 'strnatcasecmp');
-?>
 
-<div id="site_logs-page" class="cell">
-	<h4><?php echo $controller->getPageTitle(); ?></h4>
-	<div class="grid-x grid-margin-y">
-		<form name="logs" method="get" action="<?php echo KT_SCRIPT_NAME; ?>" data-abide novalidate>
-			<input type="hidden" name="action" value="show">
-			<div class="grid-x grid-margin-x">
-				<div class="cell medium-3 medium-offset-1">
-					<label class="h6"><?php echo KT_I18N::translate('From'); ?></label>
-					<div class="date fdatepicker" id="from" data-date-format="yyyy-mm-dd">
-						<div class="input-group">
-							<input class="input-group-field" type="text" name="from" value="<?php echo htmlspecialchars($from); ?>">
-							<span class="postfix input-group-label"><i class="<?php echo $iconStyle; ?> fa-calendar-days fa-lg"></i></span>
-						</div>
+echo relatedPages($site_tools, KT_SCRIPT_NAME);
+
+echo pageStart('site_logs', $controller->getPageTitle()); ?>
+
+	<form class="cell" name="logs" method="get" action="<?php echo KT_SCRIPT_NAME; ?>" data-abide novalidate>
+		<input type="hidden" name="action" value="show">
+		<div class="grid-x grid-margin-x">
+			<div class="cell medium-3 medium-offset-1">
+				<label class="h6"><?php echo KT_I18N::translate('From'); ?></label>
+				<div class="date fdatepicker" id="from" data-date-format="yyyy-mm-dd">
+					<div class="input-group">
+						<input class="input-group-field" type="text" name="from" value="<?php echo htmlspecialchars($from); ?>">
+						<span class="postfix input-group-label"><i class="<?php echo $iconStyle; ?> fa-calendar-days fa-lg"></i></span>
 					</div>
-				</div>
-				<div class="cell medium-3">
-					<label class="h6"><?php echo KT_I18N::translate('To'); ?></label>
-					<div class="date fdatepicker" id="to" data-date-format="yyyy-mm-dd">
-						<div class="input-group">
-							<input class="input-group-field" type="text" name="to" value="<?php echo htmlspecialchars($to); ?>">
-							<span class="postfix input-group-label"><i class="<?php echo $iconStyle; ?> fa-calendar-days fa-lg"></i></span>
-						</div>
-					</div>
-				</div>
-				<div class="cell medium-2">
-					<label class="h6"><?php echo KT_I18N::translate('Type'); ?></label>
-					<?php echo select_edit_control('type', array(''=>'', 'auth'=>'auth','config'=>'config','debug'=>'debug','edit'=>'edit','error'=>'error','media'=>'media','search'=>'search', 'spam'=>'spam'), null, $type, ''); ?>
-				</div>
-				<div class="cell medium-2">
-					<label class="h6"><?php echo KT_I18N::translate('IP address'); ?></label>
-					<input class="log-filter" type="text" name="ip" value="<?php echo htmlspecialchars($ip); ?>">
-				</div>
-				<div class="cell medium-4 medium-offset-1">
-					<label class="h6"><?php echo KT_I18N::translate('Message'); ?></label>
-					<input class="log-filter" type="text" name="text" value="<?php echo htmlspecialchars($text); ?>">
-				</div>
-				<div class="cell medium-3">
-					<label class="h6"><?php echo KT_I18N::translate('User'); ?></label>
-					<?php echo select_edit_control('user', $users_array, '', $user, ''); ?>
-				</div>
-				<div class="cell medium-3">
-					<label class="h6"><?php echo KT_I18N::translate('Family tree'); ?></label>
-					<?php echo select_edit_control('gedc', KT_Tree::getNameList(), '', $gedc, KT_USER_IS_ADMIN ? '' : 'disabled'); ?>
-				</div>
-				<div class="cell medium-4">
-					<button type="submit" class="button">
-						<i class="<?php echo $iconStyle; ?> fa-magnifying-glass"></i>
-						<?php echo KT_I18N::translate('Search'); ?>
-					</button>
-					<button type="submit" class="button" <?php echo 'onclick="if (confirm(\'' . htmlspecialchars(KT_I18N::translate('Permanently delete these records?')) . '\')) {document.logs.action.value=\'delete\';return true;} else {return false;}"' . ($action=='show' ? '' : 'disabled="disabled"');?> >
-						<i class="<?php echo $iconStyle; ?> fa-trash-can"></i>
-						<?php echo KT_I18N::translate('Delete results'); ?>
-					</button>
 				</div>
 			</div>
-		</form>
-	</div>
+			<div class="cell medium-3">
+				<label class="h6"><?php echo KT_I18N::translate('To'); ?></label>
+				<div class="date fdatepicker" id="to" data-date-format="yyyy-mm-dd">
+					<div class="input-group">
+						<input class="input-group-field" type="text" name="to" value="<?php echo htmlspecialchars($to); ?>">
+						<span class="postfix input-group-label"><i class="<?php echo $iconStyle; ?> fa-calendar-days fa-lg"></i></span>
+					</div>
+				</div>
+			</div>
+			<div class="cell medium-2">
+				<label class="h6"><?php echo KT_I18N::translate('Type'); ?></label>
+				<?php echo select_edit_control('type', array(''=>'', 'auth'=>'auth','config'=>'config','debug'=>'debug','edit'=>'edit','error'=>'error','media'=>'media','search'=>'search', 'spam'=>'spam'), null, $type, ''); ?>
+			</div>
+			<div class="cell medium-2">
+				<label class="h6"><?php echo KT_I18N::translate('IP address'); ?></label>
+				<input class="log-filter" type="text" name="ip" value="<?php echo htmlspecialchars($ip); ?>">
+			</div>
+			<div class="cell medium-4 medium-offset-1">
+				<label class="h6"><?php echo KT_I18N::translate('Message'); ?></label>
+				<input class="log-filter" type="text" name="text" value="<?php echo htmlspecialchars($text); ?>">
+			</div>
+			<div class="cell medium-3">
+				<label class="h6"><?php echo KT_I18N::translate('User'); ?></label>
+				<?php echo select_edit_control('user', $users_array, '', $user, ''); ?>
+			</div>
+			<div class="cell medium-3">
+				<label class="h6"><?php echo KT_I18N::translate('Family tree'); ?></label>
+				<?php echo select_edit_control('gedc', KT_Tree::getNameList(), '', $gedc, KT_USER_IS_ADMIN ? '' : 'disabled'); ?>
+			</div>
+			<div class="cell medium-4">
+				<button type="submit" class="button">
+					<i class="<?php echo $iconStyle; ?> fa-magnifying-glass"></i>
+					<?php echo KT_I18N::translate('Search'); ?>
+				</button>
+				<button type="submit" class="button" <?php echo 'onclick="if (confirm(\'' . htmlspecialchars(KT_I18N::translate('Permanently delete these records?')) . '\')) {document.logs.action.value=\'delete\';return true;} else {return false;}"' . ($action=='show' ? '' : 'disabled="disabled"');?> >
+					<i class="<?php echo $iconStyle; ?> fa-trash-can"></i>
+					<?php echo KT_I18N::translate('Delete results'); ?>
+				</button>
+			</div>
+		</div>
+	</form>
 	<hr>
 	<?php if ($action) { ?>
 		<div class="grid-x grid-margin-x">
@@ -289,5 +289,6 @@ uksort($users_array, 'strnatcasecmp');
 				</table>
 			</div>
 		</div>
-	<?php } ?>
-</div>
+	<?php }
+
+echo pageClose();
