@@ -154,28 +154,9 @@ class googlemap_KT_Module extends KT_Module implements KT_Module_Config, KT_Modu
 				require_once KT_ROOT . KT_MODULES_DIR . 'googlemap/defaultconfig.php';
  				?>
 				<div class="cell tabHeader">
-					<div class="grid-x">
-						<?php if (KT_USER_IS_ADMIN) { ?>
-							<div class="cell small-4">
-								<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_preferences">
-									<i class="<?php echo $iconStyle; ?> fa-globe"></i>
-									<?php echo KT_I18N::translate('Google Maps™ preferences'); ?>
-								</a>
-							</div>
-							<div class="cell small-4 medium-3">
-								<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_places">
-									<i class="<?php echo $iconStyle; ?> fa-map-pin"></i>
-									<?php echo KT_I18N::translate('Geographic data'); ?>
-								</a>
-							</div>
-							<div class="cell small-4 shrink">
-								<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_placecheck">
-									<i class="<?php echo $iconStyle; ?> fa-location-crosshairs"></i>
-									<?php echo KT_I18N::translate('Place Check'); ?>
-								</a>
-							</div>
-						<?php } ?>
-					</div>
+					<?php if (KT_USER_IS_ADMIN) { ?>
+						<?php echo googlemap_links(KT_GEDURL); ?>
+					<?php } ?>
 				</div>
 				<div class="cell indiFact">
 					<div class="grid-x" id="gm_mapTab">

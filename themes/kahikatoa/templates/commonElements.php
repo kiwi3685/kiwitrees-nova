@@ -171,7 +171,7 @@ function pageClose() {
  }
 
  /**
-  * A stadard "Show / Reset" pair of buttons, used on report pages
+  * A standard "Show / Reset" pair of buttons, used on report pages
   *
   * @return string[]
   */
@@ -194,3 +194,78 @@ function pageClose() {
  	return $buttonHtml;
 
  }
+
+ /**
+  * Google map links to admin pages
+  *
+  * @return string[]
+  */
+ function googlemap_links($gedcom, $update = false, $parent = false, $coords = false) {
+ 	global $iconStyle;
+
+	$preferences_url	= 'module.php?mod=googlemap&amp;mod_action=admin_preferences';
+	$placecheck_url		= 'module.php?mod=googlemap&amp;mod_action=admin_placecheck';
+	$adminplaces_url	= 'module.php?mod=googlemap&amp;mod_action=admin_places';
+
+	$class1 = $class2 = $class3 = ' small-4';
+	if ($update) {
+		$class1 = ' small-4 text-left';
+		$class2 = ' small-3 text-left';
+		$class3 = ' small-2 text-center';
+		$class4 = ' small-3 text-right';
+	}
+
+	if ($parent) {
+		$placecheck_url .= '&amp;country=' . $parent[0];
+		if (isset($parent[1])) {
+			$placecheck_url .= '&amp;state=' . $parent[1];
+		}
+
+		if ($coords) {
+			$adminplaces_url .= '&amp;parent=' . $coords;
+		}
+
+		if ($update) {
+			$update_places_url	= 'admin_trees_places.php?ged=' . $gedcom;
+			$update_places_url .= '&amp;search=' . $parent[0];
+		}
+	}
+
+	$html = '<div class="grid-x">';
+
+		$html .= '
+				<div class="cell' . $class1 . '">
+					<a href="' . $preferences_url . '">
+						<i class="' . $iconStyle . ' fa-globe"></i>
+						' . KT_I18N::translate('Google Maps™ preferences') . '
+					</a>
+				</div>
+				<div class="cell' . $class2 . '">
+					<a href="' . $adminplaces_url . '">
+						<i class="' . $iconStyle . ' fa-map-pin"></i>
+						' . KT_I18N::translate('Geographic data') . '
+					</a>
+				</div>
+				<div class="cell' . $class3 . '">
+					<a href="' . $placecheck_url . '">
+						<i class="' . $iconStyle . ' fa-location-crosshairs"></i>
+						' . KT_I18N::translate('Place Check') . '
+					</a>
+				</div>
+			';
+
+			if ($update) {
+				$html .= '
+					<div class="cell' . $class4 . '">
+						<a href="' . $update_places_url . '">
+							<i class="' . $iconStyle . ' fa-pen-to-square"></i>
+							' . KT_I18N::translate('Update place names') . '
+						</a>
+					</div>
+				';
+			}
+
+	$html .= '</div>';
+
+	return $html;
+}
