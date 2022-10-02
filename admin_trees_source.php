@@ -27,7 +27,12 @@ require KT_ROOT.'includes/functions/functions_edit.php';
 require KT_ROOT.'includes/functions/functions_print_facts.php';
 include KT_THEME_URL . 'templates/adminData.php';
 
-$sid	= KT_Filter::post('source');
+$gedID 	= KT_Filter::post('gedID') ? KT_Filter::post('gedID') : KT_GED_ID;
+$tree 	= KT_Tree::getNameFromId($gedID);
+
+$sid	= KT_Filter::post('source') ? KT_Filter::post('source') : '';
+$source	= $sid ? KT_Source::getInstance($sid) : '';
+
 $stype	= KT_Filter::post('stype');
 
 $options = array(
@@ -53,47 +58,66 @@ $controller
 
 	');
 
-echo relatedPages($trees, KT_SCRIPT_NAME); ?>
+echo relatedPages($trees, KT_SCRIPT_NAME);
 
-<div id="source_check">
-	<h2><?php echo $controller->getPageTitle(); ?></h2>
-	<div class="help_text">
-		<p class="help_content">
-			<?php echo KT_I18N::translate('Display a list of facts, events or records where the selected source is used. Facts or events are items like birth, marriage, death. Records are items like individuals, families, media.'); ?>
-		</p>
-	</div>
-	<form method="post" action="<?php echo KT_SCRIPT_NAME; ?>">
+echo pageStart('source_check', $controller->getPageTitle()); ?>
+
+	<form class="cell" name='sourceCheck' method="post" action="<?php echo KT_SCRIPT_NAME; ?>">
 		<input type="hidden" name="go" value="1">
-		<div id="admin_options">
-			<div class="input">
-				<label><?php echo KT_I18N::translate('Family tree'); ?></label>
-				<?php echo select_ged_control('ged', KT_Tree::getIdList(), null, KT_GEDCOM); ?>
+		<div class="grid-x grid-margin-x grid-padding-x">
+			<div class="cell callout warning helpcontent">
+				<?php echo KT_I18N::translate('Display a list of facts, events or records where the selected source is used. Facts or events are items like birth, marriage, death. Records are items like individuals, families, media.'); ?>
 			</div>
-			<div class="input">
-				<label><?php echo KT_I18N::translate('Source'); ?></label>
-				<input type="text" id="source" name="source" value="<?php echo $sid ? $sid : ''; ?>" dir="ltr" class="" data-autocomplete-type="SOUR" autocomplete="off">
+			<div class="cell medium-2">
+				<label for="gedID"><?php echo KT_I18N::translate('Family tree'); ?></label>
 			</div>
-			<div class="input">
+			<div class="cell medium-4">
+				<?php echo select_ged_control('gedID', KT_Tree::getIdList(), null, $gedID, ' onchange="sourceCheck.submit();"'); ?>
+			</div>
+			<div class="cell medium-6"></div>
+			<div class="cell medium-2">
+				<label for='autocompleteInput-source'><?php echo KT_I18N::translate('Source'); ?></label>
+			</div>
+			<div class="cell medium-4">
+				 <?php echo autocompleteHtml(
+						'source',
+						'SOUR',
+						$tree,
+						$source ? strip_tags($source->getFullName()) : '',
+						'',
+						'source',
+						$sid,
+				 ); ?>
+			</div>
+			<div class="cell medium-6"></div>
+			<div class="cell medium-2">
 				<label><?php echo KT_I18N::translate('Source type'); ?></label>
+			</div>
+			<div class="cell medium-4">
 				<?php echo select_edit_control('stype', $options, null, $stype); ?>
 			</div>
-			<button type="submit" class="btn btn-primary">
-				<i class="fas fa-check"></i>
-				<?php echo $controller->getPageTitle(); ?>
-			</button>
+			<div class="cell medium-6"></div>
 		</div>
+
+		<?php echo singleButton('Show'); ?>
+
 	</form>
-	<hr class="clearfloat">
+	<hr class="cell">
 
 	<?php if (KT_Filter::post('go')) { 	?>
-		<div id="source_list" style="visibility: hidden;">
+		<div id="source_list" class="cell" style="visibility: hidden;">
 			<?php
-			$source	= KT_Source::getInstance($sid);
-			$data	= facts($sid, $stype);
+			$data = facts($sid, $stype);
 			?>
-			<h3>
-				<span><?php echo KT_I18N::translate('Source'); ?></span>&nbsp;-&nbsp;<a href="<?php echo $source->getHtmlUrl(); ?>"><?php echo $source->getFullName(); ?></a>&nbsp;-&nbsp;<span><?php echo $options[$stype]; ?></span>
-			</h3>
+			<h4>
+				<span><?php echo KT_I18N::translate('Source'); ?></span>
+				&nbsp;-&nbsp;
+				<a href="<?php echo $source->getHtmlUrl(); ?>">
+					<?php echo $source->getFullName(); ?>
+				</a>
+				&nbsp;-&nbsp;
+				<span><?php echo $options[$stype]; ?></span>
+			</h4>
 			<?php switch ($stype) {
 				case 'facts' :
 					$controller
@@ -340,10 +364,9 @@ echo relatedPages($trees, KT_SCRIPT_NAME); ?>
 				<?php break; ?>
 			<?php } ?>
 		</div>
-	<?php } ?>
-</div> <!-- close source_check page div -->
+	<?php }
 
-<?php
+echo pageClose();
 
 // source functions
 function facts($sid, $stype = 'facts') {

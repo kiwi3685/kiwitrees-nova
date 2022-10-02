@@ -10232,13 +10232,17 @@ main #admin-content #merge_records-page div.unmatched hr {
 main #admin-content #merge_records-page div.unmatched hr:last-child {
 	display: none;
 }
-main #admin-content #research-links-page button {
+main #admin-content #research_links-page button {
 	margin: 1rem;
 	text-align: left;
 }
-main #admin-content #research-links-page h6,
-main #admin-content #research-links-page .h6 {
+main #admin-content #research_links-page h6,
+main #admin-content #research_links-page .h6 {
 	font-weight: 600;
+}
+main #admin-content #source_check-page .dataTables_wrapper,
+main #admin-content #source_review-page .dataTables_wrapper {
+	margin-top: 2.5rem;
 }
 main #admin-content #gm_pages {
 	margin-bottom: 1rem;

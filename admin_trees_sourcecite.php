@@ -66,56 +66,54 @@ $controller
 		jQuery(".loading-image").css("display", "none");
 	');
 
-$sid = KT_Filter::post('source');
+$gedID 	= KT_Filter::post('gedID') ? KT_Filter::post('gedID') : KT_GED_ID;
+$tree 	= KT_Tree::getNameFromId($gedID);
 
-echo relatedPages($links = array(
-    'admin_trees_manage.php',
-    'admin_trees_config.php',
-    'admin_trees_check.php',
-    'admin_trees_change.php',
-    'admin_trees_addunlinked.php',
-    'admin_trees_places.php',
-    'admin_trees_merge.php',
-    'admin_trees_renumber.php',
-    'admin_trees_append.php',
-    'admin_trees_duplicates.php',
-    'admin_trees_findunlinked.php',
-    'admin_trees_sanity.php',
-    'admin_trees_source.php',
-    'admin_trees_missing.php',
-));
-?>
+$sid	= KT_Filter::post('source') ? KT_Filter::post('source') : '';
+$source	= $sid ? KT_Source::getInstance($sid) : '';
 
-<div id="source_check">
-	<h2><?php echo $controller->getPageTitle(); ?></h2>
-	<div class="help_text">
-		<p class="help_content">
-			<?php echo KT_I18N::translate('Display a list of citations attached to any chosen source record. Used to review citations for accuracy and consistency. Entries in the column <strong>Edit raw GEDCOM record</strong> can be clicked to open the edit raw GEDCOM page. Entries in the column <strong>Record</strong> can be clicked to the detail page of that record for further editing. If you have many similar edits you might prefer to use the <strong>Batch update</strong> tool.'); ?>
-		</p>
-	</div>
-	<form method="post" action="<?php echo KT_SCRIPT_NAME; ?>">
+echo relatedPages($trees, KT_SCRIPT_NAME);
+
+echo pageStart('source_review', $controller->getPageTitle()); ?>
+
+	<form class="cell" name='sourceReview' method="post" action="<?php echo KT_SCRIPT_NAME; ?>">
 		<input type="hidden" name="go" value="1">
-		<div id="admin_options">
-			<div class="input">
-				<label><?php echo KT_I18N::translate('Family tree'); ?></label>
-				<?php echo select_ged_control('ged', KT_Tree::getIdList(), null, KT_GEDCOM); ?>
+		<div class="grid-x grid-margin-x grid-padding-x">
+			<div class="cell callout warning helpcontent">
+				<?php echo KT_I18N::translate('Display a list of citations attached to any chosen source record. Used to review citations for accuracy and consistency. Entries in the column <strong>Edit raw GEDCOM record</strong> can be clicked to open the edit raw GEDCOM page. Entries in the column <strong>Record</strong> can be clicked to the detail page of that record for further editing. If you have many similar edits you might prefer to use the <strong>Batch update</strong> tool.'); ?>
 			</div>
-			<div class="input">
-				<label><?php echo KT_I18N::translate('Source'); ?></label>
-				<input type="text" id="source" name="source" value="<?php echo $sid ? $sid : ''; ?>" dir="ltr" class="" data-autocomplete-type="SOUR" autocomplete="off">
+			<div class="cell medium-2">
+				<label for="gedID"><?php echo KT_I18N::translate('Family tree'); ?></label>
 			</div>
-			<button type="submit" class="btn btn-primary">
-				<i class="fas fa-check"></i>
-				<?php echo $controller->getPageTitle(); ?>
-			</button>
+			<div class="cell medium-4">
+				<?php echo select_ged_control('gedID', KT_Tree::getIdList(), null, $gedID, ' onchange="sourceReview.submit();"'); ?>
+			</div>
+			<div class="cell medium-6"></div>
+			<div class="cell medium-2">
+				<label for='autocompleteInput-source'><?php echo KT_I18N::translate('Source'); ?></label>
+			</div>
+			<div class="cell medium-4">
+				 <?php echo autocompleteHtml(
+						'source',
+						'SOUR',
+						$tree,
+						$source ? strip_tags($source->getFullName()) : '',
+						'',
+						'source',
+						$sid,
+				 ); ?>
+			</div>
+			<div class="cell medium-6"></div>
 		</div>
-	</form>
-	<hr class="clearfloat">
 
-	<?php if (KT_Filter::post('go')) { 	?>
-		<div id="source_list" style="visibility: hidden;">
+		<?php echo singleButton('Show'); ?>
+
+	</form>
+	<hr class="cell">
+
+	<?php if (KT_Filter::post('go') && $source) { 	?>
+		<div id="source_list" class="cell" style="visibility: hidden;">
 			<?php
-			$source		 = KT_Source::getInstance($sid);
 			$data		 = citations($sid);
 			$no_citation = count_sources($sid) - count($data);
 			?>
