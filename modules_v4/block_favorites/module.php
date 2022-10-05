@@ -392,9 +392,12 @@ class block_favorites_KT_Module extends KT_Module implements KT_Module_Block {
 		self::updateSchema(); // make sure the favorites table has been created
 
 		return
-			KT_DB::prepare(
-				"SELECT favorite_id AS id, user_id, gedcom_id, xref AS gid, favorite_type AS type, title, note, url".
-				" FROM `##favorites` WHERE gedcom_id=? AND user_id IS NULL")
+			KT_DB::prepare("
+				SELECT favorite_id AS id, user_id, gedcom_id, xref AS gid, favorite_type AS type, title, note, url
+				FROM `##favorites`
+				WHERE gedcom_id=?
+				AND user_id IS NULL
+			")
 			->execute(array($gedcom_id))
 			->fetchAll(PDO::FETCH_ASSOC);
 	}

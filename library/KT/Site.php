@@ -48,7 +48,7 @@ class KT_Site {
 			return self::$setting[$setting_name];
 		} else {
 			// If parameter two is specified, then SET the setting
-			if (self::preference($setting_name)!=$setting_value) {
+			if (self::preference($setting_name) != $setting_value) {
 				// Audit log of changes
 				AddToLog('Site setting "' . $setting_name . '" set to "' . $setting_value . '"', 'config');
 			}
