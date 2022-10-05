@@ -571,13 +571,17 @@ switch ($type) {
 		$rows = get_SOUR_rows($term);
 
 		// Filter for privacy
-		foreach ($rows as $row) {
-			$source = KT_Source::getInstance($row);
-			if ($source->canDisplayName()) {
-				$data[] = array(
-					'value' => $row['xref'],
-					'label' => $row['n_full']);
+		if ($rows) {
+			foreach ($rows as $row) {
+				$source = KT_Source::getInstance($row);
+				if ($source->canDisplayName()) {
+					$data[] = array(
+						'value' => $row['xref'],
+						'label' => $row['n_full']);
+				}
 			}
+		} else {
+			$data = array();
 		}
 
 		echo json_encode($data);
@@ -690,7 +694,9 @@ switch ($type) {
 
 	case 'SURN': // Surnames, that start with the search term
 		// Do not filter by privacy.  Surnames on their own do not identify individuals.
-		echo json_encode(
+		$data = array();
+
+		$rows =
 			KT_DB::prepare("
 				SELECT DISTINCT n_surname
 				 FROM `##name`
@@ -698,8 +704,17 @@ switch ($type) {
 				 ORDER BY n_surname COLLATE '" . KT_I18N::$collation . "'
 			")
 			->execute(array($term, KT_GED_ID))
-			->fetchOneColumn()
-		);
+			->fetchAll(PDO::FETCH_ASSOC);
+
+		foreach ($rows as $row) {
+			$data[] = $row['n_surname'];
+		}
+
+		if (is_null($data)) {
+			$data[] = $term;
+		}
+
+		echo json_encode($data);
 
 	exit;
 
