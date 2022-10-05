@@ -9356,6 +9356,7 @@ nav .is-dropdown-submenu {
 }
 nav .top-bar.first-top-bar {
 	background-color: #331919;
+	padding-bottom: 0.5rem;
 	width: 100%;
 }
 nav .top-bar.first-top-bar ul.menu {
@@ -11867,7 +11868,7 @@ div.dataTables_wrapper table.dataTable thead tr th svg.fa-bell, div.dataTables_w
 /* sizes are 48 - 48.0625 - 64 - 64.0625 em */
 @media screen and (max-width: 48em) {
 	nav .top-bar.second-top-bar {
-		padding: 0;
+		padding: 0.5rem;
 	}
 
 	div.facts .fact-title {

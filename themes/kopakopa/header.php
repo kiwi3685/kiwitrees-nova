@@ -26,6 +26,8 @@
  	exit;
  }
 
+ global $ALL_CAPS, $iconStyle;
+ include 'templates/commonElements.php';
  $this
  	->addExternalJavascript (KT_JQUERY_COLORBOX_URL)
  	->addExternalJavascript (KT_JQUERY_WHEELZOOM_URL)
@@ -35,6 +37,9 @@
  		jQuery.extend(jQuery.colorbox.settings, {
  			slideshowStart	:"' . KT_I18N::translate('Play') . '",
  			slideshowStop	:"' . KT_I18N::translate('Stop') . '",
+            previous        :"<i class=\"' . $iconStyle . ' fa-angle-left\"></i>",
+            next            :"<i class=\"' . $iconStyle . ' fa-angle-right\"></i>",
+            close           :"<i class=\"' . $iconStyle . ' fa-xmark\"></i>",
  		});
  		// Add colorbox to pdf-files
  		jQuery("body").on("click", "a.gallery", function(event) {
@@ -52,7 +57,6 @@
 
  	');
 
- global $ALL_CAPS, $iconStyle;
 
  if ($ALL_CAPS) {
  	$this->addInlineJavascript('all_caps();');
@@ -74,29 +78,58 @@
 		<meta http-equiv="x-ua-compatible" content="ie=edge">
 		<?php echo header_links($META_DESCRIPTION, $META_ROBOTS, $META_GENERATOR, $LINK_CANONICAL); ?>
 		<title><?php echo htmlspecialchars($title); ?></title>
-		<title>Kiwitrees-Nova</title>
-		<link rel="icon" href="<?php echo KT_THEME_URL; ?>images/favicon.png" type="image/png">
+        <!--Generic favicons-->
+        <link rel="icon" sizes="16x16" href="<?php echo KT_THEME_URL; ?>images/favicon.png">
+        <link rel="icon" sizes="32x32" href="<?php echo KT_THEME_URL; ?>images/favicon-32.png">
+        <link rel="icon" sizes="128x128" href="<?php echo KT_THEME_URL; ?>images/favicon-128.png">
+        <link rel="icon" sizes="192x192" href="<?php echo KT_THEME_URL; ?>images/favicon-192.png">
+        <!--Android-->
+        <link rel="shortcut icon" sizes="196x196" href="<?php echo KT_THEME_URL; ?>images/favicon-196.png">
+        <!--iPad-->
+        <link rel="apple-touch-icon" sizes="152x152" href="<?php echo KT_THEME_URL; ?>images/favicon-152.png">
+        <!--iPhone-->
+        <link rel="apple-touch-icon" sizes="180x180" href="<?php echo KT_THEME_URL; ?>images/apple-touch-icon.png">
+		<?php if ($view !='simple') { ?>
 		<link rel="stylesheet" href="<?php echo KT_DATATABLES_CSS; ?>">
 		<link rel="stylesheet" href="<?php echo KT_DATEPICKER_CSS; ?>">
 		<link rel="stylesheet" href="<?php echo KT_THEME_URL; ?>css/kopakopa.min.css">
 		<?php if (file_exists(KT_THEME_URL . 'mystyle.css')) { ?>
-			<link rel="stylesheet" href="<?php echo KT_THEME_URL; ?>mystyle.css" type="text/css">';
-		<?php } ?>
+				<link rel="stylesheet" href="<?php echo KT_THEME_URL; ?>mystyle.css" type="text/css">
+			<?php }
+		}?>
 	</head>
 	<body>
 		<?php if ($view !='simple') { ?>
+			<?php if ($show_widgetbar) { ?>
+				<div class="widget-bar off-canvas position-left" id="widgetBar" data-off-canvas>
+					<?php include_once 'widget-bar.php'; ?>
+				</div>
+				<div class="cell off-canvas-content" data-off-canvas-content> <!-- closed in footer -->
+			<?php } ?>
 			<nav class="grid-x hide-for-print">
 				<div class="top-bar stack-for-small">
 					<div class="top-bar-left">
-						<ul class="dropdown menu align-top" data-dropdown-menu>
-							<li class="show-for-large"><span class=" kiwitrees_logo"><span></li>
+						<ul class="dropdown menu" data-dropdown-menu>
+							<?php if ($show_widgetbar) { ?>
+								<li>
+									<button class="button clear widget" type="button" data-toggle="widgetBar" title="<?php echo KT_I18N::translate('Widget bar'); ?>">
+										<i class="<?php echo $iconStyle; ?> fa-bars fa-2x"></i>
+									</button>
+								</li>
+							<?php } ?>
+							<li class="show-for-large">
+								<i class="kiwitrees_logo"></i>
+							</li>
 							<?php foreach (KT_MenuBar::getOtherMenus() as $menu) {
-								if (strpos($menu, KT_I18N::translate('Login')) && !KT_USER_ID && (array_key_exists('block_login', KT_Module::getInstalledModules('%')))) {
-									$module = new block_login_KT_Module; ?>
+      					if (strpos($menu, KT_I18N::translate('Login')) && !KT_USER_ID && KT_Module::getModuleByName('login_block')) {
+      						$class_name	= 'login_block_KT_Module';
+      						$module		= new $class_name; ?>
 									<li>
-										<a href="#"><?php echo (KT_Site::preference('USE_REGISTRATION_MODULE') ? KT_I18N::translate('Login or Register') : KT_I18N::translate('Login')); ?></a>
-										<ul id="login_popup" class="dropdown" data-dropdown-content>
-											<li><?php echo $module->getBlock('block_login'); ?></li>
+      							<a href="#">
+      								<?php echo (KT_Site::preference('USE_REGISTRATION_MODULE') ? KT_I18N::translate('Login or Register') : KT_I18N::translate('Login')); ?>
+      							</a>
+      							<ul id="login_popup">
+      								<li><?php echo $module->getBlock('login_block'); ?></li>
 										</ul>
 									</li>
 								<?php } else {
@@ -120,9 +153,12 @@
 					    </ul>
 					</div>
 				</div>
-				<div class="cell treetitle"><?php echo KT_TREE_TITLE; ?>
-					<span class="subtitle show-for-large"><?php echo KT_TREE_SUBTITLE; ?></span>
+				<div class="top-bar second-top-bar">
+					<div class="top-bar-left">
+						<div class="treetitle text-center medium-text-left"><?php echo KT_TREE_TITLE; ?></div>
+						<div class="subtitle show-for-large"><?php echo KT_TREE_SUBTITLE; ?></div>
 				</div>
+					<div class="top-bar-right main-menu">
 				<!-- responsive menu -->
 				<div class="title-bar" data-hide-for="medium" data-responsive-toggle="kiwitrees-menu">
 				  <button class="menu-icon" type="button" data-toggle="kiwitrees-menu"></button>
@@ -134,16 +170,13 @@
 						echo $menu->getMenuAsList();
 					} ?>
 				</ul>
+					</div>
+				</div>
 			</nav>
-			<!--  add widget bar for all pages except Home, and only for logged in users with role 'visitor' or above -->
-			<?php if ($show_widgetbar) {
-	//			include_once 'widget-bar.php';
-			}
-			// begin content section
 
-			echo KT_FlashMessages::getHtmlMessages(), // Feedback from asynchronous actions
+			<?php echo KT_FlashMessages::getHtmlMessages(), // Feedback from asynchronous actions
 
 			$javascript;
 		} ?>
 		<main class="grid-x grid-padding-x">
-			<div class="cell"> <!-- closed in footer -->
+			<div class="cell"> <!-- container for all pages -->
