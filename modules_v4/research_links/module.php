@@ -136,7 +136,7 @@ class research_links_KT_Module extends KT_Module implements KT_Module_Config, KT
 		$all_plugins = $this->getPluginList(); // all plugins with area names
 		$RESEARCH_PLUGINS = unserialize(get_module_setting($this->getName(), 'RESEARCH_PLUGINS')); // enabled plugins
 		?>
-		<div id="research-links-page" class="cell">
+		<div id="research_links-page" class="cell">
 			<div class="grid-x grid-padding-y">
 				<div class="cell">
 					<h4 class="inline"><?php echo $controller->getPageTitle(); ?></h4>
