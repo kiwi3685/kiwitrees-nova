@@ -147,20 +147,24 @@ class KT_Controller_Branches extends KT_Controller_Page {
 	}
 
 	function indisArray() {
-		$sql =
-			"SELECT DISTINCT 'INDI' AS type, i_id AS xref, i_file AS ged_id, i_gedcom AS gedrec
-			 FROM `##individuals`
-			 JOIN `##name` ON (i_id=n_id AND i_file=n_file)
-			 WHERE n_file=?
-			 AND n_type!=?
-			 AND (n_surn=? OR n_surname=?";
+		$sql = "
+			SELECT DISTINCT 'INDI' AS type, i_id AS xref, i_file AS ged_id, i_gedcom AS gedrec
+			FROM `##individuals`
+			JOIN `##name` ON (i_id=n_id AND i_file=n_file)
+			WHERE n_file=?
+			AND n_type!=?
+			AND (n_surn=? OR n_surname=?
+		";
+
 		$args = array(KT_GED_ID, '_MARNM', $this->surn, $this->surn);
+
 		if ($this->soundex_std) {
 			foreach (explode(':', KT_Soundex::soundex_std($this->surn)) as $value) {
 				$sql .= " OR n_soundex_surn_std LIKE CONCAT('%', ?, '%')";
 				$args[] = $value;
 			}
 		}
+
 		if ($this->soundex_dm) {
 			foreach (explode(':', KT_Soundex::soundex_dm($this->surn)) as $value) {
 				$sql .= " OR n_soundex_surn_dm LIKE CONCAT('%', ?, '%')";
@@ -168,11 +172,10 @@ class KT_Controller_Branches extends KT_Controller_Page {
 			}
 		}
 		$sql .= ')';
-		$rows =
-			KT_DB::prepare($sql)
-			->execute($args)
-			->fetchAll(PDO::FETCH_ASSOC);
+
+		$rows = KT_DB::prepare($sql)->execute($args)->fetchAll(PDO::FETCH_ASSOC);
 		$data = array();
+
 		foreach ($rows as $row) {
 			$data[] = KT_Person::getInstance($row);
 		}
