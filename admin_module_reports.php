@@ -24,6 +24,7 @@
 define('KT_SCRIPT_NAME', 'admin_module_reports.php');
 require 'includes/session.php';
 require KT_ROOT . 'includes/functions/functions_edit.php';
+include KT_THEME_URL . 'templates/adminData.php';
 
 global $iconStyle;
 
@@ -47,6 +48,8 @@ if ($action == 'update_mods' && KT_Filter::checkCsrf()) {
 		}
 	}
 }
+
+echo relatedPages($module_config, KT_SCRIPT_NAME);
 
 echo pageStart('reports', $controller->getPageTitle()); ?>
 

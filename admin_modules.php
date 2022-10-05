@@ -24,6 +24,7 @@
 define('KT_SCRIPT_NAME', 'admin_modules.php');
 require 'includes/session.php';
 require KT_ROOT . 'includes/functions/functions_edit.php';
+include KT_THEME_URL . 'templates/adminData.php';
 
 $controller = new KT_Controller_Page();
 $controller
@@ -118,11 +119,12 @@ $controller
 			]
 		});
 	');
-?>
 
-<div id="module-admin-page" class="cell">
-		<h4><?php echo KT_I18N::translate('Manage modules'); ?></h4>
-		<form class="cell" method="post" action="<?php echo KT_SCRIPT_NAME; ?>">
+echo relatedPages($module_config, KT_SCRIPT_NAME);
+
+echo pageStart('module-admin', $controller->getPageTitle()); ?>
+
+	<form class="cell" method="post" action="<?php echo KT_SCRIPT_NAME; ?>">
 			<input type="hidden" name="action" value="update_mods">
 			<?php echo KT_Filter::getCsrf(); ?>
 			<div class="grid-x grid-margin-y">
@@ -215,5 +217,5 @@ $controller
 				</div>
 			</div>
 		</form>
-	</div>
-</div>
+
+<?php echo pageClose();

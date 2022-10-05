@@ -87,13 +87,21 @@ $media = [
 ];
 
 /**
- * Array of Module menu items
- * $module_cats [array]
- * Manually ordered for logical grouping
+ * Array of Module menu items not sorted alphabetically
+ * $module_config [array]
+ * Manually ordered items before sorted
  */
 $module_config = [
 	'admin_summary_modules.php'		=> KT_I18N::translate('Modules'),
 	'admin_modules.php'				=> KT_I18N::translate('Module administration'),
+];
+
+/**
+ * Array of Module menu items sorted alphabetically
+ * $module_config_files [array]
+ *
+ */
+$module_config_files = [
 	'admin_module_menus.php'		=> KT_I18N::translate('Top level menu items'),
 	'admin_module_tabs_indi.php'	=> KT_I18N::translate('Tabs for individual page'),
 	'admin_module_blocks.php'		=> KT_I18N::translate('Home page blocks'),
@@ -105,6 +113,10 @@ $module_config = [
 	'admin_module_footers.php'		=> KT_I18N::translate('Footer blocks'),
 	'admin_module_tabs_fam.php'		=> KT_I18N::translate('Tabs for family page'),
 ];
+asort($module_config_files);
+
+// Combine arrays to keep the "module_config" items at the front of the alpha list/
+$module_config = array_merge($module_config, $module_config_files);
 
 /**
  * Array of site administration menu items
