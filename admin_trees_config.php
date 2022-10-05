@@ -27,6 +27,9 @@ require './includes/session.php';
 require KT_ROOT . 'includes/functions/functions_edit.php';
 include KT_THEME_URL . 'templates/adminData.php';
 
+global $iconstyles;
+$gedID 	= KT_Filter::post('gedID') ? KT_Filter::post('gedID') : KT_GED_ID;
+
 $controller = new KT_Controller_Page();
 $controller
 	->requireManagerLogin()
@@ -77,13 +80,13 @@ switch (KT_Filter::post('action')) {
 			break;
 		}
 		if (KT_Filter::post('gedcom_title')) {
-			set_gedcom_setting(KT_GED_ID, 'title', KT_Filter::post('gedcom_title'));
+			set_gedcom_setting($gedID, 'title', KT_Filter::post('gedcom_title'));
 		}
-		set_gedcom_setting(KT_GED_ID, 'subtitle',						KT_Filter::post('new_subtitle', KT_REGEX_UNSAFE));
+		set_gedcom_setting($gedID, 'subtitle', KT_Filter::post('new_subtitle', KT_REGEX_UNSAFE));
 		$gedcom = KT_Filter::post('gedcom');
 		if ($gedcom && $gedcom != KT_GEDCOM) {
 			try {
-				KT_DB::prepare("UPDATE `##gedcom` SET gedcom_name = ? WHERE gedcom_id = ?")->execute(array($gedcom, KT_GED_ID));
+				KT_DB::prepare("UPDATE `##gedcom` SET gedcom_name = ? WHERE gedcom_id = ?")->execute(array($gedcom, $gedID));
 				KT_DB::prepare("UPDATE `##site_setting` SET setting_value = ? WHERE setting_name='DEFAULT_GEDCOM' AND setting_value = ?")->execute(array($gedcom, KT_GEDCOM));
 			} catch (Exception $ex) {
 				// Probably a duplicate name.
@@ -92,20 +95,20 @@ switch (KT_Filter::post('action')) {
 		}
 		// For backwards compatibility with we store the two calendar formats in one variable
 		// e.g. "gregorian_and_jewish"
-		set_gedcom_setting(KT_GED_ID, 'CALENDAR_FORMAT', implode('_and_', array_unique(array(
+		set_gedcom_setting($gedID, 'CALENDAR_FORMAT', implode('_and_', array_unique(array(
 			KT_Filter::post('NEW_CALENDAR_FORMAT0', 'gregorian|julian|french|jewish|hijri|jalali', 'none'),
 			KT_Filter::post('NEW_CALENDAR_FORMAT1', 'gregorian|julian|french|jewish|hijri|jalali', 'none')
 		))));
-		set_gedcom_setting(KT_GED_ID, 'FAM_ID_PREFIX',					KT_Filter::post('NEW_FAM_ID_PREFIX'));
-		set_gedcom_setting(KT_GED_ID, 'GEDCOM_ID_PREFIX',				KT_Filter::post('NEW_GEDCOM_ID_PREFIX'));
-		set_gedcom_setting(KT_GED_ID, 'GENERATE_UIDS',					KT_Filter::postBool('NEW_GENERATE_UIDS'));
-		set_gedcom_setting(KT_GED_ID, 'LANGUAGE',						KT_Filter::post('GEDCOMLANG'));
-		set_gedcom_setting(KT_GED_ID, 'MEDIA_ID_PREFIX',				KT_Filter::post('NEW_MEDIA_ID_PREFIX'));
-		set_gedcom_setting(KT_GED_ID, 'NOTE_ID_PREFIX',					KT_Filter::post('NEW_NOTE_ID_PREFIX'));
-		set_gedcom_setting(KT_GED_ID, 'PEDIGREE_ROOT_ID',				KT_Filter::post('NEW_PEDIGREE_ROOT_ID', KT_REGEX_XREF));
-		set_gedcom_setting(KT_GED_ID, 'REPO_ID_PREFIX',					KT_Filter::post('NEW_REPO_ID_PREFIX'));
-		set_gedcom_setting(KT_GED_ID, 'SOURCE_ID_PREFIX',				KT_Filter::post('NEW_SOURCE_ID_PREFIX'));
-		set_gedcom_setting(KT_GED_ID, 'USE_RIN',						KT_Filter::postBool('NEW_USE_RIN'));
+		set_gedcom_setting($gedID, 'FAM_ID_PREFIX',					KT_Filter::post('NEW_FAM_ID_PREFIX'));
+		set_gedcom_setting($gedID, 'GEDCOM_ID_PREFIX',				KT_Filter::post('NEW_GEDCOM_ID_PREFIX'));
+		set_gedcom_setting($gedID, 'GENERATE_UIDS',					KT_Filter::postBool('NEW_GENERATE_UIDS'));
+		set_gedcom_setting($gedID, 'LANGUAGE',						KT_Filter::post('GEDCOMLANG'));
+		set_gedcom_setting($gedID, 'MEDIA_ID_PREFIX',				KT_Filter::post('NEW_MEDIA_ID_PREFIX'));
+		set_gedcom_setting($gedID, 'NOTE_ID_PREFIX',				KT_Filter::post('NEW_NOTE_ID_PREFIX'));
+		set_gedcom_setting($gedID, 'PEDIGREE_ROOT_ID',				KT_Filter::post('NEW_PEDIGREE_ROOT_ID', KT_REGEX_XREF));
+		set_gedcom_setting($gedID, 'REPO_ID_PREFIX',				KT_Filter::post('NEW_REPO_ID_PREFIX'));
+		set_gedcom_setting($gedID, 'SOURCE_ID_PREFIX',				KT_Filter::post('NEW_SOURCE_ID_PREFIX'));
+		set_gedcom_setting($gedID, 'USE_RIN',						KT_Filter::postBool('NEW_USE_RIN'));
 		// Reload the page, so that the settings take effect immediately.
 		Zend_Session::writeClose();
 		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '#general');
@@ -114,9 +117,9 @@ switch (KT_Filter::post('action')) {
 		if (!KT_Filter::checkCsrf()) {
 			break;
 		}
-		set_gedcom_setting(KT_GED_ID, 'CONTACT_USER_ID',				KT_Filter::post('NEW_CONTACT_USER_ID'));
-		set_gedcom_setting(KT_GED_ID, 'KIWITREES_EMAIL',				KT_Filter::post('NEW_KIWITREES_EMAIL'));
-		set_gedcom_setting(KT_GED_ID, 'WEBMASTER_USER_ID',				KT_Filter::post('NEW_WEBMASTER_USER_ID'));
+		set_gedcom_setting($gedID, 'CONTACT_USER_ID',				KT_Filter::post('NEW_CONTACT_USER_ID'));
+		set_gedcom_setting($gedID, 'KIWITREES_EMAIL',				KT_Filter::post('NEW_KIWITREES_EMAIL'));
+		set_gedcom_setting($gedID, 'WEBMASTER_USER_ID',				KT_Filter::post('NEW_WEBMASTER_USER_ID'));
 		// Reload the page, so that the settings take effect immediately.
 		Zend_Session::writeClose();
 		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '#contact');
@@ -125,8 +128,8 @@ switch (KT_Filter::post('action')) {
 		if (!KT_Filter::checkCsrf()) {
 			break;
 		}
-		set_gedcom_setting(KT_GED_ID, 'META_DESCRIPTION',				KT_Filter::post('NEW_META_DESCRIPTION'));
-		set_gedcom_setting(KT_GED_ID, 'META_TITLE',						KT_Filter::post('NEW_META_TITLE'));
+		set_gedcom_setting($gedID, 'META_DESCRIPTION',				KT_Filter::post('NEW_META_DESCRIPTION'));
+		set_gedcom_setting($gedID, 'META_TITLE',					KT_Filter::post('NEW_META_TITLE'));
 		// Reload the page, so that the settings take effect immediately.
 		Zend_Session::writeClose();
 		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '#meta');
@@ -135,13 +138,13 @@ switch (KT_Filter::post('action')) {
 		if (!KT_Filter::checkCsrf()) {
 			break;
 		}
-		set_gedcom_setting(KT_GED_ID, 'HIDE_LIVE_PEOPLE',				KT_Filter::postBool('NEW_HIDE_LIVE_PEOPLE'));
-		set_gedcom_setting(KT_GED_ID, 'KEEP_ALIVE_YEARS_BIRTH',			KT_Filter::post('KEEP_ALIVE_YEARS_BIRTH', KT_REGEX_INTEGER, 0));
-		set_gedcom_setting(KT_GED_ID, 'KEEP_ALIVE_YEARS_DEATH',			KT_Filter::post('KEEP_ALIVE_YEARS_DEATH', KT_REGEX_INTEGER, 0));
-		set_gedcom_setting(KT_GED_ID, 'MAX_ALIVE_AGE',					KT_Filter::post('MAX_ALIVE_AGE', KT_REGEX_INTEGER, 100));
-		set_gedcom_setting(KT_GED_ID, 'SHOW_DEAD_PEOPLE',				KT_Filter::post('SHOW_DEAD_PEOPLE'));
-		set_gedcom_setting(KT_GED_ID, 'SHOW_LIVING_NAMES',				KT_Filter::post('SHOW_LIVING_NAMES'));
-		set_gedcom_setting(KT_GED_ID, 'SHOW_PRIVATE_RELATIONSHIPS',		KT_Filter::post('SHOW_PRIVATE_RELATIONSHIPS'));
+		set_gedcom_setting($gedID, 'HIDE_LIVE_PEOPLE',				KT_Filter::postBool('NEW_HIDE_LIVE_PEOPLE'));
+		set_gedcom_setting($gedID, 'KEEP_ALIVE_YEARS_BIRTH',		KT_Filter::post('KEEP_ALIVE_YEARS_BIRTH', KT_REGEX_INTEGER, 0));
+		set_gedcom_setting($gedID, 'KEEP_ALIVE_YEARS_DEATH',		KT_Filter::post('KEEP_ALIVE_YEARS_DEATH', KT_REGEX_INTEGER, 0));
+		set_gedcom_setting($gedID, 'MAX_ALIVE_AGE',					KT_Filter::post('MAX_ALIVE_AGE', KT_REGEX_INTEGER, 100));
+		set_gedcom_setting($gedID, 'SHOW_DEAD_PEOPLE',				KT_Filter::post('SHOW_DEAD_PEOPLE'));
+		set_gedcom_setting($gedID, 'SHOW_LIVING_NAMES',				KT_Filter::post('SHOW_LIVING_NAMES'));
+		set_gedcom_setting($gedID, 'SHOW_PRIVATE_RELATIONSHIPS',	KT_Filter::post('SHOW_PRIVATE_RELATIONSHIPS'));
 
 		// Reload the page, so that the settings take effect immediately.
 		Zend_Session::writeClose();
@@ -166,16 +169,16 @@ switch (KT_Filter::post('action')) {
 			if (KT_Filter::post('xref') === '') {
 				KT_DB::prepare(
 					"DELETE FROM `##default_resn` WHERE gedcom_id=? AND tag_type=? AND xref IS NULL"
-				)->execute(array(KT_GED_ID, KT_Filter::post('tag_type')));
+				)->execute(array($gedID, KT_Filter::post('tag_type')));
 			}
 			if (KT_Filter::post('tag_type') === '') {
 				KT_DB::prepare(
 					"DELETE FROM `##default_resn` WHERE gedcom_id=? AND xref=? AND tag_type IS NULL"
-				)->execute(array(KT_GED_ID, $xref));
+				)->execute(array($gedID, $xref));
 			}
 			KT_DB::prepare(
 				"REPLACE INTO `##default_resn` (gedcom_id, xref, tag_type, resn) VALUES (?, NULLIF(?, ''), NULLIF(?, ''), ?)"
-			)->execute(array(KT_GED_ID, $xref, KT_Filter::post('tag_type'), KT_Filter::post('resn')));
+			)->execute(array($gedID, $xref, KT_Filter::post('tag_type'), KT_Filter::post('resn')));
 		}
 
 		// Reload the page, so that the settings take effect immediately.
@@ -194,24 +197,24 @@ switch (KT_Filter::post('action')) {
 
 		if ($NEW_MEDIA_DIRECTORY) {
 			if (is_dir(KT_DATA_DIR . $NEW_MEDIA_DIRECTORY)) {
-				set_gedcom_setting(KT_GED_ID, 'MEDIA_DIRECTORY', $NEW_MEDIA_DIRECTORY);
+				set_gedcom_setting($gedID, 'MEDIA_DIRECTORY', $NEW_MEDIA_DIRECTORY);
 			} elseif (@mkdir(KT_DATA_DIR . $NEW_MEDIA_DIRECTORY, 0755, true)) {
-				set_gedcom_setting(KT_GED_ID, 'MEDIA_DIRECTORY', $NEW_MEDIA_DIRECTORY);
+				set_gedcom_setting($gedID, 'MEDIA_DIRECTORY', $NEW_MEDIA_DIRECTORY);
 				KT_FlashMessages::addMessage(KT_I18N::translate('The folder %s was created.', KT_DATA_DIR . $NEW_MEDIA_DIRECTORY));
 			} else {
 				KT_FlashMessages::addMessage(KT_I18N::translate('The folder %s does not exist, and it could not be created.', KT_DATA_DIR . $NEW_MEDIA_DIRECTORY));
 			}
 		}
 
-		set_gedcom_setting(KT_GED_ID, 'MEDIA_UPLOAD',					KT_Filter::post('NEW_MEDIA_UPLOAD'));
-		set_gedcom_setting(KT_GED_ID, 'SAVE_WATERMARK_IMAGE',			KT_Filter::postBool('NEW_SAVE_WATERMARK_IMAGE'));
-		set_gedcom_setting(KT_GED_ID, 'SAVE_WATERMARK_THUMB',			KT_Filter::postBool('NEW_SAVE_WATERMARK_THUMB'));
-		set_gedcom_setting(KT_GED_ID, 'SHOW_HIGHLIGHT_IMAGES',			KT_Filter::postBool('NEW_SHOW_HIGHLIGHT_IMAGES'));
-		set_gedcom_setting(KT_GED_ID, 'SHOW_MEDIA_DOWNLOAD',			KT_Filter::postBool('NEW_SHOW_MEDIA_DOWNLOAD'));
-		set_gedcom_setting(KT_GED_ID, 'SHOW_NO_WATERMARK',				KT_Filter::post('NEW_SHOW_NO_WATERMARK'));
-		set_gedcom_setting(KT_GED_ID, 'THUMBNAIL_WIDTH',				KT_Filter::post('NEW_THUMBNAIL_WIDTH'));
-		set_gedcom_setting(KT_GED_ID, 'USE_SILHOUETTE',					KT_Filter::postBool('NEW_USE_SILHOUETTE'));
-		set_gedcom_setting(KT_GED_ID, 'WATERMARK_THUMB',				KT_Filter::postBool('NEW_WATERMARK_THUMB'));
+		set_gedcom_setting($gedID, 'MEDIA_UPLOAD',					KT_Filter::post('NEW_MEDIA_UPLOAD'));
+		set_gedcom_setting($gedID, 'SAVE_WATERMARK_IMAGE',			KT_Filter::postBool('NEW_SAVE_WATERMARK_IMAGE'));
+		set_gedcom_setting($gedID, 'SAVE_WATERMARK_THUMB',			KT_Filter::postBool('NEW_SAVE_WATERMARK_THUMB'));
+		set_gedcom_setting($gedID, 'SHOW_HIGHLIGHT_IMAGES',			KT_Filter::postBool('NEW_SHOW_HIGHLIGHT_IMAGES'));
+		set_gedcom_setting($gedID, 'SHOW_MEDIA_DOWNLOAD',			KT_Filter::postBool('NEW_SHOW_MEDIA_DOWNLOAD'));
+		set_gedcom_setting($gedID, 'SHOW_NO_WATERMARK',				KT_Filter::post('NEW_SHOW_NO_WATERMARK'));
+		set_gedcom_setting($gedID, 'THUMBNAIL_WIDTH',				KT_Filter::post('NEW_THUMBNAIL_WIDTH'));
+		set_gedcom_setting($gedID, 'USE_SILHOUETTE',					KT_Filter::postBool('NEW_USE_SILHOUETTE'));
+		set_gedcom_setting($gedID, 'WATERMARK_THUMB',				KT_Filter::postBool('NEW_WATERMARK_THUMB'));
 		// Reload the page, so that the settings take effect immediately.
 		Zend_Session::writeClose();
 		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '#media');
@@ -220,21 +223,21 @@ switch (KT_Filter::post('action')) {
 		if (!KT_Filter::checkCsrf()) {
 			break;
 		}
-		set_gedcom_setting(KT_GED_ID, 'ALL_CAPS',						KT_Filter::postBool('NEW_ALL_CAPS'));
-		set_gedcom_setting(KT_GED_ID, 'COMMON_NAMES_ADD',				str_replace(' ', '', KT_Filter::post('NEW_COMMON_NAMES_ADD')));
-		set_gedcom_setting(KT_GED_ID, 'COMMON_NAMES_REMOVE',			str_replace(' ', '', KT_Filter::post('NEW_COMMON_NAMES_REMOVE')));
-		set_gedcom_setting(KT_GED_ID, 'COMMON_NAMES_THRESHOLD',			KT_Filter::post('NEW_COMMON_NAMES_THRESHOLD', KT_REGEX_INTEGER, 40));
-		set_gedcom_setting(KT_GED_ID, 'DEFAULT_PEDIGREE_GENERATIONS',	KT_Filter::post('NEW_DEFAULT_PEDIGREE_GENERATIONS'));
-		set_gedcom_setting(KT_GED_ID, 'MAX_DESCENDANCY_GENERATIONS',	KT_Filter::post('NEW_MAX_DESCENDANCY_GENERATIONS'));
-		set_gedcom_setting(KT_GED_ID, 'MAX_PEDIGREE_GENERATIONS',		KT_Filter::post('NEW_MAX_PEDIGREE_GENERATIONS'));
-		set_gedcom_setting(KT_GED_ID, 'PEDIGREE_LAYOUT',				KT_Filter::postBool('NEW_PEDIGREE_LAYOUT'));
-		set_gedcom_setting(KT_GED_ID, 'SHOW_EST_LIST_DATES',			KT_Filter::postBool('NEW_SHOW_EST_LIST_DATES'));
-		set_gedcom_setting(KT_GED_ID, 'SHOW_LAST_CHANGE',				KT_Filter::postBool('NEW_SHOW_LAST_CHANGE'));
-		set_gedcom_setting(KT_GED_ID, 'SHOW_PEDIGREE_PLACES',			KT_Filter::post('NEW_SHOW_PEDIGREE_PLACES'));
-		set_gedcom_setting(KT_GED_ID, 'SHOW_PEDIGREE_PLACES_SUFFIX',	KT_Filter::postBool('NEW_SHOW_PEDIGREE_PLACES_SUFFIX'));
-		set_gedcom_setting(KT_GED_ID, 'SHOW_RELATIVES_EVENTS',			KT_Filter::post('NEW_SHOW_RELATIVES_EVENTS'));
-		set_gedcom_setting(KT_GED_ID, 'SUBLIST_TRIGGER_I',				KT_Filter::post('NEW_SUBLIST_TRIGGER_I', KT_REGEX_INTEGER, 200));
-		set_gedcom_setting(KT_GED_ID, 'SURNAME_LIST_STYLE',				KT_Filter::post('NEW_SURNAME_LIST_STYLE'));
+		set_gedcom_setting($gedID, 'ALL_CAPS',						KT_Filter::postBool('NEW_ALL_CAPS'));
+		set_gedcom_setting($gedID, 'COMMON_NAMES_ADD',				str_replace(' ', '', KT_Filter::post('NEW_COMMON_NAMES_ADD')));
+		set_gedcom_setting($gedID, 'COMMON_NAMES_REMOVE',			str_replace(' ', '', KT_Filter::post('NEW_COMMON_NAMES_REMOVE')));
+		set_gedcom_setting($gedID, 'COMMON_NAMES_THRESHOLD',			KT_Filter::post('NEW_COMMON_NAMES_THRESHOLD', KT_REGEX_INTEGER, 40));
+		set_gedcom_setting($gedID, 'DEFAULT_PEDIGREE_GENERATIONS',	KT_Filter::post('NEW_DEFAULT_PEDIGREE_GENERATIONS'));
+		set_gedcom_setting($gedID, 'MAX_DESCENDANCY_GENERATIONS',	KT_Filter::post('NEW_MAX_DESCENDANCY_GENERATIONS'));
+		set_gedcom_setting($gedID, 'MAX_PEDIGREE_GENERATIONS',		KT_Filter::post('NEW_MAX_PEDIGREE_GENERATIONS'));
+		set_gedcom_setting($gedID, 'PEDIGREE_LAYOUT',				KT_Filter::postBool('NEW_PEDIGREE_LAYOUT'));
+		set_gedcom_setting($gedID, 'SHOW_EST_LIST_DATES',			KT_Filter::postBool('NEW_SHOW_EST_LIST_DATES'));
+		set_gedcom_setting($gedID, 'SHOW_LAST_CHANGE',				KT_Filter::postBool('NEW_SHOW_LAST_CHANGE'));
+		set_gedcom_setting($gedID, 'SHOW_PEDIGREE_PLACES',			KT_Filter::post('NEW_SHOW_PEDIGREE_PLACES'));
+		set_gedcom_setting($gedID, 'SHOW_PEDIGREE_PLACES_SUFFIX',	KT_Filter::postBool('NEW_SHOW_PEDIGREE_PLACES_SUFFIX'));
+		set_gedcom_setting($gedID, 'SHOW_RELATIVES_EVENTS',			KT_Filter::post('NEW_SHOW_RELATIVES_EVENTS'));
+		set_gedcom_setting($gedID, 'SUBLIST_TRIGGER_I',				KT_Filter::post('NEW_SUBLIST_TRIGGER_I', KT_REGEX_INTEGER, 200));
+		set_gedcom_setting($gedID, 'SURNAME_LIST_STYLE',				KT_Filter::post('NEW_SURNAME_LIST_STYLE'));
 		// Reload the page, so that the settings take effect immediately.
 		Zend_Session::writeClose();
 		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '#layout');
@@ -244,18 +247,18 @@ switch (KT_Filter::post('action')) {
 			break;
 		}
 
-		set_gedcom_setting(KT_GED_ID, 'ABBREVIATE_CHART_LABELS',		KT_Filter::postBool('NEW_ABBREVIATE_CHART_LABELS'));
-		set_gedcom_setting(KT_GED_ID, 'CHART_BOX_TAGS',					implode(",", KT_Filter::post('NEW_CHART_BOX_TAGS')));
-		set_gedcom_setting(KT_GED_ID, 'EXPAND_NOTES',					KT_Filter::postBool('NEW_EXPAND_NOTES'));
-		set_gedcom_setting(KT_GED_ID, 'EXPAND_SOURCES',					KT_Filter::postBool('NEW_EXPAND_SOURCES'));
-		set_gedcom_setting(KT_GED_ID, 'HIDE_GEDCOM_ERRORS',				KT_Filter::postBool('NEW_HIDE_GEDCOM_ERRORS'));
-		set_gedcom_setting(KT_GED_ID, 'PEDIGREE_FULL_DETAILS',			KT_Filter::postBool('NEW_PEDIGREE_FULL_DETAILS'));
-		set_gedcom_setting(KT_GED_ID, 'PEDIGREE_SHOW_GENDER',			KT_Filter::postBool('NEW_PEDIGREE_SHOW_GENDER'));
-		set_gedcom_setting(KT_GED_ID, 'SHOW_COUNTER',					KT_Filter::postBool('NEW_SHOW_COUNTER'));
-		set_gedcom_setting(KT_GED_ID, 'SHOW_FACT_ICONS',				KT_Filter::postBool('NEW_SHOW_FACT_ICONS'));
-		set_gedcom_setting(KT_GED_ID, 'SHOW_GEDCOM_RECORD',				KT_Filter::postBool('NEW_SHOW_GEDCOM_RECORD'));
-		set_gedcom_setting(KT_GED_ID, 'SHOW_PARENTS_AGE',				KT_Filter::postBool('NEW_SHOW_PARENTS_AGE'));
-		set_gedcom_setting(KT_GED_ID, 'SHOW_LDS_AT_GLANCE',				KT_Filter::postBool('NEW_SHOW_LDS_AT_GLANCE'));
+		set_gedcom_setting($gedID, 'ABBREVIATE_CHART_LABELS',		KT_Filter::postBool('NEW_ABBREVIATE_CHART_LABELS'));
+		set_gedcom_setting($gedID, 'CHART_BOX_TAGS',					implode(",", KT_Filter::post('NEW_CHART_BOX_TAGS')));
+		set_gedcom_setting($gedID, 'EXPAND_NOTES',					KT_Filter::postBool('NEW_EXPAND_NOTES'));
+		set_gedcom_setting($gedID, 'EXPAND_SOURCES',					KT_Filter::postBool('NEW_EXPAND_SOURCES'));
+		set_gedcom_setting($gedID, 'HIDE_GEDCOM_ERRORS',				KT_Filter::postBool('NEW_HIDE_GEDCOM_ERRORS'));
+		set_gedcom_setting($gedID, 'PEDIGREE_FULL_DETAILS',			KT_Filter::postBool('NEW_PEDIGREE_FULL_DETAILS'));
+		set_gedcom_setting($gedID, 'PEDIGREE_SHOW_GENDER',			KT_Filter::postBool('NEW_PEDIGREE_SHOW_GENDER'));
+		set_gedcom_setting($gedID, 'SHOW_COUNTER',					KT_Filter::postBool('NEW_SHOW_COUNTER'));
+		set_gedcom_setting($gedID, 'SHOW_FACT_ICONS',				KT_Filter::postBool('NEW_SHOW_FACT_ICONS'));
+		set_gedcom_setting($gedID, 'SHOW_GEDCOM_RECORD',				KT_Filter::postBool('NEW_SHOW_GEDCOM_RECORD'));
+		set_gedcom_setting($gedID, 'SHOW_PARENTS_AGE',				KT_Filter::postBool('NEW_SHOW_PARENTS_AGE'));
+		set_gedcom_setting($gedID, 'SHOW_LDS_AT_GLANCE',				KT_Filter::postBool('NEW_SHOW_LDS_AT_GLANCE'));
 
 		// Reload the page, so that the settings take effect immediately.
 		Zend_Session::writeClose();
@@ -265,7 +268,7 @@ switch (KT_Filter::post('action')) {
 		if (!KT_Filter::checkCsrf()) {
 			break;
 		}
-		set_gedcom_setting(KT_GED_ID, 'INDI_FACTS_ADD',					implode(",", KT_Filter::post('NEW_INDI_FACTS_ADD')));
+		set_gedcom_setting($gedID, 'INDI_FACTS_ADD',					implode(",", KT_Filter::post('NEW_INDI_FACTS_ADD')));
 
 
 		// Reload the page, so that the settings take effect immediately.
@@ -273,30 +276,43 @@ switch (KT_Filter::post('action')) {
 		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '#edit');
 		exit;
 
+
+
+	case 'update-theme':
+		if (!KT_Filter::checkCsrf()) {
+			break;
+		}
+		set_gedcom_setting($gedID, 'THEME_DIR',						KT_Filter::post('NEW_THEME_DIR'));
+
+
+		// Reload the page, so that the settings take effect immediately.
+		Zend_Session::writeClose();
+		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '#theme');
+		exit;
+
 /*
-			set_gedcom_setting(KT_GED_ID, 'ADVANCED_NAME_FACTS',			KT_Filter::post('NEW_ADVANCED_NAME_FACTS'));
-			set_gedcom_setting(KT_GED_ID, 'ADVANCED_PLAC_FACTS',			KT_Filter::post('NEW_ADVANCED_PLAC_FACTS'));
-			set_gedcom_setting(KT_GED_ID, 'FAM_FACTS_ADD',					str_replace(' ', '', KT_Filter::post('NEW_FAM_FACTS_ADD')));
-			set_gedcom_setting(KT_GED_ID, 'FAM_FACTS_QUICK',				str_replace(' ', '', KT_Filter::post('NEW_FAM_FACTS_QUICK')));
-			set_gedcom_setting(KT_GED_ID, 'FAM_FACTS_UNIQUE',				str_replace(' ', '', KT_Filter::post('NEW_FAM_FACTS_UNIQUE')));
-			set_gedcom_setting(KT_GED_ID, 'FULL_SOURCES',					KT_Filter::postBool('NEW_FULL_SOURCES'));
-			set_gedcom_setting(KT_GED_ID, 'GEDCOM_MEDIA_PATH',				KT_Filter::post('NEW_GEDCOM_MEDIA_PATH'));
-			set_gedcom_setting(KT_GED_ID, 'INDI_FACTS_QUICK',				str_replace(' ', '', KT_Filter::post('NEW_INDI_FACTS_QUICK')));
-			set_gedcom_setting(KT_GED_ID, 'INDI_FACTS_UNIQUE',				str_replace(' ', '', KT_Filter::post('NEW_INDI_FACTS_UNIQUE')));
-			set_gedcom_setting(KT_GED_ID, 'NO_UPDATE_CHAN',					KT_Filter::postBool('NEW_NO_UPDATE_CHAN'));
-			set_gedcom_setting(KT_GED_ID, 'PREFER_LEVEL2_SOURCES',			KT_Filter::post('NEW_PREFER_LEVEL2_SOURCES'));
-			set_gedcom_setting(KT_GED_ID, 'QUICK_REQUIRED_FACTS',			KT_Filter::post('NEW_QUICK_REQUIRED_FACTS'));
-			set_gedcom_setting(KT_GED_ID, 'QUICK_REQUIRED_FAMFACTS',		KT_Filter::post('NEW_QUICK_REQUIRED_FAMFACTS'));
-			set_gedcom_setting(KT_GED_ID, 'REPO_FACTS_ADD',					str_replace(' ', '', KT_Filter::post('NEW_REPO_FACTS_ADD')));
-			set_gedcom_setting(KT_GED_ID, 'REPO_FACTS_QUICK',				str_replace(' ', '', KT_Filter::post('NEW_REPO_FACTS_QUICK')));
-			set_gedcom_setting(KT_GED_ID, 'REPO_FACTS_UNIQUE',				str_replace(' ', '', KT_Filter::post('NEW_REPO_FACTS_UNIQUE')));
-			set_gedcom_setting(KT_GED_ID, 'SOUR_FACTS_ADD',					str_replace(' ', '', KT_Filter::post('NEW_SOUR_FACTS_ADD')));
-			set_gedcom_setting(KT_GED_ID, 'SOUR_FACTS_QUICK',				str_replace(' ', '', KT_Filter::post('NEW_SOUR_FACTS_QUICK')));
-			set_gedcom_setting(KT_GED_ID, 'SOUR_FACTS_UNIQUE',				str_replace(' ', '', KT_Filter::post('NEW_SOUR_FACTS_UNIQUE')));
-			set_gedcom_setting(KT_GED_ID, 'SURNAME_TRADITION',				KT_Filter::post('NEW_SURNAME_TRADITION'));
-			set_gedcom_setting(KT_GED_ID, 'THEME_DIR',						KT_Filter::post('NEW_THEME_DIR'));
-			set_gedcom_setting(KT_GED_ID, 'COLOR_PALETTE',					KT_Filter::post('NEW_COLOR_PALETTE'));
-			set_gedcom_setting(KT_GED_ID, 'USE_GEONAMES',					KT_Filter::postBool('NEW_USE_GEONAMES'));
+			set_gedcom_setting($gedID, 'ADVANCED_NAME_FACTS',			KT_Filter::post('NEW_ADVANCED_NAME_FACTS'));
+			set_gedcom_setting($gedID, 'ADVANCED_PLAC_FACTS',			KT_Filter::post('NEW_ADVANCED_PLAC_FACTS'));
+			set_gedcom_setting($gedID, 'FAM_FACTS_ADD',					str_replace(' ', '', KT_Filter::post('NEW_FAM_FACTS_ADD')));
+			set_gedcom_setting($gedID, 'FAM_FACTS_QUICK',				str_replace(' ', '', KT_Filter::post('NEW_FAM_FACTS_QUICK')));
+			set_gedcom_setting($gedID, 'FAM_FACTS_UNIQUE',				str_replace(' ', '', KT_Filter::post('NEW_FAM_FACTS_UNIQUE')));
+			set_gedcom_setting($gedID, 'FULL_SOURCES',					KT_Filter::postBool('NEW_FULL_SOURCES'));
+			set_gedcom_setting($gedID, 'GEDCOM_MEDIA_PATH',				KT_Filter::post('NEW_GEDCOM_MEDIA_PATH'));
+			set_gedcom_setting($gedID, 'INDI_FACTS_QUICK',				str_replace(' ', '', KT_Filter::post('NEW_INDI_FACTS_QUICK')));
+			set_gedcom_setting($gedID, 'INDI_FACTS_UNIQUE',				str_replace(' ', '', KT_Filter::post('NEW_INDI_FACTS_UNIQUE')));
+			set_gedcom_setting($gedID, 'NO_UPDATE_CHAN',					KT_Filter::postBool('NEW_NO_UPDATE_CHAN'));
+			set_gedcom_setting($gedID, 'PREFER_LEVEL2_SOURCES',			KT_Filter::post('NEW_PREFER_LEVEL2_SOURCES'));
+			set_gedcom_setting($gedID, 'QUICK_REQUIRED_FACTS',			KT_Filter::post('NEW_QUICK_REQUIRED_FACTS'));
+			set_gedcom_setting($gedID, 'QUICK_REQUIRED_FAMFACTS',		KT_Filter::post('NEW_QUICK_REQUIRED_FAMFACTS'));
+			set_gedcom_setting($gedID, 'REPO_FACTS_ADD',					str_replace(' ', '', KT_Filter::post('NEW_REPO_FACTS_ADD')));
+			set_gedcom_setting($gedID, 'REPO_FACTS_QUICK',				str_replace(' ', '', KT_Filter::post('NEW_REPO_FACTS_QUICK')));
+			set_gedcom_setting($gedID, 'REPO_FACTS_UNIQUE',				str_replace(' ', '', KT_Filter::post('NEW_REPO_FACTS_UNIQUE')));
+			set_gedcom_setting($gedID, 'SOUR_FACTS_ADD',					str_replace(' ', '', KT_Filter::post('NEW_SOUR_FACTS_ADD')));
+			set_gedcom_setting($gedID, 'SOUR_FACTS_QUICK',				str_replace(' ', '', KT_Filter::post('NEW_SOUR_FACTS_QUICK')));
+			set_gedcom_setting($gedID, 'SOUR_FACTS_UNIQUE',				str_replace(' ', '', KT_Filter::post('NEW_SOUR_FACTS_UNIQUE')));
+			set_gedcom_setting($gedID, 'SURNAME_TRADITION',				KT_Filter::post('NEW_SURNAME_TRADITION'));
+			set_gedcom_setting($gedID, 'COLOR_PALETTE',					KT_Filter::post('NEW_COLOR_PALETTE'));
+			set_gedcom_setting($gedID, 'USE_GEONAMES',					KT_Filter::postBool('NEW_USE_GEONAMES'));
 
 
 
@@ -314,34 +330,28 @@ $controller
 	->addExternalJavascript(KT_CHOSEN_JS)
 	->addExternalJavascript(KT_CONFIRM_JS)
 	->addInlineJavascript('
-	autocomplete();
+		autocomplete();
 
 		jQuery(".chosen_select").chosen({width: "100%"});
 
 		jQuery("#record-type-selector").change(function() {
 			jQuery(".autocomplete_container").addClass("hidden");
 
-		    var selectVal = jQuery(this).children("option:selected").val();
+			var selectVal = jQuery(this).children("option:selected").val();
 
-		    jQuery("#select-" + selectVal).removeClass("hidden");
+			jQuery("#select-" + selectVal).removeClass("hidden");
 			jQuery("#autocompleteInput-" + selectVal).focus();
 		});
 
 	');
 
-global $iconstyles;
+echo relatedPages($trees, KT_SCRIPT_NAME);
 
-echo relatedPages($trees, KT_SCRIPT_NAME);?>
+echo pageStart('family_tree_config', $controller->getPageTitle(), 'y', '', 'administration/family_tree_config'); ?>
 
-<div id="family_tree_config" class="cell">
-	<div class="grid-x grid-padding-x grid-padding-y">
-		<div class="cell">
-			<?php echo faqLink('administration/family_tree_config'); ?>
-			<h4 class="inline"><?php echo KT_I18N::translate('Family tree configuration'); ?></h4>
-		</div>
 		<div class="cell medium-4">
 			<form method="post" action="#" name="tree">
-				<?php echo select_ged_control('ged', KT_Tree::getIdList(), null, KT_GEDCOM, ' onchange="tree.submit();"'); ?>
+				<?php echo select_ged_control('gedID', KT_Tree::getIdList(), null, $gedID, ' onchange="tree.submit();"'); ?>
 			</form>
 		</div>
 		<div class="cell">
@@ -392,13 +402,13 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 								<label for="tree_title"><?php echo KT_I18N::translate('Family tree title'); ?></label>
 							</div>
 							<div class="cell large-9">
-								<input type="text" id="tree_title" name="gedcom_title" value="<?php echo KT_Filter::escapeHtml(get_gedcom_setting(KT_GED_ID, 'title')); ?>" required maxlength="255">
+								<input type="text" id="tree_title" name="gedcom_title" value="<?php echo KT_Filter::escapeHtml(get_gedcom_setting($gedID, 'title')); ?>" required maxlength="255">
 							</div>
 							<div class="cell large-3">
 								<label for="tree_subtitle"><?php echo KT_I18N::translate('Family tree subtitle'); ?></label>
 							</div>
 							<div class="cell large-9">
-								<input type="text" id="tree_subtitle" name="new_subtitle"value="<?php echo KT_Filter::escapeHtml(get_gedcom_setting(KT_GED_ID, 'subtitle')); ?>" maxlength="255">
+								<input type="text" id="tree_subtitle" name="new_subtitle"value="<?php echo KT_Filter::escapeHtml(get_gedcom_setting($gedID, 'subtitle')); ?>" maxlength="255">
 							</div>
 							<div class="cell large-3">
 								<label for="tree_url"><?php echo KT_I18N::translate('Website URL'); ?></label>
@@ -416,7 +426,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 								<label for="tree_lang"><?php echo KT_I18N::translate('Language'); ?></label>
 							</div>
 							<div class="cell large-9">
-								<?php echo edit_field_language('GEDCOMLANG', get_gedcom_setting(KT_GED_ID, 'LANGUAGE')); ?>
+								<?php echo edit_field_language('GEDCOMLANG', get_gedcom_setting($gedID, 'LANGUAGE')); ?>
 								<div class="cell callout warning helpcontent">
 									<?php echo KT_I18N::translate('If a visitor to the site has not specified a preferred language in their browser configuration, or they have specified an unsupported language, then this language will be used. Typically, this setting applies to search engines.'); ?>
 								</div>
@@ -426,7 +436,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 							</div>
 							<div class="cell large-9">
 								<?php
-									$person = KT_Person::getInstance(get_gedcom_setting(KT_GED_ID, 'PEDIGREE_ROOT_ID'));
+									$person = KT_Person::getInstance(get_gedcom_setting($gedID, 'PEDIGREE_ROOT_ID'));
 									$lifeSpan = $person ? strip_tags($person->getLifespanName()) : '';
 								echo autocompleteHtml(
 									'default',
@@ -510,7 +520,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 								<label for="NEW_USE_RIN"><?php echo KT_I18N::translate('Use RIN number instead of GEDCOM ID'); ?></label>
 							</div>
 							<div class="cell large-9">
-								<?php echo edit_field_yes_no('NEW_USE_RIN', get_gedcom_setting(KT_GED_ID, 'USE_RIN')); ?>
+								<?php echo edit_field_yes_no('NEW_USE_RIN', get_gedcom_setting($gedID, 'USE_RIN')); ?>
 								<div class="cell callout warning helpcontent">
 									<?php echo KT_I18N::translate('Set to <b>Yes</b> to use the RIN number instead of the GEDCOM ID when asked for Individual IDs in configuration files, user settings, and charts. This is useful for genealogy programs that do not consistently export GEDCOMs with the same ID assigned to each individual but always use the same RIN.'); ?>
 								</div>
@@ -519,7 +529,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 								<label for="tree_subtitle"><?php echo KT_I18N::translate('Automatically create globally unique IDs'); ?></label>
 							</div>
 							<div class="cell large-9">
-								<?php echo edit_field_yes_no('NEW_GENERATE_UIDS', get_gedcom_setting(KT_GED_ID, 'GENERATE_UIDS')); ?>
+								<?php echo edit_field_yes_no('NEW_GENERATE_UIDS', get_gedcom_setting($gedID, 'GENERATE_UIDS')); ?>
 								<div class="cell callout warning helpcontent">
 									<?php echo KT_I18N::translate('<b>GUID</b> in this context is an acronym for «Globally Unique ID».<br>GUIDs are intended to help identify each individual in a manner that is repeatable, so that central organizations such as the Family History Center of the LDS Church in Salt Lake City, or even compatible programs running on your own server, can determine whether they are dealing with the same person no matter where the GEDCOM originates. The goal of the Family History Center is to have a central repository of genealogical data and expose it through web services. This will enable any program to access the data and update their data within it.<br><br>If you do not intend to share this GEDCOM with anyone else, you do not need to let kiwitrees create these GUIDs; however, doing so will do no harm other than increasing the size of your GEDCOM.'); ?>
 								</div>
@@ -605,7 +615,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 							</div>
 							<div class="cell large-9">
 								<select id="tree_gene" name="NEW_CONTACT_USER_ID">
-									<?php $CONTACT_USER_ID = get_gedcom_setting(KT_GED_ID, 'CONTACT_USER_ID');
+									<?php $CONTACT_USER_ID = get_gedcom_setting($gedID, 'CONTACT_USER_ID');
 									echo '<option value="" ';
 										if ($CONTACT_USER_ID == '') echo ' selected="selected"';
 									echo '>' . KT_I18N::translate('none') . '</option>';
@@ -626,7 +636,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 							</div>
 							<div class="cell large-9">
 								<select id="tree_tech" name="NEW_WEBMASTER_USER_ID">
-									<?php $WEBMASTER_USER_ID=get_gedcom_setting(KT_GED_ID, 'WEBMASTER_USER_ID');
+									<?php $WEBMASTER_USER_ID=get_gedcom_setting($gedID, 'WEBMASTER_USER_ID');
 									echo '<option value="" ';
 									if ($WEBMASTER_USER_ID == '') echo ' selected="selected"';
 									echo '>' . KT_I18N::translate('none') . '</option>';
@@ -662,7 +672,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 								<label for="tree_head"><?php echo KT_I18N::translate('Add to TITLE header tag'); ?></label>
 							</div>
 							<div class="cell large-9">
-								<input type="text" id="tree_head" name="NEW_META_TITLE" value="<?php echo htmlspecialchars(get_gedcom_setting(KT_GED_ID, 'META_TITLE')); ?>" size="40" maxlength="255">
+								<input type="text" id="tree_head" name="NEW_META_TITLE" value="<?php echo htmlspecialchars(get_gedcom_setting($gedID, 'META_TITLE')); ?>" size="40" maxlength="255">
 								<div class="cell callout warning helpcontent">
 									<?php echo KT_I18N::translate('This text will be appended to each page title. It will be shown in the browser’s title bar, bookmarks, etc.'); ?>
 								</div>
@@ -671,7 +681,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 								<label for="tree_desc"><?php echo KT_I18N::translate('Description META tag'); ?></label>
 							</div>
 							<div class="cell large-9">
-								<input type="text" id="tree_desc" name="NEW_META_DESCRIPTION" value="<?php echo get_gedcom_setting(KT_GED_ID, 'META_DESCRIPTION'); ?>" size="40" maxlength="255">
+								<input type="text" id="tree_desc" name="NEW_META_DESCRIPTION" value="<?php echo get_gedcom_setting($gedID, 'META_DESCRIPTION'); ?>" size="40" maxlength="255">
 								<div class="cell callout warning helpcontent">
 									<?php echo KT_I18N::translate('The value to place in the “meta description” tag in the HTML page header. Leave this field empty to use the name of the currently active family tree.'); ?>
 								</div>
@@ -700,7 +710,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 								<?php echo edit_field_yes_no('NEW_HIDE_LIVE_PEOPLE', $HIDE_LIVE_PEOPLE); ?>
 								<div class="cell callout warning helpcontent">
 									<?php echo KT_I18N::translate('This option will enable all privacy settings and hide the details of living people, as defined or modified below. If privacy is not enabled kiwitrees will ignore all the other settings on this page.'); ?>
-									<?php echo KT_I18N::plural('<b>Note:</b> "living" is defined (if no death or burial is known) as ending %d year after birth or estimated birth.','<b>Note:</b> "living" is defined (if no death or burial is known) as ending %d years after birth or estimated birth.', get_gedcom_setting(KT_GED_ID, 'MAX_ALIVE_AGE'), get_gedcom_setting(KT_GED_ID, 'MAX_ALIVE_AGE')); ?>
+									<?php echo KT_I18N::plural('<b>Note:</b> "living" is defined (if no death or burial is known) as ending %d year after birth or estimated birth.','<b>Note:</b> "living" is defined (if no death or burial is known) as ending %d years after birth or estimated birth.', get_gedcom_setting($gedID, 'MAX_ALIVE_AGE'), get_gedcom_setting($gedID, 'MAX_ALIVE_AGE')); ?>
 									<br>
 									<?php echo KT_I18N::translate('The length of time after birth can be set using the option "Age at which to assume a person is dead".'); ?>
 								</div>
@@ -709,7 +719,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 								<label for="SHOW_DEAD_PEOPLE"><?php echo KT_I18N::translate('Show dead people'); ?></label>
 							</div>
 							<div class="cell large-9">
-								<?php echo edit_field_access_level("SHOW_DEAD_PEOPLE", get_gedcom_setting(KT_GED_ID, 'SHOW_DEAD_PEOPLE')); ?>
+								<?php echo edit_field_access_level("SHOW_DEAD_PEOPLE", get_gedcom_setting($gedID, 'SHOW_DEAD_PEOPLE')); ?>
 								<div class="cell callout warning helpcontent">
 									<?php echo KT_I18N::translate('Set the privacy access level for all dead people.'); ?>
 								</div>
@@ -719,7 +729,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 							</div>
 							<div class="cell large-2">
 								<div class="input-group">
-										<input type="number" id="tree_maxage" name="MAX_ALIVE_AGE" value="<?php echo get_gedcom_setting(KT_GED_ID, 'MAX_ALIVE_AGE'); ?>" max="9999" min="1" required>
+										<input type="number" id="tree_maxage" name="MAX_ALIVE_AGE" value="<?php echo get_gedcom_setting($gedID, 'MAX_ALIVE_AGE'); ?>" max="9999" min="1" required>
 									<span class="input-group-label"><?php echo KT_I18N::translate('years'); ?></span>
 								</div>
 							</div>
@@ -735,8 +745,8 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 							<div class="cell large-9" id="tree_extend">
 								<?php echo /* I18N: ... Extend privacy to dead people [who were] ... */ KT_I18N::translate(
 										'Born in the last %1$s years or died in the last %2$s years',
-										'<input type="text" class="tree_extend" name="KEEP_ALIVE_YEARS_BIRTH" value="'.get_gedcom_setting(KT_GED_ID, 'KEEP_ALIVE_YEARS_BIRTH').'" size="5" maxlength="3">',
-										'<input type="text" class="tree_extend" name="KEEP_ALIVE_YEARS_DEATH" value="'.get_gedcom_setting(KT_GED_ID, 'KEEP_ALIVE_YEARS_DEATH').'" size="5" maxlength="3">'
+										'<input type="text" class="tree_extend" name="KEEP_ALIVE_YEARS_BIRTH" value="'.get_gedcom_setting($gedID, 'KEEP_ALIVE_YEARS_BIRTH').'" size="5" maxlength="3">',
+										'<input type="text" class="tree_extend" name="KEEP_ALIVE_YEARS_DEATH" value="'.get_gedcom_setting($gedID, 'KEEP_ALIVE_YEARS_DEATH').'" size="5" maxlength="3">'
 									); ?>
 								<div class="cell callout warning helpcontent">
 									<?php echo KT_I18N::translate('In some countries privacy laws apply not only to living people but also to those who have died recently. This option allows you to extend the privacy rules for living people to those who were born or died within a specified number of years. Leave these values at zero to disable this feature.'); ?>
@@ -746,7 +756,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 								<label for="SHOW_LIVING_NAMES"><?php echo KT_I18N::translate('Names of private individuals'); ?></label>
 							</div>
 							<div class="cell large-9">
-								<?php echo edit_field_access_level("SHOW_LIVING_NAMES", get_gedcom_setting(KT_GED_ID, 'SHOW_LIVING_NAMES')); ?>
+								<?php echo edit_field_access_level("SHOW_LIVING_NAMES", get_gedcom_setting($gedID, 'SHOW_LIVING_NAMES')); ?>
 								<div class="cell callout warning helpcontent">
 									<?php echo KT_I18N::translate('This option will show the names (but no other details) of private individuals. Individuals are private if they are still alive or if a privacy restriction has been added to their individual record. To hide a specific name, add a privacy restriction to that name record.'); ?>
 								</div>
@@ -755,7 +765,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 								<label for="SHOW_PRIVATE_RELATIONSHIPS"><?php echo KT_I18N::translate('Show private relationships'); ?></label>
 							</div>
 							<div class="cell large-9">
-								<?php echo radio_switch_group('SHOW_PRIVATE_RELATIONSHIPS', $privacy, get_gedcom_setting(KT_GED_ID, 'SHOW_PRIVATE_RELATIONSHIPS')); ?>
+								<?php echo radio_switch_group('SHOW_PRIVATE_RELATIONSHIPS', $privacy, get_gedcom_setting($gedID, 'SHOW_PRIVATE_RELATIONSHIPS')); ?>
 								<div class="cell callout warning helpcontent">
 									<?php echo KT_I18N::translate('This option will retain family links in private records. This means you will see empty "private" boxes on the pedigree chart and on other charts with private people.'); ?>
 								</div>
@@ -771,11 +781,11 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 				<?php
 				$all_tags	= array();
 				$tags		= array_unique(array_merge(
-					explode(',', get_gedcom_setting(KT_GED_ID, 'INDI_FACTS_ADD')), explode(',', get_gedcom_setting(KT_GED_ID, 'INDI_FACTS_UNIQUE')),
-					explode(',', get_gedcom_setting(KT_GED_ID, 'FAM_FACTS_ADD' )), explode(',', get_gedcom_setting(KT_GED_ID, 'FAM_FACTS_UNIQUE' )),
-					explode(',', get_gedcom_setting(KT_GED_ID, 'NOTE_FACTS_ADD')), explode(',', get_gedcom_setting(KT_GED_ID, 'NOTE_FACTS_UNIQUE')),
-					explode(',', get_gedcom_setting(KT_GED_ID, 'SOUR_FACTS_ADD')), explode(',', get_gedcom_setting(KT_GED_ID, 'SOUR_FACTS_UNIQUE')),
-					explode(',', get_gedcom_setting(KT_GED_ID, 'REPO_FACTS_ADD')), explode(',', get_gedcom_setting(KT_GED_ID, 'REPO_FACTS_UNIQUE')),
+					explode(',', get_gedcom_setting($gedID, 'INDI_FACTS_ADD')), explode(',', get_gedcom_setting($gedID, 'INDI_FACTS_UNIQUE')),
+					explode(',', get_gedcom_setting($gedID, 'FAM_FACTS_ADD' )), explode(',', get_gedcom_setting($gedID, 'FAM_FACTS_UNIQUE' )),
+					explode(',', get_gedcom_setting($gedID, 'NOTE_FACTS_ADD')), explode(',', get_gedcom_setting($gedID, 'NOTE_FACTS_UNIQUE')),
+					explode(',', get_gedcom_setting($gedID, 'SOUR_FACTS_ADD')), explode(',', get_gedcom_setting($gedID, 'SOUR_FACTS_UNIQUE')),
+					explode(',', get_gedcom_setting($gedID, 'REPO_FACTS_ADD')), explode(',', get_gedcom_setting($gedID, 'REPO_FACTS_UNIQUE')),
 					array('SOUR', 'REPO', 'OBJE', '_PRIM', 'NOTE', 'SUBM', 'SUBN', '_UID', 'CHAN')
 				));
 				foreach ($tags as $tag) {
@@ -908,7 +918,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 											" LEFT JOIN `##name` ON (gedcom_id=n_file AND xref=n_id AND n_num=0)".
 											" WHERE gedcom_id=?".
 											" ORDER BY xref IS NULL, n_sort, xref, tag_type"
-										)->execute(array(KT_GED_ID))->fetchAll();
+										)->execute(array($gedID))->fetchAll();
 										$n = 1; ?>
 
 										<?php foreach ($rows as $row) { ?>
@@ -983,7 +993,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 								<label for="NEW_MEDIA_UPLOAD"><?php echo KT_I18N::translate('Option to upload new media files'); ?></label>
 							</div>
 							<div class="cell large-9">
-								<?php echo radio_switch_group('NEW_MEDIA_UPLOAD', $privacy, get_gedcom_setting(KT_GED_ID, 'MEDIA_UPLOAD')); ?>
+								<?php echo radio_switch_group('NEW_MEDIA_UPLOAD', $privacy, get_gedcom_setting($gedID, 'MEDIA_UPLOAD')); ?>
 								 <div class="cell callout warning helpcontent">
 									<?php echo KT_I18N::translate('If you are concerned that users might upload inappropriate images, you can restrict media uploads to managers only.'); ?>
 								</div>
@@ -992,7 +1002,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 								<label for="NEW_SHOW_MEDIA_DOWNLOAD"><?php echo KT_I18N::translate('Download link in media viewer'); ?></label>
 							</div>
 							<div class="cell large-9">
-								<?php echo radio_switch_group('NEW_SHOW_MEDIA_DOWNLOAD', $privacy, get_gedcom_setting(KT_GED_ID, 'SHOW_MEDIA_DOWNLOAD')); ?>
+								<?php echo radio_switch_group('NEW_SHOW_MEDIA_DOWNLOAD', $privacy, get_gedcom_setting($gedID, 'SHOW_MEDIA_DOWNLOAD')); ?>
 								 <div class="cell callout warning helpcontent">
 									 <?php echo KT_I18N::translate('The media viewer can show a link which when clicked will download the media file to the local PC.<br>You may want to hide the download link for security reasons.'); ?>
 								</div>
@@ -1016,7 +1026,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 								<label for="NEW_SHOW_HIGHLIGHT_IMAGES"><?php echo KT_I18N::translate('Show highlight images in people boxes'); ?></label>
 							</div>
 							<div class="cell large-9">
-								<?php echo simple_switch('NEW_SHOW_HIGHLIGHT_IMAGES', true, get_gedcom_setting(KT_GED_ID, 'SHOW_HIGHLIGHT_IMAGES')); ?>
+								<?php echo simple_switch('NEW_SHOW_HIGHLIGHT_IMAGES', true, get_gedcom_setting($gedID, 'SHOW_HIGHLIGHT_IMAGES')); ?>
 								 <div class="cell callout warning helpcontent">
 									 <a href="<?php echo KT_KIWITREES_URL; ?>/faqs/general-topics/highlighted-images/" target="_blank" rel="noopener noreferrer">
  										<?php echo KT_I18N::translate('Click here to view more information about highlight images on the kiwitrees.net website FAQs'); ?>
@@ -1027,7 +1037,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 								<label for="NEW_USE_SILHOUETTE"><?php echo KT_I18N::translate('Use silhouettes'); ?></label>
 							</div>
 							<div class="cell large-9">
-								<?php echo simple_switch('NEW_USE_SILHOUETTE', true, get_gedcom_setting(KT_GED_ID, 'USE_SILHOUETTE')); ?>
+								<?php echo simple_switch('NEW_USE_SILHOUETTE', true, get_gedcom_setting($gedID, 'USE_SILHOUETTE')); ?>
 								 <div class="cell callout warning helpcontent">
 									 <?php echo KT_I18N::translate('Use silhouette images when no highlighted image for that individual has been specified. The images used are specific to the gender of the individual in question and may also vary according to the theme you use.'); ?>
 								</div>
@@ -1056,7 +1066,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 										<label for="NEW_SHOW_NO_WATERMARK"><?php echo KT_I18N::translate('Full size images without watermarks'); ?></label>
 									</div>
 									<div class="cell large-9">
-										<?php echo radio_switch_group('NEW_SHOW_NO_WATERMARK', $privacy, get_gedcom_setting(KT_GED_ID, 'SHOW_NO_WATERMARK')); ?>
+										<?php echo radio_switch_group('NEW_SHOW_NO_WATERMARK', $privacy, get_gedcom_setting($gedID, 'SHOW_NO_WATERMARK')); ?>
 										 <div class="cell callout warning helpcontent">
 											 <?php echo KT_I18N::translate('Watermarks are optional and normally shown just to visitors.'); ?>
 										</div>
@@ -1065,7 +1075,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 										<label for="NEW_WATERMARK_THUMB"><?php echo KT_I18N::translate('Add watermarks to thumbnails'); ?></label>
 									</div>
 									<div class="cell large-9">
-										<?php echo simple_switch('NEW_WATERMARK_THUMB', true, get_gedcom_setting(KT_GED_ID, 'WATERMARK_THUMB')); ?>
+										<?php echo simple_switch('NEW_WATERMARK_THUMB', true, get_gedcom_setting($gedID, 'WATERMARK_THUMB')); ?>
 										 <div class="cell callout warning helpcontent">
 											 <?php echo KT_I18N::translate('A watermark is text that is added to an image to discourage others from copying it without permission. If you select yes further options will be available.'); ?>
 										</div>
@@ -1074,7 +1084,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 										<label for="NEW_SAVE_WATERMARK_IMAGE"><?php echo KT_I18N::translate('Store watermarked full size images on server'); ?></label>
 									</div>
 									<div class="cell large-9">
-										<?php echo simple_switch('NEW_SAVE_WATERMARK_IMAGE', true, get_gedcom_setting(KT_GED_ID, 'SAVE_WATERMARK_IMAGE')); ?>
+										<?php echo simple_switch('NEW_SAVE_WATERMARK_IMAGE', true, get_gedcom_setting($gedID, 'SAVE_WATERMARK_IMAGE')); ?>
 										 <div class="cell callout warning helpcontent">
 											 <?php echo KT_I18N::translate('Watermarks can be slow to generate for large images. Busy sites may prefer to generate them once and store the watermarked image on the server.'); ?>
 										</div>
@@ -1083,7 +1093,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 										<label for="NEW_SAVE_WATERMARK_THUMB"><?php echo KT_I18N::translate('Store watermarked thumbnails on server'); ?></label>
 									</div>
 									<div class="cell large-9">
-										<?php echo simple_switch('NEW_SAVE_WATERMARK_THUMB', true, get_gedcom_setting(KT_GED_ID, 'SAVE_WATERMARK_THUMB')); ?>
+										<?php echo simple_switch('NEW_SAVE_WATERMARK_THUMB', true, get_gedcom_setting($gedID, 'SAVE_WATERMARK_THUMB')); ?>
 										 <div class="cell callout warning helpcontent">
 											 <?php echo KT_I18N::translate('Busy sites may prefer to generate them once and store the watermarked thumbnails on the server.'); ?>
 										</div>
@@ -1115,7 +1125,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 												<label for="tree_surnames"><?php echo KT_I18N::translate('Minimum number of occurrences to be a "common surname"'); ?></label>
 											</div>
 											<div class="cell large-9">
-												<input type="text" id="tree_surnames" name="NEW_COMMON_NAMES_THRESHOLD" value="<?php echo get_gedcom_setting(KT_GED_ID, 'COMMON_NAMES_THRESHOLD'); ?>" maxlength="5" required>
+												<input type="text" id="tree_surnames" name="NEW_COMMON_NAMES_THRESHOLD" value="<?php echo get_gedcom_setting($gedID, 'COMMON_NAMES_THRESHOLD'); ?>" maxlength="5" required>
 												<div class="cell callout warning helpcontent">
 													<?php echo KT_I18N::translate('This is the number of times a surname must occur before it shows up in the Common Surname list on the "Statistics block".'); ?>
 												</div>
@@ -1124,7 +1134,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 												<label for="tree_addnames"><?php echo KT_I18N::translate('Names to add to common surnames list'); ?></label>
 											</div>
 											<div class="cell large-9">
-												<input type="text" id="tree_addnames" name="NEW_COMMON_NAMES_ADD" value="<?php echo get_gedcom_setting(KT_GED_ID, 'COMMON_NAMES_ADD'); ?>" maxlength="255">
+												<input type="text" id="tree_addnames" name="NEW_COMMON_NAMES_ADD" value="<?php echo get_gedcom_setting($gedID, 'COMMON_NAMES_ADD'); ?>" maxlength="255">
 												<div class="cell callout warning helpcontent">
 													<?php echo KT_I18N::translate('If the number of times that a certain surname occurs is lower than the threshold, it will not appear in the list. It can be added here manually. If more than one surname is entered, they must be separated by a comma. <b>Surnames are case-sensitive.</b>'); ?>
 												</div>
@@ -1133,7 +1143,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 												<label for="tree_minusnames"><?php echo KT_I18N::translate('Names to exclude from common surnames list'); ?></label>
 											</div>
 											<div class="cell large-9">
-												<input type="text" id="tree_minusnames" name="NEW_COMMON_NAMES_REMOVE" value="<?php echo get_gedcom_setting(KT_GED_ID, 'COMMON_NAMES_REMOVE'); ?>" maxlength="255">
+												<input type="text" id="tree_minusnames" name="NEW_COMMON_NAMES_REMOVE" value="<?php echo get_gedcom_setting($gedID, 'COMMON_NAMES_REMOVE'); ?>" maxlength="255">
 												<div class="cell callout warning helpcontent">
 													<?php echo KT_I18N::translate('If you want to remove a surname from the Common Surname list without increasing the threshold value, you can do that by entering the surname here. If more than one surname is entered, they must be separated by a comma. <b>Surnames are case-sensitive.</b> Surnames entered here will also be removed from the Top-10 list on the Home Page.'); ?>
 												</div>
@@ -1142,7 +1152,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 												<label for="NEW_ALL_CAPS"><?php echo KT_I18N::translate('Display surnames in all CAPS'); ?></label>
 											</div>
 											<div class="cell large-9">
-												<?php echo simple_switch('NEW_ALL_CAPS', true, get_gedcom_setting(KT_GED_ID, 'ALL_CAPS')); ?>
+												<?php echo simple_switch('NEW_ALL_CAPS', true, get_gedcom_setting($gedID, 'ALL_CAPS')); ?>
 												<div class="cell callout warning helpcontent">
 													<?php echo KT_I18N::translate('Always display surnames in CAPITAL letters'); ?>
 												</div>
@@ -1158,7 +1168,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 												<label for="NEW_SURNAME_LIST_STYLE"><?php echo KT_I18N::translate('Surname list style'); ?></label>
 											</div>
 											<div class="cell large-9">
-												<?php echo radio_switch_group('NEW_SURNAME_LIST_STYLE', $surnameListStyles, get_gedcom_setting(KT_GED_ID, 'SURNAME_LIST_STYLE')); ?>
+												<?php echo radio_switch_group('NEW_SURNAME_LIST_STYLE', $surnameListStyles, get_gedcom_setting($gedID, 'SURNAME_LIST_STYLE')); ?>
 												<div class="cell callout warning helpcontent">
 													<?php echo KT_I18N::translate('The display style used for lists of surnames, such as on the <a href="module.php?mod=list_individuals&mod_action=show&show_all=yes" target="_blank">Individual List</a> page'); ?>
 												</div>
@@ -1167,7 +1177,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 												<label for="tree_maxnames"><?php echo KT_I18N::translate('Names to exclude from common surnames list'); ?></label>
 											</div>
 											<div class="cell large-9">
-												<input type="text" id="tree_maxnames" name="NEW_SUBLIST_TRIGGER_I" value="<?php echo get_gedcom_setting(KT_GED_ID, 'SUBLIST_TRIGGER_I'); ?>" maxlength="5" required>
+												<input type="text" id="tree_maxnames" name="NEW_SUBLIST_TRIGGER_I" value="<?php echo get_gedcom_setting($gedID, 'SUBLIST_TRIGGER_I'); ?>" maxlength="5" required>
 												<div class="cell callout warning helpcontent">
 													<?php echo KT_I18N::translate('Long lists of people with the same surname can be broken into smaller sub-lists according to the first letter of the individual\'s given name. This option determines when sub-listing of surnames will occur. To disable sub-listing completely, set this option to zero.'); ?>
 												</div>
@@ -1176,7 +1186,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 												<label for="NEW_SHOW_EST_LIST_DATES"><?php echo KT_I18N::translate('Show estimated dates for birth and death'); ?></label>
 											</div>
 											<div class="cell large-9">
-												<?php echo simple_switch('NEW_SHOW_EST_LIST_DATES', true, get_gedcom_setting(KT_GED_ID, 'SHOW_EST_LIST_DATES')); ?>
+												<?php echo simple_switch('NEW_SHOW_EST_LIST_DATES', true, get_gedcom_setting($gedID, 'SHOW_EST_LIST_DATES')); ?>
 												<div class="cell callout warning helpcontent">
 													<?php echo KT_I18N::translate('This option controls whether or not to show estimated dates for birth and death instead of leaving blanks on individual lists and charts for individuals whose dates are not known.'); ?>
 												</div>
@@ -1185,7 +1195,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 												<label for="NEW_SHOW_LAST_CHANGE"><?php echo KT_I18N::translate('Show the date and time of the last update'); ?></label>
 											</div>
 											<div class="cell large-9">
-												<?php echo simple_switch('NEW_SHOW_LAST_CHANGE', true, get_gedcom_setting(KT_GED_ID, 'SHOW_LAST_CHANGE')); ?>
+												<?php echo simple_switch('NEW_SHOW_LAST_CHANGE', true, get_gedcom_setting($gedID, 'SHOW_LAST_CHANGE')); ?>
 												<div class="cell callout warning helpcontent">
 													<?php echo KT_I18N::translate('Include in lists the last date a record was changed'); ?>
 												</div>
@@ -1201,7 +1211,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 												<label for="NEW_PEDIGREE_LAYOUT"><?php echo KT_I18N::translate('Default pedigree chart layout'); ?></label>
 											</div>
 											<div class="cell large-9">
-												<?php echo radio_switch_group('NEW_PEDIGREE_LAYOUT', $pedigreeLayoutOptions, get_gedcom_setting(KT_GED_ID, 'PEDIGREE_LAYOUT')); ?>
+												<?php echo radio_switch_group('NEW_PEDIGREE_LAYOUT', $pedigreeLayoutOptions, get_gedcom_setting($gedID, 'PEDIGREE_LAYOUT')); ?>
 												<div class="cell callout warning helpcontent">
 													<?php echo /* I18N: Help text for the “Default pedigree chart layout” tree configuration setting */ KT_I18N::translate('This option indicates whether the Pedigree chart should be generated in landscape or portrait mode.'); ?>
 												</div>
@@ -1245,7 +1255,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 											</div>
 											<div class="cell large-9">
 												<input type="hidden" name="NEW_SHOW_RELATIVES_EVENTS" value="<?php echo $SHOW_RELATIVES_EVENTS; ?>">
-												<?php echo checkbox_switch_group('NEW_SHOW_RELATIVES_EVENTS', $relativeEvents, get_gedcom_setting(KT_GED_ID, 'SHOW_RELATIVES_EVENTS')); ?>
+												<?php echo checkbox_switch_group('NEW_SHOW_RELATIVES_EVENTS', $relativeEvents, get_gedcom_setting($gedID, 'SHOW_RELATIVES_EVENTS')); ?>
 											</div>
 										</div>
 									</div>
@@ -1268,7 +1278,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 																	true =>KT_I18N::translate_c('Show the [first/last] [N] parts of a place name.', 'last')
 																),
 																null,
-																get_gedcom_setting(KT_GED_ID, 'SHOW_PEDIGREE_PLACES_SUFFIX')
+																get_gedcom_setting($gedID, 'SHOW_PEDIGREE_PLACES_SUFFIX')
 															) .
 														'</div>',
 														'<div class="cell medium-4 large-2">' .
@@ -1285,7 +1295,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 																	9 => KT_I18N::number(9),
 																),
 																null,
-																get_gedcom_setting(KT_GED_ID, 'SHOW_PEDIGREE_PLACES')
+																get_gedcom_setting($gedID, 'SHOW_PEDIGREE_PLACES')
 															) .
 														'</div>'
 													); ?>
@@ -1324,7 +1334,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 												<label for="NEW_ABBREVIATE_CHART_LABELS"><?php echo KT_I18N::translate('Abbreviate chart labels'); ?></label>
 											</div>
 											<div class="cell large-9">
-												<?php echo simple_switch('NEW_ABBREVIATE_CHART_LABELS', true, get_gedcom_setting(KT_GED_ID, 'ABBREVIATE_CHART_LABELS')); ?>
+												<?php echo simple_switch('NEW_ABBREVIATE_CHART_LABELS', true, get_gedcom_setting($gedID, 'ABBREVIATE_CHART_LABELS')); ?>
 												<div class="cell callout warning helpcontent">
 													<?php echo KT_I18N::translate('This option controls whether or not to abbreviate labels like <b>Birth</b> on charts with just the first letter like <b>B</b>.'); ?>
 												</div>
@@ -1333,7 +1343,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 												<label for="NEW_PEDIGREE_FULL_DETAILS"><?php echo KT_I18N::translate('Show chart details by default'); ?></label>
 											</div>
 											<div class="cell large-9">
-												<?php echo simple_switch('NEW_PEDIGREE_FULL_DETAILS', true, get_gedcom_setting(KT_GED_ID, 'PEDIGREE_FULL_DETAILS')); ?>
+												<?php echo simple_switch('NEW_PEDIGREE_FULL_DETAILS', true, get_gedcom_setting($gedID, 'PEDIGREE_FULL_DETAILS')); ?>
 												<div class="cell callout warning helpcontent">
 													<?php echo /* I18N: Help text for the “Show chart details by default” tree configuration setting */ KT_I18N::translate('This is the initial setting for the “show details” option on the charts.'); ?>
 												</div>
@@ -1342,7 +1352,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 												<label for="NEW_PEDIGREE_SHOW_GENDER"><?php echo KT_I18N::translate('Show Gender icon on charts'); ?></label>
 											</div>
 											<div class="cell large-9">
-												<?php echo simple_switch('NEW_PEDIGREE_SHOW_GENDER', true, get_gedcom_setting(KT_GED_ID, 'PEDIGREE_SHOW_GENDER')); ?>
+												<?php echo simple_switch('NEW_PEDIGREE_SHOW_GENDER', true, get_gedcom_setting($gedID, 'PEDIGREE_SHOW_GENDER')); ?>
 												<div class="cell callout warning helpcontent">
 													<?php echo KT_I18N::translate('This option controls whether or not to show the individual\'s gender icon on charts. Since the gender is also indicated by the color of the box, this option doesn\'t conceal the gender. The option simply removes some duplicate information from the box.'); ?>
 												</div>
@@ -1351,7 +1361,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 												<label for="NEW_SHOW_PARENTS_AGE"><?php echo KT_I18N::translate('Age of parents next to child\'s birth date'); ?></label>
 											</div>
 											<div class="cell large-9">
-												<?php echo simple_switch('NEW_SHOW_PARENTS_AGE', true, get_gedcom_setting(KT_GED_ID, 'SHOW_PARENTS_AGE')); ?>
+												<?php echo simple_switch('NEW_SHOW_PARENTS_AGE', true, get_gedcom_setting($gedID, 'SHOW_PARENTS_AGE')); ?>
 												<div class="cell callout warning helpcontent">
 													<?php echo KT_I18N::translate('This option controls whether or not to show age of father and mother next to child\'s birth date on charts.'); ?>
 												</div>
@@ -1360,7 +1370,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 												<label for="NEW_SHOW_LDS_AT_GLANCE"><?php echo KT_I18N::translate('LDS ordinance codes in chart boxes'); ?></label>
 											</div>
 											<div class="cell large-9">
-												<?php echo simple_switch('NEW_SHOW_LDS_AT_GLANCE', true, get_gedcom_setting(KT_GED_ID, 'SHOW_LDS_AT_GLANCE')); ?>
+												<?php echo simple_switch('NEW_SHOW_LDS_AT_GLANCE', true, get_gedcom_setting($gedID, 'SHOW_LDS_AT_GLANCE')); ?>
 												<div class="cell callout warning helpcontent">
 													<?php echo /* I18N: Help for LDS ordinances show/hide option */ KT_I18N::translate('Setting this option to <b>Yes</b> will show status codes for LDS ordinances in all chart boxes.<ul><li><b>B</b> - Baptism</li><li><b>E</b> - Endowed</li><li><b>S</b> - Sealed to spouse</li><li><b>P</b> - Sealed to parents</li></ul>A person who has all of the ordinances done will have <b>BESP</b> printed after their name. Missing ordinances are indicated by <b>_</b> in place of the corresponding letter code. For example, <b>BE__</b> indicates missing <b>S</b> and <b>P</b> ordinances.'); ?>
 												</div>
@@ -1370,7 +1380,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 											</div>
 											<div class="cell large-9">
 												<select id="NEW_CHART_BOX_TAGS" data-placeholder="Select facts..." multiple class="chosen_select" name="NEW_CHART_BOX_TAGS[]">
-													<?php $chartBoxTags = explode(",", get_gedcom_setting(KT_GED_ID, 'CHART_BOX_TAGS'));
+													<?php $chartBoxTags = explode(",", get_gedcom_setting($gedID, 'CHART_BOX_TAGS'));
 													foreach (KT_Gedcom_Tag::getPicklistFacts('ALL') as $factId => $factName) {
 														$selected = in_array($factId, $chartBoxTags) ? ' selected=selected ' : ' ';
 														echo '<option' . $selected . 'value="' . $factId . '">' . $factName . '&nbsp;(' . $factId . ')&nbsp;</option>';
@@ -1391,7 +1401,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 												<label for="NEW_SHOW_FACT_ICONS"><?php echo KT_I18N::translate('Display fact icons'); ?></label>
 											</div>
 											<div class="cell large-9">
-												<?php echo simple_switch('NEW_SHOW_FACT_ICONS', true, get_gedcom_setting(KT_GED_ID, 'SHOW_FACT_ICONS')); ?>
+												<?php echo simple_switch('NEW_SHOW_FACT_ICONS', true, get_gedcom_setting($gedID, 'SHOW_FACT_ICONS')); ?>
 												<div class="cell callout warning helpcontent">
 													<?php echo KT_I18N::translate('Set this on to display icons near fact names on the "Facts and Events" and "Events" tab. Fact icons will be displayed only if they exist in the <i>images/facts</i> directory of the current theme.'); ?>
 												</div>
@@ -1400,7 +1410,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 												<label for="NEW_EXPAND_NOTES"><?php echo KT_I18N::translate('Automatically expand notes'); ?></label>
 											</div>
 											<div class="cell large-9">
-												<?php echo simple_switch('NEW_EXPAND_NOTES', true, get_gedcom_setting(KT_GED_ID, 'EXPAND_NOTES')); ?>
+												<?php echo simple_switch('NEW_EXPAND_NOTES', true, get_gedcom_setting($gedID, 'EXPAND_NOTES')); ?>
 												<div class="cell callout warning helpcontent">
 													<?php echo KT_I18N::translate('This option controls whether or not to automatically display content of a <i>Note</i> record on the Individual page.'); ?>
 												</div>
@@ -1409,7 +1419,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 												<label for="NEW_EXPAND_SOURCES"><?php echo KT_I18N::translate('Automatically expand sources'); ?></label>
 											</div>
 											<div class="cell large-9">
-												<?php echo simple_switch('NEW_EXPAND_SOURCES', true, get_gedcom_setting(KT_GED_ID, 'EXPAND_SOURCES')); ?>
+												<?php echo simple_switch('NEW_EXPAND_SOURCES', true, get_gedcom_setting($gedID, 'EXPAND_SOURCES')); ?>
 												<div class="cell callout warning helpcontent">
 													<?php echo KT_I18N::translate('This option controls whether or not to automatically display content of a <i>Source</i> record on the Individual page.'); ?>
 												</div>
@@ -1425,7 +1435,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 												<label for="NEW_SHOW_GEDCOM_RECORD"><?php echo KT_I18N::translate('Allow users to see raw GEDCOM records'); ?></label>
 											</div>
 											<div class="cell large-9">
-												<?php echo simple_switch('NEW_SHOW_GEDCOM_RECORD', true, get_gedcom_setting(KT_GED_ID, 'SHOW_GEDCOM_RECORD')); ?>
+												<?php echo simple_switch('NEW_SHOW_GEDCOM_RECORD', true, get_gedcom_setting($gedID, 'SHOW_GEDCOM_RECORD')); ?>
 												<div class="cell callout warning helpcontent">
 													<?php echo KT_I18N::translate('Setting this to <b>Yes</b> will place links on individuals, sources, and families page menus to let users bring up another window containing the raw data in GEDCOM file format.<br>Administrators always see these links regardless of this setting.'); ?>
 												</div>
@@ -1434,7 +1444,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 												<label for="NEW_HIDE_GEDCOM_ERRORS"><?php echo KT_I18N::translate('GEDCOM errors'); ?></label>
 											</div>
 											<div class="cell large-9">
-												<?php echo simple_switch('NEW_HIDE_GEDCOM_ERRORS', true, get_gedcom_setting(KT_GED_ID, 'HIDE_GEDCOM_ERRORS')); ?>
+												<?php echo simple_switch('NEW_HIDE_GEDCOM_ERRORS', true, get_gedcom_setting($gedID, 'HIDE_GEDCOM_ERRORS')); ?>
 												<div class="cell callout warning helpcontent">
 													<?php echo KT_I18N::translate('Many genealogy programs create GEDCOM files with custom tags, and kiwitrees understands most of them. When unrecognised tags are found, this option lets you choose whether to ignore them or display a warning message.'); ?>
 												</div>
@@ -1443,7 +1453,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 												<label for="NEW_SHOW_COUNTER"><?php echo KT_I18N::translate('Hit counters'); ?></label>
 											</div>
 											<div class="cell large-9">
-												<?php echo simple_switch('NEW_SHOW_COUNTER', true, get_gedcom_setting(KT_GED_ID, 'SHOW_COUNTER')); ?>
+												<?php echo simple_switch('NEW_SHOW_COUNTER', true, get_gedcom_setting($gedID, 'SHOW_COUNTER')); ?>
 												<div class="cell callout warning helpcontent">
 													<?php echo KT_I18N::translate('Show hit counters on the Home and Individual pages.'); ?>
 												</div>
@@ -1478,7 +1488,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 											</div>
 											<div class="cell large-9">
 												<select id="NEW_INDI_FACTS_ADD" data-placeholder="Select facts..." multiple class="chosen_select" name="NEW_INDI_FACTS_ADD[]">
-													<?php $allIndiTags = explode(",", get_gedcom_setting(KT_GED_ID, 'INDI_FACTS_ADD'));
+													<?php $allIndiTags = explode(",", get_gedcom_setting($gedID, 'INDI_FACTS_ADD'));
 													foreach (KT_Gedcom_Tag::getPicklistFacts('ALL') as $factId => $factName) {
 														$selected = in_array($factId, $allIndiTags) ? ' selected=selected ' : ' ';
 														echo '<option' . $selected . 'value="' . $factId . '">' . $factName . '&nbsp;(' . $factId . ')&nbsp;</option>';
@@ -1508,7 +1518,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 							<div data-abide-error class="alert callout" style="display: none;">
 								<p><i class="fi-alert"></i><?php echo /* I18N: A general error message for forms */ KT_I18N::translate('There are some errors in your form.'); ?></p>
 							</div>
-							<?php $current_themedir = get_gedcom_setting(KT_GED_ID, 'THEME_DIR');
+							<?php $current_themedir = get_gedcom_setting($gedID, 'THEME_DIR');
 							foreach (get_theme_names() as $themename => $themedir) {
 								$selectClass = ($current_themedir == $themedir ? 'current_theme' : ''); ?>
 								<div class="cell card large-3 theme_box <?php echo $selectClass; ?>">
@@ -1543,9 +1553,13 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 
 							<?php } ?>
 
-							<?php echo singleButton(); ?>
-
 						</div>
+						<div class="grid-x grid-margin-x grid-margin-y">
+							<div class="cell">
+								<?php echo singleButton(); ?>
+							</div>
+						</div>
+
 					</form>
 				</div>
 
