@@ -204,11 +204,11 @@ class list_favorites_KT_Module extends KT_Module implements KT_Module_List {
 										<div class="cell favType">
 											<label class="h6 bold"><?php echo KT_I18N::translate('Select type of favorite'); ?></label>
 											<label for="favTypeFamily1">
-												<input type="radio" name="indi" value=1 id="favTypeFamily1" required<?php echo $favType ? ' checked' : ''; ?><?php echo $favType ? ' checked' : ''; ?>>
+												<input type="radio" name="favType" value=0 id="favTypeFamily1" required<?php echo $favType ? ' checked' : ''; ?><?php echo $favType ? ' checked' : ''; ?>>
 												<?php echo KT_I18N::translate('Family tree favorite'); ?>
 											</label>
 											<label for="favTypePersonal1">
-												<input type="radio" name="indi" value=0 id="favTypePersonal1"<?php echo !$favType ? ' checked' : ''; ?>>
+												<input type="radio" name="favType" value=1 id="favTypePersonal1"<?php echo !$favType ? ' checked' : ''; ?>>
 												<?php echo KT_I18N::translate('My favorite'); ?>
 											</label>
 										</div>
@@ -240,12 +240,12 @@ class list_favorites_KT_Module extends KT_Module implements KT_Module_List {
 										); ?>
 										<div class="cell favType">
 											<label class="h6 bold"><?php echo KT_I18N::translate('Select type of favorite'); ?></label>
-											<label for="favTypeFamily1">
-												<input type="radio" name="fam" value=1 id="favTypeFamily1" required<?php echo $favType ? ' checked' : ''; ?><?php echo $favType ? ' checked' : ''; ?>>
+											<label for="favTypeFamily2">
+												<input type="radio" name="fam" value=0 id="favTypeFamily2" required<?php echo $favType ? ' checked' : ''; ?><?php echo $favType ? ' checked' : ''; ?>>
 												<?php echo KT_I18N::translate('Family tree favorite'); ?>
 											</label>
-											<label for="favTypePersonal1">
-												<input type="radio" name="fam" value=0 id="favTypePersonal1"<?php echo !$favType ? ' checked' : ''; ?>>
+											<label for="favTypePersonal2">
+												<input type="radio" name="fam" value=1 id="favTypePersonal2"<?php echo !$favType ? ' checked' : ''; ?>>
 												<?php echo KT_I18N::translate('My favorite'); ?>
 											</label>
 										</div>
@@ -277,12 +277,12 @@ class list_favorites_KT_Module extends KT_Module implements KT_Module_List {
 										); ?>
 										<div class="cell favType">
 											<label class="h6 bold"><?php echo KT_I18N::translate('Select type of favorite'); ?></label>
-											<label for="favTypeFamily1">
-												<input type="radio" name="sour" value=1 id="favTypeFamily1" required<?php echo $favType ? ' checked' : ''; ?><?php echo $favType ? ' checked' : ''; ?>>
+											<label for="favTypeFamily3">
+												<input type="radio" name="sour" value=0 id="favTypeFamily3" required<?php echo $favType ? ' checked' : ''; ?><?php echo $favType ? ' checked' : ''; ?>>
 												<?php echo KT_I18N::translate('Family tree favorite'); ?>
 											</label>
-											<label for="favTypePersonal1">
-												<input type="radio" name="sour" value=0 id="favTypePersonal1"<?php echo !$favType ? ' checked' : ''; ?>>
+											<label for="favTypePersonal3">
+												<input type="radio" name="sour" value=1 id="favTypePersonal3"<?php echo !$favType ? ' checked' : ''; ?>>
 												<?php echo KT_I18N::translate('My favorite'); ?>
 											</label>
 										</div>
@@ -308,11 +308,11 @@ class list_favorites_KT_Module extends KT_Module implements KT_Module_List {
 										<div class="cell favType">
 											<label class="h6"><?php echo KT_I18N::translate('Select type of favorite'); ?></label>
 											<label for="favTypeFamily4">
-												<input type="radio" name="url" value=1 id="favTypeFamily4" required<?php echo $favType ? ' checked' : ''; ?>>
+												<input type="radio" name="url" value=0 id="favTypeFamily4" required<?php echo $favType ? ' checked' : ''; ?>>
 												<?php echo KT_I18N::translate('Family tree favorite'); ?>
 											</label>
 											<label for="favTypePersonal4">
-												<input type="radio" name="url" value=0 id="favTypePersonal4"<?php echo !$favType ? ' checked' : ''; ?>>
+												<input type="radio" name="url" value=1 id="favTypePersonal4"<?php echo !$favType ? ' checked' : ''; ?>>
 												<?php echo KT_I18N::translate('My favorite'); ?>
 											</label>
 										</div>
@@ -330,6 +330,7 @@ class list_favorites_KT_Module extends KT_Module implements KT_Module_List {
 					</div>
 				</div>
 			<?php }
+
 			if ($favorites) { ?>
 				<div class="grid-x grid-margin-x grid-margin-y" id="display_favorites" data-toggler=".is-hidden">
 					<div class="cell">
@@ -343,47 +344,97 @@ class list_favorites_KT_Module extends KT_Module implements KT_Module_List {
 							</button>
 						<?php } ?>
 					</div>
-					<?php foreach ($favorites as $key => $favorite) {
-						if (isset($favorite['id'])) {
-							$key = $favorite['id'];
-						}
-						$favType	= '';
-						$remove		= '';
-						if ($favorite['user_id']) {
-							$favType	= '<span class="float-right">' . KT_I18N::translate('My favorite') . '</span>';
-						} else {
-							$favType	= '<span class="float-right">' . KT_I18N::translate('Family tree favorite') . '</span>';
-						}
-						if (KT_USER_ID || KT_USER_GEDCOM_ADMIN) {
-							$remove		= '<span class="float-left">' . $this->removeFavourite($key) . '</span>';
-						}
-						if ($favorite['type'] == 'URL') { ?>
-							<div class="cell medium-4 large-3">
-								<div class="clearfix"><?php echo $remove . $favType; ?></div>
-								<?php $this->print_url($favorite); ?>
-							</div>
-						<?php } else {
-							$record = KT_GedcomRecord::getInstance($favorite['gid']);
-							if ($record && $record->canDisplayDetails()) {
-								if ($record->getType() == 'INDI') { ?>
-									<div class="cell medium-4 large-3">
-										<div class="clearfix"><?php echo $remove . $favType; ?></div>
-										<?php print_pedigree_person($record, $style, 1, $key, $favorite['note']); ?>
-									</div>
-								<?php } else { ?>
-									<div class="cell medium-4 large-3">
-										<div class="clearfix"><?php echo $remove . $favType; ?></div>
-										<?php $this->print_other($record, $favorite); ?>
-									</div>
-								<?php }
+
+					<!-- print "My Favorites" -->
+					<?php if ($favorites['myFavs']) { ?>
+						<div class="cell">
+							<h4><?php echo KT_I18N::translate('My favorites'); ?></h4>
+						</div>
+						<?php foreach ($favorites['myFavs'] as $key => $favorite) {
+							if (isset($favorite['id'])) {
+								$key = $favorite['id'];
+							}
+
+							$remove		= '';
+							if (KT_USER_ID || KT_USER_GEDCOM_ADMIN) {
+								$remove		= '<span class="float-left">' . $this->removeFavourite($key) . '</span>';
+							}
+
+							if ($favorite['type'] == 'URL') { ?>
+								<div class="cell medium-4 large-3">
+									<div class="clearfix"><?php echo $remove; ?></div>
+									<?php $this->print_url($favorite); ?>
+								</div>
+
+							<?php } else {
+								$record = KT_GedcomRecord::getInstance($favorite['gid']);
+
+								if ($record && $record->canDisplayDetails()) {
+									if ($record->getType() == 'INDI') { ?>
+										<div class="cell medium-4 large-3">
+											<div class="clearfix"><?php echo $remove; ?></div>
+											<?php print_pedigree_person($record, $style, 1, $key, $favorite['note']); ?>
+										</div>
+									<?php } else { ?>
+										<div class="cell medium-4 large-3">
+											<div class="clearfix"><?php echo $remove; ?></div>
+											<?php $this->print_other($record, $favorite); ?>
+										</div>
+									<?php }
+								}
 							}
 						}
+					} else {
+						echo KT_I18N::translate('You have no personal favorites to display');
 					} ?>
-				</div>
-			<?php } else {
-				echo KT_I18N::translate('There are no favorites to display');
-			}
-		echo pageClose();
+
+
+					<!-- print "Family tree Favorites" -->
+					<?php if ($favorites['treeFavs']) { ?>
+						<div class="cell">
+							<h4><?php echo KT_I18N::translate('Family tree favorites'); ?></h4>
+						</div>
+						<?php foreach ($favorites['treeFavs'] as $key => $favorite) {
+							if (isset($favorite['id'])) {
+								$key = $favorite['id'];
+							}
+							$remove		= '';
+
+							if (KT_USER_ID || KT_USER_GEDCOM_ADMIN) {
+								$remove		= '<span class="float-left">' . $this->removeFavourite($key) . '</span>';
+							}
+
+							if ($favorite['type'] == 'URL') { ?>
+								<div class="cell medium-4 large-3">
+									<div class="clearfix"><?php echo $remove; ?></div>
+									<?php $this->print_url($favorite); ?>
+								</div>
+							<?php } else {
+								$record = KT_GedcomRecord::getInstance($favorite['gid']);
+								if ($record && $record->canDisplayDetails()) {
+									if ($record->getType() == 'INDI') { ?>
+										<div class="cell medium-4 large-3">
+											<div class="clearfix"><?php echo $remove; ?></div>
+											<?php print_pedigree_person($record, $style, 1, $key, $favorite['note']); ?>
+										</div>
+									<?php } else { ?>
+										<div class="cell medium-4 large-3">
+											<div class="clearfix"><?php echo $remove; ?></div>
+											<?php $this->print_other($record, $favorite); ?>
+										</div>
+									<?php }
+								}
+							}
+						}
+					} else {
+						echo KT_I18N::translate('There are no family tree favorites to display');
+					}
+				} else {
+					echo KT_I18N::translate('There are no favorites to display'); ?>
+					</div>
+				<?php } ?>
+
+		<?php echo pageClose();
 
 		// Restore GEDCOM configuration
 		unset($show_full);
@@ -407,7 +458,7 @@ class list_favorites_KT_Module extends KT_Module implements KT_Module_List {
 		return $removeFavourite;
 	}
 
-	public static function print_other($record, $favorite) {
+	public static function print_other($record, $key) {
 		global $iconStyle;
 
 		$pid			= $record->getXref();
@@ -416,7 +467,7 @@ class list_favorites_KT_Module extends KT_Module implements KT_Module_List {
 		$addname		= '';
 		$thumbnail		= $record->displayImage(true);
 		$recordYear		= $record->getType() == 'FAM' ? KT_I18N::translate('Marriage year %s', $record->getMarriageYear()) : '';
-		$displayNote	= $favorite['note'];
+		$displayNote	= $key['note'];
 		$detailedView	= $record->format_list_details();
 		$uniqueID		= (int)(microtime(true) * 1000000);
 		$dataToggle		= $pid . '-' . $uniqueID;
@@ -464,20 +515,52 @@ class list_favorites_KT_Module extends KT_Module implements KT_Module_List {
 
 		//-- add the favorite to the database
 		return (bool)
-			KT_DB::prepare("INSERT INTO `##favorites` (user_id, gedcom_id, xref, favorite_type, url, title, note) VALUES (? ,? ,? ,? ,? ,? ,?)")
-				->execute(array($favorite['user_id'], $favorite['gedcom_id'], $favorite['gid'], $favorite['type'], $favorite['url'], $favorite['title'], $favorite['note']));
+			KT_DB::prepare("
+				INSERT INTO `##favorites` (
+					user_id,
+					gedcom_id,
+					xref,
+					favorite_type,
+					url,
+					title,
+					note
+				) VALUES (? ,? ,? ,? ,? ,? ,?)
+			")
+			->execute(array(
+				$favorite['user_id'],
+				$favorite['gedcom_id'],
+				$favorite['gid'],
+				$favorite['type'],
+				$favorite['url'],
+				$favorite['title'],
+				$favorite['note']
+			));
 	}
 
 	// Get favorites for a user or family tree
 	public static function getFavorites($user_id) {
 		self::updateSchema(); // make sure the favorites table has been created
 
-		return
-			KT_DB::prepare(
-				"SELECT favorite_id AS id, user_id, gedcom_id, xref AS gid, favorite_type AS type, title, note, url".
-				" FROM `##favorites` WHERE gedcom_id=? AND (user_id IS NULL OR user_id = ? )")
-			->execute(array(KT_GED_ID, $user_id))
-			->fetchAll(PDO::FETCH_ASSOC);
+			$myfavsql = "
+				SELECT favorite_id AS id, xref AS gid, favorite_type AS type, title, note, url
+				FROM `##favorites`
+				WHERE gedcom_id=?
+				AND user_id = ?
+			";
+
+			$myfavRows = KT_DB::prepare($myfavsql)->execute(array(KT_GED_ID, $user_id))->fetchAll(PDO::FETCH_ASSOC);
+
+			$treefavsql = "
+				SELECT favorite_id AS id, xref AS gid, favorite_type AS type, title, note, url
+				FROM `##favorites`
+				WHERE gedcom_id=?
+				AND user_id IS NULL
+			";
+
+			$treefavRows = KT_DB::prepare($treefavsql)->execute(array(KT_GED_ID))->fetchAll(PDO::FETCH_ASSOC);
+
+			return (array('myFavs' => $myfavRows, 'treeFavs' => $treefavRows));
+
 	}
 
 	protected static function updateSchema() {

@@ -31,9 +31,9 @@ if (!defined('KT_KIWITREES')) {
  *
  * @param string $title name of page
  */
-function pageStart($title, $pageTitle = '', $includeTitle = 'y', $subTitle = '', $url = '') {
+function pageStart($title, $pageTitle = '', $includeTitle = 'y', $subTitle = '', $faq = '') {
 	$pageTitle ? $pageTitle = $pageTitle : $pageTitle = $title;
-	$url ? $url = faqLink($url) : $url = '';
+	$faq ? $faq = faqLink($faq) : $faq = '';
 
 	if ($includeTitle == 'n') {
 		$pageTitle = '';
@@ -46,7 +46,7 @@ function pageStart($title, $pageTitle = '', $includeTitle = 'y', $subTitle = '',
 	}
 	return '
 		<div id="' . strtolower($title) . '-page" class="cell">' .
-		 	$url .
+		 	$faq .
 			'<div class="cell titles">' .
 				$pageTitle .
 				$subTitle .
@@ -60,10 +60,28 @@ function pageStart($title, $pageTitle = '', $includeTitle = 'y', $subTitle = '',
  * print end of all pages
  */
 function pageClose() {
-	'</div>
+	return '
 		</div>
+			</div>
 	';
 }
+
+/**
+ * print Family tree select box and label
+ *
+ */
+ function familyTree($gedID) {
+	 return '
+		<div class="cell medium-2">
+			<label for="ged">' . KT_I18N::translate('Family tree') . '</label>
+		</div>
+		<div class="cell medium-4">
+			<form method="post" action="#" name="tree">
+				' . select_ged_control('gedID', KT_Tree::getIdList(), null, $gedID, ' onchange="tree.submit();"') . '
+			</form>
+		</div>
+	';
+ }
 
 /**
  * Provides consistent structure of autocomplete elements
@@ -79,13 +97,15 @@ function pageClose() {
  *
  * Example:
  *  <?php echo autocompleteHtml(
- * 	 'dna_id_b', // id
+ * 	 'dna_id_b', // id suffix
  * 	 'INDI', // TYPE
  * 	 '', // autocomplete-ged
  * 	 strip_tags(($person_b ? $person_b->getLifespanName() : '')), // input value
  * 	 '', // placeholder
  * 	 'dna_id_b', // hidden input name
  * 	 $dna_id_b // hidden input value
+ *   'required' // Optional required setting
+ *   'string' // optional other entry
  * ); ?>
  *
  */

@@ -9398,6 +9398,9 @@ a.morelink.less {
 div[id$=-page] {
 	padding: 1rem;
 }
+div[id$=-page] div.cell.titles {
+	padding-bottom: 1rem;
+}
 
 div.relatedPages {
 	border-bottom: 0.125rem solid #e6e6e6;
@@ -9855,29 +9858,29 @@ main #admin-content #site_config label.middle {
 	line-height: 1;
 	padding: 0.5625rem 0 0;
 }
-main #admin-content #family_tree_config #media .padding-bottom {
+main #admin-content #family_tree_config-page #media .padding-bottom {
 	margin-bottom: 1rem;
 }
-main #admin-content #family_tree_config #media .padding-left {
+main #admin-content #family_tree_config-page #media .padding-left {
 	margin-left: -0.1rem;
 }
-main #admin-content #family_tree_config ul.accordion {
+main #admin-content #family_tree_config-page ul.accordion {
 	margin: 1rem;
 }
-main #admin-content #family_tree_config button.privacyOptions {
+main #admin-content #family_tree_config-page button.privacyOptions {
 	margin: 1rem 0;
 }
-main #admin-content #family_tree_config tr.vertAlign {
+main #admin-content #family_tree_config-page tr.vertAlign {
 	vertical-align: top;
 }
-main #admin-content #family_tree_config #restriction div.dataTables_wrapper table.dataTable thead tr th {
+main #admin-content #family_tree_config-page #restriction div.dataTables_wrapper table.dataTable thead tr th {
 	padding: 0rem 0.5rem;
 }
-main #admin-content #family_tree_config #restriction div.dataTables_wrapper table.dataTable thead tr th svg.svg-inline--fa {
+main #admin-content #family_tree_config-page #restriction div.dataTables_wrapper table.dataTable thead tr th svg.svg-inline--fa {
 	right: 1rem;
 	top: 1.25rem;
 }
-main #admin-content #family_tree_config #restriction .callout.help_content {
+main #admin-content #family_tree_config-page #restriction .callout.help_content {
 	font-size: 0.95rem !important;
 }
 main #admin-content #admin_media-page .media-folders {
@@ -10186,9 +10189,6 @@ main #admin-content #missing_data-page .input-group.autocomplete_container .inpu
 }
 main #admin-content #find_duplicates-page div.tinySwitch {
 	padding-top: 0.625rem;
-}
-main #admin-content #find_duplicates-page .titles {
-	margin-bottom: 1.625rem;
 }
 main #admin-content #find_duplicates-page .button-group .button {
 	margin-bottom: 0;
@@ -10523,6 +10523,9 @@ div.dataTables_wrapper table.dataTable thead tr th svg {
 	max-height: 40rem;
 	min-height: 20rem;
 	overflow-x: scroll;
+}
+#textarea.code {
+	border: 0.125rem solid #34689c;
 }
 #textarea .CodeMirror {
 	height: auto;

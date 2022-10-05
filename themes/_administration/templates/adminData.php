@@ -113,8 +113,9 @@ $module_config = [
  */
  $custom = [
 	'admin_summary_custom.php'	=> KT_I18N::translate('Customizing'),
-	'admin_custom_lang.php'		=> KT_I18N::translate('Manage custom translations'),
+	'admin_custom_lang.php'		=> KT_I18N::translate('Custom translations'),
 	'admin_custom_theme.php'	=> KT_I18N::translate('Custom file editing'),
+	'module.php?mod=custom_js&mod_action=admin_config' => KT_I18N::translate('Custom JavaScript'),
  ];
 
  /**

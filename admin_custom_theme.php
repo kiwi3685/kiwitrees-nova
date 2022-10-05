@@ -159,26 +159,23 @@ echo relatedPages($custom, KT_SCRIPT_NAME);
 
 echo pageStart('custom_theme', $controller->getPageTitle()); ?>
 
-    <?php //echo faqLink('customisation/custom-translations/'); ?>
-	<div class="cell">
-		<form method="post" action="">
-			<input type="hidden" name="action" value="files">
-			<div class="grid-x">
-				<div class="cell medium-2">
-					<label><?php echo KT_I18N::translate('Select theme or other files'); ?></label>
-				</div>
-				<select class="cell medium-4" id="theme-select" name="theme" onchange="this.form.submit();">
-					<option value=''></option>
-					<?php foreach ($themeNames as $themedir) {
-						$name		= (in_array($themedir, $nonThemeNames) ? KT_I18N::translate($nonThemeNames) : get_theme_display($themedir));
-						$selected	= ($theme == $themedir ? ' selected ' : ''); ?>
-						<option <?php echo $selected; ?> value="<?php echo $themedir; ?>"><?php echo $name; ?></option>
-					<?php } ?>
-				</select>
-				<div class="cell medium-6"></div>
+	<form class="cell" method="post" action="">
+		<input type="hidden" name="action" value="files">
+		<div class="grid-x">
+			<div class="cell medium-2">
+				<label><?php echo KT_I18N::translate('Select theme or other files'); ?></label>
 			</div>
-		</form>
-	</div>
+			<select class="cell medium-4" id="theme-select" name="theme" onchange="this.form.submit();">
+				<option value=''></option>
+				<?php foreach ($themeNames as $themedir) {
+					$name		= (in_array($themedir, $nonThemeNames) ? KT_I18N::translate($nonThemeNames) : get_theme_display($themedir));
+					$selected	= ($theme == $themedir ? ' selected ' : ''); ?>
+					<option <?php echo $selected; ?> value="<?php echo $themedir; ?>"><?php echo $name; ?></option>
+				<?php } ?>
+			</select>
+			<div class="cell medium-6"></div>
+		</div>
+	</form>
 	<div class="cell">
 		<?php if ($action == 'files') { ?>
 			<!-- Select files for chosen theme or other files-->
