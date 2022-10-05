@@ -155,7 +155,7 @@ class googlemap_KT_Module extends KT_Module implements KT_Module_Config, KT_Modu
  				?>
 				<div class="cell tabHeader">
 					<?php if (KT_USER_IS_ADMIN) { ?>
-						<?php echo googlemap_links(KT_GEDURL); ?>
+						<?php echo googlemap_links(); ?>
 					<?php } ?>
 				</div>
 				<div class="cell indiFact">

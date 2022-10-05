@@ -32,11 +32,15 @@ if (file_exists(KT_ROOT . KT_MODULES_DIR . 'googlemap/defaultconfig.php')) {
 }
 
 function place_id_to_hierarchy($id) {
-	$statement	= KT_DB::prepare("SELECT pl_parent_id, pl_place FROM `##placelocation` WHERE pl_id=?");
+	$statement	= KT_DB::prepare("
+		SELECT pl_parent_id, pl_place
+		FROM `##placelocation`
+		WHERE pl_id=?
+	");
 	$arr		= array();
 	while ($id != 0) {
 		$row	= $statement->execute(array($id))->fetchOneRow();
-		$arr	= array($id=>$row->pl_place)+$arr;
+		$arr	= array($id => $row->pl_place) + $arr;
 		$id		= $row->pl_parent_id;
 	}
 	return $arr;
@@ -52,7 +56,14 @@ function get_placeid($place) {
 		$placelist = create_possible_place_names($par[$i], $i+1);
 		foreach ($placelist as $key => $placename) {
 			$pl_id =
-				KT_DB::prepare("SELECT pl_id FROM `##placelocation` WHERE pl_level=? AND pl_parent_id=? AND pl_place LIKE ? ORDER BY pl_place")
+				KT_DB::prepare("
+					SELECT pl_id
+					FROM `##placelocation`
+					WHERE pl_level=?
+					AND pl_parent_id=?
+					AND pl_place LIKE ?
+					ORDER BY pl_place
+				")
 				->execute(array($i, $place_id, $placename))
 				->fetchOne();
 			if (!empty($pl_id)) break;
@@ -67,12 +78,19 @@ function get_p_id($place) {
 	$par = explode (",", $place);
 	$par = array_reverse($par);
 	$place_id = 0;
-	for ($i=0; $i<count($par); $i++) {
+	for ($i = 0; $i < count($par); $i ++) {
 		$par[$i] = trim($par[$i]);
-		$placelist = create_possible_place_names($par[$i], $i+1);
+		$placelist = create_possible_place_names($par[$i], $i + 1);
 		foreach ($placelist as $key => $placename) {
 			$pl_id=
-				KT_DB::prepare("SELECT p_id FROM `##places` WHERE p_parent_id=? AND p_file=? AND p_place LIKE ? ORDER BY p_place")
+				KT_DB::prepare("
+					SELECT p_id
+					FROM `##places`
+					WHERE p_parent_id=?
+					AND p_file=?
+					AND p_place LIKE ?
+					ORDER BY p_place
+				")
 				->execute(array($place_id, KT_GED_ID, $placename))
 				->fetchOne();
 			if (!empty($pl_id)) break;
@@ -85,75 +103,81 @@ function get_p_id($place) {
 
 function set_placeid_map($level, $parent) {
 	if (!isset($levelm)) {
-		$levelm=0;
+		$levelm = 0;
 	}
 	$fullplace = "";
-	if ($level==0)
-		$levelm=0;
-	else {
-		for ($i=1; $i<=$level; $i++) {
-			$fullplace .= $parent[$level-$i].", ";
+	if ($level == 0) {
+		$levelm = 0;
+	} else {
+		for ($i = 1; $i <= $level; $i ++) {
+			$fullplace .= $parent[$level - $i] . ", ";
 		}
-		$fullplace = substr($fullplace, 0, -2);
-		$levelm = get_p_id($fullplace);
+		$fullplace 	= substr($fullplace, 0, -2);
+		$levelm 	= get_p_id($fullplace);
 	}
 	return $levelm;
 }
 
 function set_levelm($level, $parent) {
 	if (!isset($levelm)) {
-		$levelm=0;
+		$levelm = 0;
 	}
 	$fullplace = "";
-	if ($level==0)
-		$levelm=0;
-	else {
-		for ($i=1; $i<=$level; $i++) {
-			if (!empty($parent[$level-$i]))
-				$fullplace .= $parent[$level-$i].", ";
+	if ($level == 0) {
+		$levelm = 0;
+	} else {
+		for ($i = 1; $i <= $level; $i ++) {
+			if (!empty($parent[$level - $i]))
+				$fullplace .= $parent[$level - $i] . ", ";
 			else
 				$fullplace .= "Unknown, ";
 		}
-		$fullplace = substr($fullplace, 0, -2);
-		$levelm = get_placeid($fullplace);
+		$fullplace 	= substr($fullplace, 0, -2);
+		$levelm 	= get_placeid($fullplace);
 	}
 	return $levelm;
 }
 
 function create_map($placelevels) {
-	global $level, $iconStyle;
-	global $GOOGLEMAP_PH_XSIZE, $GOOGLEMAP_PH_YSIZE, $GOOGLEMAP_MAP_TYPE, $levelm, $plzoom, $controller;
+	global $controller, $iconStyle, $level, $levelm, $plzoom;
+	global $GOOGLEMAP_PH_XSIZE, $GOOGLEMAP_PH_YSIZE, $GOOGLEMAP_MAP_TYPE;
 
-	$parent		= KT_Filter::get('parent');
+	$parent = KT_Filter::get('parent');
 
-	// create the map
-	$levelm = set_levelm($level, $parent);
+	if ($parent && is_null($level)) {
+		$level = count($parent) - 1;
+		$levelm = set_levelm($level, $parent);
+	} else {
+		$level = 0;
+	}
+
 	$latlng =
-		KT_DB::prepare("SELECT pl_place, pl_id, pl_lati, pl_long, pl_zoom FROM `##placelocation` WHERE pl_id=?")
+		KT_DB::prepare("
+			SELECT pl_place, pl_id, pl_lati, pl_long, pl_zoom
+			FROM `##placelocation`
+			WHERE pl_id=?
+		")
 		->execute(array($levelm))
 		->fetch(PDO::FETCH_ASSOC);
-	// Map zoom level
+
 	if ($latlng) {
         $plzoom = $latlng['pl_zoom'];
+		$coords = $latlng['pl_id'];
     } else {
         $plzoom = 3;
+		$coords = '';
     }
 	?>
+
 	<div class="grid-x grid-margin-y">
 		<div class="cell medium-10 medium-offset-1 large-8 large-offset-2">
+
 			<div class="shadow" id="place_map">
 				<i class="icon-loading-large"></i>
 				<script src="<?php echo KT_GM_SCRIPT; ?>"></script>
 			</div>
 
-			<?php if (KT_USER_IS_ADMIN && $parent !== null) {
-				if ($latlng && isset($latlng['pl_id'])) {
-					$coords = $latlng['pl_id'];
-				} else {
-					$coords = false;
-				}
-				echo googlemap_links(KT_GEDCOM, true, $parent, $coords);
-			 } ?>
+			<?php echo googlemap_links($parent, $coords, KT_GEDCOM, true); ?>
 
 		</div>
 	</div>
@@ -161,14 +185,14 @@ function create_map($placelevels) {
 }
 
 function check_were_am_i($numls, $levelm) {
-	$where_am_i=place_id_to_hierarchy($levelm);
-	$i=$numls+1;
+	$where_am_i = place_id_to_hierarchy($levelm);
+	$i = $numls + 1;
 	if (!isset($levelo)) {
-		$levelo[0]=0;
+		$levelo[0] = 0;
 	}
-	foreach (array_reverse($where_am_i, true) as $id=>$place2) {
-		$levelo[$i]=$id;
-		$i--;
+	foreach (array_reverse($where_am_i, true) as $id => $place2) {
+		$levelo[$i] = $id;
+		$i --;
 	}
 	return $levelo;
 }

@@ -153,7 +153,7 @@ $controller
 							<label><?php echo KT_I18N::translate('%s places', count($placelist)); ?></label>
 						<?php } ?>
 					</div>
-					<div class="cell medium-7 text-right" id="gm_breadcrumb">
+					<div class="h5 cell medium-7 text-right" id="gm_breadcrumb">
 						<?php
 						$where_am_i = place_id_to_hierarchy($parent);
 						$separator = /* I18N: Symbol separating parts of a place name */ KT_I18N::translate(' - ');

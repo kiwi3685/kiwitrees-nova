@@ -87,7 +87,7 @@ class list_places_KT_Module extends KT_Module implements KT_Module_List {
 		$action		= KT_Filter::get('action', 'find|view', 'find');
 		$display	= KT_Filter::get('display', 'hierarchy|list', 'hierarchy');
 		$parent		= KT_Filter::getArray('parent');
-		$level = count($parent);
+		$level 		= count($parent);
 
 		if ($display == 'hierarchy') {
 			if ($level) {

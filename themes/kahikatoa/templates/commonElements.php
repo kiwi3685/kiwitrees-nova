@@ -198,14 +198,20 @@ function pageClose() {
  /**
   * Google map links to admin pages
   *
+  * $parent (array) - id of parent - used where links connect to specific places
+  *	$coords (string) - latlng settings - used where links connect to specific places
+  * $gedcom (string) - Only required if link to admin_trees_places.php used
+  * $update (bool) -
+  *
   * @return string[]
   */
- function googlemap_links($gedcom, array $parent, $coords, $update = false) {
+ function googlemap_links($parent = array(), $coords = '', $gedcom = KT_GED_ID, $update = false) {
  	global $iconStyle;
 
 	$preferences_url	= 'module.php?mod=googlemap&amp;mod_action=admin_preferences';
-	$placecheck_url		= 'module.php?mod=googlemap&amp;mod_action=admin_placecheck';
-	$adminplaces_url	= 'module.php?mod=googlemap&amp;mod_action=admin_places';
+	$placecheck_url		= 'module.php?mod=googlemap&amp;mod_action=admin_placecheck&amp;gedcom_id=1&amp;matching=1';
+	$adminplaces_url	= 'module.php?mod=googlemap&amp;mod_action=admin_places&amp;parent=' . $coords . '&status=all';
+	$update_places_url	= 'admin_trees_places.php?ged=' . $gedcom;
 
 	$class1 = $class2 = $class3 = ' small-4';
 	if ($update) {
@@ -215,25 +221,26 @@ function pageClose() {
 		$class4 = ' small-3 text-right';
 	}
 
-	if (isset($parent[0])) {
+/*
+	if ($parent && isset($parent[0]) ) {
 		$placecheck_url .= '&amp;country=' . $parent[0];
 		if (isset($parent[1])) {
 			$placecheck_url .= '&amp;state=' . $parent[1];
 		}
+		$update_places_url = 'admin_trees_places.php?ged=' . KT_GEDCOM . '&amp;search=' . $parent[0];
+	}
+	$adminplaces_url = 'module.php?mod=googlemap&amp;mod_action=admin_places';
+	if ($latlng && isset($latlng['pl_id'])) {
+		$adminplaces_url .= '&amp;parent='.$latlng['pl_id'];
+	}
+*/
 
-		if ($coords) {
-			$adminplaces_url .= '&amp;parent=' . $coords;
+	if ($parent && isset($parent[0])) {
+		$placecheck_url .= '&amp;country=' . $parent[0];
+		if (isset($parent[1])) {
+			$placecheck_url .= '&amp;state=' . $parent[1];
 		}
-
-		$adminplaces_url = 'module.php?mod=googlemap&amp;mod_action=admin_places';
-		if ($latlng && isset($latlng['pl_id'])) {
-			$adminplaces_url .= '&amp;parent='.$latlng['pl_id'];
-		}
-
-		if ($update) {
-			$update_places_url	= 'admin_trees_places.php?ged=' . $gedcom;
-			$update_places_url .= '&amp;search=' . $parent[0];
-		}
+		$update_places_url .= '&amp;search=' . implode(', ', array_reverse($parent));
 	}
 
 	$html = '<div class="grid-x">';

@@ -198,9 +198,14 @@ function pageClose() {
  /**
   * Google map links to admin pages
   *
+  * $parent (array) - id of parent - used where links connect to specific places
+  *	$coords (string) - latlng settings - used where links connect to specific places
+  * $gedcom (string) - Only required if link to admin_trees_places.php used
+  * $update (bool) -
+  *
   * @return string[]
   */
- function googlemap_links($gedcom, array $parent, $coords, $update = false) {
+ function googlemap_links($parent = array(), $coords = '', $gedcom = KT_GED_ID, $update = false) {
  	global $iconStyle;
 
 	$preferences_url	= 'module.php?mod=googlemap&amp;mod_action=admin_preferences';
