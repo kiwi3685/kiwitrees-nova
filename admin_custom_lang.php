@@ -31,7 +31,7 @@ global $iconStyle;
 $controller = new KT_Controller_Page();
 $controller
 	->restrictAccess(KT_USER_IS_ADMIN)
-	->setPageTitle(KT_I18N::translate('Manage custom translations'))
+	->setPageTitle(KT_I18N::translate('Custom translations'))
 	->pageHeader();
 
 $action				= KT_Filter::post('action');
@@ -140,7 +140,7 @@ echo pageStart('custom_language', $controller->getPageTitle()); ?>
 					<div class="cell cell medium-5">
 						<div class="card">
 							<div class="card-divider">
-								<?php echo KT_I18N::translate('Manage custom translations'); ?>
+								<?php echo $controller->getPageTitle(); ?>
 							</div>
 							<div class="card-section">
 								<textarea  name="new_custom_text" placeholder="<?php echo KT_I18N::translate('Add your custom translation here'); ?>"></textarea>
@@ -182,7 +182,7 @@ echo pageStart('custom_language', $controller->getPageTitle()); ?>
 						<div class="cell cell medium-5">
 							<div class="card">
 								<div class="card-divider">
-									<?php echo KT_I18N::translate('Manage custom translations'); ?>
+									<?php echo $controller->getPageTitle(); ?>
 								</div>
 								<?php foreach ($custom_lang as $key => $value){ ?>
 									<div class="card-section">

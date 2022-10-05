@@ -38,7 +38,7 @@ $controller
  */
 $custom = array(
 	 "admin_custom_lang.php"							=> array(
- 	   KT_I18N::translate('Manage custom translations'),
+ 	   KT_I18N::translate('Custom translations'),
 	   KT_I18N::translate(''),
 	   KT_I18N::translate('Administrator access only'),
 	   'alert'

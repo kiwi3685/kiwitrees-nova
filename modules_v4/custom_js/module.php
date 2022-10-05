@@ -54,7 +54,11 @@ class custom_js_KT_Module extends KT_Module implements KT_Module_Config, KT_Modu
 
 	// Extend KT_Module
 	public function modAction($mod_action) {
+		include KT_THEME_URL . 'templates/adminData.php';
+
 		global $iconStyle;
+
+		$gedID 	= KT_Filter::post('gedID') ? KT_Filter::post('gedID') : KT_GED_ID;
 
 		switch($mod_action) {
 			case 'admin_config':
@@ -76,11 +80,25 @@ class custom_js_KT_Module extends KT_Module implements KT_Module_Config, KT_Modu
 					AddToLog($this->getTitle().' config updated', 'config');
 				}
 
-				$CJS_FOOTER = get_module_setting('custom_js', 'CJS_FOOTER'); ?>
-				<div class="cell">
-					<h4 class="inline"><?php echo KT_I18N::translate('Custom Javascript for Footer'); ?></h4>
-					<a class="current faq_link" href="<?php echo KT_KIWITREES_URL; ?>/faqs/modules/add-code-for-google-analytics-social-media-piwik-etc/" target="_blank" rel="noopener noreferrer" title="<?php echo KT_I18N::translate('View FAQ for this page.'); ?>"><?php echo KT_I18N::translate('View FAQ for this page.'); ?><i class="<?php echo $iconStyle; ?> fa-comments"></i></a>
-					<form style="width:98%;" method="post" name="configform" action="<?php echo $this->getConfigLink(); ?>">
+				$CJS_FOOTER = get_module_setting('custom_js', 'CJS_FOOTER');
+
+				echo relatedPages($custom, 'module.php?mod=custom_js&mod_action=admin_config');
+
+				echo pageStart('custom-js', $controller->getPageTitle(), 'y', '', '/faqs/modules/add-code-for-google-analytics-social-media-piwik-etc/'); ?>
+
+				<div class="cell callout warning helpcontent">
+					<?php echo KT_I18N::translate('
+						Use this to include any custom javascript code you
+						require in the site footer.
+					'); ?>
+				</div>
+				<div class="cell medium-4">
+					<form method="post" action="#" name="tree">
+						<?php echo select_ged_control('gedID', KT_Tree::getIdList(), null, $gedID, ' onchange="tree.submit();"'); ?>
+					</form>
+				</div>
+
+				<form class="cell" method="post" name="configform" action="<?php echo $this->getConfigLink(); ?>">
 						<input type="hidden" name="action" value="update">
 						<textarea id="new_js" style="width:100%;" name="NEW_CJS_FOOTER"><?php echo $CJS_FOOTER; ?></textarea>
 						<button class="button" type="submit">
@@ -96,8 +114,8 @@ class custom_js_KT_Module extends KT_Module implements KT_Module_Config, KT_Modu
 						    <?php echo KT_I18N::translate('clear'); ?>
 						</button>
 					</form>
-				</div>
-				<?php
+
+				<?php echo pageClose();
 				break;
             default:
                 header('HTTP/1.0 404 Not Found');
