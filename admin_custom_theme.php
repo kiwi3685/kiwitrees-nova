@@ -81,7 +81,8 @@ KT_Filter::post('code') ? $content = KT_Filter::post('code') : $content = '';
 
 if ($delete == 'delete_file') {
 	$deleteFile	= KT_Filter::get('filename');
-	fclose($deleteFile);
+//    $handle     = fopen($deleteFile)
+//	fclose($handle);
 	unlink($deleteFile);
 }
 

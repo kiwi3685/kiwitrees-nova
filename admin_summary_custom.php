@@ -39,19 +39,29 @@ $controller
 $custom = array(
 	 "admin_custom_lang.php"							=> array(
  	   KT_I18N::translate('Custom translations'),
-	   KT_I18N::translate(''),
+	   KT_I18N::translate('
+	   		Modify language translations that you want to be different from the
+			standard. These changes can be for any language, and apply right
+			across your site.
+		'),
 	   KT_I18N::translate('Administrator access only'),
 	   'alert'
    ),
 	 "admin_custom_theme.php"							=> array(
  	   KT_I18N::translate('Custom file editing'),
-	   KT_I18N::translate(''),
+	   KT_I18N::translate('
+	   		Create and edit personalized theme files for your site,
+	   		including style sheets, headers, and the Home page layout template.
+		'),
 	   KT_I18N::translate('Administrator access only'),
 	   'alert'
    ),
 	 "module.php?mod=custom_js&mod_action=admin_config"	=> array(
  	   KT_I18N::translate('Custom javascript'),
-	   KT_I18N::translate(''),
+	   KT_I18N::translate('
+	   		Add or edit any javascript you need for your site here.
+			An examples might be Google Analytics, or other similar tools.
+		'),
 	   KT_I18N::translate('Administrator access only'),
 	   'alert'
    ),
@@ -62,7 +72,7 @@ echo pageStart('custom_admin', $controller->getPageTitle()); ?>
 
 	<div class="cell callout warning help_content">
 		<?php echo KT_I18N::translate('
-			Enable modules, set access levels, and adjust their locations.
+			Tools to help personalize your site beyond the standard features set.
 		'); ?>
 	</div>
 	<div class="cell">
