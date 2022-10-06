@@ -31,17 +31,21 @@ include KT_THEME_URL . 'templates/adminData.php';
 $search  = KT_Filter::post('search', null, KT_Filter::get('search'));
 $replace = KT_Filter::post('replace');
 $confirm = KT_Filter::post('confirm');
+$gedID 	= KT_Filter::post('gedID') ? KT_Filter::post('gedID') : KT_GED_ID;
+$tree 	= KT_Tree::getNameFromId($gedID);
 
 $changes = array();
 
 if ($search && $replace) {
-	$rows = KT_DB::prepare(
-		"SELECT i_id AS xref, i_file AS gedcom_id, i_gedcom AS gedcom" .
-		" FROM `##individuals`" .
-		" LEFT JOIN `##change` ON (i_id = xref AND i_file=gedcom_id AND status='pending')".
-		" WHERE i_file = ?" .
-		" AND COALESCE(new_gedcom, i_gedcom) REGEXP CONCAT('\n2 PLAC ([^\n]*, )*', ?, '(\n|$)')"
-	)->execute(array(KT_GED_ID, preg_quote($search)))->fetchAll();
+
+	$rows = KT_DB::prepare("
+		SELECT i_id AS xref, i_file AS gedcom_id, i_gedcom AS gedcom
+		FROM `##individuals`
+		LEFT JOIN `##change` ON (i_id = xref AND i_file=gedcom_id AND status='pending')
+		WHERE i_file = ?
+		AND COALESCE(new_gedcom, i_gedcom) REGEXP CONCAT('\n2 PLAC ([^\n]*, )*', ?, '(\n|$)')
+	")->execute(array($gedID , preg_quote($search)))->fetchAll();
+
 	foreach ($rows as $row) {
 		$record = KT_Person::getInstance($row->xref, $row->gedcom_id, $row->gedcom);
 		if ($record) {
@@ -52,19 +56,20 @@ if ($search && $replace) {
 					$changes[$old_place] = $new_place;
 					if ($confirm == 'update') {
 						$gedcom = preg_replace('/(\n2 PLAC (?:.*, )*)' . preg_quote($search, '/') . '(\n|$)/i', '$1' . $replace . '$2', $row->gedcom);
-						replace_gedrec($row->xref, KT_GED_ID, $gedcom, false);
+						replace_gedrec($row->xref, $gedID , $gedcom, false);
 					}
 				}
 			}
 		}
 	}
-	$rows = KT_DB::prepare(
-		"SELECT f_id AS xref, f_file AS gedcom_id, f_gedcom AS gedcom".
-		" FROM `##families`".
-		" LEFT JOIN `##change` ON (f_id = xref AND f_file=gedcom_id AND status='pending')".
-		" WHERE f_file = ?" .
-		" AND COALESCE(new_gedcom, f_gedcom) REGEXP CONCAT('\n2 PLAC ([^\n]*, )*', ?, '(\n|$)')"
-	)->execute(array(KT_GED_ID, preg_quote($search)))->fetchAll();
+	$rows = KT_DB::prepare("
+		SELECT f_id AS xref, f_file AS gedcom_id, f_gedcom AS gedcom
+		FROM `##families`
+		LEFT JOIN `##change` ON (f_id = xref AND f_file=gedcom_id AND status='pending')
+		WHERE f_file = ?
+		AND COALESCE(new_gedcom, f_gedcom) REGEXP CONCAT('\n2 PLAC ([^\n]*, )*', ?, '(\n|$)')
+	")->execute(array($gedID, preg_quote($search)))->fetchAll();
+
 	foreach ($rows as $row) {
 		$record = KT_Family::getInstance($row->xref, $row->gedcom_id, $row->gedcom);
 		if ($record) {
@@ -75,7 +80,7 @@ if ($search && $replace) {
 					$changes[$old_place] = $new_place;
 					if ($confirm == 'update') {
 						$gedcom = preg_replace('/(\n2 PLAC (?:.*, )*)' . preg_quote($search, '/') . '(\n|$)/i', '$1' . $replace . '$2', $row->gedcom);
-						replace_gedrec($row->xref, KT_GED_ID, $gedcom, false);
+						replace_gedrec($row->xref, $gedID, $gedcom, false);
 					}
 				}
 			}
@@ -91,58 +96,101 @@ $controller
 	->addExternalJavascript(KT_AUTOCOMPLETE_JS_URL)
 	->addInlineJavascript('autocomplete();');
 
-echo relatedPages($trees, KT_SCRIPT_NAME);?>
+echo relatedPages($trees, KT_SCRIPT_NAME);
 
-<div id="places">
-	<h2>
-		<?php echo KT_I18N::translate('Update all the place names in a family tree'); ?>
-	</h2>
-	<p>
-		<?php echo KT_I18N::translate('This will update the highest-level part or parts of the place name.  For example, “Mexico” will match “Quintana Roo, Mexico”, but not “Santa Fe, New Mexico”.'); ?>
-	</p>
-	<form method="post">
-		<div id="admin_options">
-			<div class="input">
-				<label><?php echo KT_I18N::translate('Family tree'); ?></label>
-				<?php echo select_ged_control('ged', KT_Tree::getIdList(), null, KT_GEDCOM); ?>
+echo pageStart('update_places', KT_I18N::translate('Update all the place names in a family tree'))?>
+
+	<form class="cell" method="post" name="treePlaces">
+		<div class="grid-x grid-margin-x grid-padding-x">
+			<div class="cell callout warning helpcontent">
+				<?php echo KT_I18N::translate('
+					This will update the highest-level part or parts of the place name.
+					For example, “Mexico” will match “Quintana Roo, Mexico”,
+					but not “Santa Fe, New Mexico”. <br>
+					<span class="strong alert">CAUTION! This can be a slow process. Be patient</span>
+				'); ?>
 			</div>
-			<div class="input">
-				<label for="search"><?php echo KT_I18N::translate('Search for'); ?></label>
-				<input name="search" id="search" type="text" data-autocomplete-type="PLAC" value="<?php echo KT_Filter::escapeHtml($search); ?>" required><?php echo print_specialchar_link('search'); ?>
+			<div class="cell medium-2">
+				<label for="gedID"><?php echo KT_I18N::translate('Family tree'); ?></label>
 			</div>
-			<div class="input">
-				<label for="replace"><?php echo KT_I18N::translate('Replace with'); ?></label>
-				<input name="replace" id="replace" type="text" data-autocomplete-type="PLAC" value="<?php echo KT_Filter::escapeHtml($replace); ?>" required><?php echo print_specialchar_link('replace'); ?>
+			<div class="cell medium-4">
+				<?php echo select_ged_control('gedID', KT_Tree::getIdList(), null, $gedID, ' onchange="treePlaces.submit();"'); ?>
 			</div>
-			<p>
-				<button type="submit" value="preview"><?php echo /* I18N: button label */ KT_I18N::translate('preview'); ?></button>
-				<button type="submit" value="update" name="confirm"><?php echo /* I18N: button label */ KT_I18N::translate('update'); ?></button>
-			</p>
+			<div class="cell medium-6"></div>
+			<div class="cell medium-2">
+				<label for="select-search"><?php echo KT_I18N::translate('Search for'); ?></label>
+			</div>
+			<div class="cell medium-4">
+				<?php echo autocompleteHtml(
+					'search',
+					'PLAC',
+					$tree,
+					KT_Filter::escapeHtml($search),
+					'',
+					'search',
+					KT_Filter::escapeHtml($search),
+					'required',
+					''
+				); ?>
+			</div>
+			<div class="cell medium-6"></div>
+			<div class="cell medium-2">
+				<label for="select-replace"><?php echo KT_I18N::translate('Replace with'); ?></label>
+			</div>
+			<div class="cell medium-4">
+				<?php echo autocompleteHtml(
+					'replace',
+					'PLAC',
+					$tree,
+					KT_Filter::escapeHtml($replace),
+					'',
+					'replace',
+					KT_Filter::escapeHtml($replace),
+					'required',
+					''
+				); ?>
+			</div>
+			<div class="cell medium-6"></div>
 		</div>
+		<div class="cell align-left button-group">
+ 		   <button class="button primary" type="submit" value="preview">
+			   <i class="<?php echo $iconStyle; ?> fa-magnifying-glass"></i>
+			   <?php echo /* I18N: button label */ KT_I18N::translate('Preview'); ?>
+ 		   </button>
+ 		   <button class="button hollow" type="submit" value="update" name="confirm">
+			   <i class="<?php echo $iconStyle; ?> fa-pen-to-square"></i>
+			   <?php echo /* I18N: button label */ KT_I18N::translate('Update'); ?>
+ 		   </button>
+	   </div>
 	</form>
-
-	<p class="error clearfloat">
-		<?php echo KT_I18N::translate('Caution! This may take a long time. Be patient.'); ?>
-	</p>
 
 	<?php if ($search && $replace) { ?>
 		<?php if ($changes) { ?>
-		<p>
-			<?php echo ($confirm) ? KT_I18N::translate('The following places were changed:') : KT_I18N::translate('The following places would be changed:'); ?>
-		</p>
-		<ul>
-			<?php foreach ($changes as $old_place => $new_place) { ?>
-			<li>
-				<?php echo KT_Filter::escapeHtml($old_place); ?>
-				&nbsp;&rarr;&nbsp;
-				<?php echo KT_Filter::escapeHtml($new_place); ?>
-			</li>
+			<?php if ($confirm == 'update') { ?>
+				<div class="cell callout success helpcontent">
+					<?php echo KT_I18N::translate('The following places were changed:'); ?>
+				</div>
+			<?php } else { ?>
+				<div class="cell callout warning helpcontent">
+					<?php echo KT_I18N::translate('The following places would be changed:'); ?>
+				</div>
 			<?php } ?>
-		</ul>
+			<div class="cell">
+				<ul>
+					<?php foreach ($changes as $old_place => $new_place) { ?>
+						<li>
+							<?php echo KT_Filter::escapeHtml($old_place); ?>
+							&nbsp;&rarr;&nbsp;
+							<?php echo KT_Filter::escapeHtml($new_place); ?>
+						</li>
+					<?php } ?>
+				</ul>
+			</div>
 		<?php } else { ?>
-		<p>
-			<?php echo KT_I18N::translate('No places were found.'); ?>
-		</p>
+			<div class="cell callout alert helpcontent">
+				<?php echo KT_I18N::translate('No places were found.'); ?>
+			</div>
 		<?php } ?>
-	<?php } ?>
-</div>
+	<?php }
+
+echo pageClose();
