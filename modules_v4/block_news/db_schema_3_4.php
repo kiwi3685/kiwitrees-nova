@@ -26,17 +26,12 @@ if (!defined('KT_KIWITREES')) {
 	exit;
 }
 
-KT_DB::exec(
-	"CREATE TABLE IF NOT EXISTS `##news` (".
-	" n_id       INTEGER AUTO_INCREMENT NOT NULL,".
-	" n_username VARCHAR(100)           NOT NULL,".
-	" n_date     INTEGER                NOT NULL,".
-	" n_title    VARCHAR(255)           NOT NULL,".
-	" n_text     LONGTEXT                   NOT NULL,".
-	" PRIMARY KEY     (n_id),".
-	"         KEY ix1 (n_username)".
-	") COLLATE utf8_unicode_ci ENGINE=InnoDB"
-);
+// Use LONGTEXT for log files.
+try {
+	self::exec("ALTER TABLE `##news` CHANGE body body LONGTEXT COLLATE utf8_unicode_ci NOT NULL");
+} catch (PDOException $ex) {
+	// Perhaps we have already deleted this data?
+}
 
 // Update the version to indicate success
 KT_Site::preference($schema_name, $next_version);

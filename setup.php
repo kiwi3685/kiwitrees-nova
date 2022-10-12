@@ -586,7 +586,7 @@ try {
 		" log_id      INTEGER AUTO_INCREMENT NOT NULL,".
 		" log_time    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,".
 		" log_type    ENUM('auth', 'config', 'debug', 'edit', 'error', 'media', 'search', 'spam') NOT NULL,".
-		" log_message TEXT         NOT NULL,".
+		" log_message LONGTEXT         NOT NULL,".
 		" ip_address  VARCHAR(40)  NOT NULL,".
 		" user_id     INTEGER          NULL,".
 		" gedcom_id   INTEGER          NULL,".
@@ -659,8 +659,8 @@ try {
 		" p_place       VARCHAR(150)               NULL,".
 		" p_parent_id   INTEGER                    NULL,".
 		" p_file        INTEGER               NOT  NULL,".
-		" p_std_soundex TEXT                       NULL,".
-		" p_dm_soundex  TEXT                       NULL,".
+		" p_std_soundex LONGTEXT                       NULL,".
+		" p_dm_soundex  LONGTEXT                       NULL,".
 		" PRIMARY KEY                (p_id),".
 		"         KEY `##places_ix1` (p_file, p_place),".
 		" UNIQUE  KEY `##places_ix2` (p_parent_id, p_file, p_place)".
@@ -709,7 +709,7 @@ try {
 		" m_titl     VARCHAR(255)               NULL,".
 		" m_filename VARCHAR(512)               NULL,".
 		" m_file     INTEGER                NOT NULL,".
-		" m_gedcom   MEDIUMTEXT                 NULL,".
+		" m_gedcom   LONGTEXT                 NULL,".
 		" PRIMARY KEY               (m_file, m_id),".
 		" UNIQUE  KEY `##media_ix1` (m_id, m_file),".
 		"         KEY `##media_ix2` (m_ext, m_type),".
@@ -730,7 +730,7 @@ try {
 		" o_id     VARCHAR(20) NOT NULL,".
 		" o_file   INTEGER     NOT NULL,".
 		" o_type   VARCHAR(15) NOT NULL,".
-		" o_gedcom MEDIUMTEXT      NULL,".
+		" o_gedcom LONGTEXT      NULL,".
 		" PRIMARY KEY               (o_id, o_file),".
 		" UNIQUE  KEY `##other_ix1` (o_file, o_id)".
 		") COLLATE utf8_unicode_ci ENGINE=InnoDB"
@@ -740,7 +740,7 @@ try {
 		" s_id     VARCHAR(20)    NOT NULL,".
 		" s_file   INTEGER        NOT NULL,".
 		" s_name   VARCHAR(255)   NOT NULL,".
-		" s_gedcom MEDIUMTEXT     NOT NULL,".
+		" s_gedcom LONGTEXT     NOT NULL,".
 		" PRIMARY KEY                 (s_id, s_file),".
 		" UNIQUE  KEY `##sources_ix1` (s_file, s_id),".
 		"         KEY `##sources_ix2` (s_name)".
