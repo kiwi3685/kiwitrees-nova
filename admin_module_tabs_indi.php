@@ -34,7 +34,7 @@ $controller
 	->setPageTitle(KT_I18N::translate('Individual page tabs administration'))
 	->pageHeader()
 	->addInlineJavascript('
-    jQuery("#tabs_table").sortable({items: ".sortme", forceHelperSize: true, forcePlaceholderSize: true, opacity: 0.7, cursor: "move", axis: "y"});
+    jQuery("#tabi_table").sortable({items: ".sortme", forceHelperSize: true, forcePlaceholderSize: true, opacity: 0.7, cursor: "move", axis: "y"});
 
     //-- update the order numbers after drag-n-drop sorting is complete
     jQuery("#tabi_table").bind("sortupdate", function(event, ui) {

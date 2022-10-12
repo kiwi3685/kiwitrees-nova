@@ -34,7 +34,7 @@ $controller
 	->setPageTitle(KT_I18N::translate('Family page tabs administration'))
 	->pageHeader()
 	->addInlineJavascript('
-    jQuery("#tabs_table").sortable({items: ".sortme", forceHelperSize: true, forcePlaceholderSize: true, opacity: 0.7, cursor: "move", axis: "y"});
+    jQuery("#tabf_table").sortable({items: ".sortme", forceHelperSize: true, forcePlaceholderSize: true, opacity: 0.7, cursor: "move", axis: "y"});
 
     //-- update the order numbers after drag-n-drop sorting is complete
     jQuery("#tabf_table").bind("sortupdate", function(event, ui) {
