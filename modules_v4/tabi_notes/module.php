@@ -132,7 +132,7 @@ class tabi_notes_KT_Module extends KT_Module implements KT_Module_IndiTab {
 
 	// Implement KT_Module_IndiTab
 	public function isGrayedOut() {
-		return $this->get_note_count()==0;
+		return $this->get_note_count() == 0;
 	}
 	// Implement KT_Module_IndiTab
 	public function canLoadAjax() {
