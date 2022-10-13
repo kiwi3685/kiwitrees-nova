@@ -96,7 +96,7 @@ class census_assistant_KT_Module extends KT_Module {
 						<p> <?php echo KT_I18N::translate('No results found'); ?> </p>
 					<?php } ?>
 					<button onclick="window.close();">
-						<i class="' . $iconStyle . ' fa-close"></i>
+						<i class="<?php echo $iconStyle; ?> fa-close"></i>
 						<?php echo KT_I18N::translate('close'); ?>
 					</button>
 				</div>
@@ -194,6 +194,7 @@ class census_assistant_KT_Module extends KT_Module {
 
 			return
 				'<div class="census_text">
+					<span id="title">' . $title . '</span>
 					<p>' . $preamble . '</p>
 					<table class="ca">
 						<thead>' . $thead . '</thead>
