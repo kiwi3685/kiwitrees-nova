@@ -100,12 +100,11 @@ class KT_Filter {
 	 * Format block-level text such as notes or transcripts, etc.
 	 *
 	 * @param string  $text
-	 * @param Tree $KT_TREE
 	 *
 	 * @return string
 	 */
 	public static function formatText($text) {
-		return '<div style="white-space: pre-wrap;" dir="auto">' . self::expandUrls($text) . '</div>';
+		return '<div style="display: inline; white-space: pre-wrap;" dir="auto">' . self::expandUrls($text) . '</div>';
 	}
 
 	/**
