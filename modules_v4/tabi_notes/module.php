@@ -46,76 +46,71 @@ class tabi_notes_KT_Module extends KT_Module implements KT_Module_IndiTab {
 
 	// Implement KT_Module_IndiTab
 	public function getTabContent() {
-		global $NAV_NOTES, $controller;
+		global $iconStyle, $controller;
 
 		$controller->addInlineJavascript('
-			persistent_toggle("checkbox_rela_facts", "tr.row_rela");
-			persistent_toggle("checkbox_histo", "tr.row_histo");
+			persistent_toggle("checkbox_note2", "div.row_note2");
 		');
+		?>
 
-		ob_start();
-		?>
-		<table class="facts_table">
-			<tr>
-				<td colspan="2" class="descriptionbox rela">
-					<input id="checkbox_note2" type="checkbox">
-					<label for="checkbox_note2"><?php echo KT_I18N::translate('Show all notes'); ?></label>
-					<?php echo help_link('show_fact_sources'); ?>
-				</td>
-			</tr>
+		<div id="tabi_notes_content" class="grid-x grid-padding-x grid-padding-y">
+			<div class="cell tabHeader">
+				<div class="grid-x">
+					<div class="cell shrink">
+						<input id="checkbox_note2" type="checkbox" checked>
+						<label for="checkbox_note2"><?php echo KT_I18N::translate('Show all notes'); ?></label>
+					</div>
+					<?php if ($controller->record->canEdit()) { ?>
+						<div class="cell shrink">
+							<a href="#" onclick="add_new_record('<?php echo $controller->record->getXref(); ?>','NOTE'); return false;">
+								<i class="<?php echo $iconStyle; ?> fa-note-sticky"></i>
+								<?php echo KT_I18N::translate('Add a note'); ?>
+							</a>
+						</div>
+						<div class="cell shrink">
+							<a href="#" onclick="add_new_record('<?php echo $controller->record->getXref(); ?>','SHARED_NOTE'); return false;">
+								<i class="<?php echo $iconStyle; ?> fa-notes-medical"></i>
+								<?php echo KT_I18N::translate('Add a shared note'); ?>
+							</a>
+						</div>
+					<?php } ?>
+				</div>
+			</div>
+			<?php
+			if ($this->get_note_count() > 0) { ?>
+					<?php
+					$globalfacts = $controller->getGlobalFacts();
+					foreach ($globalfacts as $event) {
+						$fact = $event->getTag();
+						if ($fact == 'NAME') {
+							print_main_notes($event, 2);
+						}
+					}
+
+					$otherfacts = $controller->getOtherFacts();
+					foreach ($otherfacts as $event) {
+						$fact = $event->getTag();
+						if ($fact == 'NOTE') {
+							print_main_notes($event, 1);
+						}
+					}
+					// 2nd to 5th level notes/sources
+					$controller->record->add_family_facts(false);
+					foreach ($controller->getIndiFacts() as $factrec) {
+						for ($i = 2; $i < 6; $i ++) {
+							print_main_notes($factrec, $i);
+						}
+					} ?>
+			<?php } else { ?>
+				<div class="cell callout warning">
+					<?php echo KT_I18N::translate('There are no notes for this individual.'); ?>
+				</div>
+
+			<?php } ?>
+
+		</div>
 		<?php
-		$globalfacts = $controller->getGlobalFacts();
-		foreach ($globalfacts as $event) {
-			$fact = $event->getTag();
-			if ($fact=='NAME') {
-				print_main_notes($event, 2);
-			}
-		}
-		$otherfacts = $controller->getOtherFacts();
-		foreach ($otherfacts as $event) {
-			$fact = $event->getTag();
-			if ($fact=='NOTE') {
-				print_main_notes($event, 1);
-			}
-		}
-		// 2nd to 5th level notes/sources
-		$controller->record->add_family_facts(false);
-		foreach ($controller->getIndiFacts() as $factrec) {
-			for ($i=2; $i<6; $i++) {
-				print_main_notes($factrec, $i);
-			}
-		}
-		if ($this->get_note_count()==0) {
-			echo '<tr><td id="no_tab2" colspan="2" class="facts_value">', KT_I18N::translate('There are no Notes for this individual.'), '</td></tr>';
-		}
-		//-- New Note Link
-		if ($controller->record->canEdit()) {
-			?>
-		<tr>
-			<td class="facts_label"><?php echo KT_Gedcom_Tag::getLabel('NOTE'); ?></td>
-			<td class="facts_value">
-				<a href="#" onclick="add_new_record('<?php echo $controller->record->getXref(); ?>','NOTE'); return false;">
-					<?php echo KT_I18N::translate('Add a note'); ?>
-				</a>
-				<?php echo help_link('add_note'); ?>
-			</td>
-		</tr>
-		<tr>
-			<td class="facts_label"><?php echo KT_Gedcom_Tag::getLabel('SHARED_NOTE'); ?></td>
-			<td class="facts_value">
-				<a href="#" onclick="add_new_record('<?php echo $controller->record->getXref(); ?>','SHARED_NOTE'); return false;">
-					<?php echo KT_I18N::translate('Add a shared note'); ?>
-				</a>
-				<?php echo help_link('add_shared_note'); ?>
-			</td>
-		</tr>
-		<?php
-		}
-		?>
-		</table>
-		<br>
-		<?php
-		return '<div id="'.$this->getName().'_content">'.ob_get_clean().'</div>';
+
 	}
 
 	function get_note_count() {
@@ -132,8 +127,9 @@ class tabi_notes_KT_Module extends KT_Module implements KT_Module_IndiTab {
 
 	// Implement KT_Module_IndiTab
 	public function hasTabContent() {
-		return KT_USER_CAN_EDIT || $this->get_note_count()>0;
+		return KT_USER_CAN_EDIT || $this->get_note_count() > 0;
 	}
+
 	// Implement KT_Module_IndiTab
 	public function isGrayedOut() {
 		return $this->get_note_count()==0;
