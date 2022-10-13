@@ -51,51 +51,53 @@ class tabi_sources_KT_Module extends KT_Module implements KT_Module_IndiTab {
 
 	// Implement KT_Module_IndiTab
 	public function getTabContent() {
-		global $NAV_SOURCES, $controller;
+		global $iconStyle, $controller;
 
 		$controller->addInlineJavascript('
-			persistent_toggle("checkbox_sour2", "tr.row_sour2");
+			persistent_toggle("checkbox_sour2", "div.row_sour2");
 		');
+		?>
 
-		ob_start();
-		?>
-		<table class="facts_table">
-			<tr>
-				<td colspan="2" class="descriptionbox rela">
-					<input id="checkbox_sour2" type="checkbox">
-					<label for="checkbox_sour2"><?php echo KT_I18N::translate('Show all sources'), help_link('show_fact_sources'); ?></label>
-				</td>
-			</tr>
+		<div id="tabi_sources_content" class="grid-x grid-padding-x grid-padding-y">
+			<div class="cell tabHeader">
+				<div class="grid-x">
+					<div class="cell shrink">
+						<input id="checkbox_sour2" type="checkbox" checked>
+						<label for="checkbox_sour2"><?php echo KT_I18N::translate('Show all sources'); ?></label>
+					</div>
+					<?php if ($controller->record->canEdit()) { ?>
+						<div class="cell shrink">
+							<a href="#" onclick="add_new_record('<?php echo $controller->record->getXref(); ?>','SOUR'); return false;">
+								<i class="<?php echo $iconStyle; ?> fa-book-medical"></i>
+								<?php echo KT_I18N::translate('Add a source citation'); ?>
+							</a>
+						</div>
+					<?php } ?>
+				</div>
+			</div>
 			<?php
-			$otheritems = $controller->getOtherFacts();
-				foreach ($otheritems as $event) {
-					if ($event->getTag()=='SOUR') {
-						print_main_sources($event, 1);
-					}
-			}
-			// 2nd level sources [ 1712181 ]
-			$controller->record->add_family_facts(false);
-			foreach ($controller->getIndiFacts() as $event) {
-				print_main_sources($event, 2);
-			}
-			if ($this->get_source_count()==0) echo "<tr><td id=\"no_tab3\" colspan=\"2\" class=\"facts_value\">".KT_I18N::translate('There are no Source citations for this individual.')."</td></tr>";
-			//-- New Source Link
-			if ($controller->record->canEdit()) {
-			?>
-				<tr>
-					<td class="facts_label"><?php echo KT_Gedcom_Tag::getLabel('SOUR'); ?></td>
-					<td class="facts_value">
-					<a href="#" onclick="add_new_record('<?php echo $controller->record->getXref(); ?>','SOUR'); return false;"><?php echo KT_I18N::translate('Add a source citation'); ?></a>
-					<?php echo help_link('add_source'); ?>
-					</td>
-				</tr>
-			<?php
-			}
-		?>
-		</table>
-		<br>
+			if ($this->get_source_count() > 0) {
+				$otheritems = $controller->getOtherFacts();
+					foreach ($otheritems as $event) {
+						if ($event->getTag()=='SOUR') {
+							print_main_sources($event, 1);
+						}
+				}
+				// 2nd level sources [ 1712181 ]
+				$controller->record->add_family_facts(false);
+				foreach ($controller->getIndiFacts() as $event) {
+					print_main_sources($event, 2);
+				}
+
+			} else { ?>
+				<div class="cell callout warning">
+					<?php echo KT_I18N::translate('There are no source citations for this individual.'); ?>
+				</div>
+
+			<?php } ?>
+		</div>
 		<?php
-		return '<div id="'.$this->getName().'_content">'.ob_get_clean().'</div>';
+
 	}
 
 	function get_source_count() {
@@ -112,17 +114,20 @@ class tabi_sources_KT_Module extends KT_Module implements KT_Module_IndiTab {
 
 	// Implement KT_Module_IndiTab
 	public function hasTabContent() {
-		return KT_USER_CAN_EDIT || $this->get_source_count()>0;
+		return KT_USER_CAN_EDIT || $this->get_source_count() > 0;
 	}
+
 	// Implement KT_Module_IndiTab
 	public function isGrayedOut() {
-		return $this->get_source_count()==0;
+		return $this->get_source_count() == 0;
 	}
+
 	// Implement KT_Module_IndiTab
 	public function canLoadAjax() {
-		global $SEARCH_SPIDER;
+		//		global $SEARCH_SPIDER;
 
-		return !$SEARCH_SPIDER; // Search engines cannot use AJAX
+		//		return !$SEARCH_SPIDER; // Search engines cannot use AJAX
+		return false;
 	}
 
 	// Implement KT_Module_IndiTab

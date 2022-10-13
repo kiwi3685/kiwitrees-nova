@@ -1529,118 +1529,144 @@ function print_main_sources(KT_Event $fact, $level) {
 	// -- find source for each fact
 	$ct = preg_match_all("/($level SOUR (.+))/", $factrec, $match, PREG_SET_ORDER);
 	$spos2 = 0;
-	for ($j=0; $j<$ct; $j++) {
-		$sid = trim($match[$j][2], '@');
-		$spos1 = strpos($factrec, $match[$j][1], $spos2);
-		$spos2 = strpos($factrec, "\n$level", $spos1);
-		if (!$spos2) $spos2 = strlen($factrec);
-		$srec = substr($factrec, $spos1, $spos2-$spos1);
-		$source=KT_Source::getInstance($sid);
-		// Allow access to "1 SOUR @non_existent_source@", so it can be corrected/deleted
-		if (!$source || $source->canDisplayDetails()) {
-			if ($level==2) echo '<tr class="row_sour2">';
-			else echo '<tr>';
-			echo '<td class="descriptionbox';
-			if ($level==2) echo ' rela';
-			echo ' ', $styleadd, ' width20">';
-			$temp = preg_match("/^\d (\w*)/", $factrec, $factname);
-			$factlines = explode("\n", $factrec); // 1 BIRT Y\n2 SOUR ...
-			$factwords = explode(" ", $factlines[0]); // 1 BIRT Y
-			$factname = $factwords[1]; // BIRT
-			if ($factname == 'EVEN' || $factname=='FACT') {
-				// Add ' EVEN' to provide sensible output for an event with an empty TYPE record
-				$ct = preg_match("/2 TYPE (.*)/", $factrec, $ematch);
-				if ($ct>0) {
-					$factname = trim($ematch[1]);
-					echo $factname;
-				} else {
-					echo KT_Gedcom_Tag::getLabel($factname, $parent);
-				}
-			} else
-			if ($can_edit) {
-				echo '<a href="#" onclick="return edit_record(\'', $pid, '\'', $linenum, '\');" title="', KT_I18N::translate('Edit'), '">';
-					if ($SHOW_FACT_ICONS) {
-						if ($level==1) echo '<i class="icon-source"></i> ';
-					}
-					echo KT_Gedcom_Tag::getLabel($factname, $parent), '</a>';
-					echo '<div class="editfacts">';
-					if (preg_match('/^@.+@$/', $match[$j][2])) {
-						// Inline sources can't be edited.  Attempting to save one will convert it
-						// into a link, and delete it.
-						// e.g. "1 SOUR my source" becomes "1 SOUR @my source@" which does not exist.
-						echo '<div class="editlink"><a class="icon-edit" href="#" onclick="return edit_record(\'', $pid, '\', \'', $linenum, '\');" title="'. KT_I18N::translate('Edit') .'"><span class="link_text">'. KT_I18N::translate('Edit'). '</span></a></div>';
-						echo '<div class="copylink"><a class="icon-copy" href="#" onclick="return copy_fact(\'', $pid, '\', \'', $linenum, '\');" title="'. KT_I18N::translate('Copy') .'"><span class="link_text">'. KT_I18N::translate('Copy'). '</span></a></div>';
-					}
-					echo '<div class="deletelink"><a class="icon-delete" href="#" onclick="return delete_fact(\'', $pid, '\', \'', $linenum, '\', \'\', \''. KT_I18N::translate('Are you sure you want to delete this fact?'). '\');" title="' .KT_I18N::translate('Delete').'"><span class="link_text">'.KT_I18N::translate('Delete').'</span></a></div>';
-				echo '</div>';
-			} else {
-				echo KT_Gedcom_Tag::getLabel($factname, $parent);
-			}
-			echo '</td>';
-			echo '<td class="optionbox ', $styleadd, ' wrap">';
-			//echo "<td class=\"facts_value$styleadd\">";
-			if ($source) {
-				echo '<a href="', $source->getHtmlUrl(), '">', $source->getFullName(), '</a>';
-				// OBJE
-				$src_media = trim(get_gedcom_value('OBJE', '1', $source->getGedcomRecord()), '@');
-				if (!empty($src_media) && $nlevel > 2) {
-					echo print_source_media($src_media);
-				}
-				// PUBL
-				$text = get_gedcom_value('PUBL', '1', $source->getGedcomRecord());
-				if (!empty($text)) {
-					echo '<br><span class="label">', KT_Gedcom_Tag::getLabel('PUBL'), ': </span>';
-					echo $text;
-				}
-				// 2 RESN tags.  Note, there can be more than one, such as "privacy" and "locked"
-				if (preg_match_all("/\n2 RESN (.+)/", $factrec, $rmatches)) {
-					foreach ($rmatches[1] as $rmatch) {
-						echo '<br><span class="label">', KT_Gedcom_Tag::getLabel('RESN'), ':</span> <span class="field">';
-						switch ($rmatch) {
-						case 'none':
-							// Note: "2 RESN none" is not valid gedcom, and the GUI will not let you add it.
-							// However, kiwitrees privacy rules will interpret it as "show an otherwise private fact to public".
-							echo '<i class="icon-resn-none"></i> ', KT_I18N::translate('Show to visitors');
-							break;
-						case 'privacy':
-							echo '<i class="icon-resn-privacy"></i> ', KT_I18N::translate('Show to members');
-							break;
-						case 'confidential':
-							echo '<i class="icon-resn-confidential"></i> ', KT_I18N::translate('Show to managers');
-							break;
-						case 'locked':
-							echo '<i class="icon-resn-locked"></i> ', KT_I18N::translate('Only managers can edit');
-							break;
-						default:
-							echo $rmatch;
-							break;
+
+	for ($j = 0; $j < $ct; $j ++) {
+		if ($level >= 2) {
+			$class = 'row_source2';
+		} else {
+			$class = '';
+		} ?>
+		<div class="cell indiFact <?php echo $class; ?>">
+			<div class="grid-x grid-padding-x grid-padding-y">
+				<div class="cell medium-3">
+					<label>
+						<?php
+						$sid 	= trim($match[$j][2], '@');
+						$spos1 	= strpos($factrec, $match[$j][1], $spos2);
+						$spos2 	= strpos($factrec, "\n$level", $spos1);
+						if (!$spos2) $spos2 = strlen($factrec);
+						$srec 	= substr($factrec, $spos1, $spos2-$spos1);
+						$source	= KT_Source::getInstance($sid);
+
+						// Allow access to "1 SOUR @non_existent_source@", so it can be corrected/deleted
+						if (!$source || $source->canDisplayDetails()) {
+
+							$temp = preg_match("/^\d (\w*)/", $factrec, $factname);
+							$factlines = explode("\n", $factrec); // 1 BIRT Y\n2 SOUR ...
+							$factwords = explode(" ", $factlines[0]); // 1 BIRT Y
+							$factname = $factwords[1]; // BIRT
+							if ($factname == 'EVEN' || $factname=='FACT') {
+								// Add ' EVEN' to provide sensible output for an event with an empty TYPE record
+								$ct = preg_match("/2 TYPE (.*)/", $factrec, $ematch);
+								if ($ct>0) {
+									$factname = trim($ematch[1]);
+									echo $factname;
+								} else {
+									echo KT_Gedcom_Tag::getLabel($factname, $parent);
+								}
+							} elseif ($can_edit) {
+								if ($SHOW_FACT_ICONS) {
+									if ($level==1) { ?>
+										<i class="<?php echo $iconStyle; ?> fa-book"></i>
+									<?php }
+								}
+								echo KT_Gedcom_Tag::getLabel($factname, $parent); ?>
+
+								<div class="editfacts button-group">
+									<?php if (preg_match('/^@.+@$/', $match[$j][2])) {
+											// Inline sources can't be edited.  Attempting to save one will convert it
+											// into a link, and delete it.
+											// e.g. "1 SOUR my source" becomes "1 SOUR @my source@" which does not exist. ?>
+										<a class="button clear" onclick="return edit_record('<?php echo $pid; ?>', <?php echo $fact->getLineNumber(); ?>);">
+											<i class="<?php echo $iconStyle; ?> fa-pen-to-square"></i>
+											<span class="link_text" tabindex="1" title="<?php echo KT_I18N::translate('Edit'); ?>">
+												<?php echo KT_I18N::translate('Edit'); ?>
+											</span>
+										</a>
+										<a class="button clear" onclick="jQuery.post('action.php',{action:'copy-fact', type:'<?php echo $fact->getParentObject()->getType(); ?>',factgedcom:'<?php echo rawurlencode($fact->getGedcomRecord()); ?>'},function(){location.reload();})">
+											<i class="<?php echo $iconStyle; ?> fa-copy"></i>
+											<span class="link_text" tabindex="2" title="<?php echo KT_I18N::translate('Copy'); ?>">
+												<?php echo KT_I18N::translate('Copy'); ?>
+											</span>
+										</a>
+									<?php } ?>
+									<a class="button clear" onclick="return delete_fact('<?php echo $pid; ?>', <?php echo $fact->getLineNumber(); ?>, '', '<?php echo KT_I18N::translate('Are you sure you want to delete this fact?'); ?>');">
+										<i class="<?php echo $iconStyle; ?> fa-trash-can"></i>
+										<span class="link_text" tabindex="3" title="<?php echo KT_I18N::translate('Delete'); ?>">
+											<?php echo KT_I18N::translate('Delete'); ?>
+										</span>
+									</a>
+								</div>
+							<?php } else {
+								echo KT_Gedcom_Tag::getLabel($factname, $parent);
+							}
+						} ?>
+					</label>
+				</div>
+				<div class="cell medium-9 overflow-y">
+					<?php if ($source) {
+						echo '<a href="', $source->getHtmlUrl(), '">', $source->getFullName(), '</a>';
+						// OBJE
+						$src_media = trim(get_gedcom_value('OBJE', '1', $source->getGedcomRecord()), '@');
+						if (!empty($src_media) && $nlevel > 2) {
+							echo print_source_media($src_media);
 						}
-						echo '</span>';
-					}
-				}
-				$cs = preg_match("/$nlevel EVEN (.*)/", $srec, $cmatch);
-				if ($cs>0) {
-					echo '<br><span class="label">', KT_Gedcom_Tag::getLabel('EVEN'), ' </span><span class="field">', $cmatch[1], '</span>';
-					$cs = preg_match("/".($nlevel+1)." ROLE (.*)/", $srec, $cmatch);
-					if ($cs>0) echo '<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="label">', KT_Gedcom_Tag::getLabel('ROLE'), ' </span><span class="field">', $cmatch[1], '</span>';
-				}
-				echo printSourceStructure(getSourceStructure($srec));
-				echo '<div class="indent">';
-				print_media_links($srec, $nlevel);
-				if ($nlevel==2) {
-					print_media_links($source->getGedcomRecord(), 1);
-				}
-				print_fact_notes($srec, $nlevel);
-				if ($nlevel == 2) {
-					print_fact_notes($source->getGedcomRecord(), 1);
-				}
-				echo '</div>';
-			} else {
-				echo $sid;
-			}
-			echo '</td></tr>';
-		}
-	}
+						// PUBL
+						$text = get_gedcom_value('PUBL', '1', $source->getGedcomRecord());
+						if (!empty($text)) {
+							echo '<br><span class="label">', KT_Gedcom_Tag::getLabel('PUBL'), ': </span>';
+							echo $text;
+						}
+						// 2 RESN tags.  Note, there can be more than one, such as "privacy" and "locked"
+						if (preg_match_all("/\n2 RESN (.+)/", $factrec, $rmatches)) {
+							foreach ($rmatches[1] as $rmatch) {
+								echo '<br><span class="label">', KT_Gedcom_Tag::getLabel('RESN'), ':</span> <span class="field">';
+								switch ($rmatch) {
+								case 'none':
+									// Note: "2 RESN none" is not valid gedcom, and the GUI will not let you add it.
+									// However, kiwitrees privacy rules will interpret it as "show an otherwise private fact to public".
+									echo '<i class="icon-resn-none"></i> ', KT_I18N::translate('Show to visitors');
+									break;
+								case 'privacy':
+									echo '<i class="icon-resn-privacy"></i> ', KT_I18N::translate('Show to members');
+									break;
+								case 'confidential':
+									echo '<i class="icon-resn-confidential"></i> ', KT_I18N::translate('Show to managers');
+									break;
+								case 'locked':
+									echo '<i class="icon-resn-locked"></i> ', KT_I18N::translate('Only managers can edit');
+									break;
+								default:
+									echo $rmatch;
+									break;
+								}
+								echo '</span>';
+							}
+						}
+						$cs = preg_match("/$nlevel EVEN (.*)/", $srec, $cmatch);
+						if ($cs>0) {
+							echo '<br><span class="label">', KT_Gedcom_Tag::getLabel('EVEN'), ' </span><span class="field">', $cmatch[1], '</span>';
+							$cs = preg_match("/".($nlevel+1)." ROLE (.*)/", $srec, $cmatch);
+							if ($cs>0) echo '<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="label">', KT_Gedcom_Tag::getLabel('ROLE'), ' </span><span class="field">', $cmatch[1], '</span>';
+						}
+						echo printSourceStructure(getSourceStructure($srec));
+						echo '<div class="indent">';
+						print_media_links($srec, $nlevel);
+						if ($nlevel==2) {
+							print_media_links($source->getGedcomRecord(), 1);
+						}
+						print_fact_notes($srec, $nlevel);
+						if ($nlevel == 2) {
+							print_fact_notes($source->getGedcomRecord(), 1);
+						}
+						echo '</div>';
+					} else {
+						echo $sid;
+					} ?>
+				</div>
+			</div>
+		</div>
+	<?php }
 }
 
 /**
@@ -1824,36 +1850,36 @@ function print_main_notes(KT_Event $fact, $level) {
 							}
 						} ?>
 					</label>
-					<?php
-					$nrec = get_sub_record($level, "$level NOTE", $factrec, $j+1);
-					if (preg_match("/$level NOTE @(.*)@/", $match[$j][0], $nmatch)) {
-						//-- print linked/shared note records
-						$nid	= $nmatch[1];
-						$note	= KT_Note::getInstance($nid);
-						if ($note) {
-							$noterec	= $note->getGedcomRecord();
-							$nt			= preg_match("/^0 @[^@]+@ NOTE (.*)/", $noterec, $n1match);
-							$line1		= $n1match[1];
-							$text		= get_cont(1, $noterec);
-							// If Census assistant installed, allow it to format the note
-							if (array_key_exists('census_assistant', KT_Module::getActiveModules())) {
-								$text = census_assistant_KT_Module::formatCensusNote($note);
-								if (preg_match('/<span id="title">.*<\/span>/', $text, $match)) {
-									$first_line	= '<a href="' . $note->getHtmlUrl() . '">' . $match[0] . '</a>';
-									$text		= preg_replace('/<span id="title">.*<\/span>/', $first_line, $text);
-								}
-							} else {
-								$text = KT_Filter::formatText($note->getNote());
+				</div>
+				<?php
+				$nrec = get_sub_record($level, "$level NOTE", $factrec, $j+1);
+				if (preg_match("/$level NOTE @(.*)@/", $match[$j][0], $nmatch)) {
+					//-- print linked/shared note records
+					$nid	= $nmatch[1];
+					$note	= KT_Note::getInstance($nid);
+					if ($note) {
+						$noterec	= $note->getGedcomRecord();
+						$nt			= preg_match("/^0 @[^@]+@ NOTE (.*)/", $noterec, $n1match);
+						$line1		= $n1match[1];
+						$text		= get_cont(1, $noterec);
+						// If Census assistant installed, allow it to format the note
+						if (array_key_exists('census_assistant', KT_Module::getActiveModules())) {
+							$text = census_assistant_KT_Module::formatCensusNote($note);
+							if (preg_match('/<span id="title">.*<\/span>/', $text, $match)) {
+								$first_line	= '<a href="' . $note->getHtmlUrl() . '">' . $match[0] . '</a>';
+								$text		= preg_replace('/<span id="title">.*<\/span>/', $first_line, $text);
 							}
 						} else {
-							$text = '<span class="error">' . htmlspecialchars((string) $nid) . '</span>';
+							$text = KT_Filter::formatText($note->getNote());
 						}
 					} else {
-						//-- print embedded note records
-						$text = trim($match[$j][1]) . get_cont($level + 1, $nrec);
-						$text = KT_Filter::formatText($text);
-					} ?>
-				</div>
+						$text = '<span class="error">' . htmlspecialchars((string) $nid) . '</span>';
+					}
+				} else {
+					//-- print embedded note records
+					$text = trim($match[$j][1]) . get_cont($level + 1, $nrec);
+					$text = KT_Filter::formatText($text);
+				} ?>
 				<div class="cell medium-9 overflow-y">
 					<?php echo $text;
 					if (!empty($noterec)) {
