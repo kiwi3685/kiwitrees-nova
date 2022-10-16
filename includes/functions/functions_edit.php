@@ -677,7 +677,7 @@ function print_indi_form($nextaction, $famid, $linenum='', $namerec='', $famtag=
 
 	$bdm = ''; // used to copy '1 SOUR' to '2 SOUR' for BIRT DEAT MARR
 	init_calendar_popup(); ?>
-	<form method="post" name="addchildform" onsubmit="return checkform();">
+	<form class="cell" method="post" name="addchildform" onsubmit="return checkform();">
 			<input type="hidden" name="action" value="<?php echo $nextaction; ?>">
 			<input type="hidden" name="linenum" value="<?php echo $linenum; ?>">
 			<input type="hidden" name="famid" value="<?php echo $famid; ?>">
