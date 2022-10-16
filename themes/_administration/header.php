@@ -37,7 +37,6 @@ $this
 	->addExternalJavascript(KT_JQUERY_AUTOSIZE)
 	->addInlineJavascript('jQuery("textarea").autosize();');
 
-
 $class='';
 
 ?>
