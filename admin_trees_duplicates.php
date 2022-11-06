@@ -286,7 +286,7 @@ echo pageStart('find_duplicates', $controller->getPageTitle()); ?>
 				<label for="date"><?php echo KT_I18N::translate('Date'); ?></label>
 			</div>
 			<div class="cell medium-2">
-				<input id="date" type="number" name="date" min="1200" max="<?php echo $maxYear; ?>" value="<?php echo $date; ?>" >
+				<input id="date" type="number" name="date" min="1200" max="<?php echo $maxYear; ?>" value="<?php echo $date; ?>" placeholder="<?php echo KT_I18N::translate('Year'); ?>" >
 			</div>
 			<div class="cell medium-1 text-right">
 				<label for="date"><?php echo KT_I18N::translate('Range'); ?></label>
