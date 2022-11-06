@@ -123,20 +123,16 @@ function pageClose() {
   *
   * @return string[]
   */
- function singleButton() {
-    global $iconStyle;
+ function singleButton($icon = 'fa-save', $title = "KT_I18N::translate('Save')") {
+    global $iconStyle; ?>
 
-    $buttonHtml = '
- 	   <div class="cell align-left button-group">
- 		   <button class="button primary" type="submit">
- 			   <i class="' . $iconStyle . ' fa-save"></i>'
- 				. KT_I18N::translate('Save') .
- 		   '</button>
- 	   </div>
-    ';
-
-    return $buttonHtml;
-
+	<div class="cell align-left button-group">
+		<button class="button primary" type="submit">
+			<i class="<?php echo $iconStyle; ?>$nbsp;<?php echo $icon; ?>"></i>
+			<?php echo $title; ?>
+		</button>
+	</div>
+	<?php
  }
 
  /**

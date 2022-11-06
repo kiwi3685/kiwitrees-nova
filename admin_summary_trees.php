@@ -139,7 +139,7 @@ asort($ft_tools);
 
 echo pageStart('tree_admin', $controller->getPageTitle()); ?>
 
-	<div class="cell callout warning help_content">
+	<div class="cell callout info-help help_content">
 		<?php echo KT_I18N::translate('
 			All of the configuration settings and tools necessary to manage all family trees on your website
 		'); ?>

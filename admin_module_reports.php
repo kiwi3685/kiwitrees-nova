@@ -58,7 +58,7 @@ echo pageStart('reports', $controller->getPageTitle()); ?>
 			<?php echo KT_Filter::getCsrf(); ?>
 			<div class="grid-x show-for-medium">
 				<div class="cell medium-10">
-					<div class="cell callout warning helpcontent">
+					<div class="cell callout info-help ">
 						<?php echo KT_I18N::translate('The order of these items under the main menu "%s" is fixed at alphabetical, based on the current display language in use.', $menuItem); ?>
 						<?php echo KT_I18N::translate('The "Access level" setting "Hide from everyone" means exactly that, including Administrators.'); ?>
 					</div>

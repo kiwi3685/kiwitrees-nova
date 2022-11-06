@@ -78,6 +78,14 @@ if ($controller->record && $controller->record->canDisplayDetails()) {
 $PEDIGREE_FULL_DETAILS = '1'; // Override GEDCOM configuration
 $show_full = '1';
 
+/* Check for Highlight image or silhouette */
+$highlightImage = false;
+$image          = $controller->record->displayImage();
+if ($image || $USE_SILHOUETTE) {
+    $highlightImage = true;
+}
+
+
 if (KT_USER_ID){
 	$controller->addInlineJavascript('
 		// open specified tab, previously saved tab, or the first one
@@ -101,10 +109,21 @@ if (KT_USER_ID){
 
 <div class="grid-x grid-padding-y" id="family-page">
 	<div class="cell">
-		<h3>
-			<?php echo $controller->record->getFullName(); ?>
-		</h3>
+		<div class="grid-x">
+			<?php if ($highlightImage) { ?>
+				<div class="cell small-2 medium-offset-1 highlight text-right">
+					<?php echo $controller->record->displayImage(); ?>
+				</div>
+			<?php } ?>
+			<div class="cell auto">
+				<h3>
+					<?php echo $controller->record->getFullName(); ?>
+				</h3>
+			</div>
+			<div class="cell small-3"></div>
+		</div>
 		<?php print_parents($controller->record->getXref());
+
 		if (KT_USER_CAN_EDIT) {
 			if ($controller->diff_record) {
 				$husb = $controller->diff_record->getHusband();
@@ -117,7 +136,9 @@ if (KT_USER_ID){
 				$wife = $controller->record->getWife();
 			}
 		} ?>
-		<?php print_children($controller->record->getXref()); ?>
+
+ 		<?php print_children($controller->record->getXref()); ?>
+
 	</div>
 
 	<!-- =============== Family page tabs ====================== -->

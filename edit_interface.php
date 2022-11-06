@@ -194,7 +194,7 @@ switch ($actionA) {
 
         echo pageStart('edit_interface', $controller->getPageTitle()); ?>
 
-    			<?php echo print_indi_form('addchildaction', $famid, '', '', 'CHIL', $gender); ?>
+    		<?php echo print_indi_form('addchildaction', $famid, '', '', 'CHIL', $gender); ?>
 
         <?php echo pageClose();
 
@@ -331,7 +331,7 @@ switch ($actionA) {
     				<input type="hidden" name="action" value="addnoteaction">
     				<input type="hidden" name="noteid" value="newnote">
     				<div id="add_facts">
-                        <div class="cell callout warning help_content">
+                        <div class="cell callout info-help help_content">
                             <?php echo KT_I18N::translate('
                                 Shared Notes are free-form text and will appear in the Fact Details section of the page.
                                 <br>
@@ -505,7 +505,7 @@ switch ($actionA) {
         }
 
         $controller->setPageTitle(KT_I18N::translate('Create a new Source'));
-        $controller->addInlineJavascript('display_help();'); ?>
+        //$controller->addInlineJavascript('display_help();'); ?>
 
 		<script>
 			function check_form(frm) {
@@ -1108,7 +1108,7 @@ switch ($actionA) {
 				<input type="hidden" name="pid" value="<?php echo $pid; ?>">
                 <input type="hidden" name="num_note_lines" value="<?php echo $num_note_lines; ?>">
 
-                <div class="cell callout warning help_content">
+                <div class="cell callout info-help help_content">
                     <?php echo KT_I18N::translate('
                         Shared Notes are free-form text and will appear in the Fact Details section of the page.
                         <br>
@@ -1242,7 +1242,6 @@ switch ($actionA) {
 
     				</div>
                     <ul class="accordion" data-accordion data-allow-all-closed="true" data-multi-expand="true">
-    					<!--  Add new source to fact -->
     					<?php
                         print_add_layer("OBJE");
                         print_add_layer("NOTE");
@@ -1302,16 +1301,18 @@ switch ($actionA) {
                     ?>
 				</div>
 				<div id="additional_facts">
-					<?php
-                        print_add_layer("SOUR");
-                        print_add_layer("OBJE");
-                        print_add_layer("NOTE");
-                        print_add_layer("SHARED_NOTE");
-                        print_add_layer("ASSO");
-                        // allow to add godfather and godmother for CHR fact or best man and bridesmaid for MARR fact in one window
-                        print_add_layer("ASSO2");
-                        print_add_layer("RESN");
-                    ?>
+                    <ul class="accordion" data-accordion data-multi-expand="true" data-allow-all-closed="true">
+    					<?php
+                            print_add_layer("SOUR");
+                            print_add_layer("OBJE");
+                            print_add_layer("NOTE");
+                            print_add_layer("SHARED_NOTE");
+                            print_add_layer("ASSO");
+                            // allow to add godfather and godmother for CHR fact or best man and bridesmaid for MARR fact in one window
+                            print_add_layer("ASSO2");
+                            print_add_layer("RESN");
+                        ?>
+                    </ul>
 				</div>
 				<p id="save-cancel">
 					<button class="btn btn-primary" type="submit">

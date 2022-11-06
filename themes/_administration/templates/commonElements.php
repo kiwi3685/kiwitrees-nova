@@ -44,14 +44,14 @@ function pageStart($title, $pageTitle = '', $includeTitle = 'y', $subTitle = '',
 	if ($subTitle !== '') {
 		$subTitle = '<h4>' . $subTitle . '</h4>';
 	}
+
 	return '
-		<div id="' . strtolower($title) . '-page" class="cell">' .
+		<div id="' . strtolower($title) . '-page" class="grid-x grid-margin-x grid-margin-y">' .
 		 	$faq .
 			'<div class="cell titles">' .
 				$pageTitle .
 				$subTitle .
-			'</div>' .
-			'<div class="grid-x grid-margin-x grid-margin-y">';
+			'</div>';
 
 	// function pageClose() must be added after content to close this div element
 }
@@ -59,12 +59,9 @@ function pageStart($title, $pageTitle = '', $includeTitle = 'y', $subTitle = '',
 /**
  * print end of all pages
  */
-function pageClose() {
-	return '
-		</div>
-			</div>
-	';
-}
+ function pageClose() {
+ 	'</div>';
+ }
 
 /**
  * print Family tree select box and label
@@ -171,28 +168,27 @@ function singleButton($firstButton  = '') {
  *
  * @return string[]
  */
-function submitButtons($onClick = '') {
+function submitButtons($extra = '', $onClick = '') {
    global $iconStyle;
+   $onClickHtml = '';
 
-   if($onClick) {
+   if ($onClick) {
 	   $onClickHtml = 'onclick="' . $onClick . ';"';
    }
 
-   $buttonHtml = '
-	   <div class="cell align-left button-group">
-		   <button class="button primary" type="submit">
-			   <i class="' . $iconStyle . ' fa-save"></i>'
-				. KT_I18N::translate('Save') .
-		   '</button>
-		   <button class="button hollow" type="button" ' . $onClickHtml . '>
-			   <i class="' . $iconStyle . ' fa-xmark"></i>'
-				. KT_I18N::translate('Cancel') .
-		   '</button>
-	   </div>
-   ';
+   ?>
+   <div class="cell align-left button-group">
+	   <button class="button primary" type="submit">
+			<i class="<?php echo $iconStyle; ?> fa-save"></i>
+			<?php echo KT_I18N::translate('Save'); ?>
+	   </button>
+	   <button class="button hollow " type="button" <?php echo $extra . ' ' . $onClickHtml; ?>>
+		   <i class="<?php echo $iconStyle; ?> fa-xmark"></i>
+		   <?php echo KT_I18N::translate('Cancel'); ?>
+	   </button>
+   </div>
 
-   return $buttonHtml;
-
+   <?php
 }
 
 /**

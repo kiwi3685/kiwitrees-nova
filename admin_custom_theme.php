@@ -40,7 +40,7 @@ include KT_THEME_URL . 'templates/adminData.php';
     <link href="library/codemirror/theme/mdn-like.css" rel="stylesheet" type="text/css" />
 <?php
 
-global $iconstyles;
+global $iconStyle;
 
 $controller = new KT_Controller_Page();
 $controller

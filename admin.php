@@ -149,19 +149,19 @@ $changes = KT_DB::prepare(
 
 echo pageStart('admin', KT_I18N::translate('Dashboard')); ?>
 
-	<div class="cell callout warning help_content">
+	<div class="cell callout info-help help_content">
 		<?php echo KT_I18N::translate('These pages provide access to all the configuration settings and management tools for this kiwitrees site.'); ?><br>
 		<?php echo /* I18N: %s is a URL/link to the project website */ KT_I18N::translate('Support is available at %s.', ' <a class="current" href="' . KT_KIWITREES_URL . '/forums/">kiwitrees.net forums</a>'); ?>
 	</div>
 	<?php // Server warnings
-	if ($server_warnings): ?>
-		<div class="callout warning">
+	if ($server_warnings) { ?>
+		<div class="cell callout warning">
 			<h5 class=""><?php echo KT_I18N::translate('Server information'); ?></h5>
 			<?php foreach ($server_warnings as $server_warning): ?>
 				<?php echo $server_warning; ?>
 			<?php endforeach; ?>
 		</div>
-	<?php endif;
+	<?php };
 
 	// Accordion block for DELETE OLD FILES - only shown when old files are found
 	$old_files_found = false;
@@ -177,8 +177,8 @@ echo pageStart('admin', KT_I18N::translate('Dashboard')); ?>
 		}
 	}
 
-	if (KT_USER_IS_ADMIN && $old_files_found) { ?>
-		<div class="callout warning">
+//	if (KT_USER_IS_ADMIN && $old_files_found) { ?>
+		<div class="cell callout warning">
 			<h5><?php echo KT_I18N::translate('Old files found'); ?></h5>
 			<p>
 				<?php echo KT_I18N::translate('Files have been found from a previous version of kiwitrees.  Old files can sometimes be a security risk.  You should delete them.'); ?>
@@ -191,7 +191,7 @@ echo pageStart('admin', KT_I18N::translate('Dashboard')); ?>
 				} ?>
 			</ul>
 		</div>
-	<?php } ?>
+	<?php //} ?>
 	<!-- End // Accordion block for DELETE OLD FILES -->
 
 

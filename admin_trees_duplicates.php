@@ -168,7 +168,7 @@ echo pageStart('find_duplicates', $controller->getPageTitle()); ?>
 	<form class="cell" method="get" name="duplicates_form" action="<?php echo KT_SCRIPT_NAME; ?>">
 		<input type="hidden" name="action" value="go">
 		<div class="grid-x grid-margin-x">
-			<div class="cell callout warning helpcontent">
+			<div class="cell callout info-help ">
 				<?php echo KT_I18N::translate('
 					Search for possible duplicate individuals.
 					The minimum required to start the search is either a surname or
@@ -279,7 +279,7 @@ echo pageStart('find_duplicates', $controller->getPageTitle()); ?>
 			<div class="cell medium-6"></div>
 			<!-- Date and range -->
 			<hr class="cell">
-			<div class="cell callout warning helpcontent">
+			<div class="cell callout info-help ">
 				<?php echo KT_I18N::translate('Enter a birth or death year, and a range either side of that'); ?>
 			</div>
 			<div class="cell medium-2">

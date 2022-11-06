@@ -57,7 +57,7 @@ echo pageStart('blocks', $controller->getPageTitle()); ?>
 		<?php echo KT_Filter::getCsrf(); ?>
 		<div class="grid-x show-for-medium">
 			<div class="cell medium-10">
-				<div class="cell callout warning helpcontent">
+				<div class="cell callout info-help ">
 					<?php echo KT_I18N::translate('To change the order of these blocks go to the Home page, and select "Change the Home page blocks" from the options under your user name at the top of the page'); ?>
 					<?php echo KT_I18N::translate('The "Access level" setting "Hide from everyone" means exactly that, including Administrators.'); ?>
 				</div>

@@ -102,7 +102,7 @@ $controller
 	<div class="tabs-content" data-tabs-content="gm_places_tabs">
 		<!-- GM List tab -->
 		<div class="tabs-panel is-active" id="gm_list">
-			<div class="cell callout warning help_content">
+			<div class="cell callout info-help help_content">
 				<?php echo KT_I18N::translate('
 					By default the list shows only those places which can be matched between the Google Maps place list and your family trees.
 					You may have details for other places, such as those imported in bulk from an external file.

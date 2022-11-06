@@ -65,7 +65,7 @@ $user_tools = array(
 
 echo pageStart('user_admin', $controller->getPageTitle()); ?>
 
-	<div class="cell callout warning help_content">
+	<div class="cell callout info-help help_content">
 		<?php echo KT_I18N::translate('
 			Add, delete, edit and manage users
 		'); ?>

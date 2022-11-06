@@ -118,7 +118,7 @@ $module_cat = array(
 
 echo pageStart('modules_admin', $controller->getPageTitle()); ?>
 
-	<div class="cell callout warning help_content">
+	<div class="cell callout info-help help_content">
 		<?php echo KT_I18N::translate('
 			Enable or disable modules, set access levels, and adjust their locations.
 		'); ?>

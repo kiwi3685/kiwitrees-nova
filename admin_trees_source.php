@@ -65,7 +65,7 @@ echo pageStart('source_check', $controller->getPageTitle()); ?>
 	<form class="cell" name='sourceCheck' method="post" action="<?php echo KT_SCRIPT_NAME; ?>">
 		<input type="hidden" name="go" value="1">
 		<div class="grid-x grid-margin-x grid-padding-x">
-			<div class="cell callout warning helpcontent">
+			<div class="cell callout info-help ">
 				<?php echo KT_I18N::translate('Display a list of facts, events or records where the selected source is used. Facts or events are items like birth, marriage, death. Records are items like individuals, families, media.'); ?>
 			</div>
 			<div class="cell medium-2">

@@ -51,7 +51,7 @@ echo pageStart('merge_records', $controller->getPageTitle()); ?>
 		<form class="cell" method="post" name="datatype" action="<?php echo KT_SCRIPT_NAME; ?>">
 			<input type="hidden" name="action" value="choose">
 			<div class="grid-x grid-margin-x grid-padding-x grid-padding-y">
-				<div class="cell callout warning helpcontent">
+				<div class="cell callout info-help ">
 	                <?php echo KT_I18N::translate('
 	                    Select the type of record you want to merge, then click "Next"
 	                '); ?>
@@ -101,7 +101,7 @@ echo pageStart('merge_records', $controller->getPageTitle()); ?>
             <input type="hidden" name="ged2" value="<?php echo $ged2; ?>">
 
 			<div class="grid-x grid-margin-x">
-				<div class="cell callout warning helpcontent">
+				<div class="cell callout info-help ">
 					<?php echo KT_I18N::translate('
 						Select two GEDCOM records to merge.
 						The records must be of the same type, but can be from

@@ -79,7 +79,7 @@ asort($site_tools);
 
 echo pageStart('site_admin', $controller->getPageTitle()); ?>
 
-	<div class="cell callout warning help_content">
+	<div class="cell callout info-help help_content">
 		<?php echo KT_I18N::translate('
 		Configuration, management, logs, and other activities related to the overall website.
 		'); ?>

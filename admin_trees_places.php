@@ -102,7 +102,7 @@ echo pageStart('update_places', KT_I18N::translate('Update all the place names i
 
 	<form class="cell" method="post" name="treePlaces">
 		<div class="grid-x grid-margin-x grid-padding-x">
-			<div class="cell callout warning helpcontent">
+			<div class="cell callout info-help ">
 				<?php echo KT_I18N::translate('
 					This will update the highest-level part or parts of the place name.
 					For example, “Mexico” will match “Quintana Roo, Mexico”,
@@ -171,7 +171,7 @@ echo pageStart('update_places', KT_I18N::translate('Update all the place names i
 					<?php echo KT_I18N::translate('The following places were changed:'); ?>
 				</div>
 			<?php } else { ?>
-				<div class="cell callout warning helpcontent">
+				<div class="cell callout info-help ">
 					<?php echo KT_I18N::translate('The following places would be changed:'); ?>
 				</div>
 			<?php } ?>

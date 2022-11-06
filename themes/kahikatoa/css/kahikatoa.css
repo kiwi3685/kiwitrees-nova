@@ -4722,9 +4722,9 @@ table.hover:not(.unstriped) tr:nth-of-type(even):hover {
 	display: inline-block;
 	max-width: 100%;
 	margin-bottom: 1rem;
-	border: solid 4px #fffff4;
+	border: solid 0.25rem #fffff4;
 	border-radius: 0;
-	box-shadow: 0.25rem 0.25rem 0.5rem 0 #8a8a8a;
+	box-shadow: 0 0 0 1px rgba(51, 25, 25, 0.2);
 	line-height: 0;
 }
 
@@ -9329,6 +9329,23 @@ form select {
 	max-height: 12.5rem;
 }
 
+.popup_links {
+	font-size: 1.25rem;
+	padding: 0.25rem 0.25rem 0;
+}
+.popup_links a {
+	color: #331919;
+}
+.popup_links a .fa-fw {
+	width: 3rem;
+}
+.popup_links a .svg-inline--fa {
+	cursor: pointer;
+}
+.popup_links a .svg-inline--fa:hover {
+	color: #ab3334;
+}
+
 /* Sticky footer settings */
 body {
 	display: flex;
@@ -10061,6 +10078,26 @@ div[id$=-page] button[type=submit] {
 	margin-top: 1rem;
 	margin-bottom: 1rem;
 }
+#family-page .highlight img {
+	border: 0.1rem solid #ab3334;
+	border-radius: 0.5rem;
+	display: block;
+	height: auto;
+	margin: auto;
+	max-width: 100%;
+	width: 10rem;
+}
+@media print, screen and (max-width: 64.06125em) {
+	#family-page .highlight img {
+		height: 9rem;
+		margin: 1rem auto;
+	}
+}
+#family-page .highlight i.icon-silhouette-FAM {
+	height: 9rem;
+	width: 100%;
+	max-width: 12rem;
+}
 #family-page .tabs-panel .tabHeader {
 	border-bottom: 0.0125rem solid #ab3334;
 	font-size: 1rem;
@@ -10422,22 +10459,6 @@ div[id$=-page] button[type=submit] {
 	border-bottom: 0.0125rem solid #ab3334;
 	margin-bottom: 0.25rem;
 }
-#edit_interface-page .popup_links {
-	font-size: 1.25rem;
-	padding: 0.25rem 0.25rem 0;
-}
-#edit_interface-page .popup_links a {
-	color: #331919;
-}
-#edit_interface-page .popup_links a .fa-fw {
-	width: 3rem;
-}
-#edit_interface-page .popup_links a .svg-inline--fa {
-	cursor: pointer;
-}
-#edit_interface-page .popup_links a .svg-inline--fa:hover {
-	color: #ab3334;
-}
 #edit_interface-page .fdatepicker .input-group {
 	height: 2.4rem;
 	margin-bottom: 0;
@@ -10465,6 +10486,12 @@ div[id$=-page] button[type=submit] {
 #edit_interface-page div.callout div.factDetails {
 	display: inline-block;
 	font-size: 0.5rem;
+}
+#edit_interface-page div.additional_facts li.accordion-item a.accordion-title {
+	padding: 0.75rem 1rem;
+}
+#edit_interface-page div.sourceLinks {
+	margin-bottom: 1rem;
 }
 
 #fanchart-page svg {
@@ -10521,6 +10548,28 @@ div[id$=-page] button[type=submit] {
 	-webkit-transform: translateY(-50%);
 	-ms-transform: translateY(-50%);
 	transform: translateY(-50%);
+}
+
+#favoriteslist-page form {
+	border: 0.125rem solid #ab3334;
+	padding: 0.75rem;
+}
+#favoriteslist-page form div.favInput {
+	height: 24rem;
+}
+#favoriteslist-page form div.favType {
+	border: 0.125rem solid #ab3334;
+	margin-top: 3rem;
+	padding: 0.5rem;
+}
+#favoriteslist-page form #favurl {
+	margin: 0;
+}
+#favoriteslist-page form #favurl div.favType {
+	margin-top: -0.5rem;
+}
+#favoriteslist-page form button {
+	margin-bottom: 0;
 }
 
 #medialist-page input#filter {
@@ -10752,26 +10801,16 @@ div[id$=-page] button[type=submit] {
 	padding: 0 0.5rem;
 }
 
-#favoriteslist-page form {
-	border: 0.125rem solid #ab3334;
-	padding: 0.75rem;
+#search-page .fieldset {
+	border-radius: 0.65rem;
+	margin: 0 0.75rem 0.5rem 1rem;
+	padding: 0.25rem 0.75rem;
 }
-#favoriteslist-page form div.favInput {
-	height: 24rem;
+#search-page label {
+	padding-top: 0;
 }
-#favoriteslist-page form div.favType {
-	border: 0.125rem solid #ab3334;
-	margin-top: 3rem;
-	padding: 0.5rem;
-}
-#favoriteslist-page form #favurl {
-	margin: 0;
-}
-#favoriteslist-page form #favurl div.favType {
-	margin-top: -0.5rem;
-}
-#favoriteslist-page form button {
-	margin-bottom: 0;
+#search-page .tabs-content {
+	background-color: #faf5e8;
 }
 
 label {
@@ -10938,6 +10977,7 @@ div.last_change label {
 
 /* Person box template */
 .person_box_template {
+	border-bottom: 0.125rem solid #e0e0e0;
 	font-size: 0.875rem;
 	margin-bottom: 0.5rem;
 	padding: 0.3125rem;
@@ -11248,6 +11288,10 @@ div.last_change label {
 	color: #0193b7;
 }
 
+.icon-silhouette-FAM {
+	background: url(../images/silhouette_family.svg) 50% 50% no-repeat;
+}
+
 .icon-silhouette-F {
 	background: url(../images/silhouette_female.svg) 50% 50% no-repeat;
 }
@@ -11260,6 +11304,7 @@ div.last_change label {
 	background: url(../images/silhouette_unknown.svg) 50% 50% no-repeat;
 }
 
+i.icon-silhouette-FAM,
 i.icon-silhouette-M,
 i.icon-silhouette-F,
 i.icon-silhouette-U {
@@ -11268,6 +11313,7 @@ i.icon-silhouette-U {
 	height: 3rem;
 	width: 3rem;
 }
+i.icon-silhouette-FAM.small,
 i.icon-silhouette-M.small,
 i.icon-silhouette-F.small,
 i.icon-silhouette-U.small {
@@ -11343,10 +11389,6 @@ input[type=checkbox] {
 	margin: 0;
 	vertical-align: middle;
 	width: 1.2rem;
-}
-
-.checkbox-label {
-	margin: 0 1rem;
 }
 
 .switch {

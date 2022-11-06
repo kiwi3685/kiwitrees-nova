@@ -168,7 +168,7 @@ if ($countrySelected != 'Countries') {
 			<input type="hidden" name="selstate" value="<?php echo $stateSelected; ?>">
 
 			<div class="grid-x">
-				<div class="cell callout warning helpcontent">
+				<div class="cell callout info-help ">
 					<?php echo KT_I18N::translate('
 						Some countries have state or county flags. Using the pull down menu it is possible to select a country,
 						and display it\'s flags for selection.
@@ -236,7 +236,7 @@ if ($countrySelected != 'Countries') {
 					} ?>
 				</div>
 
-				<div class="cell callout warning helpcontent"<?php echo ($countrySelected == 'Countries' || count($stateList) == 0)  ? ' style=" display: none"' : ''; ?>>
+				<div class="cell callout info-help "<?php echo ($countrySelected == 'Countries' || count($stateList) == 0)  ? ' style=" display: none"' : ''; ?>>
 					<?php echo KT_I18N::translate('
 						Some countries have a further level of flags. Using the pull down menu it is possible to select a subdivision,
 						and display it\'s flags for selection.

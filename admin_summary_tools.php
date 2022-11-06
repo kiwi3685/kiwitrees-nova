@@ -34,7 +34,7 @@ $controller
 
 echo pageStart('tools_admin', $controller->getPageTitle()); ?>
 
-	<div class="cell callout warning help_content">
+	<div class="cell callout info-help help_content">
 		<?php echo KT_I18N::translate('
 			A collection of tools to perform site-wide functions. Includes backups, batch data updates, and configuration of them more complex modules
 		'); ?>

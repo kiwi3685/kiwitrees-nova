@@ -70,7 +70,7 @@ asort($custom);
 
 echo pageStart('custom_admin', $controller->getPageTitle()); ?>
 
-	<div class="cell callout warning help_content">
+	<div class="cell callout info-help help_content">
 		<?php echo KT_I18N::translate('
 			Tools to help personalize your site beyond the standard features set.
 		'); ?>

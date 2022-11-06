@@ -68,7 +68,7 @@ echo pageStart('module-admin', $controller->getPageTitle()); ?>
 			<?php echo KT_Filter::getCsrf(); ?>
 			<div class="grid-x show-for-medium">
 				<div class="cell medium-10">
-					<div class="cell callout warning helpcontent">
+					<div class="cell callout info-help ">
 						<?php echo KT_I18N::translate('"Drag & drop" each module, or manually adjust the order numbers, to change the order these modules will be displayed in.'); ?>
 						<?php echo KT_I18N::translate('The "Access level" setting "Hide from everyone" means exactly that, including Administrators.'); ?>
 					</div>

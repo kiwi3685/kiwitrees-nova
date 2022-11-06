@@ -123,6 +123,7 @@ class KT_Family extends KT_GedcomRecord {
 		return true;
 	}
 
+
 	/**
 	 * return the spouse of the given person
 	 * @param Person $person
@@ -398,23 +399,73 @@ class KT_Family extends KT_GedcomRecord {
 			$this->format_first_major_fact(KT_EVENTS_DIV, 1);
 	}
 
-	// Display the FIRST image for this Family.
-	// Use an icon if no image is available.
-	public function displayImage($icon = false) {
-		global $iconStyle;
+	// Display the preferred image for this individual.
+    // Use an icon if no image is available.
+    public function displayImage($override_silhouette = false) {
+        global $USE_SILHOUETTE;
 
-		preg_match('/\n(\d) OBJE @(' . KT_REGEX_XREF . ')@/', $this->getGedcomRecord(), $match);
-		if ($match) {
-			$media = KT_Media::getInstance($match[2]);
-			// Thumbnail exists - use it.
-			return $media->displayImage();
-		} elseif ($icon) {
-			// No thumbnail exists - use an icon
-			return '<i class="' . $iconStyle . ' fa-users fa-8x"></i>';
-		} else {
-			return '';
-		}
-	}
+        $media = $this->findHighlightedMedia();
+        if ($media) {
+            // Thumbnail exists - use it.
+            return $media->displayImage();
+        } elseif ($USE_SILHOUETTE && !$override_silhouette) {
+            // No thumbnail exists - use an icon
+            return '<i class="icon-silhouette-FAM"></i>';
+        } else {
+            return '';
+        }
+    }
+
+	// Find the highlighted media object for an individual
+    // 1. Ignore all media objects that are not displayable because of Privacy rules
+    // 2. Ignore all media objects with the Highlight option set to "N"
+    // 3. Pick the first media object that matches these criteria, in order of preference:
+    //    (a) Level 1 object with the Highlight option set to "Y"
+    //    (b) Level 1 object with the Highlight option missing or set to other than "Y" or "N"
+    //    (c) Level 2 or higher object with the Highlight option set to "Y"
+    function findHighlightedMedia() {
+        $objectA = null;
+        $objectB = null;
+        $objectC = null;
+
+        // Iterate over all of the media items for the person
+        preg_match_all('/\n(\d) OBJE @(' . KT_REGEX_XREF . ')@/', $this->getGedcomRecord(), $matches, PREG_SET_ORDER);
+
+        foreach ($matches as $match) {
+            $media = KT_Media::getInstance($match[2]);
+            if (!$media || !$media->canDisplayDetails() || $media->isExternal()) {
+                continue;
+            }
+            $level = $match[1];
+            $prim  = $media->isPrimary();
+            if ($prim == 'N') {
+                continue;
+            }
+            if ($level == 1) {
+                if ($prim == 'Y') {
+                    if (empty($objectA)) {
+                        $objectA = $media;
+                    }
+                } else {
+                    if (empty($objectB)) {
+                        $objectB = $media;
+                    }
+                }
+            } else {
+                if ($prim == 'Y') {
+                    if (empty($objectC)) {
+                        $objectC = $media;
+                    }
+                }
+            }
+        }
+
+        if ($objectA) return $objectA;
+        if ($objectB) return $objectB;
+        if ($objectC) return $objectC;
+
+        return null;
+    }
 
 
 }

@@ -706,7 +706,7 @@ switch (KT_Filter::get('action')) {
 									</label>
 								</div>
 							</div>
-							<div class="cell callout warning helpcontent">
+							<div class="cell callout info-help ">
 								<?php echo KT_I18N::translate('
 									When a user downloads a GEDCOM file created in the Clippings cart the
 									site administrator will be notified by mail if this option is selected.

@@ -290,7 +290,7 @@
                                  <?php echo KT_I18N::translate('Default value for top-level'); ?>
                              </label>
                          </div>
-                         <div class="cell callout warning helpcontent medium-9">
+                         <div class="cell callout info-help  medium-9">
                              <?php echo KT_I18N::translate('Here the default level for the highest level in the place-hierarchy can be defined. If a place cannot be found this name is added as the highest level (country) and the database is searched again.'); ?>
                          </div>
                          <div class="cell medium-9 medium-offset-3">
@@ -308,7 +308,7 @@
                          <?php echo KT_I18N::translate('Optional prefixes and suffixes');?>
                      </label>
                  </div>
-                 <div class="cell callout warning helpcontent medium-9">
+                 <div class="cell callout info-help  medium-9">
                      <?php echo KT_I18N::translate('Some place names may be written with optional prefixes and suffixes.  For example “Orange” versus “Orange County”.  If the family tree contains the full place names, but the geographic database contains the short place names, then you should specify a list of the prefixes and suffixes to be disregarded.  Multiple options should be separated with semicolons.  For example “County;County of” or “Township;Twp;Twp.”.'); ?>
                  </div>
                  <div class="cell medium-9 close small-up-1">

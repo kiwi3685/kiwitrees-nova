@@ -86,7 +86,7 @@ class custom_js_KT_Module extends KT_Module implements KT_Module_Config, KT_Modu
 
 				echo pageStart('custom-js', $controller->getPageTitle(), 'y', '', '/faqs/modules/add-code-for-google-analytics-social-media-piwik-etc/'); ?>
 
-				<div class="cell callout warning helpcontent">
+				<div class="cell callout info-help ">
 					<?php echo KT_I18N::translate('
 						Use this to include any custom javascript code you
 						require in the site footer.

@@ -1755,10 +1755,11 @@ function format_size($size) {
 			break;
 	}
 }
+
 function table_exists ($table) {
-    $sql  = "SELECT * FROM `" . $table . "`";
     try {
-        $rows = KT_DB::prepare($sql)->fetchAll(PDO::FETCH_ASSOC);
+		KT_DB::prepare('SELECT * FROM `?`')
+		->execute(array($table));
         return true;
     } catch (PDOException $ex) {
     	return false;

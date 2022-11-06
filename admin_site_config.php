@@ -223,7 +223,7 @@ echo pageStart('site_config', $controller->getPageTitle()); ?>
 					</div>
 					<div class="cell large-9">
 						<input type="text" id="data" name="INDEX_DIRECTORY" value="<?php echo KT_Filter::escapeHtml(KT_Site::preference('INDEX_DIRECTORY')); ?>" placeholder="data/" required>
-						<div class="cell callout warning helpcontent">
+						<div class="cell callout info-help ">
 							<?php echo /* I18N: Help text for the "Data folder" site configuration setting. “Apache” is a software program. */ KT_I18N::translate('This folder will be used by kiwitrees to store media files, GEDCOM files, temporary files, etc. The default setting is “data/”.<br>These files may contain private data and should not be made available over the internet. To protect this private data kiwitrees uses an Apache configuration file (.htaccess) which blocks all access to this folder.<br>If your web-server does not support .htaccess files and you cannot restrict access to this folder then you can select another folder away from your web documents. If you select a different folder you must also move all files (except config.ini.php, index.php and .htaccess) from the existing folder to the new folder. The folder can be specified here in full (e.g. /home/user_name/kiwitrees_data/) or relative to the installation folder (e.g. ../../kiwitrees_data/).'); ?>
 						</div>
 					</div>
@@ -232,7 +232,7 @@ echo pageStart('site_config', $controller->getPageTitle()); ?>
 					</div>
 					<div class="cell large-9">
 						<input type="text" id="memory" name="MEMORY_LIMIT" value="<?php echo KT_Filter::escapeHtml(KT_Site::preference('MEMORY_LIMIT')); ?>" pattern="[0-9]+[KMG]" placeholder="<?php echo get_cfg_var('memory_limit'); ?>" maxlength="255">
-						<div class="cell callout warning helpcontent">
+						<div class="cell callout info-help ">
 							<?php echo /* I18N: %s is an amount of memory, such as 32MB */ KT_I18N::translate('By default, your server allows scripts to use %s of memory.', get_cfg_var('memory_limit')); ?>
 							<p>
 								<?php echo KT_I18N::translate('You can request a higher or lower limit here, although the server may ignore this request.<br>If you leave this setting empty the default value will be used.'); ?>
@@ -244,7 +244,7 @@ echo pageStart('site_config', $controller->getPageTitle()); ?>
 					</div>
 					<div class="cell large-9">
 						<input type="text" id="time" name="MAX_EXECUTION_TIME" value="<?php echo KT_Filter::escapeHtml(KT_Site::preference('MAX_EXECUTION_TIME')); ?>" pattern="[0-9]*" placeholder="<?php echo get_cfg_var('max_execution_time') ?>" maxlength="255">
-						<div class="cell callout warning helpcontent">
+						<div class="cell callout info-help ">
 								<?php echo KT_I18N::plural(
 									'By default, your server allows scripts to run for %s second.',
 									'By default, your server allows scripts to run for %s seconds.',
@@ -260,7 +260,7 @@ echo pageStart('site_config', $controller->getPageTitle()); ?>
 					</div>
 					<div class="cell large-9">
 						<?php echo edit_field_yes_no('ALLOW_CHANGE_GEDCOM', KT_Site::preference('ALLOW_CHANGE_GEDCOM')); ?>
-						<div class="cell callout warning helpcontent">
+						<div class="cell callout info-help ">
 							<?php echo /* I18N: Help text for the “Show list of family trees” site configuration setting */ KT_I18N::translate('For sites with more than one family tree, this option will show the list of family trees in the main menu, the search pages, etc.'); ?>
 						</div>
 					</div>
@@ -269,7 +269,7 @@ echo pageStart('site_config', $controller->getPageTitle()); ?>
 					</div>
 					<div class="cell large-9">
 						<input type="text" id="session" name="SESSION_TIME" value="<?php echo KT_Filter::escapeHtml(KT_Site::preference('SESSION_TIME')); ?>" pattern="[0-9]*" placeholder="7200" maxlength="255">
-						<div class="cell callout warning helpcontent">
+						<div class="cell callout info-help ">
 							<?php echo /* I18N: Help text for the “Session timeout” site configuration setting */ KT_I18N::translate('The time in seconds that a kiwitrees session remains active before requiring a login. The default is 7200, which is 2 hours.'); ?>
 						</div>
 					</div>
@@ -278,7 +278,7 @@ echo pageStart('site_config', $controller->getPageTitle()); ?>
 					</div>
 					<div class="cell large-9">
 						<?php echo select_edit_control('SERVER_URL', array(KT_SERVER_NAME.KT_SCRIPT_PATH=>KT_SERVER_NAME.KT_SCRIPT_PATH), '', KT_Site::preference('SERVER_URL')); ?>
-						<div class="cell callout warning helpcontent">
+						<div class="cell callout info-help ">
 							<?php echo /* I18N: Help text for the "Website URL" site configuration setting */ KT_I18N::translate('If your site can be reached using more than one URL such as <b>http://www.example.com/kiwitrees/</b> and <b>http://kiwitrees.example.com/</b> you can specify the preferred URL here. Requests for the other URLs will be redirected to the preferred one. <span class="warning">If not required, leave this field blank.</span>'); ?>
 						</div>
 					</div>
@@ -287,7 +287,7 @@ echo pageStart('site_config', $controller->getPageTitle()); ?>
 					</div>
 					<div class="cell large-9">
 						<?php echo edit_field_yes_no('MAINTENANCE', KT_Site::preference('MAINTENANCE')); ?>
-						<<div class="cell callout warning helpcontent">
+						<<div class="cell callout info-help ">
 							<?php echo KT_I18N::translate('Set this to <b>yes</b> to temporarily prevent anyone <u>except the site administrator</u> from accessing your site.'); ?>
 						</div>
 					</div>
@@ -318,7 +318,7 @@ echo pageStart('site_config', $controller->getPageTitle()); ?>
 								echo '>' . $value . '</option>';
 							} ?>
 						</select>
-						<div class="cell callout warning helpcontent">
+						<div class="cell callout info-help ">
 							<?php echo /* I18N: Help text for the “Messages” site configuration setting */ KT_I18N::translate('Kiwitrees needs to send emails such as password reminders and site notifications. To do this it can use this server\'s built in PHP mail facility (which is not always available) or an external SMTP (mail-relay) service, for which you will need to provide the connection details.<br>Selecting SMTP will display additional configuration options below.'); ?>
 						</div>
 					</div>
@@ -327,7 +327,7 @@ echo pageStart('site_config', $controller->getPageTitle()); ?>
 					</div>
 					<div class="cell large-9">
 						<?php echo edit_field_yes_no('MAIL_FORMAT', KT_Site::preference('MAIL_FORMAT')); ?>
-						<div class="cell callout warning helpcontent">
+						<div class="cell callout info-help ">
 							<?php echo /* I18N: Help text for the “Messages” site configuration setting */ KT_I18N::translate('By default kiwitrees sends emails in plain text format. Setting this option to <b>yes</b> will change that to the multipart format. This allows the use of HTML formatting, but also includes a plain text version for recipients that do not allow HTML formatted emails.'); ?>
 						</div>
 					</div>
@@ -336,7 +336,7 @@ echo pageStart('site_config', $controller->getPageTitle()); ?>
 					</div>
 					<div class="cell large-9">
 						<input type="email" id="sender" name="SMTP_FROM_NAME" value="<?php echo KT_Filter::escapeHtml(KT_Site::preference('SMTP_FROM_NAME')); ?>" placeholder="admin@mydomain.com" maxlength="255" required pattern="email">
-						<div class="cell callout warning helpcontent">
+						<div class="cell callout info-help ">
 							<?php echo /* I18N: Help text for the “Sender name” site configuration setting */ KT_I18N::translate('This name is used in the “From” field, when sending automatic emails from this server. It must be a valid email address.'); ?>
 						</div>
 					</div>
@@ -349,7 +349,7 @@ echo pageStart('site_config', $controller->getPageTitle()); ?>
 							</div>
 							<div class="cell large-9">
 								<input type="text" id="server" name="SMTP_HOST" value="<?php echo KT_Filter::escapeHtml(KT_Site::preference('SMTP_HOST')); ?>" placeholder="smtp.example.com" pattern="[a-z0-9-]+(\.[a-z0-9-]+)*" maxlength="255">
-								<div class="cell callout warning helpcontent">
+								<div class="cell callout info-help ">
 									<?php echo /* I18N: Help text for the “Server name” site configuration setting */ KT_I18N::translate('This is the name of the SMTP server. \'localhost\' means that the mail service is running on the same computer as your web server.'); ?>
 								</div>
 							</div>
@@ -358,7 +358,7 @@ echo pageStart('site_config', $controller->getPageTitle()); ?>
 							</div>
 							<div class="cell large-9">
 								<input type="text" id="port" name="SMTP_PORT" value="<?php echo KT_Filter::escapeHtml(KT_Site::preference('SMTP_PORT')); ?>" placeholder="25" maxlength="5" required pattern="number">
-								<div class="cell callout warning helpcontent">
+								<div class="cell callout info-help ">
 									<?php echo /* I18N: Help text for the "Port number" site configuration setting */ KT_I18N::translate('By default SMTP works on port 25.'); ?>
 								</div>
 							</div>
@@ -367,7 +367,7 @@ echo pageStart('site_config', $controller->getPageTitle()); ?>
 							</div>
 							<div class="cell large-9">
 								<?php echo edit_field_yes_no('SMTP_AUTH', KT_Site::preference('SMTP_AUTH')); ?>
-								<div class="cell callout warning helpcontent">
+								<div class="cell callout info-help ">
 									<?php echo /* I18N: Help text for the “Use password” site configuration setting */ KT_I18N::translate('Most SMTP servers require a password.'); ?>
 								</div>
 							</div>
@@ -376,7 +376,7 @@ echo pageStart('site_config', $controller->getPageTitle()); ?>
 							</div>
 							<div class="cell large-9">
 								<input type="text" id="username" name="SMTP_AUTH_USER" value="<?php echo KT_Filter::escapeHtml(KT_Site::preference('SMTP_AUTH_USER')); ?>">
-								<div class="cell callout warning helpcontent">
+								<div class="cell callout info-help ">
 									<?php echo KT_I18N::translate('The user name required for authentication with the SMTP server.'); ?>
 								</div>
 							</div>
@@ -385,7 +385,7 @@ echo pageStart('site_config', $controller->getPageTitle()); ?>
 							</div>
 							<div class="cell large-9">
 								<input type="text" id="password" name="SMTP_AUTH_PASS" value="">
-								<div class="cell callout warning helpcontent">
+								<div class="cell callout info-help ">
 									<?php echo KT_I18N::translate('The password required for authentication with the SMTP server.'); ?>
 								</div>
 							</div>
@@ -394,7 +394,7 @@ echo pageStart('site_config', $controller->getPageTitle()); ?>
 							</div>
 							<div class="cell large-9">
 								<?php echo select_edit_control('SMTP_SSL', $SMTP_SSL_OPTIONS, null, KT_Site::preference('SMTP_SSL')); ?>
-								<div class="cell callout warning helpcontent">
+								<div class="cell callout info-help ">
 									<?php echo /* I18N: Help text for the "Secure connection" site configuration setting */ KT_I18N::translate('Most servers do not use secure connections.'); ?>
 								</div>
 							</div>
@@ -403,7 +403,7 @@ echo pageStart('site_config', $controller->getPageTitle()); ?>
 							</div>
 							<div class="cell large-9">
 								<input type="text" id="sending" name="SMTP_HELO" value="<?php echo KT_Filter::escapeHtml(KT_Site::preference('SMTP_HELO')); ?>" placeholder="abc.com" required pattern="domain" maxlength="255">
-								<div class="cell callout warning helpcontent">
+								<div class="cell callout info-help ">
 									<?php echo /* I18N: Help text for the “Sending server name” site configuration setting */ KT_I18N::translate('Many mail servers require that the sending server identifies itself correctly, using a valid domain name.'); ?>
 								</div>
 							</div>
@@ -434,7 +434,7 @@ echo pageStart('site_config', $controller->getPageTitle()); ?>
 					</div>
 					<div class="cell large-9">
 						<input type="text" id="loginurl" name="LOGIN_URL" value="<?php echo KT_Filter::escapeHtml(KT_Site::preference('LOGIN_URL')); ?>" maxlength="255">
-						<div class="cell callout warning helpcontent">
+						<div class="cell callout info-help ">
 							<?php echo /* I18N: Help text for the “Login URL” site configuration setting */ KT_I18N::translate('You only need to enter a Login URL if you want to redirect to a different site or location when your users login. This is very useful if you need to switch from http to https when your users login. Include the full URL to <i>login.php</i>. For example, https://www.yourserver.com/kiwitrees/login.php .'); ?>
 						</div>
 					</div>
@@ -475,7 +475,7 @@ echo pageStart('site_config', $controller->getPageTitle()); ?>
 					</div>
 					<div class="cell large-9">
 						<?php echo select_edit_control('WELCOME_TEXT_AUTH_MODE', $WELCOME_TEXT_AUTH_MODE_OPTIONS, null, KT_Site::preference('WELCOME_TEXT_AUTH_MODE')); ?>
-						<div class="cell callout warning helpcontent">
+						<div class="cell callout info-help ">
 							<?php echo /* I18N: Explanation for custom welcome text (1) */ KT_I18N::translate('Here you can choose text to appear on the login page. You must determine which predefined text is most appropriate. You can also choose to enter your own custom welcome text.<br><br>Please refer to the Help text associated with the <b>Custom welcome text</b> field for more information.<br>The predefined texts are below.'); ?>
 							<br><br>
 							<?php echo /* I18N: Explanation for custom welcome text (2) */ KT_I18N::translate('<b>Predefined text that states all users can request a user account:</b><div class="callout secondary"><center><b>Welcome to this Genealogy website</b><br>Access to this site is permitted to every visitor who has a user account.<br>If you have a user account, you can login on this page. If you don\'t have a user account, you can apply for one by clicking on the appropriate link below.<br>After verifying your application, the site administrator will activate your account. You will receive an email when your application has been approved.</center></div>.'); ?>
@@ -490,7 +490,7 @@ echo pageStart('site_config', $controller->getPageTitle()); ?>
 					</div>
 					<div class="cell large-9">
 						<textarea maxlength="2000" id="custom" name="WELCOME_TEXT_AUTH_MODE_4" rows="4"><?php echo KT_Filter::escapeHtml(KT_Site::preference('WELCOME_TEXT_AUTH_MODE_' . KT_LOCALE)) ?></textarea>
-						<div class="cell callout warning helpcontent">
+						<div class="cell callout info-help ">
 							<?php echo KT_I18N::translate('If you have opted for custom welcome text, you can type that text here. To set this text for other languages you must switch to that language and visit this page again.'); ?>
 						</div>
 					</div>
@@ -499,7 +499,7 @@ echo pageStart('site_config', $controller->getPageTitle()); ?>
 					</div>
 					<div class="cell large-9">
 						<?php echo edit_field_yes_no('USE_REGISTRATION_MODULE', KT_Site::preference('USE_REGISTRATION_MODULE')); ?>
-						<div class="cell callout warning helpcontent">
+						<div class="cell callout info-help ">
 							<?php echo KT_I18N::translate('Gives visitors the option of registering themselves for an account on the site. The visitor will receive an email message with a code to verify their application for an account. After verification the Administrator will have to approve the registration before it becomes active.'); ?>
 						</div>
 					</div>
@@ -537,7 +537,7 @@ echo pageStart('site_config', $controller->getPageTitle()); ?>
 					</div>
 					<div class="cell large-9">
 						<?php echo edit_field_yes_no('USE_HONEYPOT', KT_Site::preference('USE_HONEYPOT')); ?>
-						<div class="cell callout warning helpcontent">
+						<div class="cell callout info-help ">
 							<?php echo  /* I18N: Help text for the “honeypot” site configuration setting */ KT_I18N::translate('This will create a secret field that only internet robots will see and complete. If they do, then their entry will be ignored.'); ?>
 						</div>
 					</div>
@@ -546,7 +546,7 @@ echo pageStart('site_config', $controller->getPageTitle()); ?>
 					</div>
 					<div class="cell large-9">
 						<?php echo edit_field_yes_no('USE_RECAPTCHA', KT_Site::preference('USE_RECAPTCHA')); ?>
-						<div class="cell callout warning helpcontent">
+						<div class="cell callout info-help ">
 							<?php echo  /* I18N: Help text for the recaptcha site configuration setting */ KT_I18N::translate('This can help limit the number of spam attempts to register on your site.<br>It requires a pair of Google reCaptcha v2 API keys. Help to obtain this can be found on this kiwitrees FAQ page: <a href="<>php echo KT_KIWITREES_URL; ?>/faqs/administration/site_admin/" target="_blank">Google reCaptcha v2</a>'); ?>
 						</div>
 					</div>
@@ -571,7 +571,7 @@ echo pageStart('site_config', $controller->getPageTitle()); ?>
 					</div>
 					<div class="cell large-9">
 							<input type="text" name="VERIFY_DAYS" value="<?php echo KT_Site::preference('VERIFY_DAYS'); ?>" pattern="[0-9]*" placeholder="7" maxlength="3">
-							<div class="cell callout warning helpcontent">
+							<div class="cell callout info-help ">
 								<?php echo /* I18N: Help text for the “Days allowed to verify” site configuration setting */ KT_I18N::translate('The number of days a new user has to verify their email address before their request to register is highlighted as an error'); ?>
 							</div>
 					</div>
@@ -580,7 +580,7 @@ echo pageStart('site_config', $controller->getPageTitle()); ?>
 					</div>
 					<div class="cell large-9">
 							<?php echo edit_field_yes_no('REQUIRE_COMMENT', KT_Site::preference('REQUIRE_COMMENT')); ?>
-							<div class="cell callout warning helpcontent">
+							<div class="cell callout info-help ">
 								<?php echo KT_I18N::translate('Require all new registrations to enter a comment in the "Comments" field'); ?>
 							</div>
 					</div>
@@ -595,7 +595,7 @@ echo pageStart('site_config', $controller->getPageTitle()); ?>
 							}
 						?>
 						<textarea id="BLOCKED_EMAIL_ADDRESS_LIST" name="BLOCKED_EMAIL_ADDRESS_LIST" rows="3"><?php echo $blockedEmails; ?></textarea>
-						<div class="cell callout warning helpcontent">
+						<div class="cell callout info-help ">
 							<?php echo KT_I18N::translate('Add email addresses to this list to prevent them being used to register on this site. Separate each address with a comma. Whenever a visitor tries to use one of these addresses to register, their attempt will be ignored and a message added to the site error log.'); ?>
 						</div>
 					</div>

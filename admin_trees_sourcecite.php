@@ -79,7 +79,7 @@ echo pageStart('source_review', $controller->getPageTitle()); ?>
 	<form class="cell" name='sourceReview' method="post" action="<?php echo KT_SCRIPT_NAME; ?>">
 		<input type="hidden" name="go" value="1">
 		<div class="grid-x grid-margin-x grid-padding-x">
-			<div class="cell callout warning helpcontent">
+			<div class="cell callout info-help ">
 				<?php echo KT_I18N::translate('Display a list of citations attached to any chosen source record. Used to review citations for accuracy and consistency. Entries in the column <strong>Edit raw GEDCOM record</strong> can be clicked to open the edit raw GEDCOM page. Entries in the column <strong>Record</strong> can be clicked to the detail page of that record for further editing. If you have many similar edits you might prefer to use the <strong>Batch update</strong> tool.'); ?>
 			</div>
 			<div class="cell medium-2">
