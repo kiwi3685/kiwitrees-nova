@@ -314,7 +314,7 @@ function relatedPages($links, $self = '') {
 
 				foreach ($links as $link => $title) {
 						$html .= '
-							<a href="' . $link. '" target="_blank" class="button small large-down-expanded">
+							<a href="' . $link. '" class="button small large-down-expanded">
 							' . $title . '
 						</a>';
 				}
