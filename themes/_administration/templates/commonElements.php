@@ -46,7 +46,7 @@ function pageStart($title, $pageTitle = '', $includeTitle = 'y', $subTitle = '',
 	}
 
 	return '
-		<div id="' . strtolower($title) . '-page" class="grid-x grid-margin-x grid-margin-y">' .
+		<div id="' . strtolower($title) . '-page" class="grid-x grid-margin-x">' .
 		 	$faq .
 			'<div class="cell titles">' .
 				$pageTitle .
