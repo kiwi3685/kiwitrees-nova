@@ -177,7 +177,7 @@ echo pageStart('admin', KT_I18N::translate('Dashboard')); ?>
 		}
 	}
 
-//	if (KT_USER_IS_ADMIN && $old_files_found) { ?>
+	if (KT_USER_IS_ADMIN && $old_files_found) { ?>
 		<div class="cell callout warning">
 			<h5><?php echo KT_I18N::translate('Old files found'); ?></h5>
 			<p>
@@ -191,7 +191,7 @@ echo pageStart('admin', KT_I18N::translate('Dashboard')); ?>
 				} ?>
 			</ul>
 		</div>
-	<?php //} ?>
+	<?php } ?>
 	<!-- End // Accordion block for DELETE OLD FILES -->
 
 
