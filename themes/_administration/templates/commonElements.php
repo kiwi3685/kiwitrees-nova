@@ -199,6 +199,7 @@ function submitButtons($extra = '', $onClick = '') {
 function resetButtons($onClick = '') {
    global $iconStyle;
 
+   $onClickHtml = '';
    if($onClick) {
 	   $onClickHtml = 'onclick="' . $onClick . ';"';
    }
