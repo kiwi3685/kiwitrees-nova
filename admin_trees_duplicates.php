@@ -100,7 +100,9 @@ $controller
 	');
 
 $action		= KT_Filter::get('action','go', '');
-$gedcom_id	= safe_get('gedcom_id', array_keys(KT_Tree::getAll()), KT_GED_ID);
+$gedID 	    = KT_Filter::post('gedID') ? KT_Filter::post('gedID') : KT_GED_ID;
+$tree       = KT_Tree::getNameFromId($gedID);
+//$gedcom_id	= safe_get('gedcom_id', array_keys(KT_Tree::getAll()), KT_GED_ID);
 $surn		= KT_Filter::get('surname', '[^<>&%{};]*');
 $givn		= KT_Filter::get('given', '[^<>&%{};]*');
 $exact_givn	= KT_Filter::getBool('exact_givn');
@@ -113,7 +115,7 @@ $maxYear 	= date('Y') + 1;
 
 if (KT_Filter::getBool('reset')) {
 	$action		= '';
-	$gedcom_id	= KT_GED_ID;
+	$gedID	= KT_GED_ID;
 	$surn		= '';
 	$givn		= '';
 	$exact_givn	= '';
@@ -134,7 +136,7 @@ if ($date || preg_match('/\d{4}(?<!0000)/', $date)) {
 	$maxDate = $date + $range;
 	$sql .= '
 		INNER JOIN `##dates` ON d_gid = n_id
-		WHERE n_file = '. $gedcom_id . '
+		WHERE n_file = '. $gedID . '
 		AND (
 			(d_fact="BIRT" AND d_year <= ' . $maxDate . ' AND d_year >= ' . $minDate . ')
 			 OR
@@ -142,7 +144,7 @@ if ($date || preg_match('/\d{4}(?<!0000)/', $date)) {
 		)
 	';
 } else {
-	$sql .= 'WHERE n_file = '. $gedcom_id . ' ';
+	$sql .= 'WHERE n_file = '. $gedID . ' ';
 }
 	if ($exact_surn) {
 	$sql .= 'AND n_surn = "' . $surn  . '" ';
@@ -182,11 +184,11 @@ echo pageStart('find_duplicates', $controller->getPageTitle()); ?>
 			</div>
 			<!-- Family tree -->
  			<div class="cell medium-2">
-				<label for="ged"><?php echo KT_I18N::translate('Family tree'); ?></label>
+				<label for="gedID"><?php echo KT_I18N::translate('Family tree'); ?></label>
 			</div>
 			<div class="cell medium-4">
 				<form method="post" action="#" name="tree">
-					<?php echo select_ged_control('ged', KT_Tree::getIdList(), null, KT_GEDCOM, ' onchange="tree.submit();"'); ?>
+					<?php echo select_ged_control('gedID', KT_Tree::getIdList(), null, KT_GEDCOM, ' onchange="tree.submit();"'); ?>
 				</form>
 			</div>
 			<div class="cell medium-6"></div>
@@ -198,7 +200,7 @@ echo pageStart('find_duplicates', $controller->getPageTitle()); ?>
 				<?php echo autocompleteHtml(
 					'surname', // id
 					'SURN', // TYPE
-					'', // autocomplete-ged
+					$tree, // autocomplete-ged
 					htmlspecialchars($surn), // input value
 					KT_I18N::translate('A full or partial surname'), // placeholder
 					'surname', // hidden input name
@@ -219,7 +221,7 @@ echo pageStart('find_duplicates', $controller->getPageTitle()); ?>
 				<?php echo autocompleteHtml(
 					'given', // id
 					'GIVN', // TYPE
-					'', // autocomplete-ged
+					$tree, // autocomplete-ged
 					htmlspecialchars($givn), // input value
 					KT_I18N::translate('The full or partial given name(s)'), // placeholder
 					'given', // hidden input name

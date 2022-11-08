@@ -37,13 +37,26 @@ $controller
     ->addExternalJavascript(KT_AUTOCOMPLETE_JS_URL)
     ->addInlineJavascript('autocomplete();');
 
+//-- variables
+$fact             = KT_Filter::post('fact');
+$go               = KT_Filter::post('go');
+$rootid           = KT_Filter::get('rootid');
+$root_id          = KT_Filter::post('root_id');
+$rootid           = empty($root_id) ? $rootid : $root_id;
+$choose_relatives = KT_Filter::post('choose_relatives') ? KT_Filter::post('choose_relatives') : 'child-family';
+$maxgen           = KT_Filter::post('generations', KT_REGEX_INTEGER, $DEFAULT_PEDIGREE_GENERATIONS);
+$person           = KT_Person::getInstance($rootid) ? KT_Person::getInstance($rootid) : '';
+$personName       = $person ? strip_tags($person->getLifespanName()) : '';
+$gedID 	          = KT_Filter::post('gedID') ? KT_Filter::post('gedID') : KT_GED_ID;
+$tree             = KT_Tree::getNameFromId($gedID);
+
 //-- set list of all configured individual tags (level 1)
-$indifacts      = preg_split("/[, ;:]+/", get_gedcom_setting(KT_GED_ID, 'INDI_FACTS_ADD'), -1, PREG_SPLIT_NO_EMPTY);
-$uniqueIndfacts = preg_split("/[, ;:]+/", get_gedcom_setting(KT_GED_ID, 'INDI_FACTS_UNIQUE'), -1, PREG_SPLIT_NO_EMPTY);
+$indifacts      = preg_split("/[, ;:]+/", get_gedcom_setting($gedID, 'INDI_FACTS_ADD'), -1, PREG_SPLIT_NO_EMPTY);
+$uniqueIndfacts = preg_split("/[, ;:]+/", get_gedcom_setting($gedID, 'INDI_FACTS_UNIQUE'), -1, PREG_SPLIT_NO_EMPTY);
 $indifacts      = array_merge($indifacts, $uniqueIndfacts);
 
-$famfacts       = preg_split("/[, ;:]+/", get_gedcom_setting(KT_GED_ID, 'FAM_FACTS_ADD'),     -1, PREG_SPLIT_NO_EMPTY);
-$uniqueFamfacts = preg_split("/[, ;:]+/", get_gedcom_setting(KT_GED_ID, 'FAM_FACTS_UNIQUE'),  -1, PREG_SPLIT_NO_EMPTY);
+$famfacts       = preg_split("/[, ;:]+/", get_gedcom_setting($gedID, 'FAM_FACTS_ADD'),     -1, PREG_SPLIT_NO_EMPTY);
+$uniqueFamfacts = preg_split("/[, ;:]+/", get_gedcom_setting($gedID, 'FAM_FACTS_UNIQUE'),  -1, PREG_SPLIT_NO_EMPTY);
 $famfacts       = array_merge($famfacts, $uniqueFamfacts);
 
 $facts = array_merge($indifacts, $famfacts);
@@ -53,18 +66,6 @@ foreach ($facts as $addfact) {
     $translated_facts[$addfact] = KT_Gedcom_Tag::getLabel($addfact);
 }
 uasort($translated_facts, 'factsort');
-
-//-- variables
-$fact             = KT_Filter::post('fact');
-$go               = KT_Filter::post('go');
-$rootid           = KT_Filter::get('rootid');
-$root_id          = KT_Filter::post('root_id');
-$rootid           = empty($root_id) ? $rootid : $root_id;
-$choose_relatives = KT_Filter::post('choose_relatives') ? KT_Filter::post('choose_relatives') : 'child-family';
-$ged              = KT_Filter::post('ged') ? KT_Filter::post('ged') : $GEDCOM;
-$maxgen           = KT_Filter::post('generations', KT_REGEX_INTEGER, $DEFAULT_PEDIGREE_GENERATIONS);
-$person           = KT_Person::getInstance($rootid) ? KT_Person::getInstance($rootid) : '';
-
 
 $select = array(
     'child-family'     => KT_I18N::translate('Parents and siblings'),
@@ -101,25 +102,26 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
         <?php echo /* I18N: Help content for missing data admin page */ KT_I18N::translate('Whenever possible names are followed by the individual\'s lifespan dates for ease of identification. Note that these may include dates of baptism, christening, burial and cremation if birth and death dates are missing.<br>The list also ignores any estimates of dates or ages, so living people will be listed as missing death dates and places.<br>Some facts such as "Religion" do not commonly have sub-tags like date, place or source, so here only the fact itself is checked for.<br><b>Limitations: </b>It is only practical for this tool to search for media objects directly linked to the selected event ("level 2 object"). Other media such as attached directly to the individual (level 1 object), or linked to a source itself linked to the event ("level 3 object"), will not be checked here.'); ?>
     </div>
     <div class="grid-x grid-margin-x hide-for-print">
-        <form class="cell" method="post" action="<?php echo KT_SCRIPT_NAME; ?>">
+        <form class="cell" method="post"  name="tree" action="<?php echo KT_SCRIPT_NAME; ?>">
             <input type="hidden" name="go" value="1">
             <div class="grid-x grid-padding-x">
                 <div class="cell medium-3">
                     <label><?php echo KT_I18N::translate('Family tree'); ?></label>
-                    <?php echo select_ged_control('ged', KT_Tree::getIdList(), null, KT_GEDCOM); ?>
+                    <?php echo select_ged_control('gedID', KT_Tree::getIdList(), null, $gedID, ' onchange="tree.submit();"'); ?>
                 </div>
                 <div class="cell medium-3">
-                    <label for="autocompleteInput-missing"><?php echo KT_I18N::translate('Individual'); ?></label>
-                    <div class="input-group autocomplete_container">
-                        <?php $person ? $personName = strip_tags($person->getLifespanName()) : $personName = ''; ?>
-                        <input data-autocomplete-type="INDI" type="text" id="autocompleteInput-missing" value="<?php echo $personName; ?>">
-                        <span class="input-group-label">
-                            <button class="clearAutocomplete autocomplete_icon">
-                                <i class="<?php echo $iconStyle; ?> fa-xmark"></i>
-                            </button>
-                        </span>
-                    </div>
-                    <input type="hidden" id="selectedValue" name="root_id">
+                    <label for="select-missing"><?php echo KT_I18N::translate('Individual'); ?></label>
+                    <?php echo autocompleteHtml(
+                        'missing', // id suffix
+                        'INDI', // TYPE
+                        $tree , // autocomplete-ged
+                        $personName, // input value
+                        '', // placeholder
+                        'root_id', // hidden input name
+                        $rootid, // hidden input value
+                        'required', // Optional required setting
+                        '', // optional other entry
+                    ); ?>
                 </div>
                 <div class="cell medium-3">
                     <label for = "fact"><?php echo KT_I18N::translate('Fact or event'); ?></label>
