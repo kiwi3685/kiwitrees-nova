@@ -9302,7 +9302,7 @@ ol.list-upper-roman {
 	color: #34689c;
 }
 .input-group.autocomplete_container .ui-autocomplete-loading {
-	background: url("../images/ui-anim_loading.gif") calc(100% - 2rem) center no-repeat;
+	background: none;
 }
 .input-group.autocomplete_container button.autocomplete_icon {
 	min-width: auto;

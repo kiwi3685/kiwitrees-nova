@@ -9198,6 +9198,9 @@ ol.list-upper-roman {
 .input-group.autocomplete_container .input-group-label .svg-inline--fa:hover {
 	color: #ab3334;
 }
+.input-group.autocomplete_container .ui-autocomplete-loading {
+	display: none;
+}
 
 div [id$=_description] {
 	margin-bottom: 1rem;
