@@ -10040,16 +10040,16 @@ main #admin-content #user_details-page #password-checker .progress {
 	height: 0.5rem;
 	margin-bottom: 0;
 }
-main #admin-content #user_details-page #password-checker .progress .progress-bar {
+main #admin-content #user_details-page #password-checker .progress #password-strength.progress-bar {
 	height: 0.5rem;
 }
-main #admin-content #user_details-page #password-checker .progress .progress-bar-danger {
+main #admin-content #user_details-page #password-checker .progress #password-strength.progress-bar.progress-bar-danger {
 	background-color: #ff0000;
 }
-main #admin-content #user_details-page #password-checker .progress .progress-bar-warning {
+main #admin-content #user_details-page #password-checker .progress #password-strength.progress-bar.progress-bar-warning {
 	background-color: #ffae00;
 }
-main #admin-content #user_details-page #password-checker .progress .progress-bar-success {
+main #admin-content #user_details-page #password-checker .progress #password-strength.progress-bar.progress-bar-success {
 	background-color: #5da423;
 }
 main #admin-content #log_list th {

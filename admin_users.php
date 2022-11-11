@@ -335,13 +335,13 @@ switch (KT_Filter::get('action')) {
 				// https://codepen.io/coding_beast/pen/LYGrXde
 				// converted to jquery and for fontawesom svg icons
 				jQuery("#password").keyup(function() {
-				   var strength         = 0;
-				   var password         = jQuery(this).val();
-				   var passwordStrength = jQuery("#password-strength");
-				   var lowuppercase     = jQuery(".low-upper-case");
-				   var number           = jQuery(".one-number");
-				   var specialChar      = jQuery(".one-special-char");
-				   var multiChar        = jQuery(".multi-character");
+					var strength         = 0;
+					var password         = jQuery(this).val();
+					var passwordStrength = jQuery("#password-strength");
+					var lowuppercase     = jQuery(".low-upper-case");
+					var number           = jQuery(".one-number");
+					var specialChar      = jQuery(".one-special-char");
+					var multiChar        = jQuery(".multi-character");
 
 				  //If password contains both lower and uppercase characters
 				  if (password.match(/([a-z].*[A-Z])|([A-Z].*[a-z])/)) {
@@ -399,9 +399,9 @@ switch (KT_Filter::get('action')) {
 
 			');
 
-		echo relatedPages($users, 'admin_users.php?action=edit');
+		echo relatedPages($users);
 
-		echo pageStart('admin_users_edit', $controller->getPageTitle()); ?>
+		echo pageStart('user_details', $controller->getPageTitle()); ?>
 
 			<form class="cell" name="newform" method="post" role="form" autocomplete="off">
 				<?php echo KT_Filter::getCsrf(); ?>
