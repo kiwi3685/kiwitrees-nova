@@ -9199,7 +9199,7 @@ ol.list-upper-roman {
 	color: #ab3334;
 }
 .input-group.autocomplete_container .ui-autocomplete-loading {
-	display: none;
+	background: none;
 }
 
 div [id$=_description] {
@@ -9613,8 +9613,8 @@ footer .card .card-section .contact_links {
 	margin-bottom: 1rem;
 }
 .block .blockcontent.block_favorites .dropdown-pane button.close-button {
-	bottom: 0.5rem;
-	font-size: 1.5em;
+	bottom: 1.75rem;
+	font-size: 1.25em;
 	top: auto;
 }
 .block .blockcontent.block_favorites div[id^=box] small {
