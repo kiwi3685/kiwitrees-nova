@@ -442,30 +442,30 @@ echo pageStart('site_config', $controller->getPageTitle()); ?>
 						<label><?php echo KT_I18N::translate('Password requirements'); ?></label>
 					</div>
 					<div class="cell large-9">
-						<div class="grid-x grid-margin-y">
-							<div class="medium-2">
+						<div class="grid-x">
+							<div class="cell medium-2">
 								<?php echo simple_switch('PASSWORD_ALPHA', true, KT_Site::preference('PASSWORD_ALPHA')); ?>
 							</div>
-							<div class="medium-10">
+							<div class="cell medium-10">
 								<label class="middle"><?php echo KT_I18N::translate('Require at least one upper case and one lower case letter'); ?></label>
 							</div>
-							<div class="medium-2">
+							<div class="cell medium-2">
 								<?php echo simple_switch('PASSWORD_NUMBERS', true, KT_Site::preference('PASSWORD_NUMBERS')); ?>
 							</div>
-							<div class="medium-10">
+							<div class="cell medium-10">
 								<label class="middle"><?php echo KT_I18N::translate('Require at least one number'); ?></label>
 							</div>
-							<div class="medium-2">
+							<div class="cell medium-2">
 								<?php echo simple_switch('PASSWORD_SPECIAL', true, KT_Site::preference('PASSWORD_SPECIAL')); ?>
 							</div>
-							<div class="medium-10">
+							<div class="cell medium-10">
 								<?php $chars = '!@#$%^&*'; ?>
 								<label class="middle"><?php echo KT_I18N::translate('Require at least one character from %s', $chars); ?></label>
 							</div>
-							<div class="medium-1">
+							<div class="cell medium-1">
 								<input type="number" value="<?php echo (KT_Site::preference('PASSWORD_LENGTH') ? KT_Site::preference('PASSWORD_LENGTH') : 6); ?>" name="PASSWORD_LENGTH" min="6" max="20" step="2" required>
 							</div>
-							<div class="medium-10 medium-offset-1">
+							<div class="cell medium-10 medium-offset-1">
 								<label class="middle"><?php echo KT_I18N::translate('Set minimum password length'); ?></label>
 							</div>
 						</div>

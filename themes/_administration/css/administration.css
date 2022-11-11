@@ -9857,10 +9857,10 @@ main #admin-content #modules_admin-page div.card div.card-section img {
 	height: 100%;
 	object-fit: fill;
 }
-main #admin-content #site_config label.middle {
-	margin: 0 0 1rem;
-	line-height: 1;
-	padding: 0.5625rem 0 0;
+main #admin-content #site_config-page label.middle {
+	line-height: 1.5;
+	margin: 0;
+	padding: 0 0 1rem;
 }
 main #admin-content #family_tree_config-page #media .padding-bottom {
 	margin-bottom: 1rem;

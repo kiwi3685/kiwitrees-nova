@@ -126,7 +126,7 @@ function select_edit_control_inline($name, $values, $empty, $selected, $controll
 * @param string $inactiveText - label for inactive response
 *
 */
-function simple_switch($name, $value, $selected, $disabled = '', $activeText = '', $inactiveText = '', $size = '') {
+function simple_switch($name, $value, $selected, $disabled = '', $activeText = 'Yes', $inactiveText = 'No', $size = 'small') {
 	$html = '
 		<div class="grid-x grid-margin-y">
 			<div class="switch ' . $size . ' cell small-8 medium-4 large-2">
@@ -137,8 +137,8 @@ function simple_switch($name, $value, $selected, $disabled = '', $activeText = '
 				$html .= '>' . '
 				<label class="switch-paddle" for="' . $name . '">
 					<span class="show-for-sr">' . $value . '</span>
-					<span class="switch-active" aria-hidden="true">' . $activeText . '</span>
-					<span class="switch-inactive" aria-hidden="true">' . $inactiveText . '</span>
+					<span class="switch-active" aria-hidden="true">' . KT_I18N::translate($activeText) . '</span>
+					<span class="switch-inactive" aria-hidden="true">' . KT_I18N::translate($inactiveText) . '</span>
 				</label>
 			</div>
 		</div>
