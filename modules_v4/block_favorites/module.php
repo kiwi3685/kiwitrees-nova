@@ -162,11 +162,18 @@ class block_favorites_KT_Module extends KT_Module implements KT_Module_Block {
 							<div class="cell">
 								<label class="h6">' . KT_I18N::translate('Enter an optional note') . '</label>
 								<textarea name="favnote" rows="6" cols="50"></textarea>
-							</div>' .
-							singleButton() . '
-							<button class="close-button" data-close>
-								<span aria-hidden="true"><i class="' . $iconStyle . ' fa-xmark"></i></span>
-							</button>
+							</div>
+							<div class="cell align-left button-group">
+								<button class="button primary small" type="submit">
+									<i class="' . $iconStyle . ' fa-save"></i>
+									' . KT_I18N::translate('Save') . '
+								</button>
+								<button class="close-button" data-close>
+									<span aria-hidden="true">
+										<i class="' . $iconStyle . ' fa-xmark"></i>
+									</span>
+								</button>
+							</div>
 						</form>
 					</div>
 
@@ -186,11 +193,18 @@ class block_favorites_KT_Module extends KT_Module implements KT_Module_Block {
 							<div class="cell">
 								<label class="h6">' . KT_I18N::translate('Enter an optional note') . '</label>
 								<textarea name="favnote" rows="6" cols="50"></textarea>
-							</div>' .
-							singleButton() . '
-							<button class="close-button" data-close>
-								<span aria-hidden="true"><i class="' . $iconStyle . ' fa-xmark"></i></span>
-							</button>
+							</div>
+							<div class="cell align-left button-group">
+								<button class="button primary small" type="submit">
+									<i class="' . $iconStyle . ' fa-save"></i>
+									' . KT_I18N::translate('Save') . '
+								</button>
+								<button class="close-button" data-close>
+									<span aria-hidden="true">
+										<i class="' . $iconStyle . ' fa-xmark"></i>
+									</span>
+								</button>
+							</div>
 						</form>
 					</div>
 
@@ -210,11 +224,18 @@ class block_favorites_KT_Module extends KT_Module implements KT_Module_Block {
 							<div class="cell">
 								<label class="h6">' . KT_I18N::translate('Enter an optional note') . '</label>
 								<textarea name="favnote" rows="6" cols="50"></textarea>
-							</div>' .
-							singleButton() . '
-							<button class="close-button" data-close>
-								<span aria-hidden="true"><i class="' . $iconStyle . ' fa-xmark"></i></span>
-							</button>
+							</div>
+							<div class="cell align-left button-group">
+								<button class="button primary small" type="submit">
+									<i class="' . $iconStyle . ' fa-save"></i>
+									' . KT_I18N::translate('Save') . '
+								</button>
+								<button class="close-button" data-close>
+									<span aria-hidden="true">
+										<i class="' . $iconStyle . ' fa-xmark"></i>
+									</span>
+								</button>
+							</div>
 						</form>
 					</div>
 
@@ -227,11 +248,18 @@ class block_favorites_KT_Module extends KT_Module implements KT_Module_Block {
 							<div class="cell">
 								<label class="h6">' . KT_I18N::translate('Enter an optional note') . '</label>
 								<textarea name="favnote" rows="6" cols="50"></textarea>
-							</div>' .
-							singleButton() . '
-							<button class="close-button" data-close>
-								<span aria-hidden="true"><i class="' . $iconStyle . ' fa-xmark"></i></span>
-							</button>
+							</div>
+							<div class="cell align-left button-group">
+								<button class="button primary small" type="submit">
+									<i class="' . $iconStyle . ' fa-save"></i>
+									' . KT_I18N::translate('Save') . '
+								</button>
+								<button class="close-button" data-close>
+									<span aria-hidden="true">
+										<i class="' . $iconStyle . ' fa-xmark"></i>
+									</span>
+								</button>
+							</div>
 						</form>
 					</div>
 				</div>
