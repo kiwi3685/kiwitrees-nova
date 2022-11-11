@@ -33,11 +33,17 @@ $controller
 	->setPageTitle(KT_I18N::translate('Administration'))
 	->pageHeader();
 
-//Check for updates
+//Check for kiwitrees-nova updates
 $latest_version = fetch_latest_version();
 
 //Check SQL server version
-$version = KT_DB::prepare("select version()")->fetchColumn();
+$versionNumber	= KT_DB::prepare("select version()")->fetchColumn();
+$versionNo		= substr($versionNumber, 0, strpos($versionNumber, '.'));
+if ($versionNo < '10') {
+    $version = 'MySQL ' . $versionNumber;
+} else {
+	$version = 'MariaDB ' . $versionNumber;
+}
 
 // Prepare statistic variables
 $stats = new KT_Stats(KT_GEDCOM);
@@ -268,7 +274,7 @@ echo pageStart('admin', KT_I18N::translate('Dashboard')); ?>
 				</div>
 				<div class="accordion-item" data-accordion-item>
 					<a href="#" class="accordion-title">
-						<span><?php echo KT_I18N::translate('Users'); ?></span>
+						<span><?php echo KT_I18N::translate('User statistics'); ?></span>
 						<span class="fa-layers fa-lg has-tip top" data-tooltip aria-haspopup="true" data-disable-hover="false" title="<?php echo KT_I18N::translate('Total number of users'); ?>">
 							<i class="<?php echo $iconStyle; ?> fa-users"></i>
 							<span class="fa-layers-counter"><?php echo $total_users; ?></span>
