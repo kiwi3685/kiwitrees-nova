@@ -611,15 +611,15 @@ switch ($action) {
 		}
 		$mail1_body.=
 			"\r\n\r\n".
-			"=--------------------------------------=\r\n".
-			"IP ADDRESS: ".$REQUEST->getClientIp()."\r\n".
-			"DNS LOOKUP: ".gethostbyaddr($REQUEST->getClientIp())."\r\n".
-			"LANGUAGE: ".LOCALE."\r\n";
+			"=--------------------------------------=\r\n" .
+			"IP ADDRESS: " . $REQUEST->getClientIp() . "\r\n" .
+			"DNS LOOKUP: " . gethostbyaddr($REQUEST->getClientIp()) . "\r\n" .
+			"LANGUAGE:   " . KT_LOCALE."\r\n";
 
-		$mail1_to = $KIWITREES_EMAIL;
-		$mail1_from = getUserEmail($user_id);
-		$mail1_subject = /* I18N: %s is a server name/URL */ KT_I18N::translate('New user at %s', KT_SERVER_NAME . KT_SCRIPT_PATH . ' ' . strip_tags(KT_TREE_TITLE));
-		$mail1_method = get_user_setting($webmaster_user_id, 'CONTACT_METHOD');
+		$mail1_to 		= $KIWITREES_EMAIL;
+		$mail1_from 	= getUserEmail($user_id);
+		$mail1_subject 	= /* I18N: %s is a server name/URL */ KT_I18N::translate('New user at %s', KT_SERVER_NAME . KT_SCRIPT_PATH . ' ' . strip_tags(KT_TREE_TITLE));
+		$mail1_method 	= get_user_setting($webmaster_user_id, 'CONTACT_METHOD');
 
 		// Change to the new user’s language
 		KT_I18N::init(get_user_setting($user_id, 'language'));
