@@ -155,7 +155,7 @@ switch ($action) {
 					');
 					break;
 				case 4:
-					echo '<div style="white-space: pre-wrap;">' . KT_Site::preference('WELCOME_TEXT_AUTH_MODE_', LOCALE) . '</div';
+					echo '<div style="white-space: pre-wrap;">' . KT_Site::preference('WELCOME_TEXT_AUTH_MODE_', KT_LOCALE) . '</div';
 					break;
 				} ?>
 				<form id="login-form"
