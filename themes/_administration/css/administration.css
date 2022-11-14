@@ -9428,6 +9428,10 @@ div.relatedPages .button.large-down-expanded {
 	color: #ff0000;
 }
 
+.warning {
+	color: #ffae00;
+}
+
 .success {
 	color: #5da423;
 }

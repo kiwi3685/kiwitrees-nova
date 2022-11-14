@@ -419,7 +419,7 @@ switch (KT_Filter::get('action')) {
 					<div class="cell large-9">
 						<div class="input_group">
 							<input type="text" id="real_name" name="real_name" required maxlength="64" value="<?php echo KT_Filter::escapeHtml($realname); ?>" dir="auto">
-							<div class="callout warning helpcontent">
+							<div class="callout info-help">
 								<?php echo KT_I18N::translate('This is your real name, as you would like it displayed on screen.'); ?>
 							</div>
 						</div>
@@ -434,7 +434,7 @@ switch (KT_Filter::get('action')) {
 					<div class="cell large-9">
 						<div class="input_group">
 							<input type="text" id="username" name="username" required maxlength="32" value="<?php echo KT_Filter::escapeHtml($username); ?>" dir="auto">
-							<div class="callout warning helpcontent">
+							<div class="callout info-help">
 								<?php echo KT_I18N::translate('Usernames are case-insensitive and ignore accented letters, so that “chloe”, “chloë”, and “Chloe” are considered to be the same.'); ?>
 							</div>
 						</div>
@@ -500,7 +500,7 @@ switch (KT_Filter::get('action')) {
 					            <span><?php echo KT_I18N::translate('At least %d characters', KT_MINIMUM_PASSWORD_LENGTH); ?><span>
 						    </div>
 						</div>
-						<div class="callout warning helpcontent">
+						<div class="callout info-help">
 							<?php if ($user_id > 0) { ?>
 								<?php echo '<b>' . KT_I18N::translate('Leave password blank if you want to keep the current password.') . '</b>'; ?>
 								<br>
@@ -508,9 +508,14 @@ switch (KT_Filter::get('action')) {
 							<?php echo KT_I18N::translate('
 								Passwords are case-sensitive, so that “secret” is different from “SECRET”.
 								<br>
-								Anything with %2d characters or more is acceptable, but mixed lower and uppercase characters, numbers, and special characters will increase the security of the password.
+								This site requires that all passwords include, AS A MINIMUM, each of the items listed below the password entry field.
+								The colored bar (grey until you start typing) denotes the strength of your chosen password.
+								<span class="alert strong">Red</span> = weak password;
+								<span class="warning strong">Orange</span> = medium;
+								<span class="success strong">Green</span> = strong.
 								<br>
 								Use the "Show or hide password" icon (eye) to check your password before saving it.
+								<br>
 							', KT_MINIMUM_PASSWORD_LENGTH, KT_MINIMUM_PASSWORD_LENGTH); ?>
 						</div>
 					</div>
@@ -524,7 +529,7 @@ switch (KT_Filter::get('action')) {
 					<div class="cell large-9">
 						<div class="input_group">
 							<input type="email" id="email" name="email" required maxlength="64" value="<?php echo KT_Filter::escapeHtml($email); ?>">
-							<div class="callout warning helpcontent">
+							<div class="callout info-help">
 								<?php echo KT_I18N::translate('This email address will be used to send password reminders, website notifications, and messages from other family members who are registered on the website.'); ?>
 							</div>
 						</div>
@@ -567,7 +572,7 @@ switch (KT_Filter::get('action')) {
 								</label>
 							</div>
 						</div>
-						<div class="callout warning helpcontent">
+						<div class="callout info-help">
 							<?php echo KT_I18N::translate('
 								When a user registers for an account, an email is sent to their email address with a verification link. When they follow this link, we know the email address is correct, and the “email verified” option is selected automatically.
 								<br>
@@ -618,7 +623,7 @@ switch (KT_Filter::get('action')) {
 								'small'
 							); ?>
 						</div>
-						<div class="callout warning helpcontent">
+						<div class="callout info-help">
 							<?php echo KT_I18N::translate('
 								Automatically accept changes and additions to family tree data by this user.
 							'); ?>
@@ -643,7 +648,7 @@ switch (KT_Filter::get('action')) {
 								'small'
 							); ?>
 						</div>
-						<div class="callout warning helpcontent">
+						<div class="callout info-help">
 							<?php /* I18N: A configuration setting */ echo KT_I18N::translate('
 								You can choose whether to appear in the list of users who are currently signed-in.
 							'); ?>
@@ -659,7 +664,7 @@ switch (KT_Filter::get('action')) {
 					<div class="cell large-9">
 						<div class="input_group">
 							<?php echo edit_field_contact('contact_method', get_user_setting($user_id, 'contactmethod')); ?>
-							<div class="callout warning helpcontent">
+							<div class="callout info-help">
 								<?php echo /* I18N: Help text for the “Preferred contact method” configuration setting */
 								KT_I18N::translate('
 									Site members can send each other messages.
@@ -722,7 +727,7 @@ switch (KT_Filter::get('action')) {
 					<div id="access" class="cell">
 						<h4><?php echo KT_I18N::translate('Family tree roles and settings'); ?></h4>
 						<div class="grid-x">
-							<div class="cell callout warning shortenMedium">
+							<div class="cell callout info-help shortenMedium">
 								<h5><?php echo KT_I18N::translate('Help for family tree access settings'); ?></h5>
 								<dl>
 									<dt><?php echo KT_I18N::translate('Default individual'); ?></dt>
@@ -838,7 +843,7 @@ switch (KT_Filter::get('action')) {
 									<tbody>
 										<tr>
 											<td colspan="5">
-												<div class="callout warning helpcontent">
+												<div class="callout info-help">
 													<?php echo KT_I18N::translate('For more imformation about these items, see the help content above.'); ?>
 												</div>
 											</td>
