@@ -538,7 +538,11 @@ echo pageStart('site_config', $controller->getPageTitle()); ?>
 					<div class="cell large-9">
 						<?php echo edit_field_yes_no('USE_HONEYPOT', KT_Site::preference('USE_HONEYPOT')); ?>
 						<div class="cell callout info-help ">
-							<?php echo  /* I18N: Help text for the “honeypot” site configuration setting */ KT_I18N::translate('This will create a secret field that only internet robots will see and complete. If they do, then their entry will be ignored.'); ?>
+							<?php echo
+								/* I18N: Help text for the “honeypot” site configuration setting */
+								KT_I18N::translate('This will create a secret field that only internet
+									robots will see and complete. If they do their entry will be
+									ignored. See FAQ for full explanation'); ?>
 						</div>
 					</div>
 					<div id="recaptcha_select" class="cell large-3">
