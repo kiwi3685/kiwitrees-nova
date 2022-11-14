@@ -579,7 +579,7 @@ echo pageStart('admin_media', $controller->getPageTitle()); ?>
 			<div class="cell medium-2">
 				<label class="h5"><?php echo KT_I18N::translate('Media folders'); ?></label>
 			</div>
-			<div class="cell medium-9">
+			<div class="cell medium-10">
 				<div class="grid-x">
 					<?php switch ($files) {
 						case 'local':
@@ -622,7 +622,7 @@ echo pageStart('admin_media', $controller->getPageTitle()); ?>
 			<div class="cell medium-2">
 				<label class="h6"><?php echo KT_I18N::translate('Subfolders'); ?></label>
 			</div>
-			<div class="cell medium-9">
+			<div class="cell medium-10">
 				<?php echo radio_switch_group (
 					'subfolders',
 					array(
@@ -637,7 +637,7 @@ echo pageStart('admin_media', $controller->getPageTitle()); ?>
 			<div class="cell medium-2">
 				<label class="h5"><?php echo KT_I18N::translate('Media files'); ?></label>
 			</div>
-			<div class="cell medium-9">
+			<div class="cell medium-10">
 				<?php echo radio_switch_group (
 					'files',
 					$filesArray,
