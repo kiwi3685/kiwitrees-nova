@@ -125,7 +125,7 @@
                  </div>
                  <div class="cell medium-9">
                      <input type="text" name="NEW_GM_API_KEY" value="<?php echo $GM_API_KEY; ?>">
-                     <div class="callout warning helpcontent">
+                     <div class="callout info-help">
                          <?php echo KT_I18N::translate('
                              Google require that users of Google Maps™ obtain an API key from them.
                              This is linked to their usage restrictions described at
@@ -189,7 +189,7 @@
                          </select>
                      </div>
                  </div>
-                 <div class="callout warning helpcontent medium-9 medium-offset-3">
+                 <div class="callout info-help medium-9 medium-offset-3">
                          <?php echo KT_I18N::translate('Minimum and maximum zoom factor for the Google map. 1 is the full map, 15 is single house. Note that 15 is only available in certain areas.'); ?>
                  </div>
                  <div class="cell medium-3">
@@ -221,7 +221,7 @@
                          KT_I18N::translate('yes'),
                          KT_I18N::translate('no')
                      ); ?>
-                     <div class="callout warning helpcontent">
+                     <div class="callout info-help">
                          <?php echo KT_I18N::translate('
                              Here you can choose between two types of displaying places names in hierarchy.
                              If set Yes the place has short name or actual level name, if No - full name.
@@ -247,7 +247,7 @@
                          KT_I18N::translate('yes'),
                          KT_I18N::translate('no')
                      ); ?>
-                     <div class="callout warning helpcontent">
+                     <div class="callout info-help">
                          <?php echo KT_I18N::translate('
                              This options sets whether Latitude and Longitude are displayed on the pop-up window
                              attached to map markers.
