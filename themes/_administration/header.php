@@ -183,17 +183,21 @@ $class='';
 								<?php echo KT_I18N::translate('Tools'); ?>
 							</a>
 						</li>
-
-						<li class="admin-menu-title">
-							<form method="post" action="adminSearch.php" name="adminSearch">
-								<div class="input-group">
-									<input type="search" name="admin_query" value="<?php echo KT_Filter::post('admin_query'); ?>" placeholder="<?php echo KT_I18N::translate('Administration search'); ?>" class="input-group-field">
-									<span class="input-group-label"><a href="#" onclick="adminSearch.submit()"><i class="<?php echo $iconStyle; ?> fa-magnifying-glass"></i></a></span>
-								</div>
-							</form>
-
-						</li>
-					<?php } ?>
+						<?php if (in_array(KT_LOCALE, array('en_US', 'en_GB', 'en_AU'))) { ?>
+							<li class="admin-menu-title">
+								<form method="post" action="adminSearch.php" name="adminSearch">
+									<div class="input-group">
+										<input type="search" name="admin_query" value="<?php echo KT_Filter::post('admin_query'); ?>" placeholder="<?php echo KT_I18N::translate('Administration search'); ?>" class="input-group-field">
+										<span class="input-group-label">
+											<a href="#" target="_blank" onclick="adminSearch.submit()">
+												<i class="<?php echo $iconStyle; ?> fa-magnifying-glass"></i>
+											</a>
+										</span>
+									</div>
+								</form>
+							</li>
+						<?php }
+					} ?>
 				</ul>
 			</aside>
 			<div id="admin-content" class="cell large-10">

@@ -58,11 +58,15 @@ echo pageStart('admin_search', $controller->getPageTitle()); ?>
 										$modules = KT_Module::getActiveModules(KT_GED_ID, KT_PRIV_HIDE);
 										foreach ($modules as $module) {
 											if ( $module->getName() === $indirectAccess[$file]) {
-												$link = '<a href="' . $module->getConfigLink(str_replace(".php", "", $file)) . '">' . $searchAdminFiles[$file] . '</a>';
+												$link = '
+													<a href="' . $module->getConfigLink(str_replace(".php", "", $file)) . '" target="_blank">
+														' . $searchAdminFiles[$file] . '
+													</a>
+												';
 											}
 										}
 									} else {
-										$link = '<a href="' . $file . '">' . $searchAdminFiles[$file] . '</a>';
+										$link = '<a href="' . $file . '" target="_blank">' . $searchAdminFiles[$file] . '</a>';
 									} ?>
 									<tr>
 										<td><?php echo $link; ?></td>
