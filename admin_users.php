@@ -650,7 +650,7 @@ switch (KT_Filter::get('action')) {
 						</div>
 						<div class="callout info-help">
 							<?php /* I18N: A configuration setting */ echo KT_I18N::translate('
-								You can choose whether to appear in the list of users who are currently signed-in.
+								You can choose whether this user appears in the list of users who are currently signed-in.
 							'); ?>
 						</div>
 					</div>
@@ -668,8 +668,8 @@ switch (KT_Filter::get('action')) {
 								<?php echo /* I18N: Help text for the “Preferred contact method” configuration setting */
 								KT_I18N::translate('
 									Site members can send each other messages.
-									You can choose how these messages are sent to you,
-									or choose not receive them at all.
+									YUse this setting to choose how these messages are sent to this user,
+									or not sent to them at all.
 								'); ?>
 							</div>
 						</div>
