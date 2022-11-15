@@ -476,7 +476,7 @@ switch ($actionA) {
 								<?php } else { ?>
 									<input type="checkbox" name="preserve_last_changed">
 								<?php }
-                                echo KT_I18N::translate('Do not update the “last change” record'), help_link('no_update_CHAN'); ?>
+                                echo KT_I18N::translate('Prevent updates to the “last change” record'), help_link('no_update_CHAN'); ?>
 							</div>
 						</div>
 					<?php }?>
@@ -626,7 +626,7 @@ switch ($actionA) {
                                 <?php } else { ?>
                                     <input type="checkbox" name="preserve_last_changed">
                                 <?php }
-                                echo KT_I18N::translate('Do not update the “last change” record'), help_link('no_update_CHAN'); ?>
+                                echo KT_I18N::translate('Prevent updates to the “last change” record'), help_link('no_update_CHAN'); ?>
                             </div>
                         </div>
                     <?php }?>

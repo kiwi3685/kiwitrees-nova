@@ -168,7 +168,6 @@ function addnewnote() {
 				<div class="cell medium-2 popup_links">
 					<?php echo print_specialchar_link('NOTE'); ?>
 				</div>
-				<?php echo no_update_chan(); ?>
 			</div>
 			<?php echo submitButtons('data-toggle="note"'); ?>
 		</form>
@@ -179,7 +178,7 @@ function addnewnote() {
 }
 
 function addnewsource() {
-	global $iconStyle, $ADVANCED_NAME_FACTS, $NO_UPDATE_CHAN; ?>
+	global $iconStyle, $ADVANCED_NAME_FACTS; ?>
 
 	<script>
 		function check_form(frm) {
@@ -319,7 +318,6 @@ function addnewsource() {
 				<div class="cell medium-2 popup_links">
 					<?php echo print_specialchar_link('WWW'); ?>
 				</div>
-				<?php echo no_update_chan(); ?>
 			</div>
 			<?php echo submitButtons('data-toggle="sour"'); ?>
 		</form>
@@ -329,7 +327,7 @@ function addnewsource() {
 }
 
 function addnewrepository() {
-	global $iconStyle, $ADVANCED_NAME_FACTS, $NO_UPDATE_CHAN; ?>
+	global $iconStyle, $ADVANCED_NAME_FACTS; ?>
 
 	<script>
 		function check_form(frm) {
@@ -439,21 +437,6 @@ function addnewrepository() {
 						<?php echo print_specialchar_link('WWW'); ?>
 					</div>
 				</div>
-				<?php if (KT_USER_IS_ADMIN) { ?>
-					<div class="last_change">
-						<label>
-							<?php echo KT_Gedcom_Tag::getLabel('CHAN'); ?>
-						</label>
-						<div class="input">
-							<?php if ($NO_UPDATE_CHAN) { ?>
-								<input type="checkbox" checked="checked" name="preserve_last_changed">
-							<?php } else { ?>
-								<input type="checkbox" name="preserve_last_changed">
-							<?php }
-							echo KT_I18N::translate('Do not update the “last change” record'), help_link('no_update_CHAN'); ?>
-						</div>
-					</div>
-				<?php }?>
 			</div>
 			<?php echo submitButtons('data-toggle="sour"'); ?>
 		</form>

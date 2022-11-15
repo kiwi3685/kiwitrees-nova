@@ -3001,7 +3001,7 @@ function no_update_chan(KT_GedcomRecord $record = null) {
 
 	$checked = $NO_UPDATE_CHAN ? ' checked="checked"' : '';
 
-	if (KT_USER_IS_ADMIN) { ?>
+	if (KT_USER_IS_ADMIN && KT_SCRIPT_NAME !== 'admin_trees_addunlinked.php') { ?>
 		<div class="cell last_change">
 			<div class="grid-x">
 				<div class="cell medium-3">
@@ -3017,7 +3017,7 @@ function no_update_chan(KT_GedcomRecord $record = null) {
 				</div>
 				<div class="cell medium-9 input">
 					<div class="checkbox-label">
-						<?php echo KT_I18N::translate('Do not update the “last change” record'); ?>
+						<?php echo KT_I18N::translate('Prevent updates to the “last change” record'); ?>
 					</div>
 					<?php echo simple_switch(
 						'preserve_last_changed',
