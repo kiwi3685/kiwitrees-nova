@@ -36,6 +36,7 @@ try {
 	self::exec("ALTER TABLE `##places`         CHANGE p_std_soundex p_std_soundex LONGTEXT COLLATE utf8_unicode_ci NOT NULL");
 	self::exec("ALTER TABLE `##places`         CHANGE p_dm_soundex  p_dm_soundex  LONGTEXT COLLATE utf8_unicode_ci NOT NULL");
 	self::exec("ALTER TABLE `##sources`        CHANGE s_gedcom      s_gedcom      LONGTEXT COLLATE utf8_unicode_ci NOT NULL");
+	self::exec("ALTER TABLE `##site_setting`   CHANGE setting_value setting_value varchar(2000) COLLATE utf8_unicode_ci NOT NULL");
 } catch (PDOException $ex) {
 	// Perhaps we have already deleted this data?
 }

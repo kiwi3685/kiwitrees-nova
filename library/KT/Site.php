@@ -53,7 +53,7 @@ class KT_Site {
 				AddToLog('Site setting "' . $setting_name . '" set to "' . $setting_value . '"', 'config');
 			}
 			KT_DB::prepare(
-				"REPLACE INTO `##site_setting` (setting_name, setting_value) VALUES (?, LEFT(?, 255))"
+				"REPLACE INTO `##site_setting` (setting_name, setting_value) VALUES (?, LEFT(?, 2000))"
 			)->execute(array($setting_name, $setting_value));
 			self::$setting[$setting_name] = $setting_value;
 		}
