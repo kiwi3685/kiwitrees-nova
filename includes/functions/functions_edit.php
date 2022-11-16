@@ -687,9 +687,10 @@ function print_indi_form($nextaction, $famid, $linenum='', $namerec='', $famtag=
 		<div id="add_name_details" class="grid-x">
 			<?php
 			// When adding a new child, specify the pedigree
-			if ($nextaction == 'addchildaction' || $nextaction == 'addopfchildaction') {
+			if (($nextaction == 'addchildaction' || $nextaction == 'addopfchildaction') && KT_SCRIPT_NAME !== 'admin_trees_addunlinked.php') {
 				add_simple_tag('0 PEDI');
 			}
+			// Add TYPE option on updateSOUR
 			if ($nextaction == 'update') {
 				$name_type = get_gedcom_value('TYPE', 2, $namerec);
 				add_simple_tag('0 TYPE ' . $name_type);
