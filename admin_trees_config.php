@@ -520,7 +520,11 @@ echo pageStart('family_tree_config', $controller->getPageTitle(), 'y', '', 'admi
 								<label for="NEW_USE_RIN"><?php echo KT_I18N::translate('Use RIN number instead of GEDCOM ID'); ?></label>
 							</div>
 							<div class="cell large-9">
-								<?php echo edit_field_yes_no('NEW_USE_RIN', get_gedcom_setting($gedID, 'USE_RIN')); ?>
+								<?php echo simple_switch(
+									'NEW_USE_RIN',
+									true,
+									get_gedcom_setting($gedID, 'USE_RIN'),
+								); ?>
 								<div class="cell callout info-help ">
 									<?php echo KT_I18N::translate('Set to <b>Yes</b> to use the RIN number instead of the GEDCOM ID when asked for Individual IDs in configuration files, user settings, and charts. This is useful for genealogy programs that do not consistently export GEDCOMs with the same ID assigned to each individual but always use the same RIN.'); ?>
 								</div>
@@ -529,7 +533,11 @@ echo pageStart('family_tree_config', $controller->getPageTitle(), 'y', '', 'admi
 								<label for="tree_subtitle"><?php echo KT_I18N::translate('Automatically create globally unique IDs'); ?></label>
 							</div>
 							<div class="cell large-9">
-								<?php echo edit_field_yes_no('NEW_GENERATE_UIDS', get_gedcom_setting($gedID, 'GENERATE_UIDS')); ?>
+								<?php echo simple_switch(
+									'NEW_GENERATE_UIDS',
+									true,
+									get_gedcom_setting($gedID, 'USE_RIN'),
+								); ?>
 								<div class="cell callout info-help ">
 									<?php echo KT_I18N::translate('<b>GUID</b> in this context is an acronym for «Globally Unique ID».<br>GUIDs are intended to help identify each individual in a manner that is repeatable, so that central organizations such as the Family History Center of the LDS Church in Salt Lake City, or even compatible programs running on your own server, can determine whether they are dealing with the same person no matter where the GEDCOM originates. The goal of the Family History Center is to have a central repository of genealogical data and expose it through web services. This will enable any program to access the data and update their data within it.<br><br>If you do not intend to share this GEDCOM with anyone else, you do not need to let kiwitrees create these GUIDs; however, doing so will do no harm other than increasing the size of your GEDCOM.'); ?>
 								</div>
@@ -700,14 +708,24 @@ echo pageStart('family_tree_config', $controller->getPageTitle(), 'y', '', 'admi
 						<input type="hidden" name="default_resn_id">
 						<input type="hidden" name="action" value="update-privacy">
 						<div class="grid-x grid-margin-x">
-							<div data-abide-error class="alert callout" style="display: none;">
-								<p><i class="fi-alert"></i><?php echo /* I18N: A general error message for forms */ KT_I18N::translate('There are some errors in your form.'); ?></p>
+							<div data-abide-error class="calloutnalert" style="display: none;">
+								<p>
+									<i class="<?php echo $iconStyle; ?> fa-triangle-exclamation"></i>
+									<?php echo
+										/* I18N: A general error message for forms */
+										KT_I18N::translate('There are some errors in your form.')
+									; ?>
+								</p>
 							</div>
 							<div class="cell large-3">
 								<label for="NEW_HIDE_LIVE_PEOPLE"><?php echo KT_I18N::translate('Enable privacy'); ?></label>
 							</div>
 							<div class="cell large-9">
-								<?php echo edit_field_yes_no('NEW_HIDE_LIVE_PEOPLE', $HIDE_LIVE_PEOPLE); ?>
+								<?php echo simple_switch(
+								  'NEW_HIDE_LIVE_PEOPLE',
+								  true,
+								  $HIDE_LIVE_PEOPLE,
+								); ?>
 								<div class="cell callout info-help ">
 									<?php echo KT_I18N::translate('This option will enable all privacy settings and hide the details of living people, as defined or modified below. If privacy is not enabled kiwitrees will ignore all the other settings on this page.'); ?>
 									<?php echo KT_I18N::plural('<b>Note:</b> "living" is defined (if no death or burial is known) as ending %d year after birth or estimated birth.','<b>Note:</b> "living" is defined (if no death or burial is known) as ending %d years after birth or estimated birth.', get_gedcom_setting($gedID, 'MAX_ALIVE_AGE'), get_gedcom_setting($gedID, 'MAX_ALIVE_AGE')); ?>
@@ -765,7 +783,11 @@ echo pageStart('family_tree_config', $controller->getPageTitle(), 'y', '', 'admi
 								<label for="SHOW_PRIVATE_RELATIONSHIPS"><?php echo KT_I18N::translate('Show private relationships'); ?></label>
 							</div>
 							<div class="cell large-9">
-								<?php echo radio_switch_group('SHOW_PRIVATE_RELATIONSHIPS', $privacy, get_gedcom_setting($gedID, 'SHOW_PRIVATE_RELATIONSHIPS')); ?>
+								<?php echo radio_switch_group(
+									'SHOW_PRIVATE_RELATIONSHIPS',
+									$privacy,
+									get_gedcom_setting($gedID, 'SHOW_PRIVATE_RELATIONSHIPS')
+								); ?>
 								<div class="cell callout info-help ">
 									<?php echo KT_I18N::translate('This option will retain family links in private records. This means you will see empty "private" boxes on the pedigree chart and on other charts with private people.'); ?>
 								</div>
@@ -993,7 +1015,11 @@ echo pageStart('family_tree_config', $controller->getPageTitle(), 'y', '', 'admi
 								<label for="NEW_MEDIA_UPLOAD"><?php echo KT_I18N::translate('Option to upload new media files'); ?></label>
 							</div>
 							<div class="cell large-9">
-								<?php echo radio_switch_group('NEW_MEDIA_UPLOAD', $privacy, get_gedcom_setting($gedID, 'MEDIA_UPLOAD')); ?>
+								<?php echo radio_switch_group(
+									'NEW_MEDIA_UPLOAD',
+									$privacy,
+									get_gedcom_setting($gedID, 'MEDIA_UPLOAD')
+								); ?>
 								 <div class="cell callout info-help ">
 									<?php echo KT_I18N::translate('If you are concerned that users might upload inappropriate images, you can restrict media uploads to managers only.'); ?>
 								</div>
@@ -1002,7 +1028,11 @@ echo pageStart('family_tree_config', $controller->getPageTitle(), 'y', '', 'admi
 								<label for="NEW_SHOW_MEDIA_DOWNLOAD"><?php echo KT_I18N::translate('Download link in media viewer'); ?></label>
 							</div>
 							<div class="cell large-9">
-								<?php echo radio_switch_group('NEW_SHOW_MEDIA_DOWNLOAD', $privacy, get_gedcom_setting($gedID, 'SHOW_MEDIA_DOWNLOAD')); ?>
+								<?php echo radio_switch_group(
+									'NEW_SHOW_MEDIA_DOWNLOAD',
+									$privacy,
+									get_gedcom_setting($gedID, 'SHOW_MEDIA_DOWNLOAD')
+								); ?>
 								 <div class="cell callout info-help ">
 									 <?php echo KT_I18N::translate('The media viewer can show a link which when clicked will download the media file to the local PC.<br>You may want to hide the download link for security reasons.'); ?>
 								</div>
@@ -1026,7 +1056,11 @@ echo pageStart('family_tree_config', $controller->getPageTitle(), 'y', '', 'admi
 								<label for="NEW_SHOW_HIGHLIGHT_IMAGES"><?php echo KT_I18N::translate('Show highlight images in people boxes'); ?></label>
 							</div>
 							<div class="cell large-9">
-								<?php echo simple_switch('NEW_SHOW_HIGHLIGHT_IMAGES', true, get_gedcom_setting($gedID, 'SHOW_HIGHLIGHT_IMAGES')); ?>
+								<?php echo simple_switch(
+									'NEW_SHOW_HIGHLIGHT_IMAGES',
+									true,
+									get_gedcom_setting($gedID, 'SHOW_HIGHLIGHT_IMAGES')
+								); ?>
 								 <div class="cell callout info-help ">
 									 <a href="<?php echo KT_KIWITREES_URL; ?>/faqs/general-topics/highlighted-images/" target="_blank" rel="noopener noreferrer">
  										<?php echo KT_I18N::translate('Click here to view more information about highlight images on the kiwitrees.net website FAQs'); ?>
@@ -1037,7 +1071,11 @@ echo pageStart('family_tree_config', $controller->getPageTitle(), 'y', '', 'admi
 								<label for="NEW_USE_SILHOUETTE"><?php echo KT_I18N::translate('Use silhouettes'); ?></label>
 							</div>
 							<div class="cell large-9">
-								<?php echo simple_switch('NEW_USE_SILHOUETTE', true, get_gedcom_setting($gedID, 'USE_SILHOUETTE')); ?>
+								<?php echo simple_switch(
+									'NEW_USE_SILHOUETTE',
+									true,
+									get_gedcom_setting($gedID, 'USE_SILHOUETTE')
+								); ?>
 								 <div class="cell callout info-help ">
 									 <?php echo KT_I18N::translate('Use silhouette images when no highlighted image for that individual has been specified. The images used are specific to the gender of the individual in question and may also vary according to the theme you use.'); ?>
 								</div>
@@ -1066,7 +1104,11 @@ echo pageStart('family_tree_config', $controller->getPageTitle(), 'y', '', 'admi
 										<label for="NEW_SHOW_NO_WATERMARK"><?php echo KT_I18N::translate('Full size images without watermarks'); ?></label>
 									</div>
 									<div class="cell large-9">
-										<?php echo radio_switch_group('NEW_SHOW_NO_WATERMARK', $privacy, get_gedcom_setting($gedID, 'SHOW_NO_WATERMARK')); ?>
+										<?php echo radio_switch_group(
+											'NEW_SHOW_NO_WATERMARK',
+											$privacy,
+											get_gedcom_setting($gedID, 'SHOW_NO_WATERMARK')
+										); ?>
 										 <div class="cell callout info-help ">
 											 <?php echo KT_I18N::translate('Watermarks are optional and normally shown just to visitors.'); ?>
 										</div>
@@ -1075,7 +1117,11 @@ echo pageStart('family_tree_config', $controller->getPageTitle(), 'y', '', 'admi
 										<label for="NEW_WATERMARK_THUMB"><?php echo KT_I18N::translate('Add watermarks to thumbnails'); ?></label>
 									</div>
 									<div class="cell large-9">
-										<?php echo simple_switch('NEW_WATERMARK_THUMB', true, get_gedcom_setting($gedID, 'WATERMARK_THUMB')); ?>
+										<?php echo simple_switch(
+											'NEW_WATERMARK_THUMB',
+											true,
+											get_gedcom_setting($gedID, 'WATERMARK_THUMB')
+										); ?>
 										 <div class="cell callout info-help ">
 											 <?php echo KT_I18N::translate('A watermark is text that is added to an image to discourage others from copying it without permission. If you select yes further options will be available.'); ?>
 										</div>
@@ -1084,7 +1130,11 @@ echo pageStart('family_tree_config', $controller->getPageTitle(), 'y', '', 'admi
 										<label for="NEW_SAVE_WATERMARK_IMAGE"><?php echo KT_I18N::translate('Store watermarked full size images on server'); ?></label>
 									</div>
 									<div class="cell large-9">
-										<?php echo simple_switch('NEW_SAVE_WATERMARK_IMAGE', true, get_gedcom_setting($gedID, 'SAVE_WATERMARK_IMAGE')); ?>
+										<?php echo simple_switch(
+											'NEW_SAVE_WATERMARK_IMAGE',
+											true,
+											get_gedcom_setting($gedID, 'SAVE_WATERMARK_IMAGE')
+										); ?>
 										 <div class="cell callout info-help ">
 											 <?php echo KT_I18N::translate('Watermarks can be slow to generate for large images. Busy sites may prefer to generate them once and store the watermarked image on the server.'); ?>
 										</div>
@@ -1093,7 +1143,11 @@ echo pageStart('family_tree_config', $controller->getPageTitle(), 'y', '', 'admi
 										<label for="NEW_SAVE_WATERMARK_THUMB"><?php echo KT_I18N::translate('Store watermarked thumbnails on server'); ?></label>
 									</div>
 									<div class="cell large-9">
-										<?php echo simple_switch('NEW_SAVE_WATERMARK_THUMB', true, get_gedcom_setting($gedID, 'SAVE_WATERMARK_THUMB')); ?>
+										<?php echo simple_switch(
+											'NEW_SAVE_WATERMARK_THUMB',
+											true,
+											get_gedcom_setting($gedID, 'SAVE_WATERMARK_THUMB')
+										); ?>
 										 <div class="cell callout info-help ">
 											 <?php echo KT_I18N::translate('Busy sites may prefer to generate them once and store the watermarked thumbnails on the server.'); ?>
 										</div>
@@ -1152,7 +1206,11 @@ echo pageStart('family_tree_config', $controller->getPageTitle(), 'y', '', 'admi
 												<label for="NEW_ALL_CAPS"><?php echo KT_I18N::translate('Display surnames in all CAPS'); ?></label>
 											</div>
 											<div class="cell large-9">
-												<?php echo simple_switch('NEW_ALL_CAPS', true, get_gedcom_setting($gedID, 'ALL_CAPS')); ?>
+												<?php echo simple_switch(
+													'NEW_ALL_CAPS',
+													true,
+													get_gedcom_setting($gedID, 'ALL_CAPS')
+												); ?>
 												<div class="cell callout info-help ">
 													<?php echo KT_I18N::translate('Always display surnames in CAPITAL letters'); ?>
 												</div>
@@ -1168,7 +1226,11 @@ echo pageStart('family_tree_config', $controller->getPageTitle(), 'y', '', 'admi
 												<label for="NEW_SURNAME_LIST_STYLE"><?php echo KT_I18N::translate('Surname list style'); ?></label>
 											</div>
 											<div class="cell large-9">
-												<?php echo radio_switch_group('NEW_SURNAME_LIST_STYLE', $surnameListStyles, get_gedcom_setting($gedID, 'SURNAME_LIST_STYLE')); ?>
+												<?php echo radio_switch_group(
+													'NEW_SURNAME_LIST_STYLE',
+													$surnameListStyles,
+													get_gedcom_setting($gedID, 'SURNAME_LIST_STYLE')
+												); ?>
 												<div class="cell callout info-help ">
 													<?php echo KT_I18N::translate('The display style used for lists of surnames, such as on the <a href="module.php?mod=list_individuals&mod_action=show&show_all=yes" target="_blank">Individual List</a> page'); ?>
 												</div>
@@ -1186,7 +1248,10 @@ echo pageStart('family_tree_config', $controller->getPageTitle(), 'y', '', 'admi
 												<label for="NEW_SHOW_EST_LIST_DATES"><?php echo KT_I18N::translate('Show estimated dates for birth and death'); ?></label>
 											</div>
 											<div class="cell large-9">
-												<?php echo simple_switch('NEW_SHOW_EST_LIST_DATES', true, get_gedcom_setting($gedID, 'SHOW_EST_LIST_DATES')); ?>
+												<?php echo simple_switch(
+													'NEW_SHOW_EST_LIST_DATES',
+													true, get_gedcom_setting($gedID, 'SHOW_EST_LIST_DATES')
+												); ?>
 												<div class="cell callout info-help ">
 													<?php echo KT_I18N::translate('This option controls whether or not to show estimated dates for birth and death instead of leaving blanks on individual lists and charts for individuals whose dates are not known.'); ?>
 												</div>
@@ -1195,7 +1260,11 @@ echo pageStart('family_tree_config', $controller->getPageTitle(), 'y', '', 'admi
 												<label for="NEW_SHOW_LAST_CHANGE"><?php echo KT_I18N::translate('Show the date and time of the last update'); ?></label>
 											</div>
 											<div class="cell large-9">
-												<?php echo simple_switch('NEW_SHOW_LAST_CHANGE', true, get_gedcom_setting($gedID, 'SHOW_LAST_CHANGE')); ?>
+												<?php echo simple_switch(
+													'NEW_SHOW_LAST_CHANGE',
+													true,
+													get_gedcom_setting($gedID, 'SHOW_LAST_CHANGE')
+												); ?>
 												<div class="cell callout info-help ">
 													<?php echo KT_I18N::translate('Include in lists the last date a record was changed'); ?>
 												</div>
@@ -1334,7 +1403,11 @@ echo pageStart('family_tree_config', $controller->getPageTitle(), 'y', '', 'admi
 												<label for="NEW_ABBREVIATE_CHART_LABELS"><?php echo KT_I18N::translate('Abbreviate chart labels'); ?></label>
 											</div>
 											<div class="cell large-9">
-												<?php echo simple_switch('NEW_ABBREVIATE_CHART_LABELS', true, get_gedcom_setting($gedID, 'ABBREVIATE_CHART_LABELS')); ?>
+												<?php echo simple_switch(
+													'NEW_ABBREVIATE_CHART_LABELS',
+													true,
+													get_gedcom_setting($gedID, 'ABBREVIATE_CHART_LABELS')
+												); ?>
 												<div class="cell callout info-help ">
 													<?php echo KT_I18N::translate('This option controls whether or not to abbreviate labels like <b>Birth</b> on charts with just the first letter like <b>B</b>.'); ?>
 												</div>
@@ -1343,7 +1416,11 @@ echo pageStart('family_tree_config', $controller->getPageTitle(), 'y', '', 'admi
 												<label for="NEW_PEDIGREE_FULL_DETAILS"><?php echo KT_I18N::translate('Show chart details by default'); ?></label>
 											</div>
 											<div class="cell large-9">
-												<?php echo simple_switch('NEW_PEDIGREE_FULL_DETAILS', true, get_gedcom_setting($gedID, 'PEDIGREE_FULL_DETAILS')); ?>
+												<?php echo simple_switch(
+													'NEW_PEDIGREE_FULL_DETAILS',
+													true,
+													get_gedcom_setting($gedID, 'PEDIGREE_FULL_DETAILS')
+												); ?>
 												<div class="cell callout info-help ">
 													<?php echo /* I18N: Help text for the “Show chart details by default” tree configuration setting */ KT_I18N::translate('This is the initial setting for the “show details” option on the charts.'); ?>
 												</div>
@@ -1352,7 +1429,11 @@ echo pageStart('family_tree_config', $controller->getPageTitle(), 'y', '', 'admi
 												<label for="NEW_PEDIGREE_SHOW_GENDER"><?php echo KT_I18N::translate('Show Gender icon on charts'); ?></label>
 											</div>
 											<div class="cell large-9">
-												<?php echo simple_switch('NEW_PEDIGREE_SHOW_GENDER', true, get_gedcom_setting($gedID, 'PEDIGREE_SHOW_GENDER')); ?>
+												<?php echo simple_switch(
+													'NEW_PEDIGREE_SHOW_GENDER',
+													true,
+													get_gedcom_setting($gedID, 'PEDIGREE_SHOW_GENDER')
+												); ?>
 												<div class="cell callout info-help ">
 													<?php echo KT_I18N::translate('This option controls whether or not to show the individual\'s gender icon on charts. Since the gender is also indicated by the color of the box, this option doesn\'t conceal the gender. The option simply removes some duplicate information from the box.'); ?>
 												</div>
@@ -1361,7 +1442,11 @@ echo pageStart('family_tree_config', $controller->getPageTitle(), 'y', '', 'admi
 												<label for="NEW_SHOW_PARENTS_AGE"><?php echo KT_I18N::translate('Age of parents next to child\'s birth date'); ?></label>
 											</div>
 											<div class="cell large-9">
-												<?php echo simple_switch('NEW_SHOW_PARENTS_AGE', true, get_gedcom_setting($gedID, 'SHOW_PARENTS_AGE')); ?>
+												<?php echo simple_switch(
+													'NEW_SHOW_PARENTS_AGE',
+													true,
+													get_gedcom_setting($gedID, 'SHOW_PARENTS_AGE')
+												); ?>
 												<div class="cell callout info-help ">
 													<?php echo KT_I18N::translate('This option controls whether or not to show age of father and mother next to child\'s birth date on charts.'); ?>
 												</div>
@@ -1370,7 +1455,11 @@ echo pageStart('family_tree_config', $controller->getPageTitle(), 'y', '', 'admi
 												<label for="NEW_SHOW_LDS_AT_GLANCE"><?php echo KT_I18N::translate('LDS ordinance codes in chart boxes'); ?></label>
 											</div>
 											<div class="cell large-9">
-												<?php echo simple_switch('NEW_SHOW_LDS_AT_GLANCE', true, get_gedcom_setting($gedID, 'SHOW_LDS_AT_GLANCE')); ?>
+												<?php echo simple_switch(
+													'NEW_SHOW_LDS_AT_GLANCE',
+													true,
+													get_gedcom_setting($gedID, 'SHOW_LDS_AT_GLANCE')
+												); ?>
 												<div class="cell callout info-help ">
 													<?php echo /* I18N: Help for LDS ordinances show/hide option */ KT_I18N::translate('Setting this option to <b>Yes</b> will show status codes for LDS ordinances in all chart boxes.<ul><li><b>B</b> - Baptism</li><li><b>E</b> - Endowed</li><li><b>S</b> - Sealed to spouse</li><li><b>P</b> - Sealed to parents</li></ul>A person who has all of the ordinances done will have <b>BESP</b> printed after their name. Missing ordinances are indicated by <b>_</b> in place of the corresponding letter code. For example, <b>BE__</b> indicates missing <b>S</b> and <b>P</b> ordinances.'); ?>
 												</div>
@@ -1401,7 +1490,11 @@ echo pageStart('family_tree_config', $controller->getPageTitle(), 'y', '', 'admi
 												<label for="NEW_SHOW_FACT_ICONS"><?php echo KT_I18N::translate('Display fact icons'); ?></label>
 											</div>
 											<div class="cell large-9">
-												<?php echo simple_switch('NEW_SHOW_FACT_ICONS', true, get_gedcom_setting($gedID, 'SHOW_FACT_ICONS')); ?>
+												<?php echo simple_switch(
+													'NEW_SHOW_FACT_ICONS',
+													true,
+													get_gedcom_setting($gedID, 'SHOW_FACT_ICONS')
+												); ?>
 												<div class="cell callout info-help ">
 													<?php echo KT_I18N::translate('Set this on to display icons near fact names on the "Facts and Events" and "Events" tab. Fact icons will be displayed only if they exist in the <i>images/facts</i> directory of the current theme.'); ?>
 												</div>
@@ -1410,7 +1503,11 @@ echo pageStart('family_tree_config', $controller->getPageTitle(), 'y', '', 'admi
 												<label for="NEW_EXPAND_NOTES"><?php echo KT_I18N::translate('Automatically expand notes'); ?></label>
 											</div>
 											<div class="cell large-9">
-												<?php echo simple_switch('NEW_EXPAND_NOTES', true, get_gedcom_setting($gedID, 'EXPAND_NOTES')); ?>
+												<?php echo simple_switch(
+													'NEW_EXPAND_NOTES',
+													true,
+													get_gedcom_setting($gedID, 'EXPAND_NOTES')
+												); ?>
 												<div class="cell callout info-help ">
 													<?php echo KT_I18N::translate('This option controls whether or not to automatically display content of a <i>Note</i> record on the Individual page.'); ?>
 												</div>
@@ -1419,7 +1516,11 @@ echo pageStart('family_tree_config', $controller->getPageTitle(), 'y', '', 'admi
 												<label for="NEW_EXPAND_SOURCES"><?php echo KT_I18N::translate('Automatically expand sources'); ?></label>
 											</div>
 											<div class="cell large-9">
-												<?php echo simple_switch('NEW_EXPAND_SOURCES', true, get_gedcom_setting($gedID, 'EXPAND_SOURCES')); ?>
+												<?php echo simple_switch(
+													'NEW_EXPAND_SOURCES',
+													true,
+													get_gedcom_setting($gedID, 'EXPAND_SOURCES')
+												); ?>
 												<div class="cell callout info-help ">
 													<?php echo KT_I18N::translate('This option controls whether or not to automatically display content of a <i>Source</i> record on the Individual page.'); ?>
 												</div>
@@ -1435,7 +1536,11 @@ echo pageStart('family_tree_config', $controller->getPageTitle(), 'y', '', 'admi
 												<label for="NEW_SHOW_GEDCOM_RECORD"><?php echo KT_I18N::translate('Allow users to see raw GEDCOM records'); ?></label>
 											</div>
 											<div class="cell large-9">
-												<?php echo simple_switch('NEW_SHOW_GEDCOM_RECORD', true, get_gedcom_setting($gedID, 'SHOW_GEDCOM_RECORD')); ?>
+												<?php echo simple_switch(
+													'NEW_SHOW_GEDCOM_RECORD',
+													true,
+													get_gedcom_setting($gedID, 'SHOW_GEDCOM_RECORD')
+												); ?>
 												<div class="cell callout info-help ">
 													<?php echo KT_I18N::translate('Setting this to <b>Yes</b> will place links on individuals, sources, and families page menus to let users bring up another window containing the raw data in GEDCOM file format.<br>Administrators always see these links regardless of this setting.'); ?>
 												</div>
@@ -1444,7 +1549,11 @@ echo pageStart('family_tree_config', $controller->getPageTitle(), 'y', '', 'admi
 												<label for="NEW_HIDE_GEDCOM_ERRORS"><?php echo KT_I18N::translate('GEDCOM errors'); ?></label>
 											</div>
 											<div class="cell large-9">
-												<?php echo simple_switch('NEW_HIDE_GEDCOM_ERRORS', true, get_gedcom_setting($gedID, 'HIDE_GEDCOM_ERRORS')); ?>
+												<?php echo simple_switch(
+													'NEW_HIDE_GEDCOM_ERRORS',
+													true,
+													get_gedcom_setting($gedID, 'HIDE_GEDCOM_ERRORS')
+												); ?>
 												<div class="cell callout info-help ">
 													<?php echo KT_I18N::translate('Many genealogy programs create GEDCOM files with custom tags, and kiwitrees understands most of them. When unrecognised tags are found, this option lets you choose whether to ignore them or display a warning message.'); ?>
 												</div>
@@ -1453,7 +1562,11 @@ echo pageStart('family_tree_config', $controller->getPageTitle(), 'y', '', 'admi
 												<label for="NEW_SHOW_COUNTER"><?php echo KT_I18N::translate('Hit counters'); ?></label>
 											</div>
 											<div class="cell large-9">
-												<?php echo simple_switch('NEW_SHOW_COUNTER', true, get_gedcom_setting($gedID, 'SHOW_COUNTER')); ?>
+												<?php echo simple_switch(
+													'NEW_SHOW_COUNTER',
+													true,
+													get_gedcom_setting($gedID, 'SHOW_COUNTER')
+												); ?>
 												<div class="cell callout info-help ">
 													<?php echo KT_I18N::translate('Show hit counters on the Home and Individual pages.'); ?>
 												</div>

@@ -306,7 +306,7 @@ echo relatedPages($site_tools, KT_SCRIPT_NAME);
 echo pageStart('site_access', $controller->getPageTitle()); ?>
 
 	<?php echo faqLink('general-topics/site-access-rules/'); ?>
-	<div class="cell callout warning">
+	<div class="callout info-help">
 		<?php echo KT_I18N::translate('The following rules are used to decide whether a visitor is a human being (allow full access), a search-engine robot (allow restricted access) or an unwanted crawler (deny all access).'); ?>
 	</div>
 	<div class="cell">
@@ -332,7 +332,7 @@ echo pageStart('site_access', $controller->getPageTitle()); ?>
 		</button>
 		<hr>
 	</div>
-	<div class="cell callout warning">
+	<div class="callout info-help">
 		<?php echo KT_I18N::translate('The following visitors were not recognised, and were assumed to be search engines.'); ?>
 	</div>
 	<div class="cell">
