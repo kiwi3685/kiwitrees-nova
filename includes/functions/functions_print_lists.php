@@ -2583,7 +2583,7 @@ function print_events_table($startjd, $endjd, $events='BIRT MARR DEAT', $only_li
 					/* 3-DATE */   { visible: false },
 					/* 4-Anniv. */ { dataSort: 5, class: "text-center" },
 					/* 5-ANNIV  */ { type: "numeric", visible: false },
-					/* 6-Event */  { class: "text-center" }
+					/* 6-Event */  { }
 				]
 			});
 		');
@@ -2624,16 +2624,21 @@ function print_events_table($startjd, $endjd, $events='BIRT MARR DEAT', $only_li
 
 		if ($output==1) {
 			//-- table body
-			$html .= '<table class="shadow" id="' . $table_id . '">';
-			$html .= '<thead><tr>';
-			$html .= '<th>'.KT_I18N::translate('Record').'</th>';
-			$html .= '<th>NAME</th>'; //hidden by datatables code
-			$html .= '<th>'.KT_Gedcom_Tag::getLabel('DATE').'</th>';
-			$html .= '<th>DATE</th>'; //hidden by datatables code
-			$html .= '<th><i class="icon-reminder" title="'.KT_I18N::translate('Anniversary').'"></i></th>';
-			$html .= '<th>ANNIV</th>';
-			$html .= '<th>'.KT_Gedcom_Tag::getLabel('EVEN').'</th>';
-			$html .= '</tr></thead><tbody>'."\n";
+			$html .= '
+				<table class="shadow" id="' . $table_id . '">
+					<thead>
+						<tr>
+							<th>'.KT_I18N::translate('Record').'</th>
+							<th>NAME</th>
+							<th>'.KT_Gedcom_Tag::getLabel('DATE').'</th>
+							<th>DATE</th>
+							<th><i class="icon-reminder" title="'.KT_I18N::translate('Anniversary').'"></i></th>
+							<th>ANNIV</th>
+							<th style="min-width: 4rem;">'.KT_Gedcom_Tag::getLabel('EVEN').'</th>
+						</tr>
+					</thead>
+					<tbody>
+			';
 		}
 
 		$value['name'] = $record->getFullName();
@@ -2647,36 +2652,38 @@ function print_events_table($startjd, $endjd, $events='BIRT MARR DEAT', $only_li
 	}
 
 	foreach ($filtered_events as $n=>$value) {
-		$html .= "<tr>";
-		//-- Record name(s)
-		$name = $value['name'];
-		$html .= '<td class="wrap">';
-		$html .= '<a href="'.$value['url'].'">'.$name.'</a>';
-		if ($value['record']->getType()=="INDI") {
-			$html .= $value['sex'];
-		}
-		$html .= '</td>';
-		//-- NAME
-		$html .= '<td>'; //hidden by datatables code
-		$html .= $value['record']->getSortName();
-		$html .= '</td>';
-		//-- Event date
-		$html .= '<td class="wrap">';
-		$html .= $value['date']->Display(empty($SEARCH_SPIDER));
-		$html .= '</td>';
-		//-- Event date (sortable)
-		$html .= '<td>'; //hidden by datatables code
-		$html .= $n;
-		$html .= '</td>';
-		//-- Anniversary
-		$anniv = $value['anniv'];
-		$html .= '<td>'.($anniv ? KT_I18N::number($anniv) : '&nbsp;').'</td><td>'.$anniv.'</td>';
-		//-- Event name
-		$html .= '<td class="wrap">';
-		$html .= '<a href="'.$value['url'].'">'.KT_Gedcom_Tag::getLabel($value['fact']).'</a>';
-		$html .= '&nbsp;</td>';
-
-		$html .= '</tr>'."\n";
+		$html .= '<tr>';
+			//-- Record name(s)
+			$name = $value['name'];
+			$html .= '<td class="wrap">';
+				if ($value['record']->getType() == "INDI") {
+					$html .= $value['sex'];
+				}
+				$html .= '<a href="'.$value['url'] . '">' . $name . '</a>';
+			$html .= '</td>';
+			//-- NAME
+			$html .= '<td>'; //hidden by datatables code
+				$html .= $value['record']->getSortName();
+			$html .= '</td>';
+			//-- Event date
+			$html .= '<td class="wrap">';
+				$html .= $value['date']->Display(empty($SEARCH_SPIDER));
+			$html .= '</td>';
+			//-- Event date (sortable)
+			$html .= '<td>'; //hidden by datatables code
+				$html .= $n;
+			$html .= '</td>';
+			//-- Anniversary
+			$anniv = $value['anniv'];
+			$html .= '
+				<td>' . ($anniv ? KT_I18N::number($anniv) : '&nbsp;') . '</td>
+				<td>' . $anniv.'</td>
+			';
+			//-- Event name
+			$html .= '<td class="wrap">';
+			$html .= '<a href="' . $value['url'] . '">' . KT_Gedcom_Tag::getLabel($value['fact']) . '</a>';
+			$html .= '&nbsp;</td>';
+		$html .= '</tr>';
 	}
 
 	if ($output!=0) {
