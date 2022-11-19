@@ -476,22 +476,28 @@ echo pageStart('site_config', $controller->getPageTitle()); ?>
 					<div class="cell large-9">
 						<?php echo select_edit_control('WELCOME_TEXT_AUTH_MODE', $WELCOME_TEXT_AUTH_MODE_OPTIONS, null, KT_Site::preference('WELCOME_TEXT_AUTH_MODE')); ?>
 						<div class="cell callout info-help ">
-							<?php echo /* I18N: Explanation for custom welcome text (1) */ KT_I18N::translate('Here you can choose text to appear on the login page. You must determine which predefined text is most appropriate. You can also choose to enter your own custom welcome text.<br><br>Please refer to the Help text associated with the <b>Custom welcome text</b> field for more information.<br>The predefined texts are below.'); ?>
-							<br><br>
-							<?php echo /* I18N: Explanation for custom welcome text (2) */ KT_I18N::translate('<b>Predefined text that states all users can request a user account:</b><div class="callout secondary"><center><b>Welcome to this Genealogy website</b><br>Access to this site is permitted to every visitor who has a user account.<br>If you have a user account, you can login on this page. If you don\'t have a user account, you can apply for one by clicking on the appropriate link below.<br>After verifying your application, the site administrator will activate your account. You will receive an email when your application has been approved.</center></div>.'); ?>
-							<br><br>
-							<?php echo /* I18N: Explanation for custom welcome text (2) */ KT_I18N::translate('<b>Predefined text that states admin will decide on each request for a user account:</b><div class="callout secondary"><center><b>Welcome to this Genealogy website</b><br>Access to this site is permitted to <u>authorized</u> users only.<br>If you have a user account you can login on this page. If you don\'t have a user account, you can apply for one by clicking on the appropriate link below.<br>After verifying your information, the administrator will either approve or decline your account application. You will receive an email message when your application has been approved.</center></div>.'); ?>
-							<br><br>
-							<?php echo /* I18N: Explanation for custom welcome text (2) */ KT_I18N::translate('<b>Predefined text that states only family members can request a user account:</b><div class="callout secondary"><center><b>Welcome to this Genealogy website</b><br>Access to this site is permitted to <u>family members only</u>.<br>If you have a user account you can login on this page. If you don\'t have a user account, you can apply for one by clicking on the appropriate link below.<br>After verifying the information you provide, the administrator will either approve or decline your request for an account. You will receive an email when your request is approved.</center></div>'); ?>
-						</div>
-					</div>
-					<div class="cell large-3">
-						<label for="custom"><?php echo KT_I18N::translate('Custom welcome text'); ?></label>
-					</div>
-					<div class="cell large-9">
-						<textarea maxlength="2000" id="custom" name="WELCOME_TEXT_AUTH_MODE_4" rows="4"><?php echo KT_Filter::escapeHtml(KT_Site::preference('WELCOME_TEXT_AUTH_MODE_' . KT_LOCALE)) ?></textarea>
-						<div class="cell callout info-help ">
-							<?php echo KT_I18N::translate('If you have opted for custom welcome text, you can type that text here. To set this text for other languages you must switch to that language and visit this page again.'); ?>
+							<p>
+								<?php echo
+									/* I18N: Explanation for custom welcome text (1) */
+									KT_I18N::translate('Here you can choose text to appear on the login page.
+									You must determine which predefined text is most appropriate, from the examples below.
+									<br><br>
+									If you prefer to create your own welcome text, this can be done using "Custom translation", under "Customizing" on the left of this page.')
+								; ?>
+								<a class="current" href="<?php echo KT_KIWITREES_URL; ?>/faqs/customisation/custom-translations/" target="_blank" rel="noopener noreferrer" title="<?php echo KT_I18N::translate('View FAQ for this page.'); ?>" style="white-space:nowrap;">
+									<?php echo KT_I18N::translate('View FAQ for Custom translation.'); ?>
+									<i class="fa fa-comments"></i>
+								</a>
+							</p>
+							<p>
+								<?php echo /* I18N: Explanation for custom welcome text (2) */ KT_I18N::translate('<b>Predefined text that states all users can request a user account:</b><div class="callout secondary"><center><b>Welcome to this Genealogy website</b><br>Access to this site is permitted to every visitor who has a user account.<br>If you have a user account, you can login on this page. If you don\'t have a user account, you can apply for one by clicking on the appropriate link below.<br>After verifying your application, the site administrator will activate your account. You will receive an email when your application has been approved.</center></div>.'); ?>
+								</p>
+								<p>
+								<?php echo /* I18N: Explanation for custom welcome text (2) */ KT_I18N::translate('<b>Predefined text that states admin will decide on each request for a user account:</b><div class="callout secondary"><center><b>Welcome to this Genealogy website</b><br>Access to this site is permitted to <u>authorized</u> users only.<br>If you have a user account you can login on this page. If you don\'t have a user account, you can apply for one by clicking on the appropriate link below.<br>After verifying your information, the administrator will either approve or decline your account application. You will receive an email message when your application has been approved.</center></div>.'); ?>
+								</p>
+								<p>
+								<?php echo /* I18N: Explanation for custom welcome text (2) */ KT_I18N::translate('<b>Predefined text that states only family members can request a user account:</b><div class="callout secondary"><center><b>Welcome to this Genealogy website</b><br>Access to this site is permitted to <u>family members only</u>.<br>If you have a user account you can login on this page. If you don\'t have a user account, you can apply for one by clicking on the appropriate link below.<br>After verifying the information you provide, the administrator will either approve or decline your request for an account. You will receive an email when your request is approved.</center></div>'); ?>
+							</p>
 						</div>
 					</div>
 					<div class="cell large-3">
