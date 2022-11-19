@@ -474,7 +474,7 @@ function format_indi_table($datalist, $option='') {
 			if ($SHOW_EST_LIST_DATES && $death_date->MinJD() < KT_CLIENT_JD) {
 				$html .= $death_date->Display(!$SEARCH_SPIDER);
 			} else if ($person->isDead()) {
-				$html .= KT_I18N::translate('yes');
+				$html .= KT_I18N::translate('Yes');
 			} else {
 				$html .= '&nbsp;';
 			}
@@ -799,7 +799,7 @@ function simple_indi_table($datalist) {
 					if ($SHOW_EST_LIST_DATES && $death_date->MinJD() < KT_CLIENT_JD) {
 						$html .= $death_date->Display(!$SEARCH_SPIDER);
 					} else if ($person->isDead()) {
-						$html .= KT_I18N::translate('yes');
+						$html .= KT_I18N::translate('Yes');
 					} else {
 						$html .= '&nbsp;';
 					}
@@ -1294,9 +1294,9 @@ function format_fam_table($datalist, $option = '') {
 				if (isset($factdetail)) {
 					if (count($factdetail) >= 3) {
 						if (strtoupper($factdetail[2]) != "N") {
-							$html .= KT_I18N::translate('yes');
+							$html .= KT_I18N::translate('Yes');
 						} else {
-							$html .= KT_I18N::translate('no');
+							$html .= KT_I18N::translate('No');
 						}
 					} else {
 						$html .= '&nbsp;';

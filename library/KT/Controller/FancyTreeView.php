@@ -624,7 +624,7 @@ class KT_Controller_FancyTreeView {
 					} else {
 						$html .= KT_I18N::translate_c('One parent/one child', 'had');
 					}
-					$html .= ' ' . /* I18N: 'no' is the number zero  */ KT_I18N::translate('no') . ' ' . KT_I18N::translate('children') . '.</p></div>';
+					$html .= ' ' . /* I18N: 'no' is the number zero  */ KT_I18N::translate('No') . ' ' . KT_I18N::translate('children') . '.</p></div>';
 		} else {
 			$children = $family->getChildren();
 			if ($children) {

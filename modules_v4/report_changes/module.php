@@ -242,8 +242,8 @@ class report_changes_KT_Module extends KT_Module implements KT_Module_Report {
                             true,
                             $pending,
                             '',
-                            KT_I18N::translate('yes'),
-                            KT_I18N::translate('no')
+                            KT_I18N::translate('Yes'),
+                            KT_I18N::translate('No')
                         ) . '
                     </div>' .
                     resetButtons() . '

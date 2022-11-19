@@ -114,8 +114,8 @@
                          true,
                          get_module_setting('googlemap', 'GM_PLACE_HIERARCHY', '0'),
                          '',
-                         KT_I18N::translate('yes'),
-                         KT_I18N::translate('no')
+                         KT_I18N::translate('Yes'),
+                         KT_I18N::translate('No')
                      ); ?>
                  </div>
                  <div class="cell medium-3">
@@ -218,8 +218,8 @@
                          true,
                          $GM_DISP_SHORT_PLACE,
                          '',
-                         KT_I18N::translate('yes'),
-                         KT_I18N::translate('no')
+                         KT_I18N::translate('Yes'),
+                         KT_I18N::translate('No')
                      ); ?>
                      <div class="callout info-help">
                          <?php echo KT_I18N::translate('
@@ -244,8 +244,8 @@
                          true,
                          $GOOGLEMAP_COORD,
                          '',
-                         KT_I18N::translate('yes'),
-                         KT_I18N::translate('no')
+                         KT_I18N::translate('Yes'),
+                         KT_I18N::translate('No')
                      ); ?>
                      <div class="callout info-help">
                          <?php echo KT_I18N::translate('

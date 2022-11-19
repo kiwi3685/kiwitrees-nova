@@ -388,7 +388,7 @@ class tabi_families_KT_Module extends KT_Module implements KT_Module_IndiTab {
 						} else if ($family->getMarriageRecord()=="" && $controller->record->canEdit()) {
 							echo "<a href=\"#\" onclick=\"return add_new_record('".$famid."', 'MARR');\">".KT_I18N::translate('Add marriage details')."</a>";
 						} else {
-							echo KT_Gedcom_Tag::getLabelValue($marr_fact, KT_I18N::translate('yes'));
+							echo KT_Gedcom_Tag::getLabelValue($marr_fact, KT_I18N::translate('Yes'));
 						}
 						?>
 					</div>

@@ -567,7 +567,7 @@ function marriageDetails($family) {
 			return KT_Gedcom_Tag::getLabel('_NMR');
 		}
 	} else {
-		return KT_Gedcom_Tag::getLabelValue($marr_fact, KT_I18N::translate('yes'));
+		return KT_Gedcom_Tag::getLabelValue($marr_fact, KT_I18N::translate('Yes'));
 	}
 
 }

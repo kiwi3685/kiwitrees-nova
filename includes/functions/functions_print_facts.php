@@ -1367,7 +1367,7 @@ function print_fact_sources($factrec, $level, $return=false) {
 			} else {
 				// Show that we do actually have sources for this data.
 				// Commented out for now, based on pre-kiwitrees user feedback.
-				//$data .= KT_Gedcom_Tag::getLabelValue('SOUR', KT_I18N::translate('yes'));
+				//$data .= KT_Gedcom_Tag::getLabelValue('SOUR', KT_I18N::translate('Yes'));
 			}
 		} else {
 			$data .= KT_Gedcom_Tag::getLabelValue('SOUR', '<span class="error">' . $sid . '</span>');
@@ -2161,10 +2161,10 @@ function print_main_media_row($rtype, $rowm, $pid) {
 
 	switch ($mediaobject->isPrimary()) {
 	case 'Y':
-		echo KT_Gedcom_Tag::getLabelValue('_PRIM', KT_I18N::translate('yes'));
+		echo KT_Gedcom_Tag::getLabelValue('_PRIM', KT_I18N::translate('Yes'));
 		break;
 	case 'N':
-		echo KT_Gedcom_Tag::getLabelValue('_PRIM', KT_I18N::translate('no'));
+		echo KT_Gedcom_Tag::getLabelValue('_PRIM', KT_I18N::translate('No'));
 		break;
 	}
 	print_fact_notes($mediaobject->getGedcomRecord(), 1);

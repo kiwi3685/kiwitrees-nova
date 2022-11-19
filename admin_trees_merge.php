@@ -308,8 +308,8 @@ echo pageStart('merge_records', $controller->getPageTitle()); ?>
                                                     <input class="switch-input" id="keep1-<?php echo $i; ?>" type="checkbox" name="keep1[]" value="<?php echo $i; ?>" checked >
                                                     <label class="switch-paddle" for="keep1-<?php echo $i; ?>">
                                                         <span class="show-for-sr"><?php echo $i; ?></span>
-                                                        <span class="switch-active" aria-hidden="true"><?php echo KT_I18N::translate('yes'); ?></span>
-                                                        <span class="switch-inactive" aria-hidden="true"><?php echo KT_I18N::translate('yes'); ?></span>
+                                                        <span class="switch-active" aria-hidden="true"><?php echo KT_I18N::translate('Yes'); ?></span>
+                                                        <span class="switch-inactive" aria-hidden="true"><?php echo KT_I18N::translate('Yes'); ?></span>
                                                     </label>
                                                 </div>
                                             </div>
@@ -332,8 +332,8 @@ echo pageStart('merge_records', $controller->getPageTitle()); ?>
                                                     <input class="switch-input" id="keep2-<?php echo $j; ?>" type="checkbox" name="keep2[]" value="<?php echo $j; ?>" checked >
                                                     <label class="switch-paddle" for="keep2-<?php echo $j; ?>">
                                                         <span class="show-for-sr"><?php echo $j; ?></span>
-                                                        <span class="switch-active" aria-hidden="true"><?php echo KT_I18N::translate('yes'); ?></span>
-                                                        <span class="switch-inactive" aria-hidden="true"><?php echo KT_I18N::translate('yes'); ?></span>
+                                                        <span class="switch-active" aria-hidden="true"><?php echo KT_I18N::translate('Yes'); ?></span>
+                                                        <span class="switch-inactive" aria-hidden="true"><?php echo KT_I18N::translate('Yes'); ?></span>
                                                     </label>
                                                 </div>
                                             </div>

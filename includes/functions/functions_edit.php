@@ -241,7 +241,7 @@ function radio_buttons($name, $values, $selected, $extra='') {
 // Print an edit control for a Yes/No field
 function edit_field_yes_no($name, $selected = false, $extra = 'class="radio_inline"') {
 	return radio_buttons(
-		$name, array(false => KT_I18N::translate('no'), true => KT_I18N::translate('yes')), $selected, $extra
+		$name, array(false => KT_I18N::translate('No'), true => KT_I18N::translate('Yes')), $selected, $extra
 	);
 }
 
@@ -1559,7 +1559,7 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 							echo ' checked="checked"';
 						}
 						echo ' onclick="if (this.checked) ' . $element_id . '.value=\'Y\'; else ' . $element_id . '.value=\'\'; ">';
-						echo '<span class="checkbox-label">' . KT_I18N::translate('yes') . '</span>';
+						echo '<span class="checkbox-label">' . KT_I18N::translate('Yes') . '</span>';
 					}
 
 					if ($fact === 'CENS' && $value === 'Y') {
@@ -1605,10 +1605,10 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 				} else if ($fact == '_PRIM') { ?>
 					<select id="<?php echo $element_id; ?>" name="<?php echo $element_name; ?>" >
 						<option value="N" <?php if ($value == 'N') echo ' selected="selected"'; ?>>
-							<?php echo KT_I18N::translate('no'); ?>
+							<?php echo KT_I18N::translate('No'); ?>
 						</option>
 						<option value="Y" <?php if ($value == 'Y') echo ' selected="selected"'; ?>>
-							<?php echo KT_I18N::translate('yes'); ?>
+							<?php echo KT_I18N::translate('Yes'); ?>
 						</option>
 					</select>
 				<?php } else if ($fact == 'SEX') { ?>

@@ -263,8 +263,8 @@ switch (KT_Filter::get('action')) {
 			} else {
 				$aData[9] = KT_I18N::translate('Never');
 			}
-			$aData[10] = $aData[10] ? KT_I18N::translate('yes') : KT_I18N::translate('no');
-			$aData[11] = $aData[11] ? KT_I18N::translate('yes') : KT_I18N::translate('no');
+			$aData[10] = $aData[10] ? KT_I18N::translate('Yes') : KT_I18N::translate('No');
+			$aData[11] = $aData[11] ? KT_I18N::translate('Yes') : KT_I18N::translate('No');
 			// Add extra column for "delete" action
 			if ($user_id != KT_USER_ID) {
 				$aData[12]='<div class="' . $iconStyle . ' fa-trash-can" onclick="if (confirm(\''.htmlspecialchars(KT_I18N::translate('Are you sure you want to delete “%s”?', $username)).'\')) { document.location=\''.KT_SCRIPT_NAME.'?action=deleteuser&username='.htmlspecialchars($username).'\'; }"></div>';
@@ -551,8 +551,8 @@ switch (KT_Filter::get('action')) {
 										true,
 										get_user_setting($user_id, 'verified'),
 										'',
-										KT_I18N::translate('yes'),
-			                            KT_I18N::translate('no'),
+										KT_I18N::translate('Yes'),
+			                            KT_I18N::translate('No'),
 										'small'
 									); ?>
 								</label>
@@ -565,8 +565,8 @@ switch (KT_Filter::get('action')) {
 										true,
 										get_user_setting($user_id, 'verified_by_admin'),
 										'',
-										KT_I18N::translate('yes'),
-			                            KT_I18N::translate('no'),
+										KT_I18N::translate('Yes'),
+			                            KT_I18N::translate('No'),
 										'small'
 									); ?>
 								</label>
@@ -618,8 +618,8 @@ switch (KT_Filter::get('action')) {
 								true,
 								get_user_setting($user_id, 'auto_accept'),
 								'',
-								KT_I18N::translate('yes'),
-	                            KT_I18N::translate('no'),
+								KT_I18N::translate('Yes'),
+	                            KT_I18N::translate('No'),
 								'small'
 							); ?>
 						</div>
@@ -643,8 +643,8 @@ switch (KT_Filter::get('action')) {
 								true,
 								get_user_setting($user_id, 'visible_online'),
 								'',
-								KT_I18N::translate('yes'),
-	                            KT_I18N::translate('no'),
+								KT_I18N::translate('Yes'),
+	                            KT_I18N::translate('No'),
 								'small'
 							); ?>
 						</div>
@@ -704,8 +704,8 @@ switch (KT_Filter::get('action')) {
 											true,
 											get_user_setting($user_id, 'notify_clipping'),
 											'',
-											KT_I18N::translate('yes'),
-				                            KT_I18N::translate('no'),
+											KT_I18N::translate('Yes'),
+				                            KT_I18N::translate('No'),
 											'small'
 										); ?>
 									</label>
@@ -822,8 +822,8 @@ switch (KT_Filter::get('action')) {
 									true,
 									get_user_setting($user_id, 'canadmin'),
 									$disabled,
-									KT_I18N::translate('yes'),
-									KT_I18N::translate('no'),
+									KT_I18N::translate('Yes'),
+									KT_I18N::translate('No'),
 									'small'
 								); ?>
 							</div>

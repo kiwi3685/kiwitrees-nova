@@ -281,10 +281,10 @@ class list_media_KT_Module extends KT_Module implements KT_Module_List {
 																echo KT_Gedcom_Tag::getLabelValue('TYPE' , KT_Gedcom_Tag::getFileFormTypeValue($mediaobject->getMediaType()));
 																switch ($mediaobject->isPrimary()) {
 																	case 'Y':
-																		echo KT_Gedcom_Tag::getLabelValue('_PRIM', KT_I18N::translate('yes'));
+																		echo KT_Gedcom_Tag::getLabelValue('_PRIM', KT_I18N::translate('Yes'));
 																		break;
 																	case 'N':
-																		echo KT_Gedcom_Tag::getLabelValue('_PRIM', KT_I18N::translate('no'));
+																		echo KT_Gedcom_Tag::getLabelValue('_PRIM', KT_I18N::translate('No'));
 																		break;
 																}
 																echo KT_Gedcom_Tag::getLabelValue('__FILE_SIZE__' , $mediaobject->getFilesize());

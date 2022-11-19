@@ -1089,7 +1089,7 @@ function format_fact_date(KT_Event $event, KT_GedcomRecord $record, $anchor = fa
 		// It is not proper GEDCOM form to use a N(o) value with an event tag to infer that it did not happen.
 		$factdetail = explode(' ', trim($factrec));
 		if (isset($factdetail) && (count($factdetail) == 3 && strtoupper($factdetail[2]) == 'Y') || (count($factdetail) == 4 && $factdetail[2] == 'SOUR')) {
-			$html .= KT_I18N::translate('yes');
+			$html .= KT_I18N::translate('Yes');
 		}
 	}
 	// print gedcom ages

@@ -119,7 +119,7 @@ class KT_Controller_Branches extends KT_Controller_Page {
 				}
 				else if ($family->getMarriage()) {
 					$txt .= ' <a href="'.$family->getHtmlUrl().'">';
-					$txt .= '<span class="details1" title="' . KT_I18N::translate('yes') . '"><i class="icon-rings"></i></span></a>';
+					$txt .= '<span class="details1" title="' . KT_I18N::translate('Yes') . '"><i class="icon-rings"></i></span></a>';
 				}
 			$txt .=
 				$spouse->getSexImage().

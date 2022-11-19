@@ -371,8 +371,8 @@ class base_plugin {
 		return
 			'<label><span>' . KT_I18N::translate('Update the CHAN record') . '</span>
 				<select name="chan" onchange="this.form.submit();">
-					<option value="no"' . ($this->chan ? '' : ' selected="selected"') . '>' .KT_I18N::translate('no') . '</option>
-					<option value="yes"' . ($this->chan ? ' selected="selected"' : '') . '>' .KT_I18N::translate('yes'). '</option>
+					<option value="no"' . ($this->chan ? '' : ' selected="selected"') . '>' .KT_I18N::translate('No') . '</option>
+					<option value="yes"' . ($this->chan ? ' selected="selected"' : '') . '>' .KT_I18N::translate('Yes'). '</option>
 				</select>
 			</label>';
 	}

@@ -161,10 +161,10 @@ case 'loadrows':
 			$media = KT_Media::getInstance($row);
 			switch ($media->isPrimary()) {
 			case 'Y':
-				$highlight = KT_I18N::translate('yes');
+				$highlight = KT_I18N::translate('Yes');
 				break;
 			case 'N':
-				$highlight = KT_I18N::translate('no');
+				$highlight = KT_I18N::translate('No');
 				break;
 			default:
 				$highlight = '';
@@ -233,10 +233,10 @@ case 'loadrows':
 			$media = KT_Media::getInstance($row);
 			switch ($media->isPrimary()) {
 			case 'Y':
-				$highlight = KT_I18N::translate('yes');
+				$highlight = KT_I18N::translate('Yes');
 				break;
 			case 'N':
-				$highlight = KT_I18N::translate('no');
+				$highlight = KT_I18N::translate('No');
 				break;
 			default:
 				$highlight = '';
