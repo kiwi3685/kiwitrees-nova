@@ -106,7 +106,7 @@ function pageStart($title, $pageTitle = '', $includeTitle = 'y', $subTitle = '',
  * ); ?>
  *
  */
- function autocompleteHtml($suffix, $type, $tree, $valueInput, $placeHolder, $inputName, $valueHidden, $required = '', $other = '' ) {
+ function autocompleteHtml($suffix, $type, $tree, $valueInput, $placeHolder, $inputName, $valueHidden, $required = '', $other = '', $validator = '' ) {
 	global $iconStyle;
 
 	$class = KT_SCRIPT_NAME == 'admin_trees_config.php' ? 'hidden' : '';
@@ -129,6 +129,7 @@ function pageStart($title, $pageTitle = '', $includeTitle = 'y', $subTitle = '',
  				name="' . $inputName . '"
  				id="selectedValue-' . $suffix . '"';
 				if ($valueHidden) {$html .= 'value="' . $valueHidden . '"';}
+				if ($validator) {$html .= $validator;}
 			$html .= '>
 			<span class="input-group-label">
 				<button id="' . $suffix . '" type="button" class="adminClearAutocomplete autocomplete_icon">
@@ -143,24 +144,27 @@ function pageStart($title, $pageTitle = '', $includeTitle = 'y', $subTitle = '',
 }
 
 /**
- * A basic "Show" single submit  s
+ * A basic "Show" single submit buttons
  *
  * @return string[]
  */
-function singleButton($firstButton  = '') {
-   global $iconStyle;
+function singleButton($title = 'Save') {
+   global $iconStyle; ?>
 
-   $firstButton ? $firstButton = KT_I18N::translate($firstButton) : $firstButton = KT_I18N::translate('Save');
-
-   $buttonHtml = '
-	  <button class="button primary" type="submit">
-		  <i class="' . $iconStyle . ' fa-save"></i>'
-		   . $firstButton .
-	  '</button>
-   ';
-
-   return $buttonHtml;
-
+   <div class="cell align-left button-group">
+	   <button class="button primary" type="submit">
+	   		<?php switch ($title) {
+			   	case 'Save':
+					echo '<i class="' . $iconStyle . ' fa-save"></i>';
+					break;
+				case 'Show':
+					echo '<i class="' . $iconStyle . ' fa-eye"></i>';
+					break;
+			}
+		   echo KT_I18N::translate($title); ?>
+	   </button>
+   </div>
+   <?php
 }
 
 /**
@@ -200,8 +204,11 @@ function resetButtons($onClick = '') {
    global $iconStyle;
 
    $onClickHtml = '';
+   $submitReset = '<input type="hidden" name="reset" value="1">';
+
    if($onClick) {
 	   $onClickHtml = 'onclick="' . $onClick . ';"';
+	   $submitReset = '';
    }
 
    $buttonHtml = '
@@ -210,7 +217,7 @@ function resetButtons($onClick = '') {
 			   <i class="' . $iconStyle . ' fa-eye"></i>'
 				. KT_I18N::translate('Show') .
 		   '</button>
-		   <button class="button hollow" type="submit" name="reset" value="1" ' . $onClickHtml . '>
+		   <button class="button hollow" type="submit" name="reset" value="reset" ' . $onClickHtml . '>
 			   <i class="' . $iconStyle . ' fa-rotate"></i>'
 				. KT_I18N::translate('Reset') .
 		   '</button>

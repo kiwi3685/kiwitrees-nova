@@ -10287,6 +10287,10 @@ main #admin-content #missing_data-page .input-group.autocomplete_container .inpu
 }
 main #admin-content #find_duplicates-page div.tinySwitch {
 	padding-top: 0.625rem;
+	margin-bottom: 0.9375rem;
+}
+main #admin-content #find_duplicates-page .input-group-field#range {
+	max-width: 7rem;
 }
 main #admin-content #find_duplicates-page .button-group .button {
 	margin-bottom: 0;
