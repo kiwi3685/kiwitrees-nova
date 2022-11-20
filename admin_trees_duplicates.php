@@ -67,9 +67,11 @@ $controller
 		autocomplete();
 
 		//After submit, scroll to Results area
-		jQuery("html, body").animate({
-			scrollTop: jQuery("#duplicates_table").offset().top
-		}, 2000);
+		if (jQuery("#duplicates_table").length != 0) {
+			jQuery("html, body").animate({
+				scrollTop: jQuery("#duplicates_table").offset().top
+			}, 2000);
+		}
 
 		// prevent more than two boxes from being checked
 		var checked = 0;
@@ -90,8 +92,8 @@ $controller
 
 		// loop through all checkboxes with class "check" and create input string for form
 		function checkbox_test() {
-			var counter = 0
 			var i = 0
+			var counter = 1;
 			var gid = new Array();
 			var record_type = new Array();
 			var action = new Array();
@@ -99,27 +101,27 @@ $controller
 			form.setAttribute("method", "POST");
 			form.setAttribute("action", "admin_trees_merge.php");
 			form.setAttribute("target", "_blank");
+
 			// get a collection of objects with the specified class "check"
 			input_obj = document.getElementsByClassName("check"); // this might fail on some old browsers (see http://caniuse.com/getelementsbyclassname)
 			// loop through all collected objects
 			for (i = 0; i < input_obj.length; i++) {
-				// if input object is checked then ...
 				if (input_obj[i].checked === true) {
-					// ... increase counter and concatenate checkbox value to the input string
 					gid[i] = document.createElement("input");
-					gid[i].setAttribute("name", "gid" + (counter + 1));
+					gid[i].setAttribute("name", "gid" + counter);
 					gid[i].setAttribute("type", "hidden");
 					gid[i].setAttribute("value", input_obj[i].value);
 					form.appendChild(gid[i]);
 					counter++;
 				}
 			}
-			record_type = document.createElement("input");
+
+			var record_type = document.createElement("input");
 			record_type.setAttribute("name", "record_type");
 			record_type.setAttribute("type", "hidden");
 			record_type.setAttribute("value", "INDI");
 			form.appendChild(record_type);
-			action = document.createElement("input");
+			var action = document.createElement("input");
 			action.setAttribute("name", "action");
 			action.setAttribute("type", "hidden");
 			action.setAttribute("value", "choose");
@@ -200,7 +202,7 @@ echo pageStart('find_duplicates', $controller->getPageTitle()); ?>
 				<label for="gedID"><?php echo KT_I18N::translate('Family tree'); ?></label>
 			</div>
 			<div class="cell medium-4">
-				<form method="post" action="#" name="tree">
+				<form id="tree" method="post" action="#" name="tree">
 					<?php echo select_ged_control('gedID', KT_Tree::getIdList(), null, KT_GEDCOM, ' onchange="tree.submit();"'); ?>
 				</form>
 			</div>
@@ -220,7 +222,7 @@ echo pageStart('find_duplicates', $controller->getPageTitle()); ?>
 							htmlspecialchars($surn), // input value
 							KT_I18N::translate('A full or partial surname'), // placeholder
 							'surname', // hidden input name
-							htmlspecialchars($surn), // hidden input value
+							htmlspecialchars($surn) // hidden input value
 						); ?>
 					</div>
 					<div class="cell shrink">

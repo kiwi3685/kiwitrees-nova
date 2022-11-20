@@ -58,10 +58,10 @@ echo pageStart('merge_records', $controller->getPageTitle()); ?>
 	            </div>
 				<!-- Record type -->
 				<div class="cell medium-2">
-					<label for="ged"><?php echo KT_I18N::translate('Select record type'); ?></label>
+					<label for="record_type"><?php echo KT_I18N::translate('Select record type'); ?></label>
 				</div>
 				<div class="cell medium-2">
-					<select name="record_type">
+					<select id="record_type" name="record_type">
 						<option> </option>
 						<?php foreach ($recordTypes as $key => $value) { ?>
 							<option value="<?php echo $value; ?>"
@@ -91,7 +91,10 @@ echo pageStart('merge_records', $controller->getPageTitle()); ?>
 	    $person1 = $gid1 ? KT_Person::getInstance($gid1) : '';
 	    $person2 = $gid2 ? KT_Person::getInstance($gid2) : '';
 
+//echo 'gid1 = ' . $gid1 . ' / ' . 'gid2 = ' . $gid2 . '<br>';
+//echo 'ged1 = ' . $ged1 . ' / ' . 'ged2 = ' . $ged2 . '<br>';
 		?>
+
 		<form class="cell" method="post" name="merge" action="<?php echo KT_SCRIPT_NAME; ?>" data-abide data-live-validate="true" novalidate>
 			<input type="hidden" name="action" value="select">
 			<input type="hidden" name="record_type" value="<?php echo $type; ?>">
@@ -157,7 +160,8 @@ echo pageStart('merge_records', $controller->getPageTitle()); ?>
 					    'gid2', // hidden input name
 					    $gid2, // hidden input value
 					    ' required ' , // required
-					    ' data-validator="not_equalTo" data-not-equalTo="autocompleteInput-gid1" ' //other
+						'', // other
+					    ' data-validator="not_equalTo" data-not-equalTo="selectedValue-gid1" ' //validator
 					); ?>
 					<div class="cell alert callout" data-abide-error data-form-error-on="not_equalTo" style="display: none;">
 						<?php echo KT_I18N::translate('You cannot merge the same records.'); ?>
@@ -180,9 +184,13 @@ echo pageStart('merge_records', $controller->getPageTitle()); ?>
 	    $ged2    = KT_Filter::post('ged2', null, null);
 	    $person1 = $gid1 ? KT_Person::getInstance($gid1) : '';
 	    $person2 = $gid2 ? KT_Person::getInstance($gid2) : '';
-		$gedrec1 = find_gedcom_record($gid1, KT_GED_ID, true);
-		$gedrec2 = find_gedcom_record($gid2, get_id_from_gedcom($ged2), true);
+		$gedrec1 = find_gedcom_record($gid1, $ged1, true);
+		$gedrec2 = find_gedcom_record($gid2, $ged2, true);
 
+echo 'gid1 = ' . $gid1 . ' / ' . 'gid2 = ' . $gid2 . '<br>';
+echo 'ged1 = ' . $ged1 . ' / ' . 'ged2 = ' . $ged2 . '<br>';
+//echo 'person1 = ' . $person1->getXref() . '<br>';
+//echo 'person2 = ' . $person2->getXref();
 		// Fetch the original XREF - may differ in case from the supplied value
 		$tmp	= new KT_Person($gedrec1);
 		$gid1	= $tmp->getXref();
