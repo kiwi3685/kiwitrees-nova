@@ -187,8 +187,8 @@ echo pageStart('merge_records', $controller->getPageTitle()); ?>
 		$gedrec1 = find_gedcom_record($gid1, $ged1, true);
 		$gedrec2 = find_gedcom_record($gid2, $ged2, true);
 
-echo 'gid1 = ' . $gid1 . ' / ' . 'gid2 = ' . $gid2 . '<br>';
-echo 'ged1 = ' . $ged1 . ' / ' . 'ged2 = ' . $ged2 . '<br>';
+//echo 'gid1 = ' . $gid1 . ' / ' . 'gid2 = ' . $gid2 . '<br>';
+//echo 'ged1 = ' . $ged1 . ' / ' . 'ged2 = ' . $ged2 . '<br>';
 //echo 'person1 = ' . $person1->getXref() . '<br>';
 //echo 'person2 = ' . $person2->getXref();
 		// Fetch the original XREF - may differ in case from the supplied value

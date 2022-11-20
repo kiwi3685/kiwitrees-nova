@@ -155,9 +155,9 @@ if ($date || preg_match('/\d{4}(?<!0000)/', $date)) {
 		INNER JOIN `##dates` ON d_gid = n_id
 		WHERE n_file = '. $gedID . '
 		AND (
-			(d_fact="BIRT" AND d_year <= ' . $maxDate . ' AND d_year >= ' . $minDate . ')
+			(d_fact IN "'. KT_EVENTS_BIRT . '" AND d_year <= ' . $maxDate . ' AND d_year >= ' . $minDate . ')
 			 OR
-			(d_fact="DEAT" AND d_year <= ' . $maxDate . ' AND d_year >= ' . $minDate . ')
+			(d_fact IN "'. KT_EVENTS_DEAT . '" AND d_year <= ' . $maxDate . ' AND d_year >= ' . $minDate . ')
 		)
 	';
 } else {

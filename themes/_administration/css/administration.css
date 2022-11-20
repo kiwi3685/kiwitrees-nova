@@ -10295,6 +10295,9 @@ main #admin-content #find_duplicates-page .input-group-field#range {
 main #admin-content #find_duplicates-page .button-group .button {
 	margin-bottom: 0;
 }
+main #admin-content #find_duplicates-page .button.reset {
+	margin-top: -6.5rem;
+}
 main #admin-content #find_duplicates-page table th a {
 	word-wrap: normal;
 }
