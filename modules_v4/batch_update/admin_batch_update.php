@@ -314,6 +314,8 @@ class batch_update {
 
 	// Create a submit button for our form
 	static function createSubmitButton($text, $xref, $action='', $data='') {
+		global $iconStyle;
+
 		$button_icon = '';
 		switch($text) {
 			case 'previous':

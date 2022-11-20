@@ -88,6 +88,8 @@ class search_replace_bu_plugin extends base_plugin {
 	}
 
 	function getOptionsForm() {
+		global $iconStyle;
+
 		$descriptions = array(
 			'exact'		=> KT_I18N::translate('Match the exact text, even if it occurs in the middle of a word.'),
 			'words'		=> KT_I18N::translate('Match the exact text, unless it occurs in the middle of a word.'),
