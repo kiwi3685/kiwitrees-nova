@@ -143,6 +143,9 @@ $controller
 
 	');
 
+$births 	= "'" . str_replace("|", "','", KT_EVENTS_BIRT) . "'";
+$deaths 	= "'" . str_replace("|", "','", KT_EVENTS_DEAT) . "'";
+
 // the sql query used to identify duplicates
 $sql = '
 	SELECT DISTINCT n_id, n_full, n_type, n_sort
@@ -155,9 +158,9 @@ if ($date || preg_match('/\d{4}(?<!0000)/', $date)) {
 		INNER JOIN `##dates` ON d_gid = n_id
 		WHERE n_file = '. $gedID . '
 		AND (
-			(d_fact IN "'. KT_EVENTS_BIRT . '" AND d_year <= ' . $maxDate . ' AND d_year >= ' . $minDate . ')
+			(d_fact IN ('. $births . ') AND d_year <= ' . $maxDate . ' AND d_year >= ' . $minDate . ')
 			 OR
-			(d_fact IN "'. KT_EVENTS_DEAT . '" AND d_year <= ' . $maxDate . ' AND d_year >= ' . $minDate . ')
+			(d_fact IN ('. $deaths . ') AND d_year <= ' . $maxDate . ' AND d_year >= ' . $minDate . ')
 		)
 	';
 } else {
@@ -184,164 +187,164 @@ echo relatedPages($trees, KT_SCRIPT_NAME);
 
 echo pageStart('find_duplicates', $controller->getPageTitle()); ?>
 
-		<div class="grid-x grid-margin-x">
-			<div class="cell callout info-help ">
-				<?php echo KT_I18N::translate('
-					Search for possible duplicate individuals.
-					The minimum required to start the search is either a surname or
-					given name, although both are preferable.
-					If too many results are displayed you can complete further fields
-					to improve the accuracy, but this may also increase the chance of
-					missing one or more duplicates. From the completed list choose
-					any two (click checkboxes at right) then click "Merge duplicates" to take those to the "Merge duplicates" page.
-					Results are only shown where a minimum of two similar people are found.
-				'); ?>
-			</div>
-			<!-- Family tree -->
- 			<div class="cell medium-2">
-				<label for="gedID"><?php echo KT_I18N::translate('Family tree'); ?></label>
-			</div>
-			<div class="cell medium-4">
-				<form id="tree" method="post" action="#" name="tree">
-					<?php echo select_ged_control('gedID', KT_Tree::getIdList(), null, KT_GEDCOM, ' onchange="tree.submit();"'); ?>
-				</form>
-			</div>
-			<div class="cell medium-6"></div>
-			<form class="cell" method="post" name="duplicates_form" action="<?php echo KT_SCRIPT_NAME; ?>">
-				<input type="hidden" name="action" value="go">
-				<div class="grid-x grid-margin-x">
-					<!-- Surnames -->
-					<div class="cell medium-2">
-						<label for="SURN"><?php echo KT_I18N::translate('Surname'); ?></label>
-					</div>
-					<div class="cell medium-4">
-						<?php echo autocompleteHtml(
-							'surname', // id
-							'SURN', // TYPE
-							$tree, // autocomplete-ged
-							htmlspecialchars($surn), // input value
-							KT_I18N::translate('A full or partial surname'), // placeholder
-							'surname', // hidden input name
-							htmlspecialchars($surn) // hidden input value
-						); ?>
-					</div>
-					<div class="cell shrink">
-						<label for="exact_surn"><?php echo KT_I18N::translate('Match exactly'); ?></label>
-					</div>
-					<div class="cell medium-4 auto tinySwitch">
-						<?php echo simple_switch(
-							"exact_surn",
-							"1",
-							$exact_surn,
-							'',
-							KT_I18N::translate('Yes'),
-							KT_I18N::translate('No'),
-							"tiny"
-						); ?>
-					</div>
-					<!-- Given names -->
-					<div class="cell medium-2">
-						<label for="GIVN"><?php echo KT_I18N::translate('Given name(s)'); ?></label>
-					</div>
-					<div class="cell medium-4">
-						<?php echo autocompleteHtml(
-							'given', // id
-							'GIVN', // TYPE
-							$tree, // autocomplete-ged
-							htmlspecialchars($givn), // input value
-							KT_I18N::translate('The full or partial given name(s)'), // placeholder
-							'given', // hidden input name
-							htmlspecialchars($givn), // hidden input value
-						); ?>
-					</div>
-					<div class="cell shrink">
-						<label for="exact_givn"><?php echo KT_I18N::translate('Match exactly'); ?></label>
-					</div>
-					<div class="cell medium-4 auto tinySwitch">
-						<?php echo simple_switch(
-							"exact_givn",
-							"1",
-							$exact_givn,
-							'',
-							KT_I18N::translate('Yes'),
-							KT_I18N::translate('No'),
-							"tiny"
-						); ?>
-					</div>
-					<!-- Gender -->
-					<div class="cell medium-2">
-						<label for="gender"><?php echo KT_I18N::translate('Gender'); ?></label>
-					</div>
-					<div class="cell medium-4">
-						<select id="gender" name="gender" value="<?php echo $gender; ?>">
-							<option value="A"
-								<?php if ($gender == 'A' || empty($gender)) { ; ?>
-									selected
-								<?php } ?>
-							>
-								<?php echo KT_I18N::translate('Any'); ?>
-							</option>
-							<option value="M"
-								<?php if ($gender == 'M') { ; ?>
-									selected
-								<?php } ?>
-							>
-								<?php echo KT_I18N::translate('Male'); ?>
-							</option>
-							<option value="F"
-								<?php if ($gender == 'F') { ; ?>
-									selected
-								<?php } ?>
-							>
-								<?php echo KT_I18N::translate('Female'); ?>
-							</option>
-							<option value="U"
-								<?php if ($gender == 'U') { ; ?>
-									selected
-								<?php } ?>
-							>
-								<?php echo KT_I18N::translate_c('unknown gender', 'Unknown'); ?>
-							</option>
-						</select>
-					</div>
-					<div class="cell medium-6"></div>
-					<!-- Married name -->
-					<div class="cell medium-2">
-						<label for="checkbox3"><?php echo KT_I18N::translate('Include married names'); ?></label>
-					</div>
-					<div class="cell medium-4 auto tinySwitch">
-						<?php echo simple_switch(
-							"married",
-							"1",
-							$married,
-							'',
-							KT_I18N::translate('Yes'),
-							KT_I18N::translate('No'),
-							"tiny"
-						); ?>
-					</div>
-					<div class="cell medium-6"></div>
-					<!-- Date and range -->
-					<div class="cell medium-2">
-						<label for="date" class="align-self-middle"><?php echo KT_I18N::translate('Birth or death year'); ?></label>
-					</div>
-					<div class="cell medium-4 input-group">
-						<input class="input-group-field" id="date" type="number" name="date" min="1200" max="<?php echo $maxYear; ?>" value="<?php echo $date; ?>" placeholder="<?php echo KT_I18N::translate('Year'); ?>">
-						<span class="input-group-label"> + / - </span>
-						<input class="input-group-field" id="range" type="number" name="range" min="0" max="10" value="<?php echo $range; ?>" >
-						<span class="input-group-label"><?php echo KT_I18N::translate('Years'); ?></span>
-					</div>
-				</div>
-				<?php echo singleButton('Show'); ?>
-			</form>
-			<form class="cell small-2 small-offset-7 medium-1 medium-offset-1" method="post" name="rela_form" action="#">
-				<input type="hidden" name="reset" value="1">
-				<button class="button hollow reset" type="submit">
-					<i class="<?php echo $iconStyle; ?> fa-rotate"></i>
-					 <?php echo KT_I18N::translate('Reset'); ?>
-				</button>
+	<div class="grid-x grid-margin-x">
+		<div class="cell callout info-help ">
+			<?php echo KT_I18N::translate('
+				Search for possible duplicate individuals.
+				The minimum required to start the search is either a surname or
+				given name, although both are preferable.
+				If too many results are displayed you can complete further fields
+				to improve the accuracy, but this may also increase the chance of
+				missing one or more duplicates. From the completed list choose
+				any two (click checkboxes at right) then click "Merge duplicates" to take those to the "Merge duplicates" page.
+				Results are only shown where a minimum of two similar people are found.
+			'); ?>
+		</div>
+		<!-- Family tree -->
+			<div class="cell medium-2">
+			<label for="gedID"><?php echo KT_I18N::translate('Family tree'); ?></label>
+		</div>
+		<div class="cell medium-4">
+			<form id="tree" method="post" action="#" name="tree">
+				<?php echo select_ged_control('gedID', KT_Tree::getIdList(), null, KT_GEDCOM, ' onchange="tree.submit();"'); ?>
 			</form>
 		</div>
+		<div class="cell medium-6"></div>
+		<form class="cell" method="post" name="duplicates_form" action="<?php echo KT_SCRIPT_NAME; ?>">
+			<input type="hidden" name="action" value="go">
+			<div class="grid-x grid-margin-x">
+				<!-- Surnames -->
+				<div class="cell medium-2">
+					<label for="SURN"><?php echo KT_I18N::translate('Surname'); ?></label>
+				</div>
+				<div class="cell medium-4">
+					<?php echo autocompleteHtml(
+						'surname', // id
+						'SURN', // TYPE
+						$tree, // autocomplete-ged
+						htmlspecialchars($surn), // input value
+						KT_I18N::translate('A full or partial surname'), // placeholder
+						'surname', // hidden input name
+						htmlspecialchars($surn) // hidden input value
+					); ?>
+				</div>
+				<div class="cell shrink">
+					<label for="exact_surn"><?php echo KT_I18N::translate('Match exactly'); ?></label>
+				</div>
+				<div class="cell medium-4 auto tinySwitch">
+					<?php echo simple_switch(
+						"exact_surn",
+						"1",
+						$exact_surn,
+						'',
+						KT_I18N::translate('Yes'),
+						KT_I18N::translate('No'),
+						"tiny"
+					); ?>
+				</div>
+				<!-- Given names -->
+				<div class="cell medium-2">
+					<label for="GIVN"><?php echo KT_I18N::translate('Given name(s)'); ?></label>
+				</div>
+				<div class="cell medium-4">
+					<?php echo autocompleteHtml(
+						'given', // id
+						'GIVN', // TYPE
+						$tree, // autocomplete-ged
+						htmlspecialchars($givn), // input value
+						KT_I18N::translate('The full or partial given name(s)'), // placeholder
+						'given', // hidden input name
+						htmlspecialchars($givn), // hidden input value
+					); ?>
+				</div>
+				<div class="cell shrink">
+					<label for="exact_givn"><?php echo KT_I18N::translate('Match exactly'); ?></label>
+				</div>
+				<div class="cell medium-4 auto tinySwitch">
+					<?php echo simple_switch(
+						"exact_givn",
+						"1",
+						$exact_givn,
+						'',
+						KT_I18N::translate('Yes'),
+						KT_I18N::translate('No'),
+						"tiny"
+					); ?>
+				</div>
+				<!-- Gender -->
+				<div class="cell medium-2">
+					<label for="gender"><?php echo KT_I18N::translate('Gender'); ?></label>
+				</div>
+				<div class="cell medium-4">
+					<select id="gender" name="gender" value="<?php echo $gender; ?>">
+						<option value="A"
+							<?php if ($gender == 'A' || empty($gender)) { ; ?>
+								selected
+							<?php } ?>
+						>
+							<?php echo KT_I18N::translate('Any'); ?>
+						</option>
+						<option value="M"
+							<?php if ($gender == 'M') { ; ?>
+								selected
+							<?php } ?>
+						>
+							<?php echo KT_I18N::translate('Male'); ?>
+						</option>
+						<option value="F"
+							<?php if ($gender == 'F') { ; ?>
+								selected
+							<?php } ?>
+						>
+							<?php echo KT_I18N::translate('Female'); ?>
+						</option>
+						<option value="U"
+							<?php if ($gender == 'U') { ; ?>
+								selected
+							<?php } ?>
+						>
+							<?php echo KT_I18N::translate_c('unknown gender', 'Unknown'); ?>
+						</option>
+					</select>
+				</div>
+				<div class="cell medium-6"></div>
+				<!-- Married name -->
+				<div class="cell medium-2">
+					<label for="checkbox3"><?php echo KT_I18N::translate('Include married names'); ?></label>
+				</div>
+				<div class="cell medium-4 auto tinySwitch">
+					<?php echo simple_switch(
+						"married",
+						"1",
+						$married,
+						'',
+						KT_I18N::translate('Yes'),
+						KT_I18N::translate('No'),
+						"tiny"
+					); ?>
+				</div>
+				<div class="cell medium-6"></div>
+				<!-- Date and range -->
+				<div class="cell medium-2">
+					<label for="date" class="align-self-middle"><?php echo KT_I18N::translate('Birth or death year'); ?></label>
+				</div>
+				<div class="cell medium-4 input-group">
+					<input class="input-group-field" id="date" type="number" name="date" min="1200" max="<?php echo $maxYear; ?>" value="<?php echo $date; ?>" placeholder="<?php echo KT_I18N::translate('Year'); ?>">
+					<span class="input-group-label"> + / - </span>
+					<input class="input-group-field" id="range" type="number" name="range" min="0" max="10" value="<?php echo $range; ?>" >
+					<span class="input-group-label"><?php echo KT_I18N::translate('Years'); ?></span>
+				</div>
+			</div>
+			<?php echo singleButton('Show'); ?>
+		</form>
+		<form class="cell small-2 small-offset-7 medium-1 medium-offset-1" method="post" name="rela_form" action="#">
+			<input type="hidden" name="reset" value="1">
+			<button class="button hollow reset" type="submit">
+				<i class="<?php echo $iconStyle; ?> fa-rotate"></i>
+				 <?php echo KT_I18N::translate('Reset'); ?>
+			</button>
+		</form>
+	</div>
 	<?php
 	if ($action == 'go') {
 		$controller
@@ -493,7 +496,9 @@ echo pageStart('find_duplicates', $controller->getPageTitle()); ?>
 				</table>
 			</div>
 		<?php } else { ?>
-			<div class="cell callout alert text-center"><?php echo KT_I18N::translate('No duplicates to display'); ?></div>
+			<div class="cell callout alert text-center">
+				<?php echo KT_I18N::translate('No duplicates to display'); ?>
+			</div>
 		<?php }
 	}
 
