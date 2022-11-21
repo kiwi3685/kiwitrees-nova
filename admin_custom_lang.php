@@ -34,12 +34,12 @@ $controller
 	->setPageTitle(KT_I18N::translate('Custom translations'))
 	->pageHeader();
 
-$action				= KT_Filter::post('action');
-$language			= KT_Filter::post('language');
-$custom_text_edits	= KT_Filter::postArray('custom_text_edit');
-$new_standard_text	= KT_Filter::post('new_standard_text');
-$new_custom_text	= KT_Filter::post('new_custom_text');
-$delete				= KT_Filter::get('delete');
+$action            = KT_Filter::post('action');
+$language          = KT_Filter::post('language');
+$custom_text_edits = KT_Filter::postArray('custom_text_edit');
+$new_standard_text = KT_Filter::post('new_standard_text');
+$new_custom_text   = KT_Filter::post('new_custom_text');
+$delete            = KT_Filter::get('delete');
 
 if ($custom_text_edits) {
 	foreach ($custom_text_edits as $key => $value) {
@@ -52,9 +52,9 @@ if ($new_standard_text || $new_custom_text) {
 }
 
 if ($delete == 'delete_item') {
-	$custom_lang_id	= KT_Filter::get('custom_lang_id');
-	$action			= KT_Filter::get('action');
-	$language		= KT_Filter::get('language');
+	$custom_lang_id = KT_Filter::get('custom_lang_id');
+	$action         = KT_Filter::get('action');
+	$language       = KT_Filter::get('language');
 	KT_DB::exec("DELETE FROM `##custom_lang` WHERE `custom_lang_id` = {$custom_lang_id}");
 }
 
