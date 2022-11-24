@@ -107,8 +107,10 @@ $controller
 			// loop through all collected objects
 			for (i = 0; i < input_obj.length; i++) {
 				if (input_obj[i].checked === true) {
+					if (counter=1) { var id = recordFrom;}
+					if (counter=2) { var id = recordTo;}
 					gid[i] = document.createElement("input");
-					gid[i].setAttribute("name", "gid" + counter);
+					gid[i].setAttribute("name", id);
 					gid[i].setAttribute("type", "hidden");
 					gid[i].setAttribute("value", input_obj[i].value);
 					form.appendChild(gid[i]);

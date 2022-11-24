@@ -103,10 +103,10 @@ function pageStart($title, $pageTitle = '', $includeTitle = 'y', $subTitle = '',
  * 	 $dna_id_b // hidden input value
  *   'required' // Optional required setting
  *   'string' // optional other entry
- * ); ?>
+ * );
  *
  */
- function autocompleteHtml($suffix, $type, $tree, $valueInput, $placeHolder, $inputName, $valueHidden, $required = '', $other = '', $validator = '' ) {
+function autocompleteHtml($suffix, $type, $tree, $valueInput, $placeHolder, $inputName, $valueHidden, $required = '', $other = '', $validator = '' ) {
 	global $iconStyle;
 
 	$class = KT_SCRIPT_NAME == 'admin_trees_config.php' ? 'hidden' : '';
@@ -145,25 +145,50 @@ function pageStart($title, $pageTitle = '', $includeTitle = 'y', $subTitle = '',
 
 /**
  * A basic "Show" single submit buttons
+ * 
+ * @string  single-quoted name to display on button like 'Save'
  *
  * @return string[]
  */
-function singleButton($title = 'Save') {
+function singleButton($title) {
    global $iconStyle; ?>
 
-   <div class="cell align-left button-group">
-	   <button class="button primary" type="submit">
-	   		<?php switch ($title) {
-			   	case 'Save':
-					echo '<i class="' . $iconStyle . ' fa-save"></i>';
-					break;
-				case 'Show':
-					echo '<i class="' . $iconStyle . ' fa-eye"></i>';
-					break;
-			}
-		   echo KT_I18N::translate($title); ?>
+   	<?php switch ($title) {
+		   	case 'Save':
+		   	default:
+				echo '
+					<button class="button primary" type="submit">
+						<i class="' . $iconStyle . ' fa-save"></i>' .
+				   	KT_I18N::translate($title);
+				break;
+			case 'Show':
+				echo '
+					<button class="button primary" type="submit">
+						<i class="' . $iconStyle . ' fa-eye"></i>' .
+				   	KT_I18N::translate($title);
+				break;
+			case 'Next':
+			   echo '
+				   <button class="button primary" type="submit">' .
+				   	KT_I18N::translate($title) . '
+						<i class="' . $iconStyle . ' fa-arrow-right"></i>';
+				break;
+			case 'Back':
+				echo '
+					<button class="button primary" type="button" onclick="history.back()">
+						<i class="' . $iconStyle . ' fa-arrow-left"></i>' .
+				   	KT_I18N::translate($title);
+				break;
+			case 'Continue':
+			   echo '
+					<button class="button" type="submit">
+						<i class="' . $iconStyle . ' fa-play"></i>' .
+				   	KT_I18N::translate($title);
+				break;
+			} ?>
+
 	   </button>
-   </div>
+
    <?php
 }
 

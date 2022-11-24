@@ -10322,14 +10322,12 @@ main #admin-content #merge_records-page div.unmatched div.header {
 }
 main #admin-content #merge_records-page div.unmatched div.unmatchedL,
 main #admin-content #merge_records-page div.unmatched div.unmatchedR {
-	border-bottom: 0.125rem solid #e6e6e6;
-	border-left: 0.125rem solid #e6e6e6;
-	border-right: 0.125rem solid #e6e6e6;
+	background-color: #c6d9ec;
 	font-size: 90%;
-	padding-top: 1rem;
+	padding: 1rem;
 }
 main #admin-content #merge_records-page div.unmatched div.unmatchedR {
-	border-left: 0;
+	background-color: #dde8f4;
 }
 main #admin-content #merge_records-page div.unmatched hr {
 	margin: 0.5rem auto;
