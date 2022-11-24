@@ -136,9 +136,8 @@ switch (KT_Filter::get('action')) {
 			break;
 		}
 		$gedcom_filename = get_gedcom_setting($gedcom_id, 'gedcom_filename');
-		?>
-		<div id="trees_import" class="cell">
-			<h4><?php echo KT_TREE_TITLE; ?> — <?php echo KT_I18N::translate('Import a GEDCOM file'); ?></h3>
+
+		echo pageStart('importTrees', KT_I18N::translate('Import a GEDCOM file')); ?>
 			<div class="callout alert small">
 				<?php echo /* I18N: %s is the name of a family tree */ KT_I18N::translate('This will delete all the genealogy data from "%s" and replace it with data from a GEDCOM file.', KT_TREE_TITLE); ?>
 			</div>
@@ -156,7 +155,7 @@ switch (KT_Filter::get('action')) {
 							</div>
 							<div class="cell medium-9">
 								<input type="file" name="tree_name" id="import-computer-file">
-								<div class="help-text">
+								<div class="callout info-help">
 									<?php echo KT_I18N::translate('The maximum file size your server can upload is %s', format_size(detectMaxUploadFileSize())); ?>
 								</div>
 							</div>
@@ -208,14 +207,14 @@ switch (KT_Filter::get('action')) {
 							<div class="cell">
 								<input type="checkbox" name="keep_media<?php echo $gedcom_id; ?>" value="1">
 								<label><?php echo KT_I18N::translate('Keep media objects'); ?></label>
-								<div class="help-text">
+								<div class="callout info-help">
 									<?php echo KT_I18N::translate('If you have created media objects in kiwitrees, and edited your gedcom off-line using a program that deletes media objects, then check this box to merge the current media objects with the new GEDCOM.'); ?>
 								</div>
 							</div>
 							<div class="cell">
 								<input type="checkbox" name="NEW_WORD_WRAPPED_NOTES" value="1" <?php echo get_gedcom_setting(KT_GED_ID, 'WORD_WRAPPED_NOTES') ? 'checked' : ''; ?>>
 								<label><?php echo KT_I18N::translate('Add spaces where notes were wrapped'); ?></label>
-								<div class="help-text">
+								<div class="callout info-help">
 									<?php echo KT_I18N::translate('Some genealogy programs wrap notes at word boundaries while others wrap notes anywhere.  This can cause kiwitrees to run words together.  Setting this to <b>Yes</b> will add a space between words where they are wrapped in the original GEDCOM during the import process. If you have already imported the file you will need to re-import it.'); ?>
 								</div>
 							</div>
@@ -223,7 +222,7 @@ switch (KT_Filter::get('action')) {
 								<label><?php echo /* I18N: A media path (e.g. c:\aaa\bbb\ccc\ddd.jpeg) in a GEDCOM file */ KT_I18N::translate('Remove the GEDCOM media path from filenames'); ?></label>
 								<div class="input">
 									<input type="text" name="NEW_GEDCOM_MEDIA_PATH" value="<?php echo $GEDCOM_MEDIA_PATH; ?>" maxlength="255">
-									<div class="help-text">
+									<div class="callout info-help">
 										<?php echo
 										// I18N: A "path" is something like "C:\Documents\My_User\Genealogy\Photos\Gravestones\John_Smith.jpeg"
 										KT_I18N::translate('Some genealogy applications create GEDCOM files that contain media filenames with full paths.  These paths will not exist on the web-server.  To allow kiwitrees to find the file, the first part of the path must be removed.').
@@ -237,14 +236,16 @@ switch (KT_Filter::get('action')) {
 					</div>
 				</div>
 				<hr class="cell">
-				<button class="button" type="submit">
-					<i class="<?php echo $iconStyle; ?> fa-play"></i>
-					<?php echo KT_I18N::translate('Continue'); ?>
-				</button>
+
+				<?php echo singleButton('Back'); ?>
+				<?php echo singleButton('Next'); ?>
+
 			</form>
-		</div>
-		<?php
+		
+		<?php echo pageClose();
+
 	return;
+
 }
 
 echo relatedPages($trees, KT_SCRIPT_NAME);?>
@@ -381,7 +382,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 												placeholder="<?php echo $default_tree_title; ?>"
 											>
 										</div>
-										<div class="help-text">
+										<div class="callout info-help">
 											<?php echo KT_I18N::translate('This is the name used for display.'); ?>
 										</div>
 									</div>
@@ -404,7 +405,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 												required
 											>
 										</div>
-										<div class="help-text">
+										<div class="callout info-help">
 											<?php echo KT_I18N::translate('Keep this short and avoid spaces and punctuation. A family name might be a good choice.'); ?>
 										</div>
 									</div>

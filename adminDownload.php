@@ -127,7 +127,7 @@ $controller->pageHeader();
 					<div class="cell">
 						<input type="checkbox" name="zip" value="yes">
 						<label><?php echo KT_I18N::translate('Zip File(s)'); ?></label>
-						<div class="help-text">
+						<div class="callout info-help">
 							<?php echo KT_I18N::translate('To reduce the size of the download, you can compress the data into a .ZIP file. You will need to uncompress the .ZIP file before you can use it.'); ?>
 						</div>
 					</div>
@@ -137,14 +137,14 @@ $controller->pageHeader();
 						<input type="radio" name="privatize_export" value="gedadmin" id="gedadmin"><label for="gedadmin"><?php echo KT_I18N::translate('Manager'); ?></label>
 						<input type="radio" name="privatize_export" value="user" id="user"><label for="user"><?php echo KT_I18N::translate('Member'); ?></label>
 						<input type="radio" name="privatize_export" value="visitor" id="visitor"><label for="visitor"><?php echo KT_I18N::translate('Visitor'); ?></label>
-						<div class="help-text">
+						<div class="callout info-help">
 							<?php echo KT_I18N::translate('This option will remove private data from the downloaded GEDCOM file.  The file will be filtered according to the privacy settings that apply to each access level.  Privacy settings are specified on the GEDCOM configuration page.'); ?>
 						</div>
 				    </fieldset>
 					<div class="cell">
 						<input type="checkbox" name="convert" value="yes">
 						<label><?php echo KT_I18N::translate('Convert from UTF-8 to ANSI (ISO-8859-1)'); ?></label>
-						<div class="help-text">
+						<div class="callout info-help">
 							<?php echo KT_I18N::translate('Kiwitrees uses UTF-8 encoding for accented letters, special characters and non-latin scripts. If you want to use this GEDCOM file with genealogy software that does not support UTF-8, then you can create it using ISO-8859-1 encoding.'); ?>
 						</div>
 					</div>
