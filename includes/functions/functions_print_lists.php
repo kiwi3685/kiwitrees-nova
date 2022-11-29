@@ -1657,6 +1657,25 @@ function format_note_table($datalist) {
 	}
 
 	$controller
+		->addExternalJavascript(KT_CONFIRM_JS)
+		->addInlineJavascript('
+			// Add the jquery_confirm defaults
+			jquery_confirm_defaults();
+			// Add page specific settings
+			jQuery(".jsConfirm").confirm({
+				title: "' . htmlspecialchars(KT_I18N::translate('Permanently delete these records?')) . '",
+				content: "",
+				autoClose: false,
+				boxWidth: "20rem",
+		        buttons: {
+		            confirm: {
+		                action: function(){
+		                    return checkbox_delete("notes");
+		                }
+		            }
+		        }
+			});
+		')
 		->addExternalJavascript(KT_DATATABLES_JS)
 		->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
 	;
@@ -1730,8 +1749,7 @@ function format_note_table($datalist) {
 					<input
 						type="button"
 						value = "' . KT_I18N::translate('Delete'). '"
-						class="button tiny"
-						onclick="if (confirm(\'' . htmlspecialchars(KT_I18N::translate('Permanently delete these records?')) . '\')) {return checkbox_delete(\'notes\');} else {return false;}"
+						class="jsConfirm button tiny"
 					>
 					<input type="checkbox" onclick="toggle_select(this)" style="vertical-align:middle;">
 				</th>
