@@ -49,16 +49,15 @@ $this
 	->addInlineJavascript('
 		jQuery("textarea").autosize();
 
+		// Manage cookies for admin search
 		function save_data() {
 			var input = document.getElementById("term")
             document.cookie = "adminSearch" + "=" + input.value;
 	    };
-
 		jQuery("#searchClose").click(function() {
 			document.cookie = "adminSearch=;expires=" + new Date(0).toUTCString()
 			location.reload();
 	    });
-
 
 	');
 
