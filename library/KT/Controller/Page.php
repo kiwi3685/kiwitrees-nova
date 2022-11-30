@@ -49,8 +49,8 @@ class KT_Controller_Page extends KT_Controller_Base {
 		// Every page uses these scripts
 		$this
 			->addExternalJavascript(KT_JQUERY_JS)
-			->addExternalJavascript(KT_FOUNDATION_JS)
 			->addExternalJavascript(KT_JQUERYUI_JS) // Needed for autocomplete js
+			->addExternalJavascript(KT_FOUNDATION_JS)
 			->addExternalJavascript(KT_FONTAWESOME_JS)
 			->addExternalJavascript(KT_KIWITREES_JS_URL)
 			->addExternalJavascript(KT_JQUERY_SHORTEN);

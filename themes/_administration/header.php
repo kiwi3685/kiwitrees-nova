@@ -28,18 +28,42 @@ if (!defined('KT_KIWITREES')) {
 
 include 'templates/commonElements.php';
 include 'templates/adminData.php';
+include 'templates/functions.php';
+
 global $iconStyle;
+
+$searchTerm = KT_Filter::post('admin_query') ? KT_Filter::post('admin_query') : '';
+$class      = '';
+
+
+if (!$searchTerm && isset($_COOKIE["adminSearch"])){
+   $searchTerm = $_COOKIE["adminSearch"];
+} 
+
 
 $this
 	->addExternalJavascript(KT_KIWITREES_ADMIN_JS_URL)
 	->addExternalJavascript(KT_JQUERY_COLORBOX_URL)
 	->addExternalJavascript(KT_JQUERY_WHEELZOOM_URL)
 	->addExternalJavascript(KT_JQUERY_AUTOSIZE)
-	->addInlineJavascript('jQuery("textarea").autosize();');
+	->addInlineJavascript('
+		jQuery("textarea").autosize();
 
-$class='';
+		function save_data() {
+			var input = document.getElementById("term")
+            document.cookie = "adminSearch" + "=" + input.value;
+	    };
+
+		jQuery("#searchClose").click(function() {
+			document.cookie = "adminSearch=;expires=" + new Date(0).toUTCString()
+			location.reload();
+	    });
+
+
+	');
 
 ?>
+
 <!DOCTYPE html>
 <html <?php echo KT_I18N::html_markup(); ?>>
 	<head>
@@ -93,7 +117,7 @@ $class='';
 				<div class="top-bar-right">
 					<ul class="menu">
 						<li>
-							<form class="header-search"action="search.php" method="post">
+							<form class="header-search" action="search.php" method="post">
 								<div class="input-group">
 									<input type="hidden" name="action" value="general">
 									<input type="hidden" name="topsearch" value="yes">
@@ -185,16 +209,59 @@ $class='';
 						</li>
 						<?php if (in_array(KT_LOCALE, array('en_US', 'en_GB', 'en_AU'))) { ?>
 							<li class="admin-menu-title">
-								<form method="post" action="adminSearch.php" name="adminSearch">
+								<form id="adminSearch" method="post" name="adminSearch" onsubmit="save_data()">
 									<div class="input-group">
-										<input type="search" name="admin_query" value="<?php echo KT_Filter::post('admin_query'); ?>" placeholder="<?php echo KT_I18N::translate('Administration search'); ?>" class="input-group-field">
+										<input id="term" type="search" name="admin_query" value="<?php echo $searchTerm; ?>" placeholder="<?php echo KT_I18N::translate('Administration search'); ?>" class="input-group-field">
 										<span class="input-group-label">
-											<a href="#" target="_blank" onclick="adminSearch.submit()">
+											<a href="#" onclick="adminSearch.submit()">
 												<i class="<?php echo $iconStyle; ?> fa-magnifying-glass"></i>
 											</a>
 										</span>
 									</div>
 								</form>
+								<?php if ($searchTerm) {
+									$result = adminSearch($searchTerm); ?>
+									<div id="adminQueryResult" class="callout info-help" data-closable>
+										<h6><?php echo KT_I18N::translate('The term <span>%s</span> can be found on these pages: ', $searchTerm); ?></h6>
+										<button class="close-button" id="searchClose" type="button" data-close>
+											<span aria-hidden="true">&times;</span>
+										</button>
+										<ul>
+									        <?php foreach ($result as $page) {
+												foreach ($page as $file => $count)  {
+													if (array_key_exists($file, $indirectAccess)) {
+														$modules = KT_Module::getActiveModules(KT_GED_ID, KT_PRIV_HIDE);
+														foreach ($modules as $module) {
+															if ( $module->getName() === $indirectAccess[$file]) {
+																echo '
+																	<li>
+																		<a href="' . $module->getConfigLink(str_replace(".php", "", $file)) . '" target="_blank">
+																			' . $searchAdminFiles[$file]
+																			. '&nbsp(' . $count . ')
+																		</a>
+																	</li>
+																';
+															}
+														}
+													} else {
+														echo '
+															<li>
+																<a href="' . $file . '" target="_blank">
+																	' . $searchAdminFiles[$file]
+																	. '&nbsp(' . $count . ')
+																</a>
+															</li>
+														';
+													}
+												}
+											} ?>
+										</ul>
+									</div>
+							    <?php } elseif ($searchTerm) { ?>
+							    	<div id="adminQueryResult">
+							    		<?php echo  KT_I18N::translate('Nothing found'); ?>
+							    	</div>
+							   <?php } ?>
 							</li>
 						<?php }
 					} ?>

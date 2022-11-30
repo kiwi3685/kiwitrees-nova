@@ -1400,6 +1400,7 @@ function old_paths() {
 		KT_ROOT . 'admin_users_bulk.php', // moved to admin_users.php
 		KT_ROOT . 'admin_trees_export.php', // changed to adminExport.php
 		KT_ROOT . 'admin_trees_download.php', // changed to adminExport.php
+		KT_ROOT . 'adminSearch.php', // removed temporary development solution
 
 	);
 }

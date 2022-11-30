@@ -150,12 +150,13 @@ function autocompleteHtml($suffix, $type, $tree, $valueInput, $placeHolder, $inp
  *
  * @return string[]
  */
-function singleButton($title) {
+function singleButton($title = '') {
    global $iconStyle; ?>
 
-   	<?php switch ($title) {
+	<?php switch ($title) {
 		   	case 'Save':
 		   	default:
+		   	$title = 'Save';
 				echo '
 					<button class="button primary" type="submit">
 						<i class="' . $iconStyle . ' fa-save"></i>' .

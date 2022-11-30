@@ -9545,6 +9545,37 @@ main aside ul#admin-menu li a svg {
 	margin: 0 0.5rem;
 	width: 1.25rem;
 }
+main aside ul#admin-menu li #adminQueryResult {
+	padding: 0.25rem;
+	margin-top: -0.5rem;
+}
+main aside ul#admin-menu li #adminQueryResult h6 {
+	max-width: 88%;
+	padding: 0;
+}
+main aside ul#admin-menu li #adminQueryResult h6 span {
+	font-style: italic;
+	background-color: #ffd780;
+	padding: 0.125rem 0.25rem;
+}
+main aside ul#admin-menu li #adminQueryResult ul li a {
+	font-size: 0.95rem;
+	margin: 0;
+	padding: 0;
+}
+main aside ul#admin-menu li #adminQueryResult p {
+	font-size: 97%;
+	line-height: auto;
+	margin: 0;
+	padding: 0;
+}
+main aside ul#admin-menu li #adminQueryResult .close-button {
+	font-weight: 600;
+	font-size: 2rem;
+	min-width: 1rem;
+	right: 0.25rem;
+	top: 0;
+}
 main aside ul#admin-menu form .input-group .input-group-label {
 	padding: 0 0.5rem;
 }
@@ -9567,7 +9598,6 @@ main #admin-content {
 	/* MANAGE USERS */
 	/* SITE LOGS */
 	/* TREE CHANGES LOG */
-	/* SEARCH REDSULTS */
 	/* SANITY CHECKS */
 	/* ADD UNLINKED */
 	/* MISSING DATA */
@@ -9745,7 +9775,6 @@ main #admin-content .tabs-content .accordion.is-active > .accordion-title:before
 main #admin-content .faq_link {
 	float: right;
 	font-size: 0.9rem;
-	margin-top: -2.5rem;
 	padding: 0 1.25rem;
 }
 main #admin-content h4.inline {
@@ -9865,9 +9894,6 @@ main #admin-content #site_config-page label.middle {
 	line-height: 1.5;
 	margin: 0;
 	padding: 0 0 1rem;
-}
-main #admin-content #site_config-page .tabs-panel#spam .faq_link {
-	margin-top: 0;
 }
 main #admin-content #family_tree_config-page #media .padding-bottom {
 	margin-bottom: 1rem;
@@ -10108,15 +10134,6 @@ main #admin-content #change_list table.DifferencesSideBySide tbody.ChangeReplace
 main #admin-content #change_list table.DifferencesSideBySide tbody.ChangeReplace del, main #admin-content #change_list table.DifferencesSideBySide tbody.ChangeInsert del, main #admin-content #change_list table.DifferencesSideBySide tbody.ChangeDelete del {
 	color: blue;
 	text-decoration: initial;
-}
-main #admin-content #admin_search-page .searchTerm {
-	font-style: italic;
-	background-color: #ffd780;
-	padding: 0.125rem 1rem;
-}
-main #admin-content #admin_search-page table {
-	border: 0.125rem solid #e6e6e6;
-	border-collapse: unset;
 }
 main #admin-content #sanity_check-page fieldset.fieldset {
 	border-radius: 1rem;
