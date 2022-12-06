@@ -168,11 +168,11 @@ function singleButton($title = '') {
 						<i class="' . $iconStyle . ' fa-eye"></i>' .
 				   	KT_I18N::translate($title);
 				break;
-			case 'Next':
+			case 'Continue':
 			   echo '
-				   <button class="button primary" type="submit">' .
-				   	KT_I18N::translate($title) . '
-						<i class="' . $iconStyle . ' fa-arrow-right"></i>';
+					<button class="button" type="submit">
+						<i class="' . $iconStyle . ' fa-play"></i>' .
+				   	KT_I18N::translate($title);
 				break;
 			case 'Back':
 				echo '
@@ -180,11 +180,14 @@ function singleButton($title = '') {
 						<i class="' . $iconStyle . ' fa-arrow-left"></i>' .
 				   	KT_I18N::translate($title);
 				break;
-			case 'Continue':
+
+			case 'Next':
+			case 'Import':
+			case 'Merge':
 			   echo '
-					<button class="button" type="submit">
-						<i class="' . $iconStyle . ' fa-play"></i>' .
-				   	KT_I18N::translate($title);
+				   <button class="button primary" type="submit">' .
+				   	KT_I18N::translate($title) . '
+						<i class="' . $iconStyle . ' fa-arrow-right"></i>';
 				break;
 			} ?>
 

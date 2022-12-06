@@ -41,7 +41,7 @@ $controller
 	->addExternalJavascript(KT_AUTOCOMPLETE_JS_URL)
 	->addInlineJavascript('autocomplete();');
 
-$action  = KT_Filter::post('action', 'data_type|choose|select|merge', 'data_type');
+$action=KT_Filter::post('action','data_type|choose|select|merge','data_type');
 $type	 = KT_Filter::post('record_type');
 
 echo relatedPages($trees, KT_SCRIPT_NAME);
@@ -50,6 +50,7 @@ echo pageStart('merge_records', $controller->getPageTitle()); ?>
 	<?php if ($action == 'data_type') { ?>
 		<form class="cell" method="post" name="datatype" action="<?php echo KT_SCRIPT_NAME; ?>">
 			<input type="hidden" name="action" value="choose">
+			<input type="hidden" name="record_type" value="<?php echo $type; ?>">
 			<div class="grid-x grid-margin-x grid-padding-x grid-padding-y">
 				<div class="cell callout info-help ">
 	                <?php echo KT_I18N::translate('
@@ -82,22 +83,11 @@ echo pageStart('merge_records', $controller->getPageTitle()); ?>
 
 	<?php } ?>
 
-	<?php if ($action == 'choose') {
-	    $recordFrom = KT_Filter::post('recordFrom', KT_REGEX_XREF, null);
-	    $recordTo   = KT_Filter::post('recordTo', KT_REGEX_XREF, null);
-	    $gedIDFrom  = KT_Filter::post('gedIDFrom', null, null);
-	    $gedIDTo    = KT_Filter::post('gedIDTo', null, null);
-	    $person1    = $recordFrom ? KT_Person::getInstance($recordFrom) : '';
-	    $person2    = $recordTo ? KT_Person::getInstance($recordTo) : '';
-		?>
+	<?php if ($action == 'choose') { ?>
 
 		<form class="cell" method="post" name="merge" action="<?php echo KT_SCRIPT_NAME; ?>" data-abide data-live-validate="true" novalidate>
 			<input type="hidden" name="action" value="select">
 			<input type="hidden" name="record_type" value="<?php echo $type; ?>">
-			<input type="hidden" name="recordFrom" value="<?php echo $recordFrom; ?>">
-            <input type="hidden" name="recordTo" value="<?php echo $recordTo; ?>">
-            <input type="hidden" name="gedIDFrom" value="<?php echo $gedIDFrom; ?>">
-            <input type="hidden" name="gedIDTo" value="<?php echo $gedIDTo; ?>">
 
 			<div class="grid-x grid-margin-x">
 				<div class="cell callout info-help ">
@@ -120,40 +110,41 @@ echo pageStart('merge_records', $controller->getPageTitle()); ?>
 					<label for="gedIDFrom"><?php echo KT_I18N::translate('Merge from:'); ?></label>
 				</div>
 				<div class="cell medium-4">
-					<?php echo select_ged_control('gedIDFrom', KT_Tree::getIdList(), null, KT_GEDCOM); ?>
+					<?php echo select_ged_control('gedIDFrom', KT_Tree::getIdList(), null, $gedIDFrom); ?>
 				</div>
 				<div class="cell medium-4">
 					<?php echo autocompleteHtml(
-						'recordFrom', // id
+						'recordIdFrom', // id
 						$type, // TYPE
 						'', // autocomplete-ged
-						$person1 ? strip_tags($person1->getLifespanName()) : '', // input value
+						$recordFrom ? strip_tags($recordFrom->getLifespanName()) : '', // input value
 						array_search($type, $recordTypes), // placeholder
-						'recordFrom', // hidden input name
-						$recordFrom, // hidden input value
-						' required ' // required
+						'recordIdFrom', // hidden input name
+						$recordIdFrom, // hidden input value
+						' required ', // required
+						'autofocus' // optional other entry
 					); ?>
 				</div>
 				<div class="cell medium-2"></div>
 				<!-- Merge to -->
 				<div class="cell medium-2">
-					<label for="recordTo"><?php echo KT_I18N::translate('Merge to:'); ?></label>
+					<label for="recordIdTo"><?php echo KT_I18N::translate('Merge to:'); ?></label>
 				</div>
 				<div class="cell medium-4">
-					<?php echo select_ged_control('gedIDTo', KT_Tree::getIdList(), null, KT_GEDCOM); ?>
+					<?php echo select_ged_control('gedIDTo', KT_Tree::getIdList(), null, $gedIDTo); ?>
 				</div>
 				<div class="cell medium-4">
 					<?php echo autocompleteHtml(
-					    'recordTo', // id
+					    'recordIdTo', // id
 					    $type, // TYPE
 					    '', // autocomplete-ged
-					    $person2 ? strip_tags($person2->getLifespanName()) : '', // input value
+					    $recordTo ? strip_tags($recordTo->getLifespanName()) : '', // input value
 					    array_search($type, $recordTypes), // placeholder
-					    'recordTo', // hidden input name
-					    $recordTo, // hidden input value
+					    'recordIdTo', // hidden input name
+					    $recordIdTo, // hidden input value
 					    ' required ' , // required
 						'', // other
-					    ' data-validator="not_equalTo" data-not-equalTo="selectedValue-recordFrom" ' //validator
+					    ' data-validator="not_equalTo" data-not-equalTo="selectedValue-recordIdFrom" ' //validator
 					); ?>
 					<div class="cell alert callout" data-abide-error data-form-error-on="not_equalTo" style="display: none;">
 						<?php echo KT_I18N::translate('You cannot merge the same records.'); ?>
@@ -169,42 +160,11 @@ echo pageStart('merge_records', $controller->getPageTitle()); ?>
 	<?php } ?>
 
 	<?php if ($action == 'select') {
-	    $recordFrom = KT_Filter::post('recordFrom', KT_REGEX_XREF, null);
-	    $recordTo   = KT_Filter::post('recordTo', KT_REGEX_XREF, null);
-	    $gedIDFrom  = KT_Filter::post('gedIDFrom', null, null);
-	    $gedIDTo    = KT_Filter::post('gedIDTo', null, null);
-	    $person1    = $recordFrom ? KT_Person::getInstance($recordFrom) : '';
-	    $person2    = $recordTo ? KT_Person::getInstance($recordTo) : '';
-		$gedrec1    = find_gedcom_record($recordFrom, $gedIDFrom, true);
-		$gedrec2    = find_gedcom_record($recordTo, $gedIDTo, true);
+		$factsFrom  = [];
+		$factsTo    = [];
 
-
-		// Fetch the original XREF - may differ in case from the supplied value
-		$tmp        = new KT_Person($gedrec1);
-		$recordFrom = $tmp->getXref();
-		$nameFrom   = $tmp->getLifespanName();
-
-		$tmp        = new KT_Person($gedrec2);
-		$recordTo   = $tmp->getXref();
-		$nameTo     = $tmp->getLifespanName();
-
-		$typeFrom      = '';
-		$ct         = preg_match("/0 @$recordFrom@ (.*)/", $gedrec1, $match);
-		if ($ct > 0) {
-			$typeFrom  = trim($match[1]);
-		}
-
-		$typeTo      = '';
-		$ct         = preg_match("/0 @$recordTo@ (.*)/", $gedrec2, $match);
-		if ($ct > 0) {
-			$typeTo  = trim($match[1]);
-		}
-
-		$factsFrom  = array();
-		$factsTo    = array();
-		$prev_tags  = array();
-
-		$ct         = preg_match_all('/\n1 (\w+)/', $gedrec1, $match, PREG_SET_ORDER);
+		$prev_tags  = [];
+		$ct         = preg_match_all('/\n1 (\w+)/', $gedrecTo, $match, PREG_SET_ORDER);
 		for ($i = 0; $i < $ct; $i ++) {
 			$fact = trim($match[$i][1]);
 			if (isset($prev_tags[$fact])) {
@@ -212,39 +172,37 @@ echo pageStart('merge_records', $controller->getPageTitle()); ?>
 			} else {
 				$prev_tags[$fact] = 1;
 			}
-			$subrec		= get_sub_record(1, "1 $fact", $gedrec1, $prev_tags[$fact]);
-			$factsFrom[]	= array('fact'=>$fact, 'subrec'=>trim($subrec));
-		}
-		$prev_tags = array();
-		$ct = preg_match_all('/\n1 (\w+)/', $gedrec2, $match, PREG_SET_ORDER);
-
-		for ($i = 0; $i < $ct; $i ++) {
-			$fact = trim($match[$i][1]);
-			if (isset($prev_tags[$fact])) {
-				$prev_tags[$fact]++;
-			} else {
-				$prev_tags[$fact] = 1;
-			}
-			$subrec		= get_sub_record(1, "1 $fact", $gedrec2, $prev_tags[$fact]);
+			$subrec			= get_sub_record(1, "1 $fact", $gedrecTo, $prev_tags[$fact]);
 			$factsTo[]	= array('fact'=>$fact, 'subrec'=>trim($subrec));
+		}
+
+		$prev_tags = [];
+		$ct = preg_match_all('/\n1 (\w+)/', $gedrecFrom, $match, PREG_SET_ORDER);
+		for ($i = 0; $i < $ct; $i ++) {
+			$fact = trim($match[$i][1]);
+			if (isset($prev_tags[$fact])) {
+				$prev_tags[$fact]++;
+			} else {
+				$prev_tags[$fact] = 1;
+			}
+			$subrec		= get_sub_record(1, "1 $fact", $gedrecFrom, $prev_tags[$fact]);
+			$factsFrom[]	= array('fact'=>$fact, 'subrec'=>trim($subrec));
 		}
 		?>
 
 		<form class="cell" method="post" action="<?php echo KT_SCRIPT_NAME; ?>">
-            <input type="hidden" name="recordFrom" value="<?php echo $recordFrom; ?>">
-            <input type="hidden" name="recordTo" value="<?php echo $recordTo; ?>">
-            <input type="hidden" name="gedIDFrom" value="<?php echo $gedIDFrom; ?>">
+            <input type="hidden" name="recordIdTo" value="<?php echo $recordIdTo; ?>">
+            <input type="hidden" name="recordIdFrom" value="<?php echo $recordIdFrom; ?>">
             <input type="hidden" name="gedIDTo" value="<?php echo $gedIDTo; ?>">
-			<input type="hidden" name="typeFrom" value="<?php echo $typeFrom; ?>">
-			<input type="hidden" name="typeTo" value="<?php echo $typeTo; ?>">
-			<input type="hidden" name="factsFrom" value="<?php echo $factsFrom; ?>">
-			<input type="hidden" name="factsTo" value="<?php echo $factsTo; ?>">
-            <input type="hidden" name="action" value="merge">
+            <input type="hidden" name="gedIDFrom" value="<?php echo $gedIDFrom; ?>">
+			<input type="hidden" name="record_type" value="<?php echo $type; ?>">
+            <input type="hidden" name="action" value="merge"> 
             <?php
             $equal_count	= 0;
-            $skipFrom		= array();
-            $skipTo			= array();
+            $skipTo		= [];
+            $skipFrom			= [];
             ?>
+ 
             <div class="grid-x grid-margin-x grid-padding-x grid-padding-y">
                 <div class="cell callout success">
                     <?php echo KT_I18N::translate('
@@ -254,17 +212,17 @@ echo pageStart('merge_records', $controller->getPageTitle()); ?>
                 </div>
                 <div class="cell medium-6">
                     <div class="grid-x grid-padding-x matched">
-                        <?php foreach ($factsFrom as $i=>$factFrom) {
-                            foreach ($factsTo as $j=>$factTo) {
-                                if (utf8_strtoupper($factFrom['subrec']) == utf8_strtoupper($factTo['subrec'])) {
-                                    $skipFrom[]	 = $i;
-                                    $skipTo[] 	 = $j;
+                        <?php foreach ($factsTo as $i=>$factTo) {
+                            foreach ($factsFrom as $j=>$factFrom) {
+                                if (utf8_strtoupper($factTo['subrec']) == utf8_strtoupper($factFrom['subrec'])) {
+                                    $skipTo[]	 = $i;
+                                    $skipFrom[]  = $j;
                                     $equal_count ++; ?>
-                                    <div class="cell medium-2"><?php echo KT_I18N::translate($factFrom['fact']); ?>
-                                        <input type="hidden" name="keepFrom[]" value="<?php echo $i; ?>">
+                                    <div class="cell medium-2"><?php echo KT_I18N::translate($factTo['fact']); ?>
+                                        <input type="hidden" name="keepTo[]" value="<?php echo $i; ?>">
                                     </div>
                                     <div class="cell medium-10">
-                                        <?php echo nl2br($factFrom['subrec']); ?>
+                                        <?php echo nl2br($factTo['subrec']); ?>
                                     </div>
                                 <?php }
                             }
@@ -283,16 +241,16 @@ echo pageStart('merge_records', $controller->getPageTitle()); ?>
                     <?php echo KT_I18N::translate('
                         The following facts did not match.
                         Select the information you would like to keep
-                        using the switches below.
+                        from each person, using the switches below.
                     '); ?>
                 </div>
                 <div class="cell">
                     <div class="grid-x grid-margin-x unmatched">
                         <div class="cell small-6 text-center header">
-                            <?php echo KT_I18N::translate('From record') . ' ' . $recordFrom . ' - ' . $nameFrom; ?>
+                            <?php echo KT_I18N::translate('From record') . ' ' . $recordIdFrom . ' - ' . $nameFrom; ?>
                         </div>
                         <div class="cell small-6 text-center header">
-                            <?php echo KT_I18N::translate('To record') . ' ' . $recordTo . ' - ' . $nameTo; ?>
+                            <?php echo KT_I18N::translate('To record') . ' ' . $recordIdTo . ' - ' . $nameTo; ?>
                         </div>
                         <div class="cell small-6">
                             <div class="grid-x unmatchedL">
@@ -345,125 +303,159 @@ echo pageStart('merge_records', $controller->getPageTitle()); ?>
                     </div>
                 </div>
 
-				<?php echo singleButton('Previous'); ?>
-				<?php echo singleButton('Save'); ?>
+				<?php echo singleButton('Back'); ?>
+				<?php echo singleButton('Merge'); ?>
 
             </div>
         </form>
 	<?php } ?>
 
 	<?php if ($action == 'merge') {
-	    $recordFrom = KT_Filter::post('recordFrom', KT_REGEX_XREF, null);
-	    $recordTo   = KT_Filter::post('recordTo', KT_REGEX_XREF, null);
-	    $gedIDFrom  = KT_Filter::post('gedIDFrom', null, null);
-	    $gedIDTo    = KT_Filter::post('gedIDTo', null, null);
-		$typeFrom   = KT_Filter::postArray('typeFrom');
-		$typeTo     = KT_Filter::postArray('typeTo');
-		$factsFrom  = KT_Filter::postArray('factsFrom');
-		$factsTo    = KT_Filter::postArray('factsTo');
-		$keepFrom   = KT_Filter::postArray('keepFrom');
-		$keepTo     = KT_Filter::postArray('keepTo');
 
-		if ($gedIDFrom == $gedIDTo) {
-            $success = delete_gedrec($recordTo, $gedIDTo); ?>
-            <div class="cell">
-                <?php echo KT_I18N::translate('GEDCOM record successfully deleted.'); ?>
-            </div>
+       if ($gedIDTo == $gedIDFrom) {            
+            delete_gedrec($recordIdFrom, $gedIDFrom); ?>
+            <label class="cell h6">
+            	<?php echo KT_I18N::translate('Step 1'); ?>
+           	</label>
+			<div class="cell">
+				<?php echo KT_I18N::translate('"Merge from" record <em>%s1 (%s2)</em> has been deleted.', $nameFrom, $recordIdFrom); ?>
+			</div>
 
-            <?php
-            // replace all the records that linked to recordTo //
-            $ids = fetch_all_links($recordTo, $gedIDTo);
+            <?php // replace all the links from and to recordIdFrom
+            $ids = fetch_all_links($recordIdFrom, $gedIDFrom);
+            ?>
 
-            foreach ($ids as $id) {
-                $record = find_gedcom_record($id, $gedIDTo, true); ?>
-                <div class="cell">
-                    <?php echo KT_I18N::translate('Updating linked record'); ?>
-                </div>
+            <label class="cell h6">
+            	<?php echo KT_I18N::translate('Step 2'); ?>
+           	</label>
+			<ul class="cell">
+				<?php echo KT_I18N::translate('Change all GEDCOM links from or to the "Merge from" record to the "Merge to" record'); ?>
 
-                <?php
-                $newrec = str_replace("@$recordTo@", "@$recordFrom@", $record);
-                $newrec = preg_replace(
-                    '/(\n1.*@.+@.*(?:(?:\n[2-9].*)*))((?:\n1.*(?:\n[2-9].*)*)*\1)/',
-                    '$2',
-                    $newrec
-                );
-                replace_gedrec($id, $gedIDTo, $newrec);
-            }
+				<?php foreach ($ids as $id) {
 
-            // Update any linked user-accounts
-            KT_DB::prepare(
-                "UPDATE `##user_gedcom_setting`".
-                " SET setting_value=?".
-                " WHERE gedcom_id=? AND setting_name='gedcomid' AND setting_value=?"
-            )->execute(array($recordTo, $gedIDTo, $recordFrom));
+	                $record = find_gedcom_record($id, $gedIDFrom, true); ?>
 
-            // Merge hit counters
-            $hits=KT_DB::prepare(
-                "SELECT page_name, SUM(page_count)".
-                " FROM `##hit_counter`".
-                " WHERE gedcom_id=? AND page_parameter IN (?, ?)".
-                " GROUP BY page_name"
-            )->execute(array($gedIDTo, $recordFrom, $recordTo))->fetchAssoc();
-            foreach ($hits as $page_name=>$page_count) {
-                KT_DB::prepare(
-                    "UPDATE `##hit_counter` SET page_count=?".
-                    " WHERE gedcom_id=? AND page_name=? AND page_parameter=?"
-                )->execute(array($page_count, $gedIDTo, $page_name, $recordFrom));
-            }
-            KT_DB::prepare(
-                "DELETE FROM `##hit_counter`".
-                " WHERE gedcom_id=? AND page_parameter=?"
-            )->execute(array($gedIDTo, $recordTo));
-        }
+		            <li class="cell">
+		                <?php echo KT_I18N::translate('Updating linked record'), ' ', $id; ?>
+		            </li>
 
-        $newgedrec = "0 @$recordFrom@ $typeFrom\n";
+	                <?php
+	                $newrec = str_replace("@$recordIdFrom@", "@$recordIdTo@", $record);
+	                $newrec = preg_replace(
+	                    '/(\n1.*@.+@.*(?:(?:\n[2-9].*)*))((?:\n1.*(?:\n[2-9].*)*)*\1)/',
+	                    '$2',
+	                    $newrec
+	                );
+	 
+	                replace_gedrec($id, $gedIDTo, $newrec); ?>
+	 
+	            <?php } ?>
+        	</ul>
 
-        if ((is_countable($$factsFrom) && count($factsFrom) > 0) || is_countable($$factsTo) && count($factsTo) > 0) {
-        	for ($i = 0; ($i < count($factsFrom) || $i < count($factsTo)); $i ++) {
-	            if (isset($factsFrom[$i])) {
-	                if (in_array($i, $keepFrom)) {
-	                    $newgedrec .= $factsFrom[$i]['subrec']."\n"; ?>
-	                    <div class="cell">
-	                        <?php echo
-		                        KT_I18N::translate('Adding') . ' ' .
-		                        $factsFrom[$i]['fact'] . ' ' .
-		                        KT_I18N::translate('from') . ' ' .
-		                        $recordFrom
-		                    ; ?>
-	                    </div>
-	                <?php }
-	            }
 
-	            if (isset($factsTo[$i])) {
-	                if (in_array($i, $keepTo)) {
-	                    $newgedrec .= $factsTo[$i]['subrec']."\n"; ?>
-	                    <div class="cell">
-	                        <?php echo
-		                        KT_I18N::translate('Adding') . ' ' .
-		                        $factsTo[$i]['fact'] . ' ' .
-		                        KT_I18N::translate('from') . ' ' .
-		                        $recordTo
-		                    ; ?>
-	                    </div>
-	                <?php }
-	            }
+            <label class="cell h6">
+            	<?php echo KT_I18N::translate('Step 3'); ?>
+           	</label>
+			<div class="cell">
+			    <?php echo KT_I18N::translate('Updating other linked data'); ?>
+			</div>
+
+			<?php // Linked user-accounts
+			KT_DB::prepare(
+			    "UPDATE `##user_gedcom_setting`".
+			    " SET setting_value=?".
+			    " WHERE gedcom_id=? AND setting_name='gedcomid' AND setting_value=?"
+			)->execute(array($recordIdFrom, $gedIDFrom, $recordIdTo)); ?>
+			<div class="cell">
+			    <?php echo KT_I18N::translate('Linked user accounts updated'); ?>
+			</div>
+
+	        <?php // Hit counters
+	        $hits = KT_DB::prepare('
+	            SELECT page_name, SUM(page_count)
+	             FROM `##hit_counter`
+	             WHERE gedcom_id=? AND page_parameter IN (?, ?)
+	            GROUP BY page_name
+	           ')->execute(array($gedIDFrom, $recordIdTo, $recordIdFrom))->fetchAssoc();
+	 
+	        foreach ($hits as $page_name=>$page_count) {
+	            KT_DB::prepare(
+	                "UPDATE `##hit_counter` SET page_count=?".
+	                " WHERE gedcom_id=? AND page_name=? AND page_parameter=?"
+	            )->execute(array($page_count, $gedIDFrom, $page_name, $recordIdTo));
 	        }
-	    }
 
-        replace_gedrec($recordFrom, $gedIDFrom, $newgedrec);
-        $rec = KT_GedcomRecord::getInstance($recordFrom); ?>
+	        KT_DB::prepare(
+	            "DELETE FROM `##hit_counter`".
+	            " WHERE gedcom_id=? AND page_parameter=?"
+	        )->execute(array($gedIDFrom, $recordIdFrom));
+	        ?>
+ 			<div class="cell">
+			    <?php echo KT_I18N::translate('Hit counters updated'); ?>
+			</div>
+ 
+	         <?php  // Favorites
+	        $fav_count = update_favorites($recordIdFrom, $recordIdTo, $gedIDTo);
+	        if ($fav_count > 0) { ?>
+	            <div class="cell">
+	                <?php echo KT_I18N::plural('%s favorite updated', '%s favorites updated', $fav_count, $fav_count); ?>
+	            </div>
+	        <?php }
+      
+		<?php }
+
+        $newgedrec = "0 @$recordIdFrom@ $type\n";
+
+        if ((is_countable($factsTo) && count($factsTo) > 0) || is_countable($factsFrom) && count($factsFrom) > 0) { ?>
+			<label class="cell h6">
+				<?php echo KT_I18N::translate('Step 3'); ?>
+			</label>
+			<div class="cell">
+				<?php echo KT_I18N::translate('Add merged facts to "Merge to" record'); ?>
+			</div>
+
+           <?php for ($i = 0; ($i < count($factsTo) || $i < count($factsFrom)); $i ++) {
+                if (isset($factsTo[$i])) {
+                    if (in_array($i, $keepTo)) {
+                        $newgedrec .= $factsTo[$i]['subrec']."\n"; ?>
+                        <div class="cell">
+                            <?php echo
+                                KT_I18N::translate('Adding') . ' ' .
+                                $factsTo[$i]['fact'] . ' ' .
+                                KT_I18N::translate('from') . ' ' .
+                                $recordIdTo
+                            ; ?>
+                        </div>
+                    <?php }
+                }
+
+                if (isset($factsFrom[$i])) {
+                    if (in_array($i, $keepFrom)) {
+                        $newgedrec .= $factsFrom[$i]['subrec']."\n"; ?>
+                        <div class="cell">
+                            <?php echo
+                                KT_I18N::translate('Adding') . ' ' .
+                                $factsFrom[$i]['fact'] . ' ' .
+                                KT_I18N::translate('from') . ' ' .
+                                $recordIdFrom
+                            ; ?>
+                        </div>
+                    <?php }
+                }
+            }
+        } ?>
+
+		<label class="cell h6">
+			<?php echo KT_I18N::translate('Step 4'); ?>
+		</label>
+		<?php
+        replace_gedrec($recordIdTo, $gedIDTo, $newgedrec);
+        $rec = KT_GedcomRecord::getInstance($recordIdTo); ?>
         <div class="cell">
-            <?php echo KT_I18N::translate('Record %s successfully updated.', '<a href="' . $rec->getHtmlUrl() . '">' . $rec->getXref() . '</a>' ); ?>
+			<?php echo KT_I18N::translate('"Merge to" record <em>%s1 (%s2)</em> has been deleted.', $nameTo, $recordIdTo); ?>
         </div>
 
-        <?php
-        $fav_count = update_favorites($recordTo, $recordFrom);
+	<?php }
 
-        if ($fav_count > 0) { ?>
-            <div class="cell">
-                <?php echo KT_I18N::plural('%s favorite updated', '%s favorites updated', $fav_count, $fav_count); ?>
-            </div>
-        <?php }
-	}
 
 echo pageClose();

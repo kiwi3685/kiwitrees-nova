@@ -25,7 +25,7 @@
 	background-color: #e8f0f7;
 	border-left: 0.25rem solid #34689c;
 	border-right: 0.25rem solid #34689c;
-	font-size: 80%;
+	font-size: 90%;
 	margin-top: 0;
 	margin-bottom: 1rem;
 	padding: 0.5rem 0.75rem;
@@ -637,7 +637,7 @@ b {
 }
 
 small {
-	font-size: 80%;
+	font-size: 90%;
 	line-height: inherit;
 }
 
@@ -4311,7 +4311,7 @@ table.hover:not(.unstriped) tr:nth-of-type(even):hover {
 	padding: 0.75rem;
 	border-radius: 0;
 	background-color: #1b1212;
-	font-size: 80%;
+	font-size: 90%;
 	color: #fefefe;
 }
 .tooltip::before {
@@ -9491,7 +9491,7 @@ body main {
 }
 #admin-head .top-bar .top-bar-left .menu .is-dropdown-submenu a {
 	color: #1b1212;
-	font-size: 80%;
+	font-size: 90%;
 	padding: 0.25rem;
 }
 #admin-head .top-bar .top-bar-left .menu .is-dropdown-submenu a:hover {
@@ -9706,7 +9706,7 @@ main #admin-content .tabs-content .allcontent .callout {
 	font-size: inherit;
 }
 main #admin-content .tabs-content .callout {
-	font-size: 80%;
+	font-size: 90%;
 }
 main #admin-content .tabs-content .callout .info-help {
 	font-size: inherit;
@@ -9994,7 +9994,7 @@ main #admin-content #server-use ul li:last-of-type {
 	font-weight: 600;
 }
 main #admin-content .php-info {
-	font-size: 80%;
+	font-size: 90%;
 }
 main #admin-content .php-info h1 {
 	font-size: 1.5rem;
