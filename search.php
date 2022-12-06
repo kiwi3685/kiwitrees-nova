@@ -1,7 +1,7 @@
 <?php
 /**
  * Kiwitrees: Web based Family History software
- * Copyright (C) 2012 to 2022 kiwitrees.net
+ * Copyright (C) 2012 to 2022 kiwitrees.net.
  *
  * Derived from webtrees (www.webtrees.net)
  * Copyright (C) 2010 to 2012 webtrees development team
@@ -20,18 +20,21 @@
  * You should have received a copy of the GNU General Public License
  * along with Kiwitrees. If not, see <http://www.gnu.org/licenses/>.
  */
-
 define('KT_SCRIPT_NAME', 'search.php');
+
 require './includes/session.php';
-require_once KT_ROOT.'includes/functions/functions_print_lists.php';
-require_once KT_ROOT.'includes/functions/functions_edit.php';
+
+require_once KT_ROOT . 'includes/functions/functions_print_lists.php';
+
+require_once KT_ROOT . 'includes/functions/functions_edit.php';
 
 $controller = new KT_Controller_Search();
 $controller
 	->pageHeader()
 	->setPageTitle(KT_I18N::translate('Search'))
 	->addExternalJavascript(KT_AUTOCOMPLETE_JS_URL)
-	->addInlineJavascript('autocomplete();');
+	->addInlineJavascript('autocomplete();')
+;
 
 ?>
 
@@ -89,16 +92,17 @@ $controller
 <?php
 $action = KT_Filter::get('action');
 // Set active tab based on view parameter from url
-$action == 'general'	? $active = '#general' : $active = '#general';
-$action == 'soundex'	? $active = '#soundex' : $active = '#general';
-$action == 'replace'	? $active = '#replace' : $active = '#general';
-$action == 'advanced'	? $active = '#advanced' : $active = '#general';
+'general' == $action ? $active = '#general' : $active = '#general';
+'soundex' == $action ? $active = '#soundex' : $active = '#general';
+'replace' == $action ? $active = '#replace' : $active = '#general';
+'advanced' == $action ? $active = '#advanced' : $active = '#general';
 
-$controller ->addInlineJavascript('
+$controller->addInlineJavascript('
 
 		jQuery(".loading-image").css("display", "none");
 
-	');
+	')
+;
 ?>
 
 <div class="loading-image"></div>
@@ -143,7 +147,9 @@ $controller ->addInlineJavascript('
 													id="query"
 													type="text"
 													name="query"
-													value="<?php if (isset($controller->myquery)) echo $controller->myquery; ?>"
+													value="<?php if (isset($controller->myquery)) {
+														echo $controller->myquery;
+													} ?>"
 													autofocus
 												>
 											</div>
@@ -156,14 +162,14 @@ $controller ->addInlineJavascript('
 										<legend class="h6"><?php echo KT_I18N::translate('Associates'); ?></legend>
 										<label for="showasso"><?php echo KT_I18N::translate('Show related persons/families'); ?></label>
 										<?php echo simple_switch(
-											'showasso',
-											'on',
-											$controller->showasso == 'on',
-											'',
-											KT_I18N::translate('Yes'),
-											KT_I18N::translate('No'),
-											'small'
-										); ?>
+														'showasso',
+														'on',
+														'on' == $controller->showasso,
+														'',
+														KT_I18N::translate('Yes'),
+														KT_I18N::translate('No'),
+														'small'
+													); ?>
 									</fieldset>
 									<fieldset class="fieldset medium-12">
 										<legend class="h6"><?php echo KT_I18N::translate('Records'); ?></legend>
@@ -171,21 +177,21 @@ $controller ->addInlineJavascript('
 											<div class="cell medium-2">
 												<label for="srindi"><?php echo KT_I18N::translate('Individuals'); ?></label>
 												<?php echo simple_switch(
-													'srindi',
-													'yes',
-													(isset ($controller->srindi) || !$controller->isPostBack),
-													'',
-													KT_I18N::translate('Yes'),
-													KT_I18N::translate('No'),
-													'small'
-												); ?>
+											'srindi',
+											'yes',
+											isset($controller->srindi) || !$controller->isPostBack,
+											'',
+											KT_I18N::translate('Yes'),
+											KT_I18N::translate('No'),
+											'small'
+										); ?>
 											</div>
 											<div class="cell medium-2">
 												<label for="srfams"><?php echo KT_I18N::translate('Families'); ?></label>
 												<?php echo simple_switch(
 													'srfams',
 													'yes',
-													(isset ($controller->srfams)),
+													isset($controller->srfams),
 													'',
 													KT_I18N::translate('Yes'),
 													KT_I18N::translate('No'),
@@ -197,7 +203,7 @@ $controller ->addInlineJavascript('
 												<?php echo simple_switch(
 													'srsour',
 													'yes',
-													(isset ($controller->srfams)),
+													isset($controller->srfams),
 													'',
 													KT_I18N::translate('Yes'),
 													KT_I18N::translate('No'),
@@ -209,7 +215,7 @@ $controller ->addInlineJavascript('
 												<?php echo simple_switch(
 													'srnote',
 													'yes',
-													(isset ($controller->srnote)),
+													isset($controller->srnote),
 													'',
 													KT_I18N::translate('Yes'),
 													KT_I18N::translate('No'),
@@ -220,14 +226,14 @@ $controller ->addInlineJavascript('
 												<div class="cell medium-2">
 													<label for="srstor"><?php echo KT_I18N::translate('Stories'); ?></label>
 													<?php echo simple_switch(
-														'srstor',
-														'yes',
-														(isset ($controller->srstor)),
-														'',
-														KT_I18N::translate('Yes'),
-														KT_I18N::translate('No'),
-														'small'
-													); ?>
+													'srstor',
+													'yes',
+													isset($controller->srstor),
+													'',
+													KT_I18N::translate('Yes'),
+													KT_I18N::translate('No'),
+													'small'
+												); ?>
 												</div>
 											<?php } ?>
 										</div>
@@ -273,18 +279,24 @@ $controller ->addInlineJavascript('
 						<div class="label"><?php echo KT_I18N::translate('soundex algorithm'); ?></div>
 							<div class="value">
 								<p>
-									<input type="radio" name="soundex" value="Russell" <?php if ($controller->soundex == "Russell") echo ' checked="checked" '; ?> >
+									<input type="radio" name="soundex" value="Russell" <?php if ('Russell' == $controller->soundex) {
+										echo ' checked="checked" ';
+									} ?> >
 									<?php echo KT_I18N::translate('Russell'); ?>
 								</p>
 								<p>
-									<input type="radio" name="soundex" value="DaitchM" <?php if ($controller->soundex == "DaitchM" || $controller->soundex == "") echo ' checked="checked"'; ?> >
+									<input type="radio" name="soundex" value="DaitchM" <?php if ('DaitchM' == $controller->soundex || '' == $controller->soundex) {
+										echo ' checked="checked"';
+									} ?> >
 									<?php echo KT_I18N::translate('Daitch-Mokotoff'); ?>
 								</p>
 							</div>
 						<!-- Associates Section -->
 						<div class="label"><?php echo KT_I18N::translate('Associates'); ?></div>
 						<div class="value">
-							<input type="checkbox" name="showasso" value="on" <?php  if ($controller->showasso == "on") echo ' checked="checked" '; ?> >
+							<input type="checkbox" name="showasso" value="on" <?php if ('on' == $controller->showasso) {
+								echo ' checked="checked" ';
+							} ?> >
 							<?php echo KT_I18N::translate('Show related persons/families'); ?>
 						</div>
 					</div>
@@ -383,7 +395,7 @@ $controller ->addInlineJavascript('
 							};
 
 							// all of the field options
-							<?php foreach ($controller->getOtherFields() as $field=>$label) { ?>
+							<?php foreach ($controller->getOtherFields() as $field => $label) { ?>
 								opt = document.createElement('option');
 								opt.value='<?php echo $field; ?>';
 								opt.text='<?php echo addslashes($label); ?>';
@@ -433,15 +445,15 @@ $controller ->addInlineJavascript('
 							opt = document.createElement('option');
 							opt.value='2';
 							/* The translation strings use HTML entities, but javascript does not.  See bug 687980 */
-							opt.text='<?php echo html_entity_decode(KT_I18N::plural('&plusmn;%d year','&plusmn;%d years', 2, 2), ENT_COMPAT, 'UTF-8'); ?>';
+							opt.text='<?php echo html_entity_decode(KT_I18N::plural('&plusmn;%d year', '&plusmn;%d years', 2, 2), ENT_COMPAT, 'UTF-8'); ?>';
 							sel.appendChild(opt);
 							opt = document.createElement('option');
 							opt.value='5';
-							opt.text='<?php echo html_entity_decode(KT_I18N::plural('&plusmn;%d year','&plusmn;%d years', 5, 5), ENT_COMPAT, 'UTF-8'); ?>';
+							opt.text='<?php echo html_entity_decode(KT_I18N::plural('&plusmn;%d year', '&plusmn;%d years', 5, 5), ENT_COMPAT, 'UTF-8'); ?>';
 							sel.appendChild(opt);
 							opt = document.createElement('option');
 							opt.value='10';
-							opt.text='<?php echo html_entity_decode(KT_I18N::plural('&plusmn;%d year','&plusmn;%d years', 10, 10), ENT_COMPAT, 'UTF-8'); ?>';
+							opt.text='<?php echo html_entity_decode(KT_I18N::plural('&plusmn;%d year', '&plusmn;%d years', 10, 10), ENT_COMPAT, 'UTF-8'); ?>';
 							sel.appendChild(opt);
 							opt = document.createElement('option');
 							opt.value='BEF';
@@ -463,67 +475,97 @@ $controller ->addInlineJavascript('
 							<!-- // search terms -->
 							<?php
 							$fct = count($controller->fields);
-							for ($i=0; $i<$fct; $i++) {
-								if (strpos($controller->getField($i), "FAMC:HUSB:NAME")===0) continue;
-								if (strpos($controller->getField($i), "FAMC:WIFE:NAME")===0) continue;
-							?>
+				for ($i = 0; $i < $fct; $i++) {
+					if (0 === strpos($controller->getField($i), 'FAMC:HUSB:NAME')) {
+						continue;
+					}
+					if (0 === strpos($controller->getField($i), 'FAMC:WIFE:NAME')) {
+						continue;
+					}
+					?>
 							<tr>
 								<td class="list_label">
 									<?php echo $controller->getLabel($controller->getField($i)); ?>
 								</td>
 								<td id="vcell<?php echo $i; ?>" class="list_value">
 									<?php
-									$currentFieldSearch = $controller->getField($i); // Get this field's name and the search criterion
-									$currentField = substr($currentFieldSearch, 0, strrpos($currentFieldSearch, ':')); // Get the actual field name
-									?>
-										<input tabindex="<?php echo $i+1; ?>" type="text" id="value<?php echo $i; ?>" name="values[<?php echo $i; ?>]" value="<?php echo KT_Filter::escapeHtml($controller->getValue($i)); ?>"<?php echo (substr($controller->getField($i),-4)=='PLAC') ? 'data-autocomplete-type="PLAC"' : ''; ?>>
-									<?php if (preg_match("/^NAME:/", $currentFieldSearch)>0) { ?>
+							$currentFieldSearch = $controller->getField($i); // Get this field's name and the search criterion
+					$currentField = substr($currentFieldSearch, 0, strrpos($currentFieldSearch, ':')); // Get the actual field name
+					?>
+										<input tabindex="<?php echo $i + 1; ?>" type="text" id="value<?php echo $i; ?>" name="values[<?php echo $i; ?>]" value="<?php echo KT_Filter::escapeHtml($controller->getValue($i)); ?>"<?php echo ('PLAC' == substr($controller->getField($i), -4)) ? 'data-autocomplete-type="PLAC"' : ''; ?>>
+									<?php if (preg_match('/^NAME:/', $currentFieldSearch) > 0) { ?>
 										<select name="fields[<?php echo $i; ?>]">
-											<option value="<?php echo $currentField; ?>:EXACT"<?php if (preg_match("/:EXACT$/", $currentFieldSearch)>0) echo " selected=\"selected\""; ?>><?php echo KT_I18N::translate('Exact'); ?></option>
-											<option value="<?php echo $currentField; ?>:BEGINS"<?php if (preg_match("/:BEGINS$/", $currentFieldSearch)>0) echo " selected=\"selected\""; ?>><?php echo KT_I18N::translate('Begins with'); ?></option>
-											<option value="<?php echo $currentField; ?>:CONTAINS"<?php if (preg_match("/:CONTAINS$/", $currentFieldSearch)>0) echo " selected=\"selected\""; ?>><?php echo KT_I18N::translate('Contains'); ?></option>
-											<option value="<?php echo $currentField; ?>:SDX"<?php if (preg_match("/:SDX$/", $currentFieldSearch)>0) echo " selected=\"selected\""; ?>><?php echo KT_I18N::translate('Sounds like'); ?></option>
+											<option value="<?php echo $currentField; ?>:EXACT"<?php if (preg_match('/:EXACT$/', $currentFieldSearch) > 0) {
+												echo ' selected="selected"';
+											} ?>><?php echo KT_I18N::translate('Exact'); ?></option>
+											<option value="<?php echo $currentField; ?>:BEGINS"<?php if (preg_match('/:BEGINS$/', $currentFieldSearch) > 0) {
+												echo ' selected="selected"';
+											} ?>><?php echo KT_I18N::translate('Begins with'); ?></option>
+											<option value="<?php echo $currentField; ?>:CONTAINS"<?php if (preg_match('/:CONTAINS$/', $currentFieldSearch) > 0) {
+												echo ' selected="selected"';
+											} ?>><?php echo KT_I18N::translate('Contains'); ?></option>
+											<option value="<?php echo $currentField; ?>:SDX"<?php if (preg_match('/:SDX$/', $currentFieldSearch) > 0) {
+												echo ' selected="selected"';
+											} ?>><?php echo KT_I18N::translate('Sounds like'); ?></option>
 										</select>
 									<?php } else { ?>
 									<input type="hidden" name="fields[<?php echo $i; ?>]" value="<?php echo $controller->getField($i); ?>">
 									<?php }
-									if (preg_match("/:DATE$/", $currentFieldSearch)>0) {
+									if (preg_match('/:DATE$/', $currentFieldSearch) > 0) {
 										?>
 										<select name="plusminus[<?php echo $i; ?>]">
 											<option value=""><?php echo KT_I18N::translate('Exact date'); ?></option>
-											<option value="2" <?php if (!empty($controller->plusminus[$i]) && $controller->plusminus[$i]==2) echo " selected=\"selected\""; ?>><?php echo KT_I18N::plural('&plusmn;%d year','&plusmn;%d years', 2, 2); ?></option>
-											<option value="5" <?php if (!empty($controller->plusminus[$i]) && $controller->plusminus[$i]==5) echo "selected=\"selected\""; ?>><?php echo KT_I18N::plural('&plusmn;%d year','&plusmn;%d years', 5, 5); ?></option>
-											<option value="10" <?php if (!empty($controller->plusminus[$i]) && $controller->plusminus[$i]==10) echo "selected=\"selected\""; ?>><?php echo KT_I18N::plural('&plusmn;%d year','&plusmn;%d years', 10, 10); ?></option>
-											<option value="BEF" <?php if (!empty($controller->plusminus[$i]) && $controller->plusminus[$i]=='BEF') echo "selected=\"selected\""; ?>><?php echo KT_I18N::translate('Before'); ?></option>
-											<option value="AFT" <?php if (!empty($controller->plusminus[$i]) && $controller->plusminus[$i]=='AFT') echo "selected=\"selected\""; ?>><?php echo KT_I18N::translate('After'); ?></option>
+											<option value="2" <?php if (!empty($controller->plusminus[$i]) && 2 == $controller->plusminus[$i]) {
+												echo ' selected="selected"';
+											} ?>><?php echo KT_I18N::plural('&plusmn;%d year', '&plusmn;%d years', 2, 2); ?></option>
+											<option value="5" <?php if (!empty($controller->plusminus[$i]) && 5 == $controller->plusminus[$i]) {
+												echo 'selected="selected"';
+											} ?>><?php echo KT_I18N::plural('&plusmn;%d year', '&plusmn;%d years', 5, 5); ?></option>
+											<option value="10" <?php if (!empty($controller->plusminus[$i]) && 10 == $controller->plusminus[$i]) {
+												echo 'selected="selected"';
+											} ?>><?php echo KT_I18N::plural('&plusmn;%d year', '&plusmn;%d years', 10, 10); ?></option>
+											<option value="BEF" <?php if (!empty($controller->plusminus[$i]) && 'BEF' == $controller->plusminus[$i]) {
+												echo 'selected="selected"';
+											} ?>><?php echo KT_I18N::translate('Before'); ?></option>
+											<option value="AFT" <?php if (!empty($controller->plusminus[$i]) && 'AFT' == $controller->plusminus[$i]) {
+												echo 'selected="selected"';
+											} ?>><?php echo KT_I18N::translate('After'); ?></option>
 										</select>
 									<?php } ?>
 								</td>
 								<?php
-								//-- relative fields
-								if ($i==0 && $fct>4) {
-									$j=$fct;
+								// -- relative fields
+								if (0 == $i && $fct > 4) {
+									$j = $fct;
 									// Get the current options for Father's and Mother's name searches
 									$fatherGivnOption = 'SDX';
 									$fatherSurnOption = 'SDX';
 									$motherGivnOption = 'SDX';
 									$motherSurnOption = 'SDX';
-									for ($k=0; $k<$fct; $k++) {
+									for ($k = 0; $k < $fct; $k++) {
 										$searchField = $controller->getField($k);
 										$searchOption = substr($searchField, 20); // Assume we have something like "FAMC:HUSB:NAME:GIVN:foo"
+
 										switch (substr($searchField, 0, 20)) {
-										case 'FAMC:HUSB:NAME:GIVN:':
-											$fatherGivnOption = $searchOption;
-											break;
-										case 'FAMC:HUSB:NAME:SURN:':
-											$fatherSurnOption = $searchOption;
-											break;
-										case 'FAMC:WIFE:NAME:GIVN:':
-											$motherGivnOption = $searchOption;
-											break;
-										case 'FAMC:WIFE:NAME:SURN:':
-											$motherSurnOption = $searchOption;
-											break;
+											case 'FAMC:HUSB:NAME:GIVN:':
+												$fatherGivnOption = $searchOption;
+
+												break;
+
+											case 'FAMC:HUSB:NAME:SURN:':
+												$fatherSurnOption = $searchOption;
+
+												break;
+
+											case 'FAMC:WIFE:NAME:GIVN:':
+												$motherGivnOption = $searchOption;
+
+												break;
+
+											case 'FAMC:WIFE:NAME:SURN:':
+												$motherSurnOption = $searchOption;
+
+												break;
 										}
 									}
 									?>
@@ -540,12 +582,20 @@ $controller ->addInlineJavascript('
 													<?php echo KT_Gedcom_Tag::getLabel('GIVN'); ?>
 												</td>
 												<td class="list_value">
-													<input type="text" name="values[<?php echo $j; ?>]" value="<?php echo $controller->getValue($controller->getIndex('FAMC:HUSB:NAME:GIVN:'.$fatherGivnOption)); ?>">
+													<input type="text" name="values[<?php echo $j; ?>]" value="<?php echo $controller->getValue($controller->getIndex('FAMC:HUSB:NAME:GIVN:' . $fatherGivnOption)); ?>">
 													<select name="fields[<?php echo $j; ?>]">
-														<option value="FAMC:HUSB:NAME:GIVN:EXACT"<?php if ($fatherGivnOption == 'EXACT') echo " selected=\"selected\""; ?>><?php echo KT_I18N::translate('Exact'); ?></option>
-														<option value="FAMC:HUSB:NAME:GIVN:BEGINS"<?php if ($fatherGivnOption == 'BEGINS') echo " selected=\"selected\""; ?>><?php echo KT_I18N::translate('Begins with'); ?></option>
-														<option value="FAMC:HUSB:NAME:GIVN:CONTAINS"<?php if ($fatherGivnOption == 'CONTAINS') echo " selected=\"selected\""; ?>><?php echo KT_I18N::translate('Contains'); ?></option>
-														<option value="FAMC:HUSB:NAME:GIVN:SDX"<?php if ($fatherGivnOption == 'SDX') echo " selected=\"selected\""; ?>><?php echo KT_I18N::translate('Sounds like'); ?></option>
+														<option value="FAMC:HUSB:NAME:GIVN:EXACT"<?php if ('EXACT' == $fatherGivnOption) {
+															echo ' selected="selected"';
+														} ?>><?php echo KT_I18N::translate('Exact'); ?></option>
+														<option value="FAMC:HUSB:NAME:GIVN:BEGINS"<?php if ('BEGINS' == $fatherGivnOption) {
+															echo ' selected="selected"';
+														} ?>><?php echo KT_I18N::translate('Begins with'); ?></option>
+														<option value="FAMC:HUSB:NAME:GIVN:CONTAINS"<?php if ('CONTAINS' == $fatherGivnOption) {
+															echo ' selected="selected"';
+														} ?>><?php echo KT_I18N::translate('Contains'); ?></option>
+														<option value="FAMC:HUSB:NAME:GIVN:SDX"<?php if ('SDX' == $fatherGivnOption) {
+															echo ' selected="selected"';
+														} ?>><?php echo KT_I18N::translate('Sounds like'); ?></option>
 													</select>
 												</td>
 											</tr>
@@ -555,12 +605,20 @@ $controller ->addInlineJavascript('
 													<?php echo KT_Gedcom_Tag::getLabel('SURN'); ?>
 												</td>
 												<td class="list_value">
-													<input type="text" name="values[<?php echo $j; ?>]" value="<?php echo $controller->getValue($controller->getIndex('FAMC:HUSB:NAME:SURN:'.$fatherSurnOption)); ?>">
+													<input type="text" name="values[<?php echo $j; ?>]" value="<?php echo $controller->getValue($controller->getIndex('FAMC:HUSB:NAME:SURN:' . $fatherSurnOption)); ?>">
 													<select name="fields[<?php echo $j; ?>]">
-														<option value="FAMC:HUSB:NAME:SURN:EXACT"<?php if ($fatherSurnOption == 'EXACT') echo " selected=\"selected\""; ?>><?php echo KT_I18N::translate('Exact'); ?></option>
-														<option value="FAMC:HUSB:NAME:SURN:BEGINS"<?php if ($fatherSurnOption == 'BEGINS') echo " selected=\"selected\""; ?>><?php echo KT_I18N::translate('Begins with'); ?></option>
-														<option value="FAMC:HUSB:NAME:SURN:CONTAINS"<?php if ($fatherSurnOption == 'CONTAINS') echo " selected=\"selected\""; ?>><?php echo KT_I18N::translate('Contains'); ?></option>
-														<option value="FAMC:HUSB:NAME:SURN:SDX"<?php if ($fatherSurnOption == 'SDX') echo " selected=\"selected\""; ?>><?php echo KT_I18N::translate('Sounds like'); ?></option>
+														<option value="FAMC:HUSB:NAME:SURN:EXACT"<?php if ('EXACT' == $fatherSurnOption) {
+															echo ' selected="selected"';
+														} ?>><?php echo KT_I18N::translate('Exact'); ?></option>
+														<option value="FAMC:HUSB:NAME:SURN:BEGINS"<?php if ('BEGINS' == $fatherSurnOption) {
+															echo ' selected="selected"';
+														} ?>><?php echo KT_I18N::translate('Begins with'); ?></option>
+														<option value="FAMC:HUSB:NAME:SURN:CONTAINS"<?php if ('CONTAINS' == $fatherSurnOption) {
+															echo ' selected="selected"';
+														} ?>><?php echo KT_I18N::translate('Contains'); ?></option>
+														<option value="FAMC:HUSB:NAME:SURN:SDX"<?php if ('SDX' == $fatherSurnOption) {
+															echo ' selected="selected"';
+														} ?>><?php echo KT_I18N::translate('Sounds like'); ?></option>
 													</select>
 												</td>
 											</tr>
@@ -577,12 +635,20 @@ $controller ->addInlineJavascript('
 													<?php echo KT_Gedcom_Tag::getLabel('GIVN'); ?>
 												</td>
 												<td class="list_value">
-													<input type="text" name="values[<?php echo $j; ?>]" value="<?php echo $controller->getValue($controller->getIndex('FAMC:WIFE:NAME:GIVN:'.$motherGivnOption)); ?>">
+													<input type="text" name="values[<?php echo $j; ?>]" value="<?php echo $controller->getValue($controller->getIndex('FAMC:WIFE:NAME:GIVN:' . $motherGivnOption)); ?>">
 													<select name="fields[<?php echo $j; ?>]">
-														<option value="FAMC:WIFE:NAME:GIVN:EXACT"<?php if ($motherGivnOption == 'EXACT') echo " selected=\"selected\""; ?>><?php echo KT_I18N::translate('Exact'); ?></option>
-														<option value="FAMC:WIFE:NAME:GIVN:BEGINS"<?php if ($motherGivnOption == 'BEGINS') echo " selected=\"selected\""; ?>><?php echo KT_I18N::translate('Begins with'); ?></option>
-														<option value="FAMC:WIFE:NAME:GIVN:CONTAINS"<?php if ($motherGivnOption == 'CONTAINS') echo " selected=\"selected\""; ?>><?php echo KT_I18N::translate('Contains'); ?></option>
-														<option value="FAMC:WIFE:NAME:GIVN:SDX"<?php if ($motherGivnOption == 'SDX') echo " selected=\"selected\""; ?>><?php echo KT_I18N::translate('Sounds like'); ?></option>
+														<option value="FAMC:WIFE:NAME:GIVN:EXACT"<?php if ('EXACT' == $motherGivnOption) {
+															echo ' selected="selected"';
+														} ?>><?php echo KT_I18N::translate('Exact'); ?></option>
+														<option value="FAMC:WIFE:NAME:GIVN:BEGINS"<?php if ('BEGINS' == $motherGivnOption) {
+															echo ' selected="selected"';
+														} ?>><?php echo KT_I18N::translate('Begins with'); ?></option>
+														<option value="FAMC:WIFE:NAME:GIVN:CONTAINS"<?php if ('CONTAINS' == $motherGivnOption) {
+															echo ' selected="selected"';
+														} ?>><?php echo KT_I18N::translate('Contains'); ?></option>
+														<option value="FAMC:WIFE:NAME:GIVN:SDX"<?php if ('SDX' == $motherGivnOption) {
+															echo ' selected="selected"';
+														} ?>><?php echo KT_I18N::translate('Sounds like'); ?></option>
 													</select>
 												</td>
 												<?php $j++; ?>
@@ -592,12 +658,20 @@ $controller ->addInlineJavascript('
 													<?php echo KT_Gedcom_Tag::getLabel('SURN'); ?>
 												</td>
 												<td class="list_value">
-													<input type="text" name="values[<?php echo $j; ?>]" value="<?php echo $controller->getValue($controller->getIndex('FAMC:WIFE:NAME:SURN:'.$motherSurnOption)); ?>">
+													<input type="text" name="values[<?php echo $j; ?>]" value="<?php echo $controller->getValue($controller->getIndex('FAMC:WIFE:NAME:SURN:' . $motherSurnOption)); ?>">
 													<select name="fields[<?php echo $j; ?>]">
-														<option value="FAMC:WIFE:NAME:SURN:EXACT"<?php if ($motherSurnOption == 'EXACT') echo " selected=\"selected\""; ?>><?php echo KT_I18N::translate('Exact'); ?></option>
-														<option value="FAMC:WIFE:NAME:SURN:BEGINS"<?php if ($motherSurnOption == 'BEGINS') echo " selected=\"selected\""; ?>><?php echo KT_I18N::translate('Begins with'); ?></option>
-														<option value="FAMC:WIFE:NAME:SURN:CONTAINS"<?php if ($motherSurnOption == 'CONTAINS') echo " selected=\"selected\""; ?>><?php echo KT_I18N::translate('Contains'); ?></option>
-														<option value="FAMC:WIFE:NAME:SURN:SDX"<?php if ($motherSurnOption == 'SDX') echo " selected=\"selected\""; ?>><?php echo KT_I18N::translate('Sounds like'); ?></option>
+														<option value="FAMC:WIFE:NAME:SURN:EXACT"<?php if ('EXACT' == $motherSurnOption) {
+															echo ' selected="selected"';
+														} ?>><?php echo KT_I18N::translate('Exact'); ?></option>
+														<option value="FAMC:WIFE:NAME:SURN:BEGINS"<?php if ('BEGINS' == $motherSurnOption) {
+															echo ' selected="selected"';
+														} ?>><?php echo KT_I18N::translate('Begins with'); ?></option>
+														<option value="FAMC:WIFE:NAME:SURN:CONTAINS"<?php if ('CONTAINS' == $motherSurnOption) {
+															echo ' selected="selected"';
+														} ?>><?php echo KT_I18N::translate('Contains'); ?></option>
+														<option value="FAMC:WIFE:NAME:SURN:SDX"<?php if ('SDX' == $motherSurnOption) {
+															echo ' selected="selected"';
+														} ?>><?php echo KT_I18N::translate('Sounds like'); ?></option>
 													</select>
 												</td>
 												<?php $j++; ?>
@@ -627,14 +701,15 @@ $controller ->addInlineJavascript('
 				</div>
 			<?php }
 			echo $somethingPrinted = $controller->printResults();
-			?>
+?>
 		</div>
 	</div>
 
 <?php echo pageClose();
 
-function search_trees() {
-    global $controller; ?>
+function search_trees()
+{
+	global $controller; ?>
 
 	<legend class="h6"><?php echo KT_I18N::translate('Family trees'); ?></legend>
 
@@ -645,12 +720,12 @@ function search_trees() {
 			<div class="value">
 				<input
 					type="button"
-					value="<?php echo /* I18N: select all (of the family trees) */
+					value="<?php echo // I18N: select all (of the family trees)
 						KT_I18N::translate('select all'); ?>"
 					onclick="jQuery(\'#search_trees :checkbox\').each(function(){jQuery(this).attr(\'checked\', true);});return false;"
 				>
 				<input type="button"
-					value="<?php echo /* I18N: select none (of the family trees) */
+					value="<?php echo // I18N: select none (of the family trees)
 						KT_I18N::translate('select none'); ?>"
 					onclick="jQuery(\'#search_trees :checkbox\').each(function(){jQuery(this).attr(\'checked\', false);});return false;"
 				>
@@ -662,27 +737,27 @@ function search_trees() {
 			</div>
 		<?php }
 
-		//-- sorting menu by gedcom filename
+		// -- sorting menu by gedcom filename
 		foreach (KT_Tree::getAll() as $tree) {
-			$str = str_replace(array (".", "-", " "), array ("_", "_", "_"), $tree->tree_name);
-			$controller->inputFieldNames[] = "$str"; ?>
+			$str = str_replace(['.', '-', ' '], ['_', '_', '_'], $tree->tree_name);
+			$controller->inputFieldNames[] = "{$str}"; ?>
 
 			<div class="grid-x">
 				<div class="cell small-3">
 					<?php echo simple_switch(
-						$str,
-						'yes',
-						(isset ($_REQUEST["$str"])),
-						'',
-						KT_I18N::translate('Yes'),
-						KT_I18N::translate('No'),
-						'small'
-					); ?>
+				$str,
+				'yes',
+				isset($_REQUEST["{$str}"]),
+				'',
+				KT_I18N::translate('Yes'),
+				KT_I18N::translate('No'),
+				'small'
+			); ?>
 				</div>
-				<label class="cell small-9" for="checkbox_<?php echo $tree->tree_id ; ?>">
+				<label class="cell small-9" for="checkbox_<?php echo $tree->tree_id; ?>">
 					<?php echo $tree->tree_title_html; ?>
 				</label>
 			</div>
 		<?php }
-	}
+		}
 }

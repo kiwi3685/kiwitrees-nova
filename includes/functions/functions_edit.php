@@ -1,7 +1,7 @@
 <?php
 /**
  * Kiwitrees: Web based Family History software
- * Copyright (C) 2012 to 2022 kiwitrees.net
+ * Copyright (C) 2012 to 2022 kiwitrees.net.
  *
  * Derived from webtrees (www.webtrees.net)
  * Copyright (C) 2010 to 2012 webtrees development team
@@ -20,44 +20,46 @@
  * You should have received a copy of the GNU General Public License
  * along with Kiwitrees. If not, see <http://www.gnu.org/licenses/>.
  */
-
 if (!defined('KT_KIWITREES')) {
 	header('HTTP/1.0 403 Forbidden');
+
 	exit;
 }
 
-require_once KT_ROOT.'includes/functions/functions_import.php';
+require_once KT_ROOT . 'includes/functions/functions_import.php';
 
 // Invoke the Carbon Autoloader, to make any Carbon date class available
 require KT_ROOT . 'library/Carbon/autoload.php';
 use Carbon\Carbon;
 
 // Create an edit control for inline editing using jeditable
-function edit_field_inline($name, $value, $controller=null) {
-	$html='<span class="editable" id="' . $name . '">' . KT_Filter::escapeHtml($value) . '</span>';
-	$js='jQuery("#' . $name . '").editable("' . KT_SERVER_NAME . KT_SCRIPT_PATH . 'save.php", {tooltip: " ' . KT_I18N::translate('click to edit') . '", submitdata: {csrf: KT_CSRF_TOKEN}, submit:"&nbsp;&nbsp;' . /* I18N: button label */ KT_I18N::translate('Save') . '&nbsp;&nbsp;", style:"inherit", placeholder: "'.KT_I18N::translate('click to edit').'"});';
+function edit_field_inline($name, $value, $controller = null)
+{
+	$html = '<span class="editable" id="' . $name . '">' . KT_Filter::escapeHtml($value) . '</span>';
+	$js = 'jQuery("#' . $name . '").editable("' . KT_SERVER_NAME . KT_SCRIPT_PATH . 'save.php", {tooltip: " ' . KT_I18N::translate('click to edit') . '", submitdata: {csrf: KT_CSRF_TOKEN}, submit:"&nbsp;&nbsp;' . /* I18N: button label */ KT_I18N::translate('Save') . '&nbsp;&nbsp;", style:"inherit", placeholder: "' . KT_I18N::translate('click to edit') . '"});';
 
 	if ($controller) {
 		$controller->addInlineJavascript($js);
+
 		return $html;
-	} else {
-		// For AJAX callbacks
-		return $html . '<script>' . $js . '</script>';
 	}
+	// For AJAX callbacks
+	return $html . '<script>' . $js . '</script>';
 }
 
 // Create a text area for inline editing using jeditable
-function edit_text_inline($name, $value, $controller=null) {
-	$html='<span class="editable" style="white-space:pre-wrap;" id="' . $name . '">' . KT_Filter::escapeHtml($value) . '</span>';
-	$js='jQuery("#' . $name . '").editable("' . KT_SERVER_NAME . KT_SCRIPT_PATH . 'save.php", {tooltip: " ' . KT_I18N::translate('click to edit') . '", submitdata: {csrf: KT_CSRF_TOKEN}, submit:"&nbsp;&nbsp;' . KT_I18N::translate('Save') . '&nbsp;&nbsp;", style:"inherit", placeholder: "'.KT_I18N::translate('click to edit').'", type: "textarea", rows:4, cols:60 });';
+function edit_text_inline($name, $value, $controller = null)
+{
+	$html = '<span class="editable" style="white-space:pre-wrap;" id="' . $name . '">' . KT_Filter::escapeHtml($value) . '</span>';
+	$js = 'jQuery("#' . $name . '").editable("' . KT_SERVER_NAME . KT_SCRIPT_PATH . 'save.php", {tooltip: " ' . KT_I18N::translate('click to edit') . '", submitdata: {csrf: KT_CSRF_TOKEN}, submit:"&nbsp;&nbsp;' . KT_I18N::translate('Save') . '&nbsp;&nbsp;", style:"inherit", placeholder: "' . KT_I18N::translate('click to edit') . '", type: "textarea", rows:4, cols:60 });';
 
 	if ($controller) {
 		$controller->addInlineJavascript($js);
+
 		return $html;
-	} else {
-		// For AJAX callbacks
-		return $html . '<script>' . $js . '</script>';
 	}
+	// For AJAX callbacks
+	return $html . '<script>' . $js . '</script>';
 }
 
 // Create a <select> control for a form
@@ -66,75 +68,81 @@ function edit_text_inline($name, $value, $controller=null) {
 // $empty    - if not null, then add an entry ""=>$empty
 // $selected - the currently selected item (if any)
 // $extra    - extra markup for field (e.g. tab key sequence)
-function select_edit_control($name, $values, $empty, $selected, $extra='') {
+function select_edit_control($name, $values, $empty, $selected, $extra = '')
+{
 	if (is_null($empty)) {
 		$html = '';
 	} else {
 		if (empty($selected)) {
-			$html = '<option value="" selected="selected">'.htmlspecialchars($empty).'</option>';
+			$html = '<option value="" selected="selected">' . htmlspecialchars($empty) . '</option>';
 		} else {
-			$html = '<option value="">'.htmlspecialchars($empty).'</option>';
+			$html = '<option value="">' . htmlspecialchars($empty) . '</option>';
 		}
 	}
 	// A completely empty list would be invalid, and break various things
 	if (empty($values) && empty($html)) {
 		$html = '<option value=""></option>';
 	}
-	foreach ($values as $key=>$value) {
-		if ((string)$key === (string)$selected) { // Because "0" != ""
+	foreach ($values as $key => $value) {
+		if ((string) $key === (string) $selected) { // Because "0" != ""
 			$html .= '<option value="' . htmlspecialchars($key) . '" selected="selected" dir="auto">' . htmlspecialchars($value) . '</option>';
 		} else {
 			$html .= '<option value="' . htmlspecialchars($key) . '" dir="auto">' . htmlspecialchars($value) . '</option>';
 		}
 	}
 
-	$element_id = $name . '-' . (int)(microtime(true)*1000000);
+	$element_id = $name . '-' . (int) (microtime(true) * 1000000);
 
-	return '<select id="' . $element_id.'" name="' . $name . '" ' . $extra .'>' . $html . '</select>';
+	return '<select id="' . $element_id . '" name="' . $name . '" ' . $extra . '>' . $html . '</select>';
 }
 
 // An inline-editing version of select_edit_control()
-function select_edit_control_inline($name, $values, $empty, $selected, $controller=null) {
+function select_edit_control_inline($name, $values, $empty, $selected, $controller = null)
+{
 	if (!is_null($empty)) {
 		// Push ''=>$empty onto the front of the array, maintaining keys
-		$tmp=array(''=>htmlspecialchars($empty));
-		foreach ($values as $key=>$value) {
-			$tmp[$key]=htmlspecialchars($value);
+		$tmp = ['' => htmlspecialchars($empty)];
+		foreach ($values as $key => $value) {
+			$tmp[$key] = htmlspecialchars($value);
 		}
-		$values=$tmp;
+		$values = $tmp;
 	}
-	$values['selected']=htmlspecialchars($selected);
+	$values['selected'] = htmlspecialchars($selected);
 
-	$html='<span class="editable" id="' . $name . '">' .  (array_key_exists($selected, $values) ? $values[$selected] : '') . '</span>';
-	$js='jQuery("#' . $name . '").editable("' . KT_SERVER_NAME . KT_SCRIPT_PATH . 'save.php", {tooltip: " ' . KT_I18N::translate('click to edit') . '", submitdata: {csrf: KT_CSRF_TOKEN}, type:"select", data:' . json_encode($values) . ', submit:"&nbsp;&nbsp;' . KT_I18N::translate('Save') . '&nbsp;&nbsp;", style:"inherit", placeholder: "'.KT_I18N::translate('click to edit').'", callback:function(value, settings) {jQuery(this).html(settings.data[value]);} });';
+	$html = '<span class="editable" id="' . $name . '">' . (array_key_exists($selected, $values) ? $values[$selected] : '') . '</span>';
+	$js = 'jQuery("#' . $name . '").editable("' . KT_SERVER_NAME . KT_SCRIPT_PATH . 'save.php", {tooltip: " ' . KT_I18N::translate('click to edit') . '", submitdata: {csrf: KT_CSRF_TOKEN}, type:"select", data:' . json_encode($values) . ', submit:"&nbsp;&nbsp;' . KT_I18N::translate('Save') . '&nbsp;&nbsp;", style:"inherit", placeholder: "' . KT_I18N::translate('click to edit') . '", callback:function(value, settings) {jQuery(this).html(settings.data[value]);} });';
 
 	if ($controller) {
 		$controller->addInlineJavascript($js);
+
 		return $html;
-	} else {
-		// For AJAX callbacks
-		return $html . '<script>' . $js . '</script>';
 	}
+	// For AJAX callbacks
+	return $html . '<script>' . $js . '</script>';
 }
 
 /**
-* Create an on-off switch for a form
-* @param string $name     - the name and ID for the form element
-* @param array  $values   - array of value=>display items
-* @param string $selected - the currently selected item (if any)
-* @param string $activeText - label for active response
-* @param string $inactiveText - label for inactive response
-*
-*/
-function simple_switch($name, $value, $selected, $disabled = '', $activeText = 'Yes', $inactiveText = 'No', $size = 'small') {
+ * Create an on-off switch for a form.
+ *
+ * @param string $name         - the name and ID for the form element
+ * @param array  $values       - array of value=>display items
+ * @param string $selected     - the currently selected item (if any)
+ * @param string $activeText   - label for active response
+ * @param string $inactiveText - label for inactive response
+ * @param mixed  $value
+ * @param mixed  $disabled
+ * @param mixed  $size
+ */
+function simple_switch($name, $value, $selected, $disabled = '', $activeText = 'Yes', $inactiveText = 'No', $size = 'small')
+{
 	$html = '
 		<div class="grid-x grid-margin-y">
 			<div class="switch ' . $size . ' cell small-8 medium-4 large-2">
 				<input class="switch-input" ' . $disabled . ' id="' . $name . '" type="checkbox" name="' . $name . '" value="' . $value . '"';
-					if ((string)$value === (string)$selected) {
-						$html .= ' checked';
-					}
-				$html .= '>' . '
+	if ((string) $value === (string) $selected) {
+		$html .= ' checked';
+	}
+	$html .= '>' . '
 				<label class="switch-paddle" for="' . $name . '">
 					<span class="show-for-sr">' . $value . '</span>
 					<span class="switch-active" aria-hidden="true">' . KT_I18N::translate($activeText) . '</span>
@@ -148,122 +156,132 @@ function simple_switch($name, $value, $selected, $disabled = '', $activeText = '
 }
 
 /**
-* Create a set of switches for a form (only one can be "on")
-* @param string $name     - the ID for the form element
-* @param array  $values   - array of value=>display items
-* @param string $selected - the currently selected item (if any)
-*
-*/
-function radio_switch_group($name, $values, $selected, $extra = '') {
+ * Create a set of switches for a form (only one can be "on").
+ *
+ * @param string $name     - the ID for the form element
+ * @param array  $values   - array of value=>display items
+ * @param string $selected - the currently selected item (if any)
+ * @param mixed  $extra
+ */
+function radio_switch_group($name, $values, $selected, $extra = '')
+{
 	$html = '<div class="grid-x grid-margin-y">';
-		foreach ($values as $key => $value) {
-			$uniqueID = $name . (int)(microtime(true) * 1000000);
-			$html .= '
+	foreach ($values as $key => $value) {
+		$uniqueID = $name . (int) (microtime(true) * 1000000);
+		$html .= '
 				<div class="switch cell small-8 medium-4 large-2">
 					<label>' . $value . '</label>
 					<input class="switch-input" id="' . $uniqueID . '" type="radio" name="' . $name . '" value="' . htmlspecialchars($key) . '"';
-						if ((string)$key === (string)$selected) {
-							$html .= ' checked';
-						}
-						if ($extra ) {
-							$html .= ' ' . $extra;
-						}
-					$html .= '>' . '
+		if ((string) $key === (string) $selected) {
+			$html .= ' checked';
+		}
+		if ($extra) {
+			$html .= ' ' . $extra;
+		}
+		$html .= '>' . '
 					<label class="switch-paddle" for="' . $uniqueID . '">
 						<span class="show-for-sr">' . $value . '</span>
 					</label>
 				</div>
 			';
-		}
+	}
 	$html .= '</div>';
 
 	return $html;
 }
 
 /**
-* Create a set of switches for a form (any can be "on")
-* @param string $name     - the ID for the form element
-* @param array  $values   - array of value=>display items
-* @param string $selected - the currently selected item (if any)
-*
-*/
-function checkbox_switch_group($name, $values, $selected) {
+ * Create a set of switches for a form (any can be "on").
+ *
+ * @param string $name     - the ID for the form element
+ * @param array  $values   - array of value=>display items
+ * @param string $selected - the currently selected item (if any)
+ */
+function checkbox_switch_group($name, $values, $selected)
+{
 	$html = '<div class="grid-x grid-margin-y">';
-		foreach ($values as $key => $value) {
-			$uniqueID = $key . (int)(microtime(true) * 1000000);
-			$html .= '
+	foreach ($values as $key => $value) {
+		$uniqueID = $key . (int) (microtime(true) * 1000000);
+		$html .= '
 				<div class="switch cell small-4 medium-3">
 					<label>' . $value . '</label>
 					<input class="switch-input" id="' . $uniqueID . '" type="radio" value="' . htmlspecialchars($key) . '"';
-						if ((string)$key === (string)$selected) {
-							$html .= ' checked';
-						}
-					$html .= '>' . '
+		if ((string) $key === (string) $selected) {
+			$html .= ' checked';
+		}
+		$html .= '>' . '
 					<label class="switch-paddle" for="' . $uniqueID . '">
 						<span class="show-for-sr">' . $value . '</span>
 					</label>
 				</div>
 			';
-		}
+	}
 	$html .= '</div>';
 
 	return $html;
 }
 
 /**
-* Create a set of radio buttons for a form
-*
-* @param string $name     - the ID for the form element
-* @param array  $values   - array of value=>display items
-* @param string $selected - the currently selected item (if any)
-* @param string $extra    - extra markup for field (optional class)
-*/
-function radio_buttons($name, $values, $selected, $extra='') {
+ * Create a set of radio buttons for a form.
+ *
+ * @param string $name     - the ID for the form element
+ * @param array  $values   - array of value=>display items
+ * @param string $selected - the currently selected item (if any)
+ * @param string $extra    - extra markup for field (optional class)
+ */
+function radio_buttons($name, $values, $selected, $extra = '')
+{
 	$html = '';
 	foreach ($values as $key => $value) {
-		$uniqueID = $name . (int)(microtime(true) * 1000000);
+		$uniqueID = $name . (int) (microtime(true) * 1000000);
 		$html .= '
 			<label for="' . $uniqueID . '" ' . $extra . '>
 				<input type="radio" name="' . $name . '" id="' . $uniqueID . '" value="' . htmlspecialchars($key) . '"';
-					if ((string)$key === (string)$selected) {
-						$html .= ' checked';
-					}
-				$html .= '>' .
-				htmlspecialchars($value) . '
+		if ((string) $key === (string) $selected) {
+			$html .= ' checked';
+		}
+		$html .= '>' .
+		htmlspecialchars($value) . '
 			</label>
 		';
 	}
+
 	return $html;
 }
 
-
-
 // Print an edit control for a Yes/No field
-function edit_field_yes_no($name, $selected = false, $extra = 'class="radio_inline"') {
+function edit_field_yes_no($name, $selected = false, $extra = 'class="radio_inline"')
+{
 	return radio_buttons(
-		$name, array(false => KT_I18N::translate('No'), true => KT_I18N::translate('Yes')), $selected, $extra
+		$name,
+		[false => KT_I18N::translate('No'), true => KT_I18N::translate('Yes')],
+		$selected,
+		$extra
 	);
 }
 
 // Print an edit control for a checkbox
-function checkbox($name, $is_checked=false, $extra='') {
-	return '<input type="checkbox" name="' . $name . '" value="1" ' . ($is_checked ? 'checked="checked" ' : '') . $extra.'>';
+function checkbox($name, $is_checked = false, $extra = '')
+{
+	return '<input type="checkbox" name="' . $name . '" value="1" ' . ($is_checked ? 'checked="checked" ' : '') . $extra . '>';
 }
 
 // Print an edit control for a checkbox, with a hidden field to store one of the two states.
 // By default, a checkbox is either set, or not sent.
 // This function gives us a three options, set, unset or not sent.
 // Useful for dynamically generated forms where we don't know what elements are present.
-function two_state_checkbox($name, $is_checked=0, $extra='') {
+function two_state_checkbox($name, $is_checked = 0, $extra = '')
+{
 	return
-		'<input type="hidden" id="'.$name.'" name="'.$name.'" value="'.($is_checked?1:0).'">'.
-		'<input type="checkbox" name="'.$name.'-GUI-ONLY" value="1"'.
-		($is_checked ? ' checked="checked"' : '').
-		' onclick="document.getElementById(\''.$name.'\').value=(this.checked?1:0);" '.$extra.'>';
+		'<input type="hidden" id="' . $name . '" name="' . $name . '" value="' . ($is_checked ? 1 : 0) . '">' .
+		'<input type="checkbox" name="' . $name . '-GUI-ONLY" value="1"' .
+		($is_checked ? ' checked="checked"' : '') .
+		' onclick="document.getElementById(\'' . $name . '\').value=(this.checked?1:0);" ' . $extra . '>';
 }
 
 // Print a set of edit controls to select languages
-function edit_language_checkboxes($field_prefix, $languages) {
+function edit_language_checkboxes($field_prefix, $languages)
+{
 	$used_languages = KT_I18N::installed_languages();
 	// sort by localised name
 	foreach ($used_languages as $code => $name) {
@@ -272,166 +290,197 @@ function edit_language_checkboxes($field_prefix, $languages) {
 	asort($used_languages);
 
 	echo '<ul class="vertList">';
-		foreach ($used_languages as $code=>$name) {
-			$content = '<input type="checkbox" name="' . $field_prefix . $code . '" id="' . $field_prefix . $code . '"';
-			if (strpos(",{$languages},", ",{$code},") !== false) {
-				$content .= 'checked="checked"';
-			}
-			$content .= '><label for="' . $field_prefix . $code . '"> ' . KT_I18N::translate($name) . '</label>';
-			echo '<li>' . $content . '</li>';
+	foreach ($used_languages as $code => $name) {
+		$content = '<input type="checkbox" name="' . $field_prefix . $code . '" id="' . $field_prefix . $code . '"';
+		if (false !== strpos(",{$languages},", ",{$code},")) {
+			$content .= 'checked="checked"';
 		}
+		$content .= '><label for="' . $field_prefix . $code . '"> ' . KT_I18N::translate($name) . '</label>';
+		echo '<li>' . $content . '</li>';
+	}
 	echo '</ul>';
 }
 
 // Print an edit control for access level
-function edit_field_access_level($name, $selected = '', $extra = '', $priv = false) {
-	if ($priv == false) {
-		$ACCESS_LEVEL = array(
+function edit_field_access_level($name, $selected = '', $extra = '', $priv = false)
+{
+	if (false == $priv) {
+		$ACCESS_LEVEL = [
 			KT_PRIV_PUBLIC => KT_I18N::translate('Show to visitors'),
-			KT_PRIV_USER   => KT_I18N::translate('Show to members'),
-			KT_PRIV_NONE   => KT_I18N::translate('Show to managers'),
-			KT_PRIV_HIDE   => KT_I18N::translate('Hide from everyone')
-		);
+			KT_PRIV_USER => KT_I18N::translate('Show to members'),
+			KT_PRIV_NONE => KT_I18N::translate('Show to managers'),
+			KT_PRIV_HIDE => KT_I18N::translate('Hide from everyone'),
+		];
 	} else {
-		$ACCESS_LEVEL = array(
-			KT_PRIV_USER  => KT_I18N::translate('Show to members'),
-			KT_PRIV_NONE  => KT_I18N::translate('Show to managers'),
-			KT_PRIV_HIDE  => KT_I18N::translate('Hide from everyone')
-		);
-
+		$ACCESS_LEVEL = [
+			KT_PRIV_USER => KT_I18N::translate('Show to members'),
+			KT_PRIV_NONE => KT_I18N::translate('Show to managers'),
+			KT_PRIV_HIDE => KT_I18N::translate('Hide from everyone'),
+		];
 	}
+
 	return select_edit_control($name, $ACCESS_LEVEL, null, $selected, $extra);
 }
 
 // Print an edit control for a RESN field
-function edit_field_resn($name, $selected = '', $extra = '') {
-	$RESN = array(
-		''            => '',
-		'none'        => KT_I18N::translate('Show to visitors'), // Not valid GEDCOM, but very useful
-		'privacy'     => KT_I18N::translate('Show to members'),
-		'confidential'=> KT_I18N::translate('Show to managers'),
-		'locked'      => KT_I18N::translate('Only managers can edit')
-	);
+function edit_field_resn($name, $selected = '', $extra = '')
+{
+	$RESN = [
+		'' => '',
+		'none' => KT_I18N::translate('Show to visitors'), // Not valid GEDCOM, but very useful
+		'privacy' => KT_I18N::translate('Show to members'),
+		'confidential' => KT_I18N::translate('Show to managers'),
+		'locked' => KT_I18N::translate('Only managers can edit'),
+	];
+
 	return select_edit_control($name, $RESN, null, $selected, $extra);
 }
 
 // Print an edit control for a contact method field
-function edit_field_contact($name, $selected='', $extra='') {
+function edit_field_contact($name, $selected = '', $extra = '')
+{
 	// Different ways to contact the users
-	$CONTACT_METHODS = array(
-		'messaging'=>KT_I18N::translate('Kiwitrees sends emails'),
-		'mailto'    =>KT_I18N::translate('Mailto link'),
-		'none'      =>KT_I18N::translate('No contact'),
-	);
+	$CONTACT_METHODS = [
+		'messaging' => KT_I18N::translate('Kiwitrees sends emails'),
+		'mailto' => KT_I18N::translate('Mailto link'),
+		'none' => KT_I18N::translate('No contact'),
+	];
+
 	return select_edit_control($name, $CONTACT_METHODS, null, $selected, $extra);
 }
-function edit_field_contact_inline($name, $selected='', $controller=null) {
+function edit_field_contact_inline($name, $selected = '', $controller = null)
+{
 	// Different ways to contact the users
-	$CONTACT_METHODS = array(
-		'messaging'=>KT_I18N::translate('Kiwitrees sends emails'),
-		'mailto'    =>KT_I18N::translate('Mailto link'),
-		'none'      =>KT_I18N::translate('No contact'),
-	);
+	$CONTACT_METHODS = [
+		'messaging' => KT_I18N::translate('Kiwitrees sends emails'),
+		'mailto' => KT_I18N::translate('Mailto link'),
+		'none' => KT_I18N::translate('No contact'),
+	];
+
 	return select_edit_control_inline($name, $CONTACT_METHODS, null, $selected, $controller);
 }
 
 // Print an edit control for a language field
-function edit_field_language($name, $selected='', $extra='') {
+function edit_field_language($name, $selected = '', $extra = '')
+{
 	return select_edit_control($name, KT_I18N::used_languages(), null, $selected, $extra);
 }
 
 // An inline-editing version of edit_field_language()
-function edit_field_language_inline($name, $selected=false, $controller=null) {
+function edit_field_language_inline($name, $selected = false, $controller = null)
+{
 	return select_edit_control_inline(
-		$name, KT_I18N::used_languages(), null, $selected, $controller
+		$name,
+		KT_I18N::used_languages(),
+		null,
+		$selected,
+		$controller
 	);
 }
 
 // Print an edit control for a range of integers
-function edit_field_integers($name, $min, $max, $selected=false, $extra=false) {
-	$array=array();
-	for ($i=$min; $i<=$max; ++$i) {
-		$array[$i]=KT_I18N::number($i);
+function edit_field_integers($name, $min, $max, $selected = false, $extra = false)
+{
+	$array = [];
+	for ($i = $min; $i <= $max; $i++) {
+		$array[$i] = KT_I18N::number($i);
 	}
+
 	return select_edit_control($name, $array, null, $selected, $extra);
 }
 
 // Print an edit control for a username
-function edit_field_username($name, $selected='', $extra='') {
-	$all_users=KT_DB::prepare(
+function edit_field_username($name, $selected = '', $extra = '')
+{
+	$all_users = KT_DB::prepare(
 		"SELECT user_name, CONCAT_WS(' ', real_name, '-', user_name) FROM `##user` ORDER BY real_name"
 	)->fetchAssoc();
 	// The currently selected user may not exist
 	if ($selected && !array_key_exists($selected, $all_users)) {
-		$all_users[$selected]=$selected;
+		$all_users[$selected] = $selected;
 	}
+
 	return select_edit_control($name, $all_users, '-', $selected, $extra);
 }
 
 // Print an edit control for a ADOP field
-function edit_field_adop_u($name, $selected='', $extra='') {
+function edit_field_adop_u($name, $selected = '', $extra = '')
+{
 	return select_edit_control($name, KT_Gedcom_Code_Adop::getValues(), null, $selected, $extra);
 }
 
 // Print an edit control for a ADOP female field
-function edit_field_adop_f($name, $selected='', $extra='') {
+function edit_field_adop_f($name, $selected = '', $extra = '')
+{
 	return select_edit_control($name, KT_Gedcom_Code_Adop::getValues(new KT_Person("0 @XXX@ INDI\n1 SEX F")), null, $selected, $extra);
 }
 
 // Print an edit control for a ADOP male field
-function edit_field_adop_m($name, $selected='', $extra='') {
+function edit_field_adop_m($name, $selected = '', $extra = '')
+{
 	return select_edit_control($name, KT_Gedcom_Code_Adop::getValues(new KT_Person("0 @XXX@ INDI\n1 SEX M")), null, $selected, $extra);
 }
 
 // Print an edit control for a PEDI field
-function edit_field_pedi_u($name, $selected='', $extra='') {
+function edit_field_pedi_u($name, $selected = '', $extra = '')
+{
 	return select_edit_control($name, KT_Gedcom_Code_Pedi::getValues(), '', $selected, $extra);
 }
 
 // Print an edit control for a PEDI female field
-function edit_field_pedi_f($name, $selected='', $extra='') {
+function edit_field_pedi_f($name, $selected = '', $extra = '')
+{
 	return select_edit_control($name, KT_Gedcom_Code_Pedi::getValues(new KT_Person("0 @XXX@ INDI\n1 SEX F")), '', $selected, $extra);
 }
 
 // Print an edit control for a PEDI male field
-function edit_field_pedi_m($name, $selected='', $extra='') {
+function edit_field_pedi_m($name, $selected = '', $extra = '')
+{
 	return select_edit_control($name, KT_Gedcom_Code_Pedi::getValues(new KT_Person("0 @XXX@ INDI\n1 SEX M")), '', $selected, $extra);
 }
 
 // Print an edit control for a NAME TYPE field
-function edit_field_name_type_u($name, $selected='', $extra='') {
+function edit_field_name_type_u($name, $selected = '', $extra = '')
+{
 	return select_edit_control($name, KT_Gedcom_Code_Name::getValues(), '', $selected, $extra);
 }
 
 // Print an edit control for a female NAME TYPE field
-function edit_field_name_type_f($name, $selected='', $extra='') {
+function edit_field_name_type_f($name, $selected = '', $extra = '')
+{
 	return select_edit_control($name, KT_Gedcom_Code_Name::getValues(new KT_Person("0 @XXX@ INDI\n1 SEX F")), '', $selected, $extra);
 }
 
 // Print an edit control for a male NAME TYPE field
-function edit_field_name_type_m($name, $selected='', $extra='') {
+function edit_field_name_type_m($name, $selected = '', $extra = '')
+{
 	return select_edit_control($name, KT_Gedcom_Code_Name::getValues(new KT_Person("0 @XXX@ INDI\n1 SEX M")), '', $selected, $extra);
 }
 
 // Print an edit control for a RELA field
-function edit_field_rela($name, $selected='', $extra='') {
-	$rela_codes=KT_Gedcom_Code_Rela::getValues();
+function edit_field_rela($name, $selected = '', $extra = '')
+{
+	$rela_codes = KT_Gedcom_Code_Rela::getValues();
 	// The user is allowed to specify values that aren't in the list.
 	if (!array_key_exists($selected, $rela_codes)) {
-		$rela_codes[$selected]=$selected;
+		$rela_codes[$selected] = $selected;
 	}
+
 	return select_edit_control($name, $rela_codes, '', $selected, $extra);
 }
 
 /**
-* Check if the given gedcom record has changed since the last session access
-* This is used to check if the gedcom record changed between the time the user
-* loaded the individual page and the time they clicked on a link to edit
-* the data.
-*
-* @param string $pid The gedcom id of the record to check
-*/
-function checkChangeTime($pid, $gedrec, $lastTime) {
+ * Check if the given gedcom record has changed since the last session access
+ * This is used to check if the gedcom record changed between the time the user
+ * loaded the individual page and the time they clicked on a link to edit
+ * the data.
+ *
+ * @param string $pid      The gedcom id of the record to check
+ * @param mixed  $gedrec
+ * @param mixed  $lastTime
+ */
+function checkChangeTime($pid, $gedrec, $lastTime)
+{
 	$lastTime = Carbon::createFromTimestamp($lastTime)->toDateTimeString();
 	$change = KT_DB::prepare("
 		SELECT UNIX_TIMESTAMP(change_time) AS change_time, user_name
@@ -440,16 +489,16 @@ function checkChangeTime($pid, $gedrec, $lastTime) {
 		WHERE status<>'rejected' AND gedcom_id=? AND xref=? AND change_time>?
 		ORDER BY change_id DESC
 		LIMIT 1
-	")->execute(array(KT_GED_ID, $pid, $lastTime))->fetchOneRow();
+	")->execute([KT_GED_ID, $pid, $lastTime])->fetchOneRow();
 
 	if ($change) {
-		$changeTime=$change->change_time;
-		$changeUser=$change->user_name;
+		$changeTime = $change->change_time;
+		$changeUser = $change->user_name;
 	} else {
 		$changeTime = 0;
 		$changeUser = '';
 	}
-	if (isset($_REQUEST['linenum']) && $changeTime != 0 && $lastTime && $changeTime > $lastTime) {
+	if (isset($_REQUEST['linenum']) && 0 != $changeTime && $lastTime && $changeTime > $lastTime) {
 		global $controller;
 		$controller->pageHeader();
 		echo '<p class="error">', KT_I18N::translate('The record with id %s was changed by another user since you last accessed it.', $pid) . '</p>';
@@ -457,7 +506,8 @@ function checkChangeTime($pid, $gedrec, $lastTime) {
 			echo '<p>' . KT_I18N::translate('This record was last changed by <i>%s</i> at %s', $changeUser, $changeTime), '</p>';
 			echo '<p>' . KT_I18N::translate('Current time is %s', $lastTime) . '</p>';
 		}
-		echo '<p>' . KT_I18N::translate('Please reload the previous page to make sure you are working with the most recent record.') . "</p>";
+		echo '<p>' . KT_I18N::translate('Please reload the previous page to make sure you are working with the most recent record.') . '</p>';
+
 		exit;
 	}
 }
@@ -466,94 +516,103 @@ function checkChangeTime($pid, $gedrec, $lastTime) {
 // $xref/$ged_id - the record to update
 // $gedrec       - the new gedcom record
 // $chan         - whether or not to update the CHAN record
-function replace_gedrec($xref, $ged_id, $gedrec, $chan = true) {
+function replace_gedrec($xref, $ged_id, $gedrec, $chan = true)
+{
 	if (($gedrec = check_gedcom($gedrec, $chan)) !== false) {
 		$old_gedrec = find_gedcom_record($xref, $ged_id, true);
 		if ($old_gedrec != $gedrec) {
 			KT_DB::prepare(
-				"INSERT INTO `##change` (gedcom_id, xref, old_gedcom, new_gedcom, user_id) VALUES (?, ?, ?, ?, ?)"
-			)->execute(array(
+				'INSERT INTO `##change` (gedcom_id, xref, old_gedcom, new_gedcom, user_id) VALUES (?, ?, ?, ?, ?)'
+			)->execute([
 				$ged_id,
 				$xref,
 				$old_gedrec,
 				$gedrec,
-				KT_USER_ID
-			));
+				KT_USER_ID,
+			]);
 		}
 
 		if (get_user_setting(KT_USER_ID, 'auto_accept')) {
 			accept_all_changes($xref, $ged_id);
 		}
+
 		return true;
 	}
+
 	return false;
 }
 
-//-- this function will append a new gedcom record at
-//-- the end of the gedcom file.
-function append_gedrec($gedrec, $ged_id) {
-	if (($gedrec = check_gedcom($gedrec, true)) !== false && preg_match("/0 @(".KT_REGEX_XREF.")@ (".KT_REGEX_TAG.")/", $gedrec, $match)) {
-		$gid  = $match[1];
+// -- this function will append a new gedcom record at
+// -- the end of the gedcom file.
+function append_gedrec($gedrec, $ged_id)
+{
+	if (($gedrec = check_gedcom($gedrec, true)) !== false && preg_match('/0 @(' . KT_REGEX_XREF . ')@ (' . KT_REGEX_TAG . ')/', $gedrec, $match)) {
+		$gid = $match[1];
 		$type = $match[2];
 
-		if (preg_match("/\d/", $gid) == 0) {
+		if (0 == preg_match('/\\d/', $gid)) {
 			$xref = get_new_xref($type);
 		} else {
 			$xref = $gid;
 		}
-		$gedrec=preg_replace("/^0 @(.*)@/", "0 @$xref@", $gedrec);
+		$gedrec = preg_replace('/^0 @(.*)@/', "0 @{$xref}@", $gedrec);
 
 		KT_DB::prepare(
-			"INSERT INTO `##change` (gedcom_id, xref, old_gedcom, new_gedcom, user_id) VALUES (?, ?, ?, ?, ?)"
-		)->execute(array(
+			'INSERT INTO `##change` (gedcom_id, xref, old_gedcom, new_gedcom, user_id) VALUES (?, ?, ?, ?, ?)'
+		)->execute([
 			$ged_id,
 			$xref,
 			'',
 			$gedrec,
-			KT_USER_ID
-		));
+			KT_USER_ID,
+		]);
 
-		AddToLog("Appending new $type record $xref", 'edit');
+		AddToLog("Appending new {$type} record {$xref}", 'edit');
 
 		if (get_user_setting(KT_USER_ID, 'auto_accept')) {
 			accept_all_changes($xref, KT_GED_ID);
 		}
+
 		return $xref;
 	}
+
 	return false;
 }
 
-//-- this function will delete the gedcom record with
-//-- the given $xref
-function delete_gedrec($xref, $ged_id) {
+// -- this function will delete the gedcom record with
+// -- the given $xref
+function delete_gedrec($xref, $ged_id)
+{
 	KT_DB::prepare(
-		"INSERT INTO `##change` (gedcom_id, xref, old_gedcom, new_gedcom, user_id) VALUES (?, ?, ?, ?, ?)"
-	)->execute(array(
+		'INSERT INTO `##change` (gedcom_id, xref, old_gedcom, new_gedcom, user_id) VALUES (?, ?, ?, ?, ?)'
+	)->execute([
 		$ged_id,
 		$xref,
 		find_gedcom_record($xref, $ged_id, true),
 		'',
-		KT_USER_ID
-	));
+		KT_USER_ID,
+	]);
 
-	AddToLog("Deleting gedcom record $xref", 'edit');
+	AddToLog("Deleting gedcom record {$xref}", 'edit');
 
 	if (get_user_setting(KT_USER_ID, 'auto_accept')) {
 		accept_all_changes($xref, KT_GED_ID);
 	}
 }
 
-//-- this function will check a GEDCOM record for valid gedcom format
-function check_gedcom($gedrec, $chan=true) {
-	$ct = preg_match("/0 @(.*)@ (.*)/", $gedrec, $match);
+// -- this function will check a GEDCOM record for valid gedcom format
+function check_gedcom($gedrec, $chan = true)
+{
+	$ct = preg_match('/0 @(.*)@ (.*)/', $gedrec, $match);
 
-	if ($ct == 0) {
-		echo "ERROR 20: Invalid GEDCOM format";
+	if (0 == $ct) {
+		echo 'ERROR 20: Invalid GEDCOM format';
 		AddToLog("ERROR 20: Invalid GEDCOM format:\n" . $gedrec, 'edit');
 		if (KT_DEBUG) {
-			echo "<pre>$gedrec</pre>";
+			echo "<pre>{$gedrec}</pre>";
 			echo debug_print_backtrace();
 		}
+
 		return false;
 	}
 
@@ -562,64 +621,68 @@ function check_gedcom($gedrec, $chan=true) {
 
 	$gedrec = trim($gedrec);
 	if ($chan) {
-		$pos1 = strpos($gedrec, "1 CHAN");
-		if ($pos1 !== false) {
-			$pos2 = strpos($gedrec, "\n1", $pos1+4);
-			if ($pos2 === false) $pos2 = strlen($gedrec);
+		$pos1 = strpos($gedrec, '1 CHAN');
+		if (false !== $pos1) {
+			$pos2 = strpos($gedrec, "\n1", $pos1 + 4);
+			if (false === $pos2) {
+				$pos2 = strlen($gedrec);
+			}
 			$newgedrec = substr($gedrec, 0, $pos1);
-			$newgedrec .= "1 CHAN\n2 DATE ".strtoupper(date("d M Y"))."\n";
-			$newgedrec .= "3 TIME ".date("H:i:s")."\n";
-			$newgedrec .= "2 _KT_USER ".KT_USER_NAME."\n";
+			$newgedrec .= "1 CHAN\n2 DATE " . strtoupper(date('d M Y')) . "\n";
+			$newgedrec .= '3 TIME ' . date('H:i:s') . "\n";
+			$newgedrec .= '2 _KT_USER ' . KT_USER_NAME . "\n";
 			$newgedrec .= substr($gedrec, $pos2);
 			$gedrec = $newgedrec;
-		}
-		else {
-			$newgedrec = "\n1 CHAN\n2 DATE ".strtoupper(date("d M Y"))."\n";
-			$newgedrec .= "3 TIME ".date("H:i:s")."\n";
-			$newgedrec .= "2 _KT_USER ".KT_USER_NAME;
+		} else {
+			$newgedrec = "\n1 CHAN\n2 DATE " . strtoupper(date('d M Y')) . "\n";
+			$newgedrec .= '3 TIME ' . date('H:i:s') . "\n";
+			$newgedrec .= '2 _KT_USER ' . KT_USER_NAME;
 			$gedrec .= $newgedrec;
 		}
 	}
-	$gedrec = preg_replace('/\\\+/', "\\", $gedrec);
+	$gedrec = preg_replace('/\\\+/', '\\', $gedrec);
 
-	//-- remove any empty lines
+	// -- remove any empty lines
 	$lines = explode("\n", $gedrec);
 	$newrec = '';
-	foreach ($lines as $ind=>$line) {
-		//-- remove any whitespace
+	foreach ($lines as $ind => $line) {
+		// -- remove any whitespace
 		$line = trim($line);
-		if (!empty($line)) $newrec .= $line."\n";
+		if (!empty($line)) {
+			$newrec .= $line . "\n";
+		}
 	}
 
-	$newrec = html_entity_decode($newrec, ENT_COMPAT, 'UTF-8');
-	return $newrec;
+	return html_entity_decode($newrec, ENT_COMPAT, 'UTF-8');
 }
 
 // Remove all links from $gedrec to $xref, and any sub-tags.
-function remove_links($gedrec, $xref) {
-	$gedrec = preg_replace('/\n1 '.KT_REGEX_TAG.' @'.$xref.'@(\n[2-9].*)*/', '', $gedrec);
-	$gedrec = preg_replace('/\n2 '.KT_REGEX_TAG.' @'.$xref.'@(\n[3-9].*)*/', '', $gedrec);
-	$gedrec = preg_replace('/\n3 '.KT_REGEX_TAG.' @'.$xref.'@(\n[4-9].*)*/', '', $gedrec);
-	$gedrec = preg_replace('/\n4 '.KT_REGEX_TAG.' @'.$xref.'@(\n[5-9].*)*/', '', $gedrec);
-	$gedrec = preg_replace('/\n5 '.KT_REGEX_TAG.' @'.$xref.'@(\n[6-9].*)*/', '', $gedrec);
-	return $gedrec;
+function remove_links($gedrec, $xref)
+{
+	$gedrec = preg_replace('/\n1 ' . KT_REGEX_TAG . ' @' . $xref . '@(\n[2-9].*)*/', '', $gedrec);
+	$gedrec = preg_replace('/\n2 ' . KT_REGEX_TAG . ' @' . $xref . '@(\n[3-9].*)*/', '', $gedrec);
+	$gedrec = preg_replace('/\n3 ' . KT_REGEX_TAG . ' @' . $xref . '@(\n[4-9].*)*/', '', $gedrec);
+	$gedrec = preg_replace('/\n4 ' . KT_REGEX_TAG . ' @' . $xref . '@(\n[5-9].*)*/', '', $gedrec);
+
+	return preg_replace('/\n5 ' . KT_REGEX_TAG . ' @' . $xref . '@(\n[6-9].*)*/', '', $gedrec);
 }
 
 // Remove a link to a media object from a GEDCOM record
-function remove_media_subrecord($oldrecord, $gid) {
+function remove_media_subrecord($oldrecord, $gid)
+{
 	$newrec = '';
 	$gedlines = explode("\n", $oldrecord);
 
-	for ($i=0; $i<count($gedlines); $i++) {
+	for ($i = 0; $i < count($gedlines); $i++) {
 		if (preg_match('/^\d (?:OBJE|_KT_OBJE_SORT) @' . $gid . '@$/', $gedlines[$i])) {
 			$glevel = $gedlines[$i][0];
 			$i++;
-			while ((isset($gedlines[$i]))&&(strlen($gedlines[$i])<4 || $gedlines[$i][0]>$glevel)) {
+			while ((isset($gedlines[$i])) && (strlen($gedlines[$i]) < 4 || $gedlines[$i][0] > $glevel)) {
 				$i++;
 			}
 			$i--;
 		} else {
-			$newrec .= $gedlines[$i]."\n";
+			$newrec .= $gedlines[$i] . "\n";
 		}
 	}
 
@@ -627,47 +690,58 @@ function remove_media_subrecord($oldrecord, $gid) {
 }
 
 /**
-* delete a subrecord from a parent record using the linenumber
-*
-* @param string $oldrecord parent record to delete from
-* @param int $linenum linenumber where the subrecord to delete starts
-* @return string the new record
-*/
-function remove_subline($oldrecord, $linenum) {
+ * delete a subrecord from a parent record using the linenumber.
+ *
+ * @param string $oldrecord parent record to delete from
+ * @param int    $linenum   linenumber where the subrecord to delete starts
+ *
+ * @return string the new record
+ */
+function remove_subline($oldrecord, $linenum)
+{
 	$newrec = '';
 	$gedlines = explode("\n", $oldrecord);
 
-	for ($i=0; $i<$linenum; $i++) {
-		if (trim($gedlines[$i])!='') $newrec .= $gedlines[$i]."\n";
+	for ($i = 0; $i < $linenum; $i++) {
+		if ('' != trim($gedlines[$i])) {
+			$newrec .= $gedlines[$i] . "\n";
+		}
 	}
 	if (isset($gedlines[$linenum])) {
 		$fields = explode(' ', $gedlines[$linenum]);
 		$glevel = $fields[0];
 		$i++;
-		if ($i<count($gedlines)) {
-			//-- don't put empty lines in the record
-			while ((isset($gedlines[$i]))&&(strlen($gedlines[$i])<4 || $gedlines[$i][0]>$glevel)) $i++;
-			while ($i<count($gedlines)) {
-				if (trim($gedlines[$i])!='') $newrec .= $gedlines[$i]."\n";
+		if ($i < count($gedlines)) {
+			// -- don't put empty lines in the record
+			while ((isset($gedlines[$i])) && (strlen($gedlines[$i]) < 4 || $gedlines[$i][0] > $glevel)) {
+				$i++;
+			}
+			while ($i < count($gedlines)) {
+				if ('' != trim($gedlines[$i])) {
+					$newrec .= $gedlines[$i] . "\n";
+				}
 				$i++;
 			}
 		}
+	} else {
+		return $oldrecord;
 	}
-	else return $oldrecord;
 
-	$newrec = trim($newrec);
-	return $newrec;
+	return trim($newrec);
 }
 
 /**
-* prints a form to add an individual or edit an individual's name
-*
-* @param string $nextaction the next action the edit_interface.php file should take after the form is submitted
-* @param string $famid the family that the new person should be added to
-* @param string $namerec the name subrecord when editing a name
-* @param string $famtag how the new person is added to the family
-*/
-function print_indi_form($nextaction, $famid, $linenum='', $namerec='', $famtag="CHIL", $sextag='') {
+ * prints a form to add an individual or edit an individual's name.
+ *
+ * @param string $nextaction the next action the edit_interface.php file should take after the form is submitted
+ * @param string $famid      the family that the new person should be added to
+ * @param string $namerec    the name subrecord when editing a name
+ * @param string $famtag     how the new person is added to the family
+ * @param mixed  $linenum
+ * @param mixed  $sextag
+ */
+function print_indi_form($nextaction, $famid, $linenum = '', $namerec = '', $famtag = 'CHIL', $sextag = '')
+{
 	global $pid, $WORD_WRAPPED_NOTES, $iconStyle, $UNLINKED;
 	global $NPFX_accept, $SPFX_accept, $NSFX_accept, $FILE_FORM_accept;
 	global $bdm, $STANDARD_NAME_FACTS, $REVERSED_NAME_FACTS, $ADVANCED_NAME_FACTS, $ADVANCED_PLAC_FACTS;
@@ -687,354 +761,401 @@ function print_indi_form($nextaction, $famid, $linenum='', $namerec='', $famtag=
 		<div id="add_name_details" class="grid-x">
 			<?php
 			// When adding a new child, specify the pedigree
-			if (($nextaction == 'addchildaction' || $nextaction == 'addopfchildaction') && KT_SCRIPT_NAME !== 'admin_trees_addunlinked.php') {
+			if (('addchildaction' == $nextaction || 'addopfchildaction' == $nextaction) && KT_SCRIPT_NAME !== 'admin_trees_addunlinked.php') {
 				add_simple_tag('0 PEDI');
 			}
 			// Add TYPE option on updateSOUR
-			if ($nextaction == 'update') {
+			if ('update' == $nextaction) {
 				$name_type = get_gedcom_value('TYPE', 2, $namerec);
 				add_simple_tag('0 TYPE ' . $name_type);
 			}
 			// Populate the standard NAME field and subfields
-			$name_fields = array();
-			foreach ($STANDARD_NAME_FACTS as $tag) {
-				$name_fields[$tag]=get_gedcom_value($tag, 0, $namerec);
-			}
+			$name_fields = [];
+	foreach ($STANDARD_NAME_FACTS as $tag) {
+		$name_fields[$tag] = get_gedcom_value($tag, 0, $namerec);
+	}
 
-			$new_marnm='';
-			// Inherit surname from parents, spouse or child
-			if (empty($namerec)) {
-				// We'll need the parent's name to set the child's surname
-				$family=KT_Family::getInstance($famid);
-				if ($family && $family->getHusband()) {
-					$father_name=get_gedcom_value('NAME', 0, $family->getHusband()->getGedcomRecord());
-				} else {
-					$father_name='';
+	$new_marnm = '';
+	// Inherit surname from parents, spouse or child
+	if (empty($namerec)) {
+		// We'll need the parent's name to set the child's surname
+		$family = KT_Family::getInstance($famid);
+		if ($family && $family->getHusband()) {
+			$father_name = get_gedcom_value('NAME', 0, $family->getHusband()->getGedcomRecord());
+		} else {
+			$father_name = '';
+		}
+		if ($family && $family->getWife()) {
+			$mother_name = get_gedcom_value('NAME', 0, $family->getWife()->getGedcomRecord());
+		} else {
+			$mother_name = '';
+		}
+		// We'll need the spouse/child's name to set the spouse/parent's surname
+		$prec = find_gedcom_record($pid, KT_GED_ID, true);
+		$indi_name = get_gedcom_value('NAME', 0, $prec);
+		// Different cultures do surnames differently
+		switch ($SURNAME_TRADITION) {
+			case 'spanish':
+				// Mother: Maria /AAAA BBBB/
+				// Father: Jose  /CCCC DDDD/
+				// Child:  Pablo /CCCC AAAA/
+				switch ($nextaction) {
+					case 'addchildaction':
+						if (preg_match('/\/(\S+)\s+\S+\//', $mother_name, $matchm)
+								&& preg_match('/\/(\S+)\s+\S+\//', $father_name, $matchf)) {
+							$name_fields['SURN'] = $matchf[1] . ' ' . $matchm[1];
+							$name_fields['NAME'] = '/' . $name_fields['SURN'] . '/';
+						}
+
+						break;
+
+					case 'addnewparentaction':
+						if ('HUSB' == $famtag && preg_match('/\/(\S+)\s+\S+\//', $indi_name, $match)) {
+							$name_fields['SURN'] = $match[1] . ' ';
+							$name_fields['NAME'] = '/' . $name_fields['SURN'] . '/';
+						}
+						if ('WIFE' == $famtag && preg_match('/\/\S+\s+(\S+)\//', $indi_name, $match)) {
+							$name_fields['SURN'] = $match[1] . ' ';
+							$name_fields['NAME'] = '/' . $name_fields['SURN'] . '/';
+						}
+
+						break;
 				}
-				if ($family && $family->getWife()) {
-					$mother_name=get_gedcom_value('NAME', 0, $family->getWife()->getGedcomRecord());
-				} else {
-					$mother_name='';
+
+				break;
+
+			case 'portuguese':
+				// Mother: Maria /AAAA BBBB/
+				// Father: Jose  /CCCC DDDD/
+				// Child:  Pablo /BBBB DDDD/
+				switch ($nextaction) {
+					case 'addchildaction':
+						if (preg_match('/\/\S+\s+(\S+)\//', $mother_name, $matchm)
+								&& preg_match('/\/\S+\s+(\S+)\//', $father_name, $matchf)) {
+							$name_fields['SURN'] = $matchf[1] . ' ' . $matchm[1];
+							$name_fields['NAME'] = '/' . $name_fields['SURN'] . '/';
+						}
+
+						break;
+
+					case 'addnewparentaction':
+						if ('HUSB' == $famtag && preg_match('/\/\S+\s+(\S+)\//', $indi_name, $match)) {
+							$name_fields['SURN'] = ' ' . $match[1];
+							$name_fields['NAME'] = '/' . $name_fields['SURN'] . '/';
+						}
+						if ('WIFE' == $famtag && preg_match('/\/(\S+)\s+\S+\//', $indi_name, $match)) {
+							$name_fields['SURN'] = ' ' . $match[1];
+							$name_fields['NAME'] = '/' . $name_fields['SURN'] . '/';
+						}
+
+						break;
 				}
-				// We'll need the spouse/child's name to set the spouse/parent's surname
-				$prec		= find_gedcom_record($pid, KT_GED_ID, true);
-				$indi_name	= get_gedcom_value('NAME', 0, $prec);
-				// Different cultures do surnames differently
-				switch ($SURNAME_TRADITION) {
-				case 'spanish':
-					//Mother: Maria /AAAA BBBB/
-					//Father: Jose  /CCCC DDDD/
-					//Child:  Pablo /CCCC AAAA/
-					switch ($nextaction) {
+
+				break;
+
+			case 'icelandic':
+				// Sons get their father's given name plus "sson"
+				// Daughters get their father's given name plus "sdottir"
+				switch ($nextaction) {
 					case 'addchildaction':
-						if (preg_match('/\/(\S+)\s+\S+\//', $mother_name, $matchm) &&
-								preg_match('/\/(\S+)\s+\S+\//', $father_name, $matchf)) {
-							$name_fields['SURN']=$matchf[1].' '.$matchm[1];
-							$name_fields['NAME']='/'.$name_fields['SURN'].'/';
+						if ('M' == $sextag && preg_match('/(\S+)\s+\/.*\//', $father_name, $match)) {
+							$name_fields['SURN'] = preg_replace('/s$/', '', $match[1]) . 'sson';
+							$name_fields['NAME'] = '/' . $name_fields['SURN'] . '/';
 						}
+						if ('F' == $sextag && preg_match('/(\S+)\s+\/.*\//', $father_name, $match)) {
+							$name_fields['SURN'] = preg_replace('/s$/', '', $match[1]) . 'sdottir';
+							$name_fields['NAME'] = '/' . $name_fields['SURN'] . '/';
+						}
+
 						break;
+
 					case 'addnewparentaction':
-						if ($famtag == 'HUSB' && preg_match('/\/(\S+)\s+\S+\//', $indi_name, $match)) {
-							$name_fields['SURN']=$match[1].' ';
-							$name_fields['NAME']='/'.$name_fields['SURN'].'/';
+						if ('HUSB' == $famtag && preg_match('/(\S+)sson\s+\/.*\//i', $indi_name, $match)) {
+							$name_fields['GIVN'] = $match[1];
+							$name_fields['NAME'] = $name_fields['GIVN'] . ' //';
 						}
-						if ($famtag == 'WIFE' && preg_match('/\/\S+\s+(\S+)\//', $indi_name, $match)) {
-							$name_fields['SURN']=$match[1].' ';
-							$name_fields['NAME']='/'.$name_fields['SURN'].'/';
+						if ('WIFE' == $famtag && preg_match('/(\S+)sdottir\s+\/.*\//i', $indi_name, $match)) {
+							$name_fields['GIVN'] = $match[1];
+							$name_fields['NAME'] = $name_fields['GIVN'] . ' //';
 						}
+
 						break;
-					}
-					break;
-				case 'portuguese':
-					//Mother: Maria /AAAA BBBB/
-					//Father: Jose  /CCCC DDDD/
-					//Child:  Pablo /BBBB DDDD/
-					switch ($nextaction) {
-					case 'addchildaction':
-						if (preg_match('/\/\S+\s+(\S+)\//', $mother_name, $matchm) &&
-								preg_match('/\/\S+\s+(\S+)\//', $father_name, $matchf)) {
-							$name_fields['SURN']=$matchf[1].' '.$matchm[1];
-							$name_fields['NAME']='/'.$name_fields['SURN'].'/';
-						}
-						break;
-					case 'addnewparentaction':
-						if ($famtag == 'HUSB' && preg_match('/\/\S+\s+(\S+)\//', $indi_name, $match)) {
-							$name_fields['SURN']=' '.$match[1];
-							$name_fields['NAME']='/'.$name_fields['SURN'].'/';
-						}
-						if ($famtag == 'WIFE' && preg_match('/\/(\S+)\s+\S+\//', $indi_name, $match)) {
-							$name_fields['SURN']=' '.$match[1];
-							$name_fields['NAME']='/'.$name_fields['SURN'].'/';
-						}
-						break;
-					}
-					break;
-				case 'icelandic':
-					// Sons get their father's given name plus "sson"
-					// Daughters get their father's given name plus "sdottir"
-					switch ($nextaction) {
-					case 'addchildaction':
-						if ($sextag == 'M' && preg_match('/(\S+)\s+\/.*\//', $father_name, $match)) {
-							$name_fields['SURN']=preg_replace('/s$/', '', $match[1]).'sson';
-							$name_fields['NAME']='/'.$name_fields['SURN'].'/';
-						}
-						if ($sextag == 'F' && preg_match('/(\S+)\s+\/.*\//', $father_name, $match)) {
-							$name_fields['SURN']=preg_replace('/s$/', '', $match[1]).'sdottir';
-							$name_fields['NAME']='/'.$name_fields['SURN'].'/';
-						}
-						break;
-					case 'addnewparentaction':
-						if ($famtag == 'HUSB' && preg_match('/(\S+)sson\s+\/.*\//i', $indi_name, $match)) {
-							$name_fields['GIVN']=$match[1];
-							$name_fields['NAME']=$name_fields['GIVN'].' //';
-						}
-						if ($famtag == 'WIFE' && preg_match('/(\S+)sdottir\s+\/.*\//i', $indi_name, $match)) {
-							$name_fields['GIVN']=$match[1];
-							$name_fields['NAME']=$name_fields['GIVN'].' //';
-						}
-						break;
-					}
-					break;
-				case 'patrilineal':
-					// Father gives his surname to his children
-					switch ($nextaction) {
+				}
+
+				break;
+
+			case 'patrilineal':
+				// Father gives his surname to his children
+				switch ($nextaction) {
 					case 'addchildaction':
 						if (preg_match('/\/((?:[a-z]{2,3} )*)(.*)\//i', $father_name, $match)) {
-							$name_fields['SURN']=$match[2];
-							$name_fields['SPFX']=trim($match[1]);
-							$name_fields['NAME']="/{$match[1]}{$match[2]}/";
+							$name_fields['SURN'] = $match[2];
+							$name_fields['SPFX'] = trim($match[1]);
+							$name_fields['NAME'] = "/{$match[1]}{$match[2]}/";
 						}
+
 						break;
+
 					case 'addnewparentaction':
-						if ($famtag == 'HUSB' && preg_match('/\/((?:[a-z]{2,3} )*)(.*)\//i', $indi_name, $match)) {
-							$name_fields['SURN']=$match[2];
-							$name_fields['SPFX']=trim($match[1]);
-							$name_fields['NAME']="/{$match[1]}{$match[2]}/";
+						if ('HUSB' == $famtag && preg_match('/\/((?:[a-z]{2,3} )*)(.*)\//i', $indi_name, $match)) {
+							$name_fields['SURN'] = $match[2];
+							$name_fields['SPFX'] = trim($match[1]);
+							$name_fields['NAME'] = "/{$match[1]}{$match[2]}/";
 						}
+
 						break;
-					}
-					break;
-				case 'matrilineal':
-					// Mother gives her surname to her children
-					switch ($nextaction) {
+				}
+
+				break;
+
+			case 'matrilineal':
+				// Mother gives her surname to her children
+				switch ($nextaction) {
 					case 'addchildaction':
 						if (preg_match('/\/((?:[a-z]{2,3} )*)(.*)\//i', $mother, $match)) {
-							$name_fields['SURN']=$match[2];
-							$name_fields['SPFX']=trim($match[1]);
-							$name_fields['NAME']="/{$match[1]}{$match[2]}/";
+							$name_fields['SURN'] = $match[2];
+							$name_fields['SPFX'] = trim($match[1]);
+							$name_fields['NAME'] = "/{$match[1]}{$match[2]}/";
 						}
+
 						break;
+
 					case 'addnewparentaction':
-						if ($famtag == 'WIFE' && preg_match('/\/((?:[a-z]{2,3} )*)(.*)\//i', $indi_name, $match)) {
-							$name_fields['SURN']=$match[2];
-							$name_fields['SPFX']=trim($match[1]);
-							$name_fields['NAME']="/{$match[1]}{$match[2]}/";
+						if ('WIFE' == $famtag && preg_match('/\/((?:[a-z]{2,3} )*)(.*)\//i', $indi_name, $match)) {
+							$name_fields['SURN'] = $match[2];
+							$name_fields['SPFX'] = trim($match[1]);
+							$name_fields['NAME'] = "/{$match[1]}{$match[2]}/";
 						}
+
 						break;
-					}
-					break;
-				case 'paternal':
-				case 'polish':
-				case 'lithuanian':
-					// Father gives his surname to his wife and children
-					switch ($nextaction) {
+				}
+
+				break;
+
+			case 'paternal':
+			case 'polish':
+			case 'lithuanian':
+				// Father gives his surname to his wife and children
+				switch ($nextaction) {
 					case 'addspouseaction':
-						if ($famtag == 'WIFE' && preg_match('/\/(.*)\//', $indi_name, $match)) {
-							if ($SURNAME_TRADITION == 'polish') {
-								$match[1]=preg_replace(array('/ski$/', '/cki$/', '/dzki$/', '/żki$/'), array('ska', 'cka', 'dzka', 'żka'), $match[1]);
-							} else if ($SURNAME_TRADITION == 'lithuanian') {
-								$match[1]=preg_replace(array('/as$/', '/is$/', '/ys$/', '/us$/'), array('ienė', 'ienė', 'ienė', 'ienė'), $match[1]);
+						if ('WIFE' == $famtag && preg_match('/\/(.*)\//', $indi_name, $match)) {
+							if ('polish' == $SURNAME_TRADITION) {
+								$match[1] = preg_replace(['/ski$/', '/cki$/', '/dzki$/', '/żki$/'], ['ska', 'cka', 'dzka', 'żka'], $match[1]);
+							} elseif ('lithuanian' == $SURNAME_TRADITION) {
+								$match[1] = preg_replace(['/as$/', '/is$/', '/ys$/', '/us$/'], ['ienė', 'ienė', 'ienė', 'ienė'], $match[1]);
 							}
-							$new_marnm=$match[1];
+							$new_marnm = $match[1];
 						}
+
 						break;
+
 					case 'addchildaction':
 						if (preg_match('/\/((?:[a-z]{2,3} )*)(.*)\//i', $father_name, $match)) {
-							$name_fields['SURN']=$match[2];
-							if ($SURNAME_TRADITION == 'polish' && $sextag == 'F') {
-								$match[2]=preg_replace(array('/ski$/', '/cki$/', '/dzki$/', '/żki$/'), array('ska', 'cka', 'dzka', 'żka'), $match[2]);
-							} else if ($SURNAME_TRADITION == 'lithuanian' && $sextag == 'F') {
-								$match[2]=preg_replace(array('/as$/', '/a$/', '/is$/', '/ys$/', '/ius$/', '/us$/'), array('aitė', 'aitė', 'ytė', 'ytė', 'iūtė', 'utė'), $match[2]);
+							$name_fields['SURN'] = $match[2];
+							if ('polish' == $SURNAME_TRADITION && 'F' == $sextag) {
+								$match[2] = preg_replace(['/ski$/', '/cki$/', '/dzki$/', '/żki$/'], ['ska', 'cka', 'dzka', 'żka'], $match[2]);
+							} elseif ('lithuanian' == $SURNAME_TRADITION && 'F' == $sextag) {
+								$match[2] = preg_replace(['/as$/', '/a$/', '/is$/', '/ys$/', '/ius$/', '/us$/'], ['aitė', 'aitė', 'ytė', 'ytė', 'iūtė', 'utė'], $match[2]);
 							}
-							$name_fields['SPFX']=trim($match[1]);
-							$name_fields['NAME']="/{$match[1]}{$match[2]}/";
+							$name_fields['SPFX'] = trim($match[1]);
+							$name_fields['NAME'] = "/{$match[1]}{$match[2]}/";
 						}
+
 						break;
+
 					case 'addnewparentaction':
-						if ($famtag == 'HUSB' && preg_match('/\/((?:[a-z]{2,3} )*)(.*)\//i', $indi_name, $match)) {
-							if ($SURNAME_TRADITION == 'polish' && $sextag == 'M') {
-								$match[2]=preg_replace(array('/ska$/', '/cka$/', '/dzka$/', '/żka$/'), array('ski', 'cki', 'dzki', 'żki'), $match[2]);
-							} else if ($SURNAME_TRADITION == 'lithuanian') {
+						if ('HUSB' == $famtag && preg_match('/\/((?:[a-z]{2,3} )*)(.*)\//i', $indi_name, $match)) {
+							if ('polish' == $SURNAME_TRADITION && 'M' == $sextag) {
+								$match[2] = preg_replace(['/ska$/', '/cka$/', '/dzka$/', '/żka$/'], ['ski', 'cki', 'dzki', 'żki'], $match[2]);
+							} elseif ('lithuanian' == $SURNAME_TRADITION) {
 								// not a complete list as the rules are somewhat complicated but will do 95% correctly
-								$match[2]=preg_replace(array('/aitė$/', '/ytė$/', '/iūtė$/', '/utė$/'), array('as', 'is', 'ius', 'us'), $match[2]);
+								$match[2] = preg_replace(['/aitė$/', '/ytė$/', '/iūtė$/', '/utė$/'], ['as', 'is', 'ius', 'us'], $match[2]);
 							}
-							$name_fields['SPFX']=trim($match[1]);
-							$name_fields['SURN']=$match[2];
-							$name_fields['NAME']="/{$match[1]}{$match[2]}/";
+							$name_fields['SPFX'] = trim($match[1]);
+							$name_fields['SURN'] = $match[2];
+							$name_fields['NAME'] = "/{$match[1]}{$match[2]}/";
 						}
-						if ($famtag == 'WIFE' && preg_match('/\/((?:[a-z]{2,3} )*)(.*)\//i', $indi_name, $match)) {
-							if ($SURNAME_TRADITION == 'lithuanian') {
-								$match[2]=preg_replace(array('/as$/', '/is$/', '/ys$/', '/us$/'), array('ienė', 'ienė', 'ienė', 'ienė'), $match[2]);
-								$match[2]=preg_replace(array('/aitė$/', '/ytė$/', '/iūtė$/', '/utė$/'), array('ienė', 'ienė', 'ienė', 'ienė'), $match[2]);
-								$new_marnm=$match[2];
+						if ('WIFE' == $famtag && preg_match('/\/((?:[a-z]{2,3} )*)(.*)\//i', $indi_name, $match)) {
+							if ('lithuanian' == $SURNAME_TRADITION) {
+								$match[2] = preg_replace(['/as$/', '/is$/', '/ys$/', '/us$/'], ['ienė', 'ienė', 'ienė', 'ienė'], $match[2]);
+								$match[2] = preg_replace(['/aitė$/', '/ytė$/', '/iūtė$/', '/utė$/'], ['ienė', 'ienė', 'ienė', 'ienė'], $match[2]);
+								$new_marnm = $match[2];
 							}
 						}
+
 						break;
+				}
+
+				break;
+		}
+	}
+
+	// Make sure there are two slashes in the name
+	if (!preg_match('/\//', $name_fields['NAME'])) {
+		$name_fields['NAME'] .= ' /';
+	}
+	if (!preg_match('/\/.*\//', $name_fields['NAME'])) {
+		$name_fields['NAME'] .= '/';
+	}
+
+	// Populate any missing 2 XXXX fields from the 1 NAME field
+	$npfx_accept = implode('|', $NPFX_accept);
+	if (preg_match("/((({$npfx_accept})\\.? +)*)([^\n\\/\"]*)(\"(.*)\")? *\\/(([a-z]{2,3} +)*)(.*)\\/ *(.*)/i", $name_fields['NAME'], $name_bits)) {
+		if (empty($name_fields['NPFX'])) {
+			$name_fields['NPFX'] = $name_bits[1];
+		}
+		if (empty($name_fields['SPFX']) && empty($name_fields['SURN'])) {
+			$name_fields['SPFX'] = trim($name_bits[7]);
+			// For names with two surnames, there will be four slashes.
+			// Turn them into a list
+			$name_fields['SURN'] = preg_replace('~/[^/]*/~', ',', $name_bits[9]);
+		}
+		if (empty($name_fields['GIVN'])) {
+			$name_fields['GIVN'] = $name_bits[4];
+		}
+		// Don't automatically create an empty NICK - it is an "advanced" field.
+		if (empty($name_fields['NICK']) && !empty($name_bits[6]) && !preg_match('/^2 NICK/m', $namerec)) {
+			$name_fields['NICK'] = $name_bits[6];
+		}
+	}
+
+	// Edit the standard name fields
+	foreach ($name_fields as $tag => $value) {
+		add_simple_tag("0 {$tag} {$value}");
+	}
+
+	// Get the advanced name fields
+	$adv_name_fields = [];
+	if (preg_match_all('/(' . KT_REGEX_TAG . ')/', $ADVANCED_NAME_FACTS, $match)) {
+		foreach ($match[1] as $tag) {
+			$adv_name_fields[$tag] = '';
+		}
+	}
+	// This is a custom tag, but kiwitrees uses it extensively.
+	if ('paternal' == $SURNAME_TRADITION || 'polish' == $SURNAME_TRADITION || 'lithuanian' == $SURNAME_TRADITION || (false !== strpos($namerec, '2 _MARNM'))) {
+		$adv_name_fields['_MARNM'] = '';
+	}
+	$person = KT_Person::getInstance($pid);
+	if (isset($adv_name_fields['TYPE'])) {
+		unset($adv_name_fields['TYPE']);
+	}
+	foreach ($adv_name_fields as $tag => $dummy) {
+		// Edit existing tags
+		if (preg_match_all("/2 {$tag} (.+)/", $namerec, $match)) {
+			foreach ($match[1] as $value) {
+				if ('_MARNM' == $tag) {
+					$mnsct = preg_match('/\/(.+)\//', $value, $match2);
+					$marnm_surn = '';
+					if ($mnsct > 0) {
+						$marnm_surn = $match2[1];
 					}
-					break;
+					add_simple_tag('2 _MARNM ' . $value);
+					add_simple_tag('2 _MARNM_SURN ' . $marnm_surn);
+				} else {
+					add_simple_tag("2 {$tag} {$value}", '', KT_Gedcom_Tag::getLabel("NAME:{$tag}", $person));
 				}
 			}
+		}
+		// Allow a new row to be entered if there was no row provided
+		if (0 == count($match[1]) && empty($name_fields[$tag]) || '_HEB' != $tag && 'NICK' != $tag) {
+			if ('_MARNM' == $tag) {
+				if (false == strstr($ADVANCED_NAME_FACTS, '_MARNM')) {
+					add_simple_tag('0 _MARNM');
+					add_simple_tag("0 _MARNM_SURN {$new_marnm}");
+				}
+			} else {
+				add_simple_tag("0 {$tag}", '', KT_Gedcom_Tag::getLabel("NAME:{$tag}", $person));
+			}
+		}
+	}
 
-			// Make sure there are two slashes in the name
-			if (!preg_match('/\//', $name_fields['NAME']))
-				$name_fields['NAME'].=' /';
-			if (!preg_match('/\/.*\//', $name_fields['NAME']))
-				$name_fields['NAME'].='/';
-
-			// Populate any missing 2 XXXX fields from the 1 NAME field
-			$npfx_accept=implode('|', $NPFX_accept);
-			if (preg_match ("/((($npfx_accept)\.? +)*)([^\n\/\"]*)(\"(.*)\")? *\/(([a-z]{2,3} +)*)(.*)\/ *(.*)/i", $name_fields['NAME'], $name_bits)) {
-				if (empty($name_fields['NPFX'])) {
-					$name_fields['NPFX']=$name_bits[1];
-				}
-				if (empty($name_fields['SPFX']) && empty($name_fields['SURN'])) {
-					$name_fields['SPFX']=trim($name_bits[7]);
-					// For names with two surnames, there will be four slashes.
-					// Turn them into a list
-					$name_fields['SURN']=preg_replace('~/[^/]*/~', ',', $name_bits[9]);
-				}
-				if (empty($name_fields['GIVN'])) {
-					$name_fields['GIVN']=$name_bits[4];
-				}
-				// Don't automatically create an empty NICK - it is an "advanced" field.
-				if (empty($name_fields['NICK']) && !empty($name_bits[6]) && !preg_match('/^2 NICK/m', $namerec)) {
-					$name_fields['NICK']=$name_bits[6];
-				}
-			}
-
-			// Edit the standard name fields
-			foreach ($name_fields as $tag=>$value) {
-				add_simple_tag("0 $tag $value");
-			}
-
-			// Get the advanced name fields
-			$adv_name_fields = array();
-			if (preg_match_all('/('.KT_REGEX_TAG.')/', $ADVANCED_NAME_FACTS, $match))
-				foreach ($match[1] as $tag)
-					$adv_name_fields[$tag] = '';
-			// This is a custom tag, but kiwitrees uses it extensively.
-			if ($SURNAME_TRADITION == 'paternal' || $SURNAME_TRADITION == 'polish' || $SURNAME_TRADITION == 'lithuanian' || (strpos($namerec, '2 _MARNM') !== false)) {
-				$adv_name_fields['_MARNM'] = '';
-			}
-			$person = KT_Person::getInstance($pid);
-			if (isset($adv_name_fields['TYPE'])) {
-				unset($adv_name_fields['TYPE']);
-			}
-			foreach ($adv_name_fields as $tag=>$dummy) {
-				// Edit existing tags
-				if (preg_match_all("/2 $tag (.+)/", $namerec, $match))
-					foreach ($match[1] as $value) {
-						if ($tag == '_MARNM') {
-							$mnsct = preg_match('/\/(.+)\//', $value, $match2);
-							$marnm_surn = '';
-							if ($mnsct>0) $marnm_surn = $match2[1];
-							add_simple_tag("2 _MARNM ".$value);
-							add_simple_tag("2 _MARNM_SURN ".$marnm_surn);
-						} else {
-							add_simple_tag("2 $tag $value", '', KT_Gedcom_Tag::getLabel("NAME:{$tag}", $person));
-						}
+	// Handle any other NAME subfields that aren't included above (SOUR, NOTE, _CUSTOM, etc)
+	if ('' != $namerec && 'NEW' != $namerec) {
+		$gedlines = explode("\n", $namerec); // -- find the number of lines in the record
+		$fields = explode(' ', $gedlines[0]);
+		$glevel = $fields[0];
+		$level = $glevel;
+		$type = trim($fields[1]);
+		$level1type = $type;
+		$tags = [];
+		$i = 0;
+		do {
+			if ('TYPE' != $type && !isset($name_fields[$type]) && !isset($adv_name_fields[$type])) {
+				$text = '';
+				for ($j = 2; $j < count($fields); $j++) {
+					if ($j > 2) {
+						$text .= ' ';
 					}
-					// Allow a new row to be entered if there was no row provided
-					if (count($match[1]) == 0 && empty($name_fields[$tag]) || $tag!='_HEB' && $tag!='NICK')
-						if ($tag == '_MARNM') {
-							if (strstr($ADVANCED_NAME_FACTS, '_MARNM') == false) {
-								add_simple_tag("0 _MARNM");
-								add_simple_tag("0 _MARNM_SURN $new_marnm");
-							}
-						} else {
-							add_simple_tag("0 $tag", '', KT_Gedcom_Tag::getLabel("NAME:{$tag}", $person));
-						}
-			}
-
-			// Handle any other NAME subfields that aren't included above (SOUR, NOTE, _CUSTOM, etc)
-			if ($namerec != '' && $namerec != "NEW") {
-				$gedlines	= explode("\n", $namerec); // -- find the number of lines in the record
-				$fields		= explode(' ', $gedlines[0]);
-				$glevel		= $fields[0];
-				$level		= $glevel;
-				$type		= trim($fields[1]);
-				$level1type	= $type;
-				$tags		= array();
-				$i = 0;
-				do {
-					if ($type != 'TYPE' && !isset($name_fields[$type]) && !isset($adv_name_fields[$type])) {
-						$text = '';
-						for ($j=2; $j<count($fields); $j++) {
-							if ($j>2) $text .= ' ';
-							$text .= $fields[$j];
-						}
-						$iscont = false;
-						while (($i+1<count($gedlines))&&(preg_match("/".($level+1)." (CON[CT]) ?(.*)/", $gedlines[$i+1], $cmatch)>0)) {
-							$iscont=true;
-							if ($cmatch[1] == "CONT") $text .= "\n";
-							if ($WORD_WRAPPED_NOTES) $text .= ' ';
-							$text .= $cmatch[2];
-							$i++;
-						}
-						add_simple_tag($level.' '.$type.' '.$text);
+					$text .= $fields[$j];
+				}
+				$iscont = false;
+				while (($i + 1 < count($gedlines)) && (preg_match('/' . ($level + 1) . ' (CON[CT]) ?(.*)/', $gedlines[$i + 1], $cmatch) > 0)) {
+					$iscont = true;
+					if ('CONT' == $cmatch[1]) {
+						$text .= "\n";
 					}
-					$tags[] = $type;
+					if ($WORD_WRAPPED_NOTES) {
+						$text .= ' ';
+					}
+					$text .= $cmatch[2];
 					$i++;
-					if (isset($gedlines[$i])) {
-						$fields	= explode(' ', $gedlines[$i]);
-						$level	= $fields[0];
-						if (isset($fields[1])) $type = $fields[1];
-					}
-				} while (($level>$glevel)&&($i<count($gedlines)));
+				}
+				add_simple_tag($level . ' ' . $type . ' ' . $text);
 			}
-			?>
+			$tags[] = $type;
+			$i++;
+			if (isset($gedlines[$i])) {
+				$fields = explode(' ', $gedlines[$i]);
+				$level = $fields[0];
+				if (isset($fields[1])) {
+					$type = $fields[1];
+				}
+			}
+		} while (($level > $glevel) && ($i < count($gedlines)));
+	}
+	?>
 		</div>
 		<?php
 		// If we are adding a new individual, add the basic details
-		if ($nextaction != 'update') { ?>
+		if ('update' != $nextaction) { ?>
 			<div id="add_other_details" class="grid-x">
 				<?php // 1 SEX
-				if ($famtag == "HUSB" || $sextag == "M") {
-					add_simple_tag("0 SEX M");
-				} elseif ($famtag == "WIFE" || $sextag == "F") {
-					add_simple_tag("0 SEX F");
-				} else {
-					add_simple_tag("0 SEX");
+		if ('HUSB' == $famtag || 'M' == $sextag) {
+			add_simple_tag('0 SEX M');
+		} elseif ('WIFE' == $famtag || 'F' == $sextag) {
+			add_simple_tag('0 SEX F');
+		} else {
+			add_simple_tag('0 SEX');
+		}
+		$bdm = 'BD';
+			if (preg_match_all('/(' . KT_REGEX_TAG . ')/', $QUICK_REQUIRED_FACTS, $matches)) {
+				foreach ($matches[1] as $match) {
+					if (!in_array($match, explode('|', KT_EVENTS_DEAT))) {
+						addSimpleTags($match);
+					}
 				}
-				$bdm = "BD";
-				if (preg_match_all('/(' . KT_REGEX_TAG . ')/', $QUICK_REQUIRED_FACTS, $matches)) {
+			}
+			// -- if adding a spouse add the option to add a marriage fact to the new family
+			if ('addspouseaction' == $nextaction || ('addnewparentaction' == $nextaction && 'new' != $famid)) {
+				$bdm .= 'M';
+				if (preg_match_all('/(' . KT_REGEX_TAG . ')/', $QUICK_REQUIRED_FAMFACTS, $matches)) {
 					foreach ($matches[1] as $match) {
-						if (!in_array($match, explode('|', KT_EVENTS_DEAT))) {
-							addSimpleTags($match);
-						}
+						addSimpleTags($match);
 					}
 				}
-				//-- if adding a spouse add the option to add a marriage fact to the new family
-				if ($nextaction == 'addspouseaction' || ($nextaction == 'addnewparentaction' && $famid != 'new')) {
-					$bdm .= "M";
-					if (preg_match_all('/(' . KT_REGEX_TAG . ')/', $QUICK_REQUIRED_FAMFACTS, $matches)) {
-						foreach ($matches[1] as $match) {
-							addSimpleTags($match);
-						}
+			}
+			if (preg_match_all('/(' . KT_REGEX_TAG . ')/', $QUICK_REQUIRED_FACTS, $matches)) {
+				foreach ($matches[1] as $match) {
+					if (in_array($match, explode('|', KT_EVENTS_DEAT))) {
+						addSimpleTags($match);
 					}
 				}
-				if (preg_match_all('/(' . KT_REGEX_TAG . ')/', $QUICK_REQUIRED_FACTS, $matches)) {
-					foreach ($matches[1] as $match) {
-						if (in_array($match, explode('|', KT_EVENTS_DEAT))) {
-							addSimpleTags($match);
-						}
-					}
-				} ?>
+			} ?>
 			</div>
 		<?php } ?>
 		<div id="additional_facts" class="grid-x">
 			<ul class="cell accordion" data-accordion data-multi-expand="true" data-allow-all-closed="true">
-				<?php if ($nextaction == 'update') { ?>
+				<?php if ('update' == $nextaction) { ?>
 					<?php echo print_add_layer('SOUR'); ?>
 					<?php echo print_add_layer('NOTE'); ?>
 					<?php echo print_add_layer('SHARED_NOTE'); ?>
@@ -1051,23 +1172,23 @@ function print_indi_form($nextaction, $famid, $linenum='', $namerec='', $famtag=
 
 		<div class="cell align-left button-group">
 			<button class="button primary" type="submit">
-				<i class="<?php echo  $iconStyle; ?> fa-save"></i>
+				<i class="<?php echo $iconStyle; ?> fa-save"></i>
 				<?php echo KT_I18N::translate('Save'); ?>
 			</button>
 			<?php if (preg_match('/^add(child|spouse|newparent)/', $nextaction)) { ?>
 				<button class="button primary" type="submit" onclick="document.addchildform.goto.value='new';">
-					<i class="<?php echo  $iconStyle; ?> fa-mail-forward"></i>
+					<i class="<?php echo $iconStyle; ?> fa-mail-forward"></i>
 					<?php echo KT_I18N::translate('Save and go to new individual'); ?>
 				</button>
 			<?php } ?>
-			<?php if ($UNLINKED === 'no') { ?>
+			<?php if ('no' === $UNLINKED) { ?>
 				<button class="button hollow" type="button"  onclick="window.close();">
-					<i class="<?php echo  $iconStyle; ?> fa-xmark"></i>
+					<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 					<?php echo KT_I18N::translate('Cancel'); ?>
 				</button>
 			<?php } else { ?>
 				<button class="button hollow" type="button" data-toggle="<?php echo $UNLINKED; ?>">
-					<i class="<?php echo  $iconStyle; ?> fa-xmark"></i>
+					<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 					<?php echo KT_I18N::translate('Cancel'); ?>
 				</button>
 			<?php } ?>
@@ -1077,7 +1198,7 @@ function print_indi_form($nextaction, $famid, $linenum='', $namerec='', $famtag=
 				onclick="check_duplicates();"
 				title="<?php /* I18N: button hover title */ KT_I18N::translate('Check for possible duplicates'); ?>"
 			>
-				<i class="<?php echo  $iconStyle; ?> fa-eye"></i>
+				<i class="<?php echo $iconStyle; ?> fa-eye"></i>
 				<?php echo KT_I18N::translate('Check'); ?>
 			</button>
 		</div>
@@ -1253,8 +1374,10 @@ function print_indi_form($nextaction, $famid, $linenum='', $namerec='', $famtag=
 }
 
 // generates javascript code for calendar popup in user's language
-function print_calendar_popup() {
+function print_calendar_popup()
+{
 	global $iconStyle;
+
 	return '
 		<span>
 			<i class="' . $iconStyle . ' fa-calendar-days"></i>
@@ -1262,10 +1385,12 @@ function print_calendar_popup() {
 	';
 }
 
-function print_addnewmedia_link($element_id) {
+function print_addnewmedia_link($element_id)
+{
 	global $iconStyle;
+
 	return '
-		<a href="#" onclick="pastefield=document.getElementById(\''.$element_id.'\'); window.open(\'addmedia.php?action=showmediaform&type=event\', \'_blank\', \'\'); return false;" title="'.KT_I18N::translate('Add a media object').'">
+		<a href="#" onclick="pastefield=document.getElementById(\'' . $element_id . '\'); window.open(\'addmedia.php?action=showmediaform&type=event\', \'_blank\', \'\'); return false;" title="' . KT_I18N::translate('Add a media object') . '">
 			<span class="fa-layers fa-fw">
 				<i class="' . $iconStyle . ' fa-camera-retro"></i>
 				<i class="' . $iconStyle . ' fa-plus" data-fa-transform="shrink-2 up-8 right-8"></i>
@@ -1273,16 +1398,20 @@ function print_addnewmedia_link($element_id) {
 		</a>';
 }
 
-function print_addnewrepository_link($element_id) {
+function print_addnewrepository_link($element_id)
+{
 	global $iconStyle;
+
 	return '
-		<a href="#" onclick="addnewrepository(document.getElementById(\''.$element_id.'\')); return false;" title="'.KT_I18N::translate('Create Repository').'">
+		<a href="#" onclick="addnewrepository(document.getElementById(\'' . $element_id . '\')); return false;" title="' . KT_I18N::translate('Create Repository') . '">
 			<i class="' . $iconStyle . ' fa-building-columns"></i>
 		</a>';
 }
 
-function print_addnewnote_link($element_id) {
+function print_addnewnote_link($element_id)
+{
 	global $iconStyle;
+
 	return '
 		<a href="edit_interface.php?action=addnewnote&amp;noteid=newnote&amp;' . KT_TIMESTAMP . '&ged=' . KT_GEDCOM . '" target="_blank" title="' . KT_I18N::translate('Create a new Shared Note') . '">
 			<span class="fa-layers fa-fw">
@@ -1293,43 +1422,47 @@ function print_addnewnote_link($element_id) {
 	';
 }
 
-/// Used in GEDFact CENS assistant
-function print_addnewnote_assisted_link($element_id, $pid) {
-	return '<a href="#" onclick="addnewnote_assisted(document.getElementById(\''.$element_id.'\'), \''.$pid.'\'); return false;" target="_blank" rel="noopener noreferrer">'.KT_I18N::translate('Create a new Shared Note using Assistant').'</a>';
+// / Used in GEDFact CENS assistant
+function print_addnewnote_assisted_link($element_id, $pid)
+{
+	return '<a href="#" onclick="addnewnote_assisted(document.getElementById(\'' . $element_id . '\'), \'' . $pid . '\'); return false;" target="_blank" rel="noopener noreferrer">' . KT_I18N::translate('Create a new Shared Note using Assistant') . '</a>';
 }
 
-function print_editnote_link($note_id) {
-	return '<a href="#" onclick="edit_note(\''.$note_id.'\'); return false;" class="icon-button_note" title="'.KT_I18N::translate('Edit shared note').'"></a>';
+function print_editnote_link($note_id)
+{
+	return '<a href="#" onclick="edit_note(\'' . $note_id . '\'); return false;" class="icon-button_note" title="' . KT_I18N::translate('Edit shared note') . '"></a>';
 }
 
-function print_addnewsource_link($element_id) {
+function print_addnewsource_link($element_id)
+{
 	global $iconStyle;
+
 	return '
-		<a href="#" onclick="addnewsource(document.getElementById(\''.$element_id.'\')); return false;" title="'.KT_I18N::translate('Create a new source').'">
+		<a href="#" onclick="addnewsource(document.getElementById(\'' . $element_id . '\')); return false;" title="' . KT_I18N::translate('Create a new source') . '">
 			<i class="' . $iconStyle . ' fa-book"></i>
 		</a>';
 }
 
 /**
-* Add a tag input field
-*
-* called for each fact to be edited on a form.
-* Fact level=0 means a new empty form : data are POSTed by name
-* else data are POSTed using arrays :
-* glevels[] : tag level
-*  islink[] : tag is a link
-*     tag[] : tag name
-*    text[] : tag value
-*
-* @param string $tag fact record to edit (eg 2 DATE xxxxx)
-* @param string $upperlevel optional upper level tag (eg BIRT)
-* @param string $label An optional label to echo instead of the default
-* @param string $extra optional text to display after the input field
-* (so that additional text can be printed in the box)
-* @param boolean $rowDisplay True to have the row displayed by default, false to hide it by default
-*/
-function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $rowDisplay = true) {
-
+ * Add a tag input field.
+ *
+ * called for each fact to be edited on a form.
+ * Fact level=0 means a new empty form : data are POSTed by name
+ * else data are POSTed using arrays :
+ * glevels[] : tag level
+ *  islink[] : tag is a link
+ *     tag[] : tag name
+ *    text[] : tag value
+ *
+ * @param string $tag        fact record to edit (eg 2 DATE xxxxx)
+ * @param string $upperlevel optional upper level tag (eg BIRT)
+ * @param string $label      An optional label to echo instead of the default
+ * @param string $extra      optional text to display after the input field
+ *                           (so that additional text can be printed in the box)
+ * @param bool   $rowDisplay True to have the row displayed by default, false to hide it by default
+ */
+function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $rowDisplay = true)
+{
 	global $MEDIA_DIRECTORY, $tags, $emptyfacts, $main_fact, $TEXT_DIRECTION;
 	global $NPFX_accept, $SPFX_accept, $NSFX_accept, $FILE_FORM_accept, $upload_count;
 	global $pid, $gender, $linkToID, $bdm, $action, $event_add, $iconStyle;
@@ -1338,11 +1471,11 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 	// Keep track of SOUR fields, so we can reference them in subsequent PAGE fields.
 	static $source_element_id;
 
-	if (substr($tag, 0, strpos($tag, "CENS"))) {
-		$event_add = "census_add";
+	if (substr($tag, 0, strpos($tag, 'CENS'))) {
+		$event_add = 'census_add';
 	}
 
-	if (substr($tag, 0, strpos($tag, "PLAC"))) {
+	if (substr($tag, 0, strpos($tag, 'PLAC'))) {
 		?>
 		<script>
 			function valid_lati_long(field, pos, neg) {
@@ -1373,11 +1506,11 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 		<?php
 	}
 
-	if (empty($linkToID)){
+	if (empty($linkToID)) {
 		$linkToID = $pid;
 	}
 
-	$subnamefacts = array('NPFX', 'GIVN', 'SPFX', 'SURN', 'NSFX', '_MARNM_SURN');
+	$subnamefacts = ['NPFX', 'GIVN', 'SPFX', 'SURN', 'NSFX', '_MARNM_SURN'];
 
 	preg_match('/^(?:(\d+) (' . KT_REGEX_TAG . ') ?(.*))/', $tag, $match);
 
@@ -1386,54 +1519,56 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 	}
 
 	// element name : used to POST data
-	if ($level == 0) {
+	if (0 == $level) {
 		if ($upperlevel) {
-			$element_name = $upperlevel . "_" . $fact; // ex: BIRT_DATE | DEAT_DATE | ...
+			$element_name = $upperlevel . '_' . $fact; // ex: BIRT_DATE | DEAT_DATE | ...
 		} else {
 			$element_name = $fact; // ex: OCCU
 		}
 	} else {
-		$element_name = "text[]";
+		$element_name = 'text[]';
 	}
 
-	if ($level == 1) {
+	if (1 == $level) {
 		$main_fact = $fact;
 	}
 
 	// element id : used by javascript functions
-	if ($level == 0) {
+	if (0 == $level) {
 		$element_id = $fact; // ex: NPFX | GIVN ...
 	} else {
-		$element_id = $fact . (int)(microtime(true)*1000000); // ex: SOUR56402
+		$element_id = $fact . (int) (microtime(true) * 1000000); // ex: SOUR56402
 	}
 
 	if ($upperlevel) {
-		$element_id = $upperlevel . "_" . $fact . (int)(microtime(true)*1000000); // ex: BIRT_DATE56402 | DEAT_DATE56402 ...
+		$element_id = $upperlevel . '_' . $fact . (int) (microtime(true) * 1000000); // ex: BIRT_DATE56402 | DEAT_DATE56402 ...
 	}
 
 	// field value
-	$islink = (substr($value, 0, 1) == "@" && substr($value, 0, 2) != "@#");
+	$islink = ('@' == substr($value, 0, 1) && '@#' != substr($value, 0, 2));
 
 	if ($islink) {
 		$value = trim(trim(substr($tag, strlen($fact) + 3)), " @\r");
 	} else {
 		$value = trim(substr($tag, strlen($fact) + 3));
 	}
-	if ($fact == 'REPO' || $fact == 'SOUR' || $fact == 'OBJE' || $fact == 'FAMC')
+	if ('REPO' == $fact || 'SOUR' == $fact || 'OBJE' == $fact || 'FAMC' == $fact) {
 		$islink = true;
+	}
 
-	if ($fact === 'SHARED_NOTE_EDIT' || $fact === 'SHARED_NOTE') {
-		$islink = true; $fact = "SHARED_NOTE";
+	if ('SHARED_NOTE_EDIT' === $fact || 'SHARED_NOTE' === $fact) {
+		$islink = true;
+		$fact = 'SHARED_NOTE';
 	}
 
 	// label
-	if ($fact === 'DATA' || $fact === 'MAP' || ($fact === 'LATI' || $fact === 'LONG') && $value === '') {
+	if ('DATA' === $fact || 'MAP' === $fact || ('LATI' === $fact || 'LONG' === $fact) && '' === $value) {
 		$style = ' style="display:none;"';
 	} else {
 		$style = '';
 	}
 
-	if ($fact == "SOUR" || ($level > 1 && ($fact == "TEXT" || $fact == "PAGE" || $fact == "OBJE" || $fact == "QUAY" || $fact == "DATE" || $fact == "NOTE"))) {
+	if ('SOUR' == $fact || ($level > 1 && ('TEXT' == $fact || 'PAGE' == $fact || 'OBJE' == $fact || 'QUAY' == $fact || 'DATE' == $fact || 'NOTE' == $fact))) {
 		$class = 'sour_facts';
 	} else {
 		$class = '';
@@ -1460,7 +1595,7 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 
 					// tag level
 					if ($level > 0) {
-						if ($fact == "TEXT" && $level > 1) { ?>
+						if ('TEXT' == $fact && $level > 1) { ?>
 							<input type="hidden" name="glevels[]" value="<?php echo $level - 1; ?>">
 							<input type="hidden" name="islink[]" value="0">
 							<input type="hidden" name="tag[]" value="DATA">
@@ -1474,24 +1609,28 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 					<?php }
 
 					// help text
-					if ($action == "addnewnote_assisted") {
+					if ('addnewnote_assisted' == $action) {
 						// Do not print on census_assistant window
 					} else {
 						// Not all facts have help text.
 						switch ($fact) {
 							case 'NAME':
-								if ($upperlevel!='REPO' && $upperlevel !== 'UNKNOWN') {
+								if ('REPO' != $upperlevel && 'UNKNOWN' !== $upperlevel) {
 									echo helpDropdown($fact);
 								}
+
 								break;
+
 							case 'ASSO':
 							case '_ASSO': // Some apps (including kiwitrees) use "2 _ASSO", since "2 ASSO" is not strictly valid GEDCOM
-								if ($level == 1) {
+								if (1 == $level) {
 									echo helpDropdown('ASSO_1');
 								} else {
 									echo helpDropdown('ASSO_2');
 								}
+
 								break;
+
 							case 'ADDR':
 							case 'AGNC':
 							case 'CAUS':
@@ -1520,7 +1659,8 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 							case 'URL':
 							case '_HEB':
 								echo helpDropdown($fact);
-							break;
+
+								break;
 						}
 					} ?>
 				</label>
@@ -1532,26 +1672,26 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 				}
 
 				// retrieve linked NOTE
-				if ($fact == "SHARED_NOTE" && $islink) {
+				if ('SHARED_NOTE' == $fact && $islink) {
 					$note1 = KT_Note::getInstance($value);
 					if ($note1) {
 						$noterec = $note1->getGedcomRecord();
-						preg_match("/$value/i", $noterec, $notematch);
+						preg_match("/{$value}/i", $noterec, $notematch);
 						$value = $notematch[0];
 					}
 				}
 				// Display HUSB / WIFE names for information only on MARR edit form.
 				$tmp = KT_GedcomRecord::GetInstance($pid);
-				if ($fact == 'HUSB') {
-					$husb = KT_Person::getInstance($tmp->getHusband()->getXref());
-					echo $husb->getFullName();
-				}
-				if ($fact == 'WIFE') {
-					$wife = KT_Person::getInstance($tmp->getWife()->getXref());
-					echo $wife->getFullName();
-				}
+	if ('HUSB' == $fact) {
+		$husb = KT_Person::getInstance($tmp->getHusband()->getXref());
+		echo $husb->getFullName();
+	}
+	if ('WIFE' == $fact) {
+		$wife = KT_Person::getInstance($tmp->getWife()->getXref());
+		echo $wife->getFullName();
+	}
 
-				if (in_array($fact, $emptyfacts) && ($value === '' || $value === 'Y' || $value === 'y')) { ?>
+	if (in_array($fact, $emptyfacts) && ('' === $value || 'Y' === $value || 'y' === $value)) { ?>
 					<input type="hidden" id="<?php echo $element_id; ?>" name="<?php echo $element_name; ?>" value="<?php echo $value; ?>">
 					<?php if ($level <= 1) {
 						echo '<input type="checkbox" ';
@@ -1562,84 +1702,111 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 						echo '<span class="checkbox-label">' . KT_I18N::translate('Yes') . '</span>';
 					}
 
-					if ($fact === 'CENS' && $value === 'Y') {
-						if (KT_Module::getModuleByName('census_assistant') && KT_GedcomRecord::getInstance($pid) instanceof KT_Person) {
-							echo censusDateSelector(KT_LOCALE, $pid); ?>
+		if ('CENS' === $fact && 'Y' === $value) {
+			if (KT_Module::getModuleByName('census_assistant') && KT_GedcomRecord::getInstance($pid) instanceof KT_Person) {
+				echo censusDateSelector(KT_LOCALE, $pid); ?>
 							<div>
 								<a href="#" style="display: none;" id="assistant-link" onclick="return activateCensusAssistant();">
 									<?php echo KT_I18N::translate('Create a shared note using the census assistant'); ?>
 								</a>
 							</div>
 						<?php }
-					}
+			}
+	} elseif ('TEMP' == $fact) {
+		echo select_edit_control(
+			$element_name,
+			KT_Gedcom_Code_Temp::templeNames(),
+			KT_I18N::translate('No Temple - Living Ordinance'),
+			$value
+		);
+	} elseif ('ADOP' == $fact) {
+		switch ($gender) {
+			case 'M': echo edit_field_adop_m($element_name, $value);
 
-				} else if ($fact == "TEMP") {
-					echo select_edit_control(
-						$element_name,
-						KT_Gedcom_Code_Temp::templeNames(),
-						KT_I18N::translate('No Temple - Living Ordinance'),
-						$value
-					);
-				} else if ($fact == "ADOP") {
-					switch ($gender) {
-					case 'M': echo edit_field_adop_m($element_name, $value); break;
-					case 'F': echo edit_field_adop_f($element_name, $value); break;
-					default:  echo edit_field_adop_u($element_name, $value); break;
-					}
-				} else if ($fact == "PEDI") {
-					switch ($gender) {
-					case 'M': echo edit_field_pedi_m($element_name, $value); break;
-					case 'F': echo edit_field_pedi_f($element_name, $value); break;
-					default:  echo edit_field_pedi_u($element_name, $value); break;
-					}
-				} else if ($fact == 'STAT') {
-					echo select_edit_control($element_name, KT_Gedcom_Code_Stat::statusNames($upperlevel), '', $value);
-				} else if ($fact == 'RELA') {
-					echo edit_field_rela($element_name, strtolower($value));
-				} else if ($fact == 'QUAY') {
-					echo select_edit_control($element_name, KT_Gedcom_Code_Quay::getValues(), '', $value);
-				} else if ($fact == '_KT_USER') {
-					echo edit_field_username($element_name, $value);
-				} else if ($fact == 'RESN') {
-					echo edit_field_resn($element_name, $value);
-				} else if ($fact == '_PRIM') { ?>
+			break;
+
+			case 'F': echo edit_field_adop_f($element_name, $value);
+
+			break;
+
+			default:  echo edit_field_adop_u($element_name, $value);
+
+			break;
+		}
+	} elseif ('PEDI' == $fact) {
+		switch ($gender) {
+			case 'M': echo edit_field_pedi_m($element_name, $value);
+
+			break;
+
+			case 'F': echo edit_field_pedi_f($element_name, $value);
+
+			break;
+
+			default:  echo edit_field_pedi_u($element_name, $value);
+
+			break;
+		}
+	} elseif ('STAT' == $fact) {
+		echo select_edit_control($element_name, KT_Gedcom_Code_Stat::statusNames($upperlevel), '', $value);
+	} elseif ('RELA' == $fact) {
+		echo edit_field_rela($element_name, strtolower($value));
+	} elseif ('QUAY' == $fact) {
+		echo select_edit_control($element_name, KT_Gedcom_Code_Quay::getValues(), '', $value);
+	} elseif ('_KT_USER' == $fact) {
+		echo edit_field_username($element_name, $value);
+	} elseif ('RESN' == $fact) {
+		echo edit_field_resn($element_name, $value);
+	} elseif ('_PRIM' == $fact) { ?>
 					<select id="<?php echo $element_id; ?>" name="<?php echo $element_name; ?>" >
-						<option value="N" <?php if ($value == 'N') echo ' selected="selected"'; ?>>
+						<option value="N" <?php if ('N' == $value) {
+							echo ' selected="selected"';
+						} ?>>
 							<?php echo KT_I18N::translate('No'); ?>
 						</option>
-						<option value="Y" <?php if ($value == 'Y') echo ' selected="selected"'; ?>>
+						<option value="Y" <?php if ('Y' == $value) {
+							echo ' selected="selected"';
+						} ?>>
 							<?php echo KT_I18N::translate('Yes'); ?>
 						</option>
 					</select>
-				<?php } else if ($fact == 'SEX') { ?>
+				<?php } elseif ('SEX' == $fact) { ?>
 					<select id="<?php echo $element_id; ?>" name="<?php echo $element_name; ?>">
-						<option value="M" <?php if ($value == 'M') echo ' selected="selected"'; ?>>
+						<option value="M" <?php if ('M' == $value) {
+							echo ' selected="selected"';
+						} ?>>
 							<?php echo KT_I18N::translate('Male'); ?>
 						</option>
-						<option value="F"<?php if ($value == 'F') echo ' selected="selected"'; ?>>
+						<option value="F"<?php if ('F' == $value) {
+							echo ' selected="selected"';
+						} ?>>
 							<?php echo KT_I18N::translate('Female'); ?>
 						</option>
-						<option value="U"<?php if ($value == 'U' || empty($value)) echo ' selected="selected"'; ?>>
+						<option value="U"<?php if ('U' == $value || empty($value)) {
+							echo ' selected="selected"';
+						} ?>>
 							<?php echo KT_I18N::translate_c('unknown gender', 'Unknown'); ?>
 						</option>
 					</select>
-				<?php } else if ($fact == 'TYPE' && $level == '3') { ?>
+				<?php } elseif ('TYPE' == $fact && '3' == $level) { ?>
 					<!-- Build the selector for the Media 'TYPE' Fact -->
 					<select name="text[]">
 						<option selected="selected" value="" ></option>
 						<?php $selectedValue = strtolower($value);
-						if (!array_key_exists($selectedValue, KT_Gedcom_Tag::getFileFormTypes())) { ?>
+					if (!array_key_exists($selectedValue, KT_Gedcom_Tag::getFileFormTypes())) { ?>
 							<option selected="selected" value="<?php echo htmlspecialchars($value); ?>" >
 								<?php echo htmlspecialchars($value); ?>
 							</option>
 						<?php }
-						foreach (KT_Gedcom_Tag::getFileFormTypes() as $typeName => $typeValue) { ?>
-							<option value="<?php echo $typeName; ?>" <?php if ($selectedValue == $typeName) echo ' selected="selected"'; ?>>
+					foreach (KT_Gedcom_Tag::getFileFormTypes() as $typeName => $typeValue) { ?>
+							<option value="<?php echo $typeName; ?>" <?php if ($selectedValue == $typeName) {
+								echo ' selected="selected"';
+							} ?>>
 								<?php echo $typeValue; ?>
 							</option>
 						<?php } ?>
 					</select>
-				<?php } else if (($fact == 'NAME' && $upperlevel!='REPO' && $upperlevel !== 'UNKNOWN') || $fact == '_MARNM') { ?>
+				<?php } elseif (('NAME' == $fact && 'REPO' != $upperlevel && 'UNKNOWN' !== $upperlevel) || '_MARNM' == $fact) { ?>
 					<!-- Populated in javascript from sub-tags -->
 					<input type="hidden" id="<?php echo $element_id; ?>" name="<?php echo $element_name; ?>" onchange="updateTextName(\'<?php echo $element_id; ?>\'); ?>" value="<?php echo htmlspecialchars($value); ?>" class="<?php echo $fact; ?>">
 					<span id="<?php echo $element_id; ?>_display">
@@ -1650,74 +1817,110 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 					</a>
 				<?php } else { ?>
 					<!-- textarea -->
-					<?php if ($fact == 'TEXT' || $fact == 'ADDR' || ($fact == 'SHARED_NOTE' && !$islink)) { ?>
+					<?php if ('TEXT' == $fact || 'ADDR' == $fact || ('SHARED_NOTE' == $fact && !$islink)) { ?>
 						<textarea id="<?php echo $element_id; ?>" name="<?php echo $element_name; ?>"><?php echo htmlspecialchars($value); ?></textarea>
 					<?php } else {
 						// Extra markup for specific fact types
 						$extra_markup = '';
+
 						switch ($fact) {
 							case 'ALIA':
 							case 'ASSO':
 							case '_ASSO':
-								$extra_markup =  ' data-autocomplete-type="ASSO" data-autocomplete-extra="input.DATE"';
+								$extra_markup = ' data-autocomplete-type="ASSO" data-autocomplete-extra="input.DATE"';
+
 								break;
+
 							case 'CAUS':
-								$extra_markup =  ' data-autocomplete-type="CAUS"';
+								$extra_markup = ' data-autocomplete-type="CAUS"';
+
 								break;
+
 							case 'DATE':
-								$extra_markup =  " onblur=\"valid_date(this);\" onmouseout=\"valid_date(this);\"";
+								$extra_markup = ' onblur="valid_date(this);" onmouseout="valid_date(this);"';
+
 								break;
+
 							case 'GIVN':
-								$extra_markup =  ' autofocus data-autocomplete-type="GIVN"';
+								$extra_markup = ' autofocus data-autocomplete-type="GIVN"';
+
 								break;
+
 							case 'LATI':
-								$extra_markup =  " onblur=\"valid_lati_long(this, 'N', 'S');\" onmouseout=\"valid_lati_long(this, 'N', 'S');\"";
+								$extra_markup = " onblur=\"valid_lati_long(this, 'N', 'S');\" onmouseout=\"valid_lati_long(this, 'N', 'S');\"";
+
 								break;
+
 							case 'LONG':
-								$extra_markup =  " onblur=\"valid_lati_long(this, 'E', 'W');\" onmouseout=\"valid_lati_long(this, 'E', 'W');\"";
+								$extra_markup = " onblur=\"valid_lati_long(this, 'E', 'W');\" onmouseout=\"valid_lati_long(this, 'E', 'W');\"";
+
 								break;
+
 							case 'SHARED_NOTE':
 								// Shared notes.  Inline notes are handled elsewhere.
-								$extra_markup =  ' data-autocomplete-type="NOTE"';
+								$extra_markup = ' data-autocomplete-type="NOTE"';
+
 								break;
+
 							case 'OBJE':
-								$extra_markup =  ' data-autocomplete-type="OBJE"';
+								$extra_markup = ' data-autocomplete-type="OBJE"';
+
 								break;
+
 							case 'OCCU':
-								$extra_markup =  ' data-autocomplete-type="OCCU"';
+								$extra_markup = ' data-autocomplete-type="OCCU"';
+
 								break;
+
 							case 'PAGE':
-								$extra_markup =  ' data-autocomplete-type="SOUR_PAGE" data-autocomplete-extra="' . $source_element_id . '"';
+								$extra_markup = ' data-autocomplete-type="SOUR_PAGE" data-autocomplete-extra="' . $source_element_id . '"';
+
 								break;
+
 							case 'PLAC':
-								$extra_markup =  ' data-autocomplete-type="PLAC"';
+								$extra_markup = ' data-autocomplete-type="PLAC"';
+
 								break;
+
 							case 'REPO':
-								$extra_markup =  ' data-autocomplete-type="REPO"';
+								$extra_markup = ' data-autocomplete-type="REPO"';
+
 								break;
+
 							case 'SOUR':
 								$source_element_id = $element_id;
-								$extra_markup =  ' data-autocomplete-type="SOUR"';
+								$extra_markup = ' data-autocomplete-type="SOUR"';
+
 								break;
+
 							case 'SURN':
 							case '_MARNM_SURN':
-								$extra_markup =  ' data-autocomplete-type="SURN"';
+								$extra_markup = ' data-autocomplete-type="SURN"';
+
 								break;
+
 							case 'TYPE':
-								if ($level == 2 && $tags[0] == 'EVEN') {
-									$extra_markup =  ' data-autocomplete-type="EVEN_TYPE"';
-								} elseif ($level == 2 && $tags[0] == 'FACT') {
-									$extra_markup =  ' data-autocomplete-type="FACT_TYPE"';
+								if (2 == $level && 'EVEN' == $tags[0]) {
+									$extra_markup = ' data-autocomplete-type="EVEN_TYPE"';
+								} elseif (2 == $level && 'FACT' == $tags[0]) {
+									$extra_markup = ' data-autocomplete-type="FACT_TYPE"';
 								}
+
 								break;
+
 							case 'NPFX':
-								$extra_markup =  ' data-autocomplete-type="NPFX"';
+								$extra_markup = ' data-autocomplete-type="NPFX"';
+
 								break;
+
 							case 'NSFX':
-								$extra_markup =  ' data-autocomplete-type="NSFX"';
+								$extra_markup = ' data-autocomplete-type="NSFX"';
+
 								break;
+
 							case 'SPFX':
-								$extra_markup =  ' data-autocomplete-type="SPFX"';
+								$extra_markup = ' data-autocomplete-type="SPFX"';
+
 								break;
 						}
 
@@ -1741,7 +1944,7 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 								</span>
 							</div>
 							<input type="hidden" id="selectedValue" name="<?php echo $element_name; ?>">
-						<?php } elseif ($fact == 'DATE') { ?>
+						<?php } elseif ('DATE' == $fact) { ?>
 							<div class="date fdatepicker" id="<?php echo $element_id; ?>" data-date-format="dd M yy">
 								<div class="input-group">
 									<input
@@ -1769,45 +1972,50 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 								echo $extra_markup; ?>
 							>
 						<?php }
-					}
-
+						}
 				}
-				// MARRiage TYPE : hide text field and show a selection list
-				if ($fact == 'TYPE' && $level == 2 && $tags[0] == 'MARR') { ?>
+	// MARRiage TYPE : hide text field and show a selection list
+	if ('TYPE' == $fact && 2 == $level && 'MARR' == $tags[0]) { ?>
 					<script>
 						document.getElementById("<?php echo $element_id; ?>'").style.display="none"
 					</script>
 					<select id="<?php echo $element_id; ?>'_sel" onchange="document.getElementById('<?php echo $element_id; ?>'\').value=this.value;" >
 						<?php
-						foreach (array("Unknown", "Civil", "Religious", "Partners", "Common") as $indexval => $key) {
-							if ($key == "Unknown") {
-								echo '<option value=""';
-							} else {
-								echo '<option value="' . $key . '"';
-							}
-								$a = strtolower($key);
-								$b = strtolower($value);
-								if (@strpos($a, $b) !== false || @strpos($b, $a) !== false) {
-									echo ' selected="selected"';
-								}
-								$tmp = "MARR_" . strtoupper($key);
-							echo '>' .
-								KT_Gedcom_Tag::getLabel($tmp) . '
+			foreach (['Unknown', 'Civil', 'Religious', 'Partners', 'Common'] as $indexval => $key) {
+				if ('Unknown' == $key) {
+					echo '<option value=""';
+				} else {
+					echo '<option value="' . $key . '"';
+				}
+				$a = strtolower($key);
+				$b = strtolower($value);
+				if (false !== @strpos($a, $b) || false !== @strpos($b, $a)) {
+					echo ' selected="selected"';
+				}
+				$tmp = 'MARR_' . strtoupper($key);
+				echo '>' .
+					KT_Gedcom_Tag::getLabel($tmp) . '
 							</option>';
-						} ?>
+			} ?>
 					</select>
-				<?php } else if ($fact == 'TYPE' && $level == 0) {
+				<?php } elseif ('TYPE' == $fact && 0 == $level) {
 					// NAME TYPE : hide text field and show a selection list
 					$onchange = 'onchange="document.getElementById(\'' . $element_id . '\').value=this.value;"';
+
 					switch (KT_Person::getInstance($pid)->getSex()) {
 						case 'M':
 							echo edit_field_name_type_m($element_name, $value, $onchange);
+
 							break;
+
 						case 'F':
 							echo edit_field_name_type_f($element_name, $value, $onchange);
+
 							break;
+
 						default:
 							echo edit_field_name_type_u($element_name, $value, $onchange);
+
 							break;
 					} ?>
 
@@ -1820,30 +2028,30 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 				<div id="<?php echo $element_id; ?>_description">
 					<?php
 					// current value
-					if ($fact == 'DATE') {
+					if ('DATE' == $fact) {
 						$date = new KT_Date($value);
 						echo $date->Display();
 					}
-					if (($fact == 'ASSO' || $fact == '_ASSO' || $fact == 'SOUR' || $fact == 'OBJE' || ($fact == 'SHARED_NOTE' && $islink)) && $value) {
+					if (('ASSO' == $fact || '_ASSO' == $fact || 'SOUR' == $fact || 'OBJE' == $fact || ('SHARED_NOTE' == $fact && $islink)) && $value) {
 						$record = KT_GedcomRecord::getInstance($value);
 						if ($record) {
 							echo ' ', $record->getFullName();
-						} elseif ($value != 'new') {
+						} elseif ('new' != $value) {
 							echo ' ', $value;
 						}
 					}
 					// pastable values
-					if ($fact === 'FORM' && $upperlevel === 'OBJE') {
+					if ('FORM' === $fact && 'OBJE' === $upperlevel) {
 						print_autopaste_link($element_id, $FILE_FORM_accept);
 					}
-					?>
+	?>
 				</div><!-- close id = $element_id . '_description -->
 
 				<?php echo $extra; ?>
 			</div>
 			<div class="cell small-2 popup_links">
 				<!-- split PLAC -->
-				<?php if ($fact == "PLAC") {
+				<?php if ('PLAC' == $fact) {
 					echo '
 						<span  onclick="jQuery(\'div[id^=', $upperlevel, '_LATI],div[id^=', $upperlevel, '_LONG],div[id^=INDI_LATI],div[id^=INDI_LONG],div[id^=LATI],div[id^=LONG]\').toggle(\'fast\'); return false;" title="', KT_Gedcom_Tag::getLabel('LATI'), ' / ', KT_Gedcom_Tag::getLabel('LONG'), '">
 							<i class="' . $iconStyle . ' fa-map-marker-alt"></i>
@@ -1851,10 +2059,10 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 					';
 				} ?>
 
-				<?php $tmp_array = array('TYPE','TIME','SHARED_NOTE','SOUR','REPO','OBJE','ASSO','_ASSO','AGE');
-				if (!in_array($fact, $tmp_array) && !in_array($fact, $emptyfacts) && ($value !== '' || $value !== 'Y' || $value !== 'y')) {
-					echo  print_specialchar_link($element_id);
-				} ?>
+				<?php $tmp_array = ['TYPE', 'TIME', 'SHARED_NOTE', 'SOUR', 'REPO', 'OBJE', 'ASSO', '_ASSO', 'AGE'];
+	if (!in_array($fact, $tmp_array) && !in_array($fact, $emptyfacts) && ('' !== $value || 'Y' !== $value || 'y' !== $value)) {
+		echo print_specialchar_link($element_id);
+	} ?>
 
 
 				<!-- popup links -->
@@ -1863,20 +2071,30 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 						case 'FAMC':
 						case 'FAMS':
 							echo print_findfamily_link($element_id);
-						break;
+
+							break;
+
 						case 'ASSO':
 						case '_ASSO':
 							echo print_findindi_link($element_id, $element_id . '_description');
-						break;
+
+							break;
+
 						case 'FILE':
-							print_findmedia_link($element_id, "0file");
-						break;
+							print_findmedia_link($element_id, '0file');
+
+							break;
+
 						case 'SOUR':
 							echo print_findsource_link($element_id, $element_id . '_description'), ' ', print_addnewsource_link($element_id);
-						break;
+
+							break;
+
 						case 'REPO':
 							echo print_findrepository_link($element_id), ' ', print_addnewrepository_link($element_id);
-						break;
+
+							break;
+
 						case 'SHARED_NOTE':
 							// Shared Notes Icons ========================================
 							if ($islink) {
@@ -1887,11 +2105,11 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 								}
 								// If census_assistant module exists && we are on the INDI page and the action is a census assistant addition.
 								// Then show the add Shared note assisted icon, if not  ... show regular Shared note icons.
-								if (($action == 'add' || $action == 'edit') && $pid && array_key_exists('census_assistant', KT_Module::getActiveModules())) {
+								if (('add' == $action || 'edit' == $action) && $pid && array_key_exists('census_assistant', KT_Module::getActiveModules())) {
 									// Check if a CENS event ---------------------------
-									if ($event_add == 'census_add') {
+									if ('census_add' == $event_add) {
 										$type_pid = KT_GedcomRecord::getInstance($pid);
-										if ($type_pid->getType() == 'INDI' ) {
+										if ('INDI' == $type_pid->getType()) {
 											echo '
 												<div>
 													<a href="#" style="display: none;" id="assistant-link" onclick="return activateCensusAssistant();">' .
@@ -1903,20 +2121,23 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 									}
 								}
 							}
-						break;
+
+							break;
+
 						case 'OBJE':
 							if (!$value) {
 								echo ' ', print_addnewmedia_link($element_id);
 								$value = 'new';
 							}
-						break;
+
+							break;
 					}
 				} ?>
 			</div>
 		</div>
 
 		<!-- checkboxes to apply '1 SOUR' to BIRT/MARR/DEAT as '2 SOUR' -->
-		<?php if ($fact == 'SOUR' && $level == 1) { ?>
+		<?php if ('SOUR' == $fact && 1 == $level) { ?>
 			<div class="sourceLinks grid-x">
 				<div class="cell small-12 medium-3">
 					<label class="h5">
@@ -1926,103 +2147,102 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 				<div class="cell small-10 medium-7">
 					<div class="grid-x grid-margin-x">
 						<?php
-						if ($PREFER_LEVEL2_SOURCES === '0') {
+						if ('0' === $PREFER_LEVEL2_SOURCES) {
 							$level1_checked = '';
 							$level2_checked = '';
-						} else if ($PREFER_LEVEL2_SOURCES === '1' || $PREFER_LEVEL2_SOURCES === true) {
+						} elseif ('1' === $PREFER_LEVEL2_SOURCES || true === $PREFER_LEVEL2_SOURCES) {
 							$level1_checked = '';
 							$level2_checked = ' checked="checked"';
 						} else {
 							$level1_checked = ' checked="checked"';
 							$level2_checked = '';
-
 						}
-						if (strpos($bdm, 'B') !== false) { ?>
+						if (false !== strpos($bdm, 'B')) { ?>
 							<div class="cell medium-2">
 								<?php echo KT_I18N::translate('Individual'); ?>
 								<?php echo simple_switch(
-									'SOUR_INDI',
-									'Y',
-									$level1_checked,
-									'',
-									KT_I18N::translate('Yes'),
-									KT_I18N::translate('No'),
-									'tiny'
-								); ?>
+							'SOUR_INDI',
+							'Y',
+							$level1_checked,
+							'',
+							KT_I18N::translate('Yes'),
+							KT_I18N::translate('No'),
+							'tiny'
+						); ?>
 							</div>
 
-							<?php if (preg_match_all('/('.KT_REGEX_TAG.')/', $QUICK_REQUIRED_FACTS, $matches)) {
+							<?php if (preg_match_all('/(' . KT_REGEX_TAG . ')/', $QUICK_REQUIRED_FACTS, $matches)) {
 								foreach ($matches[1] as $match) {
 									if (!in_array($match, explode('|', KT_EVENTS_DEAT))) { ?>
 										<div class="cell medium-2">
 											<?php echo KT_Gedcom_Tag::getLabel($match); ?>
 											<?php echo simple_switch(
-												'SOUR_' . $match,
-												'Y',
-												$level2_checked,
-												'',
-												KT_I18N::translate('Yes'),
-												KT_I18N::translate('No'),
-												'tiny'
-											); ?>
+										'SOUR_' . $match,
+										'Y',
+										$level2_checked,
+										'',
+										KT_I18N::translate('Yes'),
+										KT_I18N::translate('No'),
+										'tiny'
+									); ?>
 										</div>
 									<?php }
-								}
+									}
 							}
 						}
 
-						if (strpos($bdm, 'D') !== false) {
-							if (preg_match_all('/('.KT_REGEX_TAG.')/', $QUICK_REQUIRED_FACTS, $matches)) {
+						if (false !== strpos($bdm, 'D')) {
+							if (preg_match_all('/(' . KT_REGEX_TAG . ')/', $QUICK_REQUIRED_FACTS, $matches)) {
 								foreach ($matches[1] as $match) {
 									if (in_array($match, explode('|', KT_EVENTS_DEAT))) { ?>
 										<div class="cell medium-2">
 											<?php echo KT_Gedcom_Tag::getLabel($match); ?>
 											<?php echo simple_switch(
-												'SOUR_' . $match,
-												'Y',
-												$level2_checked,
-												'',
-												KT_I18N::translate('Yes'),
-												KT_I18N::translate('No'),
-												'tiny'
-											); ?>
+										'SOUR_' . $match,
+										'Y',
+										$level2_checked,
+										'',
+										KT_I18N::translate('Yes'),
+										KT_I18N::translate('No'),
+										'tiny'
+									); ?>
 										</div>
 									<?php }
-								}
+									}
 							}
 						}
 
-						if (strpos($bdm, 'M') !== false) { ?>
+						if (false !== strpos($bdm, 'M')) { ?>
 							<div class="cell medium-2">
 								<?php echo KT_I18N::translate('Family'); ?>
 								<?php echo simple_switch(
-									'SOUR_FAM',
+							'SOUR_FAM',
+							'Y',
+							$level1_checked,
+							'',
+							KT_I18N::translate('Yes'),
+							KT_I18N::translate('No'),
+							'tiny'
+						); ?>
+							</div>
+							<?php if (preg_match_all('/(' . KT_REGEX_TAG . ')/', $QUICK_REQUIRED_FAMFACTS, $matches)) {
+								foreach ($matches[1] as $match) { ?>
+									<div class="cell medium-2">
+										<?php echo KT_Gedcom_Tag::getLabel($match); ?>
+										<?php echo simple_switch(
+									'SOUR_' . $match,
 									'Y',
-									$level1_checked,
+									$level2_checked,
 									'',
 									KT_I18N::translate('Yes'),
 									KT_I18N::translate('No'),
 									'tiny'
 								); ?>
-							</div>
-							<?php if (preg_match_all('/('.KT_REGEX_TAG.')/', $QUICK_REQUIRED_FAMFACTS, $matches)) {
-								foreach ($matches[1] as $match) { ?>
-									<div class="cell medium-2">
-										<?php echo KT_Gedcom_Tag::getLabel($match); ?>
-										<?php echo simple_switch(
-											'SOUR_' . $match,
-											'Y',
-											$level2_checked,
-											'',
-											KT_I18N::translate('Yes'),
-											KT_I18N::translate('No'),
-											'tiny'
-										); ?>
 									</div>
 								<?php }
-							}
+								}
 						}
-						?>
+			?>
 						<div class="cell auto"></div>
 					</div>
 				</div>
@@ -2034,39 +2254,52 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 }
 
 /**
- * Genearate a <select> element, with the dates/places of all known censuses
- *
+ * Genearate a <select> element, with the dates/places of all known censuses.
  *
  * @param string $locale - Sort the censuses for this locale
  * @param string $xref   - The individual for whom we are adding a census
  */
-function censusDateSelector($locale, $xref) {
+function censusDateSelector($locale, $xref)
+{
 	global $controller;
 
 	// Show more likely census details at the top of the list.
 	switch (KT_LOCALE) {
 		case 'cs':
-			$census_places = array(new KT_Census_CensusOfCzechRepublic);
+			$census_places = [new KT_Census_CensusOfCzechRepublic()];
+
 			break;
+
 		case 'en_AU':
 		case 'en_GB':
-			$census_places = array(new KT_Census_CensusOfEngland, new KT_Census_CensusOfWales, new KT_Census_CensusOfScotland);
+			$census_places = [new KT_Census_CensusOfEngland(), new KT_Census_CensusOfWales(), new KT_Census_CensusOfScotland()];
+
 			break;
+
 		case 'en_US':
-			$census_places = array(new KT_Census_CensusOfUnitedStates);
+			$census_places = [new KT_Census_CensusOfUnitedStates()];
+
 			break;
+
 		case 'fr':
 		case 'fr_CA':
-			$census_places = array(new KT_Census_CensusOfFrance);
+			$census_places = [new KT_Census_CensusOfFrance()];
+
 			break;
+
 		case 'da':
-			$census_places = array(new KT_Census_CensusOfDenmark);
+			$census_places = [new KT_Census_CensusOfDenmark()];
+
 			break;
+
 		case 'de':
-			$census_places = array(new KT_Census_CensusOfDeutschland);
+			$census_places = [new KT_Census_CensusOfDeutschland()];
+
 			break;
+
 		default:
-			$census_places = array();
+			$census_places = [];
+
 			break;
 	}
 
@@ -2107,8 +2340,8 @@ function censusDateSelector($locale, $xref) {
 	foreach ($census_places as $census_place) {
 		$options .= '<optgroup label="' . $census_place->censusPlace() . '">';
 		foreach ($census_place->allCensusDates() as $census) {
-			$date            = new KT_Date($census->censusDate());
-			$year            = $date->minimumDate()->format('%Y');
+			$date = new KT_Date($census->censusDate());
+			$year = $date->minimumDate()->format('%Y');
 			$place_hierarchy = explode(', ', $census->censusPlace());
 			$options .= '<option value="' . $census->censusDate() . '" data-place="' . $census->censusPlace() . '" data-census="' . get_class($census) . '">' . $place_hierarchy[0] . ' ' . $year . '</option>';
 		}
@@ -2120,21 +2353,22 @@ function censusDateSelector($locale, $xref) {
 		'<select class="census-assistant-selector" onchange="selectCensus(this);">' . $options . '</select>';
 }
 
-
 /**
-* prints collapsable fields to add ASSO/RELA, SOUR, OBJE ...
-*
-* @param string $tag Gedcom tag name
-*/
-function print_add_layer($tag, $level=2) {
+ * prints collapsable fields to add ASSO/RELA, SOUR, OBJE ...
+ *
+ * @param string $tag   Gedcom tag name
+ * @param mixed  $level
+ */
+function print_add_layer($tag, $level = 2)
+{
 	global $MEDIA_DIRECTORY, $TEXT_DIRECTION;
 	global $gedrec, $FULL_SOURCES, $islink, $iconStyle;
 
-	if ($tag == 'OBJE' && get_gedcom_setting(KT_GED_ID, 'MEDIA_UPLOAD') < KT_USER_ACCESS_LEVEL) {
+	if ('OBJE' == $tag && get_gedcom_setting(KT_GED_ID, 'MEDIA_UPLOAD') < KT_USER_ACCESS_LEVEL) {
 		return;
 	}
 
-	if ($tag == "SOUR") { ?>
+	if ('SOUR' == $tag) { ?>
 		<li class="accordion-item" data-accordion-item>
 			<a href="#" class="accordion-title"><?php echo KT_I18N::translate('Add source citation'); ?></a>
 			<div id="newsource" class="accordion-content" data-tab-content>
@@ -2142,38 +2376,38 @@ function print_add_layer($tag, $level=2) {
 					<div class="cell">
 						<?php
 						// 2 SOUR
-						$source = "SOUR @";
-						add_simple_tag("$level $source");
-						// 3 PAGE
-						$page = "PAGE";
-						add_simple_tag(($level + 1) . " $page");
-						// 3 DATA
-						// 4 TEXT
-						$text = "TEXT";
-						add_simple_tag(($level + 2) . " $text");
-						if ($FULL_SOURCES) {
-							// 4 DATE
-							add_simple_tag(($level + 2) . " DATE", '', KT_Gedcom_Tag::getLabel('DATA:DATE'));
-							// 3 QUAY
-							add_simple_tag(($level + 1) . " QUAY");
-						}
-						// 3 OBJE
-						add_simple_tag(($level + 1) . " OBJE");
-						// 3 SHARED_NOTE
-						add_simple_tag(($level+1) . " SHARED_NOTE");
-						?>
+						$source = 'SOUR @';
+		add_simple_tag("{$level} {$source}");
+		// 3 PAGE
+		$page = 'PAGE';
+		add_simple_tag(($level + 1) . " {$page}");
+		// 3 DATA
+		// 4 TEXT
+		$text = 'TEXT';
+		add_simple_tag(($level + 2) . " {$text}");
+		if ($FULL_SOURCES) {
+			// 4 DATE
+			add_simple_tag(($level + 2) . ' DATE', '', KT_Gedcom_Tag::getLabel('DATA:DATE'));
+			// 3 QUAY
+			add_simple_tag(($level + 1) . ' QUAY');
+		}
+		// 3 OBJE
+		add_simple_tag(($level + 1) . ' OBJE');
+		// 3 SHARED_NOTE
+		add_simple_tag(($level + 1) . ' SHARED_NOTE');
+		?>
 					</div>
 				</div>
 			</div>
 		</li>
 	<?php }
 
-	if ($tag == "ASSO" || $tag == "ASSO2") { ?>
+	if ('ASSO' == $tag || 'ASSO2' == $tag) { ?>
 		<li class="accordion-item" data-accordion-item>
 			<a href="#" class="accordion-title">
 				<?php echo KT_I18N::translate('Add an associate'); ?>
 			</a>
-				<?php if ($tag == "ASSO") {
+				<?php if ('ASSO' == $tag) {
 					$id = 'newasso';
 				} else {
 					$id = 'newasso2';
@@ -2183,244 +2417,250 @@ function print_add_layer($tag, $level=2) {
 					<div class="cell">
 						<?php
 						// 2 ASSO
-						add_simple_tag(($level) ." ASSO @");
-						// 3 RELA
-						add_simple_tag(($level + 1) . " RELA");
-						// 3 NOTE
-						add_simple_tag(($level + 1) . " NOTE");
-						// 3 SHARED_NOTE
-						add_simple_tag(($level + 1) . " SHARED_NOTE");
-						?>
+						add_simple_tag($level . ' ASSO @');
+		// 3 RELA
+		add_simple_tag(($level + 1) . ' RELA');
+		// 3 NOTE
+		add_simple_tag(($level + 1) . ' NOTE');
+		// 3 SHARED_NOTE
+		add_simple_tag(($level + 1) . ' SHARED_NOTE');
+		?>
 					</div>
 				</div>
 			</div>
 		</li>
 	<?php }
 
-	if ($tag == "NOTE") { ?>
+	if ('NOTE' == $tag) { ?>
 		<?php $text = ''; ?>
 		<li class="accordion-item" data-accordion-item>
 			<a href="#" class="accordion-title"><?php echo KT_I18N::translate('Add note'); ?></a>
 			<div id="newnote" class="accordion-content" data-tab-content>
 				<div class="grid-x">
 					<div class="cell">
-						<?php add_simple_tag(($level) . " NOTE " . $text); ?>
+						<?php add_simple_tag($level . ' NOTE ' . $text); ?>
 					</div>
 				</div>
 			</div>
 		</li>
 	<?php }
 
-	if ($tag == "SHARED_NOTE") { ?>
+	if ('SHARED_NOTE' == $tag) { ?>
 		<?php $text = ''; ?>
 		<li class="accordion-item" data-accordion-item>
 			<a href="#" class="accordion-title"><?php echo KT_I18N::translate('Add shared note'); ?></a>
 			<div id="newshared_note" class="accordion-content" data-tab-content>
 				<div class="grid-x">
 					<div class="cell">
-						<?php add_simple_tag(($level) . " SHARED_NOTE "); ?>
+						<?php add_simple_tag($level . ' SHARED_NOTE '); ?>
 					</div>
 				</div>
 			</div>
 		</li>
 	<?php }
 
-	if ($tag == "OBJE") { ?>
+	if ('OBJE' == $tag) { ?>
 		<li class="accordion-item" data-accordion-item>
 			<a href="#" class="accordion-title"><?php echo KT_I18N::translate('Add media object'); ?></a>
 			<div id="newobje" class="accordion-content" data-tab-content>
 				<div class="grid-x">
 					<div class="cell">
-						<?php add_simple_tag($level . " OBJE"); ?>
+						<?php add_simple_tag($level . ' OBJE'); ?>
 					</div>
 				</div>
 			</div>
 		</li>
 	<?php }
 
-	if ($tag == "RESN") { ?>
+	if ('RESN' == $tag) { ?>
 		<?php $text = ''; ?>
 		<li class="accordion-item" data-accordion-item>
 			<a href="#" class="accordion-title"><?php echo KT_I18N::translate('Add restriction'); ?></a>
 			<div id="newresn" class="accordion-content" data-tab-content>
 				<div class="grid-x">
 					<div class="cell">
-						<?php add_simple_tag(($level) . " RESN " . $text); ?>
+						<?php add_simple_tag($level . ' RESN ' . $text); ?>
 					</div>
 				</div>
 			</div>
 		</li>
 	<?php }
-
-}
+	}
 
 // Add some empty tags to create a new fact
-function addSimpleTags($fact) {
+function addSimpleTags($fact)
+{
 	global $ADVANCED_PLAC_FACTS;
 
 	// For new individuals, these facts default to "Y"
-	if ($fact == 'MARR' /*|| $fact == 'BIRT'*/) {
+	if ('MARR' == $fact /* || $fact == 'BIRT' */) {
 		add_simple_tag("0 {$fact} Y");
 	} else {
 		add_simple_tag("0 {$fact}");
 	}
-	add_simple_tag("0 DATE", $fact, KT_Gedcom_Tag::getLabel("{$fact}:DATE"));
-	add_simple_tag("0 PLAC", $fact, KT_Gedcom_Tag::getLabel("{$fact}:PLAC"));
+	add_simple_tag('0 DATE', $fact, KT_Gedcom_Tag::getLabel("{$fact}:DATE"));
+	add_simple_tag('0 PLAC', $fact, KT_Gedcom_Tag::getLabel("{$fact}:PLAC"));
 
-	if (preg_match_all('/('.KT_REGEX_TAG.')/', $ADVANCED_PLAC_FACTS, $match)) {
+	if (preg_match_all('/(' . KT_REGEX_TAG . ')/', $ADVANCED_PLAC_FACTS, $match)) {
 		foreach ($match[1] as $tag) {
 			add_simple_tag("0 {$tag}", $fact, KT_Gedcom_Tag::getLabel("{$fact}:PLAC:{$tag}"));
 		}
 	}
-	add_simple_tag("0 MAP", $fact);
-	add_simple_tag("0 LATI", $fact);
-	add_simple_tag("0 LONG", $fact);
+	add_simple_tag('0 MAP', $fact);
+	add_simple_tag('0 LATI', $fact);
+	add_simple_tag('0 LONG', $fact);
 }
 
 // Assemble the pieces of a newly created record into gedcom
-function addNewName() {
+function addNewName()
+{
 	global $ADVANCED_NAME_FACTS;
 
-	$gedrec="\n1 NAME ".KT_Filter::post('NAME', KT_REGEX_UNSAFE, '//');
+	$gedrec = "\n1 NAME " . KT_Filter::post('NAME', KT_REGEX_UNSAFE, '//');
 
-	$tags=array('NPFX', 'GIVN', 'SPFX', 'SURN', 'NSFX');
+	$tags = ['NPFX', 'GIVN', 'SPFX', 'SURN', 'NSFX'];
 
-	if (preg_match_all('/('.KT_REGEX_TAG.')/', $ADVANCED_NAME_FACTS, $match)) {
-		$tags=array_merge($tags, $match[1]);
+	if (preg_match_all('/(' . KT_REGEX_TAG . ')/', $ADVANCED_NAME_FACTS, $match)) {
+		$tags = array_merge($tags, $match[1]);
 	}
 
 	// Paternal and Polish and Lithuanian surname traditions can also create a _MARNM
-	$SURNAME_TRADITION=get_gedcom_setting(KT_GED_ID, 'SURNAME_TRADITION');
-	if ($SURNAME_TRADITION == 'paternal' || $SURNAME_TRADITION == 'polish' || $SURNAME_TRADITION == 'lithuanian') {
-		$tags[]='_MARNM';
+	$SURNAME_TRADITION = get_gedcom_setting(KT_GED_ID, 'SURNAME_TRADITION');
+	if ('paternal' == $SURNAME_TRADITION || 'polish' == $SURNAME_TRADITION || 'lithuanian' == $SURNAME_TRADITION) {
+		$tags[] = '_MARNM';
 	}
 
 	foreach (array_unique($tags) as $tag) {
-		$TAG=KT_Filter::post($tag, KT_REGEX_UNSAFE);
+		$TAG = KT_Filter::post($tag, KT_REGEX_UNSAFE);
 		if ($TAG) {
-			$gedrec.="\n2 {$tag} {$TAG}";
+			$gedrec .= "\n2 {$tag} {$TAG}";
 		}
 	}
+
 	return $gedrec;
 }
 
-function addNewSex() {
+function addNewSex()
+{
 	switch (KT_Filter::post('SEX', '[MF]', 'U')) {
-	case 'M':
-		return "\n1 SEX M";
-	case 'F':
-		return "\n1 SEX F";
-	default:
-		return "\n1 SEX U";
+		case 'M':
+			return "\n1 SEX M";
+
+		case 'F':
+			return "\n1 SEX F";
+
+		default:
+			return "\n1 SEX U";
 	}
 }
 
-function addNewFact($fact) {
+function addNewFact($fact)
+{
 	global $tagSOUR, $ADVANCED_PLAC_FACTS;
 
-	$FACT=KT_Filter::post($fact,          KT_REGEX_UNSAFE);
-	$DATE=KT_Filter::post("{$fact}_DATE", KT_REGEX_UNSAFE);
-	$PLAC=KT_Filter::post("{$fact}_PLAC", KT_REGEX_UNSAFE);
-	if ($DATE || $PLAC || $FACT && $FACT != 'Y') {
-		if ($FACT && $FACT != 'Y') {
-			$gedrec="\n1 {$fact} {$FACT}";
+	$FACT = KT_Filter::post($fact, KT_REGEX_UNSAFE);
+	$DATE = KT_Filter::post("{$fact}_DATE", KT_REGEX_UNSAFE);
+	$PLAC = KT_Filter::post("{$fact}_PLAC", KT_REGEX_UNSAFE);
+	if ($DATE || $PLAC || $FACT && 'Y' != $FACT) {
+		if ($FACT && 'Y' != $FACT) {
+			$gedrec = "\n1 {$fact} {$FACT}";
 		} else {
-			$gedrec="\n1 {$fact}";
+			$gedrec = "\n1 {$fact}";
 		}
 		if ($DATE) {
-			$gedrec.="\n2 DATE {$DATE}";
+			$gedrec .= "\n2 DATE {$DATE}";
 		}
 		if ($PLAC) {
-			$gedrec.="\n2 PLAC {$PLAC}";
+			$gedrec .= "\n2 PLAC {$PLAC}";
 
-			if (preg_match_all('/('.KT_REGEX_TAG.')/', $ADVANCED_PLAC_FACTS, $match)) {
+			if (preg_match_all('/(' . KT_REGEX_TAG . ')/', $ADVANCED_PLAC_FACTS, $match)) {
 				foreach ($match[1] as $tag) {
-					$TAG=KT_Filter::post("{$fact}_{$tag}", KT_REGEX_UNSAFE);
+					$TAG = KT_Filter::post("{$fact}_{$tag}", KT_REGEX_UNSAFE);
 					if ($TAG) {
-						$gedrec.="\n3 {$tag} {$TAG}";
+						$gedrec .= "\n3 {$tag} {$TAG}";
 					}
 				}
 			}
-			$LATI=KT_Filter::post("{$fact}_LATI", KT_REGEX_UNSAFE);
-			$LONG=KT_Filter::post("{$fact}_LONG", KT_REGEX_UNSAFE);
+			$LATI = KT_Filter::post("{$fact}_LATI", KT_REGEX_UNSAFE);
+			$LONG = KT_Filter::post("{$fact}_LONG", KT_REGEX_UNSAFE);
 			if ($LATI || $LONG) {
-				$gedrec.="\n3 MAP\n4 LATI {$LATI}\n4 LONG {$LONG}";
+				$gedrec .= "\n3 MAP\n4 LATI {$LATI}\n4 LONG {$LONG}";
 			}
 		}
 		if (KT_Filter::postBool("SOUR_{$fact}")) {
 			return updateSOUR($gedrec, 2);
-		} else {
-			return $gedrec;
 		}
-	} elseif ($FACT == 'Y') {
+
+		return $gedrec;
+	} elseif ('Y' == $FACT) {
 		if (KT_Filter::postBool("SOUR_{$fact}")) {
 			return updateSOUR("\n1 {$fact} Y", 2);
-		} else {
-			return "\n1 {$fact} Y";
 		}
-	} else {
-		return '';
+
+		return "\n1 {$fact} Y";
 	}
+
+	return '';
 }
 
 /**
-* This function splits the $glevels, $tag, $islink, and $text arrays so that the
-* entries associated with a SOUR record are separate from everything else.
-*
-* Input arrays:
-* - $glevels[] - an array of the gedcom level for each line that was edited
-* - $tag[] - an array of the tags for each gedcom line that was edited
-* - $islink[] - an array of 1 or 0 values to indicate when the text is a link element
-* - $text[] - an array of the text data for each line
-*
-* Output arrays:
-* ** For the SOUR record:
-* - $glevelsSOUR[] - an array of the gedcom level for each line that was edited
-* - $tagSOUR[] - an array of the tags for each gedcom line that was edited
-* - $islinkSOUR[] - an array of 1 or 0 values to indicate when the text is a link element
-* - $textSOUR[] - an array of the text data for each line
-* ** For the remaining records:
-* - $glevelsRest[] - an array of the gedcom level for each line that was edited
-* - $tagRest[] - an array of the tags for each gedcom line that was edited
-* - $islinkRest[] - an array of 1 or 0 values to indicate when the text is a link element
-* - $textRest[] - an array of the text data for each line
-*
-*/
-function splitSOUR() {
+ * This function splits the $glevels, $tag, $islink, and $text arrays so that the
+ * entries associated with a SOUR record are separate from everything else.
+ *
+ * Input arrays:
+ * - $glevels[] - an array of the gedcom level for each line that was edited
+ * - $tag[] - an array of the tags for each gedcom line that was edited
+ * - $islink[] - an array of 1 or 0 values to indicate when the text is a link element
+ * - $text[] - an array of the text data for each line
+ *
+ * Output arrays:
+ * ** For the SOUR record:
+ * - $glevelsSOUR[] - an array of the gedcom level for each line that was edited
+ * - $tagSOUR[] - an array of the tags for each gedcom line that was edited
+ * - $islinkSOUR[] - an array of 1 or 0 values to indicate when the text is a link element
+ * - $textSOUR[] - an array of the text data for each line
+ * ** For the remaining records:
+ * - $glevelsRest[] - an array of the gedcom level for each line that was edited
+ * - $tagRest[] - an array of the tags for each gedcom line that was edited
+ * - $islinkRest[] - an array of 1 or 0 values to indicate when the text is a link element
+ * - $textRest[] - an array of the text data for each line
+ */
+function splitSOUR()
+{
 	global $glevels, $tag, $islink, $text;
 	global $glevelsSOUR, $tagSOUR, $islinkSOUR, $textSOUR;
 	global $glevelsRest, $tagRest, $islinkRest, $textRest;
 
-	$glevelsSOUR = array();
-	$tagSOUR = array();
-	$islinkSOUR = array();
-	$textSOUR = array();
+	$glevelsSOUR = [];
+	$tagSOUR = [];
+	$islinkSOUR = [];
+	$textSOUR = [];
 
-	$glevelsRest = array();
-	$tagRest = array();
-	$islinkRest = array();
-	$textRest = array();
+	$glevelsRest = [];
+	$tagRest = [];
+	$islinkRest = [];
+	$textRest = [];
 
 	$inSOUR = false;
 
-	for ($i=0; $i<count($glevels); $i++) {
+	for ($i = 0; $i < count($glevels); $i++) {
 		if ($inSOUR) {
-			if ($levelSOUR<$glevels[$i]) {
-				$dest = "S";
+			if ($levelSOUR < $glevels[$i]) {
+				$dest = 'S';
 			} else {
 				$inSOUR = false;
-				$dest = "R";
+				$dest = 'R';
 			}
 		} else {
-			if ($tag[$i] == "SOUR") {
+			if ('SOUR' == $tag[$i]) {
 				$inSOUR = true;
 				$levelSOUR = $glevels[$i];
-				$dest = "S";
+				$dest = 'S';
 			} else {
-				$dest = "R";
+				$dest = 'R';
 			}
 		}
-		if ($dest == "S") {
+		if ('S' == $dest) {
 			$glevelsSOUR[] = $glevels[$i];
 			$tagSOUR[] = $tag[$i];
 			$islinkSOUR[] = $islink[$i];
@@ -2435,18 +2675,23 @@ function splitSOUR() {
 }
 
 /**
-* Add new GEDCOM lines from the $xxxSOUR interface update arrays, which
-* were produced by the splitSOUR() function.
-*
-* See the handle_updates() function for details.
-*
-*/
-function updateSOUR($inputRec, $levelOverride="no") {
+ * Add new GEDCOM lines from the $xxxSOUR interface update arrays, which
+ * were produced by the splitSOUR() function.
+ *
+ * See the handle_updates() function for details.
+ *
+ * @param mixed $inputRec
+ * @param mixed $levelOverride
+ */
+function updateSOUR($inputRec, $levelOverride = 'no')
+{
 	global $glevels, $tag, $islink, $text;
 	global $glevelsSOUR, $tagSOUR, $islinkSOUR, $textSOUR;
 	global $glevelsRest, $tagRest, $islinkRest, $textRest;
 
-	if (count($tagSOUR) == 0) return $inputRec; // No update required
+	if (0 == count($tagSOUR)) {
+		return $inputRec;
+	} // No update required
 
 	// Save original interface update arrays before replacing them with the xxxSOUR ones
 	$glevelsSave = $glevels;
@@ -2471,18 +2716,23 @@ function updateSOUR($inputRec, $levelOverride="no") {
 }
 
 /**
-* Add new GEDCOM lines from the $xxxRest interface update arrays, which
-* were produced by the splitSOUR() function.
-*
-* See the handle_updates() function for details.
-*
-*/
-function updateRest($inputRec, $levelOverride="no") {
+ * Add new GEDCOM lines from the $xxxRest interface update arrays, which
+ * were produced by the splitSOUR() function.
+ *
+ * See the handle_updates() function for details.
+ *
+ * @param mixed $inputRec
+ * @param mixed $levelOverride
+ */
+function updateRest($inputRec, $levelOverride = 'no')
+{
 	global $glevels, $tag, $islink, $text;
 	global $glevelsSOUR, $tagSOUR, $islinkSOUR, $textSOUR;
 	global $glevelsRest, $tagRest, $islinkRest, $textRest;
 
-	if (count($tagRest) == 0) return $inputRec; // No update required
+	if (0 == count($tagRest)) {
+		return $inputRec;
+	} // No update required
 
 	// Save original interface update arrays before replacing them with the xxxRest ones
 	$glevelsSave = $glevels;
@@ -2507,69 +2757,75 @@ function updateRest($inputRec, $levelOverride="no") {
 }
 
 /**
-* Add new gedcom lines from interface update arrays
-* The edit_interface and add_simple_tag function produce the following
-* arrays incoming from the $_POST form
-* - $glevels[] - an array of the gedcom level for each line that was edited
-* - $tag[] - an array of the tags for each gedcom line that was edited
-* - $islink[] - an array of 1 or 0 values to tell whether the text is a link element and should be surrounded by @@
-* - $text[] - an array of the text data for each line
-* With these arrays you can recreate the gedcom lines like this
-* <code>$glevel[0].' '.$tag[0].' '.$text[0]</code>
-* There will be an index in each of these arrays for each line of the gedcom
-* fact that is being edited.
-* If the $text[] array is empty for the given line, then it means that the
-* user removed that line during editing or that the line is supposed to be
-* empty (1 DEAT, 1 BIRT) for example.  To know if the line should be removed
-* there is a section of code that looks ahead to the next lines to see if there
-* are sub lines.  For example we don't want to remove the 1 DEAT line if it has
-* a 2 PLAC or 2 DATE line following it.  If there are no sub lines, then the line
-* can be safely removed.
-* @param string $newged the new gedcom record to add the lines to
-* @param int $levelOverride Override GEDCOM level specified in $glevels[0]
-* @return string The updated gedcom record
-*/
-function handle_updates($newged, $levelOverride="no") {
+ * Add new gedcom lines from interface update arrays
+ * The edit_interface and add_simple_tag function produce the following
+ * arrays incoming from the $_POST form
+ * - $glevels[] - an array of the gedcom level for each line that was edited
+ * - $tag[] - an array of the tags for each gedcom line that was edited
+ * - $islink[] - an array of 1 or 0 values to tell whether the text is a link element and should be surrounded by @@
+ * - $text[] - an array of the text data for each line
+ * With these arrays you can recreate the gedcom lines like this
+ * <code>$glevel[0].' '.$tag[0].' '.$text[0]</code>
+ * There will be an index in each of these arrays for each line of the gedcom
+ * fact that is being edited.
+ * If the $text[] array is empty for the given line, then it means that the
+ * user removed that line during editing or that the line is supposed to be
+ * empty (1 DEAT, 1 BIRT) for example.  To know if the line should be removed
+ * there is a section of code that looks ahead to the next lines to see if there
+ * are sub lines.  For example we don't want to remove the 1 DEAT line if it has
+ * a 2 PLAC or 2 DATE line following it.  If there are no sub lines, then the line
+ * can be safely removed.
+ *
+ * @param string $newged        the new gedcom record to add the lines to
+ * @param int    $levelOverride Override GEDCOM level specified in $glevels[0]
+ *
+ * @return string The updated gedcom record
+ */
+function handle_updates($newged, $levelOverride = 'no')
+{
 	global $glevels, $islink, $tag, $uploaded_files, $text, $NOTE, $WORD_WRAPPED_NOTES;
 
-	if ($levelOverride == "no" || count($glevels) == 0) $levelAdjust = 0;
-	else $levelAdjust = $levelOverride - $glevels[0];
+	if ('no' == $levelOverride || 0 == count($glevels)) {
+		$levelAdjust = 0;
+	} else {
+		$levelAdjust = $levelOverride - $glevels[0];
+	}
 
-	for ($j=0; $j<count($glevels); $j++) {
-
+	for ($j = 0; $j < count($glevels); $j++) {
 		// Look for empty SOUR reference with non-empty sub-records.
 		// This can happen when the SOUR entry is deleted but its sub-records
 		// were incorrectly left intact.
 		// The sub-records should be deleted.
-		if ($tag[$j] == "SOUR" && ($text[$j] == "@@" || $text[$j] == '')) {
+		if ('SOUR' == $tag[$j] && ('@@' == $text[$j] || '' == $text[$j])) {
 			$text[$j] = '';
-			$k = $j+1;
-			while (($k<count($glevels))&&($glevels[$k]>$glevels[$j])) {
+			$k = $j + 1;
+			while (($k < count($glevels)) && ($glevels[$k] > $glevels[$j])) {
 				$text[$k] = '';
 				$k++;
 			}
 		}
 
-		if (trim($text[$j])!='') {
+		if ('' != trim($text[$j])) {
 			$pass = true;
-		}
-		else {
-			//-- for facts with empty values they must have sub records
-			//-- this section checks if they have subrecords
-			$k=$j+1;
-			$pass=false;
-			while (($k<count($glevels))&&($glevels[$k]>$glevels[$j])) {
-				if ($text[$k]!='') {
-					if (($tag[$j] != "OBJE")||($tag[$k] == "FILE")) {
-						$pass=true;
+		} else {
+			// -- for facts with empty values they must have sub records
+			// -- this section checks if they have subrecords
+			$k = $j + 1;
+			$pass = false;
+			while (($k < count($glevels)) && ($glevels[$k] > $glevels[$j])) {
+				if ('' != $text[$k]) {
+					if (('OBJE' != $tag[$j]) || ('FILE' == $tag[$k])) {
+						$pass = true;
+
 						break;
 					}
 				}
-				if (($tag[$k] == "FILE")&&(count($uploaded_files)>0)) {
+				if (('FILE' == $tag[$k]) && (count($uploaded_files) > 0)) {
 					$filename = array_shift($uploaded_files);
 					if (!empty($filename)) {
 						$text[$k] = $filename;
-						$pass=true;
+						$pass = true;
+
 						break;
 					}
 				}
@@ -2577,21 +2833,24 @@ function handle_updates($newged, $levelOverride="no") {
 			}
 		}
 
-		//-- if the value is not empty or it has sub lines
-		//--- then write the line to the gedcom record
-		//if ((($text[trim($j)]!='')||($pass == true)) && (strlen($text[$j]) > 0)) {
-		//-- we have to let some emtpy text lines pass through... (DEAT, BIRT, etc)
-		if ($pass == true) {
-			$newline = $glevels[$j]+$levelAdjust.' '.$tag[$j];
-			//-- check and translate the incoming dates
-			if ($tag[$j] == "DATE" && $text[$j]!='') {
+		// -- if the value is not empty or it has sub lines
+		// --- then write the line to the gedcom record
+		// if ((($text[trim($j)]!='')||($pass == true)) && (strlen($text[$j]) > 0)) {
+		// -- we have to let some emtpy text lines pass through... (DEAT, BIRT, etc)
+		if (true == $pass) {
+			$newline = $glevels[$j] + $levelAdjust . ' ' . $tag[$j];
+			// -- check and translate the incoming dates
+			if ('DATE' == $tag[$j] && '' != $text[$j]) {
 			}
 			// echo $newline;
-			if ($text[$j]!='') {
-				if ($islink[$j]) $newline .= " @".$text[$j]."@";
-				else $newline .= ' '.$text[$j];
+			if ('' != $text[$j]) {
+				if ($islink[$j]) {
+					$newline .= ' @' . $text[$j] . '@';
+				} else {
+					$newline .= ' ' . $text[$j];
+				}
 			}
-			$newged .= "\n".breakConts($newline);
+			$newged .= "\n" . breakConts($newline);
 		}
 	}
 
@@ -2599,43 +2858,53 @@ function handle_updates($newged, $levelOverride="no") {
 }
 
 /**
-* Link Media ID to Indi, Family, or Source ID
-*
-* Code was removed from inverselink.php to become a callable function
-*
-* @param  string  $mediaid Media ID to be linked
-* @param string $linktoid Indi, Family, or Source ID that the Media ID should link to
-* @param int $level Level where the Media Object reference should be created
-* @param boolean $chan Whether or not to update/add the CHAN record
-* @return  bool success or failure
-*/
-function linkMedia($mediaid, $linktoid, $level=1, $chan=true) {
-	if (empty($level)) $level = 1;
-	if ($level!=1) return false; // Level 2 items get linked elsewhere
+ * Link Media ID to Indi, Family, or Source ID.
+ *
+ * Code was removed from inverselink.php to become a callable function
+ *
+ * @param string $mediaid  Media ID to be linked
+ * @param string $linktoid Indi, Family, or Source ID that the Media ID should link to
+ * @param int    $level    Level where the Media Object reference should be created
+ * @param bool   $chan     Whether or not to update/add the CHAN record
+ *
+ * @return bool success or failure
+ */
+function linkMedia($mediaid, $linktoid, $level = 1, $chan = true)
+{
+	if (empty($level)) {
+		$level = 1;
+	}
+	if (1 != $level) {
+		return false;
+	} // Level 2 items get linked elsewhere
 	// find Indi, Family, or Source record to link to
 	$gedrec = find_gedcom_record($linktoid, KT_GED_ID, true);
 
-	//-- check if we are re-editing an unaccepted link that is not already in the DB
-	if (strpos($gedrec, "1 OBJE @$mediaid@") !== false) return false;
-
-	if ($gedrec) {
-		$newrec = $gedrec."\n1 OBJE @".$mediaid."@";
-		replace_gedrec($linktoid, KT_GED_ID, $newrec, $chan);
-		return true;
-	} else {
-		// Record not found?  Maybe deleted since we started this action?
+	// -- check if we are re-editing an unaccepted link that is not already in the DB
+	if (false !== strpos($gedrec, "1 OBJE @{$mediaid}@")) {
 		return false;
 	}
+
+	if ($gedrec) {
+		$newrec = $gedrec . "\n1 OBJE @" . $mediaid . '@';
+		replace_gedrec($linktoid, KT_GED_ID, $newrec, $chan);
+
+		return true;
+	}
+	// Record not found?  Maybe deleted since we started this action?
+	return false;
 }
 
 /**
-* builds the form for adding new facts
-* @param string $fact the new fact we are adding
-*/
-function create_add_form($fact) {
+ * builds the form for adding new facts.
+ *
+ * @param string $fact the new fact we are adding
+ */
+function create_add_form($fact)
+{
 	global $tags, $FULL_SOURCES, $emptyfacts;
 
-	$tags = array();
+	$tags = [];
 
 	$label = strtolower(KT_Gedcom_Tag::getLabel($fact));
 	?>
@@ -2648,17 +2917,17 @@ function create_add_form($fact) {
 	<?php
 
 	// handle  MARRiage TYPE
-	if (substr($fact, 0, 5) == "MARR_") {
-		$tags[0] = "MARR";
-		add_simple_tag("1 MARR");
+	if ('MARR_' == substr($fact, 0, 5)) {
+		$tags[0] = 'MARR';
+		add_simple_tag('1 MARR');
 		insert_missing_subtags($fact);
 	} else {
 		$tags[0] = $fact;
-		if ($fact == '_UID') {
-			$fact.= ' ' . uuid();
+		if ('_UID' == $fact) {
+			$fact .= ' ' . uuid();
 		}
 		// These new level 1 tags need to be turned into links
-		if (in_array($fact, array('ASSO'))) {
+		if (in_array($fact, ['ASSO'])) {
 			$fact .= ' @';
 		}
 		if (in_array($fact, $emptyfacts)) {
@@ -2667,55 +2936,57 @@ function create_add_form($fact) {
 			add_simple_tag('1 ' . $fact);
 		}
 		insert_missing_subtags($tags[0]);
-		//-- handle the special SOURce case for level 1 sources [ 1759246 ]
-		if ($fact == "SOUR") {
-			add_simple_tag("2 PAGE");
-			add_simple_tag("3 TEXT");
-			add_simple_tag("2 OBJE");
+		// -- handle the special SOURce case for level 1 sources [ 1759246 ]
+		if ('SOUR' == $fact) {
+			add_simple_tag('2 PAGE');
+			add_simple_tag('3 TEXT');
+			add_simple_tag('2 OBJE');
 			if ($FULL_SOURCES) {
-				add_simple_tag("3 DATE", '', KT_Gedcom_Tag::getLabel('DATA:DATE'));
-				add_simple_tag("2 QUAY");
+				add_simple_tag('3 DATE', '', KT_Gedcom_Tag::getLabel('DATA:DATE'));
+				add_simple_tag('2 QUAY');
 			}
 		}
 	}
 }
 
 /**
-* creates the form for editing the fact within the given gedcom record at the
-* given line number
-* @param string $gedrec the level 0 gedcom record
-* @param int $linenum the line number of the fact to edit within $gedrec
-* @param string $level0type the type of the level 0 gedcom record
-*/
-function create_edit_form($gedrec, $linenum, $level0type) {
-
+ * creates the form for editing the fact within the given gedcom record at the
+ * given line number.
+ *
+ * @param string $gedrec     the level 0 gedcom record
+ * @param int    $linenum    the line number of the fact to edit within $gedrec
+ * @param string $level0type the type of the level 0 gedcom record
+ */
+function create_edit_form($gedrec, $linenum, $level0type)
+{
 	global $pid, $tags, $ADVANCED_PLAC_FACTS, $date_and_time;
 	global $WORD_WRAPPED_NOTES;
 	global $FULL_SOURCES;
 
-	$tags		=array();
-	$gedlines	= explode("\n", $gedrec); // -- find the number of lines in the record
+	$tags = [];
+	$gedlines = explode("\n", $gedrec); // -- find the number of lines in the record
 	if (!isset($gedlines[$linenum])) {
-		echo "<span class=\"error\">", KT_I18N::translate('An error occurred while creating the Edit form.  Another user may have changed this record since you previously viewed it.'), "<br><br>";
-		echo KT_I18N::translate('Please reload the previous page to make sure you are working with the most recent record.'), "</span>";
+		echo '<span class="error">', KT_I18N::translate('An error occurred while creating the Edit form.  Another user may have changed this record since you previously viewed it.'), '<br><br>';
+		echo KT_I18N::translate('Please reload the previous page to make sure you are working with the most recent record.'), '</span>';
+
 		return;
 	}
 	$fields = explode(' ', $gedlines[$linenum]);
 	$glevel = $fields[0];
 	$level = $glevel;
 
+	if (1 != $level && preg_match('~/@.*/@~i', trim($fields[1]))) {
+		echo '<span class="error">', KT_I18N::translate('An error occurred while creating the Edit form.  Another user may have changed this record since you previously viewed it.'), '<br><br>';
+		echo KT_I18N::translate('Please reload the previous page to make sure you are working with the most recent record.'), '</span>';
 
-	if ($level != 1 && preg_match("~/@.*/@~i", trim($fields[1]))) {
-		echo "<span class=\"error\">", KT_I18N::translate('An error occurred while creating the Edit form.  Another user may have changed this record since you previously viewed it.'), "<br><br>";
-		echo KT_I18N::translate('Please reload the previous page to make sure you are working with the most recent record.'), "</span>";
 		return;
 	}
 
-	$type				= trim($fields[1]);
-	$level1type			= $type;
-	$level1typeLabel	= KT_Gedcom_Tag::getLabel($level1type);
+	$type = trim($fields[1]);
+	$level1type = $type;
+	$level1typeLabel = KT_Gedcom_Tag::getLabel($level1type);
 
-	if (!in_array($level0type, array('REPO', 'SOUR'))) { ?>
+	if (!in_array($level0type, ['REPO', 'SOUR'])) { ?>
 		<!-- Sub-heading for edit_interface page -->
 		<h4>
 			<?php echo KT_I18N::translate('Editing %s data', $level1typeLabel); ?>
@@ -2726,106 +2997,109 @@ function create_edit_form($gedrec, $linenum, $level0type) {
 
 	<?php
 	if (count($fields) > 2) {
-		$ct = preg_match("/@.*@/", $fields[2]);
+		$ct = preg_match('/@.*@/', $fields[2]);
 		$levellink = $ct > 0;
 	} else {
 		$levellink = false;
 	}
-	$i				= $linenum;
-	$inSource		= false;
-	$levelSource	= 0;
-	$add_date		= true;
+	$i = $linenum;
+	$inSource = false;
+	$levelSource = 0;
+	$add_date = true;
 
 	// List of tags we would expect at the next level
 	// NB insert_missing_subtags() already takes care of the simple cases
 	// where a level 1 tag is missing a level 2 tag.  Here we only need to
 	// handle the more complicated cases.
-	$expected_subtags = array(
-		'SOUR' => array('PAGE', 'DATA', 'OBJE'),
-		'DATA' => array('TEXT'),
-		'PLAC' => array('MAP'),
-		'MAP'  => array('LATI', 'LONG')
-	);
+	$expected_subtags = [
+		'SOUR' => ['PAGE', 'DATA', 'OBJE'],
+		'DATA' => ['TEXT'],
+		'PLAC' => ['MAP'],
+		'MAP' => ['LATI', 'LONG'],
+	];
 
 	if ($FULL_SOURCES) {
 		$expected_subtags['SOUR'][] = 'QUAY';
 		$expected_subtags['DATA'][] = 'DATE';
 	}
 
-	if (preg_match_all('/('.KT_REGEX_TAG.')/', $ADVANCED_PLAC_FACTS, $match)) {
+	if (preg_match_all('/(' . KT_REGEX_TAG . ')/', $ADVANCED_PLAC_FACTS, $match)) {
 		$expected_subtags['PLAC'] = array_merge($match[1], $expected_subtags['PLAC']);
 	}
 
-	$stack = array(0 => $level0type);
+	$stack = [0 => $level0type];
 
 	// Loop on existing tags :
 	while (true) {
 		// Keep track of our hierarchy, e.g. 1=>BIRT, 2=>PLAC, 3=>FONE
-		$stack[(int)$level] = $type;
+		$stack[(int) $level] = $type;
 
 		// Merge them together, e.g. BIRT:PLAC:FONE
 		$label = implode(':', array_slice($stack, 1, $level));
 
 		$text = '';
 		for ($j = 2; $j < count($fields); $j++) {
-			if ($j > 2) $text .= ' ';
+			if ($j > 2) {
+				$text .= ' ';
+			}
 			$text .= $fields[$j];
 		}
 
 		$text = rtrim($text);
 
-		while (($i + 1 < count($gedlines)) && (preg_match("/" . ($level + 1) . " CONT ?(.*)/", $gedlines[$i + 1], $cmatch) > 0)) {
+		while (($i + 1 < count($gedlines)) && (preg_match('/' . ($level + 1) . ' CONT ?(.*)/', $gedlines[$i + 1], $cmatch) > 0)) {
 			$text .= "\n" . $cmatch[1];
 			$i++;
 		}
 
-		if ($type == "SOUR") {
-			$inSource 		= true;
-			$levelSource	= $level;
+		if ('SOUR' == $type) {
+			$inSource = true;
+			$levelSource = $level;
 		} elseif ($levelSource >= $level) {
-			$inSource 		= false;
+			$inSource = false;
 		}
 
-		if ($type != "DATA" && $type != "CONT") {
-			$tags[]		= $type;
-			$person		= KT_Person::getInstance($pid);
-			$subrecord	= $level . ' ' . $type . ' ' . $text;
+		if ('DATA' != $type && 'CONT' != $type) {
+			$tags[] = $type;
+			$person = KT_Person::getInstance($pid);
+			$subrecord = $level . ' ' . $type . ' ' . $text;
 
-			if ($inSource && $type === "DATE") {
+			if ($inSource && 'DATE' === $type) {
 				add_simple_tag($subrecord, '', KT_Gedcom_Tag::getLabel($label, $person));
-			} elseif (!$inSource && $type === "DATE") {
+			} elseif (!$inSource && 'DATE' === $type) {
 				add_simple_tag($subrecord, $level1type, KT_Gedcom_Tag::getLabel($label, $person));
-				if ($level === '2') {
+				if ('2' === $level) {
 					// We already have a date - no need to add one.
 					$add_date = false;
 				}
- 			} elseif ($type == 'STAT') {
+			} elseif ('STAT' == $type) {
 				add_simple_tag($subrecord, $level1type, KT_Gedcom_Tag::getLabel($label, $person));
-		 	} elseif ($level0type == 'REPO') {
+			} elseif ('REPO' == $level0type) {
 				$repo = KT_Repository::getInstance($pid);
 				add_simple_tag($subrecord, $level0type, KT_Gedcom_Tag::getLabel($label, $repo));
 			} else {
 				add_simple_tag($subrecord, $level0type, KT_Gedcom_Tag::getLabel($label, $person));
 			}
-
 		}
 
 		// Get a list of tags present at the next level
-		$subtags = array();
-		for ($ii = $i + 1; isset($gedlines[$ii]) && preg_match('/^\s*(\d+)\s+(\S+)/', $gedlines[$ii], $mm) && $mm[1]>$level; ++$ii)
-			if ($mm[1] == $level+1)
+		$subtags = [];
+		for ($ii = $i + 1; isset($gedlines[$ii]) && preg_match('/^\s*(\d+)\s+(\S+)/', $gedlines[$ii], $mm) && $mm[1] > $level; $ii++) {
+			if ($mm[1] == $level + 1) {
 				$subtags[] = $mm[2];
+			}
+		}
 
 		// Insert missing tags
 		if (!empty($expected_subtags[$type])) {
 			foreach ($expected_subtags[$type] as $subtag) {
 				if (!in_array($subtag, $subtags)) {
-					if (!$inSource || $subtag!="DATA") {
-						add_simple_tag(($level+1).' '.$subtag, '', KT_Gedcom_Tag::getLabel("{$label}:{$subtag}"));
+					if (!$inSource || 'DATA' != $subtag) {
+						add_simple_tag(($level + 1) . ' ' . $subtag, '', KT_Gedcom_Tag::getLabel("{$label}:{$subtag}"));
 					}
 					if (!empty($expected_subtags[$subtag])) {
 						foreach ($expected_subtags[$subtag] as $subsubtag) {
-							add_simple_tag(($level+2).' '.$subsubtag, '', KT_Gedcom_Tag::getLabel("{$label}:{$subtag}:{$subsubtag}"));
+							add_simple_tag(($level + 2) . ' ' . $subsubtag, '', KT_Gedcom_Tag::getLabel("{$label}:{$subtag}:{$subsubtag}"));
 						}
 					}
 				}
@@ -2833,11 +3107,11 @@ function create_edit_form($gedrec, $linenum, $level0type) {
 		}
 
 		// Awkward special cases
-		if ($level == 2 && $type == 'DATE' && in_array($level1type, $date_and_time) && !in_array('TIME', $subtags)) {
-			add_simple_tag("3 TIME"); // TIME is NOT a valid 5.5.1 tag
+		if (2 == $level && 'DATE' == $type && in_array($level1type, $date_and_time) && !in_array('TIME', $subtags)) {
+			add_simple_tag('3 TIME'); // TIME is NOT a valid 5.5.1 tag
 		}
-		if ($level == 2 && $type == 'STAT' && KT_Gedcom_Code_Temp::isTagLDS($level1type) && !in_array('DATE', $subtags)) {
-			add_simple_tag("3 DATE", '', KT_Gedcom_Tag::getLabel('STAT:DATE'));
+		if (2 == $level && 'STAT' == $type && KT_Gedcom_Code_Temp::isTagLDS($level1type) && !in_array('DATE', $subtags)) {
+			add_simple_tag('3 DATE', '', KT_Gedcom_Tag::getLabel('STAT:DATE'));
 		}
 
 		$i++;
@@ -2852,10 +3126,12 @@ function create_edit_form($gedrec, $linenum, $level0type) {
 		} else {
 			$level = 0;
 		}
-		if ($level <= $glevel) break;
+		if ($level <= $glevel) {
+			break;
+		}
 	}
 
-	if ($level1type != '_PRIM') {
+	if ('_PRIM' != $level1type) {
 		insert_missing_subtags($level1type, $add_date);
 	}
 
@@ -2863,88 +3139,106 @@ function create_edit_form($gedrec, $linenum, $level0type) {
 }
 
 /**
-* Populates the global $tags array with any missing sub-tags.
-* @param string $level1tag the type of the level 1 gedcom record
-*/
-function insert_missing_subtags($level1tag, $add_date = false) {
+ * Populates the global $tags array with any missing sub-tags.
+ *
+ * @param string $level1tag the type of the level 1 gedcom record
+ * @param mixed  $add_date
+ */
+function insert_missing_subtags($level1tag, $add_date = false)
+{
 	global $tags, $date_and_time, $level2_tags, $ADVANCED_PLAC_FACTS, $ADVANCED_NAME_FACTS;
 	global $nondatefacts, $nonplacfacts;
 
 	// handle  MARRiage TYPE
 	$type_val = '';
-	if (substr($level1tag, 0, 5) == 'MARR_') {
+	if ('MARR_' == substr($level1tag, 0, 5)) {
 		$type_val = substr($level1tag, 5);
 		$level1tag = 'MARR';
 	}
 
 	foreach ($level2_tags as $key => $value) {
-		if ($key == 'DATE' && in_array($level1tag, $nondatefacts) || $key == 'PLAC' && in_array($level1tag, $nonplacfacts)) {
+		if ('DATE' == $key && in_array($level1tag, $nondatefacts) || 'PLAC' == $key && in_array($level1tag, $nonplacfacts)) {
 			continue;
 		}
 		if (in_array($level1tag, $value) && !in_array($key, $tags)) {
-			if ($key == 'TYPE') {
+			if ('TYPE' == $key) {
 				add_simple_tag('2 TYPE ' . $type_val, $level1tag);
-			} elseif ($level1tag === '_TODO' && $key === 'DATE') {
+			} elseif ('_TODO' === $level1tag && 'DATE' === $key) {
 				add_simple_tag('2 ' . $key . ' ' . strtoupper(date('d M Y')), $level1tag);
-			} elseif ($level1tag === '_TODO' && $key === '_KT_USER') {
+			} elseif ('_TODO' === $level1tag && '_KT_USER' === $key) {
 				add_simple_tag('2 ' . $key . ' ' . KT_USER_NAME, $level1tag);
-			} elseif ($level1tag === 'TITL' && strstr($ADVANCED_NAME_FACTS, $key) !== false) {
+			} elseif ('TITL' === $level1tag && false !== strstr($ADVANCED_NAME_FACTS, $key)) {
 				add_simple_tag('2 ' . $key, $level1tag);
-			} elseif ($level1tag === 'NAME' && strstr($ADVANCED_NAME_FACTS, $key) !== false) {
+			} elseif ('NAME' === $level1tag && false !== strstr($ADVANCED_NAME_FACTS, $key)) {
 				add_simple_tag('2 ' . $key, $level1tag);
-			} elseif ($level1tag !== 'NAME') {
+			} elseif ('NAME' !== $level1tag) {
 				add_simple_tag('2 ' . $key, $level1tag);
 			}
+
 			switch ($key) { // Add level 3/4 tags as appropriate
 				case 'PLAC':
-					if (preg_match_all('/('.KT_REGEX_TAG.')/', $ADVANCED_PLAC_FACTS, $match)) {
+					if (preg_match_all('/(' . KT_REGEX_TAG . ')/', $ADVANCED_PLAC_FACTS, $match)) {
 						foreach ($match[1] as $tag) {
-							add_simple_tag("3 $tag", '', KT_Gedcom_Tag::getLabel("{$level1tag}:PLAC:{$tag}"));
+							add_simple_tag("3 {$tag}", '', KT_Gedcom_Tag::getLabel("{$level1tag}:PLAC:{$tag}"));
 						}
 					}
 					add_simple_tag('3 MAP');
 					add_simple_tag('4 LATI');
 					add_simple_tag('4 LONG');
+
 					break;
 
 				case 'FILE':
 					add_simple_tag('3 FORM');
+
 					break;
+
 				case 'EVEN':
 					add_simple_tag('3 DATE');
 					add_simple_tag('3 PLAC');
+
 					break;
+
 				case 'STAT':
 					if (KT_Gedcom_Code_Temp::isTagLDS($level1tag)) {
 						add_simple_tag('3 DATE', '', KT_Gedcom_Tag::getLabel('STAT:DATE'));
 					}
+
 					break;
+
 				case 'DATE':
-					if (in_array($level1tag, $date_and_time))
-						add_simple_tag('3 TIME'); // TIME is NOT a valid 5.5.1 tag
+					if (in_array($level1tag, $date_and_time)) {
+						add_simple_tag('3 TIME');
+					} // TIME is NOT a valid 5.5.1 tag
+
 					break;
+
 				case 'HUSB':
 				case 'WIFE':
 					add_simple_tag('3 AGE');
+
 					break;
+
 				case 'FAMC':
-					if ($level1tag == 'ADOP')
+					if ('ADOP' == $level1tag) {
 						add_simple_tag('3 ADOP BOTH');
+					}
+
 					break;
 			}
-		} elseif ($key == 'DATE' && $add_date) {
+		} elseif ('DATE' == $key && $add_date) {
 			add_simple_tag('2 DATE', $level1tag, KT_Gedcom_Tag::getLabel("{$level1tag}:DATE"));
 		}
 	}
 	// Do something (anything!) with unrecognised custom tags
-	if (substr($level1tag, 0, 1) == '_' && $level1tag != '_UID' && $level1tag != '_TODO')
-		foreach (array('DATE', 'PLAC', 'ADDR', 'AGNC', 'TYPE', 'AGE') as $tag)
+	if ('_' == substr($level1tag, 0, 1) && '_UID' != $level1tag && '_TODO' != $level1tag) {
+		foreach (['DATE', 'PLAC', 'ADDR', 'AGNC', 'TYPE', 'AGE'] as $tag) {
 			if (!in_array($tag, $tags)) {
 				add_simple_tag("2 {$tag}");
-				if ($tag == 'PLAC') {
-					if (preg_match_all('/('.KT_REGEX_TAG.')/', $ADVANCED_PLAC_FACTS, $match)) {
+				if ('PLAC' == $tag) {
+					if (preg_match_all('/(' . KT_REGEX_TAG . ')/', $ADVANCED_PLAC_FACTS, $match)) {
 						foreach ($match[1] as $tag) {
-							add_simple_tag("3 $tag", '', KT_Gedcom_Tag::getLabel("{$level1tag}:PLAC:{$tag}"));
+							add_simple_tag("3 {$tag}", '', KT_Gedcom_Tag::getLabel("{$level1tag}:PLAC:{$tag}"));
 						}
 					}
 					add_simple_tag('3 MAP');
@@ -2952,52 +3246,46 @@ function insert_missing_subtags($level1tag, $add_date = false) {
 					add_simple_tag('4 LONG');
 				}
 			}
+		}
+	}
 }
 
 /**
- * A list of known surname traditions, with their descriptions
+ * A list of known surname traditions, with their descriptions.
  *
  * @return string[]
  */
-function surnameDescriptions() {
-	return array(
-		'paternal' =>
-			KT_I18N::translate_c('Surname tradition', 'paternal') .
+function surnameDescriptions()
+{
+	return [
+		'paternal' => KT_I18N::translate_c('Surname tradition', 'paternal') .
 			' - ' . /* I18N: In the paternal surname tradition, ... */ KT_I18N::translate('Children take their father’s surname.') .
 			' ' . /* I18N: In the paternal surname tradition, ... */ KT_I18N::translate('Wives take their husband’s surname.'),
-		/* I18N: A system where children take their father’s surname */ 'patrilineal' =>
-			KT_I18N::translate('patrilineal') .
+		/* I18N: A system where children take their father’s surname */ 'patrilineal' => KT_I18N::translate('patrilineal') .
 			' - ' . /* I18N: In the patrilineal surname tradition, ... */ KT_I18N::translate('Children take their father’s surname.'),
-		/* I18N: A system where children take their mother’s surname */ 'matrilineal' =>
-			KT_I18N::translate('matrilineal') .
+		/* I18N: A system where children take their mother’s surname */ 'matrilineal' => KT_I18N::translate('matrilineal') .
 			' - ' . /* I18N: In the matrilineal surname tradition, ... */ KT_I18N::translate('Children take their mother’s surname.'),
-		'spanish' =>
-			KT_I18N::translate_c('Surname tradition', 'Spanish') .
+		'spanish' => KT_I18N::translate_c('Surname tradition', 'Spanish') .
 			' - ' . /* I18N: In the Spanish surname tradition, ... */ KT_I18N::translate('Children take one surname from the father and one surname from the mother.'),
-		'portuguese' =>
-			KT_I18N::translate_c('Surname tradition', 'Portuguese') .
+		'portuguese' => KT_I18N::translate_c('Surname tradition', 'Portuguese') .
 			' - ' . /* I18N: In the Portuguese surname tradition, ... */ KT_I18N::translate('Children take one surname from the mother and one surname from the father.'),
-		'icelandic' =>
-			KT_I18N::translate_c('Surname tradition', 'Icelandic') .
+		'icelandic' => KT_I18N::translate_c('Surname tradition', 'Icelandic') .
 			' - ' . /* I18N: In the Icelandic surname tradition, ... */ KT_I18N::translate('Children take a patronym instead of a surname.'),
-		'polish' =>
-			KT_I18N::translate_c('Surname tradition', 'Polish') .
+		'polish' => KT_I18N::translate_c('Surname tradition', 'Polish') .
 			' - ' . /* I18N: In the Polish surname tradition, ... */ KT_I18N::translate('Children take their father’s surname.') .
 			' ' . /* I18N: In the Polish surname tradition, ... */ KT_I18N::translate('Wives take their husband’s surname.') .
 			' ' . /* I18N: In the Polish surname tradition, ... */ KT_I18N::translate('Surnames are inflected to indicate an individual’s gender.'),
-		'lithuanian' =>
-			KT_I18N::translate_c('Surname tradition', 'Lithuanian') .
+		'lithuanian' => KT_I18N::translate_c('Surname tradition', 'Lithuanian') .
 			' - ' . /* I18N: In the Lithuanian surname tradition, ... */ KT_I18N::translate('Children take their father’s surname.') .
 			' ' . /* I18N: In the Lithuanian surname tradition, ... */ KT_I18N::translate('Wives take their husband’s surname.') .
 			' ' . /* I18N: In the Lithuanian surname tradition, ... */ KT_I18N::translate('Surnames are inflected to indicate an individual’s gender and marital status.'),
-		'none' =>
-			KT_I18N::translate_c('Surname tradition', 'none'),
-	);
-
+		'none' => KT_I18N::translate_c('Surname tradition', 'none'),
+	];
 }
 
 // Keep the existing CHAN record when editing
-function no_update_chan(KT_GedcomRecord $record = null) {
+function no_update_chan(KT_GedcomRecord $record = null)
+{
 	global $NO_UPDATE_CHAN;
 
 	$checked = $NO_UPDATE_CHAN ? ' checked="checked"' : '';
@@ -3021,14 +3309,14 @@ function no_update_chan(KT_GedcomRecord $record = null) {
 						<?php echo KT_I18N::translate('Prevent updates to the “last change” record'); ?>
 					</div>
 					<?php echo simple_switch(
-						'preserve_last_changed',
-						'',
-						$checked,
-						'',
-						KT_I18N::translate('Yes'),
-						KT_I18N::translate('No'),
-						'tiny',
-					); ?>
+		'preserve_last_changed',
+		'',
+		$checked,
+		'',
+		KT_I18N::translate('Yes'),
+		KT_I18N::translate('No'),
+		'tiny',
+	); ?>
 					<div class="cell callout info-help  show-for-medium">
 						<?php echo KT_I18N::translate('
 							Administrators sometimes need to clean up and correct the data submitted by users.
@@ -3043,7 +3331,6 @@ function no_update_chan(KT_GedcomRecord $record = null) {
 			</div>
 		</div>
 	<?php } else {
-
 		return '';
 	}
 }
@@ -3051,34 +3338,40 @@ function no_update_chan(KT_GedcomRecord $record = null) {
 /**
  * Remove a complete directory
  * used in site-clean and
- * in custom language pages
+ * in custom language pages.
+ *
+ * @param mixed $dir
  */
- function full_rmdir($dir) {
- 	if (!is_writable($dir)) {
- 		if (!@chmod($dir, KT_PERM_EXE)) {
- 			return false;
- 		}
- 	}
+function full_rmdir($dir)
+{
+	if (!is_writable($dir)) {
+		if (!@chmod($dir, KT_PERM_EXE)) {
+			return false;
+		}
+	}
 
- 	$d = dir($dir);
- 	while (false !== ($entry = $d->read())) {
- 		if ($entry == '.' || $entry == '..') {
- 			continue;
- 		}
- 		$entry = $dir . '/' . $entry;
- 		if (is_dir($entry)) {
- 			if (!full_rmdir($entry)) {
- 				return false;
- 			}
- 			continue;
- 		}
- 		if (!@unlink($entry)) {
- 			$d->close();
- 			return false;
- 		}
- 	}
+	$d = dir($dir);
+	while (false !== ($entry = $d->read())) {
+		if ('.' == $entry || '..' == $entry) {
+			continue;
+		}
+		$entry = $dir . '/' . $entry;
+		if (is_dir($entry)) {
+			if (!full_rmdir($entry)) {
+				return false;
+			}
 
- 	$d->close();
- 	rmdir($dir);
- 	return TRUE;
- }
+			continue;
+		}
+		if (!@unlink($entry)) {
+			$d->close();
+
+			return false;
+		}
+	}
+
+	$d->close();
+	rmdir($dir);
+
+	return true;
+}
