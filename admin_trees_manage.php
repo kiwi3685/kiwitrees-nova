@@ -238,7 +238,7 @@ switch (KT_Filter::get('action')) {
 				<hr class="cell">
 
 				<?php echo singleButton('Back'); ?>
-				<?php echo singleButton('Next'); ?>
+				<?php echo singleButton('Import'); ?>
 
 			</form>
 		
