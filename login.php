@@ -104,11 +104,11 @@ switch ($action) {
 				// If we’ve clicked login from the login page, we don’t want to go back there.
 				if (strpos('index.php', $url) === 0) {
 					if ($KT_SESSION->gedcomid) {
-						$url = 'individual.php?pid=' . $KT_SESSION->gedcomid . '&amp;ged=' . KT_GEDURL;
+						$url = 'individual.php?pid=' . $KT_SESSION->gedcomid . '&ged=' . KT_GEDURL;
 					} elseif ($KT_SESSION->rootid) {
-						$url = 'individual.php?pid=' . $KT_SESSION->rootid . '&amp;ged=' . KT_GEDURL;
+						$url = 'individual.php?pid=' . $KT_SESSION->rootid . '&ged=' . KT_GEDURL;
 					} elseif ($PEDIGREE_ROOT_ID) {
-						$url = 'individual.php?pid=' . $PEDIGREE_ROOT_ID . '&amp;ged=' . KT_GEDURL;
+						$url = 'individual.php?pid=' . $PEDIGREE_ROOT_ID . '&ged=' . KT_GEDURL;
 					} else {
 						$url = 'index.php?ged=' . KT_GEDURL;
 					}
