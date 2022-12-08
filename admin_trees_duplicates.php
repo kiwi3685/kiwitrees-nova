@@ -1,7 +1,7 @@
 <?php
 /**
  * Kiwitrees: Web based Family History software
- * Copyright (C) 2012 to 2022 kiwitrees.net
+ * Copyright (C) 2012 to 2022 kiwitrees.net.
  *
  * Derived from webtrees (www.webtrees.net)
  * Copyright (C) 2010 to 2012 webtrees development team
@@ -20,42 +20,43 @@
  * You should have received a copy of the GNU General Public License
  * along with Kiwitrees. If not, see <http://www.gnu.org/licenses/>.
  */
-
 define('KT_SCRIPT_NAME', 'admin_trees_duplicates.php');
 
 require './includes/session.php';
-require KT_ROOT.'includes/functions/functions_edit.php';
+
+require KT_ROOT . 'includes/functions/functions_edit.php';
+
 include KT_THEME_URL . 'templates/adminData.php';
+
 include KT_THEME_URL . 'templates/adminData.php';
 
 global $iconStyle;
 
-$gedID 	    = KT_Filter::post('gedID') ? KT_Filter::post('gedID') : KT_GED_ID;
-$tree       = KT_Tree::getNameFromId($gedID);
+	$gedID        = KT_Filter::post('gedID') ? KT_Filter::post('gedID') : KT_GED_ID;
+	$tree         = KT_Tree::getNameFromId($gedID);
+	$action       = KT_Filter::post('action', 'go', '');
+	$surn         = KT_Filter::post('surname', '[^<>&%{};]*');
+	$givn         = KT_Filter::post('given', '[^<>&%{};]*');
+	$exact_givn   = KT_Filter::postBool('exact_givn');
+	$exact_surn   = KT_Filter::postBool('exact_surn');
+	$married      = KT_Filter::postBool('married');
+	$gender       = KT_Filter::post('gender');
+	$date         = KT_Filter::postInteger('date') ? KT_Filter::postInteger('date') : '';
+	$range        = KT_Filter::postInteger('range');
+	$maxYear      = date('Y') + 1;
 
-$action		= KT_Filter::post('action','go', '');
-$surn		= KT_Filter::post('surname', '[^<>&%{};]*');
-$givn		= KT_Filter::post('given', '[^<>&%{};]*');
-$exact_givn	= KT_Filter::postBool('exact_givn');
-$exact_surn	= KT_Filter::postBool('exact_surn');
-$married	= KT_Filter::postBool('married');
-$gender		= KT_Filter::post('gender');
-$date 		= KT_Filter::postInteger('date') ? KT_Filter::postInteger('date') : '';
-$range 		= KT_Filter::postInteger('range');
-$maxYear 	= date('Y') + 1;
-
-if (KT_Filter::getBool('reset')) {
-	$action		= '';
-	$gedID		= KT_GED_ID;
-	$surn		= '';
-	$givn		= '';
-	$exact_givn	= '';
-	$exact_surn	= '';
-	$married	= '';
-	$gender		= '';
-	$date 		= '';
-	$range 		= '';
-}
+	if (KT_Filter ::getBool('reset')) {
+		$action       = '';
+		$gedID        = KT_GED_ID;
+		$surn         = '';
+		$givn         = '';
+		$exact_givn   = '';
+		$exact_surn   = '';
+		$married      = '';
+		$gender       = '';
+		$date         = '';
+		$range        = '';
+	}
 
 $controller = new KT_Controller_Page();
 $controller
@@ -92,29 +93,32 @@ $controller
 
 		// loop through all checkboxes with class "check" and create input string for form
 		function checkbox_test() {
-			var i = 0
-			var counter = 1;
-			var gid = new Array();
+
+			var gid         = new Array();
 			var record_type = new Array();
-			var action = new Array();
+			var action      = new Array();
+			var counter		= 1;
+
 			form = document.createElement("form");
 			form.setAttribute("method", "POST");
 			form.setAttribute("action", "admin_trees_merge.php");
 			form.setAttribute("target", "_blank");
 
 			// get a collection of objects with the specified class "check"
-			input_obj = document.getElementsByClassName("check"); // this might fail on some old browsers (see http://caniuse.com/getelementsbyclassname)
+			input_obj = document.getElementsByClassName("check");
+
 			// loop through all collected objects
 			for (i = 0; i < input_obj.length; i++) {
 				if (input_obj[i].checked === true) {
-					if (counter=1) { var id = recordFrom;}
-					if (counter=2) { var id = recordTo;}
+					if (counter==1) {var id = "recordIdFrom";}
+					if (counter==2) {var id = "recordIdTo";}
+
 					gid[i] = document.createElement("input");
 					gid[i].setAttribute("name", id);
 					gid[i].setAttribute("type", "hidden");
 					gid[i].setAttribute("value", input_obj[i].value);
 					form.appendChild(gid[i]);
-					counter++;
+					counter=2;
 				}
 			}
 
@@ -143,10 +147,11 @@ $controller
 			}
 		}
 
-	');
+	')
+;
 
-$births 	= "'" . str_replace("|", "','", KT_EVENTS_BIRT) . "'";
-$deaths 	= "'" . str_replace("|", "','", KT_EVENTS_DEAT) . "'";
+$births = "'" . str_replace('|', "','", KT_EVENTS_BIRT) . "'";
+$deaths = "'" . str_replace('|', "','", KT_EVENTS_DEAT) . "'";
 
 // the sql query used to identify duplicates
 $sql = '
@@ -158,32 +163,32 @@ if ($date || preg_match('/\d{4}(?<!0000)/', $date)) {
 	$maxDate = $date + $range;
 	$sql .= '
 		INNER JOIN `##dates` ON d_gid = n_id
-		WHERE n_file = '. $gedID . '
+		WHERE n_file = ' . $gedID . '
 		AND (
-			(d_fact IN ('. $births . ') AND d_year <= ' . $maxDate . ' AND d_year >= ' . $minDate . ')
+			(d_fact IN (' . $births . ') AND d_year <= ' . $maxDate . ' AND d_year >= ' . $minDate . ')
 			 OR
-			(d_fact IN ('. $deaths . ') AND d_year <= ' . $maxDate . ' AND d_year >= ' . $minDate . ')
+			(d_fact IN (' . $deaths . ') AND d_year <= ' . $maxDate . ' AND d_year >= ' . $minDate . ')
 		)
 	';
 } else {
-	$sql .= 'WHERE n_file = '. $gedID . ' ';
+	$sql .= 'WHERE n_file = ' . $gedID . ' ';
 }
-	if ($exact_surn) {
-	$sql .= 'AND n_surn = "' . $surn  . '" ';
-	} else {
+if ($exact_surn) {
+	$sql .= 'AND n_surn = "' . $surn . '" ';
+} else {
 	$sql .= 'AND n_surn LIKE "%' . $surn . '%" ';
-	}
-	if ($exact_givn) {
-		$sql .= 'AND n_givn = "' . $givn  . '" ';
-	} else {
-		$sql .= 'AND n_givn LIKE "%' . $givn . '%"';
-	}
-	if (!$married) {
-		$sql .= 'AND n_type NOT LIKE "_MARNM" ';
-	}
+}
+if ($exact_givn) {
+	$sql .= 'AND n_givn = "' . $givn . '" ';
+} else {
+	$sql .= 'AND n_givn LIKE "%' . $givn . '%"';
+}
+if (!$married) {
+	$sql .= 'AND n_type NOT LIKE "_MARNM" ';
+}
 $sql .= 'ORDER BY n_sort ASC';
 
-$SHOW_EST_LIST_DATES=get_gedcom_setting(KT_GED_ID, 'SHOW_EST_LIST_DATES');
+$SHOW_EST_LIST_DATES = get_gedcom_setting(KT_GED_ID, 'SHOW_EST_LIST_DATES');
 
 echo relatedPages($trees, KT_SCRIPT_NAME);
 
@@ -220,58 +225,26 @@ echo pageStart('find_duplicates', $controller->getPageTitle()); ?>
 					<label for="SURN"><?php echo KT_I18N::translate('Surname'); ?></label>
 				</div>
 				<div class="cell medium-4">
-					<?php echo autocompleteHtml(
-						'surname', // id
-						'SURN', // TYPE
-						$tree, // autocomplete-ged
-						htmlspecialchars($surn), // input value
-						KT_I18N::translate('A full or partial surname'), // placeholder
-						'surname', // hidden input name
-						htmlspecialchars($surn) // hidden input value
-					); ?>
+					<?php echo autocompleteHtml('surname', 'SURN', $tree, htmlspecialchars($surn), KT_I18N::translate('A full or partial surname'), 'surname', htmlspecialchars($surn)); ?>
 				</div>
 				<div class="cell shrink">
 					<label for="exact_surn"><?php echo KT_I18N::translate('Match exactly'); ?></label>
 				</div>
 				<div class="cell medium-4 auto tinySwitch">
-					<?php echo simple_switch(
-						"exact_surn",
-						"1",
-						$exact_surn,
-						'',
-						KT_I18N::translate('Yes'),
-						KT_I18N::translate('No'),
-						"tiny"
-					); ?>
+					<?php echo simple_switch('exact_surn', '1', $exact_surn, '', KT_I18N::translate('Yes'), KT_I18N::translate('No'), 'tiny' ); ?>
 				</div>
 				<!-- Given names -->
 				<div class="cell medium-2">
 					<label for="GIVN"><?php echo KT_I18N::translate('Given name(s)'); ?></label>
 				</div>
 				<div class="cell medium-4">
-					<?php echo autocompleteHtml(
-						'given', // id
-						'GIVN', // TYPE
-						$tree, // autocomplete-ged
-						htmlspecialchars($givn), // input value
-						KT_I18N::translate('The full or partial given name(s)'), // placeholder
-						'given', // hidden input name
-						htmlspecialchars($givn), // hidden input value
-					); ?>
+					<?php echo autocompleteHtml('given', 'GIVN', $tree, htmlspecialchars($givn), KT_I18N::translate('The full or partial given name(s)'), 'given', htmlspecialchars($givn), ); ?>
 				</div>
 				<div class="cell shrink">
 					<label for="exact_givn"><?php echo KT_I18N::translate('Match exactly'); ?></label>
 				</div>
 				<div class="cell medium-4 auto tinySwitch">
-					<?php echo simple_switch(
-						"exact_givn",
-						"1",
-						$exact_givn,
-						'',
-						KT_I18N::translate('Yes'),
-						KT_I18N::translate('No'),
-						"tiny"
-					); ?>
+					<?php echo simple_switch('exact_givn', '1', $exact_givn, '', KT_I18N::translate('Yes'), KT_I18N::translate('No'), 'tiny' ); ?>
 				</div>
 				<!-- Gender -->
 				<div class="cell medium-2">
@@ -280,28 +253,28 @@ echo pageStart('find_duplicates', $controller->getPageTitle()); ?>
 				<div class="cell medium-4">
 					<select id="gender" name="gender" value="<?php echo $gender; ?>">
 						<option value="A"
-							<?php if ($gender == 'A' || empty($gender)) { ; ?>
+							<?php if ('A' == $gender || empty($gender)) {  ?>
 								selected
 							<?php } ?>
 						>
 							<?php echo KT_I18N::translate('Any'); ?>
 						</option>
 						<option value="M"
-							<?php if ($gender == 'M') { ; ?>
+							<?php if ('M' == $gender) {  ?>
 								selected
 							<?php } ?>
 						>
 							<?php echo KT_I18N::translate('Male'); ?>
 						</option>
 						<option value="F"
-							<?php if ($gender == 'F') { ; ?>
+							<?php if ('F' == $gender) {  ?>
 								selected
 							<?php } ?>
 						>
 							<?php echo KT_I18N::translate('Female'); ?>
 						</option>
 						<option value="U"
-							<?php if ($gender == 'U') { ; ?>
+							<?php if ('U' == $gender) {  ?>
 								selected
 							<?php } ?>
 						>
@@ -316,13 +289,13 @@ echo pageStart('find_duplicates', $controller->getPageTitle()); ?>
 				</div>
 				<div class="cell medium-4 auto tinySwitch">
 					<?php echo simple_switch(
-						"married",
-						"1",
+						'married',
+						'1',
 						$married,
 						'',
 						KT_I18N::translate('Yes'),
 						KT_I18N::translate('No'),
-						"tiny"
+						'tiny'
 					); ?>
 				</div>
 				<div class="cell medium-6"></div>
@@ -348,7 +321,7 @@ echo pageStart('find_duplicates', $controller->getPageTitle()); ?>
 		</form>
 	</div>
 	<?php
-	if ($action == 'go') {
+	if ('go' == $action) {
 		$controller
 			->addExternalJavascript(KT_DATATABLES_JS)
 			->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
@@ -381,13 +354,14 @@ echo pageStart('find_duplicates', $controller->getPageTitle()); ?>
 					],
 					order: [[ 0, "asc" ], [ 1, "asc" ]],
 				});
-			');
+			')
+		;
 
 		$rows = KT_DB::prepare($sql)->fetchAll(PDO::FETCH_ASSOC);
 		$count = 0;
 
 		foreach ($rows as $row) {
-			$count ++;
+			$count++;
 		}
 
 		if ($rows && $count > 1) { ?>
@@ -414,86 +388,94 @@ echo pageStart('find_duplicates', $controller->getPageTitle()); ?>
 					<tbody>
 						<?php
 						$i = 0;
-						foreach ($rows as $row) {
-							$i++;
-							$bdate	= '&nbsp;';
-							$bplace	= '';
-							$ddate	= '&nbsp;';
-							$dplace	= '';
-							if ($row['n_type'] == '_MARNM') {
-								$marr = '<br><span style="font-style:italic; font-size:80%;">(' . KT_I18N::translate('Married name') . ')</span>';
-							} else {
-								$marr = '';
+			foreach ($rows as $row) {
+				$i++;
+				$bdate = '&nbsp;';
+				$bplace = '';
+				$ddate = '&nbsp;';
+				$dplace = '';
+				if ('_MARNM' == $row['n_type']) {
+					$marr = '<br><span style="font-style:italic; font-size:80%;">(' . KT_I18N::translate('Married name') . ')</span>';
+				} else {
+					$marr = '';
+				}
+				$id = $row['n_id'];
+				$person = KT_Person::getInstance($id);
+				if ($person->getSex() == $gender || 'A' == $gender) {
+					// find birth/death dates
+					if ($birth_dates = $person->getAllBirthDates()) {
+						foreach ($birth_dates as $num => $birth_date) {
+							if ($num) {
+								$bdate .= '<br>';
 							}
-							$id = $row['n_id'];
-							$person = KT_Person::getInstance($id);
-							if ($person->getSex() == $gender || $gender == 'A') {
-								// find birth/death dates
-								if ($birth_dates=$person->getAllBirthDates()) {
-									foreach ($birth_dates as $num => $birth_date) {
-										if ($num) {$bdate .= '<br>';}
-										$bdate .= $birth_date->Display();
-									}
-								} else {
-									$birth_date	= $person->getEstimatedBirthDate();
-									if ($SHOW_EST_LIST_DATES) {
-										$bdate .= $birth_date->Display();
-									} else {
-										$bdate .= '&nbsp;';
-									}
-									$birth_dates[0] = new KT_Date('');
-								}
+							$bdate .= $birth_date->Display();
+						}
+					} else {
+						$birth_date = $person->getEstimatedBirthDate();
+						if ($SHOW_EST_LIST_DATES) {
+							$bdate .= $birth_date->Display();
+						} else {
+							$bdate .= '&nbsp;';
+						}
+						$birth_dates[0] = new KT_Date('');
+					}
 
-								//find birth places
-								foreach ($person->getAllBirthPlaces() as $n => $birth_place) {
-									$tmp = new KT_Place($birth_place, KT_GED_ID);
-									if ($n) {$bplace .= '<br>';}
-									$bplace .= $tmp->getShortName();
-								}
+					// find birth places
+					foreach ($person->getAllBirthPlaces() as $n => $birth_place) {
+						$tmp = new KT_Place($birth_place, KT_GED_ID);
+						if ($n) {
+							$bplace .= '<br>';
+						}
+						$bplace .= $tmp->getShortName();
+					}
 
-								// find death dates
-								if ($death_dates = $person->getAllDeathDates()) {
-									foreach ($death_dates as $num => $death_date) {
-										if ($num) {$ddate .= '<br>';}
-										$ddate .= $death_date->Display();
-									}
-								} else {
-									$death_date	= $person->getEstimatedDeathDate();
-									if ($SHOW_EST_LIST_DATES) {
-										$ddate .= $death_date->Display();
-									} else if ($person->isDead()) {
-										$ddate .= KT_I18N::translate('yes');
-									} else {
-										$ddate .= '&nbsp;';
-									}
-									$death_dates[0]=new KT_Date('');
-								}
-
-								// find death places
-								foreach ($person->getAllDeathPlaces() as $n => $death_place) {
-									$tmp = new KT_Place($death_place, KT_GED_ID);
-									if ($n) {$dplace .= '<br>';}
-									$dplace .= $tmp->getShortName();
-								}
-
-								if ($bdate !== '&nbsp;' && $ddate !== '&nbsp;') { ?>
-									<tr>
-										<td>
-											<a href="<?php echo $person->getHtmlUrl(); ?>" target="_blank" rel="noopener noreferrer">
-												<?php echo $row['n_full']; ?> <?php echo $marr; ?>
-											</a>
-										</td>
-										<td><?php echo $person->getBirthYear(); ?></td>
-										<td><?php echo $bdate; ?></td>
-										<td><?php echo $bplace; ?></td>
-										<td><?php echo $person->getDeathYear(); ?></td>
-										<td><?php echo $ddate; ?></td>
-										<td><?php echo $dplace; ?></td>
-										<td class="text-center"><input type="checkbox" name="gid[]" onclick="return addCheck(this);" class="check" value="<?php echo $id; ?>"></td>
-									</tr>
-								<?php }
+					// find death dates
+					if ($death_dates = $person->getAllDeathDates()) {
+						foreach ($death_dates as $num => $death_date) {
+							if ($num) {
+								$ddate .= '<br>';
 							}
-						} ?>
+							$ddate .= $death_date->Display();
+						}
+					} else {
+						$death_date = $person->getEstimatedDeathDate();
+						if ($SHOW_EST_LIST_DATES) {
+							$ddate .= $death_date->Display();
+						} elseif ($person->isDead()) {
+							$ddate .= KT_I18N::translate('yes');
+						} else {
+							$ddate .= '&nbsp;';
+						}
+						$death_dates[0] = new KT_Date('');
+					}
+
+					// find death places
+					foreach ($person->getAllDeathPlaces() as $n => $death_place) {
+						$tmp = new KT_Place($death_place, KT_GED_ID);
+						if ($n) {
+							$dplace .= '<br>';
+						}
+						$dplace .= $tmp->getShortName();
+					}
+
+					if ('&nbsp;' !== $bdate && '&nbsp;' !== $ddate) { ?>
+						<tr>
+							<td>
+								<a href="<?php echo $person->getHtmlUrl(); ?>" target="_blank" rel="noopener noreferrer">
+									<?php echo $row['n_full']; ?> <?php echo $marr; ?>
+								</a>
+							</td>
+							<td><?php echo $person->getBirthYear(); ?></td>
+							<td><?php echo $bdate; ?></td>
+							<td><?php echo $bplace; ?></td>
+							<td><?php echo $person->getDeathYear(); ?></td>
+							<td><?php echo $ddate; ?></td>
+							<td><?php echo $dplace; ?></td>
+							<td class="text-center"><input type="checkbox" name="gid[]" onclick="return addCheck(this);" class="check" value="<?php echo $id; ?>"></td>
+						</tr>
+					<?php }
+				}
+			} ?>
 					</tbody>
 				</table>
 			</div>

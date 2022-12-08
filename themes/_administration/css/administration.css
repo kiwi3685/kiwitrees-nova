@@ -10313,7 +10313,7 @@ main #admin-content #find_duplicates-page .button-group .button {
 	margin-bottom: 0;
 }
 main #admin-content #find_duplicates-page .button.reset {
-	margin-top: -6.5rem;
+	margin-top: -4.25rem;
 }
 main #admin-content #find_duplicates-page table th a {
 	word-wrap: normal;
@@ -10351,6 +10351,16 @@ main #admin-content #merge_records-page div.unmatched hr {
 }
 main #admin-content #merge_records-page div.unmatched hr:last-child {
 	display: none;
+}
+main #admin-content #merge_records-page dl.cell {
+	margin-bottom: 0.9375rem;
+}
+main #admin-content #merge_records-page dl.cell dd.cell {
+	margin: 0;
+	padding: 0 5rem;
+}
+main #admin-content #merge_records-page button.returnToStart {
+	margin-top: 0.9375rem;
 }
 main #admin-content #research_links-page button {
 	margin: 1rem;
