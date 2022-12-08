@@ -72,6 +72,14 @@ div.reveal.media {
 	font-weight: 600;
 }
 
+ul.tabs a span sup {
+	background-color: #fffff4;
+	border: 0.0125rem solid #ffae00;
+	border-radius: 0.75rem;
+	color: #ffae00;
+	padding: 0 0.25rem;
+}
+
 /**
  * Foundation for Sites
  * Version 6.7.4
