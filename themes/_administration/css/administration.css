@@ -10085,7 +10085,10 @@ main #admin-content #user_details-page #password-checker .progress #password-str
 main #admin-content #user_details-page #password-checker .progress #password-strength.progress-bar.progress-bar-success {
 	background-color: #5da423;
 }
-main #admin-content #log_list th {
+main #admin-content #site_logs-page form {
+	margin-bottom: 2rem;
+}
+main #admin-content #site_logs-page #log_list th {
 	min-width: 10rem;
 	white-space: nowrap;
 }
