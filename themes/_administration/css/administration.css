@@ -9347,9 +9347,6 @@ ol.list-upper-roman {
 	font-weight: 600;
 }
 
-label {
-	padding-top: 0.5rem;
-}
 label.radio_inline {
 	display: inline-block !important;
 	padding-left: 1.25rem;
@@ -10084,6 +10081,9 @@ main #admin-content #user_details-page #password-checker .progress #password-str
 }
 main #admin-content #user_details-page #password-checker .progress #password-strength.progress-bar.progress-bar-success {
 	background-color: #5da423;
+}
+main #admin-content #site_logs-page h5 {
+	font-weight: 500;
 }
 main #admin-content #site_logs-page form {
 	margin-bottom: 2rem;
