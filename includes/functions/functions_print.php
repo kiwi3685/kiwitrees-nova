@@ -105,9 +105,8 @@ function print_pedigree_person($person, $style = 1, $count = 0, $personcount = '
 		$displayNote = $favNote;
 
 		if ($person->canDisplayName()) {
+			$personlinks = getPersonLinks($person);
 			if (empty($SEARCH_SPIDER)) {
-				$personlinks = getPersonLinks($person);
-			} else {
 				if (1 == $style) {
 					$outBoxAdd .= 'person_box_template' . $isF . '" style="width: ' . $bwidth . 'px; height: ' . $bheight . 'px; overflow: hidden;"';
 				} else {

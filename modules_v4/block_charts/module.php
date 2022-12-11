@@ -112,7 +112,7 @@ class block_charts_KT_Module extends KT_Module implements KT_Module_Block {
 								if ($type != 'hourglass') {
 									$content .= '<td valign="middle">';
 									ob_start();
-									print_pedigree_person($person);
+									print_pedigree_person($person, 1);
 									$content .= ob_get_clean();
 									$content .= '</td>';
 								}
