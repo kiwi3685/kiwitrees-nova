@@ -379,7 +379,7 @@ case 'TIME':
 
 case 'URL':
 	$title = KT_Gedcom_Tag::getLabel('URL');
-	$text = KT_I18N::translate('Enter the URL address including the http://.<br><br>An example URL looks like this: <b>http://www.kiwitrees.net/</b> Leave this field blank if you do not want to include a URL.');
+	$text = KT_I18N::translate('Enter the URL address including the http://.<br><br>An example URL looks like this: <b>https://www.kiwitrees.net/</b> Leave this field blank if you do not want to include a URL.');
 	break;
 
 case '_HEB':
