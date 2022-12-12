@@ -177,6 +177,28 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 				if (array_key_exists('ckeditor', KT_Module::getActiveModules())) {
 					ckeditor_KT_Module::enableEditor($controller);
 				}
+
+				$controller->addExternalJavascript(KT_CKEDITOR5);
+				$controller->addInlineJavascript('
+					ClassicEditor
+						.create( document.querySelector( ".editor" ), {
+							
+							licenseKey: "",
+														
+						} )
+						.then( editor => {
+							window.editor = editor;
+					
+						} )
+						.catch( error => {
+							console.error( "Oops, something went wrong!" );
+							console.error( "Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:" );
+							console.warn( "Build id: dndiv66kqfi7-nohdljl880ze" );
+							console.error( error );
+						} );
+
+				');
+
 				?>
 				<div id="<?php echo $this->getName(); ?>">
 					<form name="faq" method="post" action="#">
@@ -188,14 +210,15 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 								<th><?php echo KT_I18N::translate('Question'); ?></th>
 							</tr>
 							<tr>
-								<td><input type="text" name="header" size="90" tabindex="1" value="<?php echo htmlspecialchars($header); ?>"></td>
+								<td>
+									<input type="text" name="header" size="90" tabindex="1" value="<?php echo htmlspecialchars($header); ?>"></td>
 							</tr>
 							<tr>
 								<th><?php echo KT_I18N::translate('Answer'); ?></th>
 							</tr>
 							<tr>
 									<td>
-										<textarea name="faqbody" class="html-edit" rows="10" cols="90" tabindex="2"><?php echo htmlspecialchars($faqbody); ?></textarea>
+										<textarea name="faqbody" class="editor" rows="10" cols="90" tabindex="2"><?php echo htmlspecialchars($faqbody); ?></textarea>
 									</td>
 							</tr>
 						</table>

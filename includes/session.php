@@ -50,6 +50,8 @@ if (KT_USE_CDN) {
 	define('KT_DATEPICKER_JS',				'https://cdn.jsdelivr.net/npm/foundation-datepicker@1.5.6/js/foundation-datepicker.min.js'); //1.5.6
 	define('KT_DATATABLES_JS',				'https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js'); //1.10.20
 	define('KT_DATATABLES_CSS',				'https://cdn.datatables.net/1.10.20/css/dataTables.foundation.min.css'); //1.10.20
+	define('KT_CKEDITOR5',					'https://cdn.ckeditor.com/ckeditor5/35.3.2/super-build/ckeditor.js'); // 35.3.2
+
 } else {
 	define('KT_FOUNDATION_JS',				KT_STATIC_URL . 'library/foundation/dist/js/foundation.min.js'); // 6.7.5 14-07-22
 	define('KT_JQUERY_JS',					KT_STATIC_URL . 'library/jquery/jquery-3.6.0.min.js'); // 3.6.0 10 Sep 2021
@@ -62,7 +64,10 @@ if (KT_USE_CDN) {
 	define('KT_DATATABLES_HTML5',			KT_STATIC_URL . 'library/DataTables/Buttons-1.6.0/js/buttons.html5.min.js'); // Updated 12-03-2017
 }
 
+
+
 // other js
+define('KT_CKEDITOR5',						KT_STATIC_URL . 'library/ckeditor5-35/build/ckeditor.js'); // 35.3.2  Updated 13-12-2022
 define('KT_FONTAWESOME_JS',					KT_STATIC_URL . 'library/fontawesome/js/all.min.js');  // fontawesome-free-6.1.1 Updated 15-04-2022.
 define('KT_JQUERY_COLORBOX_URL',			KT_STATIC_URL . 'library/colorbox/jquery.colorbox-min.js');	// 1.6.4	Updated 11-05-2016
 define('KT_JQUERY_JEDITABLE_URL',			KT_STATIC_URL . 'js/jquery.jeditable.js');		    	// 1.7.3 (used only in site access rules table)
