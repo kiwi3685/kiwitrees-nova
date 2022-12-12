@@ -269,7 +269,7 @@ echo pageStart('site_logs', $controller->getPageTitle()); ?>
 			</div>
 		</div>
 	</form>
-	<hr>
+	<hr class="cell">
 	<?php if ($action) { ?>
 		<div class="grid-x grid-margin-x">
 			<div class="cell">
