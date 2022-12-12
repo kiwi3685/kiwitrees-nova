@@ -1,6 +1,6 @@
 
 ClassicEditor
-	.create( document.querySelector(".editor"), {
+	.create( document.querySelector(".html-edit"), {
 		licenseKey: "",
 	})
 	.then( editor => {

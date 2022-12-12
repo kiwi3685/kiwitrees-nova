@@ -30,12 +30,12 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 
 	// Extend class KT_Module
 	public function getTitle() {
-		return /* I18N: Name of a module.  Abbreviation for “Frequently Asked Questions” */ KT_I18N::translate('FAQs');
+		return /* I18N: Name of a module.  Abbreviation for “Frequently Asked Questions” */ KT_I18N::translate('Faq');
 	}
 
 	// Extend class KT_Module
 	public function getDescription() {
-		return /* I18N: Description of the “FAQ” module */ KT_I18N::translate('A list of frequently asked questions and answers.');
+		return /* I18N: Description of the “faq” module */ KT_I18N::translate('A list of frequently asked questions and answers.');
 	}
 
 	// Implement KT_Module_Menu
@@ -106,7 +106,7 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 	}
 
 	public function getMenuTitle() {
-		$default_title = KT_I18N::translate('FAQs');
+		$default_title = KT_I18N::translate('Faq');
 		$HEADER_TITLE = KT_I18N::translate(get_module_setting($this->getName(), 'FAQ_TITLE', $default_title));
 		return $HEADER_TITLE;
 	}
@@ -155,7 +155,7 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 				$block_id	= safe_GET('block_id');
 				$controller	= new KT_Controller_Page();
 				if ($block_id) {
-					$controller->setPageTitle(KT_I18N::translate('Edit FAQ item'));
+					$controller->setPageTitle(KT_I18N::translate('Edit faq item'));
 					$header		 = get_block_setting($block_id, 'header');
 					$faqbody	 = get_block_setting($block_id, 'faqbody');
 					$block_order = KT_DB::prepare(
@@ -165,7 +165,7 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 						"SELECT gedcom_id FROM `##block` WHERE block_id=?"
 					)->execute(array($block_id))->fetchOne();
 				} else {
-					$controller->setPageTitle(KT_I18N::translate('Add FAQ item'));
+					$controller->setPageTitle(KT_I18N::translate('Add faq item'));
 					$header		 = '';
 					$faqbody	 = '';
 					$block_order = KT_DB::prepare(
@@ -174,10 +174,8 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 					$gedcom_id = KT_GED_ID;
 				}
 				$controller->pageHeader();
-				$controller->addExternalJavascript(KT_CKEDITOR5);
-				$controller->addInlineJavascript('
-					ClassicEditor.create( document.querySelector(".editor"), {licenseKey: "",}).then( editor => {window.editor = editor;})
-				');
+				$controller->addExternalJavascript(KT_CKEDITOR5_CLASSIC);
+				$controller->addExternalJavascript(KT_CKEDITOR_JS);
 
 				?>
 				<div id="<?php echo $this->getName(); ?>">
@@ -197,16 +195,16 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 								<th><?php echo KT_I18N::translate('Answer'); ?></th>
 							</tr>
 							<tr>
-									<td>
-										<textarea name="faqbody" class="editor" rows="10" cols="90" tabindex="2"><?php echo htmlspecialchars($faqbody); ?></textarea>
-									</td>
+								<td>
+									<textarea name="faqbody" class="html-edit" tabindex="2"><?php echo htmlspecialchars($faqbody); ?></textarea>
+								</td>
 							</tr>
 						</table>
 						<table id="faq_module2">
 							<tr>
 								<th><?php echo KT_I18N::translate('Show this block for which languages?'); ?></th>
-								<th><?php echo KT_I18N::translate('FAQ position'); ?></th>
-								<th><?php echo KT_I18N::translate('FAQ visibility'); ?></th>
+								<th><?php echo KT_I18N::translate('Faq position'); ?></th>
+								<th><?php echo KT_I18N::translate('Faq visibility'); ?></th>
 							</tr>
 							<tr>
 								<td>
@@ -330,7 +328,7 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 				    }
 				}
 			');
-			/* Use a structure like <div id="faq_subaccordion"><h2>Your sub-level title<h2><p>Your sub-level content</p></div> inside any FAQ page to create sub-levels within that FAQ */
+			/* Use a structure like <div id="faq_subaccordion"><h2>Your sub-level title<h2><p>Your sub-level content</p></div> inside any faq page to create sub-levels within that faq */
 
 		if (KT_Filter::post('query_faq')) {
 			$search = KT_Filter::post('query_faq');
@@ -365,7 +363,7 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 						type="search"
 						name="query_faq"
 						value="<?php echo ($search == '%' ? '' : $search); ?>"
-						placeholder="<?php echo KT_I18N::translate('Search FAQs'); ?>"
+						placeholder="<?php echo KT_I18N::translate('Search faq'); ?>"
 						dir="auto"
 					>
 				</form>
@@ -434,7 +432,7 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 			<div id="faq_tabs">
 				<ul>
 					<li><a href="#faq_summary"><span><?php echo KT_I18N::translate('Summary'); ?></span></a></li>
-					<li><a href="#faq_items"><span><?php echo KT_I18N::translate('FAQs'); ?></span></a></li>
+					<li><a href="#faq_items"><span><?php echo KT_I18N::translate('Faq'); ?></span></a></li>
 				</ul>
 				<div id="faq_summary">
 					<form method="post" name="configform" action="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_config">
@@ -467,7 +465,7 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 					<div>
 						<button class="btn btn-primary add" onclick="location.href='module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit'">
 							<i class="<?php echo $iconStyle; ?> fa-plus"></i>
-							<?php echo KT_I18N::translate('Add FAQ item'); ?>
+							<?php echo KT_I18N::translate('Add faq item'); ?>
 						</button>
 					</div>
 					<table id="faq_edit">
@@ -478,7 +476,7 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 								<tr class="faq_edit_pos">
 									<td>
 										<?php
-										echo '<p>' . KT_I18N::translate('FAQ position') . '<span>' . ($faq->block_order) . '</span></p>';
+										echo '<p>' . KT_I18N::translate('Faq position') . '<span>' . ($faq->block_order) . '</span></p>';
 										echo '<p>' . KT_I18N::translate('Family tree');
 											if ($faq->gedcom_id == null) {
 												echo '<span>' . KT_I18N::translate('All') . '</span>';
@@ -512,7 +510,7 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 										</a>
 									</td>
 									<td>
-										<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_delete&amp;block_id=<?php echo $faq->block_id; ?>" onclick="return confirm('<?php echo KT_I18N::translate('Are you sure you want to delete this FAQ entry?'); ?>');">
+										<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_delete&amp;block_id=<?php echo $faq->block_id; ?>" onclick="return confirm('<?php echo KT_I18N::translate('Are you sure you want to delete this faq entry?'); ?>');">
 											<?php echo KT_I18N::translate('Delete'); ?>
 										</a>
 									</td>
@@ -529,7 +527,7 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 						} else { ?>
 							<tr>
 								<td class="error center" colspan="5">
-									<?php echo KT_I18N::translate('The FAQ list is empty.'); ?>
+									<?php echo KT_I18N::translate('The faq list is empty.'); ?>
 								</td>
 							</tr>
 						<?php } ?>
@@ -557,8 +555,9 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 		}
 
 		$menu = new KT_Menu($this->getMenuTitle(), 'module.php?mod=faq&amp;mod_action=show', 'menu-help');
+		$menu->addClass('', '', 'fa-comments');
 		if (KT_USER_IS_ADMIN) {
-			$submenu = new KT_Menu(KT_I18N::translate('Edit FAQ items'), $this->getConfigLink(), 'menu-faq-edit');
+			$submenu = new KT_Menu(KT_I18N::translate('Edit faq items'), $this->getConfigLink(), 'menu-faq-edit');
 			$menu->addSubmenu($submenu);
 		}
 		return $menu;

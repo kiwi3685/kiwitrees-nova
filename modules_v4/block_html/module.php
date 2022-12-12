@@ -130,6 +130,7 @@ class block_html_KT_Module extends KT_Module implements KT_Module_Block {
 
 	// Implement class KT_Module_Block
 	public function configureBlock($block_id) {
+		global $controller;
 
 		if (KT_Filter::postBool('save') && KT_Filter::checkCsrf()) {
 			set_block_setting($block_id, 'gedcom',         KT_Filter::post('gedcom'));
@@ -149,12 +150,8 @@ class block_html_KT_Module extends KT_Module implements KT_Module_Block {
 
 		require_once KT_ROOT . 'includes/functions/functions_edit.php';
 
-		// The CK editor needs lots of help to load/save data :-(
-		if (array_key_exists('ckeditor', KT_Module::getActiveModules())) {
-			$ckeditor_onchange='CKEDITOR.instances.html.setData(document.block.html.value);';
-		} else {
-			$ckeditor_onchange='';
-		}
+		$controller->addExternalJavascript(KT_CKEDITOR5_CLASSIC);
+		$controller->addExternalJavascript(KT_CKEDITOR_JS);
 
 		$templates = array(
 			KT_I18N::translate('Keyword examples') =>
