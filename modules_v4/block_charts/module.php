@@ -162,7 +162,7 @@ class block_charts_KT_Module extends KT_Module implements KT_Module_Block {
 
 	// Implement class KT_Module_Block
 	public function loadAjax() {
-		return true;
+		return false;
 	}
 
 	// Implement class KT_Module_Block
