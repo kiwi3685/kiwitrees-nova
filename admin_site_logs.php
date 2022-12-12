@@ -271,23 +271,21 @@ echo pageStart('site_logs', $controller->getPageTitle()); ?>
 	</form>
 	<hr class="cell">
 	<?php if ($action) { ?>
-		<div class="grid-x grid-margin-x">
-			<div class="cell">
-				<table id="log_list">
-					<thead>
-						<tr>
-							<th><?php echo KT_I18N::translate('Timestamp'); ?></th>
-							<th><?php echo KT_I18N::translate('Type'); ?></th>
-							<th><?php echo KT_I18N::translate('Message'); ?></th>
-							<th><?php echo KT_I18N::translate('IP address'); ?></th>
-							<th><?php echo KT_I18N::translate('User'); ?></th>
-							<th><?php echo KT_I18N::translate('Family tree'); ?></th>
-						</tr>
-					</thead>
-					<tbody>
-					</tbody>
-				</table>
-			</div>
+		<div class="cell grid-x grid-margin-x">
+			<table id="log_list">
+				<thead>
+					<tr>
+						<th><?php echo KT_I18N::translate('Timestamp'); ?></th>
+						<th><?php echo KT_I18N::translate('Type'); ?></th>
+						<th><?php echo KT_I18N::translate('Message'); ?></th>
+						<th><?php echo KT_I18N::translate('IP address'); ?></th>
+						<th><?php echo KT_I18N::translate('User'); ?></th>
+						<th><?php echo KT_I18N::translate('Family tree'); ?></th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
 		</div>
 	<?php }
 
