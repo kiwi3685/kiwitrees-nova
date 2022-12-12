@@ -174,29 +174,9 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 					$gedcom_id = KT_GED_ID;
 				}
 				$controller->pageHeader();
-				if (array_key_exists('ckeditor', KT_Module::getActiveModules())) {
-					ckeditor_KT_Module::enableEditor($controller);
-				}
-
 				$controller->addExternalJavascript(KT_CKEDITOR5);
 				$controller->addInlineJavascript('
-					ClassicEditor
-						.create( document.querySelector( ".editor" ), {
-							
-							licenseKey: "",
-														
-						} )
-						.then( editor => {
-							window.editor = editor;
-					
-						} )
-						.catch( error => {
-							console.error( "Oops, something went wrong!" );
-							console.error( "Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:" );
-							console.warn( "Build id: dndiv66kqfi7-nohdljl880ze" );
-							console.error( error );
-						} );
-
+					ClassicEditor.create( document.querySelector(".editor"), {licenseKey: "",}).then( editor => {window.editor = editor;})
 				');
 
 				?>
