@@ -385,6 +385,7 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 
 	private function config() {
 		require_once KT_ROOT . 'includes/functions/functions_edit.php';
+		global $iconStyle;
 
 		$controller = new KT_Controller_Page();
 		$controller
