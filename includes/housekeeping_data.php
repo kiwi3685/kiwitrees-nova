@@ -1401,6 +1401,8 @@ function old_paths() {
 		KT_ROOT . 'admin_trees_export.php', // changed to adminExport.php
 		KT_ROOT . 'admin_trees_download.php', // changed to adminExport.php
 		KT_ROOT . 'adminSearch.php', // removed temporary development solution
+		KT_ROOT . 'modules_v4/ckeditor', // feature removed
+
 
 	);
 }
