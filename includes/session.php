@@ -62,12 +62,10 @@ if (KT_USE_CDN) {
 	define('KT_DATATABLES_CSS',				KT_STATIC_URL . 'library/DataTables/DataTables-1.10.20/css/dataTables.foundation.min.css'); // 6.4.3
 	define('KT_DATATABLES_BUTTONS',			KT_STATIC_URL . 'library/DataTables/Buttons-1.6.0/js/dataTables.buttons.min.js'); // Updated 12-03-2017
 	define('KT_DATATABLES_HTML5',			KT_STATIC_URL . 'library/DataTables/Buttons-1.6.0/js/buttons.html5.min.js'); // Updated 12-03-2017
+	define('KT_CKEDITOR5_CLASSIC',			KT_STATIC_URL . 'library/ckeditor-classic/build/ckeditor.js'); // 35.3.2  Updated 13-12-2022
 }
 
-
-
 // other js
-define('KT_CKEDITOR5',						KT_STATIC_URL . 'library/ckeditor5-35/build/ckeditor.js'); // 35.3.2  Updated 13-12-2022
 define('KT_FONTAWESOME_JS',					KT_STATIC_URL . 'library/fontawesome/js/all.min.js');  // fontawesome-free-6.1.1 Updated 15-04-2022.
 define('KT_JQUERY_COLORBOX_URL',			KT_STATIC_URL . 'library/colorbox/jquery.colorbox-min.js');	// 1.6.4	Updated 11-05-2016
 define('KT_JQUERY_JEDITABLE_URL',			KT_STATIC_URL . 'js/jquery.jeditable.js');		    	// 1.7.3 (used only in site access rules table)
@@ -81,8 +79,9 @@ define('KT_CHOSEN_JS',						KT_STATIC_URL . 'library/chosen/chosen.jquery.min.js
 define('KT_CONFIRM_JS',						KT_STATIC_URL . 'library/jquery-confirm/dist/jquery-confirm.min.js'); // Ver 3.3.4 from https://craftpip.github.io/jquery-confirm/
 
 // kiwitrees own javascript libraries
-define('KT_KIWITREES_JS_URL',				KT_STATIC_URL . 'js/kiwitrees.min.js');					// used system wide, via Pages WT class
+define('KT_KIWITREES_JS_URL',				KT_STATIC_URL . 'js/kiwitrees.min.js');					// used system wide, via Pages KT class
 define('KT_AUTOCOMPLETE_JS_URL',			KT_STATIC_URL . 'js/autocomplete.min.js');				// used system wide
+define('KT_CKEDITOR_JS',					KT_STATIC_URL . 'js/ktn_ckeditor.js');					// base iniitialisaton for CKEditor 5
 define('KT_JQUERY_TREEVIEW_JS_URL',			KT_STATIC_URL . 'js/jquery.treeview.js');				// used only in branches.php
 define('KT_FANCY_TREEVIEW_JS_URL',			KT_STATIC_URL . 'js/fancytreeview.js');					// used in fancy_treeview_descendants & fancy_treeview_ancestors
 define('KT_INTERACTIVETREE_JS_URL',			KT_STATIC_URL . 'js/interactivetree.js');				// used in the interctive tree tab
