@@ -112,8 +112,9 @@ class contact_KT_Module extends KT_Module implements KT_Module_Menu {
 				});
 			');
 
-		if (array_key_exists('ckeditor', KT_Module::getActiveModules()) && KT_Site::preference('MAIL_FORMAT') == "1") {
-			ckeditor_KT_Module::enableBasicEditor($controller);
+		$controller->addExternalJavascript(KT_CKEDITOR_CLASSIC);
+		if (KT_Site::preference('MAIL_FORMAT') == "1") {
+			$controller->addInlineJavascript('ckeditorBasic();');
 		}
 
 		// Send the message.

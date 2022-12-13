@@ -174,7 +174,7 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 					$gedcom_id = KT_GED_ID;
 				}
 				$controller->pageHeader();
-				$controller->addExternalJavascript(KT_CKEDITOR5_CLASSIC);
+				$controller->addExternalJavascript(KT_CKEDITOR_CLASSIC);
 				$controller->addExternalJavascript(KT_CKEDITOR_JS);
 
 				?>

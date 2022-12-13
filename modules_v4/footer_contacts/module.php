@@ -55,7 +55,6 @@ class footer_contacts_KT_Module extends KT_Module implements KT_Module_Footer {
 		$class		= $this->getName();
 		$title		= $this->getTitle();
 
-		//list all users for inter-user communication, only when logged in, and there is more than one user -->
 		$content = '
 			<div class="card-divider">
 				<h5>' . KT_I18N::translate('Contact Information') . '</h5>

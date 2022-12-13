@@ -9513,6 +9513,9 @@ footer .card {
 	background: none;
 	border: none;
 }
+footer .card a .svg-inline--fa {
+	color: #fffff4;
+}
 footer .card .card-divider {
 	background: none;
 	border-bottom: 0.05rem solid;
@@ -11755,8 +11758,8 @@ div.dataTables_wrapper table.dataTable thead tr th svg.fa-bell, div.dataTables_w
 }
 
 /*
-    Colorbox Core Style:
-    The following CSS is consistent between example themes and should not be altered.
+	Colorbox Core Style:
+	The following CSS is consistent between example themes and should not be altered.
 */
 #colorbox, #cboxOverlay, #cboxWrapper {
 	position: absolute;
@@ -11831,9 +11834,9 @@ div.dataTables_wrapper table.dataTable thead tr th svg.fa-bell, div.dataTables_w
 }
 
 /*
-    User Style:
-    Change the following styles to modify the appearance of Colorbox.  They are
-    ordered & tabbed in a way that represents the nesting of the generated HTML.
+	User Style:
+	Change the following styles to modify the appearance of Colorbox.  They are
+	ordered & tabbed in a way that represents the nesting of the generated HTML.
 */
 #cboxOverlay {
 	background: #e0e0e0;

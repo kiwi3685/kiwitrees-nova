@@ -39,9 +39,9 @@ $text      = KT_Filter::post('text', KT_REGEX_UNSAFE);
 
 switch ($action) {
 case 'compose':
-    if (array_key_exists('ckeditor', KT_Module::getActiveModules())) {
-        ckeditor_KT_Module::enableEditor($controller);
-    }
+    $controller->addExternalJavascript(KT_CKEDITOR_CLASSIC);
+    $controller->addInlineJavascript('ckeditorStandard();');
+ 
     echo '<h3>' . KT_I18N::translate('Add/edit journal/news entry') . '</h3>';
     echo '<form style="overflow: hidden;" name="messageform" method="post" action="editnews.php?action=save&news_id=' . $news_id . '">';
     if ($news_id) {

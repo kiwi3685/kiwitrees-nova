@@ -29,8 +29,9 @@ require KT_ROOT . 'includes/functions/functions_edit.php';
 $controller = new KT_Controller_Page();
 $controller->setPageTitle(KT_I18N::translate('Contact'));
 
-if (array_key_exists('ckeditor', KT_Module::getActiveModules()) && KT_Site::preference('MAIL_FORMAT') == "1") {
-	ckeditor_KT_Module::enableBasicEditor($controller);
+$controller->addExternalJavascript(KT_CKEDITOR_CLASSIC);
+if (KT_Site::preference('MAIL_FORMAT') == "1") {
+	$controller->addInlineJavascript('ckeditorBasic();');
 }
 
 // Send the message.

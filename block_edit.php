@@ -65,16 +65,14 @@ if (KT_Filter::post('save')) {
 $controller = new KT_Controller_Page();
 $controller
 	->setPageTitle($block->getTitle() . ' — ' . KT_I18N::translate('Configuration'))
-	->pageHeader();
+	->pageHeader()
+	->addExternalJavascript(KT_CKEDITOR_CLASSIC);
 
-if (array_key_exists('ckeditor', KT_Module::getActiveModules())) {
-	if (in_array($block->getTitle(), array('Home'))) {
-		ckeditor_KT_Module::enableBasicEditor($controller);
-	} else {
-		ckeditor_KT_Module::enableEditor($controller);
-	}
-}
-?>
+if (in_array($block->getTitle(), array('Welcome'))) {
+	$controller->addInlineJavascript('ckeditorBasic();');
+} else {
+	$controller->addInlineJavascript('ckeditorStandard();');
+} ?>
 
 <div class="grid-x block-edit">
 	<div class="cell large-8 large-offset-2">

@@ -344,9 +344,8 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 					$count_xref	= 1;
 				}
 
-				if (array_key_exists('ckeditor', KT_Module::getActiveModules())) {
-					ckeditor_KT_Module::enableEditor($controller);
-				}
+		        $controller->addExternalJavascript(KT_CKEDITOR_CLASSIC);
+		        $controller->addInlineJavascript('ckeditorStandard();');
 				?>
 
 				<div id="<?php echo $this->getName(); ?>" class="cell">

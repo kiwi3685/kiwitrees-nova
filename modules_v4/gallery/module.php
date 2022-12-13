@@ -238,10 +238,10 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 						};
 					');
 
-				if (array_key_exists('ckeditor', KT_Module::getActiveModules())) {
-					ckeditor_KT_Module::enableEditor($controller);
-				}
+		        $controller->addExternalJavascript(KT_CKEDITOR_CLASSIC);
+		        $controller->addInlineJavascript('ckeditorStandard();');
 				?>
+
 				<div id="<?php echo $this->getName();?>">
 					<form name="<?php echo $this->getName(); ?>" method="post" action="#">
 						<input type="hidden" name="save" value="1">
@@ -419,9 +419,8 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 			->pageHeader()
 			->addInlineJavascript('jQuery("#gallery_tabs").tabs();');
 
-		if (array_key_exists('ckeditor', KT_Module::getActiveModules())) {
-			ckeditor_KT_Module::enableEditor($controller);
-		}
+        $controller->addExternalJavascript(KT_CKEDITOR_CLASSIC);
+        $controller->addInlineJavascript('ckeditorStandard();');
 
 		$action = KT_Filter::post('action');
 

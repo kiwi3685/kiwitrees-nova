@@ -137,7 +137,7 @@ class block_welcome_KT_Module extends KT_Module implements KT_Module_Block {
 		?>
 
 		<div class="cell">
-			 <label><?php echo KT_I18N::translate('Optional welcome text for this family tree'); ?></label>
+			 <label class="h5"><?php echo KT_I18N::translate('Optional welcome text for this family tree'); ?></label>
 		</div>
 		<div class="cell">
 			<textarea name="text" class="html-edit" rows="5"><?php echo htmlspecialchars($text); ?></textarea>

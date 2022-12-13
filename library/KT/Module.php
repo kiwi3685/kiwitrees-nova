@@ -596,7 +596,6 @@ abstract class KT_Module {
 			'block_upcoming'		=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
 			// other
 			'batch_update'			=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
-			'ckeditor'				=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
 			'sitemap'				=> array('enabled', NULL, NULL, NULL, NULL, NULL, NULL),
 		);
 

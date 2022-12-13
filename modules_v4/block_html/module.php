@@ -150,9 +150,6 @@ class block_html_KT_Module extends KT_Module implements KT_Module_Block {
 
 		require_once KT_ROOT . 'includes/functions/functions_edit.php';
 
-		$controller->addExternalJavascript(KT_CKEDITOR5_CLASSIC);
-		$controller->addExternalJavascript(KT_CKEDITOR_JS);
-
 		$templates = array(
 			KT_I18N::translate('Keyword examples') =>
 			'#getAllTagsTable#',
@@ -285,7 +282,7 @@ class block_html_KT_Module extends KT_Module implements KT_Module_Block {
 			<label class="h6"><?php echo KT_I18N::translate('Templates'); ?></label>
 		</div>
 		<div class="cell medium-7 auto">
-			<select name="template" onchange="document.block.html.value=document.block.template.options[document.block.template.selectedIndex].value;<?php echo $ckeditor_onchange; ?>">
+			<select name="template" onchange="document.block.html.value=document.block.template.options[document.block.template.selectedIndex].value;<?php //echo $ckeditor_onchange; ?>">
 				<option value="<?php echo htmlspecialchars($html); ?>"><?php echo KT_I18N::translate('Custom'); ?></option>
 				<?php foreach ($templates as $title => $template) { ?>
 					<option value="<?php echo htmlspecialchars($template); ?>"><?php echo $title; ?></option>

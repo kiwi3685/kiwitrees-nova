@@ -20,9 +20,48 @@
  * along with Kiwitrees. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
-// Specifications for various types of popup edit window
-// Choose positions to center in the smallest (1000x800) target screen
+/**
+ * initialisation of CKEditor 5 with basic toolbar
+ * 
+ * 
+*/
+function ckeditorBasic() {
+    ClassicEditor
+    .create( document.querySelector(".html-edit"), {
+        licenseKey: "",
+        toolbar: [
+            "heading", "|",
+            "alignment:left", "alignment:right", "alignment:center", "|",
+            "bold", "italic", "|",
+            "undo", "redo"
+        ],
+    })
+    .then( editor => {
+        window.editor = editor;
+    });
+
+}
+
+/**
+ * initialisation of CKEditor 5 with standard toolbar
+ * 
+ * 
+*/
+function ckeditorStandard() {
+
+    ClassicEditor
+    .create( document.querySelector(".html-edit"), {
+        licenseKey: "",
+    })
+    .then( editor => {
+        window.editor = editor;
+    });
+
+}
+
+/**
+* Specifications for various types of popup edit window
+* Choose positions to center in the smallest (1000x800) target screen
 */
 var find_window_specs = 'width=550,height=600,left=250,top=150,resizable=1,scrollbars=1'; // special characters
 

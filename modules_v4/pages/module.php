@@ -184,9 +184,8 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 				});
 			');
 
-		if (array_key_exists('ckeditor', KT_Module::getActiveModules())) {
-			ckeditor_KT_Module::enableEditor($controller);
-		}
+        $controller->addExternalJavascript(KT_CKEDITOR_CLASSIC);
+        $controller->addInlineJavascript('ckeditorStandard();');
 
 		$items = KT_DB::prepare(
 			"SELECT block_id, block_order, gedcom_id, bs1.setting_value AS pages_title, bs2.setting_value AS pages_content".
@@ -409,10 +408,8 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 				}
 
 				$controller->pageHeader();
-
-				if (array_key_exists('ckeditor', KT_Module::getActiveModules())) {
-					ckeditor_KT_Module::enableEditor($controller);
-				}
+		        $controller->addExternalJavascript(KT_CKEDITOR_CLASSIC);
+		        $controller->addInlineJavascript('ckeditorStandard();');
 				?>
 
 				<div id="<?php echo $this->getName(); ?>" class="cell">
