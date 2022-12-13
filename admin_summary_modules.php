@@ -33,10 +33,10 @@ $controller
 	->pageHeader();
 
 /**
- * Array of Module menu items
- * $module_cats [array]
+ * Array of Module menu management items
+ * $module_config [array]
  */
-$module_cat = array(
+$module_config = array(
 	"admin_modules.php"		=> array(
 	   KT_I18N::translate('Module administration'),
 	   KT_I18N::translate('A sortable list of all available modules.<br>Enable or disable them to suit your preferences.'),
@@ -44,6 +44,13 @@ $module_cat = array(
 	   'alert',
 	   ''
    ),
+);
+
+/**
+ * Array of Module menu access position settings
+ * $module_cats [array]
+ */
+$module_cat = array(
 	"admin_module_menus.php"		=> array(
 	   KT_I18N::translate('Top level menu items'),
 	   '',
@@ -125,6 +132,50 @@ echo pageStart('modules_admin', $controller->getPageTitle()); ?>
 	</div>
 	<div class="cell">
 		<div class="grid-x grid-margin-x grid-margin-y">
+			<div class="cell">
+				<h4><?php echo KT_I18N::translate('Enable & disable modules'); ?></h4>
+			</div>
+			<?php $x = 1;
+			foreach ($module_config as $title => $file) { ?>
+				<div class="card cell">
+					<div class="card-divider">
+						<a href="<?php echo $title; ?>">
+							<?php echo $file[0]; ?>
+						</a>
+						<span class="<?php echo $file[3]; ?>" data-tooltip title="<?php echo $file[2]; ?>" data-position="top" data-alignment="right">
+							<i class="<?php echo $iconStyle; ?> fa-user"></i>
+						</span>
+					</div>
+					<div class="card-section">
+						<?php if($title == 'admin_modules.php') {
+							echo $file[1];
+						} else { ?>
+							<a class="thumbnail" href="#" data-open="moduleImage<?php echo $x; ?>">
+								<img src="<?php echo KT_THEME_DIR . 'images/module-categories/' . $file[4]; ?>" alt="<?php echo $file[1]; ?>">
+							</a>
+						<?php } ?>
+					</div>
+				</div>
+				<!-- hidden reveal - main image -->
+				<div class="reveal" id="moduleImage<?php echo $x; ?>" data-reveal>
+					<h6 class="text-center">
+						<?php echo $file[0]; ?>
+						<button class="close-button" aria-label="Dismiss image" type="button" data-close>
+							<span aria-hidden="true">
+								<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
+							</span>
+						</button>
+					</h6>
+					<img src="<?php echo KT_THEME_DIR . 'images/module-categories/' . $file[4]; ?>">
+				</div>
+				<?php $x ++;
+			} ?>
+
+			<hr class="cell">
+
+			<div class="cell">
+				<h4><?php echo KT_I18N::translate('Module settings'); ?></h4>
+			</div>
 			<?php $x = 1;
 			foreach ($module_cat as $title => $file) { ?>
 				<div class="card cell">

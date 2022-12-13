@@ -132,7 +132,7 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 
 		//-- main GALLERIES menu item
 		$menu = new KT_Menu($this->getMenuTitle(), 'module.php?mod='.$this->getName().'&amp;mod_action=show&amp;gallery_id='.$default_block, 'menu-my_gallery', 'down');
-		$menu->addClass('menuitem', 'menuitem_hover', '');
+		$menu->addClass('menuitem', 'menuitem_hover', 'fa-images');
 		foreach ($this->getMenuAlbumList() as $item) {
 			$languages=get_block_setting($item->block_id, 'languages');
 			if ((!$languages || in_array(KT_LOCALE, explode(',', $languages))) && $item->gallery_access>=KT_USER_ACCESS_LEVEL) {

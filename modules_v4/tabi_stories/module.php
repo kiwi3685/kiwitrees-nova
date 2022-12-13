@@ -752,6 +752,7 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 		}
 		//-- Stories menu item
 		$menu = new KT_Menu($this->getTitle(), 'module.php?mod=' . $this->getName() . '&amp;mod_action=show_list', 'menu-story');
+		$menu->addClass('', '', 'fa-pen-fancy');
 		return $menu;
 	}
 
