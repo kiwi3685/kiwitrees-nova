@@ -77,6 +77,7 @@ define('KT_PASSWORDSCHECK',					KT_STATIC_URL . 'js/passwordscheck.js');				// I
 define('KT_D3_JS',							KT_STATIC_URL . 'js/d3.min.js');						// Installed from https://d3js.org/ v.4
 define('KT_CHOSEN_JS',						KT_STATIC_URL . 'library/chosen/chosen.jquery.min.js'); // chosen-package-1.87 from https://github.com/harvesthq/chosen
 define('KT_CONFIRM_JS',						KT_STATIC_URL . 'library/jquery-confirm/dist/jquery-confirm.min.js'); // Ver 3.3.4 from https://craftpip.github.io/jquery-confirm/
+define('KT_ICON_PICKER_JS',				KT_STATIC_URL . 'library/fontawesome-iconpicker/dist/js/fontawesome-iconpicker.min.js'); // ver 3.2.1 from https://github.com/itsjavi/fontawesome-iconpicker
 
 // kiwitrees own javascript libraries
 define('KT_KIWITREES_JS_URL',				KT_STATIC_URL . 'js/kiwitrees.min.js');					// used system wide, via Pages KT class
@@ -90,6 +91,7 @@ define('KT_KIWITREES_ADMIN_JS_URL',			KT_STATIC_URL . 'themes/_administration/js
 define('KT_DATEPICKER_CSS',					KT_STATIC_URL . 'library/foundation-datepicker/css/foundation-datepicker.min.css');
 define('KT_CHOSEN_CSS',						KT_STATIC_URL . 'library/chosen/chosen.min.css'); // chosen-package-1.87 from https://github.com/harvesthq/chosen
 define('KT_CONFIRM_CSS',					KT_STATIC_URL . 'library/jquery-confirm/dist/jquery-confirm.min.css'); // Ver 3.3.4 from https://craftpip.github.io/jquery-confirm/
+define('KT_ICONPICKER_CSS',					KT_STATIC_URL . 'library/fontawesome-iconpicker/dist/css/fontawesome-iconpicker.min.css'); // ver 3.2.1 from https://github.com/itsjavi/fontawesome-iconpicker
 
 // Location of our modules and themes.  These are used as URLs and folder paths.
 define('KT_MODULES_DIR', 'modules_v4/'); // Update setup.php when this changes
