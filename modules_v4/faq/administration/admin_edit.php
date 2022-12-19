@@ -116,7 +116,7 @@ echo pageStart('faq_details', $controller->getPageTitle()); ?>
 				<?php echo KT_I18N::translate('Faq menu order'); ?>
 			</label>
 			<div class="cell medium-1">
-				<input type="text" name="block_order" value="<?php echo $block_order; ?>">
+				<input type="number" name="block_order" value="<?php echo $block_order; ?>">
 			</div>
 			<div class="cell medium-9"></div>
 			<label class="cell medium-2">
