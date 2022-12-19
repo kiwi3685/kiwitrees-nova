@@ -46,6 +46,7 @@ import SpecialCharactersLatin from '@ckeditor/ckeditor5-special-characters/src/s
 import SpecialCharactersMathematical from '@ckeditor/ckeditor5-special-characters/src/specialcharactersmathematical.js';
 import SpecialCharactersText from '@ckeditor/ckeditor5-special-characters/src/specialcharacterstext.js';
 import Strikethrough from '@ckeditor/ckeditor5-basic-styles/src/strikethrough.js';
+import Style from '@ckeditor/ckeditor5-style/src/style.js';
 import Subscript from '@ckeditor/ckeditor5-basic-styles/src/subscript.js';
 import Superscript from '@ckeditor/ckeditor5-basic-styles/src/superscript.js';
 import Table from '@ckeditor/ckeditor5-table/src/table.js';
@@ -99,6 +100,7 @@ Editor.builtinPlugins = [
 	SpecialCharactersMathematical,
 	SpecialCharactersText,
 	Strikethrough,
+	Style,
 	Subscript,
 	Superscript,
 	Table,
@@ -116,6 +118,7 @@ Editor.defaultConfig = {
 			'redo',
 			'|',
 			'heading',
+			'style',
 			'alignment',
 			'|',
 			'bold',

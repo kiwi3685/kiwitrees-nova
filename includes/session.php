@@ -50,7 +50,7 @@ if (KT_USE_CDN) {
 	define('KT_DATEPICKER_JS',				'https://cdn.jsdelivr.net/npm/foundation-datepicker@1.5.6/js/foundation-datepicker.min.js'); //1.5.6
 	define('KT_DATATABLES_JS',				'https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js'); //1.10.20
 	define('KT_DATATABLES_CSS',				'https://cdn.datatables.net/1.10.20/css/dataTables.foundation.min.css'); //1.10.20
-	define('KT_CKEDITOR_CLASSIC',			'https://cdn.ckeditor.com/ckeditor5/35.3.2/super-build/ckeditor.js'); // 35.3.2
+	define('KT_CKEDITOR_CLASSIC',			'https://cdn.ckeditor.com/ckeditor5/35.4.0/super-build/ckeditor.js'); // 35.3.2
 
 } else {
 	define('KT_FOUNDATION_JS',				KT_STATIC_URL . 'library/foundation/dist/js/foundation.min.js'); // 6.7.5 14-07-22
@@ -62,7 +62,7 @@ if (KT_USE_CDN) {
 	define('KT_DATATABLES_CSS',				KT_STATIC_URL . 'library/DataTables/DataTables-1.10.20/css/dataTables.foundation.min.css'); // 6.4.3
 	define('KT_DATATABLES_BUTTONS',			KT_STATIC_URL . 'library/DataTables/Buttons-1.6.0/js/dataTables.buttons.min.js'); // Updated 12-03-2017
 	define('KT_DATATABLES_HTML5',			KT_STATIC_URL . 'library/DataTables/Buttons-1.6.0/js/buttons.html5.min.js'); // Updated 12-03-2017
-	define('KT_CKEDITOR_CLASSIC',			KT_STATIC_URL . 'library/ckeditor-classic/build/ckeditor.js'); // 35.3.2  Updated 13-12-2022
+	define('KT_CKEDITOR_CLASSIC',			KT_STATIC_URL . 'library/ckeditor-classic/build/ckeditor.js'); // 35.4.0  Updated 13-12-2022
 }
 
 // other js

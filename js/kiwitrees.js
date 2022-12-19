@@ -43,9 +43,9 @@ function ckeditorBasic() {
 }
 
 /**
- * initialisation of CKEditor 5 with standard toolbar
- * 
- * 
+ * Initialisation of CKEditor 5 with standard toolbar
+ * Ver 35.4.0
+ * Build id: 'u3ttwnnue5fa-mbpmrp5gjfnq'
 */
 function ckeditorStandard() {
 	ClassicEditor
