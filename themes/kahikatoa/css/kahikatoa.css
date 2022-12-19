@@ -10564,6 +10564,28 @@ div[id$=-page] button[type=submit] {
 	transform: translateY(-50%);
 }
 
+#faq-page ul.accordion {
+	background: none;
+}
+#faq-page ul.accordion li.accordion-item a.accordion-title {
+	background: none;
+	line-height: 1.625;
+	padding-inline-start: 4rem;
+	vertical-align: middle;
+}
+#faq-page ul.accordion li.accordion-item a.accordion-title span {
+	font-size: 1.125rem;
+	font-weight: 600;
+}
+#faq-page ul.accordion li.accordion-item a.accordion-title svg {
+	left: 1rem;
+	right: unset;
+}
+#faq-page ul.accordion div.accordion-content {
+	background: none;
+	padding: 1rem 4rem 0;
+}
+
 #favoriteslist-page form {
 	border: 0.125rem solid #ab3334;
 	padding: 0.75rem;

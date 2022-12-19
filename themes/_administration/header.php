@@ -52,12 +52,12 @@ $this
 		// Manage cookies for admin search
 		function save_data() {
 			var input = document.getElementById("term")
-            document.cookie = "adminSearch" + "=" + input.value;
-	    };
+			document.cookie = "adminSearch" + "=" + input.value;
+		};
 		jQuery("#searchClose").click(function() {
 			document.cookie = "adminSearch=;expires=" + new Date(0).toUTCString()
 			location.reload();
-	    });
+		});
 
 	');
 
@@ -72,6 +72,7 @@ $this
 		<link rel="icon" href="<?php echo KT_THEME_URL; ?>images/kt.png" type="image/png">
 		<link rel="stylesheet" href="<?php echo KT_DATATABLES_CSS; ?>">
 		<link rel="stylesheet" href="<?php echo KT_DATEPICKER_CSS; ?>">
+		<link rel="stylesheet" href="<?php echo KT_ICONPICKER_CSS; ?>">
 		<link rel="stylesheet" href="<?php echo KT_CHOSEN_CSS; ?>">
 		<link rel="stylesheet" href="<?php echo KT_THEME_URL; ?>css/administration.min.css">
 		<?php echo $javascript; ?>
@@ -161,7 +162,7 @@ $this
 							</a>
 						</li>
 					<?php } ?>
-				    <li class="admin-menu-title">
+					<li class="admin-menu-title">
 						<a <?php echo (array_key_exists(KT_SCRIPT_NAME, $trees) ? 'class="current" ' : ''); ?>href="admin_summary_trees.php">
 							<i class="<?php echo $iconStyle; ?> fa-tree"></i>
 							<?php echo KT_I18N::translate('Family trees'); ?>
@@ -226,7 +227,7 @@ $this
 											<span aria-hidden="true">&times;</span>
 										</button>
 										<ul>
-									        <?php foreach ($result as $page) {
+											<?php foreach ($result as $page) {
 												foreach ($page as $file => $count)  {
 													if (array_key_exists($file, $indirectAccess)) {
 														$modules = KT_Module::getActiveModules(KT_GED_ID, KT_PRIV_HIDE);
@@ -256,10 +257,10 @@ $this
 											} ?>
 										</ul>
 									</div>
-							    <?php } elseif ($searchTerm) { ?>
-							    	<div id="adminQueryResult">
-							    		<?php echo  KT_I18N::translate('Nothing found'); ?>
-							    	</div>
+								<?php } elseif ($searchTerm) { ?>
+									<div id="adminQueryResult">
+										<?php echo  KT_I18N::translate('Nothing found'); ?>
+									</div>
 							   <?php } ?>
 							</li>
 						<?php }

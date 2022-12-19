@@ -46,11 +46,13 @@ function pageStart($title, $pageTitle = '', $includeTitle = 'y', $subTitle = '',
 	}
 
 	return '
-		<div id="' . strtolower($title) . '-page" class="grid-x grid-margin-x">' .
-		 	$faq .
-			'<div class="cell titles">' .
+		<div id="' . strtolower($title) . '-page" class="grid-x grid-margin-x">
+			<div class="cell titles medium-10">' .
 				$pageTitle .
 				$subTitle .
+			'</div>
+			<div class="cell medium-2">' .
+				$faq . 
 			'</div>';
 
 	// function pageClose() must be added after content to close this div element
@@ -67,14 +69,15 @@ function pageStart($title, $pageTitle = '', $includeTitle = 'y', $subTitle = '',
  * print Family tree select box and label
  *
  */
- function familyTree($gedID) {
+ function familyTree($gedID, $other=' onchange="tree.submit();"') {
+
 	 return '
 		<div class="cell medium-2">
 			<label for="ged">' . KT_I18N::translate('Family tree') . '</label>
 		</div>
 		<div class="cell medium-4">
 			<form method="post" action="#" name="tree">
-				' . select_ged_control('gedID', KT_Tree::getIdList(), null, $gedID, ' onchange="tree.submit();"') . '
+				' . select_ged_control('gedID', KT_Tree::getIdList(), null, $gedID, $other) . '
 			</form>
 		</div>
 	';
@@ -206,7 +209,7 @@ function submitButtons($extra = '', $onClick = '') {
    $onClickHtml = '';
 
    if ($onClick) {
-	   $onClickHtml = 'onclick="' . $onClick . ';"';
+	   $onClickHtml = 'onclick=' . $onClick;
    }
 
    ?>
@@ -335,7 +338,7 @@ function loadingImage() {
 function relatedPages($links, $self = '') {
 	global $iconStyle;
 
-	// remove summary page
+	// remove summary page and links to self
 	foreach ($links as $key => $item) {
 	    if (strstr($key, 'admin_summary_') || $key = $self) {
 	        unset($links[$key]);

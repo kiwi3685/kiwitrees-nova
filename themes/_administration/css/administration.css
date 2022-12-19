@@ -511,7 +511,7 @@ legend {
 }
 
 .fieldset {
-	margin: 1.125rem 0;
+	margin: 0 1.125rem 1.125rem;
 	padding: 0.75rem;
 	border: 1px solid #cacaca;
 }
@@ -9337,6 +9337,10 @@ ol.list-upper-roman {
 	width: 1px;
 }
 
+.ck .ck-content .ck-placeholder {
+	opacity: 50%;
+}
+
 /* General */
 .lang-active {
 	color: #5da423 !important;
@@ -9600,6 +9604,7 @@ main #admin-content {
 	/* MISSING DATA */
 	/* FIND DUPLICATES */
 	/* MMERGE RECORDS */
+	/* FAQ PAGE */
 	/* RESEARCH LINKS */
 	/* Googlemaps Admin */
 	/* CLEAN UP TABLE */
@@ -10716,4 +10721,28 @@ div.dataTables_wrapper table.dataTable thead tr th svg {
 .jconfirm.jconfirm-kiwitrees .jconfirm-buttons button {
 	margin: 0.5rem;
 	min-width: 3rem;
+}
+.iconpicker-popover.popover {
+	background-color: #e6e6e6;
+	border: 0.125rem solid #e6e6e6;
+	border-radius: 0.75rem;
+	box-shadow: 0.25rem 0.25rem 0.5rem 0 #878787;
+	width: 20rem;
+}
+.iconpicker-popover.popover.bottomRight {
+	margin-top: -0.5rem;
+}
+.iconpicker-popover.popover .popover-title {
+	display: none;
+}
+.iconpicker-popover.popover .iconpicker-items {
+	background-color: #e6e6e6;
+}
+.iconpicker-popover.popover .iconpicker-items .iconpicker-item {
+	background-color: #fefefe;
+	height: 1.5rem;
+	width: 1.5rem;
+}
+.iconpicker-popover.popover .iconpicker-items .iconpicker-item .svg-inline--fa {
+	height: 1.375em;
 }

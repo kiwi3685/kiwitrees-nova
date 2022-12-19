@@ -30,7 +30,7 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 
 	// Extend class KT_Module
 	public function getTitle() {
-		return /* I18N: Name of a module.  Abbreviation for “Frequently Asked Questions” */ KT_I18N::translate('Faq');
+		return /* I18N: Name of a module.  Abbreviation for “Frequently Asked Questions” */ KT_I18N::translate('Frequently asked questions');
 	}
 
 	// Extend class KT_Module
@@ -56,23 +56,24 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 	// Extend KT_Module
 	public function modAction($mod_action) {
 		switch($mod_action) {
+		case 'admin_add':
 		case 'admin_config':
-			$this->config();
+			require KT_ROOT . KT_MODULES_DIR . $this->getName() . '/administration/' . $mod_action . '.php';
+			break;
+		case 'admin_edit':
+			require KT_ROOT . KT_MODULES_DIR . $this->getName() . '/administration/' . $mod_action . '.php';
 			break;
 		case 'admin_delete':
 			$this->delete();
-			$this->config();
-			break;
-		case 'admin_edit':
-			$this->edit();
+			require KT_ROOT . KT_MODULES_DIR . $this->getName() . '/administration/admin_config.php';
 			break;
 		case 'admin_movedown':
 			$this->movedown();
-			$this->config();
+			require KT_ROOT . KT_MODULES_DIR . $this->getName() . '/administration/admin_config.php';
 			break;
 		case 'admin_moveup':
 			$this->moveup();
-			$this->config();
+			require KT_ROOT . KT_MODULES_DIR . $this->getName() . '/administration/admin_config.php';
 			break;
 		case 'show':
 			$this->show();
@@ -111,137 +112,85 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 		return $HEADER_TITLE;
 	}
 
+	public function getMenuIcon() {
+		$default_icon = 'fa-comments';
+		$HEADER_ICON = KT_I18N::translate(get_module_setting($this->getName(), 'FAQ_ICON', $default_icon));
+		return $HEADER_ICON;
+	}
+
 	public function getSummaryDescription() {
 		$default_description = '';
 		$HEADER_DESCRIPTION = get_module_setting($this->getName(), 'FAQ_DESCRIPTION', $default_description);
 		return $HEADER_DESCRIPTION;
 	}
 
-	// Action from the configuration page
-	private function edit() {
-		if (KT_USER_IS_ADMIN) {
-			require_once KT_ROOT . 'includes/functions/functions_edit.php';
-			if (KT_Filter::postBool('save') && KT_Filter::checkCsrf()) {
-				$block_id = KT_Filter::postInteger('block_id');
-				if ($block_id) {
-					KT_DB::prepare(
-						"UPDATE `##block` SET gedcom_id=NULLIF(?, ''), block_order=? WHERE block_id=?"
-					)->execute(array(
-						KT_Filter::post('gedcom_id'),
-						(int)KT_Filter::post('block_order'),
-						$block_id
-					));
-				} else {
-					KT_DB::prepare(
-						"INSERT INTO `##block` (gedcom_id, module_name, block_order) VALUES (NULLIF(?, ''), ?, ?)"
-					)->execute(array(
-						KT_Filter::post('gedcom_id'),
-						$this->getName(),
-						(int)KT_Filter::post('block_order')
-					));
-					$block_id = KT_DB::getInstance()->lastInsertId();
-				}
-				set_block_setting($block_id, 'header',  KT_Filter::post('header',  KT_REGEX_UNSAFE));
-				set_block_setting($block_id, 'faqbody', KT_Filter::post('faqbody', KT_REGEX_UNSAFE)); // allow html
-				$languages = array();
-				foreach (KT_I18N::used_languages() as $code=>$name) {
-					if (KT_Filter::postBool('lang_'.$code)) {
-						$languages[] = $code;
-					}
-				}
-				set_block_setting($block_id, 'languages', implode(',', $languages));
-				$this->config();
-			} else {
-				$block_id	= safe_GET('block_id');
-				$controller	= new KT_Controller_Page();
-				if ($block_id) {
-					$controller->setPageTitle(KT_I18N::translate('Edit faq item'));
-					$header		 = get_block_setting($block_id, 'header');
-					$faqbody	 = get_block_setting($block_id, 'faqbody');
-					$block_order = KT_DB::prepare(
-						"SELECT block_order FROM `##block` WHERE block_id=?"
-					)->execute(array($block_id))->fetchOne();
-					$gedcom_id	= KT_DB::prepare(
-						"SELECT gedcom_id FROM `##block` WHERE block_id=?"
-					)->execute(array($block_id))->fetchOne();
-				} else {
-					$controller->setPageTitle(KT_I18N::translate('Add faq item'));
-					$header		 = '';
-					$faqbody	 = '';
-					$block_order = KT_DB::prepare(
-						"SELECT IFNULL(MAX(block_order)+1, 0) FROM `##block` WHERE module_name=?"
-					)->execute(array($this->getName()))->fetchOne();
-					$gedcom_id = KT_GED_ID;
-				}
-				$controller->pageHeader();
-				$controller->addExternalJavascript(KT_CKEDITOR_CLASSIC);
-				$controller->addExternalJavascript(KT_CKEDITOR_JS);
-
-				?>
-				<div id="<?php echo $this->getName(); ?>">
-					<form name="faq" method="post" action="#">
-						<?php echo KT_Filter::getCsrf(); ?>
-						<input type="hidden" name="save" value="1">
-						<input type="hidden" name="block_id" value="<?php echo $block_id; ?>">
-						<table id="faq_module">
-							<tr>
-								<th><?php echo KT_I18N::translate('Question'); ?></th>
-							</tr>
-							<tr>
-								<td>
-									<input type="text" name="header" size="90" tabindex="1" value="<?php echo htmlspecialchars($header); ?>"></td>
-							</tr>
-							<tr>
-								<th><?php echo KT_I18N::translate('Answer'); ?></th>
-							</tr>
-							<tr>
-								<td>
-									<textarea name="faqbody" class="html-edit" tabindex="2"><?php echo htmlspecialchars($faqbody); ?></textarea>
-								</td>
-							</tr>
-						</table>
-						<table id="faq_module2">
-							<tr>
-								<th><?php echo KT_I18N::translate('Show this block for which languages?'); ?></th>
-								<th><?php echo KT_I18N::translate('Faq position'); ?></th>
-								<th><?php echo KT_I18N::translate('Faq visibility'); ?></th>
-							</tr>
-							<tr>
-								<td>
-									<?php
-									$languages = get_block_setting($block_id, 'languages');
-									echo edit_language_checkboxes('lang_', $languages);
-									?>
-								</td>
-								<td>
-									<input type="text" name="block_order" size="3" tabindex="3" value="<?php echo $block_order; ?>">
-								</td>
-								<td>
-									<?php echo select_edit_control('gedcom_id', KT_Tree::getIdList(), KT_I18N::translate('All'), $gedcom_id, 'tabindex="4"'); ?>
-								</td>
-							</tr>
-						</table>
-						<p>
-							<button class="btn btn-primary save" type="submit"  tabindex="5">
-								<i class="<?php echo $iconStyle; ?> fa-save"></i>
-								<?php echo KT_I18N::translate('Save'); ?>
-							</button>
-							<button class="btn btn-primary cancel" type="button" onclick="window.location='<?php echo $this->getConfigLink(); ?>';" tabindex="8">
-								<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
-								<?php echo KT_I18N::translate('cancel'); ?>
-							</button>
-						</p>
-					</form>
-				</div>
-			<?php exit;
-			}
+	private function show() {
+		global $controller;
+		$controller = new KT_Controller_Page();
+		$controller
+			->setPageTitle($this->getTitle())
+			->pageHeader();
+		
+		if (KT_Filter::post('query_faq')) {
+			$search = KT_Filter::post('query_faq');
 		} else {
-			header('Location: ' . KT_SERVER_NAME.KT_SCRIPT_PATH);
-		}
+			$search = '%';
+		};
+
+		$faqs = KT_DB::prepare("
+			SELECT block_id, bs1.setting_value AS header, bs2.setting_value AS body
+			 FROM `##block` b
+			 JOIN `##block_setting` bs1 USING (block_id)
+			 JOIN `##block_setting` bs2 USING (block_id)
+			 WHERE module_name = ?
+			 AND bs1.setting_name = 'header'
+			 AND bs2.setting_name = 'faqbody'
+			 AND IFNULL(gedcom_id, ?) = ?
+			 AND (bs2.setting_value LIKE '%" . $search . "%' OR bs1.setting_value LIKE '% . $search . %')
+			 ORDER BY block_order
+		")->execute(array($this->getName(), KT_GED_ID, KT_GED_ID))->fetchAll();
+
+		$faq_description = get_module_setting($this->getName(), 'FAQ_DESCRIPTION');
+
+		echo pageStart('faq', $controller->getPageTitle()); ?>
+
+			<div class="grid-x">
+				<div class="cell" id="faq_description">
+					<?php echo $faq_description; ?>
+				</div>
+				<form class="cell medium-4 medium-offset-4" id="faq_search" method="post" action="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=show" >
+					<input
+						type="search"
+						name="query_faq"
+						value="<?php echo ($search == '%' ? '' : $search); ?>"
+						placeholder="<?php echo KT_I18N::translate('Search faq'); ?>"
+					>
+				</form>
+				<ul class="cell accordion" data-accordion data-allow-all-closed="true" data-deep-link="true">
+					<?php foreach ($faqs as $id => $faq) {
+						$faqheader	= get_block_setting($faq->block_id, 'header');
+						$faqbody    = get_block_setting($faq->block_id, 'faqbody');
+						$languages  = get_block_setting($faq->block_id, 'languages');
+						if (!$languages || in_array(KT_LOCALE, explode(',', $languages))) { ?>
+							<li class="accordion-item" data-accordion-item>
+								<a href="#" class="accordion-title">
+									<span><?php echo $this->faq_search_hits($faq->header, $search); ?></span>
+								</a>
+								<div class="accordion-content" data-tab-content>
+									<?php echo $this->faq_search_hits(substr($faqbody, 0, 1) == '<' ? $faqbody : nl2br($faqbody), $search); ?>
+								</div>
+							</li>
+						<?php }
+					} ?>
+				</ul>
+			</div>
+
+		<?php echo pageClose();
+
 	}
 
 	private function delete() {
-		$block_id = safe_GET('block_id');
+		$block_id = KT_Filter::get('block_id');
 
 		KT_DB::prepare(
 			"DELETE FROM `##block_setting` WHERE block_id=?"
@@ -253,32 +202,40 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 	}
 
 	private function moveup() {
-		$block_id = safe_GET('block_id');
+		$block_id = KT_Filter::get('block_id');
 
-		$block_order = KT_DB::prepare(
-			"SELECT block_order FROM `##block` WHERE block_id=?"
-		)->execute(array($block_id))->fetchOne();
+		$block_order = KT_DB::prepare('
+			SELECT block_order
+			 FROM `##block`
+			  WHERE block_id = ?
+		')->execute(array($block_id))->fetchOne();
 
-		$swap_block = KT_DB::prepare(
-			"SELECT block_order, block_id".
-			" FROM `##block`".
-			" WHERE block_order=(".
-			"  SELECT MAX(block_order) FROM `##block` WHERE block_order < ? AND module_name=?".
-			" ) AND module_name=?".
-			" LIMIT 1"
-		)->execute(array($block_order, $this->getName(), $this->getName()))->fetchOneRow();
+		$swap_block = KT_DB::prepare('
+			SELECT block_order, block_id
+			 FROM `##block`
+			 WHERE block_order=(
+			 	SELECT MAX(block_order) FROM `##block` WHERE block_order < ? AND module_name = ?
+			 )
+			 AND module_name = ?
+			LIMIT 1
+		')->execute(array($block_order, $this->getName(), $this->getName()))->fetchOneRow();
+
 		if ($swap_block) {
-			KT_DB::prepare(
-				"UPDATE `##block` SET block_order=? WHERE block_id=?"
-			)->execute(array($swap_block->block_order, $block_id));
-			KT_DB::prepare(
-				"UPDATE `##block` SET block_order=? WHERE block_id=?"
-			)->execute(array($block_order, $swap_block->block_id));
+			KT_DB::prepare('
+				UPDATE `##block` 
+				SET block_order = ? 
+				WHERE block_id= ?
+			')->execute(array($swap_block->block_order, $block_id));
+			KT_DB::prepare('
+				UPDATE `##block` 
+				SET block_order = ? 
+				WHERE block_id=?
+			')->execute(array($block_order, $swap_block->block_id));
 		}
 	}
 
 	private function movedown() {
-		$block_id = safe_GET('block_id');
+		$block_id = KT_Filter::get('block_id');
 
 		$block_order = KT_DB::prepare(
 			"SELECT block_order FROM `##block` WHERE block_id=?"
@@ -302,243 +259,6 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 		}
 	}
 
-	private function show() {
-		global $controller;
-		$controller = new KT_Controller_Page();
-		$controller
-			->setPageTitle($this->getTitle())
-			->pageHeader()
-			->addInlineJavascript('
-				jQuery("#faq_accordion").accordion({heightStyle: "content", collapsible: true, active: false});
-				jQuery("#faq_accordion").css("visibility", "visible");
-				jQuery(".faq_subaccordion").accordion({heightStyle: "content", collapsible: true, active: false});
-				jQuery(".faq_subaccordion").css("visibility", "visible");
-
-				// Get hash from query string
-				var hash = window.location.hash;
-
-				if (hash) {
-				    // Get panel header element
-				    var requestedPanel = jQuery(hash);
-				    if (requestedPanel.length) {
-				        // Hide all panels
-				        jQuery(".faq_body").hide();
-				        // Show requested panel
-				        requestedPanel.next(".faq_body").show();
-				    }
-				}
-			');
-			/* Use a structure like <div id="faq_subaccordion"><h2>Your sub-level title<h2><p>Your sub-level content</p></div> inside any faq page to create sub-levels within that faq */
-
-		if (KT_Filter::post('query_faq')) {
-			$search = KT_Filter::post('query_faq');
-		} else {
-			$search = '%';
-		};
-
-		$faqs = KT_DB::prepare(
-			"SELECT block_id, bs1.setting_value AS header, bs2.setting_value AS body".
-			" FROM `##block` b".
-			" JOIN `##block_setting` bs1 USING (block_id)".
-			" JOIN `##block_setting` bs2 USING (block_id)".
-			" WHERE module_name=?".
-			" AND bs1.setting_name='header'".
-			" AND bs2.setting_name='faqbody'".
-			" AND IFNULL(gedcom_id, ?)=?".
-			" AND (bs2.setting_value LIKE '%" . $search . "%' OR bs1.setting_value LIKE '%" . $search . "%')".
-			" ORDER BY block_order"
-		)->execute(array($this->getName(), KT_GED_ID, KT_GED_ID))->fetchAll();
-
-		$faq_description = get_module_setting($this->getName(), 'FAQ_DESCRIPTION');
-		?>
-
-		<div id="faq-page">
-			<h2> <?php echo KT_I18N::translate('Frequently asked questions'); ?></h2>
-			<div id="faq_description">
-				<?php echo $faq_description; ?>
-			</div>
-			<div id="faq_search">
-				<form method="post" action="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=show" >
-					<input
-						type="search"
-						name="query_faq"
-						value="<?php echo ($search == '%' ? '' : $search); ?>"
-						placeholder="<?php echo KT_I18N::translate('Search faq'); ?>"
-						dir="auto"
-					>
-				</form>
-			</div>
-			<div id="faq_accordion" style="visibility:hidden">
-				<?php foreach ($faqs as $id => $faq) {
-					$header		= get_block_setting($faq->block_id, 'header');
-					$faqbody	= get_block_setting($faq->block_id, 'faqbody');
-					$languages	= get_block_setting($faq->block_id, 'languages');
-					if (!$languages || in_array(KT_LOCALE, explode(',', $languages))) { ?>
-						<h2 id="faq<?php echo $faq->block_id; ?>"><?php echo $this->faq_search_hits($faq->header, $search); ?></h2>
-						<div class="faq_body"> <?php echo $this->faq_search_hits(substr($faqbody, 0, 1)=='<' ? $faqbody : nl2br($faqbody), $search); ?> </div>
-					<?php } ?>
-				<?php } ?>
-			</div>
-		</div>
-		<?php
-	}
-
-	private function config() {
-		require_once KT_ROOT . 'includes/functions/functions_edit.php';
-		global $iconStyle;
-
-		$controller = new KT_Controller_Page();
-		$controller
-			->restrictAccess(KT_USER_IS_ADMIN)
-			->setPageTitle($this->getTitle())
-			->pageHeader()
-			->addInlineJavascript('jQuery("#faq_tabs").tabs();');
-
-		if (array_key_exists('ckeditor', KT_Module::getActiveModules())) {
-			ckeditor_KT_Module::enableEditor($controller);
-		}
-
-		$action = KT_Filter::post('action');
-
-		if ($action == 'update') {
-			set_module_setting($this->getName(), 'FAQ_TITLE',		KT_Filter::post('NEW_FAQ_TITLE'));
-			set_module_setting($this->getName(), 'FAQ_DESCRIPTION',	KT_Filter::post('NEW_FAQ_DESCRIPTION', KT_REGEX_UNSAFE)); // allow html
-			AddToLog($this->getName() . ' config updated', 'config');
-		}
-
-		$faqs = KT_DB::prepare(
-			"SELECT block_id, block_order, gedcom_id, bs1.setting_value AS header, bs2.setting_value AS faqbody".
-			" FROM `##block` b".
-			" JOIN `##block_setting` bs1 USING (block_id)".
-			" JOIN `##block_setting` bs2 USING (block_id)".
-			" WHERE module_name=?".
-			" AND bs1.setting_name='header'".
-			" AND bs2.setting_name='faqbody'".
-			" AND IFNULL(gedcom_id, ?)=?".
-			" ORDER BY block_order"
-		)->execute(array($this->getName(), KT_GED_ID, KT_GED_ID))->fetchAll();
-
-		$min_block_order = KT_DB::prepare(
-			"SELECT MIN(block_order) FROM `##block` WHERE module_name=?"
-		)->execute(array($this->getName()))->fetchOne();
-
-		$max_block_order = KT_DB::prepare(
-			"SELECT MAX(block_order) FROM `##block` WHERE module_name=?"
-		)->execute(array($this->getName()))->fetchOne();
-		?>
-
-		<div id="<?php echo $this->getName(); ?>">
-<!--		<a class="current faq_link" href="<?php echo KT_KIWITREES_URL; ?>/faqs/modules-faqs/pages/" target="_blank" rel="noopener noreferrer" title="'. KT_I18N::translate('View FAQ for this page.'). '">'. KT_I18N::translate('View FAQ for this page.'). '<i class="<?php echo $iconStyle; ?> fa-comments"></i></a> -->
-			<h2><?php echo $controller->getPageTitle(); ?></h2>
-			<div id="faq_tabs">
-				<ul>
-					<li><a href="#faq_summary"><span><?php echo KT_I18N::translate('Summary'); ?></span></a></li>
-					<li><a href="#faq_items"><span><?php echo KT_I18N::translate('Faq'); ?></span></a></li>
-				</ul>
-				<div id="faq_summary">
-					<form method="post" name="configform" action="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_config">
-						<input type="hidden" name="action" value="update">
-						<div class="label"><?php echo KT_I18N::translate('Main menu and page title'); ?></div>
-						<div class="value"><input type="text" name="NEW_FAQ_TITLE" value="<?php echo $this->getMenuTitle(); ?>"></div>
-						<div class="label"><?php echo KT_I18N::translate('Page description'); ?></div>
-						<div class="value2">
-							<textarea name="NEW_FAQ_DESCRIPTION" class="html-edit" rows="5" cols="120"><?php echo $this->getSummaryDescription(); ?></textarea>
-						</div>
-						<div class="save">
-							<button class="btn btn-primary save" type="submit">
-								<i class="<?php echo $iconStyle; ?> fa-save"></i>
-								<?php echo KT_I18N::translate('Save'); ?>
-							</button>
-						</div>
-					</form>
-				</div>
-				<div id="faq_items">
-					<form method="get" action="<?php echo KT_SCRIPT_NAME; ?>">
-						<label><?php echo KT_I18N::translate('Family tree'); ?></label>
-						<input type="hidden" name="mod" value="<?php echo $this->getName(); ?>">
-						<input type="hidden" name="mod_action" value="admin_config">
-						<?php echo select_ged_control('ged', KT_Tree::getIdList(), null, KT_GEDCOM); ?>
-						<button class="btn btn-primary show" type="submit" tabindex="5">
-							<i class="<?php echo $iconStyle; ?> fa-eye"></i>
-							<?php echo KT_I18N::translate('show'); ?>
-						</button>
-					</form>
-					<div>
-						<button class="btn btn-primary add" onclick="location.href='module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit'">
-							<i class="<?php echo $iconStyle; ?> fa-plus"></i>
-							<?php echo KT_I18N::translate('Add faq item'); ?>
-						</button>
-					</div>
-					<table id="faq_edit">
-						<?php
-						if ($faqs) {
-							$trees = KT_Tree::getAll();
-							foreach ($faqs as $faq) { ?>
-								<tr class="faq_edit_pos">
-									<td>
-										<?php
-										echo '<p>' . KT_I18N::translate('Faq position') . '<span>' . ($faq->block_order) . '</span></p>';
-										echo '<p>' . KT_I18N::translate('Family tree');
-											if ($faq->gedcom_id == null) {
-												echo '<span>' . KT_I18N::translate('All') . '</span>';
-											} else {
-												echo '<span>' . $trees[$faq->gedcom_id]->tree_title_html . '</span>';
-											}
-										echo '</p>';
-										?>
-									</td>
-									<td>
-										<?php
-										if ($faq->block_order == $min_block_order) {
-											echo '&nbsp;';
-										} else {
-											echo '<a href="module.php?mod=' . $this->getName() . '&amp;mod_action=admin_moveup&amp;block_id=' . $faq->block_id . '" class="icon-uarrow"></a>';
-										}
-										?>
-									</td>
-									<td>
-										<?php
-										if ($faq->block_order == $max_block_order) {
-											echo '&nbsp;';
-										} else {
-											echo '<a href="module.php?mod=' . $this->getName() . '&amp;mod_action=admin_movedown&amp;block_id=' . $faq->block_id . '" class="icon-darrow"></a>';
-										}
-										?>
-									</td>
-									<td>
-										<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit&amp;block_id=<?php echo $faq->block_id; ?>">
-											<?php echo KT_I18N::translate('Edit'); ?>
-										</a>
-									</td>
-									<td>
-										<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_delete&amp;block_id=<?php echo $faq->block_id; ?>" onclick="return confirm('<?php echo KT_I18N::translate('Are you sure you want to delete this faq entry?'); ?>');">
-											<?php echo KT_I18N::translate('Delete'); ?>
-										</a>
-									</td>
-								</tr>
-								<tr>
-									<td colspan="5">
-										<div class="faq_edit_item">
-											<div class="faq_edit_title"><?php echo $faq->header; ?></div>
-											<div class="faq_edit_content"><?php echo substr($faq->faqbody, 0, 1)=='<' ? $faq->faqbody : nl2br($faq->faqbody); ?></div>
-										</div>
-									</td>
-								</tr>
-							<?php }
-						} else { ?>
-							<tr>
-								<td class="error center" colspan="5">
-									<?php echo KT_I18N::translate('The faq list is empty.'); ?>
-								</td>
-							</tr>
-						<?php } ?>
-					</table>
-				</div>
-			</div>
-		</div>
-		<?php
-	}
-
 	// Implement KT_Module_Menu
 	public function getMenu() {
 		global $SEARCH_SPIDER;
@@ -556,7 +276,7 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 		}
 
 		$menu = new KT_Menu($this->getMenuTitle(), 'module.php?mod=faq&amp;mod_action=show', 'menu-help');
-		$menu->addClass('', '', 'fa-comments');
+		$menu->addClass('', '', $this->getMenuIcon());
 		if (KT_USER_IS_ADMIN) {
 			$submenu = new KT_Menu(KT_I18N::translate('Edit faq items'), $this->getConfigLink(), 'menu-faq-edit');
 			$menu->addSubmenu($submenu);
