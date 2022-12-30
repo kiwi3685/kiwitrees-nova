@@ -41,5 +41,12 @@ try {
 	// Perhaps we have already deleted this data?
 }
 
+// Update some database field names
+try {
+    self::exec("UPDATE `ktn_module_setting` SET `setting_name` = REPLACE(`setting_name`, 'FAQ_', 'HEADER_'");
+} catch (PDOException $ex) {
+    // Perhaps we have already deleted this data?
+}
+
 // Update the version to indicate success
 KT_Site::preference($schema_name, $next_version);
