@@ -50,7 +50,7 @@ if ($save) {
 		$block_order
 	));
 
-//	$block_id = KT_DB::getInstance()->lastInsertId();
+	$block_id = KT_DB::getInstance()->lastInsertId();
 
 	set_block_setting($block_id, 'header', $header);
 	set_block_setting($block_id, 'faqbody', $faqbody); 
@@ -86,9 +86,10 @@ if ($save) {
 }
 
 $controller->setPageTitle(KT_I18N::translate('Add faq item'));
-$block_id = '';
-$header   = '';
-$faqbody  = '';
+$block_id    = '';
+$header      = '';
+$faqbody     = '';
+$item_access = 1;
 
 $block_order = KT_DB::prepare(
 	"SELECT IFNULL(MAX(block_order) + 1, 0) FROM `##block` WHERE module_name = ?"
@@ -114,7 +115,7 @@ echo pageStart('faq_details', $controller->getPageTitle()); ?>
 				<textarea name="faqbody" class="html-edit"><?php echo htmlspecialchars($faqbody); ?></textarea>
 			</div>
 			<label class="cell medium-2">
-				<?php echo KT_I18N::translate('Faq menu order'); ?>
+				<?php echo KT_I18N::translate('Faq order'); ?>
 			</label>
 			<div class="cell medium-1">
 				<input type="number" name="block_order" value="<?php echo $block_order; ?>">
@@ -125,6 +126,13 @@ echo pageStart('faq_details', $controller->getPageTitle()); ?>
 			</label>
 			<div class="cell medium-4">
 				<?php echo select_edit_control('gedID', KT_Tree::getIdList(), KT_I18N::translate('All'), $gedID); ?>
+			</div>
+			<div class="cell medium-6"></div>
+			<label class="cell medium-2">
+				<?php echo KT_I18N::translate('Access level'); ?>
+			</label>
+			<div class="cell medium-4">
+				<?php echo edit_field_access_level('faq_access', $items_access); ?>
 			</div>
 			<div class="cell medium-6"></div>
 			<label class="cell medium-2">
