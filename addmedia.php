@@ -549,7 +549,7 @@ switch ($action) {
 					</label>
 					<div class="input">
 						<?php if (KT_USER_GEDCOM_ADMIN) { ?>
-						    <input name="filename" type="text" value="<?php echo htmlspecialchars($fileName); ?>" >
+						    <input name="filename" type="text" value="<?php echo htmlspecialchars((string) $fileName); ?>" >
 						    <?php if ($isExternal) { ?>
 								<div class="help_text">
 									<span class="help_content">
@@ -559,7 +559,7 @@ switch ($action) {
 						    <?php } ?>
 						<?php } else { ?>
 						    <?php echo $fileName; ?>
-						    <input name="filename" type="hidden" value="<?php echo htmlspecialchars($fileName); ?>">
+						    <input name="filename" type="hidden" value="<?php echo htmlspecialchars((string) $fileName); ?>">
 						<?php } ?>
 					</div>
 					<div class="help_text">
