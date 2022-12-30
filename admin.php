@@ -56,7 +56,6 @@ $stats = new KT_Stats(KT_GEDCOM);
 	$gedadmin	= array(); // Array for managers
 
 // Server warnings
-// Note that security support for 5.6 ends after security support for 7.0
 $server_warnings = array();
 if (
     // security
@@ -253,10 +252,10 @@ echo pageStart('admin', KT_I18N::translate('Dashboard')); ?>
 									</div>
 								<?php }
 								// PHP version check
-								if (version_compare(phpversion(), '8.1', '<')) {
-									if (version_compare(phpversion(), '7.3', '<')) { ?>
+								if (version_compare(phpversion(), '8.2', '<')) {
+									if (version_compare(phpversion(), '7.1', '<')) { ?>
 										<div class="callout large-4 alert">
-											<?php echo  KT_I18N::translate('Kiwitrees is no longer compatible with versions of PHP older than 7.0'); ?>
+											<?php echo  KT_I18N::translate('Kiwitrees is no longer compatible with versions of PHP older than 7.1'); ?>
 										</div>
 									<?php } else { ?>
 										<div class="callout large-4 success">
