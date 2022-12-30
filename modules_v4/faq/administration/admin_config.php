@@ -45,9 +45,9 @@ $action = KT_Filter::post('action');
 $gedID  = KT_Filter::post('gedID') ? KT_Filter::post('gedID') : KT_GED_ID;
 
 if ($action == 'update') {
-	set_module_setting($this->getName(), 'FAQ_TITLE', KT_Filter::post('NEW_FAQ_TITLE'));
-	set_module_setting($this->getName(), 'FAQ_ICON',  str_replace($iconStyle . ' ', '', KT_Filter::post('NEW_FAQ_ICON')));
-	set_module_setting($this->getName(), 'FAQ_DESCRIPTION', KT_Filter::post('NEW_FAQ_DESCRIPTION', KT_REGEX_UNSAFE)); // allow html
+	set_module_setting($this->getName(), 'HEADER_TITLE', KT_Filter::post('NEW_HEADER_TITLE'));
+	set_module_setting($this->getName(), 'HEADER_ICON',  str_replace($iconStyle . ' ', '', KT_Filter::post('NEW_HEADER_ICON')));
+	set_module_setting($this->getName(), 'HEADER_DESCRIPTION', KT_Filter::post('NEW_HEADER_DESCRIPTION', KT_REGEX_UNSAFE)); // allow html
 	AddToLog($this->getName() . ' config updated', 'config');
 }
 
@@ -85,7 +85,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/faqs/mod
 						<?php echo KT_I18N::translate('Menu and page title'); ?>
 					</label>
 					<div class="cell medium-4">
-						<input type="text" name="NEW_FAQ_TITLE" value="<?php echo $this->getMenuTitle(); ?>">
+						<input type="text" name="NEW_HEADER_TITLE" value="<?php echo $this->getMenuTitle(); ?>">
 					</div>
 					<div class="cell callout info-help medium-6">
 						<?php echo KT_I18N::translate('Keep this short, and preferably a single word, to avoid overcrowding the menu bar.'); ?>
@@ -94,7 +94,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/faqs/mod
 						<?php echo KT_I18N::translate('Menu icon'); ?>
 					</label>
 					<div class="cell medium-4 input-group iconpicker-container">
-						<input id="menuIcon" name="NEW_FAQ_ICON" data-placement="bottomRight" class="form-control icp icp-auto iconpicker-input iconpicker-element" value="<?php echo $this->getMenuIcon(); ?>" type="text">
+						<input id="menuIcon" name="NEW_HEADER_ICON" data-placement="bottomRight" class="form-control icp icp-auto iconpicker-input iconpicker-element" value="<?php echo $this->getMenuIcon(); ?>" type="text">
 						<span class="input-group-label"><i class="<?php echo $iconStyle . ' ' . $this->getMenuIcon(); ?>"></i></span>
 					</div>
 					<div class="cell callout info-help medium-6">
@@ -104,7 +104,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/faqs/mod
 						<?php echo KT_I18N::translate('Page description'); ?>
 					</label>
 					<div class="cell medium-9">
-						<textarea name="NEW_FAQ_DESCRIPTION" class="html-edit" placeholder="<?php echo KT_I18N::translate('This text will be displayed at the top of the page.'); ?>"><?php echo $this->getSummaryDescription(); ?></textarea>
+						<textarea name="NEW_HEADER_DESCRIPTION" class="html-edit" placeholder="<?php echo KT_I18N::translate('This text will be displayed at the top of the page.'); ?>"><?php echo $this->getSummaryDescription(); ?></textarea>
 					</div>
 				</div>
 
