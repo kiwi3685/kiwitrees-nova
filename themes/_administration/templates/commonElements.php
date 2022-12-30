@@ -47,11 +47,11 @@ function pageStart($title, $pageTitle = '', $includeTitle = 'y', $subTitle = '',
 
 	return '
 		<div id="' . strtolower($title) . '-page" class="grid-x grid-margin-x">
-			<div class="cell titles medium-10">' .
+			<div class="cell titles medium-9">' .
 				$pageTitle .
 				$subTitle .
 			'</div>
-			<div class="cell medium-2">' .
+			<div class="cell medium-3 text-right">' .
 				$faq . 
 			'</div>';
 
