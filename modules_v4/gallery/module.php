@@ -33,18 +33,6 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 		return KT_I18N::translate('Gallery');
 	}
 
-	public function getMenuTitle() {
-		$default_title = KT_I18N::translate('Gallery');
-		$HEADER_TITLE = KT_I18N::translate(get_module_setting($this->getName(), 'HEADER_TITLE', $default_title));
-		return $HEADER_TITLE;
-	}
-
-	public function getSummaryDescription() {
-		$default_description = KT_I18N::translate('These are galleries');
-		$HEADER_DESCRIPTION = get_module_setting($this->getName(), 'HEADER_DESCRIPTION', $default_description);
-		return $HEADER_DESCRIPTION;
-	}
-
 	// Extend class KT_Module
 	public function getDescription() {
 		return KT_I18N::translate('Display image galleries.');
@@ -60,39 +48,19 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 		return KT_PRIV_NONE;
 	}
 
+
 	// Implement KT_Module_Menu
 	public function MenuType() {
 		return 'main';
 	}
 
-	// Implement KT_Module_Config
-	public function getConfigLink() {
-		return 'module.php?mod='.$this->getName().'&amp;mod_action=admin_config';
-	}
-
-	// Implement class KT_Module_Block
-	public function getBlock($block_id, $template=true, $cfg=null) {
-	}
-
-	// Implement class KT_Module_Block
-	public function loadAjax() {
-		return false;
-	}
-
-	// Implement class KT_Module_Block
-	public function configureBlock($block_id) {
-	}
-
-	// Implement class KT_Module_Block
-	public function isGedcomBlock() {
-		return false;
-	}
-
 	// Extend KT_Module
 	public function modAction($mod_action) {
 		switch($mod_action) {
-		case 'show':
-			$this->show();
+		case 'admin_add':
+		case 'admin_config':
+		case 'admin_edit':
+			require KT_ROOT . KT_MODULES_DIR . $this->getName() . '/administration/' . $mod_action . '.php';
 			break;
 		case 'admin_config':
 			$this->config();
@@ -112,41 +80,112 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 			$this->moveup();
 			$this->config();
 			break;
+		case 'show':
+			$this->show();
+			break;
 		default:
 			header('HTTP/1.0 404 Not Found');
 		}
 	}
 
-	// Implement KT_Module_Menu
-	public function getMenu() {
-		global $controller, $SEARCH_SPIDER;
-
-		$block_id=safe_GET('block_id');
-		$default_block=KT_DB::prepare(
-			"SELECT block_id FROM `##block` WHERE block_order=? AND module_name=?"
-		)->execute(array(0, $this->getName()))->fetchOne();
-
-		if ($SEARCH_SPIDER) {
-			return null;
-		}
-
-		//-- main GALLERIES menu item
-		$menu = new KT_Menu($this->getMenuTitle(), 'module.php?mod='.$this->getName().'&amp;mod_action=show&amp;gallery_id='.$default_block, 'menu-my_gallery', 'down');
-		$menu->addClass('menuitem', 'menuitem_hover', 'fa-images');
-		foreach ($this->getMenuAlbumList() as $item) {
-			$languages=get_block_setting($item->block_id, 'languages');
-			if ((!$languages || in_array(KT_LOCALE, explode(',', $languages))) && $item->gallery_access>=KT_USER_ACCESS_LEVEL) {
-				$path = 'module.php?mod='.$this->getName().'&amp;mod_action=show&amp;gallery_id='.$item->block_id;
-				$submenu = new KT_Menu(KT_I18N::translate($item->gallery_title), $path, 'menu-my_gallery-'.$item->block_id);
-				$menu->addSubmenu($submenu);
-			}
-		}
-		if (KT_USER_IS_ADMIN) {
-			$submenu = new KT_Menu(KT_I18N::translate('Edit gallerys'), $this->getConfigLink(), 'menu-my_gallery-edit');
-			$menu->addSubmenu($submenu);
-		}
-		return $menu;
+	// Implement KT_Module_Config
+	public function getConfigLink() {
+		return 'module.php?mod='.$this->getName().'&amp;mod_action=admin_config';
 	}
+
+	// Implement class KT_Module_Block
+	public function loadAjax() {
+		return false;
+	}
+
+	// Implement class KT_Module_Block
+	public function getBlock($block_id, $template=true, $cfg=null) {
+	}
+
+	// Implement class KT_Module_Block
+	public function isGedcomBlock() {
+		return false;
+	}
+
+	// Implement class KT_Module_Block
+	public function configureBlock($block_id) {
+	}
+
+	public function getMenuTitle() {
+		$default_title = KT_I18N::translate('Gallery');
+		$HEADER_TITLE = KT_I18N::translate(get_module_setting($this->getName(), 'HEADER_TITLE', $default_title));
+		return $HEADER_TITLE;
+	}
+
+	public function getMenuIcon() {
+		$default_icon = 'fa-images';
+		$HEADER_ICON = KT_I18N::translate(get_module_setting($this->getName(), 'HEADER_ICON', $default_icon));
+		return $HEADER_ICON;
+	}
+
+	public function getSummaryDescription() {
+		$default_description = KT_I18N::translate('These are galleries');
+		$HEADER_DESCRIPTION = get_module_setting($this->getName(), 'HEADER_DESCRIPTION', $default_description);
+		return $HEADER_DESCRIPTION;
+	}
+
+	// Start to show the gallery display with the parts common to all galleries
+	private function show() {
+
+		global $MEDIA_DIRECTORY, $controller;
+
+		$item_id	= KT_Filter::get('gallery_id');
+		$version	= '1.6.1';
+		$controller = new KT_Controller_Page();
+		$controller
+			->setPageTitle($this->getMenuTitle())
+			->pageHeader()
+			->addExternalJavaScript(KT_STATIC_URL . KT_MODULES_DIR . $this->getName() . '/galleria/galleria.min.js')
+			->addExternalJavaScript(KT_STATIC_URL . KT_MODULES_DIR . $this->getName() . '/galleria/plugins/flickr/galleria.flickr.min.js')
+			->addInlineJavaScript($this->getJavaScript($item_id));
+		?>
+
+		<div id="gallery-page">
+			<div id="gallery-container">
+				<h2><?php echo $controller->getPageTitle(); ?></h2>
+				<p><?php echo $this->getSummaryDescription(); ?></p>
+				<div class="clearfloat"></div>
+				<div id="gallery_tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+					<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+						<?php
+						$item_list = $this->getAlbumList();
+						foreach ($item_list as $item) {
+							$languages=get_block_setting($item->block_id, 'languages');
+							if ((!$languages || in_array(KT_LOCALE, explode(',', $languages))) && $item->gallery_access >= KT_USER_ACCESS_LEVEL) { ?>
+								<li class="ui-state-default ui-corner-top<?php echo ($item_id == $item->block_id ? ' ui-tabs-selected ui-state-active' : ''); ?>">
+									<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=show&amp;gallery_id=<?php echo $item->block_id; ?>" class="ui-tabs-anchor">
+										<span title="<?php echo KT_I18N::translate($item->gallery_title); ?>"><?php echo KT_I18N::translate($item->gallery_title); ?></span>
+									</a>
+								</li>
+							<?php }
+						} ?>
+					</ul>
+					<div id="outer_gallery_container">
+						<?php
+						foreach ($item_list as $item) {
+							$languages = get_block_setting($item->block_id, 'languages');
+							if ((!$languages || in_array(KT_LOCALE, explode(',', $languages))) && $item_id==$item->block_id && $item->gallery_access>=KT_USER_ACCESS_LEVEL) {
+								$item_gallery = '
+									<h4>' . KT_I18N::translate($item->gallery_description) . '</h4>' .
+									$this->mediaDisplay($item->gallery_folder_w, $item_id, $version);
+							}
+						}
+						if (!isset($item_gallery)) {
+							echo '<h4>' . KT_I18N::translate('Image collections related to our family') . '</h4>' .
+								$this->mediaDisplay('//', $item_id, $version);
+						} else {
+							echo $item_gallery;
+						} ?>
+					</div><!-- close #outer_gallery_container -->
+				</div><!-- close #gallery_tabs -->
+			</div><!-- close #gallery-container -->
+		</div><!-- close #gallery-page -->
+	<?php }
 
 	// Action from the configuration page
 	private function edit() {
@@ -247,7 +286,7 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 						<input type="hidden" name="save" value="1">
 						<input type="hidden" name="block_id" value="<?php echo $block_id; ?>">
 						<?php echo KT_Filter::getCsrf(); ?>
-						<table id="faq_module">
+						<table id="gallery_module">
 							<tr><th><?php echo KT_I18N::translate('Title'); ?></th></tr>
 							<tr><td><input type="text" name="gallery_title" size="90" tabindex="1" value="<?php echo htmlspecialchars($item_title); ?>"></td></tr>
 							<tr><th><?php echo KT_I18N::translate('Description'); ?></th></tr>
@@ -410,175 +449,35 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 		}
 	}
 
-	private function config() {
-		require_once KT_ROOT.'includes/functions/functions_edit.php';
-		$controller = new KT_Controller_Page;
-		$controller
-			->restrictAccess(KT_USER_IS_ADMIN)
-			->setPageTitle($this->getTitle())
-			->pageHeader()
-			->addInlineJavascript('jQuery("#gallery_tabs").tabs();');
+	// Implement KT_Module_Menu
+	public function getMenu() {
+		global $controller, $SEARCH_SPIDER;
 
-        $controller->addExternalJavascript(KT_CKEDITOR_CLASSIC);
-        $controller->addInlineJavascript('ckeditorStandard();');
+		$block_id=safe_GET('block_id');
+		$default_block=KT_DB::prepare(
+			"SELECT block_id FROM `##block` WHERE block_order=? AND module_name=?"
+		)->execute(array(0, $this->getName()))->fetchOne();
 
-		$action = KT_Filter::post('action');
-
-		if ($action == 'update') {
-			set_module_setting($this->getName(), 'HEADER_TITLE',		safe_POST('NEW_HEADER_TITLE'));
-			set_module_setting($this->getName(), 'HEADER_DESCRIPTION',	safe_POST('NEW_HEADER_DESCRIPTION', KT_REGEX_UNSAFE)); // allow html
-			set_module_setting($this->getName(), 'THEME_DIR',			safe_POST('NEW_THEME_DIR'));
-			AddToLog($this->getName() . 'config updated', 'config');
+		if ($SEARCH_SPIDER) {
+			return null;
 		}
 
-		$current_themedir	= get_module_setting($this->getName(), 'THEME_DIR', 'classic');
-		$themenames			= $this->galleria_theme_names();
-
-		$items = KT_DB::prepare(
-			"SELECT block_id, block_order, gedcom_id, bs1.setting_value AS gallery_title, bs2.setting_value AS gallery_description
-			FROM `##block` b
-			JOIN `##block_setting` bs1 USING (block_id)
-			JOIN `##block_setting` bs2 USING (block_id)
-			WHERE module_name=?
-			AND bs1.setting_name='gallery_title'
-			AND bs2.setting_name='gallery_description'
-			AND IFNULL(gedcom_id, ?)=?
-			ORDER BY block_order"
-		)->execute(array($this->getName(), KT_GED_ID, KT_GED_ID))->fetchAll();
-
-		$min_block_order=KT_DB::prepare(
-			"SELECT MIN(block_order) FROM `##block` WHERE module_name=?"
-		)->execute(array($this->getName()))->fetchOne();
-
-		$max_block_order=KT_DB::prepare(
-			"SELECT MAX(block_order) FROM `##block` WHERE module_name=?"
-		)->execute(array($this->getName()))->fetchOne();
-		?>
-		<div id="<?php echo $this->getName();?>">
-			<a class="current faq_link" href="<?php echo KT_KIWITREES_URL; ?>/faqs/modules/gallery/" target="_blank" rel="noopener noreferrer" title="<?php echo KT_I18N::translate('View FAQ for this page.'); ?>"><?php echo KT_I18N::translate('View FAQ for this page.'); ?><i class="fa fa-comments-o"></i></a>
-			<h2><?php echo $controller->getPageTitle(); ?></h2>
-			<div id="gallery_tabs">
-				<ul>
-					<li><a href="#gallery_summary"><span><?php echo KT_I18N::translate('Summary'); ?></span></a></li>
-					<li><a href="#gallery_pages"><span><?php echo KT_I18N::translate('Galleries'); ?></span></a></li>
-				</ul>
-				<div id="gallery_summary">
-					<form method="post" name="configform" action="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_config">
-						<input type="hidden" name="action" value="update">
-						<div class="label"><?php echo KT_I18N::translate('Main menu and summary page title'); ?></div>
-						<div class="value"><input type="text" name="NEW_HEADER_TITLE" value="<?php echo $this->getMenuTitle(); ?>"></div>
-						<div class="label"><?php echo KT_I18N::translate('Summary page description'); ?></div>
-						<div class="value2">
-							<textarea name="NEW_HEADER_DESCRIPTION" class="html-edit" rows="5" cols="120"><?php echo $this->getSummaryDescription(); ?></textarea>
-						</div>
-						<div id="gallery_theme">
-							<div class="label"><?php echo KT_I18N::translate('Select gallery theme'); ?></div>
-							<?php
-							foreach ($themenames as $themedir) {
-								echo
-									'<div ', ($current_themedir == $themedir ? 'class = "current_theme"' : 'class = "theme_box"'), '>
-											<img src="', KT_MODULES_DIR , $this->getName(), '/images/' , $themedir, '.png" alt="', $themedir, ' title="' ,$themedir, '">
-										<p>
-											<input type="radio" id="radio_', $themedir, '" name="NEW_THEME_DIR" value="', $themedir, '" ',($current_themedir == $themedir ? ' checked="checked"' : ''), '/>
-											<label for="radio_', $themedir, '">', $themedir, '</label>
-										</p>
-									</div>
-								';
-							}
-							?>
-						</div>
-						<div style="clear:both;"></div>
-						<button class="btn btn-primary save" type="submit">
-							<i class="fa fa-floppy-o"></i>
-							<?php echo KT_I18N::translate('Save'); ?>
-						</button>
-					</form>
-				</div>
-				<div id="gallery_pages">
-					<form method="get" action="<?php echo KT_SCRIPT_NAME;?>">
-						<label><?php echo KT_I18N::translate('Family tree');?></label>
-						<input type="hidden" name="mod" value="<?php echo $this->getName();?>">
-						<input type="hidden" name="mod_action" value="admin_config">
-						<?php echo select_ged_control('ged', KT_Tree::getIdList(), null, KT_GEDCOM);?>
-						<button class="btn btn-primary show" type="submit">
-							<i class="fa fa-eye"></i>
-							<?php echo KT_I18N::translate('show'); ?>
-						</button>
-					</form>
-					<div>
-						<button class="btn btn-primary add" onclick="location.href='module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit'">
-							<i class="fa fa-plus"></i>
-							<?php echo KT_I18N::translate('Add gallery'); ?>
-						</button>
-					</div>
-					<table id="gallery_module">
-						<?php
-						if ($items) {
-							$trees = KT_Tree::getAll();
-							foreach ($items as $gallery) { ?>
-								<tr class="gallery_edit_pos">
-									<td>
-										<?php
-										echo '<p>' . KT_I18N::translate('Gallery position') . '<span>' . ($gallery->block_order) . '</span></p>';
-										echo '<p>' . KT_I18N::translate('Family tree');
-											if ($gallery->gedcom_id == null) {
-												echo '<span>' . KT_I18N::translate('All') . '</span>';
-									} else {
-												echo '<span>' . $trees[$gallery->gedcom_id]->tree_title_html . '</span>';
-											}
-										echo '</p>';
-										?>
-									</td>
-									<td>
-										<?php
-										if ($gallery->block_order == $min_block_order) {
-											echo '&nbsp;';
-										} else {
-											echo '<a href="module.php?mod=' . $this->getName() . '&amp;mod_action=admin_moveup&amp;block_id=' . $gallery->block_id . '" class="icon-uarrow"></a>';
-										}
-										?>
-									</td>
-									<td>
-										<?php
-										if ($gallery->block_order == $max_block_order) {
-											echo '&nbsp;';
-										} else {
-											echo '<a href="module.php?mod=' . $this->getName() . '&amp;mod_action=admin_movedown&amp;block_id=' . $gallery->block_id . '" class="icon-darrow"></a>';
-										}
-										?>
-									</td>
-									<td>
-										<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit&amp;block_id=<?php echo $gallery->block_id; ?>">
-											<?php echo KT_I18N::translate('Edit');?>
-										</a>
-									</td>
-									<td>
-										<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_delete&amp;block_id=<?php echo $gallery->block_id; ?>" onclick="return confirm('<?php echo KT_I18N::translate('Are you sure you want to delete this menu item?'); ?>');">
-											<?php echo KT_I18N::translate('Delete');?>
-										</a>
-									</td>
-								</tr>
-								<tr>
-									<td colspan="5">
-										<div class="faq_edit_item">
-											<div class="faq_edit_title"><?php echo KT_I18N::translate($gallery->gallery_title);?></div>
-											<div><?php echo substr($gallery->gallery_description, 0, 1)=='<' ? $gallery->gallery_description : nl2br($gallery->gallery_description);?></div>
-										</div>
-									</td>
-								</tr>
-								<?php }
-							} else { ?>
-								<tr>
-									<td class="error center" colspan="5">
-										<?php echo KT_I18N::translate('No pages have been created');?>
-									</td>
-								</tr>
-							<?php } ?>
-					</table>
-				</div>
-			</div>
-		</div>
-		<?php
+		//-- main GALLERIES menu item
+		$menu = new KT_Menu($this->getMenuTitle(), 'module.php?mod='.$this->getName().'&amp;mod_action=show&amp;gallery_id='.$default_block, 'menu-my_gallery', 'down');
+		$menu->addClass('menuitem', 'menuitem_hover', 'fa-images');
+		foreach ($this->getMenuAlbumList() as $item) {
+			$languages=get_block_setting($item->block_id, 'languages');
+			if ((!$languages || in_array(KT_LOCALE, explode(',', $languages))) && $item->gallery_access>=KT_USER_ACCESS_LEVEL) {
+				$path = 'module.php?mod='.$this->getName().'&amp;mod_action=show&amp;gallery_id='.$item->block_id;
+				$submenu = new KT_Menu(KT_I18N::translate($item->gallery_title), $path, 'menu-my_gallery-'.$item->block_id);
+				$menu->addSubmenu($submenu);
+			}
+		}
+		if (KT_USER_IS_ADMIN) {
+			$submenu = new KT_Menu(KT_I18N::translate('Edit gallerys'), $this->getConfigLink(), 'menu-my_gallery-edit');
+			$menu->addSubmenu($submenu);
+		}
+		return $menu;
 	}
 
 	private function getJavaScript($item_id) {
@@ -685,62 +584,6 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 		}
 		return false;
 	}
-
-	// Start to show the gallery display with the parts common to all galleries
-	private function show() {
-		global $MEDIA_DIRECTORY, $controller;
-		$item_id	= KT_Filter::get('gallery_id');
-		$version	= '1.6.1';
-		$controller = new KT_Controller_Page();
-		$controller
-			->setPageTitle($this->getMenuTitle())
-			->pageHeader()
-			->addExternalJavaScript(KT_STATIC_URL . KT_MODULES_DIR . $this->getName() . '/galleria/galleria.min.js')
-			->addExternalJavaScript(KT_STATIC_URL . KT_MODULES_DIR . $this->getName() . '/galleria/plugins/flickr/galleria.flickr.min.js')
-			->addInlineJavaScript($this->getJavaScript($item_id));
-		?>
-
-		<div id="gallery-page">
-			<div id="gallery-container">
-				<h2><?php echo $controller->getPageTitle(); ?></h2>
-				<p><?php echo $this->getSummaryDescription(); ?></p>
-				<div class="clearfloat"></div>
-				<div id="gallery_tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
-					<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
-						<?php
-						$item_list = $this->getAlbumList();
-						foreach ($item_list as $item) {
-							$languages=get_block_setting($item->block_id, 'languages');
-							if ((!$languages || in_array(KT_LOCALE, explode(',', $languages))) && $item->gallery_access >= KT_USER_ACCESS_LEVEL) { ?>
-								<li class="ui-state-default ui-corner-top<?php echo ($item_id == $item->block_id ? ' ui-tabs-selected ui-state-active' : ''); ?>">
-									<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=show&amp;gallery_id=<?php echo $item->block_id; ?>" class="ui-tabs-anchor">
-										<span title="<?php echo KT_I18N::translate($item->gallery_title); ?>"><?php echo KT_I18N::translate($item->gallery_title); ?></span>
-									</a>
-								</li>
-							<?php }
-						} ?>
-					</ul>
-					<div id="outer_gallery_container">
-						<?php
-						foreach ($item_list as $item) {
-							$languages = get_block_setting($item->block_id, 'languages');
-							if ((!$languages || in_array(KT_LOCALE, explode(',', $languages))) && $item_id==$item->block_id && $item->gallery_access>=KT_USER_ACCESS_LEVEL) {
-								$item_gallery = '
-									<h4>' . KT_I18N::translate($item->gallery_description) . '</h4>' .
-									$this->mediaDisplay($item->gallery_folder_w, $item_id, $version);
-							}
-						}
-						if (!isset($item_gallery)) {
-							echo '<h4>' . KT_I18N::translate('Image collections related to our family') . '</h4>' .
-								$this->mediaDisplay('//', $item_id, $version);
-						} else {
-							echo $item_gallery;
-						} ?>
-					</div><!-- close #outer_gallery_container -->
-				</div><!-- close #gallery_tabs -->
-			</div><!-- close #gallery-container -->
-		</div><!-- close #gallery-page -->
-	<?php }
 
 	// Print the gallery display
 	private function mediaDisplay($sub_folder, $item_id, $version) {

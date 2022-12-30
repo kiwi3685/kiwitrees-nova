@@ -9420,8 +9420,9 @@ div.relatedPages label {
 	padding-right: 2rem;
 }
 div.relatedPages .button.large-down-expanded {
-	width: 12%;
 	margin: 0 0.125rem 0.125rem 0;
+	width: 12%;
+	white-space: nowrap;
 }
 
 /* standard colors as classes */
