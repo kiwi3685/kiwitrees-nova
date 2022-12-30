@@ -106,13 +106,13 @@ echo pageStart('faq_details', $controller->getPageTitle()); ?>
 				<?php echo KT_I18N::translate('Question'); ?>				
 			</label>
 			<div class="cell medium-10">
-				<input type="text" name="header" value="<?php echo htmlspecialchars($header); ?>">
+				<input type="text" name="header" value="<?php echo htmlspecialchars((string) $header); ?>">
 			</div>
 			<label class="cell medium-2">
 				<?php echo KT_I18N::translate('Answer'); ?>
 			</label>
 			<div class="cell medium-10">
-				<textarea name="faqbody" class="html-edit"><?php echo htmlspecialchars($faqbody); ?></textarea>
+				<textarea name="faqbody" class="html-edit"><?php echo htmlspecialchars((string) $faqbody); ?></textarea>
 			</div>
 			<label class="cell medium-2">
 				<?php echo KT_I18N::translate('Faq order'); ?>

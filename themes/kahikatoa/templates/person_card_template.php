@@ -29,7 +29,7 @@ if (!defined('KT_KIWITREES')) {
 <div class="card person_card_template <?php echo (isset($isF) ? $isF : ''); ?>">
 	<div class="card-divider text-center">
 		<?php if (isset($person)) { ?>
-			<a class="h6" href="individual.php?pid=<?php echo $pid; ?>&amp;ged=<?php echo rawurlencode($GEDCOM); ?>">
+			<a class="h6" href="individual.php?pid=<?php echo $pid; ?>&amp;ged=<?php echo rawurlencode((string) $GEDCOM); ?>">
 				<span>
 					<?php echo $name . $addname; ?>
 				</span>
@@ -66,7 +66,7 @@ if (!defined('KT_KIWITREES')) {
 <div class="dropdown-pane compact_box_template card" id="<?php echo $dataToggle; ?>" data-dropdown data-closable data-close-on-click="true" >
 	<div class="card-divider text-center">
 		<?php if (isset($person)) { ?>
-			<a class="h6" href="individual.php?pid=<?php echo $pid; ?>&amp;ged=<?php echo rawurlencode($GEDCOM); ?>">
+			<a class="h6" href="individual.php?pid=<?php echo $pid; ?>&amp;ged=<?php echo rawurlencode((string) $GEDCOM); ?>">
 				<span>
 					<?php echo $name . $addname; ?>
 				</span>

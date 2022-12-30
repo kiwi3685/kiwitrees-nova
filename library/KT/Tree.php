@@ -54,12 +54,12 @@ class KT_Tree {
 		}
 		$this->tree_id        		= $tree_id;
 		$this->tree_name      		= $tree_name;
-		$this->tree_name_url  		= rawurlencode($tree_name);
-		$this->tree_name_html 		= htmlspecialchars($tree_name);
+		$this->tree_name_url  		= rawurlencode((string) $tree_name);
+		$this->tree_name_html 		= htmlspecialchars((string) $tree_name);
 		$this->tree_title     		= $tree_title;
-		$this->tree_title_html		= '<span>' . htmlspecialchars($tree_title) . '</span>';
+		$this->tree_title_html		= '<span>' . htmlspecialchars((string) $tree_title) . '</span>';
 		$this->tree_subtitle		= $tree_subtitle;
-		$this->tree_subtitle_html	= '<span>' . htmlspecialchars($tree_subtitle) . '</span>';
+		$this->tree_subtitle_html	= '<span>' . htmlspecialchars((string) $tree_subtitle) . '</span>';
 		$this->imported       		= $imported;
 	}
 

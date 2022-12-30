@@ -936,7 +936,7 @@ class KT_Gedcom_Tag {
 				}
 
 				// Still no translation? Highlight this as an error
-			return '<span class="error" title="'.KT_I18N::translate('Unrecognized GEDCOM Code').'">'.htmlspecialchars($tag).'</span>';
+			return '<span class="error" title="'.KT_I18N::translate('Unrecognized GEDCOM Code').'">'.htmlspecialchars((string) $tag).'</span>';
 		}
 	}
 

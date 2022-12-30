@@ -131,13 +131,13 @@ echo pageStart('gallery_details', $controller->getPageTitle()); ?>
 				<?php echo KT_I18N::translate('Title'); ?>				
 			</label>
 			<div class="cell medium-10">
-				<input type="text" name="gallery_title" value="<?php echo htmlspecialchars($item_title); ?>">
+				<input type="text" name="gallery_title" value="<?php echo htmlspecialchars((string) $item_title); ?>">
 			</div>
 			<label class="cell medium-2">
 				<?php echo KT_I18N::translate('Description'); ?>
 			</label>
 			<div class="cell medium-10">
-				<textarea name="gallery_description" class="html-edit"><?php echo htmlspecialchars($item_description); ?></textarea>
+				<textarea name="gallery_description" class="html-edit"><?php echo htmlspecialchars((string) $item_description); ?></textarea>
 			</div>
 			<label class="cell medium-2">
 				<?php echo KT_I18N::translate('Source'); ?>
@@ -153,7 +153,7 @@ echo pageStart('gallery_details', $controller->getPageTitle()); ?>
 				<?php echo KT_I18N::translate('Kiwitrees');	?>
 				<div class="input-group">
  					<span class="input-group-label"><?php echo KT_I18N::translate('Media folder name'); ?></span>
-					<?php echo select_edit_control("gallery_folder_w", KT_Query_Media::folderList(), null, htmlspecialchars($item_folder_w), ($plugin == 'kiwitrees') ? '' : 'disabled'); ?>
+					<?php echo select_edit_control("gallery_folder_w", KT_Query_Media::folderList(), null, htmlspecialchars((string) $item_folder_w), ($plugin == 'kiwitrees') ? '' : 'disabled'); ?>
 				</div>
 			</div>
 			<div class="cell medium-5" id="flickr-div">
@@ -172,7 +172,7 @@ echo pageStart('gallery_details', $controller->getPageTitle()); ?>
 						id="flickr" 
 						type="text" 
 						name="gallery_folder_f" 
-						value="<?php echo htmlspecialchars($item_folder_f); ?>"
+						value="<?php echo htmlspecialchars((string) $item_folder_f); ?>"
 					>
 				</div>
 			</div>

@@ -71,8 +71,8 @@ class menu_login_dropdown_KT_Module extends KT_Module implements KT_Module_Menu 
 		<div id="login-popup" class="grid-x grid-padding-x grid-padding-y">
 			<form class="cell login-form" name="login-form" method="post" action="' . $url . '" onsubmit="t = new Date(); this.usertime.value=t.getFullYear()+\'-\'+(t.getMonth()+1)+\'-\'+t.getDate()+\' \'+t.getHours()+\':\'+t.getMinutes()+\':\'+t.getSeconds();return true;">
 				<input type="hidden" name="action" value="login">
-				<input type="hidden" name="ged" value="'; (isset($ged) ? $html .= htmlspecialchars($ged) : $html .= htmlentities(KT_GEDCOM)); $html .= '">
-				<input type="hidden" name="pid" value="'; (isset($pid) ? $html .= htmlspecialchars($pid) : ''); $html .= '">
+				<input type="hidden" name="ged" value="'; (isset($ged) ? $html .= htmlspecialchars((string) $ged) : $html .= htmlentities(KT_GEDCOM)); $html .= '">
+				<input type="hidden" name="pid" value="'; (isset($pid) ? $html .= htmlspecialchars((string) $pid) : ''); $html .= '">
 				<input type="hidden" name="usertime" value="">
 				<label for="username">' . KT_I18N::translate('Username') . '</label>
 				<input type="text" name="username" id="username">

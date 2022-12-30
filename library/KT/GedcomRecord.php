@@ -55,7 +55,7 @@ class KT_GedcomRecord {
 		} else {
 			// Construct from raw GEDCOM data
 			$this->_gedrec = $data;
-			if (preg_match('/^0 (?:@('.KT_REGEX_XREF.')@ )?('.KT_REGEX_TAG.')/', $data, $match)) {
+			if (preg_match('/^0 (?:@('.KT_REGEX_XREF.')@ )?('.KT_REGEX_TAG.')/', (string) $data, $match)) {
 				$this->xref = $match[1];
 				$this->type = $match[2];
 				$this->ged_id = KT_GED_ID;
@@ -135,7 +135,7 @@ class KT_GedcomRecord {
 		// Create the object
 		if (is_array($data)) {
 			$type = $data['type'];
-		} elseif (preg_match('/^0 @'.KT_REGEX_XREF.'@ ('.KT_REGEX_TAG.')/', $data, $match)) {
+		} elseif (preg_match('/^0 @'.KT_REGEX_XREF.'@ ('.KT_REGEX_TAG.')/', (string) $data, $match)) {
 			$type = $match[1];
 		} else {
 			$type='';
@@ -456,7 +456,7 @@ class KT_GedcomRecord {
 		$this->_getAllNames[] = array(
 			'type' =>$type,
 			'sort' => preg_replace_callback('/([0-9]+)/', function($matches) { return str_pad($matches[0], 10, '0', STR_PAD_LEFT); }, $value),
-			'full' => '<span dir="auto">'.htmlspecialchars($value).'</span>',    // This is used for display
+			'full' => '<span dir="auto">'.htmlspecialchars((string) $value).'</span>',    // This is used for display
 			'fullNN' =>$value, // This goes into the database
 		);
 	}

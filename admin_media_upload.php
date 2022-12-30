@@ -247,7 +247,7 @@ echo relatedPages($media, KT_SCRIPT_NAME);
 								<select name="<?php echo 'folder_list' . $i . '" onchange="document.uploadmedia.folder' . $i . '.value=this.options[this.selectedIndex].value;'; ?>">
 									<option value=""><?php echo KT_I18N::translate('Choose: '); ?></option>
 									<?php foreach ($mediaFolders as $f) { ?>
-										<option value="<?php echo htmlspecialchars($f); ?>"><?php echo htmlspecialchars($f); ?></option>
+										<option value="<?php echo htmlspecialchars((string) $f); ?>"><?php echo htmlspecialchars((string) $f); ?></option>
 									<?php } ?>
 								</select>
 								<?php if (KT_USER_IS_ADMIN) { ?>

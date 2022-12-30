@@ -68,7 +68,7 @@ class list_families_KT_Module extends KT_Module implements KT_Module_List {
 			$menus = array();
 			$menu  = new KT_Menu(
 				$this->getTitle(),
-				'module.php?mod=' . $this->getName() . '&amp;mod_action=show&amp;surname=' . rawurlencode($controller->getSignificantSurname()) . '&amp;ged=' . KT_GEDURL,
+				'module.php?mod=' . $this->getName() . '&amp;mod_action=show&amp;surname=' . rawurlencode((string) $controller->getSignificantSurname()) . '&amp;ged=' . KT_GEDURL,
 				'menu-list-fam'
 			);
 			$menus[] = $menu;
@@ -126,7 +126,7 @@ class list_families_KT_Module extends KT_Module implements KT_Module_List {
 			} else	if ($falpha) {
 				$alpha		= '';
 				$surname	= '';
-				$legend		= KT_I18N::translate('All').', '.htmlspecialchars($falpha) . '…';
+				$legend		= KT_I18N::translate('All').', '.htmlspecialchars((string) $falpha) . '…';
 				$url		= $module_url . 'show_all=yes&amp;ged=' . KT_GEDURL;
 				$show		= 'indi';
 			} else {
@@ -142,41 +142,41 @@ class list_families_KT_Module extends KT_Module implements KT_Module_List {
 			if ($surname == '@N.N.') {
 				$legend = $UNKNOWN_NN;
 			} else {
-				$legend = htmlspecialchars($surname);
+				$legend = htmlspecialchars((string) $surname);
 				// The surname parameter is a root/canonical form.
 				// Display it as the actual surname
 				foreach (KT_Query_Name::surnames($surname, $alpha, $show_marnm === 'yes', false, KT_GED_ID) as $details) {
 					$legend = implode('/', array_keys($details));
 				}
 			}
-			$url = $module_url . 'surname=' . rawurlencode($surname).'&amp;ged=' . KT_GEDURL;
+			$url = $module_url . 'surname=' . rawurlencode((string) $surname).'&amp;ged=' . KT_GEDURL;
 			switch($falpha) {
 			case '':
 				break;
 			case '@':
 				$legend	.= ', ' . $UNKNOWN_PN;
-				$url	.= '&amp;falpha=' . rawurlencode($falpha) . '&amp;ged=' . KT_GEDURL;
+				$url	.= '&amp;falpha=' . rawurlencode((string) $falpha) . '&amp;ged=' . KT_GEDURL;
 				break;
 			default:
-				$legend	.= ', ' . htmlspecialchars($falpha) . '…';
-				$url	.= '&amp;falpha=' . rawurlencode($falpha) . '&amp;ged=' . KT_GEDURL;
+				$legend	.= ', ' . htmlspecialchars((string) $falpha) . '…';
+				$url	.= '&amp;falpha=' . rawurlencode((string) $falpha) . '&amp;ged=' . KT_GEDURL;
 				break;
 			}
 			$show = 'indi'; // SURN list makes no sense here
 		} elseif ($alpha == '@') {
 			$show_all	= 'no';
 			$legend		= $UNKNOWN_NN;
-			$url		= $module_url . 'alpha=' . rawurlencode($alpha) . '&amp;ged='.KT_GEDURL;
+			$url		= $module_url . 'alpha=' . rawurlencode((string) $alpha) . '&amp;ged='.KT_GEDURL;
 			$show		= 'indi'; // SURN list makes no sense here
 		} elseif ($alpha == ',') {
 			$show_all	= 'no';
 			$legend		= KT_I18N::translate('None');
-			$url		= $module_url . 'alpha=' . rawurlencode($alpha) . '&amp;ged=' . KT_GEDURL;
+			$url		= $module_url . 'alpha=' . rawurlencode((string) $alpha) . '&amp;ged=' . KT_GEDURL;
 			$show		= 'indi'; // SURN list makes no sense here
 		} elseif ($alpha) {
 			$show_all	= 'no';
-			$legend		= htmlspecialchars($alpha) . '…';
-			$url		= $module_url . 'alpha=' . rawurlencode($alpha) . '&amp;ged=' . KT_GEDURL;
+			$legend		= htmlspecialchars((string) $alpha) . '…';
+			$url		= $module_url . 'alpha=' . rawurlencode((string) $alpha) . '&amp;ged=' . KT_GEDURL;
 			$show		= KT_Filter::get('show', 'surn|indi', 'surn');
 		} else {
 			$show_all	= 'no';
@@ -209,14 +209,14 @@ class list_families_KT_Module extends KT_Module implements KT_Module_List {
 						$html = KT_I18N::translate('None');
 						break;
 					default:
-						$html = htmlspecialchars($letter);
+						$html = htmlspecialchars((string) $letter);
 						break;
 					}
 					if ($count) {
 						if ($letter == $alpha) {
-							$list[] = '<a href="' . $module_url . 'alpha=' . rawurlencode($letter) . '&amp;ged=' . KT_GEDURL . '" class="warning" title="' . $count . '">' . $html . '</a>';
+							$list[] = '<a href="' . $module_url . 'alpha=' . rawurlencode((string) $letter) . '&amp;ged=' . KT_GEDURL . '" class="warning" title="' . $count . '">' . $html . '</a>';
 						} else {
-							$list[] = '<a href="' . $module_url . 'alpha=' . rawurlencode($letter) . '&amp;ged=' . KT_GEDURL . '" title="' . $count . '">' . $html . '</a>';
+							$list[] = '<a href="' . $module_url . 'alpha=' . rawurlencode((string) $letter) . '&amp;ged=' . KT_GEDURL . '" title="' . $count . '">' . $html . '</a>';
 						}
 					} else {
 						$list[] = $html;
@@ -302,14 +302,14 @@ class list_families_KT_Module extends KT_Module implements KT_Module_List {
 										$html = $UNKNOWN_PN;
 										break;
 									default:
-										$html = htmlspecialchars($givn_initial);
+										$html = htmlspecialchars((string) $givn_initial);
 										break;
 									}
 									if ($count) {
 										if ($show == 'indi' && $givn_initial == $falpha && $show_all_firstnames == 'no') {
-											$list[] = '<a class="warning" href="' . $url . '&amp;falpha=' . rawurlencode($givn_initial) . '" title="' . $count . '">' . $html . '</a>';
+											$list[] = '<a class="warning" href="' . $url . '&amp;falpha=' . rawurlencode((string) $givn_initial) . '" title="' . $count . '">' . $html . '</a>';
 										} else {
-											$list[] = '<a href="' . $url . '&amp;falpha=' . rawurlencode($givn_initial) . '" title="' . $count . '">' . $html . '</a>';
+											$list[] = '<a href="' . $url . '&amp;falpha=' . rawurlencode((string) $givn_initial) . '" title="' . $count . '">' . $html . '</a>';
 										}
 									} else {
 										$list[] = $html;

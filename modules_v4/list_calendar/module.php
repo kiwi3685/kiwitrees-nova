@@ -182,7 +182,7 @@ class list_calendar_KT_Module extends KT_Module implements KT_Module_List {
 					<input type="hidden" name="filterof" value="<?php echo $filterof; ?>">
 
 					<!-- All further uses of $cal are to generate URLs -->
-					<?php $cal = rawurlencode($cal); ?>
+					<?php $cal = rawurlencode((string) $cal); ?>
 
 					<table class="unstriped">
 						<!-- Day selector-->

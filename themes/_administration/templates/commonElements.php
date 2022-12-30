@@ -295,9 +295,9 @@ function select_ged_control($name, $values, $empty, $selected, $extra='') {
 		$html = '';
 	} else {
 		if (empty($selected)) {
-			$html = '<option value="" selected="selected">' . htmlspecialchars($empty) . '</option>';
+			$html = '<option value="" selected="selected">' . htmlspecialchars((string) $empty) . '</option>';
 		} else {
-			$html = '<option value="">' . htmlspecialchars($empty) . '</option>';
+			$html = '<option value="">' . htmlspecialchars((string) $empty) . '</option>';
 		}
 	}
 	// A completely empty list would be invalid, and break various things
@@ -307,9 +307,9 @@ function select_ged_control($name, $values, $empty, $selected, $extra='') {
 	foreach ($values as $key=>$value) {
 		if (userGedcomAdmin(KT_USER_ID, $key)) {
 			if ((string)$key === (string)$selected) { // Because "0" != ""
-				$html .= '<option value="' . htmlspecialchars($key) . '" selected="selected" dir="auto">' . htmlspecialchars($value) . '</option>';
+				$html .= '<option value="' . htmlspecialchars((string) $key) . '" selected="selected" dir="auto">' . htmlspecialchars((string) $value) . '</option>';
 			} else {
-				$html .= '<option value="' . htmlspecialchars($key) . '" dir="auto">' . htmlspecialchars($value) . '</option>';
+				$html .= '<option value="' . htmlspecialchars((string) $key) . '" dir="auto">' . htmlspecialchars((string) $value) . '</option>';
 			}
 		}
 	}

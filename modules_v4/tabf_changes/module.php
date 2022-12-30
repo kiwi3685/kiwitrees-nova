@@ -151,8 +151,8 @@ class tabf_changes_KT_Module extends KT_Module implements KT_Module_FamTab {
 			<div class="grid-x grid-padding-x">
 				<?php if ($rows && $item->canDisplayDetails()) {
 		            foreach ($rows as $row) {
-		                $a = explode("\n", htmlspecialchars($row->old_gedcom));
-		                $b = explode("\n", htmlspecialchars($row->new_gedcom));
+		                $a = explode("\n", htmlspecialchars((string) $row->old_gedcom));
+		                $b = explode("\n", htmlspecialchars((string) $row->new_gedcom));
 		                // Generate a side by side diff
 		                $renderer = new Diff_Renderer_Html_SideBySide;
 		                // Options for generating the diff

@@ -1124,7 +1124,7 @@ switch ($actionA) {
 						    </label>
                         </div>
 						<div class="cell small-12 medium-10">
-							<textarea name="NOTE" id="NOTE" rows="15" cols="90"><?php echo htmlspecialchars($note_content); ?></textarea>
+							<textarea name="NOTE" id="NOTE" rows="15" cols="90"><?php echo htmlspecialchars((string) $note_content); ?></textarea>
 						</div>
 					</div>
 				</div>
@@ -1170,8 +1170,8 @@ switch ($actionA) {
 			<form method="post" action="edit_interface.php">
 				<input type="hidden" name="action" value="update">
 				<input type="hidden" name="pid" value="<?php echo $pid; ?>">
-					<textarea name="newgedrec1" id="newgedrec1" dir="ltr" readonly="readonly"><?php echo htmlspecialchars($gedrec1); ?></textarea>
-				<textarea name="newgedrec2" id="newgedrec2" dir="ltr"><?php echo htmlspecialchars($gedrec2); ?></textarea>
+					<textarea name="newgedrec1" id="newgedrec1" dir="ltr" readonly="readonly"><?php echo htmlspecialchars((string) $gedrec1); ?></textarea>
+				<textarea name="newgedrec2" id="newgedrec2" dir="ltr"><?php echo htmlspecialchars((string) $gedrec2); ?></textarea>
 
 				<?php echo no_update_chan($record); ?>
 

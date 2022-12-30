@@ -50,7 +50,7 @@ class KT_Controller_Branches extends KT_Controller_Page {
 		}
 
 		if ($this->surn) {
-			$this->setPageTitle(/* I18N: %s is a surname */ KT_I18N::translate('Branches of the %s family', htmlspecialchars($this->surn)));
+			$this->setPageTitle(/* I18N: %s is a surname */ KT_I18N::translate('Branches of the %s family', htmlspecialchars((string) $this->surn)));
 		} else {
 			$this->setPageTitle(KT_I18N::translate('Branches'));
 		}

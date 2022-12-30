@@ -253,7 +253,7 @@ class list_places_KT_Module extends KT_Module implements KT_Module_List {
 							$placelevels	= '';
 							$place_names = array();
 							for ($j = 0; $j < $level; $j ++) {
-								$linklevels .= '&amp;parent[' . $j . ']=' . rawurlencode($parent[$j]);
+								$linklevels .= '&amp;parent[' . $j . ']=' . rawurlencode((string) $parent[$j]);
 								if ($parent[$j] == '') {
 									$placelevels = ', ' . KT_I18N::translate('unknown') . $placelevels;
 								} else {

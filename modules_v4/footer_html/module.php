@@ -118,13 +118,13 @@ class footer_html_KT_Module extends KT_Module implements KT_Module_Footer {
 			 <label><?php echo KT_I18N::translate('Title for this footer block'); ?></label>
 		</div>
 		<div class="cell">
-			<input type="text" name="header" value="<?php echo htmlspecialchars($header); ?>">
+			<input type="text" name="header" value="<?php echo htmlspecialchars((string) $header); ?>">
 		</div>
 		<div class="cell">
 			 <label><?php echo KT_I18N::translate('Content for this footer block'); ?></label>
 		</div>
 		<div class="cell">
-			<textarea name="content" class="html-edit" rows="5"><?php echo htmlspecialchars($content); ?></textarea>
+			<textarea name="content" class="html-edit" rows="5"><?php echo htmlspecialchars((string) $content); ?></textarea>
 		</div>
 		<div class="cell medium-3">
 			<label class="h6"><?php echo KT_I18N::translate('Show this block for which languages?'); ?></label>

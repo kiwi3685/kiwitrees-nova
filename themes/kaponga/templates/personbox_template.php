@@ -32,7 +32,7 @@ if (!defined('KT_KIWITREES')) {
 		<?php echo $thumbnail; ?>
 	</div>
 	<div class="cell medium-10 large-11">
-		<a class="h6" href="individual.php?pid=<?php echo $pid; ?>&amp;ged=<?php echo rawurlencode($GEDCOM); ?>">
+		<a class="h6" href="individual.php?pid=<?php echo $pid; ?>&amp;ged=<?php echo rawurlencode((string) $GEDCOM); ?>">
 			<span id="name_<?php echo $boxID; ?>" class="name<?php echo $style; ?> <?php echo $classfacts; ?>">
 				<?php echo $name . $addname; ?>
 			</span>
@@ -51,7 +51,7 @@ if (!defined('KT_KIWITREES')) {
 <!-- details for details view -->
 <div class="dropdown-pane person_box_template card shadow" data-position="bottom" data-alignment="left" id="<?php echo $dataToggle; ?>" data-dropdown data-auto-focus="true" data-v-offset=26 data-h-offset=-528 data-closable data-close-on-click="true" >
 	<div class="card-divider text-center">
-		<a class="h6" href="individual.php?pid=<?php echo $pid; ?>&amp;ged=<?php echo rawurlencode($GEDCOM); ?>">
+		<a class="h6" href="individual.php?pid=<?php echo $pid; ?>&amp;ged=<?php echo rawurlencode((string) $GEDCOM); ?>">
 			<span><?php echo $name . $addname; ?></span>
 		</a>
 	</div>

@@ -204,11 +204,11 @@ switch (KT_Filter::get('action')) {
 							sort($files); ?>
 							<select name="tree_name" id="import-server-file">
 								<?php foreach ($files as $file) { ?>
-									<option value="<?php echo htmlspecialchars($file); ?>"
+									<option value="<?php echo htmlspecialchars((string) $file); ?>"
 										<?php if ($file == $gedcom_filename) { ?>
 											selected="selected"
 										<?php } ?>
-									><?php echo htmlspecialchars($file); ?></option>
+									><?php echo htmlspecialchars((string) $file); ?></option>
 								<?php }
 								if (!$files) { ?>
 									<option disabled selected><?php echo KT_I18N::translate('No GEDCOM files found.'); ?></option>

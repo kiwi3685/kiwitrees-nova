@@ -329,22 +329,22 @@ if (empty($_POST['dbuser']) || !KT_DB::isConnected() || !$db_version_ok) { ?>
 	<div class="grid-x grid-margin-y">
 		<div class="cell">
 			<label for="dbhost"><?php echo KT_I18N::translate('Server name'); ?></label>
-			<input type="text" id="dbhost" name="dbhost" value="<?php echo htmlspecialchars($_POST['dbhost']); ?>" dir="ltr">
+			<input type="text" id="dbhost" name="dbhost" value="<?php echo htmlspecialchars((string) $_POST['dbhost']); ?>" dir="ltr">
 			<span class="help-text"><?php echo KT_I18N::translate('Most sites are configured to use localhost.  This means that your database runs on the same computer as your web server.'); ?></span>
 		</div>
 		<div class="cell">
 			<label for="dbport"><?php echo KT_I18N::translate('Port number'); ?></label>
-			<input type="text"  id="dbport"name="dbport" value="<?php echo htmlspecialchars($_POST['dbport']); ?>">
+			<input type="text"  id="dbport"name="dbport" value="<?php echo htmlspecialchars((string) $_POST['dbport']); ?>">
 			<span class="help-text"><?php echo KT_I18N::translate('Most sites are configured to use the default value of 3306.'); ?></span>
 		</div>
 		<div class="cell">
 			<label for="dbuser"><?php echo KT_I18N::translate('Database user account'); ?></label>
-			<input type="text" id="dbuser" name="dbuser" value="<?php echo htmlspecialchars($_POST['dbuser']); ?>" autofocus>
+			<input type="text" id="dbuser" name="dbuser" value="<?php echo htmlspecialchars((string) $_POST['dbuser']); ?>" autofocus>
 			<span class="help-text"><?php echo KT_I18N::translate('This is case sensitive.'); ?></span>
 		</div>
 		<div class="cell">
 			<label for="dbpass"><?php echo KT_I18N::translate('Database password'); ?></label>
-			<input type="password" id="dbpass" name="dbpass" value="<?php echo htmlspecialchars($_POST['dbpass']); ?>">
+			<input type="password" id="dbpass" name="dbpass" value="<?php echo htmlspecialchars((string) $_POST['dbpass']); ?>">
 			<span class="help-text"><?php echo KT_I18N::translate('This is case sensitive.'); ?></span>
 		</div>
 		<div class="cell align-left button-group">
@@ -361,10 +361,10 @@ if (empty($_POST['dbuser']) || !KT_DB::isConnected() || !$db_version_ok) { ?>
 	exit;
 } else {
 	// Copy these values through to the next step ?>
-	<input type="hidden" name="dbhost" value="<?php echo htmlspecialchars($_POST['dbhost']); ?>">
-	<input type="hidden" name="dbport" value="<?php echo htmlspecialchars($_POST['dbport']); ?>">
-	<input type="hidden" name="dbuser" value="<?php echo htmlspecialchars($_POST['dbuser']); ?>">
-	<input type="hidden" name="dbpass" value="<?php echo htmlspecialchars($_POST['dbpass']); ?>">
+	<input type="hidden" name="dbhost" value="<?php echo htmlspecialchars((string) $_POST['dbhost']); ?>">
+	<input type="hidden" name="dbport" value="<?php echo htmlspecialchars((string) $_POST['dbport']); ?>">
+	<input type="hidden" name="dbuser" value="<?php echo htmlspecialchars((string) $_POST['dbuser']); ?>">
+	<input type="hidden" name="dbpass" value="<?php echo htmlspecialchars((string) $_POST['dbpass']); ?>">
 <?php }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -433,12 +433,12 @@ if (!$dbname_ok) { ?>
 	<div class="grid-x grid-margin-y">
 		<div class="cell">
 			<label for "dbname"><?php echo KT_I18N::translate('Database name'); ?></label>
-			<input type="text" id="dbname" name="dbname" value="<?php echo htmlspecialchars($_POST['dbname']); ?>" autofocus>
+			<input type="text" id="dbname" name="dbname" value="<?php echo htmlspecialchars((string) $_POST['dbname']); ?>" autofocus>
 			<span class="help-text"><?php echo KT_I18N::translate('This is case sensitive. If a database with this name does not already exist Kiwitrees-nova will attempt to create one for you. Success will depend on permissions set for your web server, but you will be notified if this fails.'); ?></span>
 		</div>
 		<div class="cell">
 			<label for "tblpfx"><?php echo KT_I18N::translate('Table prefix'); ?></label>
-			<input type="text" id="tblpfx" name="tblpfx" value="<?php echo htmlspecialchars($_POST['tblpfx']); ?>">
+			<input type="text" id="tblpfx" name="tblpfx" value="<?php echo htmlspecialchars((string) $_POST['tblpfx']); ?>">
 			<span class="help-text"><?php echo KT_I18N::translate('The prefix is optional, but recommended.  By giving the table names a unique prefix you can let several different applications share the same database. "kt_" is suggested, but can be anything you want.'); ?></span>
 		</div>
 		<div class="cell align-left button-group">
@@ -455,8 +455,8 @@ if (!$dbname_ok) { ?>
 	exit;
 } else {
 	// Copy these values through to the next step ?>
-	<input type="hidden" name="dbname" value="<?php echo htmlspecialchars($_POST['dbname']); ?>">
-	<input type="hidden" name="tblpfx" value="<?php echo htmlspecialchars($_POST['tblpfx']); ?>">
+	<input type="hidden" name="dbname" value="<?php echo htmlspecialchars((string) $_POST['dbname']); ?>">
+	<input type="hidden" name="tblpfx" value="<?php echo htmlspecialchars((string) $_POST['tblpfx']); ?>">
 <?php }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -480,22 +480,22 @@ if (empty($_POST['ktname']) || empty($_POST['ktuser']) || strlen($_POST['ktpass'
 	<div class="grid-x grid-margin-y">
 		<div class="cell">
 			<label for "ktname"><?php echo KT_I18N::translate('Your name'); ?></label>
-			<input type="text" id="ktname" name="ktname" value="<?php echo htmlspecialchars($_POST['ktname']); ?>" autofocus>
+			<input type="text" id="ktname" name="ktname" value="<?php echo htmlspecialchars((string) $_POST['ktname']); ?>" autofocus>
 			<span class="help-text"><?php echo KT_I18N::translate('This is your real name, as you would like it displayed on screen.'); ?></span>
 		</div>
 		<div class="cell">
 			<label for "ktuser"><?php echo KT_I18N::translate('Login ID'); ?></label>
-			<input type="text" id="ktuser" name="ktuser" value="<?php echo htmlspecialchars($_POST['ktuser']); ?>">
+			<input type="text" id="ktuser" name="ktuser" value="<?php echo htmlspecialchars((string) $_POST['ktuser']); ?>">
 			<span class="help-text"><?php echo KT_I18N::translate('You will use this to login to Kiwitrees-nova.'); ?></span>
 		</div>
 		<div class="cell">
 			<label for "ktpass"><?php echo KT_I18N::translate('Password'); ?></label>
-			<input type="password" id="ktpass" name="ktpass" value="<?php echo htmlspecialchars($_POST['ktpass']); ?>">
+			<input type="password" id="ktpass" name="ktpass" value="<?php echo htmlspecialchars((string) $_POST['ktpass']); ?>">
 			<span class="help-text"><?php echo KT_I18N::translate('This must to be at least six characters.  It is case-sensitive.'); ?></span>
 		</div>
 		<div class="cell">
 			<label for "ktemail"><?php echo KT_I18N::translate('Email address'); ?></label>
-			<input type="email" id="ktemail" name="ktemail" value="<?php echo htmlspecialchars($_POST['ktemail']); ?>">
+			<input type="email" id="ktemail" name="ktemail" value="<?php echo htmlspecialchars((string) $_POST['ktemail']); ?>">
 			<span class="help-text"><?php echo KT_I18N::translate('This email address will be used to send you password reminders, site notifications, and messages from other family members who are registered on the site.'); ?></span>
 		</div>
 		<div class="cell align-justify button-group">
@@ -512,10 +512,10 @@ if (empty($_POST['ktname']) || empty($_POST['ktuser']) || strlen($_POST['ktpass'
 	exit;
 } else {
 	// Copy these values through to the next step ?>
-	<input type="hidden" name="ktname"     value="<?php echo htmlspecialchars($_POST['ktname']); ?>">
-	<input type="hidden" name="ktuser"     value="<?php echo htmlspecialchars($_POST['ktuser']); ?>">
-	<input type="hidden" name="ktpass"     value="<?php echo htmlspecialchars($_POST['ktpass']); ?>">
-	<input type="hidden" name="ktemail"    value="<?php echo htmlspecialchars($_POST['ktemail']); ?>">
+	<input type="hidden" name="ktname"     value="<?php echo htmlspecialchars((string) $_POST['ktname']); ?>">
+	<input type="hidden" name="ktuser"     value="<?php echo htmlspecialchars((string) $_POST['ktuser']); ?>">
+	<input type="hidden" name="ktpass"     value="<?php echo htmlspecialchars((string) $_POST['ktpass']); ?>">
+	<input type="hidden" name="ktemail"    value="<?php echo htmlspecialchars((string) $_POST['ktemail']); ?>">
 <?php }
 
 ////////////////////////////////////////////////////////////////////////////////

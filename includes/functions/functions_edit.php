@@ -74,9 +74,9 @@ function select_edit_control($name, $values, $empty, $selected, $extra = '')
 		$html = '';
 	} else {
 		if (empty($selected)) {
-			$html = '<option value="" selected="selected">' . htmlspecialchars($empty) . '</option>';
+			$html = '<option value="" selected="selected">' . htmlspecialchars((string) $empty) . '</option>';
 		} else {
-			$html = '<option value="">' . htmlspecialchars($empty) . '</option>';
+			$html = '<option value="">' . htmlspecialchars((string) $empty) . '</option>';
 		}
 	}
 	// A completely empty list would be invalid, and break various things
@@ -85,9 +85,9 @@ function select_edit_control($name, $values, $empty, $selected, $extra = '')
 	}
 	foreach ($values as $key => $value) {
 		if ((string) $key === (string) $selected) { // Because "0" != ""
-			$html .= '<option value="' . htmlspecialchars($key) . '" selected="selected" dir="auto">' . htmlspecialchars($value) . '</option>';
+			$html .= '<option value="' . htmlspecialchars((string) $key) . '" selected="selected" dir="auto">' . htmlspecialchars((string) $value) . '</option>';
 		} else {
-			$html .= '<option value="' . htmlspecialchars($key) . '" dir="auto">' . htmlspecialchars($value) . '</option>';
+			$html .= '<option value="' . htmlspecialchars((string) $key) . '" dir="auto">' . htmlspecialchars((string) $value) . '</option>';
 		}
 	}
 
@@ -101,13 +101,13 @@ function select_edit_control_inline($name, $values, $empty, $selected, $controll
 {
 	if (!is_null($empty)) {
 		// Push ''=>$empty onto the front of the array, maintaining keys
-		$tmp = ['' => htmlspecialchars($empty)];
+		$tmp = ['' => htmlspecialchars((string) $empty)];
 		foreach ($values as $key => $value) {
-			$tmp[$key] = htmlspecialchars($value);
+			$tmp[$key] = htmlspecialchars((string) $value);
 		}
 		$values = $tmp;
 	}
-	$values['selected'] = htmlspecialchars($selected);
+	$values['selected'] = htmlspecialchars((string) $selected);
 
 	$html = '<span class="editable" id="' . $name . '">' . (array_key_exists($selected, $values) ? $values[$selected] : '') . '</span>';
 	$js = 'jQuery("#' . $name . '").editable("' . KT_SERVER_NAME . KT_SCRIPT_PATH . 'save.php", {tooltip: " ' . KT_I18N::translate('click to edit') . '", submitdata: {csrf: KT_CSRF_TOKEN}, type:"select", data:' . json_encode($values) . ', submit:"&nbsp;&nbsp;' . KT_I18N::translate('Save') . '&nbsp;&nbsp;", style:"inherit", placeholder: "' . KT_I18N::translate('click to edit') . '", callback:function(value, settings) {jQuery(this).html(settings.data[value]);} });';
@@ -171,7 +171,7 @@ function radio_switch_group($name, $values, $selected, $extra = '')
 		$html .= '
 				<div class="switch cell small-8 medium-4 large-2">
 					<label>' . $value . '</label>
-					<input class="switch-input" id="' . $uniqueID . '" type="radio" name="' . $name . '" value="' . htmlspecialchars($key) . '"';
+					<input class="switch-input" id="' . $uniqueID . '" type="radio" name="' . $name . '" value="' . htmlspecialchars((string) $key) . '"';
 		if ((string) $key === (string) $selected) {
 			$html .= ' checked';
 		}
@@ -205,7 +205,7 @@ function checkbox_switch_group($name, $values, $selected)
 		$html .= '
 				<div class="switch cell small-4 medium-3">
 					<label>' . $value . '</label>
-					<input class="switch-input" id="' . $uniqueID . '" type="radio" value="' . htmlspecialchars($key) . '"';
+					<input class="switch-input" id="' . $uniqueID . '" type="radio" value="' . htmlspecialchars((string) $key) . '"';
 		if ((string) $key === (string) $selected) {
 			$html .= ' checked';
 		}
@@ -236,12 +236,12 @@ function radio_buttons($name, $values, $selected, $extra = '')
 		$uniqueID = $name . (int) (microtime(true) * 1000000);
 		$html .= '
 			<label for="' . $uniqueID . '" ' . $extra . '>
-				<input type="radio" name="' . $name . '" id="' . $uniqueID . '" value="' . htmlspecialchars($key) . '"';
+				<input type="radio" name="' . $name . '" id="' . $uniqueID . '" value="' . htmlspecialchars((string) $key) . '"';
 		if ((string) $key === (string) $selected) {
 			$html .= ' checked';
 		}
 		$html .= '>' .
-		htmlspecialchars($value) . '
+		htmlspecialchars((string) $value) . '
 			</label>
 		';
 	}
@@ -1794,8 +1794,8 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 						<option selected="selected" value="" ></option>
 						<?php $selectedValue = strtolower($value);
 					if (!array_key_exists($selectedValue, KT_Gedcom_Tag::getFileFormTypes())) { ?>
-							<option selected="selected" value="<?php echo htmlspecialchars($value); ?>" >
-								<?php echo htmlspecialchars($value); ?>
+							<option selected="selected" value="<?php echo htmlspecialchars((string) $value); ?>" >
+								<?php echo htmlspecialchars((string) $value); ?>
 							</option>
 						<?php }
 					foreach (KT_Gedcom_Tag::getFileFormTypes() as $typeName => $typeValue) { ?>
@@ -1808,9 +1808,9 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 					</select>
 				<?php } elseif (('NAME' == $fact && 'REPO' != $upperlevel && 'UNKNOWN' !== $upperlevel) || '_MARNM' == $fact) { ?>
 					<!-- Populated in javascript from sub-tags -->
-					<input type="hidden" id="<?php echo $element_id; ?>" name="<?php echo $element_name; ?>" onchange="updateTextName(\'<?php echo $element_id; ?>\'); ?>" value="<?php echo htmlspecialchars($value); ?>" class="<?php echo $fact; ?>">
+					<input type="hidden" id="<?php echo $element_id; ?>" name="<?php echo $element_name; ?>" onchange="updateTextName(\'<?php echo $element_id; ?>\'); ?>" value="<?php echo htmlspecialchars((string) $value); ?>" class="<?php echo $fact; ?>">
 					<span id="<?php echo $element_id; ?>_display">
-						<?php echo htmlspecialchars($value); ?>
+						<?php echo htmlspecialchars((string) $value); ?>
 					</span>
 					<a href="#edit_name" onclick="convertHidden('<?php echo $element_id; ?>'); return false;" title="<?php echo KT_I18N::translate('Edit name'); ?>">
 						<i class="<?php echo $iconStyle; ?> fa-pen-to-square"></i>
@@ -1818,7 +1818,7 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 				<?php } else { ?>
 					<!-- textarea -->
 					<?php if ('TEXT' == $fact || 'ADDR' == $fact || ('SHARED_NOTE' == $fact && !$islink)) { ?>
-						<textarea id="<?php echo $element_id; ?>" name="<?php echo $element_name; ?>"><?php echo htmlspecialchars($value); ?></textarea>
+						<textarea id="<?php echo $element_id; ?>" name="<?php echo $element_name; ?>"><?php echo htmlspecialchars((string) $value); ?></textarea>
 					<?php } else {
 						// Extra markup for specific fact types
 						$extra_markup = '';
@@ -1929,7 +1929,7 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 								<input
 									type="text"
 									id="autocompleteInput-<?php echo $element_id; ?>"
-									value="<?php echo htmlspecialchars($value); ?>"
+									value="<?php echo htmlspecialchars((string) $value); ?>"
 									class="<?php echo $fact; ?>"
 									<?php if (in_array($fact, $subnamefacts)) { ?>
 										onblur="updatewholename();"
@@ -1950,7 +1950,7 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 									<input
 										type="text"
 										id="<?php echo $element_id; ?>"
-										value="<?php echo htmlspecialchars($value); ?>"
+										value="<?php echo htmlspecialchars((string) $value); ?>"
 										class="<?php echo $fact; ?> fdatepicker>"
 										<?php echo $extra_markup; ?>
 									>
@@ -1963,7 +1963,7 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 							<input
 								type="text"
 								id="<?php echo $element_id; ?>"
-								value="<?php echo htmlspecialchars($value); ?>"
+								value="<?php echo htmlspecialchars((string) $value); ?>"
 								class="<?php echo $fact; ?>"
 								<?php if (in_array($fact, $subnamefacts)) { ?>
 									onblur="updatewholename();"

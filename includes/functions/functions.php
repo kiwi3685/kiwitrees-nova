@@ -3142,10 +3142,10 @@ function get_query_url($overwrite = null, $separator = '&')
 	$query_string = '';
 	foreach ($get as $key => $value) {
 		if (!is_array($value)) {
-			$query_string .= $separator.rawurlencode($key).'='.rawurlencode($value);
+			$query_string .= $separator.rawurlencode((string) $key).'='.rawurlencode((string) $value);
 		} else {
 			foreach ($value as $k => $v) {
-				$query_string .= $separator.rawurlencode($key).'%5B'.rawurlencode($k).'%5D='.rawurlencode($v);
+				$query_string .= $separator.rawurlencode((string) $key).'%5B'.rawurlencode((string) $k).'%5D='.rawurlencode((string) $v);
 			}
 		}
 	}

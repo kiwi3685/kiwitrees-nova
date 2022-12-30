@@ -165,7 +165,7 @@ switch ($action) {
 					onsubmit="t = new Date();this.usertime.value=t.getFullYear()+'-'+(t.getMonth()+1)+'-'+t.getDate()+' '+t.getHours()+':'+t.getMinutes()+':'+t.getSeconds();return true;"
 				>
 					<input type="hidden" name="action" value="login">
-					<input type="hidden" name="url" value="<?php echo htmlspecialchars($url); ?>">
+					<input type="hidden" name="url" value="<?php echo htmlspecialchars((string) $url); ?>">
 					<input type="hidden" name="usertime" value="">
 					<?php if (!empty($message)) { ?>
 						<div class="callout alert">
@@ -175,7 +175,7 @@ switch ($action) {
 					<div class="grid-x grid-margin-x grid-margin-y">
 						<div class="cell medium-8 medium-offset-2">
 							<label for="user_name" class="h6"><?php echo KT_I18N::translate('User name'); ?>
-								<input type="text" id="user_name" name="username" required value="<?php echo htmlspecialchars($username); ?>" autofocus>
+								<input type="text" id="user_name" name="username" required value="<?php echo htmlspecialchars((string) $username); ?>" autofocus>
 							</label>
 						</div>
 						<div class="cell medium-8 medium-offset-2">
@@ -482,19 +482,19 @@ switch ($action) {
 							<label for="user_realname" class="h6 middle"><?php echo KT_I18N::translate('Real name'); ?>
 						</div>
 						<div class="cell medium-8">
-							<input type="text" id="user_realname" name="user_realname" placeholder="<?php echo KT_I18N::translate('Real name'); ?>" required maxlength="64" value="<?php echo htmlspecialchars($user_realname); ?>" autofocus>
+							<input type="text" id="user_realname" name="user_realname" placeholder="<?php echo KT_I18N::translate('Real name'); ?>" required maxlength="64" value="<?php echo htmlspecialchars((string) $user_realname); ?>" autofocus>
 						</div>
 						<div class="cell medium-4">
 							<label for="user_email" class="h6 middle"><?php echo KT_I18N::translate('Email address'); ?>
 						</div>
 						<div class="cell medium-8">
-							<input type="email" id="user_email" name="user_email" placeholder="<?php echo KT_I18N::translate('Email address'); ?>" required maxlength="64" value="<?php echo htmlspecialchars($user_email); ?>">
+							<input type="email" id="user_email" name="user_email" placeholder="<?php echo KT_I18N::translate('Email address'); ?>" required maxlength="64" value="<?php echo htmlspecialchars((string) $user_email); ?>">
 						</div>
 						<div class="cell medium-4">
 							<label for="user_email" class="h6 middle"><?php echo KT_I18N::translate('User name'); ?>
 						</div>
 						<div class="cell medium-8">
-							<input type="text" id="user_name" name="user_name" placeholder="<?php echo KT_I18N::translate('User name'); ?>" required  value="<?php echo htmlspecialchars($user_name); ?>">
+							<input type="text" id="user_name" name="user_name" placeholder="<?php echo KT_I18N::translate('User name'); ?>" required  value="<?php echo htmlspecialchars((string) $user_name); ?>">
 						</div>
 						<div class="cell medium-4">
 							<label for="user_password01" class="h6 middle"><?php echo KT_I18N::translate('Password'); ?>
@@ -504,7 +504,7 @@ switch ($action) {
 								type="password"
 								id="user_password01"
 								name="user_password01"
-								value="<?php echo htmlspecialchars($user_password01); ?>"
+								value="<?php echo htmlspecialchars((string) $user_password01); ?>"
 								placeholder="<?php echo /* I18N: placeholder text for new-password field */ KT_I18N::plural('Password - Use at least %s character.', 'Password - Use at least %s characters.', KT_I18N::number(KT_MINIMUM_PASSWORD_LENGTH), KT_I18N::number(KT_MINIMUM_PASSWORD_LENGTH)); ?>"
 								required
 								pattern="<?php echo KT_REGEX_PASSWORD; ?>"
@@ -514,7 +514,7 @@ switch ($action) {
 							<label for="user_comments" class="h6 middle"><?php echo KT_I18N::translate('Comment'); ?>
 						</div>
 						<div class="cell medium-8">
-							<textarea id="user_comments" name="user_comments" <?php echo (KT_Site::preference('REQUIRE_COMMENT') ? 'required' : ''); ?> placeholder="<?php echo /* I18N: placeholder text for registration-comments field */ KT_I18N::translate('Explain why you are requesting an account.'); ?>"><?php echo htmlspecialchars($user_comments); ?></textarea>
+							<textarea id="user_comments" name="user_comments" <?php echo (KT_Site::preference('REQUIRE_COMMENT') ? 'required' : ''); ?> placeholder="<?php echo /* I18N: placeholder text for registration-comments field */ KT_I18N::translate('Explain why you are requesting an account.'); ?>"><?php echo htmlspecialchars((string) $user_comments); ?></textarea>
 						</div>
 						<div class="cell">
 							<label for="termsConditions" class="h6 middle">
@@ -603,9 +603,9 @@ switch ($action) {
 		}
 		if ($TEXT_DIRECTION == 'rtl') {
 			$mail1_body .= "<a href=\"";
-			$mail1_body .= KT_SERVER_NAME . KT_SCRIPT_PATH . "admin_users.php?filter=" . rawurlencode($user_name) . "\">";
+			$mail1_body .= KT_SERVER_NAME . KT_SCRIPT_PATH . "admin_users.php?filter=" . rawurlencode((string) $user_name) . "\">";
 		}
-		$mail1_body .= KT_SERVER_NAME . KT_SCRIPT_PATH . "admin_users.php?filter=" . rawurlencode($user_name);
+		$mail1_body .= KT_SERVER_NAME . KT_SCRIPT_PATH . "admin_users.php?filter=" . rawurlencode((string) $user_name);
 		if ($TEXT_DIRECTION == "rtl") {
 			$mail1_body .= "</a>";
 		}

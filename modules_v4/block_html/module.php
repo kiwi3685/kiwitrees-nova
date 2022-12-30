@@ -276,16 +276,16 @@ class block_html_KT_Module extends KT_Module implements KT_Module_Block {
 			<label class="h6"><?php echo KT_Gedcom_Tag::getLabel('TITL'); ?></label>
 		</div>
 		<div class="cell medium-7 auto">
-			<input type="text" name="title" value="<?php echo htmlspecialchars($title); ?>">
+			<input type="text" name="title" value="<?php echo htmlspecialchars((string) $title); ?>">
 		</div>
 		<div class="cell medium-3">
 			<label class="h6"><?php echo KT_I18N::translate('Templates'); ?></label>
 		</div>
 		<div class="cell medium-7 auto">
 			<select name="template" onchange="document.block.html.value=document.block.template.options[document.block.template.selectedIndex].value;<?php //echo $ckeditor_onchange; ?>">
-				<option value="<?php echo htmlspecialchars($html); ?>"><?php echo KT_I18N::translate('Custom'); ?></option>
+				<option value="<?php echo htmlspecialchars((string) $html); ?>"><?php echo KT_I18N::translate('Custom'); ?></option>
 				<?php foreach ($templates as $title => $template) { ?>
-					<option value="<?php echo htmlspecialchars($template); ?>"><?php echo $title; ?></option>
+					<option value="<?php echo htmlspecialchars((string) $template); ?>"><?php echo $title; ?></option>
 				<?php } ?>
 			</select>
 		</div>
@@ -321,7 +321,7 @@ class block_html_KT_Module extends KT_Module implements KT_Module_Block {
 		<?php } ?>
 		<div class="cell">
 			<label class="h6"><?php echo KT_I18N::translate('Content'); ?></label>
-			<textarea name="html" class="html-edit" rows="10"><?php echo htmlspecialchars($html); ?></textarea>
+			<textarea name="html" class="html-edit" rows="10"><?php echo htmlspecialchars((string) $html); ?></textarea>
 		</div>
 		<div class="cell medium-3">
 			<label class="h6"><?php echo KT_I18N::translate('Show the date and time of update'); ?></label>

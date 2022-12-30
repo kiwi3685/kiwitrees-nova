@@ -243,7 +243,7 @@ include_once KT_MODULES_DIR . 'googlemap/places_edit.js.php';?>
 							class="input-group-field"
 							type="text" id="new_pl_name"
 							name="NEW_PLACE_NAME"
-							value="<?php echo htmlspecialchars($place_name); ?>"
+							value="<?php echo htmlspecialchars((string) $place_name); ?>"
 						>
 						<span class="input-group-label">
 							<?php echo print_specialchar_link('new_pl_name'); ?>

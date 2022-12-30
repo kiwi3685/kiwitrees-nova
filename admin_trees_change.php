@@ -185,8 +185,8 @@ case 'load_json':
 	$aaData = KT_DB::prepare($SELECT1.$WHERE.$ORDER_BY.$LIMIT)->execute($args)->fetchAll(PDO::FETCH_NUM);
 	foreach ($aaData as &$row) {
 
-		$a = explode("\n", htmlspecialchars($row[3]));
-		$b = explode("\n", htmlspecialchars($row[4]));
+		$a = explode("\n", htmlspecialchars((string) $row[3]));
+		$b = explode("\n", htmlspecialchars((string) $row[4]));
 
 		// Generate a side by side diff
 		$renderer = new Diff_Renderer_Html_SideBySide;
@@ -237,7 +237,7 @@ $controller
 			displayLength: ' . get_user_setting(KT_USER_ID, 'admin_site_log_page_size', 10) . ',
 			serverSide: true,
 			pagingType: "full_numbers",
-			"sAjaxSource": "' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '?action=load_json&from='.$from.'&to='.$to.'&type='.$type.'&oldged='.rawurlencode($oldged).'&newged='.rawurlencode($newged).'&xref='.rawurlencode($xref).'&user='.rawurlencode($user).'&gedc='.rawurlencode($gedc).'",
+			"sAjaxSource": "' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '?action=load_json&from='.$from.'&to='.$to.'&type='.$type.'&oldged='.rawurlencode((string) $oldged).'&newged='.rawurlencode((string) $newged).'&xref='.rawurlencode((string) $xref).'&user='.rawurlencode((string) $user).'&gedc='.rawurlencode((string) $gedc).'",
 			' . KT_I18N::datatablesI18N(array(10,20,50,100,500,1000,-1)) . ',
 			"aaSorting": [[ 0, "desc" ]],
 			"aoColumns": [
@@ -260,14 +260,14 @@ $controller
 	');
 
 $url =
-	KT_SCRIPT_NAME.'?from='.rawurlencode($from).
-	'&amp;to='.rawurlencode($to).
-	'&amp;type='.rawurlencode($type).
-	'&amp;oldged='.rawurlencode($oldged).
-	'&amp;newged='.rawurlencode($newged).
-	'&amp;xref='.rawurlencode($xref).
-	'&amp;user='.rawurlencode($user).
-	'&amp;gedc='.rawurlencode($gedc);
+	KT_SCRIPT_NAME.'?from='.rawurlencode((string) $from).
+	'&amp;to='.rawurlencode((string) $to).
+	'&amp;type='.rawurlencode((string) $type).
+	'&amp;oldged='.rawurlencode((string) $oldged).
+	'&amp;newged='.rawurlencode((string) $newged).
+	'&amp;xref='.rawurlencode((string) $xref).
+	'&amp;user='.rawurlencode((string) $user).
+	'&amp;gedc='.rawurlencode((string) $gedc);
 
 $users_array=array_combine(get_all_users(), get_all_users());
 uksort($users_array, 'strnatcasecmp');
@@ -284,7 +284,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 					<label class="h6"><?php echo KT_I18N::translate('From'); ?></label>
 					<div class="date fdatepicker" id="from" data-date-format="yyyy-mm-dd">
 						<div class="input-group">
-							<input class="input-group-field" type="text" name="from" value="<?php echo htmlspecialchars($from); ?>">
+							<input class="input-group-field" type="text" name="from" value="<?php echo htmlspecialchars((string) $from); ?>">
 							<span class="postfix input-group-label"><i class="<?php echo $iconStyle; ?> fa-calendar-days fa-lg"></i></span>
 						</div>
 					</div>
@@ -293,7 +293,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 					<label class="h6"><?php echo KT_I18N::translate('To'); ?></label>
 					<div class="date fdatepicker" id="to" data-date-format="yyyy-mm-dd">
 						<div class="input-group">
-							<input class="input-group-field" type="text" name="to" value="<?php echo htmlspecialchars($to); ?>">
+							<input class="input-group-field" type="text" name="to" value="<?php echo htmlspecialchars((string) $to); ?>">
 							<span class="postfix input-group-label"><i class="<?php echo $iconStyle; ?> fa-calendar-days fa-lg"></i></span>
 						</div>
 					</div>
@@ -304,11 +304,11 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 				</div>
 				<div class="cell medium-2">
 					<label class="h6"><?php echo KT_I18N::translate('Record'); ?></label>
-					<input class="log-filter" type="text" name="xref" value="<?php echo htmlspecialchars($xref); ?>">
+					<input class="log-filter" type="text" name="xref" value="<?php echo htmlspecialchars((string) $xref); ?>">
 				</div>
 				<div class="cell medium-3 medium-offset-2">
 					<label class="h6"><?php echo KT_I18N::translate('Old data'); ?></label>
-					<input class="log-filter" type="text" name="oldged" value="<?php echo htmlspecialchars($oldged); ?>">
+					<input class="log-filter" type="text" name="oldged" value="<?php echo htmlspecialchars((string) $oldged); ?>">
 				</div>
 				<div class="cell medium-3">
 					<label class="h6"><?php echo KT_I18N::translate('User'); ?></label>

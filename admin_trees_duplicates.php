@@ -225,7 +225,7 @@ echo pageStart('find_duplicates', $controller->getPageTitle()); ?>
 					<label for="SURN"><?php echo KT_I18N::translate('Surname'); ?></label>
 				</div>
 				<div class="cell medium-4">
-					<?php echo autocompleteHtml('surname', 'SURN', $tree, htmlspecialchars($surn), KT_I18N::translate('A full or partial surname'), 'surname', htmlspecialchars($surn)); ?>
+					<?php echo autocompleteHtml('surname', 'SURN', $tree, htmlspecialchars((string) $surn), KT_I18N::translate('A full or partial surname'), 'surname', htmlspecialchars((string) $surn)); ?>
 				</div>
 				<div class="cell shrink">
 					<label for="exact_surn"><?php echo KT_I18N::translate('Match exactly'); ?></label>
@@ -238,7 +238,7 @@ echo pageStart('find_duplicates', $controller->getPageTitle()); ?>
 					<label for="GIVN"><?php echo KT_I18N::translate('Given name(s)'); ?></label>
 				</div>
 				<div class="cell medium-4">
-					<?php echo autocompleteHtml('given', 'GIVN', $tree, htmlspecialchars($givn), KT_I18N::translate('The full or partial given name(s)'), 'given', htmlspecialchars($givn), ); ?>
+					<?php echo autocompleteHtml('given', 'GIVN', $tree, htmlspecialchars((string) $givn), KT_I18N::translate('The full or partial given name(s)'), 'given', htmlspecialchars((string) $givn), ); ?>
 				</div>
 				<div class="cell shrink">
 					<label for="exact_givn"><?php echo KT_I18N::translate('Match exactly'); ?></label>

@@ -161,7 +161,7 @@ $controller
 						foreach (array_reverse($where_am_i, true) as $id => $place) {
 							if ($id == $parent) {
 								if ($place != 'Unknown') {
-									echo htmlspecialchars($place);
+									echo htmlspecialchars((string) $place);
 								} else {
 									echo KT_I18N::translate('unknown');
 								}
@@ -169,7 +169,7 @@ $controller
 								<a href="module.php?mod=googlemap&mod_action=admin_places&parent=<?php echo $id; ?>&status=<?php echo $status; ?>">
 								<?php
 								if ($place != 'Unknown') {
-									echo htmlspecialchars($place); ?></a>
+									echo htmlspecialchars((string) $place); ?></a>
 								<?php } else {
 									echo KT_I18N::translate('unknown'); ?></a>
 								<?php }
@@ -222,7 +222,7 @@ $controller
 										<div class="col1">
 											<a href="module.php?mod=googlemap&mod_action=admin_places&parent=<?php echo $place['place_id']; ?>&status=<?php echo $status; ?>">
 												<?php if ($place['place'] != 'Unknown') { ?>
-													<?php echo htmlspecialchars($place['place']); ?>
+													<?php echo htmlspecialchars((string) $place['place']); ?>
 												<?php } else { ?>
 													<?php echo KT_I18N::translate('unknown'); ?>
 												<?php } ?>
@@ -543,7 +543,7 @@ if ($action == 'ImportGedcom') {
 					$highestIndex++;
 					KT_DB::prepare("INSERT INTO `##placelocation` (pl_id, pl_parent_id, pl_level, pl_place, pl_zoom) VALUES (?, ?, ?, ?, ?)")
 						->execute(array($highestIndex, $parent_id, $i, $escparent, $default_zoom_level[$i]));
-					echo htmlspecialchars($escparent), '<br>';
+					echo htmlspecialchars((string) $escparent), '<br>';
 					$parent_id=$highestIndex;
 				} else {
 					$parent_id=$row->pl_id;
@@ -554,12 +554,12 @@ if ($action == 'ImportGedcom') {
 					$highestIndex++;
 					KT_DB::prepare("INSERT INTO `##placelocation` (pl_id, pl_parent_id, pl_level, pl_place, pl_long, pl_lati, pl_zoom) VALUES (?, ?, ?, ?, ?, ?, ?)")
 						->execute(array($highestIndex, $parent_id, $i, $escparent, $place['long'], $place['lati'], $default_zoom_level[$i]));
-					echo htmlspecialchars($escparent), '<br>';
+					echo htmlspecialchars((string) $escparent), '<br>';
 				} else {
 					if (empty($row->pl_long) && empty($row->pl_lati) && $place['lati']!='0' && $place['long']!='0') {
 						KT_DB::prepare("UPDATE `##placelocation` SET pl_lati=?, pl_long=? WHERE pl_id=?")
 							->execute(array($place['lati'], $place['long'], $row->pl_id));
-						echo htmlspecialchars($escparent), '<br>';
+						echo htmlspecialchars((string) $escparent), '<br>';
 					}
 				}
 			}
@@ -592,7 +592,7 @@ if ($action == 'ImportFile') {
 						<select name="localfile">
 							<option></option>
 							<?php foreach ($placefiles as $p => $placefile) { ?>
-								<option value="<?php echo htmlspecialchars($placefile); ?>">
+								<option value="<?php echo htmlspecialchars((string) $placefile); ?>">
 									<?php if (substr($placefile, 0, 1) == "/") {
 										echo substr($placefile, 1);
 									} else {

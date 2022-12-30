@@ -1,7 +1,7 @@
 <?php
 /**
  * Kiwitrees: Web based Family History software
- * Copyright (C) 2012 to 2022 kiwitrees.net
+ * Copyright (C) 2012 to 2022 kiwitrees.net.
  *
  * Derived from webtrees (www.webtrees.net)
  * Copyright (C) 2010 to 2012 webtrees development team
@@ -20,9 +20,10 @@
  * You should have received a copy of the GNU General Public License
  * along with Kiwitrees. If not, see <http://www.gnu.org/licenses/>.
  */
-
 define('KT_SCRIPT_NAME', 'admin_site_logs.php');
+
 require './includes/session.php';
+
 include KT_THEME_URL . 'templates/adminData.php';
 
 global $iconStyle;
@@ -30,23 +31,24 @@ global $iconStyle;
 $controller = new KT_Controller_Page();
 $controller
 	->requireManagerLogin()
-	->setPageTitle(KT_I18N::translate('%s logs', KT_KIWITREES));
+	->setPageTitle(KT_I18N::translate('%s logs', KT_KIWITREES))
+;
 
-require KT_ROOT.'includes/functions/functions_edit.php';
+require KT_ROOT . 'includes/functions/functions_edit.php';
 
-$earliest	= KT_DB::prepare("SELECT DATE(MIN(log_time)) FROM `##log`")->execute(array())->fetchOne();
-$latest		= KT_DB::prepare("SELECT DATE(MAX(log_time)) FROM `##log`")->execute(array())->fetchOne();
+$earliest = KT_DB::prepare('SELECT DATE(MIN(log_time)) FROM `##log`')->execute([])->fetchOne();
+$latest = KT_DB::prepare('SELECT DATE(MAX(log_time)) FROM `##log`')->execute([])->fetchOne();
 
 // Filtering
-$action	= KT_Filter::get('action');
-$from	= KT_Filter::get('from', '\d\d\d\d-\d\d-\d\d', $earliest);
-$to		= KT_Filter::get('to',   '\d\d\d\d-\d\d-\d\d', $latest);
-$type	= KT_Filter::get('type', 'auth|change|config|debug|edit|error|media|search|spam');
-$text	= KT_Filter::get('text');
-$ip		= KT_Filter::get('ip');
-$user	= KT_Filter::get('user');
+$action = KT_Filter::get('action');
+$from = KT_Filter::get('from', '\d\d\d\d-\d\d-\d\d', $earliest);
+$to = KT_Filter::get('to', '\d\d\d\d-\d\d-\d\d', $latest);
+$type = KT_Filter::get('type', 'auth|change|config|debug|edit|error|media|search|spam');
+$text = KT_Filter::get('text');
+$ip = KT_Filter::get('ip');
+$user = KT_Filter::get('user');
 $search = KT_Filter::get('search');
-$search = isset($search['value']) ? $search['value'] : null;
+$search = $search['value'] ?? null;
 
 if (KT_USER_IS_ADMIN) {
 	// Administrators can see all logs
@@ -56,120 +58,125 @@ if (KT_USER_IS_ADMIN) {
 	$gedc = KT_GEDCOM;
 }
 
-$query=array();
-$args =array();
+$query = [];
+$args = [];
 if ($from) {
-	$query[]='log_time>=?';
-	$args []=$from;
+	$query[] = 'log_time>=?';
+	$args[] = $from;
 }
 if ($to) {
-	$query[]='log_time<TIMESTAMPADD(DAY, 1 , ?)'; // before end of the day
-	$args []=$to;
+	$query[] = 'log_time<TIMESTAMPADD(DAY, 1 , ?)'; // before end of the day
+	$args[] = $to;
 }
 if ($type) {
-	$query[]='log_type=?';
-	$args []=$type;
+	$query[] = 'log_type=?';
+	$args[] = $type;
 }
 if ($text) {
-	$query[]="log_message LIKE CONCAT('%', ?, '%')";
-	$args []=$text;
+	$query[] = "log_message LIKE CONCAT('%', ?, '%')";
+	$args[] = $text;
 }
 if ($ip) {
-	$query[]="ip_address LIKE CONCAT('%', ?, '%')";
-	$args []=$ip;
+	$query[] = "ip_address LIKE CONCAT('%', ?, '%')";
+	$args[] = $ip;
 }
 if ($user) {
-	$query[]="user_name LIKE CONCAT('%', ?, '%')";
-	$args []=$user;
+	$query[] = "user_name LIKE CONCAT('%', ?, '%')";
+	$args[] = $user;
 }
 if ($gedc) {
-	$query[]="gedcom_name LIKE CONCAT('%', ?, '%')";
-	$args []=$gedc;
+	$query[] = "gedcom_name LIKE CONCAT('%', ?, '%')";
+	$args[] = $gedc;
 }
 
-$SELECT1=
-	"SELECT SQL_CALC_FOUND_ROWS log_time, log_type, log_message, ip_address, IFNULL(user_name, '<none>') AS user_name, IFNULL(gedcom_name, '<none>') AS gedcom_name".
-	" FROM `##log`".
-	" LEFT JOIN `##user`   USING (user_id)".   // user may be deleted
-	" LEFT JOIN `##gedcom` USING (gedcom_id)"; // gedcom may be deleted
-$SELECT2=
-	"SELECT COUNT(*) FROM `##log`".
-	" LEFT JOIN `##user`   USING (user_id)".   // user may be deleted
-	" LEFT JOIN `##gedcom` USING (gedcom_id)"; // gedcom may be deleted
+$SELECT1 =
+	"SELECT SQL_CALC_FOUND_ROWS log_time, log_type, log_message, ip_address, IFNULL(user_name, '<none>') AS user_name, IFNULL(gedcom_name, '<none>') AS gedcom_name" .
+	' FROM `##log`' .
+	' LEFT JOIN `##user`   USING (user_id)' .   // user may be deleted
+	' LEFT JOIN `##gedcom` USING (gedcom_id)'; // gedcom may be deleted
+$SELECT2 =
+	'SELECT COUNT(*) FROM `##log`' .
+	' LEFT JOIN `##user`   USING (user_id)' .   // user may be deleted
+	' LEFT JOIN `##gedcom` USING (gedcom_id)'; // gedcom may be deleted
 if ($query) {
-	$WHERE=" WHERE " . implode(' AND ', $query);
+	$WHERE = ' WHERE ' . implode(' AND ', $query);
 } else {
-	$WHERE='';
+	$WHERE = '';
 }
 
-switch($action) {
+switch ($action) {
 	case 'delete':
 		$DELETE =
-			"DELETE `##log` FROM `##log`".
-			" LEFT JOIN `##user`   USING (user_id)".   // user may be deleted
-			" LEFT JOIN `##gedcom` USING (gedcom_id)". // gedcom may be deleted
+			'DELETE `##log` FROM `##log`' .
+			' LEFT JOIN `##user`   USING (user_id)' .   // user may be deleted
+			' LEFT JOIN `##gedcom` USING (gedcom_id)' . // gedcom may be deleted
 			$WHERE;
 		KT_DB::prepare($DELETE)->execute($args);
+
 		break;
 
 	case 'load_json':
 		Zend_Session::writeClose();
-		$iDisplayStart	= (int)safe_GET('iDisplayStart');
-		$iDisplayLength	= (int)safe_GET('iDisplayLength');
+		$iDisplayStart = (int) safe_GET('iDisplayStart');
+		$iDisplayLength = (int) safe_GET('iDisplayLength');
 		set_user_setting(KT_USER_ID, 'admin_site_log_page_size', $iDisplayLength);
-		if ($iDisplayLength>0) {
-			$LIMIT = " LIMIT " . $iDisplayStart . ',' . $iDisplayLength;
+		if ($iDisplayLength > 0) {
+			$LIMIT = ' LIMIT ' . $iDisplayStart . ',' . $iDisplayLength;
 		} else {
-			$LIMIT = "";
+			$LIMIT = '';
 		}
-		$iSortingCols=safe_GET('iSortingCols');
+		$iSortingCols = safe_GET('iSortingCols');
 		if ($iSortingCols) {
 			$ORDER_BY = ' ORDER BY ';
-			for ($i = 0; $i < $iSortingCols; ++$i) {
+			for ($i = 0; $i < $iSortingCols; $i++) {
 				// Datatables numbers columns 0, 1, 2, ...
 				// MySQL numbers columns 1, 2, 3, ...
 				switch (safe_GET('sSortDir_' . $i)) {
-				case 'asc':
-					if ((int)safe_GET('iSortCol_' . $i) == 0) {
-						$ORDER_BY .= 'log_id ASC '; // column 0 is "timestamp", using log_id gives the correct order for events in the same second
-					} else {
-						$ORDER_BY .= (1 + (int)safe_GET('iSortCol_' . $i)) . ' ASC ';
-					}
-					break;
-				case 'desc':
-					if ((int)safe_GET('iSortCol_'.$i)==0) {
-						$ORDER_BY .= 'log_id DESC ';
-					} else {
-						$ORDER_BY .= ( 1 + (int)safe_GET('iSortCol_' . $i)) . ' DESC ';
-					}
-					break;
+					case 'asc':
+						if (0 == (int) safe_GET('iSortCol_' . $i)) {
+							$ORDER_BY .= 'log_id ASC '; // column 0 is "timestamp", using log_id gives the correct order for events in the same second
+						} else {
+							$ORDER_BY .= (1 + (int) safe_GET('iSortCol_' . $i)) . ' ASC ';
+						}
+
+						break;
+
+					case 'desc':
+						if (0 == (int) safe_GET('iSortCol_' . $i)) {
+							$ORDER_BY .= 'log_id DESC ';
+						} else {
+							$ORDER_BY .= (1 + (int) safe_GET('iSortCol_' . $i)) . ' DESC ';
+						}
+
+						break;
 				}
-				if ($i<$iSortingCols-1) {
-					$ORDER_BY.=',';
+				if ($i < $iSortingCols - 1) {
+					$ORDER_BY .= ',';
 				}
 			}
 		} else {
-			$ORDER_BY='1 DESC';
+			$ORDER_BY = '1 DESC';
 		}
 
 		// This becomes a JSON list, not array, so need to fetch with numeric keys.
 		$data = KT_DB::prepare($SELECT1 . $WHERE . $ORDER_BY . $LIMIT)->execute($args)->fetchAll(PDO::FETCH_NUM);
 		foreach ($data as &$row) {
-			$row[2] = htmlspecialchars($row[2]);
+			$row[2] = htmlspecialchars((string) $row[2]);
 		}
 
 		// Total filtered/unfiltered rows
-		$iTotalDisplayRecords	= KT_DB::prepare("SELECT FOUND_ROWS()")->fetchColumn();
-		$iTotalRecords			= KT_DB::prepare($SELECT2 . $WHERE)->execute($args)->fetchColumn();
+		$iTotalDisplayRecords = KT_DB::prepare('SELECT FOUND_ROWS()')->fetchColumn();
+		$iTotalRecords = KT_DB::prepare($SELECT2 . $WHERE)->execute($args)->fetchColumn();
 
 		header('Content-type: application/json');
-		echo json_encode(array( // See http://www.datatables.net/usage/server-side
-			'sEcho'               =>(int)safe_GET('sEcho'),
-			'iTotalRecords'       =>$iTotalRecords,
-			'iTotalDisplayRecords'=>$iTotalDisplayRecords,
-			'data'              =>$data
-		));
-	exit;
+		echo json_encode([ // See http://www.datatables.net/usage/server-side
+			'sEcho' => (int) safe_GET('sEcho'),
+			'iTotalRecords' => $iTotalRecords,
+			'iTotalDisplayRecords' => $iTotalDisplayRecords,
+			'data' => $data,
+		]);
+
+		exit;
 }
 
 $controller
@@ -183,14 +190,14 @@ $controller
 	->addInlineJavascript('
 		jQuery("#log_list").dataTable({
 			dom: \'<"top"pBf<"clear">irl>t<"bottom"pl>\',
-			' . KT_I18N::datatablesI18N(array(10,20,50,100,500,1000,-1)) . ',
+			' . KT_I18N::datatablesI18N([10, 20, 50, 100, 500, 1000, -1]) . ',
 			buttons: [{extend: "csvHtml5"}],
 			autoWidth: false,
 			processing: true,
 			displayLength: ' . get_user_setting(KT_USER_ID, 'admin_site_log_page_size', 10) . ',
 			serverSide: true,
 			pagingType: "full_numbers",
-			"sAjaxSource": "admin_site_logs.php?action=load_json&from='.$from.'&to='.$to.'&type='.$type.'&text='.rawurlencode($text).'&ip='.rawurlencode($ip).'&user='.rawurlencode($user).'&gedc='.rawurlencode($gedc).'",
+			"sAjaxSource": "admin_site_logs.php?action=load_json&from=' . $from . '&to=' . $to . '&type=' . $type . '&text=' . rawurlencode((string) $text) . '&ip=' . rawurlencode((string) $ip) . '&user=' . rawurlencode((string) $user) . '&gedc=' . rawurlencode((string) $gedc) . '",
 			sorting: [[ 0, "desc" ]],
 			columns: [
 				/* 0 - Timestamp   */ { },
@@ -207,7 +214,8 @@ $controller
 			endDate: "' . $latest . '",
 			language: "' . KT_LOCALE . '"
 		});
-	');
+	')
+;
 
 $users_array = array_combine(get_all_users(), get_all_users());
 uksort($users_array, 'strnatcasecmp');
@@ -223,7 +231,7 @@ echo pageStart('site_logs', $controller->getPageTitle()); ?>
 				<label class="h6"><?php echo KT_I18N::translate('From'); ?></label>
 				<div class="date fdatepicker" id="from" data-date-format="yyyy-mm-dd">
 					<div class="input-group">
-						<input class="input-group-field" type="text" name="from" value="<?php echo htmlspecialchars($from); ?>">
+						<input class="input-group-field" type="text" name="from" value="<?php echo htmlspecialchars((string) $from); ?>">
 						<span class="postfix input-group-label"><i class="<?php echo $iconStyle; ?> fa-calendar-days fa-lg"></i></span>
 					</div>
 				</div>
@@ -232,22 +240,22 @@ echo pageStart('site_logs', $controller->getPageTitle()); ?>
 				<label class="h6"><?php echo KT_I18N::translate('To'); ?></label>
 				<div class="date fdatepicker" id="to" data-date-format="yyyy-mm-dd">
 					<div class="input-group">
-						<input class="input-group-field" type="text" name="to" value="<?php echo htmlspecialchars($to); ?>">
+						<input class="input-group-field" type="text" name="to" value="<?php echo htmlspecialchars((string) $to); ?>">
 						<span class="postfix input-group-label"><i class="<?php echo $iconStyle; ?> fa-calendar-days fa-lg"></i></span>
 					</div>
 				</div>
 			</div>
 			<div class="cell medium-2">
 				<label class="h6"><?php echo KT_I18N::translate('Type'); ?></label>
-				<?php echo select_edit_control('type', array(''=>'', 'auth'=>'auth','config'=>'config','debug'=>'debug','edit'=>'edit','error'=>'error','media'=>'media','search'=>'search', 'spam'=>'spam'), null, $type, ''); ?>
+				<?php echo select_edit_control('type', ['' => '', 'auth' => 'auth', 'config' => 'config', 'debug' => 'debug', 'edit' => 'edit', 'error' => 'error', 'media' => 'media', 'search' => 'search', 'spam' => 'spam'], null, $type, ''); ?>
 			</div>
 			<div class="cell medium-2">
 				<label class="h6"><?php echo KT_I18N::translate('IP address'); ?></label>
-				<input class="log-filter" type="text" name="ip" value="<?php echo htmlspecialchars($ip); ?>">
+				<input class="log-filter" type="text" name="ip" value="<?php echo htmlspecialchars((string) $ip); ?>">
 			</div>
 			<div class="cell medium-4 medium-offset-1">
 				<label class="h6"><?php echo KT_I18N::translate('Message'); ?></label>
-				<input class="log-filter" type="text" name="text" value="<?php echo htmlspecialchars($text); ?>">
+				<input class="log-filter" type="text" name="text" value="<?php echo htmlspecialchars((string) $text); ?>">
 			</div>
 			<div class="cell medium-3">
 				<label class="h6"><?php echo KT_I18N::translate('User'); ?></label>
@@ -262,7 +270,7 @@ echo pageStart('site_logs', $controller->getPageTitle()); ?>
 					<i class="<?php echo $iconStyle; ?> fa-magnifying-glass"></i>
 					<?php echo KT_I18N::translate('Search'); ?>
 				</button>
-				<button type="submit" class="button" <?php echo 'onclick="if (confirm(\'' . htmlspecialchars(KT_I18N::translate('Permanently delete these records?')) . '\')) {document.logs.action.value=\'delete\';return true;} else {return false;}"' . ($action=='show' ? '' : 'disabled="disabled"');?> >
+				<button type="submit" class="button" <?php echo 'onclick="if (confirm(\'' . htmlspecialchars(KT_I18N::translate('Permanently delete these records?')) . '\')) {document.logs.action.value=\'delete\';return true;} else {return false;}"' . ('show' == $action ? '' : 'disabled="disabled"'); ?> >
 					<i class="<?php echo $iconStyle; ?> fa-trash-can"></i>
 					<?php echo KT_I18N::translate('Delete results'); ?>
 				</button>
@@ -270,7 +278,7 @@ echo pageStart('site_logs', $controller->getPageTitle()); ?>
 		</div>
 	</form>
 	<hr class="cell">
-	<?php if ($action) { ?>
+	<?php if ($action == 'show') { ?>
 		<div class="cell grid-x grid-margin-x">
 			<table id="log_list">
 				<thead>
@@ -289,4 +297,4 @@ echo pageStart('site_logs', $controller->getPageTitle()); ?>
 		</div>
 	<?php }
 
-echo pageClose();
+	echo pageClose();

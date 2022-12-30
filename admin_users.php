@@ -267,14 +267,14 @@ switch (KT_Filter::get('action')) {
 			$aData[11] = $aData[11] ? KT_I18N::translate('Yes') : KT_I18N::translate('No');
 			// Add extra column for "delete" action
 			if ($user_id != KT_USER_ID) {
-				$aData[12]='<div class="' . $iconStyle . ' fa-trash-can" onclick="if (confirm(\''.htmlspecialchars(KT_I18N::translate('Are you sure you want to delete “%s”?', $username)).'\')) { document.location=\''.KT_SCRIPT_NAME.'?action=deleteuser&username='.htmlspecialchars($username).'\'; }"></div>';
+				$aData[12]='<div class="' . $iconStyle . ' fa-trash-can" onclick="if (confirm(\''.htmlspecialchars(KT_I18N::translate('Are you sure you want to delete “%s”?', $username)).'\')) { document.location=\''.KT_SCRIPT_NAME.'?action=deleteuser&username='.htmlspecialchars((string) $username).'\'; }"></div>';
 			} else {
 				// Do not delete ourself!
 				$aData[12]='';
 			}
 			// Add extra column for "masquerade" action
 			if ($user_id != KT_USER_ID) {
-				$aData[13]='<div class="' . $iconStyle . ' fa-mask" onclick="if (confirm(\''.htmlspecialchars(KT_I18N::translate('Are you sure you want to masquerade as “%s”?', $username)).'\')) { document.location=\''.KT_SCRIPT_NAME.'?action=masquerade_user&username='.htmlspecialchars($username).'\'; }"></div>';
+				$aData[13]='<div class="' . $iconStyle . ' fa-mask" onclick="if (confirm(\''.htmlspecialchars(KT_I18N::translate('Are you sure you want to masquerade as “%s”?', $username)).'\')) { document.location=\''.KT_SCRIPT_NAME.'?action=masquerade_user&username='.htmlspecialchars((string) $username).'\'; }"></div>';
 			} else {
 				// Do not masquerade as ourself!
 				$aData[13]='';

@@ -282,7 +282,7 @@ class research_links_KT_Module extends KT_Module implements KT_Module_Config, KT
 										if ($sublinks || $sublinks_only) {
 											$sublinks_only ? $sublinks = $sublinks_only : $sublinks = $sublinks;
 											$html .= '<li>
-												<a class="mainlink" href="'.htmlspecialchars($link).'">
+												<a class="mainlink" href="'.htmlspecialchars((string) $link).'">
 													<span class="ui-icon ui-icon-triangle-1-e left"></span>'.
 													$plugin->getName() . '
 													<span title="' . KT_I18N::translate('Pay to view') . '">' . $this->getCurrency($plugin) . '</span>';
@@ -293,9 +293,9 @@ class research_links_KT_Module extends KT_Module implements KT_Module_Config, KT
 												<ul class="sublinks">';
 													foreach ($sublinks as $sublink) {
 														if (stripos($sublink['link'], "postresearchform") === false){
-															$alink = 'href="' . htmlspecialchars($sublink['link']) . '"';
+															$alink = 'href="' . htmlspecialchars((string) $sublink['link']) . '"';
 														} else {
-															$alink = 'href="javascript:void(0);" onclick="' . htmlspecialchars($sublink['link']) . '; return false;"';
+															$alink = 'href="javascript:void(0);" onclick="' . htmlspecialchars((string) $sublink['link']) . '; return false;"';
 														}
 														$html .= '<li>
 															<a class="research_link" ' . $alink . ' target="_blank" rel="noopener noreferrer">
@@ -309,9 +309,9 @@ class research_links_KT_Module extends KT_Module implements KT_Module_Config, KT
 										} else { // default
 											$link_only ? $link = $link_only : $link = $link;
 											if (stripos($link, "postresearchform") === false){
-												$alink = 'href="' . htmlspecialchars($link) . '"';
+												$alink = 'href="' . htmlspecialchars((string) $link) . '"';
 											} else {
-												$alink = 'href="javascript:void(0);" onclick="' . htmlspecialchars($link) . '; return false;"';
+												$alink = 'href="javascript:void(0);" onclick="' . htmlspecialchars((string) $link) . '; return false;"';
 											}
 											$html .= '<li>
 												<a class="research_link" ' . $alink . ' target="_blank" rel="noopener noreferrer">
@@ -504,7 +504,7 @@ class research_links_KT_Module extends KT_Module implements KT_Module_Config, KT
 														}
 														if ($sublinks) { // 'links_only' excluded ?>
 															<li>
-																<a class="mainlink" href="<?php echo htmlspecialchars($link); ?>">
+																<a class="mainlink" href="<?php echo htmlspecialchars((string) $link); ?>">
 																	<?php echo $plugin->getName(); ?>
 																	<span title="<?php echo KT_I18N::translate('Pay to view'); ?>"><?php echo $this->getCurrency($plugin); ?></span>
 																</a>
@@ -512,9 +512,9 @@ class research_links_KT_Module extends KT_Module implements KT_Module_Config, KT
 																<ul class="sublinks">
 																	<?php foreach ($sublinks as $sublink) {
 																		if (stripos($sublink['link'], "postresearchform") === false){
-																			$alink = 'href="' . htmlspecialchars($sublink['link']) . '"';
+																			$alink = 'href="' . htmlspecialchars((string) $sublink['link']) . '"';
 																		} else {
-																			$alink = 'href="javascript:void(0);" onclick="' . htmlspecialchars($sublink['link']) . '; return false;"';
+																			$alink = 'href="javascript:void(0);" onclick="' . htmlspecialchars((string) $sublink['link']) . '; return false;"';
 																		} ?>
 																		<li>
 																			<a class="research_link" <?php echo $alink; ?> target="_blank" rel="noopener noreferrer">
@@ -526,9 +526,9 @@ class research_links_KT_Module extends KT_Module implements KT_Module_Config, KT
 															</li>
 														<?php } elseif (!$plugin->createLinkOnly() && !$plugin->createSubLinksOnly()) { // default, excluding 'links_only'
 															if (stripos($link, "postresearchform") === false) {
-																$alink = 'href="' . htmlspecialchars($link) . '"';
+																$alink = 'href="' . htmlspecialchars((string) $link) . '"';
 															} else {
-																$alink = 'href="javascript:void(0);" onclick="' . htmlspecialchars($link) . '; return false;"';
+																$alink = 'href="javascript:void(0);" onclick="' . htmlspecialchars((string) $link) . '; return false;"';
 															} ?>
 															<li>
 																<a class="research_link" <?php echo $alink; ?> target="_blank" rel="noopener noreferrer">
@@ -552,7 +552,7 @@ class research_links_KT_Module extends KT_Module implements KT_Module_Config, KT
 	}
 
 	private function encode($var, $plus) {
-		$var = rawurlencode($var);
+		$var = rawurlencode((string) $var);
 		return $plus ? str_replace("%20", "+", $var) : $var;
 	}
 

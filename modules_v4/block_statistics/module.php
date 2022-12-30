@@ -305,7 +305,7 @@ class block_statistics_KT_Module extends KT_Module implements KT_Module_Block {
 							if ($i > 0) {
 								$content .= ', ';
 							}
-							$content .= '<a class="names" href="module.php?mod=list_individuals&amp;mod_action=show&amp;surname=' . rawurlencode($surname['name']) . '&amp;ged=' . KT_GEDURL . '&amp;show_all_firstnames=yes" target="_blank">' . $surname['name'] . '</a>';
+							$content .= '<a class="names" href="module.php?mod=list_individuals&amp;mod_action=show&amp;surname=' . rawurlencode((string) $surname['name']) . '&amp;ged=' . KT_GEDURL . '&amp;show_all_firstnames=yes" target="_blank">' . $surname['name'] . '</a>';
 							$i++;
 						}
 					}

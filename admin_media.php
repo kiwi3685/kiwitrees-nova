@@ -312,7 +312,7 @@ case 'loadrows':
 				foreach ($media_trees as $media_tree) {
 					$create_form .= '
 						<p>
-							<a onclick="window.open(\'addmedia.php?action=showmediaform&amp;ged=' . rawurlencode($media_tree) . '&amp;filename=' . rawurlencode($unused_file) . '\'); return false;">' .
+							<a onclick="window.open(\'addmedia.php?action=showmediaform&amp;ged=' . rawurlencode((string) $media_tree) . '&amp;filename=' . rawurlencode((string) $unused_file) . '\'); return false;">' .
 								KT_I18N::translate('Create') . '
 							</a>
 							 — ' .
@@ -438,7 +438,7 @@ function all_media_files($media_folder, $media_path, $subfolders, $filter) {
 }
 
 function media_file_info($media_folder, $media_path, $file) {
-	$html = '<b>' . htmlspecialchars($file). '</b>';
+	$html = '<b>' . htmlspecialchars((string) $file). '</b>';
 
 	$full_path = KT_DATA_DIR . $media_folder . $media_path . $file;
 	if ($file && file_exists($full_path)) {
@@ -479,7 +479,7 @@ function media_object_info(KT_Media $media) {
 	$name   = $media->getFullName();
 	$html   =
 		'<b>' . $name . '</b>' .
-		'<div><i>' . htmlspecialchars($media->getNote()) . '</i></div>' .
+		'<div><i>' . htmlspecialchars((string) $media->getNote()) . '</i></div>' .
 		'<br>';
 
 	$linked = array();
@@ -597,7 +597,7 @@ echo pageStart('admin_media', $controller->getPageTitle()); ?>
 									</label>
 								<?php } else { ?>
 									<label class="middle">
-										<?php echo $media_folder . '<input type="hidden" name="media_folder" value="', htmlspecialchars($media_folder), '">'; ?>
+										<?php echo $media_folder . '<input type="hidden" name="media_folder" value="', htmlspecialchars((string) $media_folder), '">'; ?>
 									</label>
 								<?php } ?>
 							</div>
@@ -605,8 +605,8 @@ echo pageStart('admin_media', $controller->getPageTitle()); ?>
 						break;
 						case 'external': ?>
 							<?php echo KT_I18N::translate('External media files have a URL instead of a filename.'); ?>
-							<input type="hidden" name="media_folder" value="'<?php echo htmlspecialchars($media_folder); ?>">
-							<input type="hidden" name="media_path" value="'<?php echo htmlspecialchars($media_path); ?>">
+							<input type="hidden" name="media_folder" value="'<?php echo htmlspecialchars((string) $media_folder); ?>">
+							<input type="hidden" name="media_path" value="'<?php echo htmlspecialchars((string) $media_path); ?>">
 						<?php break;
 					} ?>
 					<div class="cell auto media-folders">
@@ -614,7 +614,7 @@ echo pageStart('admin_media', $controller->getPageTitle()); ?>
 						if (count($media_paths) > 1) { ?>
 							<?php echo select_edit_control('media_path', $media_paths, null, $media_path, $extra); ?>
 						<?php } else { ?>
-							<?php echo $media_path . '<input type="hidden" name="media_path" value="', htmlspecialchars($media_path) . '">'; ?>
+							<?php echo $media_path . '<input type="hidden" name="media_path" value="', htmlspecialchars((string) $media_path) . '">'; ?>
 						<?php } ?>
 					</div>
 				</div>

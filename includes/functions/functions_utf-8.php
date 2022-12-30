@@ -1,14 +1,14 @@
 <?php
 /**
  * Kiwitrees: Web based Family History software
- * Copyright (C) 2012 to 2022 kiwitrees.net
- * 
+ * Copyright (C) 2012 to 2022 kiwitrees.net.
+ *
  * Derived from webtrees (www.webtrees.net)
  * Copyright (C) 2010 to 2012 webtrees development team
- * 
+ *
  * Derived from PhpGedView (phpgedview.sourceforge.net)
  * Copyright (C) 2002 to 2010 PGV Development Team
- * 
+ *
  * Kiwitrees is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -20,272 +20,302 @@
  * You should have received a copy of the GNU General Public License
  * along with Kiwitrees. If not, see <http://www.gnu.org/licenses/>.
  */
-
 if (!defined('KT_KIWITREES')) {
 	header('HTTP/1.0 403 Forbidden');
+
 	exit;
 }
 
 // Identify the script used in a given string.  Just look at the first significant character.
 // If there are mixed scripts, then the enclosed scripts should already have been wrapped
 // in lrm/rlm markup.
-function utf8_script($string) {
-	$string=strip_tags($string);                               // otherwise HTML tags show up as latin
-	$string=html_entity_decode($string, ENT_QUOTES, 'UTF-8');  // otherwise HTML entities show up as latin
-	$string=str_replace(array('@N.N.', '@P.N.'), '', $string); // otherwise unknown names show up as latin
-	$pos=0;
-	$strlen=strlen($string);
-	while ($pos<$strlen) {
-		$byte=ord($string[$pos]);
-		if (($byte & 0xE0)==0xC0) {
-			$chrlen=2; $chr=$string[$pos].$string[$pos+1];
-		} elseif (($byte & 0xF0)==0xE0) {
-			$chrlen=3; $chr=$string[$pos].$string[$pos+1].$string[$pos+2];
+function utf8_script($string)
+{
+	$string = strip_tags($string);                               // otherwise HTML tags show up as latin
+	$string = html_entity_decode($string, ENT_QUOTES, 'UTF-8');  // otherwise HTML entities show up as latin
+	$string = str_replace(['@N.N.', '@P.N.'], '', $string); // otherwise unknown names show up as latin
+	$pos = 0;
+	$strlen = strlen($string);
+	while ($pos < $strlen) {
+		$byte = ord($string[$pos]);
+		if (($byte & 0xE0) == 0xC0) {
+			$chrlen = 2;
+			$chr = $string[$pos] . $string[$pos + 1];
+		} elseif (($byte & 0xF0) == 0xE0) {
+			$chrlen = 3;
+			$chr = $string[$pos] . $string[$pos + 1] . $string[$pos + 2];
 		} else {
-			$chrlen=1; $chr=$string[$pos];
+			$chrlen = 1;
+			$chr = $string[$pos];
 		}
 		// Try language-specific conversion before generic conversion
-		if (strpos(KT_UTF8_LATIN_CHARACTERS, $chr)!==false) {
+		if (false !== strpos(KT_UTF8_LATIN_CHARACTERS, $chr)) {
 			return 'Latn';
-		} elseif (strpos(KT_UTF8_CYRILLIC_CHARACTERS, $chr)!==false) {
+		}
+		if (false !== strpos(KT_UTF8_CYRILLIC_CHARACTERS, $chr)) {
 			return 'Cyrl';
-		} elseif (strpos(KT_UTF8_HEBREW_CHARACTERS, $chr)!==false) {
+		}
+		if (false !== strpos(KT_UTF8_HEBREW_CHARACTERS, $chr)) {
 			return 'Hebr';
-		} elseif (strpos(KT_UTF8_GREEK_CHARACTERS, $chr)!==false) {
+		}
+		if (false !== strpos(KT_UTF8_GREEK_CHARACTERS, $chr)) {
 			return 'Grek';
-		} elseif (strpos(KT_UTF8_ARABIC_CHARACTERS, $chr)!==false) {
+		}
+		if (false !== strpos(KT_UTF8_ARABIC_CHARACTERS, $chr)) {
 			return 'Arab';
-		} elseif (strpos(KT_UTF8_GEORGIAN_CHARACTERS, $chr)!==false) {
+		}
+		if (false !== strpos(KT_UTF8_GEORGIAN_CHARACTERS, $chr)) {
 			return 'Geor';
 		}
-		$pos+=$chrlen;
+		$pos += $chrlen;
 	}
 	// No characters with strong directionality.
 	return 'common';
 }
 
 // Determine whether a string contains LTR or RTL characters
-function utf8_direction($string) {
+function utf8_direction($string)
+{
 	switch (utf8_script($string)) {
-	case 'Latn':
-	case 'Cyrl':
-	case 'Grek':
-		return 'ltr';
-	case 'Arab':
-	case 'Hebr':
-		return 'rtl';
-	default:
-		return 'unknown';
+		case 'Latn':
+		case 'Cyrl':
+		case 'Grek':
+			return 'ltr';
+
+		case 'Arab':
+		case 'Hebr':
+			return 'rtl';
+
+		default:
+			return 'unknown';
 	}
 }
 
-function utf8_strtoupper($string) {
+function utf8_strtoupper($string)
+{
 	global $ALPHABET_lower, $ALPHABET_upper; // Language-specific conversions, e.g. Turkish dotless i
 
-	$upper=$string;
-	$pos=0;
-	$strlen=strlen($string);
-	while ($pos<$strlen) {
-		$byte=ord($string[$pos]);
-		if (($byte & 0xE0)==0xC0) {
-			$chrlen=2; $chr=$string[$pos].$string[$pos+1];
-		} elseif (($byte & 0xF0)==0xE0) {
-			$chrlen=3; $chr=$string[$pos].$string[$pos+1].$string[$pos+2];
+	$upper = $string;
+	$pos = 0;
+	$strlen = strlen($string);
+	while ($pos < $strlen) {
+		$byte = ord($string[$pos]);
+		if (($byte & 0xE0) == 0xC0) {
+			$chrlen = 2;
+			$chr = $string[$pos] . $string[$pos + 1];
+		} elseif (($byte & 0xF0) == 0xE0) {
+			$chrlen = 3;
+			$chr = $string[$pos] . $string[$pos + 1] . $string[$pos + 2];
 		} else {
-			$chrlen=1; $chr=$string[$pos];
+			$chrlen = 1;
+			$chr = $string[$pos];
 		}
 		// Try language-specific conversion before generic conversion
-		if (($chrpos=strpos($ALPHABET_lower, $chr))!==false) {
-			$upper=substr_replace($upper, substr($ALPHABET_upper, $chrpos, $chrlen), $pos, $chrlen);
-		} elseif (($chrpos=strpos(KT_UTF8_ALPHABET_LOWER, $chr))!==false) {
-			$upper=substr_replace($upper, substr(KT_UTF8_ALPHABET_UPPER, $chrpos, $chrlen), $pos, $chrlen);
+		if (($chrpos = strpos($ALPHABET_lower, $chr)) !== false) {
+			$upper = substr_replace($upper, substr($ALPHABET_upper, $chrpos, $chrlen), $pos, $chrlen);
+		} elseif (($chrpos = strpos(KT_UTF8_ALPHABET_LOWER, $chr)) !== false) {
+			$upper = substr_replace($upper, substr(KT_UTF8_ALPHABET_UPPER, $chrpos, $chrlen), $pos, $chrlen);
 		}
-		$pos+=$chrlen;
+		$pos += $chrlen;
 	}
+
 	return $upper;
 }
 
-function utf8_strtolower($string) {
+function utf8_strtolower($string)
+{
 	global $ALPHABET_lower, $ALPHABET_upper; // Language-specific conversions, e.g. Turkish dotless i
 
-	$lower=$string;
-	$pos=0;
-	$strlen=strlen($string);
-	while ($pos<$strlen) {
-		$byte=ord($string[$pos]);
-		if (($byte & 0xE0)==0xC0) {
-			$chrlen=2; $chr=$string[$pos].$string[$pos+1];
-		} elseif (($byte & 0xF0)==0xE0) {
-			$chrlen=3; $chr=$string[$pos].$string[$pos+1].$string[$pos+2];
+	$lower = $string;
+	$pos = 0;
+	$strlen = strlen($string);
+	while ($pos < $strlen) {
+		$byte = ord($string[$pos]);
+		if (($byte & 0xE0) == 0xC0) {
+			$chrlen = 2;
+			$chr = $string[$pos] . $string[$pos + 1];
+		} elseif (($byte & 0xF0) == 0xE0) {
+			$chrlen = 3;
+			$chr = $string[$pos] . $string[$pos + 1] . $string[$pos + 2];
 		} else {
-			$chrlen=1; $chr=$string[$pos];
+			$chrlen = 1;
+			$chr = $string[$pos];
 		}
 		// Try language-specific conversion before generic conversion
-		if (($chrpos=strpos($ALPHABET_upper, $chr))!==false) {
-			$lower=substr_replace($lower, substr($ALPHABET_lower, $chrpos, $chrlen), $pos, $chrlen);
-		} elseif (($chrpos=strpos(KT_UTF8_ALPHABET_UPPER, $chr))!==false) {
-			$lower=substr_replace($lower, substr(KT_UTF8_ALPHABET_LOWER, $chrpos, $chrlen), $pos, $chrlen);
+		if (($chrpos = strpos($ALPHABET_upper, $chr)) !== false) {
+			$lower = substr_replace($lower, substr($ALPHABET_lower, $chrpos, $chrlen), $pos, $chrlen);
+		} elseif (($chrpos = strpos(KT_UTF8_ALPHABET_UPPER, $chr)) !== false) {
+			$lower = substr_replace($lower, substr(KT_UTF8_ALPHABET_LOWER, $chrpos, $chrlen), $pos, $chrlen);
 		}
-		$pos+=$chrlen;
+		$pos += $chrlen;
 	}
+
 	return $lower;
 }
 
-function utf8_substr($string, $pos, $len=PHP_INT_MAX) {
-	if ($len<0) {
+function utf8_substr($string, $pos, $len = PHP_INT_MAX)
+{
+	if ($len < 0) {
 		return '';
 	}
-	$strlen=strlen($string);
-	if ($pos==0) {
-		$start=0;
-	} elseif ($pos>0) {
-		$start=0;
-		while ($pos>0 && $start<$strlen) {
-			++$start;
-			while ($start<$strlen && (ord($string[$start]) & 0xC0) == 0x80) {
-				++$start;
+	$strlen = strlen($string);
+	if (0 == $pos) {
+		$start = 0;
+	} elseif ($pos > 0) {
+		$start = 0;
+		while ($pos > 0 && $start < $strlen) {
+			$start++;
+			while ($start < $strlen && (ord($string[$start]) & 0xC0) == 0x80) {
+				$start++;
 			}
-			--$pos;
+			$pos--;
 		}
 	} else {
-		$start=$strlen-1;
+		$start = $strlen - 1;
 		do {
-			--$start;
+			$start--;
 			while ($start && (ord($string[$start]) & 0xC0) == 0x80) {
-				--$start;
+				$start--;
 			}
-			++$pos;
-		} while ($start && $pos<0);
+			$pos++;
+		} while ($start && $pos < 0);
 	}
-	if ($len==PHP_INT_MAX || $len<0) {
+	if (PHP_INT_MAX == $len || $len < 0) {
 		return substr($string, $start);
 	}
-	$end=$start;
-	while ($len>0) {
-		++$end;
-		while ($end<$strlen && (ord($string[$end]) & 0xC0) == 0x80) {
-			++$end;
+	$end = $start;
+	while ($len > 0) {
+		$end++;
+		while ($end < $strlen && (ord($string[$end]) & 0xC0) == 0x80) {
+			$end++;
 		}
-		--$len;
+		$len--;
 	}
-	return substr($string, $start, $end-$start);
+
+	return substr($string, $start, $end - $start);
 }
 
-function utf8_strlen($string) {
-	$pos=0;
-	$len=strlen($string);
-	$utf8_len=0;
-	while ($pos<$len) {
+function utf8_strlen($string)
+{
+	$pos = 0;
+	$len = strlen($string);
+	$utf8_len = 0;
+	while ($pos < $len) {
 		if ((ord($string[$pos]) & 0xC0) != 0x80) {
-			++$utf8_len;
+			$utf8_len++;
 		}
-		++$pos;
+		$pos++;
 	}
+
 	return $utf8_len;
 }
 
-function utf8_strcasecmp($string1, $string2) {
+function utf8_strcasecmp($string1, $string2)
+{
 	// Language-specific alphabet sequence
 	global $ALPHABET_lower, $ALPHABET_upper;
 
-	$strpos1=0;
-	$strpos2=0;
-	$strlen1=strlen($string1);
-	$strlen2=strlen($string2);
-	while ($strpos1<$strlen1 && $strpos2<$strlen2) {
-		$byte1=ord($string1[$strpos1]);
-		$byte2=ord($string2[$strpos2]);
-		if (($byte1 & 0xE0)==0xC0) {
-			$chr1=$string1[$strpos1++].$string1[$strpos1++];
-		} elseif (($byte1 & 0xF0)==0xE0) {
-			$chr1=$string1[$strpos1++].$string1[$strpos1++].$string1[$strpos1++];
+	$strpos1 = 0;
+	$strpos2 = 0;
+	$strlen1 = strlen($string1);
+	$strlen2 = strlen($string2);
+	while ($strpos1 < $strlen1 && $strpos2 < $strlen2) {
+		$byte1 = ord($string1[$strpos1]);
+		$byte2 = ord($string2[$strpos2]);
+		if (($byte1 & 0xE0) == 0xC0) {
+			$chr1 = $string1[$strpos1++] . $string1[$strpos1++];
+		} elseif (($byte1 & 0xF0) == 0xE0) {
+			$chr1 = $string1[$strpos1++] . $string1[$strpos1++] . $string1[$strpos1++];
 		} else {
-			$chr1=$string1[$strpos1++];
+			$chr1 = $string1[$strpos1++];
 		}
-		if (($byte2 & 0xE0)==0xC0) {
-			$chr2=$string2[$strpos2++].$string2[$strpos2++];
-		} elseif (($byte2 & 0xF0)==0xE0) {
-			$chr2=$string2[$strpos2++].$string2[$strpos2++].$string2[$strpos2++];
+		if (($byte2 & 0xE0) == 0xC0) {
+			$chr2 = $string2[$strpos2++] . $string2[$strpos2++];
+		} elseif (($byte2 & 0xF0) == 0xE0) {
+			$chr2 = $string2[$strpos2++] . $string2[$strpos2++] . $string2[$strpos2++];
 		} else {
-			$chr2=$string2[$strpos2++];
+			$chr2 = $string2[$strpos2++];
 		}
-		if ($chr1==$chr2) {
+		if ($chr1 == $chr2) {
 			continue;
 		}
 		// Try the local alphabet first
-		$offset1=strpos($ALPHABET_lower, $chr1);
-		if ($offset1===false) {
-			$offset1=strpos($ALPHABET_upper, $chr1);
+		$offset1 = strpos((string) $ALPHABET_lower, $chr1);
+		if (false === $offset1) {
+			$offset1 = strpos((string) $ALPHABET_upper, $chr1);
 		}
-		$offset2=strpos($ALPHABET_lower, $chr2);
-		if ($offset2===false) {
-			$offset2=strpos($ALPHABET_upper, $chr2);
-		}	
-		if ($offset1!==false && $offset2!==false) {
-			if ($offset1==$offset2) {
+		$offset2 = strpos((string) $ALPHABET_lower, $chr2);
+		if (false === $offset2) {
+			$offset2 = strpos((string) $ALPHABET_upper, $chr2);
+		}
+		if (false !== $offset1 && false !== $offset2) {
+			if ($offset1 == $offset2) {
 				continue;
-			} else {
-				return $offset1-$offset2;
 			}
+
+			return $offset1 - $offset2;
 		}
 		// Try the global alphabet next
-		$offset1=strpos(KT_UTF8_ALPHABET_LOWER, $chr1);
-		if ($offset1===false) {
-			$offset1=strpos(KT_UTF8_ALPHABET_UPPER, $chr1);
+		$offset1 = strpos(KT_UTF8_ALPHABET_LOWER, $chr1);
+		if (false === $offset1) {
+			$offset1 = strpos(KT_UTF8_ALPHABET_UPPER, $chr1);
 		}
-		$offset2=strpos(KT_UTF8_ALPHABET_LOWER, $chr2);
-		if ($offset2===false) {
-			$offset2=strpos(KT_UTF8_ALPHABET_UPPER, $chr2);
-		}	
-		if ($offset1!==false && $offset2!==false) {
-			if ($offset1==$offset2) {
+		$offset2 = strpos(KT_UTF8_ALPHABET_LOWER, $chr2);
+		if (false === $offset2) {
+			$offset2 = strpos(KT_UTF8_ALPHABET_UPPER, $chr2);
+		}
+		if (false !== $offset1 && false !== $offset2) {
+			if ($offset1 == $offset2) {
 				continue;
-			} else {
-				return $offset1-$offset2;
 			}
+
+			return $offset1 - $offset2;
 		}
 		// Just compare by unicode order
 		return strcmp($chr1, $chr2);
 	}
 	// Shortest string comes first.
-	return ($strlen1-$strpos1)-($strlen2-$strpos2);
+	return ($strlen1 - $strpos1) - ($strlen2 - $strpos2);
 }
 
-function utf8_wordwrap($string, $width=75, $sep="\n", $cut=false) {
-	$out='';
+function utf8_wordwrap($string, $width = 75, $sep = "\n", $cut = false)
+{
+	$out = '';
 	while ($string) {
-		if (utf8_strlen($string) <= $width){ //Do not wrap any text that is less than the output area.
-			$out.=$string;
-			$string='';
+		if (utf8_strlen($string) <= $width) { // Do not wrap any text that is less than the output area.
+			$out .= $string;
+			$string = '';
 		} else {
-			$sub1=utf8_substr($string, 0, $width+1);
-			if (utf8_substr($string,utf8_strlen($sub1)-1,1)==' ') //include words that end by a space immediately after the area. 
-				$sub=$sub1;
-			else
-				$sub=utf8_substr($string, 0, $width);
-			$spacepos=strrpos($sub, ' ');
-			if ($spacepos==false) {
+			$sub1 = utf8_substr($string, 0, $width + 1);
+			if (' ' == utf8_substr($string, utf8_strlen($sub1) - 1, 1)) { // include words that end by a space immediately after the area.
+				$sub = $sub1;
+			} else {
+				$sub = utf8_substr($string, 0, $width);
+			}
+			$spacepos = strrpos($sub, ' ');
+			if (false == $spacepos) {
 				// No space on line?
 				if ($cut) {
-					$out.=$sub.$sep;
-					$string=utf8_substr($string, utf8_strlen($sub));
+					$out .= $sub . $sep;
+					$string = utf8_substr($string, utf8_strlen($sub));
 				} else {
-					$spacepos=strpos($string, ' ');
-					if ($spacepos==false) {
-						$out.=$string;
-						$string='';
+					$spacepos = strpos($string, ' ');
+					if (false == $spacepos) {
+						$out .= $string;
+						$string = '';
 					} else {
-						$out.=substr($string, 0, $spacepos).$sep;
-						$string=substr($string, $spacepos+1);
+						$out .= substr($string, 0, $spacepos) . $sep;
+						$string = substr($string, $spacepos + 1);
 					}
 				}
 			} else {
 				// Split at space;
-				$out.=substr($string, 0, $spacepos).$sep;
-				$string=substr($string, $spacepos+1);
+				$out .= substr($string, 0, $spacepos) . $sep;
+				$string = substr($string, $spacepos + 1);
 			}
 		}
 	}
+
 	return $out;
 }
 

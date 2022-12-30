@@ -176,7 +176,7 @@ echo pageStart('custom_language', $controller->getPageTitle()); ?>
 								<?php foreach ($custom_lang as $key => $value) { ?>
 									<div class="card-section">
 										<div class="update"></div>
-										<textarea readonly><?php echo htmlspecialchars($value->standard_text); ?></textarea>
+										<textarea readonly><?php echo htmlspecialchars((string) $value->standard_text); ?></textarea>
 										<hr>
 									</div>
 								<?php } ?>
@@ -191,12 +191,12 @@ echo pageStart('custom_language', $controller->getPageTitle()); ?>
 								<?php foreach ($custom_lang as $key => $value) { ?>
 									<div class="card-section">
 										<div class="update">
-											<?php echo KT_I18N::translate('Last updated ').htmlspecialchars($value->updated); ?>
+											<?php echo KT_I18N::translate('Last updated ').htmlspecialchars((string) $value->updated); ?>
 											<div class="trash">
 												<?php echo '<i class="'.$iconStyle.' fa-trash-can" onclick="if (confirm(\''.htmlspecialchars(KT_I18N::translate('Are you sure you want to delete this translation?')).'\')) { document.location=\''.KT_SCRIPT_NAME.'?delete=delete_item&amp;custom_lang_id='.$value->custom_lang_id.'&amp;action=translate&amp;language='.$language.'\'; }"></i>'; ?>
 											</div>
 										</div>
-										<textarea name="custom_text_edit[<?php echo $value->custom_lang_id; ?>]"><?php echo htmlspecialchars($value->custom_text); ?></textarea>
+										<textarea name="custom_text_edit[<?php echo $value->custom_lang_id; ?>]"><?php echo htmlspecialchars((string) $value->custom_text); ?></textarea>
 										<hr>
 									</div>
 								<?php } ?>

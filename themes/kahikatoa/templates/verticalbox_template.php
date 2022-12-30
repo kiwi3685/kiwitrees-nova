@@ -34,7 +34,7 @@ if ($missing) { ?>
 			</div>
 			<div class="card-section">
 				<p>
-					<a class="name" href="individual.php?pid=<?php echo $pid; ?>&amp;ged=<?php echo rawurlencode($GEDCOM); ?>" title="<?php echo strip_tags($name.$addname); ?>">
+					<a class="name" href="individual.php?pid=<?php echo $pid; ?>&amp;ged=<?php echo rawurlencode((string) $GEDCOM); ?>" title="<?php echo strip_tags($name.$addname); ?>">
 						<?php echo $shortname; ?>
 					</a>
 				<p>
@@ -50,7 +50,7 @@ if ($missing) { ?>
 	<!-- details for details view -->
 	<div class="dropdown-pane compact_box_template card shadow" data-position="bottom" data-alignment="left" id="<?php echo $dataToggle; ?>" data-dropdown data-auto-focus="true" data-v-offset=10 data-h-offset=-216 data-closable data-close-on-click="true" >
 		<div class="card-divider text-center">
-			<a href="individual.php?pid=<?php echo $pid; ?>&amp;ged=<?php echo rawurlencode($GEDCOM); ?>" class="h6">
+			<a href="individual.php?pid=<?php echo $pid; ?>&amp;ged=<?php echo rawurlencode((string) $GEDCOM); ?>" class="h6">
 				<span><?php echo $name . $addname; ?></span>
 			</a>
 		</div>

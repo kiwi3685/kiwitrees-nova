@@ -63,7 +63,7 @@ class list_branches_KT_Module extends KT_Module implements KT_Module_List {
 		$menus = array();
 		$menu  = new KT_Menu(
 			$this->getTitle(),
-			'module.php?mod=' . $this->getName() . '&amp;mod_action=show&amp;surname=' . rawurlencode($controller->getSignificantSurname()) . '&amp;ged=' . KT_GEDURL,
+			'module.php?mod=' . $this->getName() . '&amp;mod_action=show&amp;surname=' . rawurlencode((string) $controller->getSignificantSurname()) . '&amp;ged=' . KT_GEDURL,
 			'menu-list-branches'
 		);
 		$menus[] = $menu;

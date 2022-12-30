@@ -363,13 +363,13 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 										<label class="h5">
 											<?php echo KT_I18N::translate('Title'); ?>
 										</label>
-										<input type="text" name="title" size="90" value="<?php echo htmlspecialchars($title); ?>">
+										<input type="text" name="title" size="90" value="<?php echo htmlspecialchars((string) $title); ?>">
 									</div>
 									<div class="cell">
 										<label class="h5">
 											<?php echo KT_I18N::translate('Content'); ?>
 										</label>
-										<textarea name="story_body" class="html-edit" rows="10" cols="90"><?php echo htmlspecialchars($story_body); ?></textarea>
+										<textarea name="story_body" class="html-edit" rows="10" cols="90"><?php echo htmlspecialchars((string) $story_body); ?></textarea>
 									</div>
 									<div class="cell">
 										<label class="h5">

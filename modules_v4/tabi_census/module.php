@@ -112,7 +112,7 @@ class tabi_census_KT_Module extends KT_Module implements KT_Module_IndiTab {
 															<?php echo KT_I18N::translate('Edit'); ?>
 														</span>
 													</a>
-													<a class="button clear" onclick="jQuery.post('action.php',{action:'copy-fact', type:'<?php echo $fact->getParentObject()->getType(); ?>',factgedcom:'<?php echo rawurlencode($fact->getGedcomRecord()); ?>'},function(){location.reload();})" title="<?php echo  KT_I18N::translate('Copy'); ?>">
+													<a class="button clear" onclick="jQuery.post('action.php',{action:'copy-fact', type:'<?php echo $fact->getParentObject()->getType(); ?>',factgedcom:'<?php echo rawurlencode((string) $fact->getGedcomRecord()); ?>'},function(){location.reload();})" title="<?php echo  KT_I18N::translate('Copy'); ?>">
 														<i class="<?php echo $iconStyle; ?> fa-copy"></i>
 														<span class="link_text" tabindex="2">
 															<?php echo KT_I18N::translate('Copy'); ?>

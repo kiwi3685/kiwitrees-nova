@@ -261,11 +261,11 @@ $controller->addInlineJavascript('
 					<div class="search-page-table">
 						<div class="label"><?php echo KT_I18N::translate('Given name'); ?></div>
 						<div class="value">
-							<input tabindex="3" type="text" data-autocomplete-type="GIVN" name="firstname" value="<?php echo htmlspecialchars($controller->firstname); ?>" autofocus>
+							<input tabindex="3" type="text" data-autocomplete-type="GIVN" name="firstname" value="<?php echo htmlspecialchars((string) $controller->firstname); ?>" autofocus>
 						</div>
 						<div class="label"><?php echo KT_I18N::translate('Last name'); ?></div>
 						<div class="value">
-							<input tabindex="4" type="text" data-autocomplete-type="SURN" name="lastname" value="<?php echo htmlspecialchars($controller->lastname); ?>">
+							<input tabindex="4" type="text" data-autocomplete-type="SURN" name="lastname" value="<?php echo htmlspecialchars((string) $controller->lastname); ?>">
 						</div>
 						<div class="label"><?php echo KT_I18N::translate('Place'); ?></div>
 						<div class="value">
@@ -273,7 +273,7 @@ $controller->addInlineJavascript('
 						</div>
 						<div class="label"><?php echo KT_I18N::translate('Year'); ?></div>
 						<div class="value">
-							<input tabindex="6" type="text" name="year" value="<?php echo htmlspecialchars($controller->year); ?>">
+							<input tabindex="6" type="text" name="year" value="<?php echo htmlspecialchars((string) $controller->year); ?>">
 						</div>
 						<!-- Soundex type options (Russell, DaitchM) -->
 						<div class="label"><?php echo KT_I18N::translate('soundex algorithm'); ?></div>

@@ -108,7 +108,7 @@ class KT_Controller_Search extends KT_Controller_Page {
 				$this->myquery="";
 			} else {
 				$this->query = $_REQUEST["query"];
-				$this->myquery = htmlspecialchars($this->query);
+				$this->myquery = htmlspecialchars((string) $this->query);
 			}
 		}
 		if (isset ($_REQUEST["replace"])) {

@@ -110,13 +110,13 @@
                             WHERE pl_level=0 ORDER BY pl_place
                         ")->fetchAssoc();
                         foreach ($rows as $id => $place) { ?>
-                            <option value="<?php echo htmlspecialchars($place); ?>"
+                            <option value="<?php echo htmlspecialchars((string) $place); ?>"
                                 <?php if ($place == $country) {
                                     echo ' selected="selected"';
                                     $par_id = $id;
                                 } ?>
                             >
-                                <?php echo htmlspecialchars($place); ?>
+                                <?php echo htmlspecialchars((string) $place); ?>
                             </option>
                         <?php } ?>
                     </select>
@@ -143,12 +143,12 @@
                                 ORDER BY pl_place
                             ")->execute(array($par_id))->fetchOneColumn();
                             foreach ($places as $place) { ?>
-                                <option value="<?php echo htmlspecialchars($place); ?>"
+                                <option value="<?php echo htmlspecialchars((string) $place); ?>"
                                     <?php if ($place == $state) {
                                         echo ' selected="selected"';
                                     } ?>
                                 >
-                                    <?php echo htmlspecialchars($place); ?>
+                                    <?php echo htmlspecialchars((string) $place); ?>
                                 </option>
                             <?php } ?>
                           </select>

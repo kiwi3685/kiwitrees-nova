@@ -355,7 +355,7 @@ class list_media_KT_Module extends KT_Module implements KT_Module_List {
 				if ($ct > $max) {
 					if ($currentPage > 1) {
 						$pagination .= '
-							<a  href="' . $url . '&amp;action=no&amp;search=no&amp;folder=' . rawurlencode($folder). '&amp;sortby=' . $sortby. '&amp;subdirs=' . $subdirs. '&form_type=' . $form_type. '&amp;filter=' . rawurlencode($filter). '&amp;apply_filter=' . $apply_filter. '&amp;start=0&amp;max=' . $max. '">
+							<a  href="' . $url . '&amp;action=no&amp;search=no&amp;folder=' . rawurlencode((string) $folder). '&amp;sortby=' . $sortby. '&amp;subdirs=' . $subdirs. '&form_type=' . $form_type. '&amp;filter=' . rawurlencode((string) $filter). '&amp;apply_filter=' . $apply_filter. '&amp;start=0&amp;max=' . $max. '">
 									<i class="' . $iconStyle . ' fa-lg fa-angle-double-left"></i>
 							</a>
 						';
@@ -364,7 +364,7 @@ class list_media_KT_Module extends KT_Module implements KT_Module_List {
 						$newstart = $start-$max;
 						if ($start<0) $start = 0;
 						$pagination .= '
-							<a href="' . $url . '&amp;action=no&amp;search=no&amp;folder=' . rawurlencode($folder). '&amp;sortby=' . $sortby. '&amp;subdirs=' . $subdirs. '&form_type=' . $form_type. '&amp;filter=' . rawurlencode($filter). '&amp;apply_filter=' . $apply_filter. '&amp;start=' . $newstart. '&amp;max=' . $max. '">
+							<a href="' . $url . '&amp;action=no&amp;search=no&amp;folder=' . rawurlencode((string) $folder). '&amp;sortby=' . $sortby. '&amp;subdirs=' . $subdirs. '&form_type=' . $form_type. '&amp;filter=' . rawurlencode((string) $filter). '&amp;apply_filter=' . $apply_filter. '&amp;start=' . $newstart. '&amp;max=' . $max. '">
 								<i class="' . $iconStyle . ' fa-lg fa-angle-left"></i>
 							</a>
 						';
@@ -375,7 +375,7 @@ class list_media_KT_Module extends KT_Module implements KT_Module_List {
 					if ($currentPage < $lastPage) {
 						$lastStart = ((int) ($ct / $max)) * $max;
 						$pagination .= '
-							<a href="' . $url . '&amp;action=no&amp;search=no&amp;folder=' . rawurlencode($folder). '&amp;sortby=' . $sortby. '&amp;subdirs=' . $subdirs. '&form_type=' . $form_type. '&amp;filter=' . rawurlencode($filter). '&amp;apply_filter=' . $apply_filter. '&amp;start=' . $lastStart. '&amp;max=' . $max. '">
+							<a href="' . $url . '&amp;action=no&amp;search=no&amp;folder=' . rawurlencode((string) $folder). '&amp;sortby=' . $sortby. '&amp;subdirs=' . $subdirs. '&form_type=' . $form_type. '&amp;filter=' . rawurlencode((string) $filter). '&amp;apply_filter=' . $apply_filter. '&amp;start=' . $lastStart. '&amp;max=' . $max. '">
 								<i class="' . $iconStyle . ' fa-lg fa-angle-double-right"></i>
 							 </a>
 						';
@@ -384,7 +384,7 @@ class list_media_KT_Module extends KT_Module implements KT_Module_List {
 						$newstart = $start + $count;
 						if ($start<0) $start = 0;
 						$pagination .= '
-							<a href="' . $url . '&amp;action=no&amp;search=no&amp;folder=' . rawurlencode($folder). '&amp;sortby=' . $sortby. '&amp;subdirs=' . $subdirs. '&form_type=' . $form_type. '&amp;filter=' . rawurlencode($filter). '&amp;apply_filter=' . $apply_filter. '&amp;start=' . $newstart. '&amp;max=' . $max. '">
+							<a href="' . $url . '&amp;action=no&amp;search=no&amp;folder=' . rawurlencode((string) $folder). '&amp;sortby=' . $sortby. '&amp;subdirs=' . $subdirs. '&form_type=' . $form_type. '&amp;filter=' . rawurlencode((string) $filter). '&amp;apply_filter=' . $apply_filter. '&amp;start=' . $newstart. '&amp;max=' . $max. '">
 								<i class="' . $iconStyle . ' fa-lg fa-angle-right"></i>
 							</a>
 						';
@@ -400,7 +400,7 @@ class list_media_KT_Module extends KT_Module implements KT_Module_List {
 						$newstart = $start+$count;
 						if ($start < 0) $start = 0;
 						$pagination .= '
-							<a href="' . $url . '&amp;action=no&amp;search=no&amp;folder=' . rawurlencode($folder). '&amp;sortby=' . $sortby. '&amp;subdirs=' . $subdirs. '&form_type=' . $form_type. '&amp;filter=' . rawurlencode($filter). '&amp;apply_filter=' . $apply_filter. '&amp;start=' . $newstart. '&amp;max=' . $max. '">
+							<a href="' . $url . '&amp;action=no&amp;search=no&amp;folder=' . rawurlencode((string) $folder). '&amp;sortby=' . $sortby. '&amp;subdirs=' . $subdirs. '&form_type=' . $form_type. '&amp;filter=' . rawurlencode((string) $filter). '&amp;apply_filter=' . $apply_filter. '&amp;start=' . $newstart. '&amp;max=' . $max. '">
 								<i class="' . $iconStyle . ' fa-lg fa-angle-right"></i>
 							 </a>
 						';
@@ -408,7 +408,7 @@ class list_media_KT_Module extends KT_Module implements KT_Module_List {
 					if ($currentPage < $lastPage) {
 						$lastStart = ((int) ($ct / $max)) * $max;
 						$pagination .= '
-							<a href="' . $url . '&amp;action=no&amp;search=no&amp;folder=' . rawurlencode($folder). '&amp;sortby=' . $sortby. '&amp;subdirs=' . $subdirs. '&form_type=' . $form_type. '&amp;filter=' . rawurlencode($filter). '&amp;apply_filter=' . $apply_filter. '&amp;start=' . $lastStart. '&amp;max=' . $max. '">
+							<a href="' . $url . '&amp;action=no&amp;search=no&amp;folder=' . rawurlencode((string) $folder). '&amp;sortby=' . $sortby. '&amp;subdirs=' . $subdirs. '&form_type=' . $form_type. '&amp;filter=' . rawurlencode((string) $filter). '&amp;apply_filter=' . $apply_filter. '&amp;start=' . $lastStart. '&amp;max=' . $max. '">
 								<i class="' . $iconStyle . ' fa-lg fa-angle-double-right"></i>
 							 </a>
 						';
@@ -420,14 +420,14 @@ class list_media_KT_Module extends KT_Module implements KT_Module_List {
 						$newstart = $start-$max;
 						if ($start < 0) $start = 0;
 						$pagination .= '
-							<a href="' . $url . '&amp;action=no&amp;search=no&amp;folder=' . rawurlencode($folder). '&amp;sortby=' . $sortby. '&amp;subdirs=' . $subdirs. '&form_type=' . $form_type. '&amp;filter=' . rawurlencode($filter). '&amp;apply_filter=' . $apply_filter. '&amp;start=' . $newstart. '&amp;max=' . $max. '">
+							<a href="' . $url . '&amp;action=no&amp;search=no&amp;folder=' . rawurlencode((string) $folder). '&amp;sortby=' . $sortby. '&amp;subdirs=' . $subdirs. '&form_type=' . $form_type. '&amp;filter=' . rawurlencode((string) $filter). '&amp;apply_filter=' . $apply_filter. '&amp;start=' . $newstart. '&amp;max=' . $max. '">
 								 <i class="' . $iconStyle . ' fa-lg fa-angle-left"></i>
 							 </a>';
 					}
 					if ($currentPage > 1) {
 						$lastStart = ((int) ($ct / $max)) * $max;
 						$pagination .= '
-							<a href="' . $url . '&amp;action=no&amp;search=no&amp;folder=' . rawurlencode($folder). '&amp;sortby=' . $sortby. '&amp;subdirs=' . $subdirs. '&form_type=' . $form_type. '&amp;filter=' . rawurlencode($filter). '&amp;apply_filter=' . $apply_filter. '&amp;start=0&amp;max=' . $max. '">
+							<a href="' . $url . '&amp;action=no&amp;search=no&amp;folder=' . rawurlencode((string) $folder). '&amp;sortby=' . $sortby. '&amp;subdirs=' . $subdirs. '&form_type=' . $form_type. '&amp;filter=' . rawurlencode((string) $filter). '&amp;apply_filter=' . $apply_filter. '&amp;start=0&amp;max=' . $max. '">
 								 <i class="' . $iconStyle . ' fa-lg fa-angle-double-left"></i>
 							</a>
 						';

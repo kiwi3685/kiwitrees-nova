@@ -76,7 +76,7 @@
 		<meta charset="utf-8" />
 		<meta http-equiv="x-ua-compatible" content="ie=edge">
 		<?php echo header_links($META_DESCRIPTION, $META_ROBOTS, $META_GENERATOR, $LINK_CANONICAL); ?>
-		<title><?php echo htmlspecialchars($title); ?></title>
+		<title><?php echo htmlspecialchars((string) $title); ?></title>
         <!--Generic favicons-->
         <link rel="icon" sizes="16x16" href="<?php echo KT_THEME_URL; ?>images/favicon.png">
         <link rel="icon" sizes="32x32" href="<?php echo KT_THEME_URL; ?>images/favicon-32.png">

@@ -36,7 +36,7 @@ if (!defined('KT_KIWITREES')) {
 			<?php echo $thumbnail; ?>
 		</div>
 		<div class="medium-10 large-11">
-			<a class="h6" href="individual.php?pid=<?php echo $pid; ?>&amp;ged=<?php echo rawurlencode($GEDCOM); ?>" onclick="event.cancelBubble=true;">
+			<a class="h6" href="individual.php?pid=<?php echo $pid; ?>&amp;ged=<?php echo rawurlencode((string) $GEDCOM); ?>" onclick="event.cancelBubble=true;">
 				<span id="namedef-<?php echo $boxID; ?>" class="name<?php echo $style; ?> <?php echo $classfacts; ?>">
 					<?php echo $name . $addname; ?>
 				</span>

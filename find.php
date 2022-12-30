@@ -661,7 +661,7 @@ $options["form"][]		= "formspecialchar";
 			if ($places) {
 				echo '<ul>';
 				foreach ($places as $place) {
-					echo '<li><a href="#" onclick="pasteid(\'', htmlspecialchars($place->getGedcomName()), '\');">';
+					echo '<li><a href="#" onclick="pasteid(\'', htmlspecialchars((string) $place->getGedcomName()), '\');">';
 					if (!$filter || $all) {
 						echo $place->getReverseName(); // When displaying all names, sort/display by the country, then region, etc.
 					} else {

@@ -78,7 +78,7 @@ class KT_Place {
 	public function getURL() {
 		$url = 'module.php?mod=list_places&amp;mod_action=show';
 		foreach (array_reverse($this->gedcom_place) as $n=>$place) {
-			$url.='&amp;parent%5B%5D=' . rawurlencode($place);
+			$url.='&amp;parent%5B%5D=' . rawurlencode((string) $place);
 		}
 		$url .= '&amp;ged=' . rawurlencode(get_gedcom_from_id($this->gedcom_id));
 		$url .= '&amp;action=view';
@@ -91,13 +91,13 @@ class KT_Place {
 
 	public function getPlaceName() {
 		$place=reset($this->gedcom_place);
-		return $place ? '<span dir="auto">'.htmlspecialchars($place).'</span>' : KT_I18N::translate('unknown');
+		return $place ? '<span dir="auto">'.htmlspecialchars((string) $place).'</span>' : KT_I18N::translate('unknown');
 	}
 
 	public function getFullName() {
 		$tmp=array();
 		foreach ($this->gedcom_place as $place) {
-			$tmp[]='<span dir="auto">' . htmlspecialchars($place) . '</span>';
+			$tmp[]='<span dir="auto">' . htmlspecialchars((string) $place) . '</span>';
 		}
 		return implode(KT_I18N::$list_separator, $tmp);
 	}
@@ -119,7 +119,7 @@ class KT_Place {
 				$short_name=implode(self::GEDCOM_SEPARATOR, array_slice($this->gedcom_place, 0, $SHOW_PEDIGREE_PLACES));
 			}
 			// Add a tool-tip showing the full name
-			return '<span title="'.htmlspecialchars($this->getGedcomName()).'" dir="auto">'.htmlspecialchars($short_name).'</span>';
+			return '<span title="'.htmlspecialchars((string) $this->getGedcomName()).'" dir="auto">'.htmlspecialchars((string) $short_name).'</span>';
 		}
 	}
 
@@ -127,7 +127,7 @@ class KT_Place {
 	public function getReverseName() {
 		$tmp=array();
 		foreach (array_reverse($this->gedcom_place) as $place) {
-			$tmp[]='<span dir="auto">' . htmlspecialchars($place) . '</span>';
+			$tmp[]='<span dir="auto">' . htmlspecialchars((string) $place) . '</span>';
 		}
 		return implode(KT_I18N::$list_separator, $tmp);
 	}

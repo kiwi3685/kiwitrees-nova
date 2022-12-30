@@ -426,13 +426,13 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 										<label class="h5">
 											<?php echo KT_I18N::translate('Title'); ?>
 										</label>
-										<input type="text" name="pages_title" size="90" value="<?php echo htmlspecialchars($items_title); ?>">
+										<input type="text" name="pages_title" size="90" value="<?php echo htmlspecialchars((string) $items_title); ?>">
 									</div>
 									<div class="cell">
 										<label class="h5">
 											<?php echo KT_I18N::translate('Content'); ?>
 										</label>
-										<textarea name="pages_content" class="html-edit" rows="10" cols="90"><?php echo htmlspecialchars($items_content); ?></textarea>
+										<textarea name="pages_content" class="html-edit" rows="10" cols="90"><?php echo htmlspecialchars((string) $items_content); ?></textarea>
 									</div>
 									<div class="cell medium-4">
 										<label class="h5">
