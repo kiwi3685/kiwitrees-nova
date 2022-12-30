@@ -306,7 +306,7 @@ function edit_field_access_level($name, $selected = '', $extra = '', $priv = fal
 {
 	if (false == $priv) {
 		$ACCESS_LEVEL = [
-			KT_PRIV_PUBLIC => KT_I18N::translate('Show to visitors'),
+			KT_PRIV_PUBLIC => KT_I18N::translate('Show to everyone'),
 			KT_PRIV_USER => KT_I18N::translate('Show to members'),
 			KT_PRIV_NONE => KT_I18N::translate('Show to managers'),
 			KT_PRIV_HIDE => KT_I18N::translate('Hide from everyone'),
@@ -327,7 +327,7 @@ function edit_field_resn($name, $selected = '', $extra = '')
 {
 	$RESN = [
 		'' => '',
-		'none' => KT_I18N::translate('Show to visitors'), // Not valid GEDCOM, but very useful
+		'none' => KT_I18N::translate('Show to everyone'), // Not valid GEDCOM, but very useful
 		'privacy' => KT_I18N::translate('Show to members'),
 		'confidential' => KT_I18N::translate('Show to managers'),
 		'locked' => KT_I18N::translate('Only managers can edit'),

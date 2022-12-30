@@ -117,7 +117,7 @@ function print_resourcefactDetails(KT_Event $fact, KT_GedcomRecord $record) {
 		case 'none':
 			// Note: "1 RESN none" is not valid gedcom.
 			// However, kiwitrees privacy rules will interpret it as "show an otherwise private record to public".
-			$html .= '<i class="icon-resn-none"></i> ' . KT_I18N::translate('Show to visitors');
+			$html .= '<i class="icon-resn-none"></i> ' . KT_I18N::translate('Show to everyone');
 			break;
 		case 'privacy':
 			$html .= '<i class="icon-class-none"></i> ' . KT_I18N::translate('Show to members');

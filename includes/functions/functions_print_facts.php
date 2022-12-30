@@ -234,7 +234,7 @@ function print_fact(KT_Event $fact, KT_GedcomRecord $record) {
 							case 'none':
 								// Note: "1 RESN none" is not valid gedcom.
 								// However, kiwitrees privacy rules will interpret it as "show an otherwise private record to public".
-								echo '<i class="icon-resn-none"></i> ', KT_I18N::translate('Show to visitors');
+								echo '<i class="icon-resn-none"></i> ', KT_I18N::translate('Show to everyone');
 							break;
 							case 'privacy':
 								echo '<i class="icon-class-none"></i> ', KT_I18N::translate('Show to members');
@@ -400,7 +400,7 @@ function print_fact(KT_Event $fact, KT_GedcomRecord $record) {
 								case 'none':
 									// Note: "2 RESN none" is not valid gedcom.
 									// However, kiwitrees privacy rules will interpret it as "show an otherwise private fact to public".
-									echo KT_Gedcom_Tag::getLabelValue('RESN', '<i class="icon-resn-none"></i> '.KT_I18N::translate('Show to visitors'));
+									echo KT_Gedcom_Tag::getLabelValue('RESN', '<i class="icon-resn-none"></i> '.KT_I18N::translate('Show to everyone'));
 								break;
 								case 'privacy':
 									echo KT_Gedcom_Tag::getLabelValue('RESN', '<i class="icon-resn-privacy"></i> '.KT_I18N::translate('Show to members'));
@@ -654,7 +654,7 @@ function print_timeline(KT_Event $fact, KT_GedcomRecord $record) {
 							case 'none':
 								// Note: "1 RESN none" is not valid gedcom.
 								// However, kiwitrees privacy rules will interpret it as "show an otherwise private record to public".
-								echo '<i class="icon-resn-none"></i> ', KT_I18N::translate('Show to visitors');
+								echo '<i class="icon-resn-none"></i> ', KT_I18N::translate('Show to everyone');
 							break;
 							case 'privacy':
 								echo '<i class="icon-class-none"></i> ', KT_I18N::translate('Show to members');
@@ -808,7 +808,7 @@ function print_timeline(KT_Event $fact, KT_GedcomRecord $record) {
 								case 'none':
 									// Note: "2 RESN none" is not valid gedcom.
 									// However, kiwitrees privacy rules will interpret it as "show an otherwise private fact to public".
-									echo KT_Gedcom_Tag::getLabelValue('RESN', '<i class="icon-resn-none"></i> '.KT_I18N::translate('Show to visitors'));
+									echo KT_Gedcom_Tag::getLabelValue('RESN', '<i class="icon-resn-none"></i> '.KT_I18N::translate('Show to everyone'));
 								break;
 								case 'privacy':
 									echo KT_Gedcom_Tag::getLabelValue('RESN', '<i class="icon-resn-privacy"></i> '.KT_I18N::translate('Show to members'));
@@ -1003,7 +1003,7 @@ function print_attributes(KT_Event $fact, KT_GedcomRecord $record) {
 								case 'none':
 									// Note: "1 RESN none" is not valid gedcom.
 									// However, kiwitrees privacy rules will interpret it as "show an otherwise private record to public".
-									echo '<i class="icon-resn-none"></i> ' . KT_I18N::translate('Show to visitors');
+									echo '<i class="icon-resn-none"></i> ' . KT_I18N::translate('Show to everyone');
 								break;
 								case 'privacy':
 									echo '<i class="icon-class-none"></i> ' . KT_I18N::translate('Show to members');
@@ -1143,7 +1143,7 @@ function print_attributes(KT_Event $fact, KT_GedcomRecord $record) {
 								case 'none':
 									// Note: "2 RESN none" is not valid gedcom.
 									// However, kiwitrees privacy rules will interpret it as "show an otherwise private fact to public".
-									echo KT_Gedcom_Tag::getLabelValue('RESN', '<i class="icon-resn-none"></i> '.KT_I18N::translate('Show to visitors'));
+									echo KT_Gedcom_Tag::getLabelValue('RESN', '<i class="icon-resn-none"></i> '.KT_I18N::translate('Show to everyone'));
 								break;
 								case 'privacy':
 									echo KT_Gedcom_Tag::getLabelValue('RESN', '<i class="icon-resn-privacy"></i> '.KT_I18N::translate('Show to members'));
@@ -1625,7 +1625,7 @@ function print_main_sources(KT_Event $fact, $level) {
 								case 'none':
 									// Note: "2 RESN none" is not valid gedcom, and the GUI will not let you add it.
 									// However, kiwitrees privacy rules will interpret it as "show an otherwise private fact to public".
-									echo '<i class="icon-resn-none"></i> ', KT_I18N::translate('Show to visitors');
+									echo '<i class="icon-resn-none"></i> ', KT_I18N::translate('Show to everyone');
 									break;
 								case 'privacy':
 									echo '<i class="icon-resn-privacy"></i> ', KT_I18N::translate('Show to members');
@@ -1894,7 +1894,7 @@ function print_main_notes(KT_Event $fact, $level) {
 							case 'none':
 								// Note: "2 RESN none" is not valid gedcom, and the GUI will not let you add it.
 								// However, kiwitrees privacy rules will interpret it as "show an otherwise private fact to public".
-								echo '<i class="icon-resn-none"></i> ', KT_I18N::translate('Show to visitors');
+								echo '<i class="icon-resn-none"></i> ', KT_I18N::translate('Show to everyone');
 								break;
 							case 'privacy':
 								echo '<i class="icon-resn-privacy"></i> ', KT_I18N::translate('Show to members');
