@@ -74,13 +74,13 @@ class block_html_KT_Module extends KT_Module implements KT_Module_Block {
 		* Retrieve text, process embedded variables
 		*/
 		$title_tmp	= get_block_setting($block_id, 'title');
-		$html		= get_block_setting($block_id, 'html');
+		$content		= get_block_setting($block_id, 'html');
 		$subtitle	= '';
 
-		if ( (strpos($title_tmp, '#') !== false) || (strpos($html, '#') !== false) ) {
+		if ((strpos((string) $title_tmp, '#')) || (strpos((string) $content, '#'))) {
 			$stats		= new KT_Stats($GEDCOM);
 			$title_tmp	= $stats->embedTags($title_tmp);
-			$html		= $stats->embedTags($html);
+			$content		= $stats->embedTags($content);
 		}
 
 		/*
@@ -100,13 +100,7 @@ class block_html_KT_Module extends KT_Module implements KT_Module_Block {
 			'<p class="timestamp">' . format_timestamp(get_block_setting($block_id, 'timestamp', KT_TIMESTAMP)) . '</p>';
 		}
 
-		$content = '
-			<div class="grid-x grid-padding-x">
-				<div class="cell">' .
-					$html . '
-				</div>
-			</div>
-		';
+//		$content = $content;
 
 		if ($template) {
 			if (get_block_location($block_id) === 'side') {
@@ -266,7 +260,7 @@ class block_html_KT_Module extends KT_Module implements KT_Module_Block {
 		);
 
 		$title			= get_block_setting($block_id, 'title');
-		$html			= get_block_setting($block_id, 'html');
+		$content			= get_block_setting($block_id, 'html');
 		$gedcom			= get_block_setting($block_id, 'gedcom');
 		$show_timestamp = get_block_setting($block_id, 'show_timestamp', 0);
 		$languages		= get_block_setting($block_id, 'languages');
@@ -283,7 +277,7 @@ class block_html_KT_Module extends KT_Module implements KT_Module_Block {
 		</div>
 		<div class="cell medium-7 auto">
 			<select name="template" onchange="document.block.html.value=document.block.template.options[document.block.template.selectedIndex].value;<?php //echo $ckeditor_onchange; ?>">
-				<option value="<?php echo htmlspecialchars((string) $html); ?>"><?php echo KT_I18N::translate('Custom'); ?></option>
+				<option value="<?php echo htmlspecialchars((string) $content); ?>"><?php echo KT_I18N::translate('Custom'); ?></option>
 				<?php foreach ($templates as $title => $template) { ?>
 					<option value="<?php echo htmlspecialchars((string) $template); ?>"><?php echo $title; ?></option>
 				<?php } ?>
@@ -321,7 +315,7 @@ class block_html_KT_Module extends KT_Module implements KT_Module_Block {
 		<?php } ?>
 		<div class="cell">
 			<label class="h6"><?php echo KT_I18N::translate('Content'); ?></label>
-			<textarea name="html" class="html-edit" rows="10"><?php echo htmlspecialchars((string) $html); ?></textarea>
+			<textarea name="html" class="html-edit" rows="10"><?php echo htmlspecialchars((string) $content); ?></textarea>
 		</div>
 		<div class="cell medium-3">
 			<label class="h6"><?php echo KT_I18N::translate('Show the date and time of update'); ?></label>
