@@ -1180,7 +1180,7 @@ function format_fact_place(KT_Event $event, $anchor = false, $sub = false, $lds 
 	global $SHOW_PEDIGREE_PLACES, $SHOW_PEDIGREE_PLACES_SUFFIX, $SEARCH_SPIDER;
 
 	$factrec = $event->getGedcomRecord();
-	$name_parts = explode(', ', $event->getPlace());
+	$name_parts = explode(', ', (string) $event->getPlace());
 	$ct = count($name_parts);
 	$kt_place = new KT_Place($event->getPlace(), KT_GED_ID);
 

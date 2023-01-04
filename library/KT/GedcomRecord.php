@@ -334,13 +334,13 @@ class KT_GedcomRecord {
 		}
 
 		// Does this record have a RESN?
-		if (strpos($this->_gedrec, "\n1 RESN confidential")) {
+		if (strpos((string) $this->_gedrec, "\n1 RESN confidential")) {
 			return KT_PRIV_NONE >= $access_level;
 		}
-		if (strpos($this->_gedrec, "\n1 RESN privacy")) {
+		if (strpos((string) $this->_gedrec, "\n1 RESN privacy")) {
 			return KT_PRIV_USER >= $access_level;
 		}
-		if (strpos($this->_gedrec, "\n1 RESN none")) {
+		if (strpos((string) $this->_gedrec, "\n1 RESN none")) {
 			return true;
 		}
 
@@ -410,7 +410,7 @@ class KT_GedcomRecord {
 	// We use the unprivatized _gedrec as we must take account
 	// of the RESN tag, even if we are not permitted to see it.
 	public function canEdit() {
-		return KT_USER_GEDCOM_ADMIN || KT_USER_CAN_EDIT && strpos($this->_gedrec, "\n1 RESN locked") === false;
+		return KT_USER_GEDCOM_ADMIN || KT_USER_CAN_EDIT && strpos((string) $this->_gedrec, "\n1 RESN locked") === false;
 	}
 
 	// Remove private data from the raw gedcom record.
@@ -425,11 +425,11 @@ class KT_GedcomRecord {
 			// The record is not private, but the individual facts may be.
 
 			// Include the entire first line (for NOTE records)
-			list($gedrec) = explode("\n", $this->_gedrec, 2);
+			list($gedrec) = explode("\n", (string) $this->_gedrec, 2);
 
 			$private_gedrec = '';
 			// Check each of the sub facts for access
-			preg_match_all('/\n1 .*(?:\n[2-9].*)*/', $this->_gedrec, $matches);
+			preg_match_all('/\n1 .*(?:\n[2-9].*)*/', (string) $this->_gedrec, $matches);
 			foreach ($matches[0] as $match) {
 				if (canDisplayFact($this->xref, $this->ged_id, $match, $access_level)) {
 					$gedrec .= $match;
@@ -789,7 +789,7 @@ class KT_GedcomRecord {
 			return;
 		}
 		//-- find all the fact information
-		$indilines = explode("\n", $this->getGedcomRecord());   // -- find the number of lines in the individuals record
+		$indilines = explode("\n", (string) $this->getGedcomRecord());   // -- find the number of lines in the individuals record
 		$lct = count($indilines);
 		$factrec = ''; // -- complete fact record
 		$line = '';   // -- temporary line buffer

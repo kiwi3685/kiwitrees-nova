@@ -180,7 +180,7 @@ class KT_Date_Jalali extends KT_Date_Calendar {
 	
 		$depoch = $jd - self::YMDtoJD(475, 1, 1);
 		$cycle = (int)($depoch / 1029983);
-		$cyear = $depoch % 1029983;
+		$cyear = (int) $depoch % 1029983;
 		if ($cyear == 1029982) {
 			$ycycle = 2820;
 		} else {

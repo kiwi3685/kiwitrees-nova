@@ -70,7 +70,7 @@ class KT_Person extends KT_GedcomRecord {
         if ($SHOW_DEAD_PEOPLE >= $access_level && $this->isDead()) {
             $keep_alive = false;
             if ($KEEP_ALIVE_YEARS_BIRTH) {
-                preg_match_all('/\n1 (?:' . KT_EVENTS_BIRT . ').*(?:\n[2-9].*)*(?:\n2 DATE (.+))/', $this->_gedrec, $matches, PREG_SET_ORDER);
+                preg_match_all('/\n1 (?:' . KT_EVENTS_BIRT . ').*(?:\n[2-9].*)*(?:\n2 DATE (.+))/', (string) $this->_gedrec, $matches, PREG_SET_ORDER);
                 foreach ($matches as $match) {
                     $date = new KT_Date($match[1]);
                     if ($date->isOK() && $date->gregorianYear() + $KEEP_ALIVE_YEARS_BIRTH > date('Y')) {
@@ -80,7 +80,7 @@ class KT_Person extends KT_GedcomRecord {
                 }
             }
             if ($KEEP_ALIVE_YEARS_DEATH) {
-                preg_match_all('/\n1 (?:' . KT_EVENTS_DEAT . ').*(?:\n[2-9].*)*(?:\n2 DATE (.+))/', $this->_gedrec, $matches, PREG_SET_ORDER);
+                preg_match_all('/\n1 (?:' . KT_EVENTS_DEAT . ').*(?:\n[2-9].*)*(?:\n2 DATE (.+))/', (string) $this->_gedrec, $matches, PREG_SET_ORDER);
                 foreach ($matches as $match) {
                     $date = new KT_Date($match[1]);
                     if ($date->isOK() && $date->gregorianYear() + $KEEP_ALIVE_YEARS_DEATH > date('Y')) {
@@ -111,7 +111,7 @@ class KT_Person extends KT_GedcomRecord {
         $rec = '0 @' . $this->xref . '@ INDI';
         if ($SHOW_LIVING_NAMES >= $access_level) {
             // Show all the NAME tags, including subtags
-            preg_match_all('/\n1 NAME.*(?:\n[2-9].*)*/', $this->_gedrec, $matches);
+            preg_match_all('/\n1 NAME.*(?:\n[2-9].*)*/', (string) $this->_gedrec, $matches);
             foreach ($matches[0] as $match) {
                 if (canDisplayFact($this->xref, $this->ged_id, $match, $access_level)) {
                     $rec .= $match;
@@ -121,7 +121,7 @@ class KT_Person extends KT_GedcomRecord {
             $rec .= "\n1 NAME " . KT_I18N::translate('Private');
         }
         // Just show the 1 FAMC/FAMS tag, not any subtags, which may contain private data
-        preg_match_all('/\n1 (?:FAMC|FAMS) @(' . KT_REGEX_XREF . ')@/', $this->_gedrec, $matches, PREG_SET_ORDER);
+        preg_match_all('/\n1 (?:FAMC|FAMS) @(' . KT_REGEX_XREF . ')@/', (string) $this->_gedrec, $matches, PREG_SET_ORDER);
         foreach ($matches as $match) {
             $rela = KT_Family::getInstance($match[1]);
             if ($rela && ($SHOW_PRIVATE_RELATIONSHIPS || $rela->canDisplayDetails($access_level))) {
@@ -129,7 +129,7 @@ class KT_Person extends KT_GedcomRecord {
             }
         }
         // Don't privatize sex.
-        if (preg_match('/\n1 SEX [MFU]/', $this->_gedrec, $match)) {
+        if (preg_match('/\n1 SEX [MFU]/', (string) $this->_gedrec, $match)) {
             $rec .= $match[0];
         }
         return $rec;
@@ -164,12 +164,12 @@ class KT_Person extends KT_GedcomRecord {
         global $MAX_ALIVE_AGE;
 
         // "1 DEAT Y" or "1 DEAT/2 DATE" or "1 DEAT/2 PLAC"
-        if (preg_match('/\n1 (?:' . KT_EVENTS_DEAT . ')(?: Y|(?:\n[2-9].+)*\n2 (DATE|PLAC) )/', $this->_gedrec)) {
+        if (preg_match('/\n1 (?:' . KT_EVENTS_DEAT . ')(?: Y|(?:\n[2-9].+)*\n2 (DATE|PLAC) )/', (string) $this->_gedrec)) {
             return true;
         }
 
         // If any event occured more than $MAX_ALIVE_AGE years ago, then assume the person is dead
-        if (preg_match_all('/\n2 DATE (.+)/', $this->_gedrec, $date_matches)) {
+        if (preg_match_all('/\n2 DATE (.+)/', (string) $this->_gedrec, $date_matches)) {
             foreach ($date_matches[1] as $date_match) {
                 $date = new KT_Date($date_match);
                 if ($date->isOK() && $date->MaxJD() <= KT_CLIENT_JD - 365 * $MAX_ALIVE_AGE) {
@@ -178,7 +178,7 @@ class KT_Person extends KT_GedcomRecord {
             }
             // The individual has one or more dated events.  All are less than $MAX_ALIVE_AGE years ago.
             // If one of these is a birth, the person must be alive.
-            if (preg_match('/\n1 BIRT(?:\n[2-9].+)*\n2 DATE /', $this->_gedrec)) {
+            if (preg_match('/\n1 BIRT(?:\n[2-9].+)*\n2 DATE /', (string) $this->_gedrec)) {
                 return false;
             }
         }
@@ -189,7 +189,7 @@ class KT_Person extends KT_GedcomRecord {
         foreach ($this->getChildFamilies(KT_PRIV_HIDE) as $family) {
             foreach ($family->getSpouses(KT_PRIV_HIDE) as $parent) {
                 // Assume parents are no more than 45 years older than their children
-                preg_match_all('/\n2 DATE (.+)/', $parent->_gedrec, $date_matches);
+                preg_match_all('/\n2 DATE (.+)/', (string) $parent->_gedrec, $date_matches);
                 foreach ($date_matches[1] as $date_match) {
                     $date = new KT_Date($date_match);
                     if ($date->isOK() && $date->MaxJD() <= KT_CLIENT_JD - 365 * ($MAX_ALIVE_AGE + 45)) {
@@ -201,7 +201,7 @@ class KT_Person extends KT_GedcomRecord {
 
         // Check spouses
         foreach ($this->getSpouseFamilies(KT_PRIV_HIDE) as $family) {
-            preg_match_all('/\n2 DATE (.+)/', $family->_gedrec, $date_matches);
+            preg_match_all('/\n2 DATE (.+)/', (string) $family->_gedrec, $date_matches);
             foreach ($date_matches[1] as $date_match) {
                 $date = new KT_Date($date_match);
                 // Assume marriage occurs after age of 10
@@ -212,7 +212,7 @@ class KT_Person extends KT_GedcomRecord {
             // Check spouse dates
             $spouse = $family->getSpouse($this, KT_PRIV_HIDE);
             if ($spouse) {
-                preg_match_all('/\n2 DATE (.+)/', $spouse->_gedrec, $date_matches);
+                preg_match_all('/\n2 DATE (.+)/', (string) $spouse->_gedrec, $date_matches);
                 foreach ($date_matches[1] as $date_match) {
                     $date = new KT_Date($date_match);
                     // Assume max age difference between spouses of 40 years
@@ -223,7 +223,7 @@ class KT_Person extends KT_GedcomRecord {
             }
             // Check child dates
             foreach ($family->getChildren(KT_PRIV_HIDE) as $child) {
-                preg_match_all('/\n2 DATE (.+)/', $child->_gedrec, $date_matches);
+                preg_match_all('/\n2 DATE (.+)/', (string) $child->_gedrec, $date_matches);
                 // Assume children born after age of 15
                 foreach ($date_matches[1] as $date_match) {
                     $date = new KT_Date($date_match);
@@ -234,7 +234,7 @@ class KT_Person extends KT_GedcomRecord {
                 // Check grandchildren
                 foreach ($child->getSpouseFamilies(KT_PRIV_HIDE) as $child_family) {
                     foreach ($child_family->getChildren(KT_PRIV_HIDE) as $grandchild) {
-                        preg_match_all('/\n2 DATE (.+)/', $grandchild->_gedrec, $date_matches);
+                        preg_match_all('/\n2 DATE (.+)/', (string) $grandchild->_gedrec, $date_matches);
                         // Assume grandchildren born after age of 30
                         foreach ($date_matches[1] as $date_match) {
                             $date = new KT_Date($date_match);
@@ -262,7 +262,7 @@ class KT_Person extends KT_GedcomRecord {
         $objectC = null;
 
         // Iterate over all of the media items for the person
-        preg_match_all('/\n(\d) OBJE @(' . KT_REGEX_XREF . ')@/', $this->getGedcomRecord(), $matches, PREG_SET_ORDER);
+        preg_match_all('/\n(\d) OBJE @(' . KT_REGEX_XREF . ')@/', (string) $this->getGedcomRecord(), $matches, PREG_SET_ORDER);
         foreach ($matches as $match) {
             $media = KT_Media::getInstance($match[2]);
             if (!$media || !$media->canDisplayDetails() || $media->isExternal()) {
@@ -675,7 +675,7 @@ class KT_Person extends KT_GedcomRecord {
     // the privatize-gedcom function, and we are allowed to know this.
     function getSex() {
         if (is_null($this->sex)) {
-            if (preg_match('/\n1 SEX ([MF])/', $this->_gedrec, $match)) {
+            if (preg_match('/\n1 SEX ([MF])/', (string) $this->_gedrec, $match)) {
                 $this->sex = $match[1];
             } else {
                 $this->sex = 'U';
@@ -788,7 +788,7 @@ class KT_Person extends KT_GedcomRecord {
         if ($access_level == KT_PRIV_HIDE) {
             // special case, (temporary - cannot make this generic as other code depends on the private cached values)
             $families = array();
-            preg_match_all('/\n1 FAMS @(' . KT_REGEX_XREF . ')@/', $this->_gedrec, $match);
+            preg_match_all('/\n1 FAMS @(' . KT_REGEX_XREF . ')@/', (string) $this->_gedrec, $match);
             foreach ($match[1] as $pid) {
                 $family = KT_Family::getInstance($pid);
                 if ($family) {
@@ -800,7 +800,7 @@ class KT_Person extends KT_GedcomRecord {
 
         if ($this->_spouseFamilies === null) {
             $this->_spouseFamilies = array();
-            preg_match_all('/\n1 FAMS @(' . KT_REGEX_XREF . ')@/', $this->_gedrec, $match);
+            preg_match_all('/\n1 FAMS @(' . KT_REGEX_XREF . ')@/', (string) $this->_gedrec, $match);
             foreach ($match[1] as $pid) {
                 $family = KT_Family::getInstance($pid);
                 if ($family && ($SHOW_PRIVATE_RELATIONSHIPS || $family->canDisplayDetails($access_level))) {
@@ -829,7 +829,7 @@ class KT_Person extends KT_GedcomRecord {
 
     // Get a count of the children for this individual
     function getNumberOfChildren() {
-        if (preg_match('/\n1 NCHI (\d+)(?:\n|$)/', $this->getGedcomRecord(), $match)) {
+        if (preg_match('/\n1 NCHI (\d+)(?:\n|$)/', (string) $this->getGedcomRecord(), $match)) {
             return $match[1];
         } else {
             $children = array();
@@ -849,7 +849,7 @@ class KT_Person extends KT_GedcomRecord {
         if ($access_level == KT_PRIV_HIDE) {
             // special case, (temporary - cannot make this generic as other code depends on the private cached values)
             $families = array();
-            preg_match_all('/\n1 FAMC @(' . KT_REGEX_XREF . ')@/', $this->_gedrec, $match);
+            preg_match_all('/\n1 FAMC @(' . KT_REGEX_XREF . ')@/', (string) $this->_gedrec, $match);
             foreach ($match[1] as $pid) {
                 $family = KT_Family::getInstance($pid);
                 if ($family) {
@@ -861,7 +861,7 @@ class KT_Person extends KT_GedcomRecord {
 
         if ($this->_childFamilies === null) {
             $this->_childFamilies = array();
-            preg_match_all('/\n1 FAMC @(' . KT_REGEX_XREF . ')@/', $this->_gedrec, $match);
+            preg_match_all('/\n1 FAMC @(' . KT_REGEX_XREF . ')@/', (string) $this->_gedrec, $match);
             foreach ($match[1] as $pid) {
                 $family = KT_Family::getInstance($pid);
                 if ($family && ($SHOW_PRIVATE_RELATIONSHIPS || $family->canDisplayDetails($access_level))) {
@@ -1007,7 +1007,7 @@ class KT_Person extends KT_GedcomRecord {
 
     // A label for a parental family group
     function getChildFamilyLabel(KT_Family $family) {
-        if (preg_match('/\n1 FAMC @' . $family->getXref() . '@(?:\n[2-9].*)*\n2 PEDI (.+)/', $this->getGedcomRecord(), $match)) {
+        if (preg_match('/\n1 FAMC @' . $family->getXref() . '@(?:\n[2-9].*)*\n2 PEDI (.+)/', (string) $this->getGedcomRecord(), $match)) {
             // A specified pedigree
             return KT_Gedcom_Code_Pedi::getChildFamilyLabel($match[1]);
         } else {
@@ -1432,7 +1432,7 @@ class KT_Person extends KT_GedcomRecord {
         global $SHOW_RELATIVES_EVENTS;
 
         // do not show if divorced
-        if (preg_match('/\n1 (?:' . KT_EVENTS_DIV . ')\b/', $famrec)) {
+        if (preg_match('/\n1 (?:' . KT_EVENTS_DIV . ')\b/', (string) $famrec)) {
             return;
         }
         // Only include events between birth and death
@@ -1511,10 +1511,10 @@ class KT_Person extends KT_GedcomRecord {
                     if ($arec) {
                         // Extract the important details from the fact
                         $factrec = '1 ' . $event->getTag();
-                        if (preg_match('/\n2 DATE .*/', $srec, $match)) {
+                        if (preg_match('/\n2 DATE .*/', (string) $srec, $match)) {
                             $factrec .= $match[0];
                         }
-                        if (preg_match('/\n2 PLAC .*/', $srec, $match)) {
+                        if (preg_match('/\n2 PLAC .*/', (string) $srec, $match)) {
                             $factrec .= $match[0];
                         }
                         if ($associate instanceof KT_Family) {
@@ -1524,7 +1524,7 @@ class KT_Person extends KT_GedcomRecord {
                         } else {
                             $factrec .= "\n2 $asso_tag @" . $associate->getXref() . '@';
                             // CHR/BAPM events are commonly used.  Generate the reverse relationship
-                            if (preg_match('/^(?:BAPM|CHR)$/', $event->getTag()) && preg_match('/2 _?ASSO @(' . $this->getXref() . ')@\n3 RELA god(?:parent|mother|father)/', $event->getGedcomRecord())) {
+                            if (preg_match('/^(?:BAPM|CHR)$/', $event->getTag()) && preg_match('/2 _?ASSO @(' . $this->getXref() . ')@\n3 RELA god(?:parent|mother|father)/', (string) $event->getGedcomRecord())) {
                                 switch ($associate->getSex()) {
                                 case 'M':
                                     $factrec .= "\n3 RELA godson";
@@ -1789,7 +1789,7 @@ class KT_Person extends KT_GedcomRecord {
 
         // Extract the surname.
         // Note, there may be multiple surnames, e.g. Jean /Vasquez/ y /Cortes/
-        if (preg_match('/\/.*\//', $full, $match)) {
+        if (preg_match('/\/.*\//', (string) $full, $match)) {
             $surname = str_replace('/', '', $match[0]);
         } else {
             $surname = '';
@@ -1797,7 +1797,7 @@ class KT_Person extends KT_GedcomRecord {
 
         // If we don't have a SURN record, extract it from the NAME
         if (!$SURNS) {
-            if (preg_match_all('/\/([^\/]*)\//', $full, $matches)) {
+            if (preg_match_all('/\/([^\/]*)\//', (string) $full, $matches)) {
                 // There can be many surnames, each wrapped with '/'
                 $SURNS = $matches[1];
                 foreach ($SURNS as $n => $SURN) {
@@ -1860,7 +1860,7 @@ class KT_Person extends KT_GedcomRecord {
                 $QNICK = '"' . $NICK . '"';
             }
 
-            if (preg_match('/(^| |"|«|“|\'|‹|‘|„)' . preg_quote($NICK, '/') . '( |"|»|”|\'|›|’|”|$)/', $full)) {
+            if (preg_match('/(^| |"|«|“|\'|‹|‘|„)' . preg_quote($NICK, '/') . '( |"|»|”|\'|›|’|”|$)/', (string) $full)) {
                 // NICK present in name.  Localise ASCII quotes (but leave others).
                 // GREG 28/Jan/12 - redundant - see comment above.
                 // $full=str_replace('"'.$NICK.'"', $QNICK, $full);

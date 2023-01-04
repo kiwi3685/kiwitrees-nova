@@ -35,16 +35,16 @@ class KT_Date {
 
 	function __construct($date) {
 		// Extract any explanatory text
-		if (preg_match('/^(.*) ?[(](.*)[)]/', $date, $match)) {
+		if (preg_match('/^(.*) ?[(](.*)[)]/', (string) (string) $date, $match)) {
 			$date = $match[1];
 			$this->text = $match[2];
 		}
-		if (preg_match('/^(FROM|BET) (.+) (AND|TO) (.+)/', $date, $match)) {
+		if (preg_match('/^(FROM|BET) (.+) (AND|TO) (.+)/', (string) (string) $date, $match)) {
 			$this->qual1 = $match[1];
 			$this->date1 = $this->ParseDate($match[2]);
 			$this->qual2 = $match[3];
 			$this->date2 = $this->ParseDate($match[4]);
-		} elseif (preg_match('/^(FROM|BET|TO|AND|BEF|AFT|CAL|EST|INT|ABT) (.+)/', $date, $match)) {
+		} elseif (preg_match('/^(FROM|BET|TO|AND|BEF|AFT|CAL|EST|INT|ABT) (.+)/', (string) (string) $date, $match)) {
 			$this->qual1 = $match[1];
 			$this->date1 = $this->ParseDate($match[2]);
 		} else {
@@ -63,20 +63,20 @@ class KT_Date {
 	// Convert an individual gedcom date string into a KT_Date_Calendar object
 	static function ParseDate($date) {
 		// Valid calendar escape specified? - use it
-		if (preg_match('/^(@#D(?:GREGORIAN|JULIAN|HEBREW|HIJRI|JALALI|FRENCH R|ROMAN|JALALI)+@) ?(.*)/', $date, $match)) {
+		if (preg_match('/^(@#D(?:GREGORIAN|JULIAN|HEBREW|HIJRI|JALALI|FRENCH R|ROMAN|JALALI)+@) ?(.*)/', (string) (string) $date, $match)) {
 			$cal	= $match[1];
 			$date	= $match[2];
 		} else {
 			$cal	= '';
 		}
 		// A date with a month: DM, M, MY or DMY
-		if (preg_match('/^(\d?\d?) ?(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC|TSH|CSH|KSL|TVT|SHV|ADR|ADS|NSN|IYR|SVN|TMZ|AAV|ELL|VEND|BRUM|FRIM|NIVO|PLUV|VENT|GERM|FLOR|PRAI|MESS|THER|FRUC|COMP|MUHAR|SAFAR|RABI[AT]|JUMA[AT]|RAJAB|SHAAB|RAMAD|SHAWW|DHUAQ|DHUAH|FARVA|ORDIB|KHORD|TIR|MORDA|SHAHR|MEHR|ABAN|AZAR|DEY|BAHMA|ESFAN) ?((?:\d+(?: B ?C)?|\d\d\d\d \/ \d{1,4})?)$/', $date, $match)) {
+		if (preg_match('/^(\d?\d?) ?(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC|TSH|CSH|KSL|TVT|SHV|ADR|ADS|NSN|IYR|SVN|TMZ|AAV|ELL|VEND|BRUM|FRIM|NIVO|PLUV|VENT|GERM|FLOR|PRAI|MESS|THER|FRUC|COMP|MUHAR|SAFAR|RABI[AT]|JUMA[AT]|RAJAB|SHAAB|RAMAD|SHAWW|DHUAQ|DHUAH|FARVA|ORDIB|KHORD|TIR|MORDA|SHAHR|MEHR|ABAN|AZAR|DEY|BAHMA|ESFAN) ?((?:\d+(?: B ?C)?|\d\d\d\d \/ \d{1,4})?)$/', (string) (string) $date, $match)) {
 			$d = $match[1];
 			$m = $match[2];
 			$y = $match[3];
 		} else
 			// A date with just a year
-			if (preg_match('/^(\d{1,4}(?: B\.C\.)?|\d\d\d\d\/\d\d)$/', $date, $match)) {
+			if (preg_match('/^(\d{1,4}(?: B\.C\.)?|\d\d\d\d\/\d\d)$/', (string) (string) $date, $match)) {
 				$d = '';
 				$m = '';
 				$y = $match[1];
@@ -86,30 +86,30 @@ class KT_Date {
 				$m = '';
 				$y = '';
 				// Look for a 3/4 digit year anywhere in the date
-				if (preg_match('/\b(\d{3,4})\b/', $date, $match)) {
+				if (preg_match('/\b(\d{3,4})\b/', (string) (string) $date, $match)) {
 					$y = $match[1];
 				}
 				// Look for a month anywhere in the date
-				if (preg_match('/(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC|TSH|CSH|KSL|TVT|SHV|ADR|ADS|NSN|IYR|SVN|TMZ|AAV|ELL|VEND|BRUM|FRIM|NIVO|PLUV|VENT|GERM|FLOR|PRAI|MESS|THER|FRUC|COMP|MUHAR|SAFAR|RABI[AT]|JUMA[AT]|RAJAB|SHAAB|RAMAD|SHAWW|DHUAQ|DHUAH|FARVA|ORDIB|KHORD|TIR|MORDA|SHAHR|MEHR|ABAN|AZAR|DEY|BAHMA|ESFAN)/', $date, $match)) {
+				if (preg_match('/(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC|TSH|CSH|KSL|TVT|SHV|ADR|ADS|NSN|IYR|SVN|TMZ|AAV|ELL|VEND|BRUM|FRIM|NIVO|PLUV|VENT|GERM|FLOR|PRAI|MESS|THER|FRUC|COMP|MUHAR|SAFAR|RABI[AT]|JUMA[AT]|RAJAB|SHAAB|RAMAD|SHAWW|DHUAQ|DHUAH|FARVA|ORDIB|KHORD|TIR|MORDA|SHAHR|MEHR|ABAN|AZAR|DEY|BAHMA|ESFAN)/', (string) (string) $date, $match)) {
 					$m = $match[1];
 					// Look for a day number anywhere in the date
-					if (preg_match('/\b(\d\d?)\b/', $date, $match))
+					if (preg_match('/\b(\d\d?)\b/', (string) $date, $match))
 						$d = $match[1];
 				}
 			}
 		// Unambiguous dates - override calendar escape
-		if (preg_match('/^(TSH|CSH|KSL|TVT|SHV|ADR|ADS|NSN|IYR|SVN|TMZ|AAV|ELL)$/', $m)) {
+		if (preg_match('/^(TSH|CSH|KSL|TVT|SHV|ADR|ADS|NSN|IYR|SVN|TMZ|AAV|ELL)$/', (string) $m)) {
 			$cal = '@#DHEBREW@';
 		} else {
-			if (preg_match('/^(VEND|BRUM|FRIM|NIVO|PLUV|VENT|GERM|FLOR|PRAI|MESS|THER|FRUC|COMP)$/', $m)) {
+			if (preg_match('/^(VEND|BRUM|FRIM|NIVO|PLUV|VENT|GERM|FLOR|PRAI|MESS|THER|FRUC|COMP)$/', (string) $m)) {
 				$cal = '@#DFRENCH R@';
 			} else {
-				if (preg_match('/^(MUHAR|SAFAR|RABI[AT]|JUMA[AT]|RAJAB|SHAAB|RAMAD|SHAWW|DHUAQ|DHUAH)$/', $m)) {
+				if (preg_match('/^(MUHAR|SAFAR|RABI[AT]|JUMA[AT]|RAJAB|SHAAB|RAMAD|SHAWW|DHUAQ|DHUAH)$/', (string) $m)) {
 					$cal = '@#DHIJRI@'; // This is a WT extension
 				} else {
-					if (preg_match('/^(FARVA|ORDIB|KHORD|TIR|MORDA|SHAHR|MEHR|ABAN|AZAR|DEY|BAHMA|ESFAN)$/', $m)) {
+					if (preg_match('/^(FARVA|ORDIB|KHORD|TIR|MORDA|SHAHR|MEHR|ABAN|AZAR|DEY|BAHMA|ESFAN)$/', (string) $m)) {
 						$cal = '@#DJALALI@'; // This is a WT extension
-					} elseif (preg_match('/^\d{1,4}( B\.C\.)|\d\d\d\d\/\d\d$/', $y)) {
+					} elseif (preg_match('/^\d{1,4}( B\.C\.)|\d\d\d\d\/\d\d$/', (string) $y)) {
 						$cal = '@#DJULIAN@';
 					}
 
@@ -118,10 +118,10 @@ class KT_Date {
 		}
 		// Ambiguous dates - don't override calendar escape
 		if ($cal == '') {
-			if (preg_match('/^(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)$/', $m)) {
+			if (preg_match('/^(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)$/', (string) $m)) {
 				$cal = '@#DGREGORIAN@';
 			} else {
-				if (preg_match('/^[345]\d\d\d$/', $y)) { // Year 3000-5999
+				if (preg_match('/^[345]\d\d\d$/', (string) $y)) { // Year 3000-5999
 					$cal = '@#DHEBREW@';
 				} else {
 					$cal = '@#DGREGORIAN@';
@@ -157,7 +157,7 @@ class KT_Date {
 			$date_fmt = $DATE_FORMAT;
 		}
 		if ($cal_fmts) {
-			$cal_fmts = explode('_and_', $CALENDAR_FORMAT);
+			$cal_fmts = explode('_and_', (string) $CALENDAR_FORMAT);
 		} else {
 			$cal_fmts = array();
 		}

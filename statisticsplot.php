@@ -658,7 +658,7 @@ function calc_axis($xas_grenzen) {
 	global $x_as, $xdata, $xmax, $xgrenzen;
 
 	//calculate xdata and zdata elements out of given POST values
-	$hulpar = explode(',', $xas_grenzen);
+	$hulpar = explode(',', (string) $xas_grenzen);
 	$i=1;
 	if ($x_as==21 && $hulpar[0]==1) {
 		$xdata[0] = 0;
@@ -703,7 +703,7 @@ function calc_legend($grenzen_zas) {
 	global $legend, $zmax, $zgrenzen;
 
 	// calculate the legend values
-	$hulpar = explode(',', $grenzen_zas);
+	$hulpar = explode(',', (string) $grenzen_zas);
 	$i=1;
 	// I18N: %d is a year
 	$date = new KT_Date('BEF ' . $hulpar[0]);
