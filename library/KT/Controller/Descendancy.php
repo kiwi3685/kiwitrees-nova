@@ -84,7 +84,7 @@ class KT_Controller_Descendancy extends KT_Controller_Chart {
 		$pbheight = $bheight+14;
 
 		// Validate form variables
-		if (strlen($this->name)<30) {
+		if (strlen((string) $this->name)<30) {
 			$this->cellwidth=420;
 		} else {
 			$this->cellwidth=(strlen($this->name)*14);

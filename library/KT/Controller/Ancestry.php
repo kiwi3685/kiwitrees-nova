@@ -75,7 +75,7 @@ class KT_Controller_Ancestry extends KT_Controller_Chart {
 			$this->setPageTitle(KT_I18N::translate('Ancestors'));
 		}
 
-		if (strlen($this->name) < 30) {
+		if (strlen((string) $this->name) < 30) {
 			$this->cellwidth = "420";
 		} else {
 			$this->cellwidth = (strlen($this->name) * 14);

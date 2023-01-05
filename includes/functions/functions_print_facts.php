@@ -1607,7 +1607,7 @@ function print_main_sources(KT_Event $fact, $level) {
 					<?php if ($source) {
 						echo '<a href="', $source->getHtmlUrl(), '">', $source->getFullName(), '</a>';
 						// OBJE
-						$src_media = trim(get_gedcom_value('OBJE', '1', $source->getGedcomRecord()), '@');
+						$src_media = trim((string) get_gedcom_value('OBJE', '1', $source->getGedcomRecord()), '@');
 						if (!empty($src_media) && $nlevel > 2) {
 							echo print_source_media($src_media);
 						}
@@ -1618,7 +1618,7 @@ function print_main_sources(KT_Event $fact, $level) {
 							echo $text;
 						}
 						// 2 RESN tags.  Note, there can be more than one, such as "privacy" and "locked"
-						if (preg_match_all("/\n2 RESN (.+)/", $factrec, $rmatches)) {
+						if (preg_match_all("/\n2 RESN (.+)/", (string) $factrec, $rmatches)) {
 							foreach ($rmatches[1] as $rmatch) {
 								echo '<br><span class="label">', KT_Gedcom_Tag::getLabel('RESN'), ':</span> <span class="field">';
 								switch ($rmatch) {

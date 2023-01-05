@@ -611,20 +611,27 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 	private function show_list() {
 		global $controller;
 		$controller = new KT_Controller_Page();
-		$controller->addExternalJavascript(KT_DATATABLES_JS);
+		$controller
+			->addExternalJavascript(KT_DATATABLES_JS)
+			->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
+		;
+
 		if (KT_USER_CAN_EDIT) {
 			$controller
-				->addExternalJavascript(KT_DATATABLES_HTML5)
-				->addExternalJavascript(KT_JQUERY_DT_BUTTONS);
+				->addExternalJavascript(KT_DATATABLES_BUTTONS)
+				->addExternalJavascript(KT_DATATABLES_HTML5);
+			$buttons = 'B';
+		} else {
+			$buttons = '';
 		}
 		$controller
 			->setPageTitle($this->getTitle())
 			->pageHeader()
 			->addInlineJavascript('
 				jQuery("#story_table").dataTable({
-					dom: \'<"H"pBf<"clear">irl>t<"F"pl>\',
+					dom: \'<"H"p' . $buttons . 'f<"clear">irl>t<"F"pl>\',
 					' . KT_I18N::datatablesI18N() . ',
-					buttons: [{extend: "csv"}],
+					buttons: [{extend: "csvHtml5"}],
 					jQueryUI: true,
 					autoWidth: false,
 					paging: true,
@@ -660,7 +667,7 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 				<tbody>
 					<?php foreach ($stories as $story) {
 						$story_title = get_block_setting($story->block_id, 'title');
-						$xref = explode(",", get_block_setting($story->block_id, 'xref'));
+						$xref = explode(",", (string) get_block_setting($story->block_id, 'xref'));
 						$count_xref = count($xref);
 						// if one indi is private, the whole story is private.
 							$private = 0;
@@ -672,7 +679,7 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 							}
 						if ($private == 0) {
 							$languages=get_block_setting($story->block_id, 'languages');
-							if (!$languages || in_array(KT_LOCALE, explode(',', $languages))) { ?>
+							if (!$languages || in_array(KT_LOCALE, explode(',', (string) $languages))) { ?>
 								<tr>
 									<td><?php echo $story_title; ?></td>
 									<td>
@@ -726,7 +733,7 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 		if (KT_USER_GEDCOM_ADMIN) {
 			$block_id = KT_Filter::get('block_id');
 			$new_xref = KT_Filter::get('xref', KT_REGEX_XREF);
-			$xref = explode(",", get_block_setting($block_id, 'xref'));
+			$xref = explode(",", (string) get_block_setting($block_id, 'xref'));
 			$xref[] = $new_xref;
 			set_block_setting($block_id, 'xref', implode(',', $xref));
 			header('Location: '. KT_SERVER_NAME . KT_SCRIPT_PATH. 'individual.php?pid=' . $new_xref);
@@ -738,7 +745,7 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 
 	// Delete an individual linked to a story, from the database
 	private function removeIndi($indi, $block_id) {
-		$xref = explode(",", get_block_setting($block_id, 'xref'));
+		$xref = explode(",", (string) get_block_setting($block_id, 'xref'));
 		$xref = array_diff($xref, array($indi));
 		set_block_setting($block_id, 'xref', implode(',', $xref));
 		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH. 'module.php?mod=' . $this->getName() . '&mod_action=admin_edit&block_id=' . $block_id);

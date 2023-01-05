@@ -1758,11 +1758,11 @@ class KT_Person extends KT_GedcomRecord {
             $sublevel = 1;
         }
 
-        $NPFX     = preg_match("/\n{$sublevel} NPFX (.+)/", $gedrec, $match) ? $match[1] : '';
-        $GIVN     = preg_match("/\n{$sublevel} GIVN (.+)/", $gedrec, $match) ? $match[1] : '';
-        $SURN     = preg_match("/\n{$sublevel} SURN (.+)/", $gedrec, $match) ? $match[1] : '';
-        $NSFX     = preg_match("/\n{$sublevel} NSFX (.+)/", $gedrec, $match) ? $match[1] : '';
-        $NICK     = preg_match("/\n{$sublevel} NICK (.+)/", $gedrec, $match) ? $match[1] : '';
+        $NPFX     = preg_match("/\n{$sublevel} NPFX (.+)/", (string) $gedrec, $match) ? $match[1] : '';
+        $GIVN     = preg_match("/\n{$sublevel} GIVN (.+)/", (string) $gedrec, $match) ? $match[1] : '';
+        $SURN     = preg_match("/\n{$sublevel} SURN (.+)/", (string) $gedrec, $match) ? $match[1] : '';
+        $NSFX     = preg_match("/\n{$sublevel} NSFX (.+)/", (string) $gedrec, $match) ? $match[1] : '';
+        $NICK     = preg_match("/\n{$sublevel} NICK (.+)/", (string) $gedrec, $match) ? $match[1] : '';
 
         // SURN is an comma-separated list of surnames...
         if ($SURN) {

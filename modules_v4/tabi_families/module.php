@@ -354,7 +354,7 @@ class tabi_families_KT_Module extends KT_Module implements KT_Module_IndiTab {
 					<div class="cell medium-2 <?php echo $styleadd; ?>">
 					</div>
 					<div class="cell medium-9">
-						<?php $marr_type = strtoupper($family->getMarriageType());
+						<?php $marr_type = strtoupper((string) $family->getMarriageType());
 						if ($marr_type=='CIVIL' || $marr_type=='PARTNERS' || $marr_type=='RELIGIOUS' || $marr_type=='COML' || $marr_type=='UNKNOWN') {
 							$marr_fact = 'MARR_' . $marr_type;
 						} else {

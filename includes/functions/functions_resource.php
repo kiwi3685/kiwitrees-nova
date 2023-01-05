@@ -536,7 +536,7 @@ function add_report_descendancy($i, $person, $parents = false, $generations = -1
 }
 
 function marriageDetails($family) {
-	$marr_type = strtoupper($family->getMarriageType());
+	$marr_type = strtoupper((string) $family->getMarriageType());
 	if ($marr_type == 'CIVIL' || $marr_type=='PARTNERS' || $marr_type=='RELIGIOUS' || $marr_type=='COML' || $marr_type=='UNKNOWN') {
 		$marr_fact = 'MARR_' . $marr_type;
 	} else {
