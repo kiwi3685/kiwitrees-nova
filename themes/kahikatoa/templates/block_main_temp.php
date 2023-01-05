@@ -31,7 +31,7 @@ if (KT_USER_GEDCOM_ADMIN || !is_null($content)) { ?>
     <div id="<?php echo $id; ?>" class="block large-block shadow">
     	<div class="blockheader">
     		<?php echo $title;
-    		if ($config) { ?>
+    		if (KT_USER_GEDCOM_ADMIN && $config) { ?>
     			<a href="block_edit.php?block_id=<?php echo $block_id; ?>&amp;ged=<?php echo $KT_TREE->tree_name_url; ?>" title="<?php echo KT_I18N::translate('Configure'); ?>">
     				<i class="<?php echo $iconStyle; ?> fa-gears"></i>
     			</a>
