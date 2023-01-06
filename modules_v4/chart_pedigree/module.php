@@ -74,20 +74,20 @@ class chart_pedigree_KT_Module extends KT_Module implements KT_Module_Chart {
 		global $controller, $iconStyle;
 		$controller	= new KT_Controller_Pedigreechart();
 
-        $chartParams = json_encode(
-	        array(
-	            'defaultColor'   => $controller->getColor(),
-	            'fontColor'      => $controller->getChartFontColor(),
+		$chartParams = json_encode(
+			array(
+				'defaultColor'   => $controller->getColor(),
+				'fontColor'      => $controller->getChartFontColor(),
 				'generations'    => $controller->generations,
 //	            'showEmptyBoxes' => $controller->getShowEmptyBoxes(),
 				'individualUrl'	 => $controller->getIndividualUrl(),
-	            'labels'         => [
-	                'zoom' => KT_I18N::translate('Use Ctrl + scroll to zoom in the view'),
-	                'move' => KT_I18N::translate('Move the view with two fingers'),
-	            ],
-	            'data'           => $controller->buildJsonTree($controller->root),
-            )
-	    );
+				'labels'         => [
+					'zoom' => KT_I18N::translate('Use Ctrl + scroll to zoom in the view'),
+					'move' => KT_I18N::translate('Move the view with two fingers'),
+				],
+				'data'           => $controller->buildJsonTree($controller->root),
+			)
+		);
 
 		$controller
 			->restrictAccess(KT_Module::isActiveChart(KT_GED_ID, $this->getName(), KT_USER_ACCESS_LEVEL))
@@ -98,27 +98,27 @@ class chart_pedigree_KT_Module extends KT_Module implements KT_Module_Chart {
 				autocomplete();
 
 				function PedigreeChart(data) {
-				    let options = new rso.Options(
-				        data.individualUrl,
-				        data.labels,
-				        data.generations,
-				        data.defaultColor,
-				        data.fontColor,
+					let options = new rso.Options(
+						data.individualUrl,
+						data.labels,
+						data.generations,
+						data.defaultColor,
+						data.fontColor,
 //				        data.rtl,
 //				        data.showEmptyBoxes,
-				        1
-				    );
+						1
+					);
 
-				    options = Object.assign({}, options, data);
+					options = Object.assign({}, options, data);
 
-				    new rso.Chart("#pedigree_chart", options);
+					new rso.Chart("#pedigree_chart", options);
 				}
 
 				new PedigreeChart(' . $chartParams . ');
 
 				document.getElementById("pedigree_chart").scrollIntoView(true);
 
-		    ');
+			');
 
 		include_once 'pedigree-chart.js.php';
 		require KT_ROOT . 'includes/functions/functions_edit.php';
@@ -148,8 +148,8 @@ class chart_pedigree_KT_Module extends KT_Module implements KT_Module_Chart {
 						<div class="grid-x grid-padding-x">
 							<div class="cell small-9">
 							  <div class="slider" data-slider data-start="2" data-step="1" data-end="10" data-initial-start="<?php echo $controller->generations; ?>">
-							    <span class="slider-handle"  data-slider-handle role="slider" tabindex="1" aria-controls="generations"></span>
-							    <span class="slider-fill" data-slider-fill></span>
+								<span class="slider-handle"  data-slider-handle role="slider" tabindex="1" aria-controls="generations"></span>
+								<span class="slider-fill" data-slider-fill></span>
 							  </div>
 							</div>
 							<div class="cell small-3">

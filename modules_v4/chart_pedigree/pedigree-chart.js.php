@@ -24,11 +24,7 @@
  if (!defined('KT_KIWITREES')) {
  	header('HTTP/1.0 403 Forbidden');
  	exit;
- }
-
- //global $KT_THEME;
-
-?>
+ } ?>
 
 <script>
 

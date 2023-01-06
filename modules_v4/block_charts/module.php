@@ -96,49 +96,98 @@ class block_charts_KT_Module extends KT_Module implements KT_Module_Block {
 					break;
 			}
 
-			$content = '<div class="grid-x">
-				<div class="cell">
-					<table>
-						<tr>';
-							if ($type=='descendants' || $type=='hourglass') {
-								$content .= '<td valign="middle">';
-								ob_start();
-								$controller->print_descendency($person, 1, false);
-								$content .= ob_get_clean();
-								$content .= '</td>';
-							}
-							if ($type=='pedigree' || $type=='hourglass') {
-								//-- print out the root person
-								if ($type != 'hourglass') {
+			if($type == 'pedigree') {
+				$controller  = new KT_Controller_Pedigreechart();
+				$chartParams = json_encode(
+					array(
+						'defaultColor'   => $controller->getColor(),
+						'fontColor'      => $controller->getChartFontColor(),
+						'generations'    => $controller->generations,
+//			            'showEmptyBoxes' => $controller->getShowEmptyBoxes(),
+						'individualUrl'	 => $controller->getIndividualUrl(),
+						'labels'         => [
+							'zoom' => KT_I18N::translate('Use Ctrl + scroll to zoom in the view'),
+							'move' => KT_I18N::translate('Move the view with two fingers'),
+						],
+						'data'           => $controller->buildJsonTree($controller->root),
+					)
+				);
+
+				$controller
+					->addExternalJavascript(KT_D3_JS)
+					->addInlineJavascript('
+						function PedigreeChart(data) {
+						    let options = new rso.Options(
+						        data.individualUrl,
+						        data.labels,
+						        data.generations,
+						        data.defaultColor,
+						        data.fontColor,
+		//				        data.rtl,
+		//				        data.showEmptyBoxes,
+						        1
+						    );
+
+						    options = Object.assign({}, options, data);
+
+						    new rso.Chart("#pedigree_chart", options);
+						}
+
+						new PedigreeChart(' . $chartParams . ');
+
+						document.getElementById("pedigree_chart").scrollIntoView(true);
+
+				    ');
+
+				include_once KT_MODULES_DIR . 'chart_pedigree/pedigree-chart.js.php';
+
+				$content = '<div id="pedigree_chart" class="cell text-center"></div>';
+
+			} else {
+				$content = '<div class="grid-x">
+					<div class="cell">
+						<table>
+							<tr>';
+								if ($type=='descendants' || $type=='hourglass') {
 									$content .= '<td valign="middle">';
 									ob_start();
-									print_pedigree_person($person, 1);
+									$controller->print_descendency($person, 1, false);
 									$content .= ob_get_clean();
 									$content .= '</td>';
 								}
-								$content .= '<td valign="middle">';
-								ob_start();
-								$controller->print_person_pedigree($person, 1);
-								$content .= ob_get_clean();
-								$content .= '<td>';
-							}
-							if ($type == 'treenav') {
-								require_once KT_MODULES_DIR . 'tree/module.php';
-								require_once KT_MODULES_DIR . 'tree/class_treeview.php';
-								$mod		= new tree_KT_Module;
-								$tv			= new TreeView;
-								$content	.= '<td>';
+								if ($type=='pedigree' || $type=='hourglass') {
+									//-- print out the root person
+									if ($type != 'hourglass') {
+										$content .= '<td valign="middle">';
+										ob_start();
+										print_pedigree_person($person, 1);
+										$content .= ob_get_clean();
+										$content .= '</td>';
+									}
+									$content .= '<td valign="middle">';
+									ob_start();
+									$controller->print_person_pedigree($person, 1);
+									$content .= ob_get_clean();
+									$content .= '<td>';
+								}
+								if ($type == 'treenav') {
+									require_once KT_MODULES_DIR . 'tree/module.php';
+									require_once KT_MODULES_DIR . 'tree/class_treeview.php';
+									$mod		= new tree_KT_Module;
+									$tv			= new TreeView;
+									$content	.= '<td>';
 
-								$content .= '<script>jQuery("head").append(\'<link rel="stylesheet" href="'.$mod->css().'" type="text/css" />\');</script>';
-								$content .= '<script src="' . $mod->js() . '"></script>';
-						    	list($html, $js) = $tv->drawViewport($person, 2);
-								$content .= $html.'<script>'.$js.'</script>';
-								$content .= '</td>';
-							}
-						$content .= '</tr>
-					</table>
-				</div>
-			</div>';
+									$content .= '<script>jQuery("head").append(\'<link rel="stylesheet" href="'.$mod->css().'" type="text/css" />\');</script>';
+									$content .= '<script src="' . $mod->js() . '"></script>';
+							    	list($html, $js) = $tv->drawViewport($person, 2);
+									$content .= $html.'<script>'.$js.'</script>';
+									$content .= '</td>';
+								}
+							$content .= '</tr>
+						</table>
+					</div>
+				</div>';
+			}
 		} else {
 			$content =
 				'<div class="callout alert">' .
