@@ -106,19 +106,19 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 
 	public function getMenuTitle() {
 		$default_title = KT_I18N::translate('Faq');
-		$HEADER_TITLE = KT_I18N::translate(get_module_setting($this->getName(), 'FAQ_TITLE', $default_title));
+		$HEADER_TITLE = KT_I18N::translate(get_module_setting($this->getName(), 'HEADER_TITLE', $default_title));
 		return $HEADER_TITLE;
 	}
 
 	public function getMenuIcon() {
 		$default_icon = 'fa-comments';
-		$HEADER_ICON = KT_I18N::translate(get_module_setting($this->getName(), 'FAQ_ICON', $default_icon));
+		$HEADER_ICON = KT_I18N::translate(get_module_setting($this->getName(), 'HEADER_ICON', $default_icon));
 		return $HEADER_ICON;
 	}
 
 	public function getSummaryDescription() {
 		$default_description = '';
-		$HEADER_DESCRIPTION = get_module_setting($this->getName(), 'FAQ_DESCRIPTION', $default_description);
+		$HEADER_DESCRIPTION = get_module_setting($this->getName(), 'HEADER_DESCRIPTION', $default_description);
 		return $HEADER_DESCRIPTION;
 	}
 
@@ -148,13 +148,11 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 			 ORDER BY block_order
 		")->execute(array($this->getName(), KT_GED_ID, KT_GED_ID))->fetchAll();
 
-		$faq_description = get_module_setting($this->getName(), 'FAQ_DESCRIPTION');
-
 		echo pageStart('faq', $controller->getPageTitle()); ?>
 
 			<div class="grid-x">
-				<div class="cell" id="faq_description">
-					<?php echo $faq_description; ?>
+				<div class="cell">
+					<?php echo $this->getSummaryDescription(); ?>
 				</div>
 				<form class="cell medium-4 medium-offset-4" id="faq_search" method="post" action="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=show" >
 					<input
