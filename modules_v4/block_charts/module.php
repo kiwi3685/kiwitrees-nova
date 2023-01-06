@@ -171,9 +171,9 @@ class block_charts_KT_Module extends KT_Module implements KT_Module_Block {
 									$content .= '<td>';
 								}
 								if ($type == 'treenav') {
-									require_once KT_MODULES_DIR . 'tree/module.php';
-									require_once KT_MODULES_DIR . 'tree/class_treeview.php';
-									$mod		= new tree_KT_Module;
+									require_once KT_MODULES_DIR . 'tabi_tree/module.php';
+									require_once KT_MODULES_DIR . 'tabi_tree/class_treeview.php';
+									$mod		= new tabi_tree_KT_Module;
 									$tv			= new TreeView;
 									$content	.= '<td>';
 
