@@ -550,7 +550,7 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 											$order = 1;
 											foreach ($stories as $story) {
 												$story_title	= get_block_setting($story->block_id, 'title');
-												$xref			= explode(",", get_block_setting($story->block_id, 'xref'));
+												$xref			= explode(",", (string) get_block_setting($story->block_id, 'xref'));
 												$count_xref		= count($xref); ?>
 												<tr class="sortme">
 													<td>
