@@ -40,6 +40,7 @@ if ($save) {
 	$header      	= KT_Filter::post('header',  KT_REGEX_UNSAFE); // allow html
 	$faqbody     	= KT_Filter::post('faqbody', KT_REGEX_UNSAFE); // allow html
 	$gedID 			= KT_Filter::post('gedID');
+	$item_access	= KT_Filter::post('faq_access');
 	$block_order 	= (int)KT_Filter::post('block_order');
 	$languages 		= array();
 
@@ -53,6 +54,7 @@ if ($save) {
 
 	set_block_setting($block_id, 'header', $header);
 	set_block_setting($block_id, 'faqbody', $faqbody); 
+	set_block_setting($block_id, 'faq_access', $item_access);
 
 	foreach (KT_I18N::used_languages() as $code=>$name) {
 		if (KT_Filter::postBool('lang_' . $code)) {
@@ -80,8 +82,9 @@ if ($save) {
 
 $controller->setPageTitle(KT_I18N::translate('Edit faq item'));
 
-$header   = get_block_setting($block_id, 'header');
-$faqbody  = get_block_setting($block_id, 'faqbody');
+$header      = get_block_setting($block_id, 'header');
+$faqbody     = get_block_setting($block_id, 'faqbody');
+$item_access = KT_I18N::translate('All');
 
 $block_order = KT_DB::prepare(
 	"SELECT block_order FROM `##block` WHERE block_id = ?"
@@ -127,6 +130,12 @@ echo pageStart('faq_details', $controller->getPageTitle()); ?>
 			</div>
 			<div class="cell medium-6"></div>
 			<label class="cell medium-2">
+				<?php echo KT_I18N::translate('Access level'); ?>
+			</label>
+			<div class="cell medium-4">
+				<?php echo edit_field_access_level('faq_access', $item_access); ?>
+			</div>
+			<div class="cell medium-6"></div>			<label class="cell medium-2">
 				<?php echo KT_I18N::translate('Show this block for which languages?'); ?>
 			</label>
 			<div class="cell medium-10">

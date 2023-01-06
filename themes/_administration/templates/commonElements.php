@@ -267,7 +267,7 @@ function resetButtons($onClick = '') {
  */
 function faqLink($url) {
 	global $iconStyle;
-	$link = KT_KIWITREES_URL . '/faqs/' . $url;
+	$link = KT_KIWITREES_URL . $url;
 	return '
 		<div class="cell">
 			<a

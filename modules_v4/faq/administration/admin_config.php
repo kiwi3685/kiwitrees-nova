@@ -73,7 +73,7 @@ $max_block_order = KT_DB::prepare(
 
 echo relatedPages($moduleTools, $this->getConfigLink());
 
-echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/faqs/modules-faqs/pages/'); ?>
+echo pageStart($this->getName(), $controller->getPageTitle(), '', '', ''); ?>
 
 	<fieldset class="cell fieldset">
 		<legend class="h5"><?php echo KT_I18N::translate('Site menu and page header'); ?></legend>
@@ -118,7 +118,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/faqs/mod
 
 			<?php echo familyTree($gedID); ?>
 
-			<div class="cell medium-offset-1 auto">
+			<div class="cell medium-offset-1 auto text-right">
 				<button class="button primary" type="submit" onclick="location.href='module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_add&amp;gedID=<?php echo $gedID; ?>'">
 					<i class="<?php echo $iconStyle; ?> fa-plus"></i>
 					<?php echo KT_I18N::translate('Add faq item'); ?>

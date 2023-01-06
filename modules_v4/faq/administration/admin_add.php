@@ -89,7 +89,7 @@ $controller->setPageTitle(KT_I18N::translate('Add faq item'));
 $block_id    = '';
 $header      = '';
 $faqbody     = '';
-$item_access = 1;
+$item_access = KT_I18N::translate('All');
 
 $block_order = KT_DB::prepare(
 	"SELECT IFNULL(MAX(block_order) + 1, 0) FROM `##block` WHERE module_name = ?"
@@ -132,7 +132,7 @@ echo pageStart('faq_details', $controller->getPageTitle()); ?>
 				<?php echo KT_I18N::translate('Access level'); ?>
 			</label>
 			<div class="cell medium-4">
-				<?php echo edit_field_access_level('faq_access', $items_access); ?>
+				<?php echo edit_field_access_level('faq_access', $item_access); ?>
 			</div>
 			<div class="cell medium-6"></div>
 			<label class="cell medium-2">
