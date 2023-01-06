@@ -120,7 +120,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 
 			<?php echo familyTree($gedID); ?>
 
-			<div class="cell medium-offset-1 auto">
+			<div class="cell medium-offset-1 auto text-right">
 				<button class="button primary" type="submit" onclick="location.href='module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_add&amp;gedID=<?php echo $gedID; ?>'">
 					<i class="<?php echo $iconStyle; ?> fa-plus"></i>
 					<?php echo KT_I18N::translate('Add gallery'); ?>
