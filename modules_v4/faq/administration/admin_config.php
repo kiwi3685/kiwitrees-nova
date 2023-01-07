@@ -80,7 +80,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', ''); ?>
 		<div class="grid-x">
 			<form class="cell" method="post" name="configform" action="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_config">
 				<input type="hidden" name="action" value="update">
-				<div class="grid-x grid-margin-x">
+				<div class="grid-x grid-margin-x grid-margin-y">
 					<label class="cell medium-2">
 						<?php echo KT_I18N::translate('Menu and page title'); ?>
 					</label>
