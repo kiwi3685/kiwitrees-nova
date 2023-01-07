@@ -48,6 +48,8 @@ if ($action == 'update') {
 	set_module_setting($this->getName(), 'HEADER_TITLE', KT_Filter::post('NEW_HEADER_TITLE'));
 	set_module_setting($this->getName(), 'HEADER_ICON',  str_replace($iconStyle . ' ', '', KT_Filter::post('NEW_HEADER_ICON')));
 	set_module_setting($this->getName(), 'HEADER_DESCRIPTION', KT_Filter::post('NEW_HEADER_DESCRIPTION', KT_REGEX_UNSAFE)); // allow html
+	set_module_setting($this->getName(), 'THEME_DIR', KT_Filter::post('NEW_THEME_DIR'));
+
 	AddToLog($this->getName() . ' config updated', 'config');
 }
 
@@ -77,12 +79,13 @@ $max_block_order = KT_DB::prepare(
 echo relatedPages($moduleTools, $this->getConfigLink());
 
 echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-guide/gallery/'); ?>
+
 	<fieldset class="cell fieldset">
 		<legend class="h5"><?php echo KT_I18N::translate('Site menu and page header'); ?></legend>
 		<div class="grid-x">
 			<form class="cell" method="post" name="configform" action="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_config">
 				<input type="hidden" name="action" value="update">
-				<div class="grid-x grid-margin-x">
+				<div class="grid-x grid-margin-x grid-margin-y">
 					<label class="cell medium-2">
 						<?php echo KT_I18N::translate('Menu and page title'); ?>
 					</label>
@@ -108,12 +111,34 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 					<div class="cell medium-9">
 						<textarea name="NEW_HEADER_DESCRIPTION" class="html-edit" placeholder="<?php echo KT_I18N::translate('This text will be displayed at the top of the page.'); ?>"><?php echo $this->getSummaryDescription(); ?></textarea>
 					</div>
+					<label class="cell medium-2">
+						<?php echo KT_I18N::translate('Select gallery theme'); ?> 
+					</label>					
+					<?php foreach ($themenames as $themedir) {
+						$class  = ($current_themedir == $themedir ? 'current_theme' : 'theme_box');
+						$check  = ($current_themedir == $themedir ? 'checked=' : '');
+						$imgURL = KT_MODULES_DIR . $this->getName() . '/images/' . $themedir . '.png"'; ?>
+						<div class="cell medium-2 <?php echo $class; ?>">
+							<img src="<?php echo  $imgURL; ?>" alt="<?php echo $themedir; ?>" title="<?php echo $themedir; ?>">
+							<input 
+								type="radio" 
+								id="radio_<?php echo $themedir; ?>"
+								name="NEW_THEME_DIR" 
+								value="<?php echo $themedir; ?>"
+								<?php echo $check; ?>
+							>
+							<label for="radio_'<?php echo $themedir; ?>">
+								<?php echo $themedir; ?>
+							</label>
+						</div>
+					<?php } ?>
 				</div>
 
 				<?php echo singleButton(); ?>
 			</form>
 		</div>
 	</fieldset>
+
 	<fieldset class="cell fieldset">
 		<legend class="h5"><?php echo KT_I18N::translate('Page contents list'); ?></legend>
 		<div class="grid-x">
@@ -127,7 +152,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 				</button>
 			</div>
 
-			<?php //if($items) { ?>
+			<?php if($items) { ?>
 				<table class="cell" id="gallery_edit">
 					<thead>
 						<tr>
@@ -194,11 +219,11 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 						<?php } ?>
 					</tbody>
 				</table>
-			<?php //} else { ?>
+			<?php } else { ?>
 				<div class="cell callout alert">
 					<?php echo KT_I18N::translate('The gallery list is empty.'); ?>
 				</div>
-			<?php //} ?>
+			<?php } ?>
 		</div>
 	</fieldset>
 

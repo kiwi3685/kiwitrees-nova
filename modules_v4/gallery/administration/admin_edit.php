@@ -37,29 +37,32 @@ $controller
 
 if ($save) {
 	$block_id 		= KT_Filter::postInteger('block_id');
-	$header      	= KT_Filter::post('header',  KT_REGEX_UNSAFE); // allow html
-	$faqbody     	= KT_Filter::post('faqbody', KT_REGEX_UNSAFE); // allow html
+	$block_order 	= KT_Filter::postInteger('block_order');
+	$header      	= KT_Filter::post('header',  KT_REGEX_UNSAFE);
+	$gallerybody    = KT_Filter::post('gallerybody', KT_REGEX_UNSAFE);
 	$gedID 			= KT_Filter::post('gedID');
-	$block_order 	= (int)KT_Filter::post('block_order');
 	$languages 		= array();
 
 	KT_DB::prepare(
-		"UPDATE `##block` SET gedcom_id = NULLIF(?, ''), block_order = ? WHERE block_id = ?"
+		"INSERT INTO `##block` (gedcom_id, module_name, block_order) VALUES (NULLIF(?, ''), ?, ?)"
 	)->execute(array(
-	$gedID,
-		$block_order,
-		$block_id
+		$gedID,
+		$this->getName(),
+		$block_order
 	));
 
-	set_block_setting($block_id, 'header', $header);
-	set_block_setting($block_id, 'faqbody', $faqbody); 
+	set_block_setting($block_id, 'gallery_title', KT_Filter::post('gallery_title', KT_REGEX_UNSAFE));
+	set_block_setting($block_id, 'gallery_description', KT_Filter::post('gallery_description', KT_REGEX_UNSAFE));
+	set_block_setting($block_id, 'gallery_folder_w', KT_Filter::post('gallery_folder_w', KT_REGEX_UNSAFE));
+	set_block_setting($block_id, 'gallery_folder_f', KT_Filter::post('gallery_folder_f', KT_REGEX_UNSAFE));
+	set_block_setting($block_id, 'gallery_access', KT_Filter::post('gallery_access', KT_REGEX_UNSAFE));
+	set_block_setting($block_id, 'plugin', KT_Filter::post('plugin', KT_REGEX_UNSAFE));
 
 	foreach (KT_I18N::used_languages() as $code=>$name) {
 		if (KT_Filter::postBool('lang_' . $code)) {
 			$languages[] = $code;
 		}
 	}
-
 	set_block_setting($block_id, 'languages', implode(',', $languages));
 
 	switch ($save) {
@@ -78,42 +81,83 @@ if ($save) {
 	}
 }
 
-$controller->setPageTitle(KT_I18N::translate('Edit faq item'));
+$controller->setPageTitle(KT_I18N::translate('Edit gallery'));
 
-$header   = get_block_setting($block_id, 'header');
-$faqbody  = get_block_setting($block_id, 'faqbody');
+$item_title       = get_block_setting($block_id, 'gallery_title');
+$item_description = get_block_setting($block_id, 'gallery_description');
+$item_folder_w    = get_block_setting($block_id, 'gallery_folder_w');
+$item_folder_f    = get_block_setting($block_id, 'gallery_folder_f');
+$item_access      = get_block_setting($block_id, 'gallery_access');
+$plugin           = get_block_setting($block_id, 'plugin');
 
-$block_order = KT_DB::prepare(
-	"SELECT block_order FROM `##block` WHERE block_id = ?"
+$block_order      = KT_DB::prepare(
+"SELECT block_order FROM `##block` WHERE block_id=?"
 )->execute(array($block_id))->fetchOne();
 
-$gedcom_id = KT_DB::prepare(
-	"SELECT gedcom_id FROM `##block` WHERE block_id = ?"
+$gedcom_id     	  = KT_DB::prepare(
+	"SELECT gedcom_id FROM `##block` WHERE block_id=?"
 )->execute(array($block_id))->fetchOne();
 
 echo relatedPages($moduleTools, $this->getConfigLink());
 
-echo pageStart('faq_details', $controller->getPageTitle()); ?>
+echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-guide/gallery/'); ?>
 
-	<form class="cell" name="faq" method="post" action="module.php?mod=faq&amp;mod_action=admin_edit">
+	<form class="cell" name="gallery" method="post" action="module.php?mod=gallery&amp;mod_action=admin_edit">
 		<input type="hidden" name="block_id" value="<?php echo $block_id; ?>">
 
 		<div class="grid-x grid-margin-y">
 
 			<label class="cell medium-2">
-				<?php echo KT_I18N::translate('Question'); ?>				
+				<?php echo KT_I18N::translate('Title'); ?>				
 			</label>
 			<div class="cell medium-10">
-				<input type="text" name="header" value="<?php echo htmlspecialchars((string) $header); ?>">
+				<input type="text" name="gallery_title" value="<?php echo htmlspecialchars((string) $item_title); ?>">
 			</div>
 			<label class="cell medium-2">
-				<?php echo KT_I18N::translate('Answer'); ?>
+				<?php echo KT_I18N::translate('Description'); ?>
 			</label>
 			<div class="cell medium-10">
-				<textarea name="faqbody" class="html-edit"><?php echo htmlspecialchars((string) $faqbody); ?></textarea>
+				<textarea name="gallery_description" class="html-edit"><?php echo htmlspecialchars((string) $item_description); ?></textarea>
 			</div>
 			<label class="cell medium-2">
-				<?php echo KT_I18N::translate('Faq menu order'); ?>
+				<?php echo KT_I18N::translate('Source'); ?>
+			</label>
+			<div class="cell medium-5" id="kiwitrees-div">
+				<input 
+					id="kiwitrees-radio" 
+					type="radio" 
+					name="plugin" 
+					value="kiwitrees" 
+					<?php echo ($plugin == 'kiwitrees') ? ' checked' :  ''; ?> 
+				>
+				<?php echo KT_I18N::translate('Kiwitrees');	?>
+				<div class="input-group">
+ 					<span class="input-group-label"><?php echo KT_I18N::translate('Media folder name'); ?></span>
+					<?php echo select_edit_control("gallery_folder_w", KT_Query_Media::folderList(), null, htmlspecialchars((string) $item_folder_w), ($plugin == 'kiwitrees') ? '' : 'disabled'); ?>
+				</div>
+			</div>
+			<div class="cell medium-5" id="flickr-div">
+				<input 
+					id="flickr-radio" 
+					type="radio" 
+					name="plugin" 
+					value="flicker" 
+					<?php echo ($plugin == 'flickr') ? ' checked' : ''; ?> 
+				>
+				<?php echo KT_I18N::translate('Flickr'); ?>
+				<div class="input-group">
+					<span class="input-group-label"><?php echo KT_I18N::translate('Flickr set number'); ?></span>
+					<input
+					 	class="input-group-field" 
+						id="flickr" 
+						type="text" 
+						name="gallery_folder_f" 
+						value="<?php echo htmlspecialchars((string) $item_folder_f); ?>"
+					>
+				</div>
+			</div>
+			<label class="cell medium-2">
+				<?php echo KT_I18N::translate('Gallery order'); ?>
 			</label>
 			<div class="cell medium-1">
 				<input type="number" name="block_order" value="<?php echo $block_order; ?>">
@@ -124,6 +168,13 @@ echo pageStart('faq_details', $controller->getPageTitle()); ?>
 			</label>
 			<div class="cell medium-4">
 				<?php echo select_edit_control('gedID', KT_Tree::getIdList(), KT_I18N::translate('All'), $gedID); ?>
+			</div>
+			<div class="cell medium-6"></div>
+			<label class="cell medium-2">
+				<?php echo KT_I18N::translate('Access level'); ?>
+			</label>
+			<div class="cell medium-4">
+				<?php echo edit_field_access_level('gallery_access', $item_access); ?>
 			</div>
 			<div class="cell medium-6"></div>
 			<label class="cell medium-2">

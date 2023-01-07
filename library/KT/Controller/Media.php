@@ -156,16 +156,18 @@ class KT_Controller_Media extends KT_Controller_GedcomRecord {
 	/**
 	* edit menu items used in media list
 	*/
-	static function getMediaListMenu($mediaobject) {
+	static function getMediaListMenu($mediaobject, $editOnly = false) {
 		$html = '<ul class="menu align-center">';
 			$menu = new KT_Menu(KT_I18N::translate('Manage links'), 'inverselink.php?mediaid=' . $mediaobject->getXref() . '&linkto=manage&ged=' . KT_GEDCOM);
 			$menu->addClass('', '', 'fa-link');
 			$menu->addTarget('_blank');
 			$html .= $menu->getMenuAsList();
 
-			$menu = new KT_Menu(KT_I18N::translate('View details'), $mediaobject->getHtmlUrl());
-			$menu->addClass('', '', 'fa-camera-retro');
-			$html .= $menu->getMenuAsList();
+			if (!$editOnly) {
+				$menu = new KT_Menu(KT_I18N::translate('View details'), $mediaobject->getHtmlUrl());
+				$menu->addClass('', '', 'fa-camera-retro');
+				$html .= $menu->getMenuAsList();
+			}
 
 			$menu = new KT_Menu(KT_I18N::translate('Edit details'), 'addmedia.php?action=editmedia&amp;pid=' . $mediaobject->getXref(), 'menu-obje-edit');
 			$menu->addClass('', '', 'fa-pen-to-square');

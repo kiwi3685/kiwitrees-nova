@@ -55,8 +55,8 @@ $controller
 if ($save) {
 	$block_id 		= KT_Filter::postInteger('block_id');
 	$block_order 	= KT_Filter::postInteger('block_order');
-	$header      	= KT_Filter::post('header',  KT_REGEX_UNSAFE); // allow html
-	$gallerybody    = KT_Filter::post('gallerybody', KT_REGEX_UNSAFE); // allow html
+	$header      	= KT_Filter::post('header',  KT_REGEX_UNSAFE);
+	$gallerybody    = KT_Filter::post('gallerybody', KT_REGEX_UNSAFE);
 	$gedID 			= KT_Filter::post('gedID');
 	$languages 		= array();
 
@@ -70,8 +70,12 @@ if ($save) {
 
 	$block_id = KT_DB::getInstance()->lastInsertId();
 
-	set_block_setting($block_id, 'header', $header);
-	set_block_setting($block_id, 'gallerybody', $gallerybody); 
+	set_block_setting($block_id, 'gallery_title', KT_Filter::post('gallery_title', KT_REGEX_UNSAFE));
+	set_block_setting($block_id, 'gallery_description', KT_Filter::post('gallery_description', KT_REGEX_UNSAFE));
+	set_block_setting($block_id, 'gallery_folder_w', KT_Filter::post('gallery_folder_w', KT_REGEX_UNSAFE));
+	set_block_setting($block_id, 'gallery_folder_f', KT_Filter::post('gallery_folder_f', KT_REGEX_UNSAFE));
+	set_block_setting($block_id, 'gallery_access', KT_Filter::post('gallery_access', KT_REGEX_UNSAFE));
+	set_block_setting($block_id, 'plugin', KT_Filter::post('plugin', KT_REGEX_UNSAFE));
 
 	foreach (KT_I18N::used_languages() as $code=>$name) {
 		if (KT_Filter::postBool('lang_' . $code)) {
@@ -107,12 +111,11 @@ $controller->setPageTitle(KT_I18N::translate('Add gallery'));
 $block_id         = '';
 $header           = '';
 $gallerybody      = '';
-
 $item_title       = '';
 $item_description = '';
 $item_folder_w    = $MEDIA_DIRECTORY;
 $item_folder_f    = '';
-$item_access      = 1;
+$item_access      = KT_I18N::translate('All');
 $plugin           = 'kiwitrees';
 
 
