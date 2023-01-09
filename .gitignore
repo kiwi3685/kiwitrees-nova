@@ -78,7 +78,9 @@ admin_awesome.php
 !/library/fontawesome-iconpicker/dist/js
 /library/fontawesome-iconpicker/dist/js/*
 !/library/fontawesome-iconpicker/dist/js/fontawesome-iconpicker.min.js
-
+!/library/fontawesome-iconpicker/dist/css
+/library/fontawesome-iconpicker/dist/css/*
+!/library/fontawesome-iconpicker/dist/css/fontawesome-iconpicker.min.css
 #Jquery-Confirm
 /library/jquery-confirm/*
 !/library/jquery-confirm/dist

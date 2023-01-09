@@ -19,7 +19,6 @@ text=auto
 .DS_Store                   export-ignore
 _MACOSX                   export-ignore
 Makefile                    export-ignore
-build/                      export-ignore
 js/kiwitrees.js	      			export-ignore
 js/autocomplete.js		    	export-ignore
 library/foundation-sites/	export-ignore
