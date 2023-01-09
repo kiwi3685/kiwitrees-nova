@@ -325,7 +325,7 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 
 	private function getJavaScript($item_id)
 	{
-		$theme = get_module_setting($this->getName(), 'THEME_DIR', 'classic');
+		$theme = 'classic';
 		$plugin = get_block_setting($item_id, 'plugin');
 
 		$js = 'Galleria.loadTheme("' . KT_STATIC_URL . KT_MODULES_DIR . $this->getName() . '/galleria/themes/' . $theme . '/galleria.' . $theme . '.min.js");';
@@ -459,7 +459,7 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 					}
 
 					if ($links) {
-						$gallery_links .= '<h4>'.KT_I18N::translate('Linked to:').'</h4>';
+						$gallery_links .= '<h5>' . KT_I18N::translate('Linked to:') .'</h5>';
 						$gallery_links .= '<div id="image_links">';
 							foreach ($links as $record) {
 									$gallery_links .= '<a href="' . $record->getHtmlUrl() . '">' . $record->getFullname().'</a><br>';
@@ -477,25 +477,23 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 			}
 			if (KT_USER_CAN_ACCESS || !is_null($media_links)) {
 				$html = '
-					<div id="links_bar" style="width:20%;"></div>
-					<div id="galleria" style="width:79%; height: 720px;">
+					<div id="links_bar"></div>
+					<div id="galleria">
 				';
 			} else {
 				$html =
-					'<div id="galleria" style="width:100%;">';
+					'<div id="galleria">';
 			}
 		} else {
-			$html = '<div id="galleria" style="width:100%;">';
+			$html = '<div id="galleria">';
 			$images .= '&nbsp;';
 		}
 		if ($images) {
 			$html .= $images . '
 				</div>
-				<div class="cell">
-					<a id="copy" href="https://galleriajs.github.io/" target="_blank" rel="noopener noreferrer">
-				 		' . /* I18N: Copyright statement in gallery module */ KT_I18N::translate('Display by Galleria (%1s)', $version) . '
-				 	</a>
-				</div>
+				<a class="cell" id="copy" href="https://galleriajs.github.io/" target="_blank" rel="noopener noreferrer">
+			 		' . /* I18N: Copyright statement in gallery module */ KT_I18N::translate('Display by Galleria (%1s)', $version) . '
+			 	</a>
 			';
 		} else {
 			$html .= KT_I18N::translate('Gallery is empty. Please choose other gallery.').

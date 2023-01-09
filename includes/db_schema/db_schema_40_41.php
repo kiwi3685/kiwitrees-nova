@@ -43,7 +43,12 @@ try {
 
 // Update some database field names
 try {
-    self::exec("UPDATE `ktn_module_setting` SET `setting_name` = REPLACE(`setting_name`, 'FAQ_', 'HEADER_'");
+    self::exec("UPDATE `##module_setting` SET `setting_name`= REPLACE(`setting_name`, 'FAQ_', 'HEADER_'");
+} catch (PDOException $ex) {
+    // Perhaps we have already deleted this data?
+}
+try {
+    self::exec("DELETE FROM `##module_setting` WHERE `module_name`='gallery' AND `setting_name`='THEME_DIR'");
 } catch (PDOException $ex) {
     // Perhaps we have already deleted this data?
 }

@@ -37,8 +37,8 @@ $controller
 if ($save) {
 	$block_id 		= KT_Filter::postInteger('block_id');
 	$block_order 	= KT_Filter::postInteger('block_order');
-	$header      	= KT_Filter::post('header',  KT_REGEX_UNSAFE); // allow html
-	$faqbody     	= KT_Filter::post('faqbody', KT_REGEX_UNSAFE); // allow html
+	$header      	= KT_Filter::post('header',  KT_REGEX_UNSAFE);
+	$faqbody     	= KT_Filter::post('faqbody', KT_REGEX_UNSAFE);
 	$gedID 			= KT_Filter::post('gedID');
 	$languages 		= array();
 

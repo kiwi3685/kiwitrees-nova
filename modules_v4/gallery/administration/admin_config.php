@@ -48,13 +48,9 @@ if ($action == 'update') {
 	set_module_setting($this->getName(), 'HEADER_TITLE', KT_Filter::post('NEW_HEADER_TITLE'));
 	set_module_setting($this->getName(), 'HEADER_ICON',  str_replace($iconStyle . ' ', '', KT_Filter::post('NEW_HEADER_ICON')));
 	set_module_setting($this->getName(), 'HEADER_DESCRIPTION', KT_Filter::post('NEW_HEADER_DESCRIPTION', KT_REGEX_UNSAFE)); // allow html
-	set_module_setting($this->getName(), 'THEME_DIR', KT_Filter::post('NEW_THEME_DIR'));
 
 	AddToLog($this->getName() . ' config updated', 'config');
 }
-
-$current_themedir	= get_module_setting($this->getName(), 'THEME_DIR', 'classic');
-$themenames			= $this->galleria_theme_names();
 
 $items = KT_DB::prepare("
 	SELECT block_id, block_order, gedcom_id, bs1.setting_value AS gallery_title, bs2.setting_value AS gallery_description 
@@ -111,27 +107,6 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 					<div class="cell medium-9">
 						<textarea name="NEW_HEADER_DESCRIPTION" class="html-edit" placeholder="<?php echo KT_I18N::translate('This text will be displayed at the top of the page.'); ?>"><?php echo $this->getSummaryDescription(); ?></textarea>
 					</div>
-					<label class="cell medium-2">
-						<?php echo KT_I18N::translate('Select gallery theme'); ?> 
-					</label>					
-					<?php foreach ($themenames as $themedir) {
-						$class  = ($current_themedir == $themedir ? 'current_theme' : 'theme_box');
-						$check  = ($current_themedir == $themedir ? 'checked=' : '');
-						$imgURL = KT_MODULES_DIR . $this->getName() . '/images/' . $themedir . '.png"'; ?>
-						<div class="cell medium-2 <?php echo $class; ?>">
-							<img src="<?php echo  $imgURL; ?>" alt="<?php echo $themedir; ?>" title="<?php echo $themedir; ?>">
-							<input 
-								type="radio" 
-								id="radio_<?php echo $themedir; ?>"
-								name="NEW_THEME_DIR" 
-								value="<?php echo $themedir; ?>"
-								<?php echo $check; ?>
-							>
-							<label for="radio_'<?php echo $themedir; ?>">
-								<?php echo $themedir; ?>
-							</label>
-						</div>
-					<?php } ?>
 				</div>
 
 				<?php echo singleButton(); ?>

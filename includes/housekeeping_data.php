@@ -1402,7 +1402,7 @@ function old_paths() {
 		KT_ROOT . 'admin_trees_download.php', // changed to adminExport.php
 		KT_ROOT . 'adminSearch.php', // removed temporary development solution
 		KT_ROOT . 'modules_v4/ckeditor', // feature removed
-
+		KT_ROOT . 'modules_v4/gallery/galleria/themes/simpl_galleria', // local theme removed
 
 	);
 }

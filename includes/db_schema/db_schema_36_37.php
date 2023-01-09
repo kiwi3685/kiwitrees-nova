@@ -60,7 +60,7 @@ try {
 	// If this fails, it has probably already been done.
 }
 try {
-	self::exec("DELETE FROM `kt_module_privacy` WHERE `component` = 'tab';");
+	self::exec("DELETE FROM `##module_privacy` WHERE `component` = 'tab';");
 } catch (PDOException $ex) {
 	// If this fails, it has probably already been done.
 }

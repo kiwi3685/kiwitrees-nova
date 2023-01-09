@@ -54,7 +54,7 @@ $this
 			var input = document.getElementById("term")
 			document.cookie = "adminSearch" + "=" + input.value;
 		};
-		jQuery("#searchClose").click(function() {
+		jQuery(".close-button").click(function() {
 			document.cookie = "adminSearch=;expires=" + new Date(0).toUTCString()
 			location.reload();
 		});
@@ -220,50 +220,55 @@ $this
 									</div>
 								</form>
 								<?php if ($searchTerm) {
-									$result = adminSearch($searchTerm); ?>
-									<div id="adminQueryResult" class="callout info-help" data-closable>
-										<h6><?php echo KT_I18N::translate('The term <span>%s</span> can be found on these pages: ', $searchTerm); ?></h6>
-										<button class="close-button" id="searchClose" type="button" data-close>
-											<span aria-hidden="true">&times;</span>
-										</button>
-										<ul>
-											<?php foreach ($result as $page) {
-												foreach ($page as $file => $count)  {
-													if (array_key_exists($file, $indirectAccess)) {
-														$modules = KT_Module::getActiveModules(KT_GED_ID, KT_PRIV_HIDE);
-														foreach ($modules as $module) {
-															if ( $module->getName() === $indirectAccess[$file]) {
-																echo '
-																	<li>
-																		<a href="' . $module->getConfigLink(str_replace(".php", "", $file)) . '" target="_blank">
-																			' . $searchAdminFiles[$file]
-																			. '&nbsp(' . $count . ')
-																		</a>
-																	</li>
-																';
+									$result = adminSearch($searchTerm);
+									if ($result) { ?>								
+										<div id="adminQueryResult" class="callout info-help" data-closable>
+											<h6><?php echo KT_I18N::translate('The term <span>%s</span> can be found on these pages: ', $searchTerm); ?></h6>
+											<button class="close-button" type="button" data-close>
+												<span aria-hidden="true">&times;</span>
+											</button>
+											<ul>
+												<?php foreach ($result as $page) {
+													foreach ($page as $file => $count)  {
+														if (array_key_exists($file, $indirectAccess)) {
+															$modules = KT_Module::getActiveModules(KT_GED_ID, KT_PRIV_HIDE);
+															foreach ($modules as $module) {
+																if ( $module->getName() === $indirectAccess[$file]) {
+																	echo '
+																		<li>
+																			<a href="' . $module->getConfigLink(str_replace(".php", "", $file)) . '" target="_blank">
+																				' . $searchAdminFiles[$file]
+																				. '&nbsp(' . $count . ')
+																			</a>
+																		</li>
+																	';
+																}
 															}
+														} else {
+															echo '
+																<li>
+																	<a href="' . $file . '" target="_blank">
+																		' . $searchAdminFiles[$file]
+																		. '&nbsp(' . $count . ')
+																	</a>
+																</li>
+															';
 														}
-													} else {
-														echo '
-															<li>
-																<a href="' . $file . '" target="_blank">
-																	' . $searchAdminFiles[$file]
-																	. '&nbsp(' . $count . ')
-																</a>
-															</li>
-														';
 													}
-												}
-											} ?>
-										</ul>
-									</div>
-								<?php } elseif ($searchTerm) { ?>
-									<div id="adminQueryResult">
-										<?php echo  KT_I18N::translate('Nothing found'); ?>
-									</div>
-							   <?php } ?>
-							</li>
-						<?php }
+												} ?>
+											</ul>
+										</div>
+									<?php } else { ?>
+										<div id="adminQueryResult" class="callout alert">
+											<h6><?php echo KT_I18N::translate('The term <span>%s</span> can not be found.', $searchTerm); ?></h6>
+											<button class="close-button" type="button" data-close>
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+								   <?php } ?>
+								</li>
+							<?php }
+						}
 					} ?>
 				</ul>
 			</aside>

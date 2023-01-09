@@ -125,7 +125,7 @@ $block_order = KT_DB::prepare(
 
 echo relatedPages($moduleTools, $this->getConfigLink());
 
-echo pageStart('gallery_details', $controller->getPageTitle()); ?>
+echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-guide/gallery/'); ?>
 
 	<form class="cell" name="gallery" method="post" action="module.php?mod=gallery&amp;mod_action=admin_add">
 		<input type="hidden" name="block_id" value="<?php echo $block_id; ?>">
