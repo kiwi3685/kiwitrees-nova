@@ -186,7 +186,7 @@ echo pageStart('admin', KT_I18N::translate('Dashboard')); ?>
 		<div class="cell callout warning">
 			<h5><?php echo KT_I18N::translate('Old files found'); ?></h5>
 			<p>
-				<?php echo KT_I18N::translate('Files have been found from a previous version of kiwitrees.  Old files can sometimes be a security risk.  You should delete them.'); ?>
+				<?php echo KT_I18N::translate('Files have been found from a previous version of kiwitrees. Old files can sometimes be a security risk. You should delete them.'); ?>
 			</p>
 			<ul>
 				<?php foreach (old_paths() as $path) {
