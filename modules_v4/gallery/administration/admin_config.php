@@ -140,7 +140,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 							<th>
 								<?php echo KT_I18N::translate('Question'); ?>
 							</th>
-							<th style="width: 20%;" colspan="3" class="text-center">
+							<th style="width: 20%;" colspan="4" class="text-center">
 								<?php echo KT_I18N::translate('Actions'); ?>
 							</th>
 						</tr>
@@ -188,6 +188,11 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 								<td>
 									<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_delete&amp;block_id=<?php echo $gallery->block_id; ?>" onclick="return confirm('<?php echo KT_I18N::translate('Are you sure you want to delete this gallery?'); ?>');">
 										<?php echo KT_I18N::translate('Delete'); ?>
+									</a>
+								</td>
+								<td>
+									<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=show&amp;gallery_id=<?php echo $gallery->block_id; ?>&amp;gedID=<?php echo $gedID; ?>" target="_blank">
+										<?php echo KT_I18N::translate('View'); ?>
 									</a>
 								</td>
 							</tr>

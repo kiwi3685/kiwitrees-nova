@@ -75,6 +75,7 @@ if ($save) {
 	set_block_setting($block_id, 'gallery_folder_w', KT_Filter::post('gallery_folder_w', KT_REGEX_UNSAFE));
 	set_block_setting($block_id, 'gallery_folder_f', KT_Filter::post('gallery_folder_f', KT_REGEX_UNSAFE));
 	set_block_setting($block_id, 'gallery_access', KT_Filter::post('gallery_access', KT_REGEX_UNSAFE));
+	set_block_setting($block_id, 'gallery_tree', KT_Filter::post('gallery_tree', KT_REGEX_UNSAFE));
 	set_block_setting($block_id, 'plugin', KT_Filter::post('plugin', KT_REGEX_UNSAFE));
 
 	foreach (KT_I18N::used_languages() as $code=>$name) {
@@ -116,6 +117,7 @@ $item_description = '';
 $item_folder_w    = $MEDIA_DIRECTORY;
 $item_folder_f    = '';
 $item_access      = KT_I18N::translate('All');
+$item_tree        = '';
 $plugin           = 'kiwitrees';
 
 
@@ -190,7 +192,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 				<?php echo KT_I18N::translate('Show for which family tree'); ?>
 			</label>
 			<div class="cell medium-4">
-				<?php echo select_edit_control('gedID', KT_Tree::getIdList(), KT_I18N::translate('All'), $gedID); ?>
+				<?php echo select_edit_control('gallery_tree', KT_Tree::getIdList(), KT_I18N::translate('All'), $item_tree); ?>
 			</div>
 			<div class="cell medium-6"></div>
 			<label class="cell medium-2">

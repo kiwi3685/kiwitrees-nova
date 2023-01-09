@@ -503,20 +503,4 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 		return $html;
 	}
 
-	// Get galleria themes list
-	private function galleria_theme_names()
-	{
-		$themes = [];
-		$d = dir(KT_MODULES_DIR . $this->getName() . '/galleria/themes/');
-
-		while (false !== ($folder = $d->read())) {
-			if ('.' != $folder[0] && '_' != $folder[0] && is_dir(KT_MODULES_DIR . $this->getName() . '/galleria/themes/' . $folder)) {
-				$themes[] = $folder;
-			}
-		}
-
-		$d->close();
-
-		return $themes;
-	}
 }
