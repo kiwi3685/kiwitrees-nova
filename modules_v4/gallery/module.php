@@ -239,14 +239,16 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 
 				<div class="cell tabs-content" data-tabs-content="gallery-tabs">
 					<div class="grid-x">
-						<?php foreach ($item_list as $item) {
+						<?php 
+						$item_gallery = '';
+						foreach ($item_list as $item) {
 							if ((!$languages || in_array(KT_LOCALE, explode(',', $languages))) && $item_id == $item->block_id && $item->gallery_access >= KT_USER_ACCESS_LEVEL) {
 								$item_gallery = '<h4 class="cell">' . KT_I18N::translate($item->gallery_description) . '</h4>' .
 									$this->mediaDisplay($item->gallery_folder_w, $item_id, $version);
 							}
 						}
 						if (!isset($item_gallery)) {
-							echo '<h4 class="cell">' . KT_I18N::translate('Image collections related to our family') . '</h4>' .
+							echo '<h4 class="cell">' . KT_I18N::translate('Image galleries will be added shortly') . '</h4>' .
 								$this->mediaDisplay('//', $item_id, $version);
 						} else {
 							echo $item_gallery;
