@@ -53,6 +53,7 @@ $controller
 	');
 
 if ($save) {
+	// ##block table entries
 	$block_id 		= KT_Filter::postInteger('block_id');
 	$block_order 	= KT_Filter::postInteger('block_order');
 	$header      	= KT_Filter::post('header',  KT_REGEX_UNSAFE);
@@ -70,6 +71,7 @@ if ($save) {
 
 	$block_id = KT_DB::getInstance()->lastInsertId();
 
+	// ##block_setting table entries
 	set_block_setting($block_id, 'gallery_title', KT_Filter::post('gallery_title', KT_REGEX_UNSAFE));
 	set_block_setting($block_id, 'gallery_description', KT_Filter::post('gallery_description', KT_REGEX_UNSAFE));
 	set_block_setting($block_id, 'gallery_folder_w', KT_Filter::post('gallery_folder_w', KT_REGEX_UNSAFE));
