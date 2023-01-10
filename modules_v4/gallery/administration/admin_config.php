@@ -45,9 +45,10 @@ $action = KT_Filter::post('action');
 $gedID  = KT_Filter::post('gedID') ? KT_Filter::post('gedID') : KT_GED_ID;
 
 if ($action == 'update') {
+	// ##module_setting table entries
 	set_module_setting($this->getName(), 'HEADER_TITLE', KT_Filter::post('NEW_HEADER_TITLE'));
 	set_module_setting($this->getName(), 'HEADER_ICON',  str_replace($iconStyle . ' ', '', KT_Filter::post('NEW_HEADER_ICON')));
-	set_module_setting($this->getName(), 'HEADER_DESCRIPTION', KT_Filter::post('NEW_HEADER_DESCRIPTION', KT_REGEX_UNSAFE)); // allow html
+	set_module_setting($this->getName(), 'HEADER_DESCRIPTION', KT_Filter::post('NEW_HEADER_DESCRIPTION', KT_REGEX_UNSAFE));
 
 	AddToLog($this->getName() . ' config updated', 'config');
 }

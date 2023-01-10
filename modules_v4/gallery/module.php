@@ -155,7 +155,7 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 	{
 		global $controller, $SEARCH_SPIDER;
 
-		$block_id = safe_GET('block_id');
+		$block_id = KT_Filter::get('block_id');
 		$default_block = KT_DB::prepare(
 			'SELECT block_id FROM `##block` WHERE block_order=? AND module_name=?'
 		)->execute([0, $this->getName()])->fetchOne();
@@ -243,12 +243,12 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 						$item_gallery = '';
 						foreach ($item_list as $item) {
 							if ((!$languages || in_array(KT_LOCALE, explode(',', $languages))) && $item_id == $item->block_id && $item->gallery_access >= KT_USER_ACCESS_LEVEL) {
-								$item_gallery = '<h4 class="cell">' . KT_I18N::translate($item->gallery_description) . '</h4>' .
+								$item_gallery = '<div class="cell gallery_description">' . KT_I18N::translate($item->gallery_description) . '</div>' .
 									$this->mediaDisplay($item->gallery_folder_w, $item_id, $version);
 							}
 						}
 						if (!isset($item_gallery)) {
-							echo '<h4 class="cell">' . KT_I18N::translate('Image galleries will be added shortly') . '</h4>' .
+							echo '<div class="cell gallery_description">' . KT_I18N::translate('Image galleries will be added shortly') . '</div>' .
 								$this->mediaDisplay('//', $item_id, $version);
 						} else {
 							echo $item_gallery;
@@ -262,7 +262,7 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 
 	private function delete()
 	{
-		$block_id = safe_GET('block_id');
+		$block_id = KT_Filter::get('block_id');
 
 		KT_DB::prepare(
 			'DELETE FROM `##block_setting` WHERE block_id=?'
@@ -275,7 +275,7 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 
 	private function moveup()
 	{
-		$block_id = safe_GET('block_id');
+		$block_id = KT_Filter::get('block_id');
 
 		$block_order = KT_DB::prepare(
 			'SELECT block_order FROM `##block` WHERE block_id=?'
@@ -301,7 +301,7 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 
 	private function movedown()
 	{
-		$block_id = safe_GET('block_id');
+		$block_id = KT_Filter::get('block_id');
 
 		$block_order = KT_DB::prepare(
 			'SELECT block_order FROM `##block` WHERE block_id=?'
