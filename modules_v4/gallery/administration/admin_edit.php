@@ -69,13 +69,13 @@ if ($save) {
 		case 1:
 			// save and re-edit
 			?><script>
-				window.location='module.php?mod=faq&mod_action=admin_edit&block_id=' . $block_id . '&gedID=' . $gedID;
+				window.location='mod=' . $this->getName() . '&mod_action=admin_edit&block_id=' . $block_id . '&gedID=' . $gedID;
 			</script><?php
 		break;
 		case 2:
 			// save & close
 			?><script>
-				window.location='module.php?mod=faq&mod_action=admin_config';
+				window.location='mod=' . $this->getName() . '&mod_action=admin_config';
 			</script><?php
 		break;
 	}
@@ -193,7 +193,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 					<i class="<?php echo $iconStyle; ?> fa-save"></i>
 					<?php echo KT_I18N::translate('Save and close'); ?>
 				</button>
-				<button class="button hollow" type="button" onclick="window.location='module.php?mod=faq&amp;mod_action=admin_config'">
+				<button class="button hollow" type="button" onclick="window.location='mod=' . $this->getName() . '&amp;mod_action=admin_config'">
 					<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 					<?php echo KT_I18N::translate('Cancel'); ?>
 				</button>
