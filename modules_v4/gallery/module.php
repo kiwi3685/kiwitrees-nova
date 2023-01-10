@@ -67,35 +67,22 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 			case 'admin_config':
 			case 'admin_edit':
 				require KT_ROOT . KT_MODULES_DIR . $this->getName() . '/administration/' . $mod_action . '.php';
-
 				break;
-
 			case 'admin_delete':
 				$this->delete();
-
 				require KT_ROOT . KT_MODULES_DIR . $this->getName() . '/administration/admin_config.php';
-
 				break;
-
 			case 'admin_movedown':
 				$this->movedown();
-
 				require KT_ROOT . KT_MODULES_DIR . $this->getName() . '/administration/admin_config.php';
-
 				break;
-
 			case 'admin_moveup':
 				$this->moveup();
-
 				require KT_ROOT . KT_MODULES_DIR . $this->getName() . '/administration/admin_config.php';
-
 				break;
-
 			case 'show':
 				$this->show();
-
 				break;
-
 			default:
 				header('HTTP/1.0 404 Not Found');
 		}
