@@ -25,6 +25,9 @@ require KT_ROOT . 'includes/functions/functions_edit.php';
 include KT_THEME_URL . 'templates/adminData.php';
 global $iconStyle;
 
+$action     = KT_Filter::post('action');
+$gedID      = KT_Filter::post('gedID') ? KT_Filter::post('gedID') : KT_GED_ID;
+
 $controller = new KT_Controller_Page();
 $controller
 	->restrictAccess(KT_USER_IS_ADMIN)
@@ -35,14 +38,11 @@ $controller
 	->addInlineJavascript('
 		jQuery("#gallery_tabs").tabs();
 
-		ckeditorStandard();
+		ckeditorStandard("' . get_gedcom_setting($gedID, 'THEME_DIR') . '");
 
 		iconPicker();
 
 	');
-
-$action = KT_Filter::post('action');
-$gedID  = KT_Filter::post('gedID') ? KT_Filter::post('gedID') : KT_GED_ID;
 
 if ($action == 'update') {
 	// ##module_setting table entries

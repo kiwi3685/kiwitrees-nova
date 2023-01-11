@@ -61,7 +61,21 @@ function ckeditorStandard() {
 				{label: 'Medium grey',	color: '#cacaca'},
 				{label: 'Dark grey',	color: '#8a8a8a'},
 				{label: 'Black',		color: '#331919'},
-				{label: 'Blue',			color: '#o193b7'},
+				{label: 'Blue',			color: '#0193b7'},
+				{label: 'Pink',			color: '#e09798'}
+			]
+		},
+		fontBackgroundColor: {
+			colors: [
+				{label: 'Red',			color: '#ab3334'},
+				{label: 'White',		color: '#faf5e8'},
+				{label: 'Green',		color: '#3adb76'},
+				{label: 'Yellow',		color: '#ffae00'},
+				{label: 'Light grey',	color: '#e0e0e0'},
+				{label: 'Medium grey',	color: '#cacaca'},
+				{label: 'Dark grey',	color: '#8a8a8a'},
+				{label: 'Black',		color: '#331919'},
+				{label: 'Blue',			color: '#0193b7'},
 				{label: 'Pink',			color: '#e09798'}
 			]
 		},
