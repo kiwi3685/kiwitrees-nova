@@ -68,24 +68,24 @@ if (KT_USE_CDN) {
 // other js
 define('KT_FONTAWESOME_JS',					KT_STATIC_URL . 'library/fontawesome/js/all.min.js');  // fontawesome-free-6.1.1 Updated 15-04-2022.
 define('KT_JQUERY_COLORBOX_URL',			KT_STATIC_URL . 'library/colorbox/jquery.colorbox-min.js');	// 1.6.4	Updated 11-05-2016
-define('KT_JQUERY_JEDITABLE_URL',			KT_STATIC_URL . 'js/jquery.jeditable.js');		    	// 1.7.3 (used only in site access rules table)
-define('KT_JQUERY_WHEELZOOM_URL',			KT_STATIC_URL . 'js/jquery.wheelzoom.js');		    	// 2.0.0
-define('KT_JQUERY_AUTOSIZE',				KT_STATIC_URL . 'js/jquery.autosize.min.js');	    	// 1.18.18	Updated 18-06-2015
+define('KT_JQUERY_JEDITABLE_URL',			KT_STATIC_URL . 'js/jquery.jeditable.js'); // 1.7.3 (used only in site access rules table)
+define('KT_JQUERY_WHEELZOOM_URL',			KT_STATIC_URL . 'js/jquery.wheelzoom.js'); // 2.0.0
+define('KT_JQUERY_AUTOSIZE',				KT_STATIC_URL . 'js/jquery.autosize.min.js'); // 1.18.18	Updated 18-06-2015
 define('KT_JQUERYUI_TOUCH_PUNCH',			KT_STATIC_URL . 'js/jquery.ui.touch-punch.min.js');
 define('KT_JQUERY_SHORTEN',					KT_STATIC_URL . 'js/jquery.shorten.js');
-define('KT_PASSWORDSCHECK',					KT_STATIC_URL . 'js/passwordscheck.js');				// Installed 09-11-2016
-define('KT_D3_JS',							KT_STATIC_URL . 'js/d3.min.js');						// Installed from https://d3js.org/ v.4
+define('KT_PASSWORDSCHECK',					KT_STATIC_URL . 'js/passwordscheck.js'); // Installed 09-11-2016
+define('KT_D3_JS',							KT_STATIC_URL . 'js/d3.min.js'); // Installed from https://d3js.org/ v.4
 define('KT_CHOSEN_JS',						KT_STATIC_URL . 'library/chosen/chosen.jquery.min.js'); // chosen-package-1.87 from https://github.com/harvesthq/chosen
 define('KT_CONFIRM_JS',						KT_STATIC_URL . 'library/jquery-confirm/dist/jquery-confirm.min.js'); // Ver 3.3.4 from https://craftpip.github.io/jquery-confirm/
-define('KT_ICON_PICKER_JS',				KT_STATIC_URL . 'library/fontawesome-iconpicker/dist/js/fontawesome-iconpicker.min.js'); // ver 3.2.1 from https://github.com/itsjavi/fontawesome-iconpicker
+define('KT_ICON_PICKER_JS',					KT_STATIC_URL . 'library/fontawesome-iconpicker/dist/js/fontawesome-iconpicker.min.js'); // ver 3.2.1 from https://github.com/itsjavi/fontawesome-iconpicker
 
 // kiwitrees own javascript libraries
-define('KT_KIWITREES_JS_URL',				KT_STATIC_URL . 'js/kiwitrees.min.js');					// used system wide, via Pages KT class
-define('KT_AUTOCOMPLETE_JS_URL',			KT_STATIC_URL . 'js/autocomplete.min.js');				// used system wide
-define('KT_JQUERY_TREEVIEW_JS_URL',			KT_STATIC_URL . 'js/jquery.treeview.js');				// used only in branches.php
-define('KT_FANCY_TREEVIEW_JS_URL',			KT_STATIC_URL . 'js/fancytreeview.js');					// used in fancy_treeview_descendants & fancy_treeview_ancestors
-define('KT_INTERACTIVETREE_JS_URL',			KT_STATIC_URL . 'js/interactivetree.js');				// used in the interctive tree tab
-define('KT_KIWITREES_ADMIN_JS_URL',			KT_STATIC_URL . 'themes/_administration/js/kiwitrees-admin.min.js');		// used on some admin pages
+define('KT_KIWITREES_JS_URL',				KT_STATIC_URL . 'js/kiwitrees.min.js'); // used system wide, via Pages KT class
+define('KT_AUTOCOMPLETE_JS_URL',			KT_STATIC_URL . 'js/autocomplete.min.js'); // used system wide
+define('KT_JQUERY_TREEVIEW_JS_URL',			KT_STATIC_URL . 'js/jquery.treeview.js'); // used only in branches.php
+define('KT_FANCY_TREEVIEW_JS_URL',			KT_STATIC_URL . 'js/fancytreeview.js'); // used in fancy_treeview_descendants & fancy_treeview_ancestors
+define('KT_INTERACTIVETREE_JS_URL',			KT_STATIC_URL . 'js/interactivetree.js'); // used in the interctive tree tab
+define('KT_KIWITREES_ADMIN_JS_URL',			KT_STATIC_URL . 'themes/_administration/js/kiwitrees-admin.min.js'); // used on some admin pages
 
 // external css libraries
 define('KT_DATEPICKER_CSS',					KT_STATIC_URL . 'library/foundation-datepicker/css/foundation-datepicker.min.css');
@@ -513,6 +513,8 @@ if ($KT_TREE) {
 	define('KT_USER_PATH_LENGTH',  0);
 	define('KT_USER_ACCESS_LEVEL', KT_PRIV_PUBLIC);
 }
+
+define('KT_THEME_JS', KT_STATIC_URL . 'themes/' . get_gedcom_setting(KT_GED_ID,'THEME_DIR') . '/js/theme.min.js'); // theme specific js
 
 $GEDCOM = KT_GEDCOM;
 

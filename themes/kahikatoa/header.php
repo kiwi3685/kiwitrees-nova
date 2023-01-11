@@ -33,6 +33,7 @@
  	->addExternalJavascript (KT_JQUERY_COLORBOX_URL)
  	->addExternalJavascript (KT_JQUERY_WHEELZOOM_URL)
  	->addExternalJavascript (KT_JQUERY_AUTOSIZE)
+ 	->addExternalJavascript (KT_THEME_JS)
  	->addInlineJavascript ('
  		activate_colorbox();
  		jQuery.extend(jQuery.colorbox.settings, {

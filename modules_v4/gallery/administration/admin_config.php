@@ -38,7 +38,7 @@ $controller
 	->addInlineJavascript('
 		jQuery("#gallery_tabs").tabs();
 
-		ckeditorStandard("' . get_gedcom_setting($gedID, 'THEME_DIR') . '");
+		ckeditorStandard();
 
 		iconPicker();
 
