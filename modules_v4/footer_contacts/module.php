@@ -57,7 +57,7 @@ class footer_contacts_KT_Module extends KT_Module implements KT_Module_Footer {
 
 		$content = '
 			<div class="card-divider">
-				<h5>' . KT_I18N::translate('Contact Information') . '</h5>
+				<h5>' . KT_I18N::translate('Contact') . '</h5>
 			</div>
 			<div class="card-section">';
 				if (array_key_exists('contact', KT_Module::getActiveModules()) && KT_USER_ID) {
