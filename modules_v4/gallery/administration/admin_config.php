@@ -25,8 +25,8 @@ require KT_ROOT . 'includes/functions/functions_edit.php';
 include KT_THEME_URL . 'templates/adminData.php';
 global $iconStyle;
 
+$gedID  	= KT_Filter::post('gedID') ? KT_Filter::post('gedID') : KT_GED_ID;
 $action     = KT_Filter::post('action');
-$gedID      = KT_Filter::post('gedID') ? KT_Filter::post('gedID') : KT_GED_ID;
 
 $controller = new KT_Controller_Page();
 $controller
@@ -54,14 +54,14 @@ if ($action == 'update') {
 }
 
 $items = KT_DB::prepare("
-	SELECT block_id, block_order, gedcom_id, bs1.setting_value AS gallery_title, bs2.setting_value AS gallery_description 
+	SELECT block_id, block_order, gedcom_id, bs1.setting_value AS gallery_title, bs2.setting_value AS gallery_description
 	FROM `##block` b 
 	JOIN `##block_setting` bs1 USING (block_id) 
 	JOIN `##block_setting` bs2 USING (block_id) 
 	WHERE module_name = ? 
 	AND bs1.setting_name='gallery_title' 
 	AND bs2.setting_name='gallery_description' 
-	AND IFNULL(gedcom_id, ?) = ? 
+	AND IFNULL(gedcom_id, ?) = ?
 	ORDER BY block_order
 ")->execute(array($this->getName(), $gedID, $gedID))->fetchAll();
 
@@ -139,7 +139,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 								<?php echo KT_I18N::translate('Tree'); ?>
 							</th>
 							<th>
-								<?php echo KT_I18N::translate('Question'); ?>
+								<?php echo KT_I18N::translate('Title'); ?>
 							</th>
 							<th style="width: 20%;" colspan="4" class="text-center">
 								<?php echo KT_I18N::translate('Actions'); ?>

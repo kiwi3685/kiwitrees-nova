@@ -37,17 +37,17 @@ $controller
 
 if ($save) {
 	$block_id 		= KT_Filter::postInteger('block_id');
+	$block_order 	= (int)KT_Filter::post('block_order');
+	$gedID 			= KT_Filter::post('gedID');
 	$header      	= KT_Filter::post('header',  KT_REGEX_UNSAFE); // allow html
 	$faqbody     	= KT_Filter::post('faqbody', KT_REGEX_UNSAFE); // allow html
-	$gedID 			= KT_Filter::post('gedID');
 	$item_access	= KT_Filter::post('faq_access');
-	$block_order 	= (int)KT_Filter::post('block_order');
 	$languages 		= array();
 
 	KT_DB::prepare(
 		"UPDATE `##block` SET gedcom_id = NULLIF(?, ''), block_order = ? WHERE block_id = ?"
 	)->execute(array(
-	$gedID,
+		$gedID,
 		$block_order,
 		$block_id
 	));
@@ -61,7 +61,6 @@ if ($save) {
 			$languages[] = $code;
 		}
 	}
-
 	set_block_setting($block_id, 'languages', implode(',', $languages));
 
 	switch ($save) {

@@ -29,6 +29,7 @@ $block_id = KT_Filter::getInteger('block_id', KT_Filter::postInteger('block_id')
 $gedID    = KT_Filter::get('gedID', KT_Filter::post('gedID'));
 $save     = KT_Filter::post('save', '');
 
+
 $controller = new KT_Controller_Page();
 $controller
 	->pageHeader()
@@ -37,18 +38,18 @@ $controller
 
 if ($save) {
 	$block_id 		= KT_Filter::postInteger('block_id');
-	$block_order 	= KT_Filter::postInteger('block_order');
+	$block_order 	= (int)KT_Filter::post('block_order');
+	$gedID 			= KT_Filter::post('gedID');
 	$header      	= KT_Filter::post('header',  KT_REGEX_UNSAFE);
 	$gallerybody    = KT_Filter::post('gallerybody', KT_REGEX_UNSAFE);
-	$gedID 			= KT_Filter::post('gedID');
 	$languages 		= array();
 
 	KT_DB::prepare(
-		"INSERT INTO `##block` (gedcom_id, module_name, block_order) VALUES (NULLIF(?, ''), ?, ?)"
+		"UPDATE `##block` SET gedcom_id = NULLIF(?, ''), block_order = ? WHERE block_id = ?"
 	)->execute(array(
 		$gedID,
-		$this->getName(),
-		$block_order
+		$block_order,
+		$block_id
 	));
 
 	set_block_setting($block_id, 'gallery_title', KT_Filter::post('gallery_title', KT_REGEX_UNSAFE));
@@ -56,7 +57,7 @@ if ($save) {
 	set_block_setting($block_id, 'gallery_folder_w', KT_Filter::post('gallery_folder_w', KT_REGEX_UNSAFE));
 	set_block_setting($block_id, 'gallery_folder_f', KT_Filter::post('gallery_folder_f', KT_REGEX_UNSAFE));
 	set_block_setting($block_id, 'gallery_access', KT_Filter::post('gallery_access', KT_REGEX_UNSAFE));
-	set_block_setting($block_id, 'plugin', KT_Filter::post('plugin', KT_REGEX_UNSAFE));
+	set_block_setting($block_id, 'gallery_plugin', KT_Filter::post('gallery_plugin', KT_REGEX_UNSAFE));
 
 	foreach (KT_I18N::used_languages() as $code=>$name) {
 		if (KT_Filter::postBool('lang_' . $code)) {
@@ -79,6 +80,7 @@ if ($save) {
 			</script><?php
 		break;
 	}
+
 }
 
 $controller->setPageTitle(KT_I18N::translate('Edit gallery'));
@@ -88,13 +90,13 @@ $item_description = get_block_setting($block_id, 'gallery_description');
 $item_folder_w    = get_block_setting($block_id, 'gallery_folder_w');
 $item_folder_f    = get_block_setting($block_id, 'gallery_folder_f');
 $item_access      = get_block_setting($block_id, 'gallery_access');
-$plugin           = get_block_setting($block_id, 'plugin');
+$item_plugin      = get_block_setting($block_id, 'gallery_plugin');
 
 $block_order      = KT_DB::prepare(
-"SELECT block_order FROM `##block` WHERE block_id=?"
+"SELECT block_order FROM `##block` WHERE block_id =?"
 )->execute(array($block_id))->fetchOne();
 
-$gedcom_id     	  = KT_DB::prepare(
+$gedID            = KT_DB::prepare(
 	"SELECT gedcom_id FROM `##block` WHERE block_id=?"
 )->execute(array($block_id))->fetchOne();
 
@@ -126,23 +128,23 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 				<input 
 					id="kiwitrees-radio" 
 					type="radio" 
-					name="plugin" 
+					name="gallery_plugin" 
 					value="kiwitrees" 
-					<?php echo ($plugin == 'kiwitrees') ? ' checked' :  ''; ?> 
+					<?php echo ($item_plugin == 'kiwitrees') ? ' checked' :  ''; ?> 
 				>
 				<?php echo KT_I18N::translate('Kiwitrees');	?>
 				<div class="input-group">
  					<span class="input-group-label"><?php echo KT_I18N::translate('Media folder name'); ?></span>
-					<?php echo select_edit_control("gallery_folder_w", KT_Query_Media::folderList(), null, htmlspecialchars((string) $item_folder_w), ($plugin == 'kiwitrees') ? '' : 'disabled'); ?>
+					<?php echo select_edit_control("gallery_folder_w", KT_Query_Media::folderList(), null, htmlspecialchars((string) $item_folder_w), ($item_plugin == 'kiwitrees') ? '' : 'disabled'); ?>
 				</div>
 			</div>
 			<div class="cell medium-5" id="flickr-div">
 				<input 
 					id="flickr-radio" 
 					type="radio" 
-					name="plugin" 
+					name="gallery_plugin" 
 					value="flicker" 
-					<?php echo ($plugin == 'flickr') ? ' checked' : ''; ?> 
+					<?php echo ($item_plugin == 'flickr') ? ' checked' : ''; ?> 
 				>
 				<?php echo KT_I18N::translate('Flickr'); ?>
 				<div class="input-group">
@@ -167,7 +169,8 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 				<?php echo KT_I18N::translate('Show for which family tree'); ?>
 			</label>
 			<div class="cell medium-4">
-				<?php echo select_edit_control('gedID', KT_Tree::getIdList(), KT_I18N::translate('All'), $gedID); ?>
+				<?php echo select_edit_control('gedID', KT_Tree::getIdList(), '', $gedID); ?>
+				<?php // echo select_edit_control('gedcom_id', KT_Tree::getIdList(), '', $gedcom_id, 'tabindex="4"'); ?>
 			</div>
 			<div class="cell medium-6"></div>
 			<label class="cell medium-2">

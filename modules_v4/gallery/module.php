@@ -314,12 +314,12 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 
 	private function getJavaScript($item_id)
 	{
-		$theme = 'classic';
-		$plugin = get_block_setting($item_id, 'plugin');
+		$theme       = 'classic';
+		$item_plugin = get_block_setting($item_id, 'gallery_plugin');
 
-		$js = 'Galleria.loadTheme("' . KT_STATIC_URL . KT_MODULES_DIR . $this->getName() . '/galleria/themes/' . $theme . '/galleria.' . $theme . '.min.js");';
+		$js          = 'Galleria.loadTheme("' . KT_STATIC_URL . KT_MODULES_DIR . $this->getName() . '/galleria/themes/' . $theme . '/galleria.' . $theme . '.min.js");';
 
-		switch ($plugin) {
+		switch ($item_plugin) {
 			case 'flickr':
 				$flickr_set = get_block_setting($item_id, 'gallery_folder_f');
 				$js .= '
@@ -414,7 +414,7 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 	// Print the gallery display
 	private function mediaDisplay($sub_folder, $item_id, $version) {
 		global $MEDIA_DIRECTORY;
-		$plugin			= get_block_setting($item_id, 'plugin');
+		$item_plugin	= get_block_setting($item_id, 'gallery_plugin');
 		$images			= '';
 		$media_links 	= '';
 
@@ -423,7 +423,7 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 		$sql		= "SELECT * FROM ##media WHERE m_filename LIKE '" . $sub_folder . "%' ORDER BY m_filename";
 		$rows		= KT_DB::prepare($sql)->execute()->fetchAll(PDO::FETCH_ASSOC);
 
-		if ($plugin == 'kiwitrees') {
+		if ($item_plugin == 'kiwitrees') {
 			foreach ($rows as $rowm) {
 				// Get info on how to handle this media file
 				$media	= KT_Media::getInstance($rowm['m_id']);

@@ -1723,29 +1723,29 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 		switch ($gender) {
 			case 'M': echo edit_field_adop_m($element_name, $value);
 
-			break;
+				break;
 
 			case 'F': echo edit_field_adop_f($element_name, $value);
 
-			break;
+				break;
 
 			default:  echo edit_field_adop_u($element_name, $value);
 
-			break;
+				break;
 		}
 	} elseif ('PEDI' == $fact) {
 		switch ($gender) {
 			case 'M': echo edit_field_pedi_m($element_name, $value);
 
-			break;
+				break;
 
 			case 'F': echo edit_field_pedi_f($element_name, $value);
 
-			break;
+				break;
 
 			default:  echo edit_field_pedi_u($element_name, $value);
 
-			break;
+				break;
 		}
 	} elseif ('STAT' == $fact) {
 		echo select_edit_control($element_name, KT_Gedcom_Code_Stat::statusNames($upperlevel), '', $value);
@@ -2592,7 +2592,8 @@ function addNewFact($fact)
 		}
 
 		return $gedrec;
-	} elseif ('Y' == $FACT) {
+	}
+	if ('Y' == $FACT) {
 		if (KT_Filter::postBool("SOUR_{$fact}")) {
 			return updateSOUR("\n1 {$fact} Y", 2);
 		}

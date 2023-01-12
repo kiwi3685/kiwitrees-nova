@@ -11097,15 +11097,6 @@ div.last_change label {
 	font-size: 0.8rem;
 	opacity: 1 !important;
 }
-#gallery-page .galleria-theme-classic .galleria-image-nav .galleria-image-nav-right,
-#gallery-page .galleria-theme-classic .galleria-image-nav .galleria-image-nav-left {
-	background: none;
-}
-#gallery-page .galleria-theme-classic .galleria-image-nav .galleria-image-nav-right::before,
-#gallery-page .galleria-theme-classic .galleria-image-nav .galleria-image-nav-left::before {
-	display: none;
-	font-family: "Font Awesome 6 Free";
-}
 #gallery-page .galleria-theme-classic .galleria-image-nav .galleria-image-nav-right svg.svg-inline--fa,
 #gallery-page .galleria-theme-classic .galleria-image-nav .galleria-image-nav-left svg.svg-inline--fa {
 	color: #ab3334;
@@ -11113,33 +11104,12 @@ div.last_change label {
 	height: 2rem;
 	font-weight: 900;
 }
-#gallery-page .galleria-theme-classic .galleria-image-nav .galleria-image-nav-right::before {
-	content: "\f054";
-}
-#gallery-page .galleria-theme-classic .galleria-image-nav .galleria-image-nav-left::before {
-	content: "\f053";
-}
-#gallery-page .galleria-theme-classic .galleria-thumbnails-container.galleria-carousel .galleria-thumb-nav-right,
-#gallery-page .galleria-theme-classic .galleria-thumbnails-container.galleria-carousel .galleria-thumb-nav-left {
-	background: none;
-}
-#gallery-page .galleria-theme-classic .galleria-thumbnails-container.galleria-carousel .galleria-thumb-nav-right::before,
-#gallery-page .galleria-theme-classic .galleria-thumbnails-container.galleria-carousel .galleria-thumb-nav-left::before {
-	display: none;
-	font-family: "Font Awesome 6 Free";
-}
 #gallery-page .galleria-theme-classic .galleria-thumbnails-container.galleria-carousel .galleria-thumb-nav-right svg.svg-inline--fa,
 #gallery-page .galleria-theme-classic .galleria-thumbnails-container.galleria-carousel .galleria-thumb-nav-left svg.svg-inline--fa {
 	color: #ab3334;
 	width: 2rem;
 	height: 2rem;
 	font-weight: 900;
-}
-#gallery-page .galleria-theme-classic .galleria-thumbnails-container.galleria-carousel .galleria-thumb-nav-right::before {
-	content: "\f0da";
-}
-#gallery-page .galleria-theme-classic .galleria-thumbnails-container.galleria-carousel .galleria-thumb-nav-left::before {
-	content: "\f0d9";
 }
 #gallery-page #links_bar {
 	font-size: 0.9rem;

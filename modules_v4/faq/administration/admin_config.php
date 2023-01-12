@@ -51,17 +51,17 @@ if ($action == 'update') {
 	AddToLog($this->getName() . ' config updated', 'config');
 }
 
-$faqs = KT_DB::prepare(
-	"SELECT block_id, block_order, gedcom_id, bs1.setting_value AS header, bs2.setting_value AS faqbody".
-	" FROM `##block` b".
-	" JOIN `##block_setting` bs1 USING (block_id)".
-	" JOIN `##block_setting` bs2 USING (block_id)".
-	" WHERE module_name=?".
-	" AND bs1.setting_name='header'".
-	" AND bs2.setting_name='faqbody'".
-	" AND IFNULL(gedcom_id, ?)=?".
-	" ORDER BY block_order"
-)->execute(array($this->getName(), $gedID, $gedID))->fetchAll();
+$faqs = KT_DB::prepare("
+	SELECT block_id, block_order, gedcom_id, bs1.setting_value AS header, bs2.setting_value AS faqbody
+	FROM `##block` b
+	JOIN `##block_setting` bs1 USING (block_id)
+	JOIN `##block_setting` bs2 USING (block_id)
+	WHERE module_name = ?
+	AND bs1.setting_name = 'header'
+	AND bs2.setting_name = 'faqbody'
+	AND IFNULL(gedcom_id, ?) = ?
+	ORDER BY block_order
+")->execute(array($this->getName(), $gedID, $gedID))->fetchAll();
 
 $min_block_order = KT_DB::prepare(
 	"SELECT MIN(block_order) FROM `##block` WHERE module_name=?"

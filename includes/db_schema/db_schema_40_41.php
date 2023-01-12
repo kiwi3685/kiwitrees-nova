@@ -43,15 +43,12 @@ try {
 
 // Update some database field names
 try {
-    self::exec("UPDATE `##module_setting` SET `setting_name`= REPLACE(`setting_name`, 'FAQ_', 'HEADER_'");
+    self::exec("UPDATE `##module_setting` SET `setting_name` = REPLACE(`setting_name`, 'FAQ_', 'HEADER_')");
+    self::exec("UPDATE `##block_setting`  SET `setting_name` = REPLACE(`setting_name`, 'plugin', 'gallery_plugin')");
+    self::exec("DELETE FROM `##module_setting` WHERE `module_name` = 'gallery' AND `setting_name` = 'THEME_DIR'");
 } catch (PDOException $ex) {
     // Perhaps we have already deleted this data?
 }
-try {
-    self::exec("DELETE FROM `##module_setting` WHERE `module_name`='gallery' AND `setting_name`='THEME_DIR'");
-} catch (PDOException $ex) {
-    // Perhaps we have already deleted this data?
-}
-
+ 
 // Update the version to indicate success
 KT_Site::preference($schema_name, $next_version);
