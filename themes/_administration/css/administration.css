@@ -9578,6 +9578,9 @@ main aside ul#admin-menu li #adminQueryResult .close-button {
 	right: 0.25rem;
 	top: 0;
 }
+main aside ul#admin-menu form .input-group input.input-group-field#term {
+	font-size: 0.9rem;
+}
 main aside ul#admin-menu form .input-group .input-group-label {
 	padding: 0 0.5rem;
 }
