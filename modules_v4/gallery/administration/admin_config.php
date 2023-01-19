@@ -25,7 +25,7 @@ require KT_ROOT . 'includes/functions/functions_edit.php';
 include KT_THEME_URL . 'templates/adminData.php';
 global $iconStyle;
 
-$gedID  	= KT_Filter::post('gedID') ? KT_Filter::post('gedID') : KT_GED_ID;
+$gedID  	= KT_Filter::post('gedID') ? KT_Filter::post('gedID') : '';
 $action     = KT_Filter::post('action');
 
 $controller = new KT_Controller_Page();
@@ -61,9 +61,8 @@ $items = KT_DB::prepare("
 	WHERE module_name = ? 
 	AND bs1.setting_name='gallery_title' 
 	AND bs2.setting_name='gallery_description' 
-	AND IFNULL(gedcom_id, ?) = ?
 	ORDER BY block_order
-")->execute(array($this->getName(), $gedID, $gedID))->fetchAll();
+")->execute(array($this->getName()))->fetchAll();
 
 $min_block_order = KT_DB::prepare(
 	"SELECT MIN(block_order) FROM `##block` WHERE module_name=?"
@@ -116,11 +115,16 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 	</fieldset>
 
 	<fieldset class="cell fieldset">
-		<legend class="h5"><?php echo KT_I18N::translate('Page contents list'); ?></legend>
+		<legend class="h5"><?php echo KT_I18N::translate('Gallery list'); ?></legend>
 		<div class="grid-x">
-
-			<?php echo familyTree($gedID); ?>
-
+			<div class="cell medium-2">
+				<label for="ged"><?php echo KT_I18N::translate('Family tree'); ?></label>
+			</div>
+			<div class="cell medium-4">
+				<form method="post" action="#" name="tree">
+					<?php echo select_edit_control('gedID', KT_Tree::getIdList(), KT_I18N::translate('All'), $gedID, ' onchange="tree.submit();"'); ?>
+				</form>
+			</div>
 			<div class="cell medium-offset-1 auto text-right">
 				<button class="button primary" type="submit" onclick="location.href='module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_add&amp;gedID=<?php echo $gedID; ?>'">
 					<i class="<?php echo $iconStyle; ?> fa-plus"></i>
@@ -149,18 +153,25 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 					<tbody>
 						<?php 
 						$trees = KT_Tree::getAll();
+
+						if (!$gedID) {
+							$items = $items;
+						} else {
+							foreach ($items as $gallery) {
+								if ($gallery->gedcom_id == $gedID || is_null($gallery->gedcom_id)) {
+									$galleryItems[] = $gallery;
+								}
+							}
+							$items = $galleryItems;
+						}
+
 						foreach ($items as $gallery) { ?>
 							<tr class="gallery_edit_pos">
 								<td>
 									<?php echo($gallery->block_order); ?>
 								</td>
 								<td>
-									<?php
-									if ($gallery->gedcom_id == null) {
-										echo KT_I18N::translate('All');
-									} else {
-										echo $trees[$gallery->gedcom_id]->tree_title_html;
-									} ?>
+									<?php echo ($gallery->gedcom_id ? $trees[$gallery->gedcom_id]->tree_title_html : KT_I18N::translate('All')); ?>
 								</td>
 								<td>
 									<?php echo $gallery->gallery_title; ?>

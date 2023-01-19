@@ -231,7 +231,7 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 						foreach ($item_list as $item) {
 							if ((!$languages || in_array(KT_LOCALE, explode(',', $languages))) && $item_id == $item->block_id && $item->gallery_access >= KT_USER_ACCESS_LEVEL) {
 								$item_gallery = '<div class="cell gallery_description">' . KT_I18N::translate($item->gallery_description) . '</div>' .
-									$this->mediaDisplay($item->gallery_folder_w, $item_id, $version);
+									$this->mediaDisplay($item->gallery_folder, $item_id, $version);
 							}
 						}
 						if (!isset($item_gallery)) {
@@ -314,17 +314,13 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 
 	private function getJavaScript($item_id)
 	{
-		$theme       = 'classic';
-		$item_plugin = get_block_setting($item_id, 'gallery_plugin');
+		$js = 'Galleria.loadTheme("' .  KT_STATIC_URL . KT_MODULES_DIR . $this->getName() . '/galleria/themes/classic/galleria.classic.min.js ");';
 
-		$js          = 'Galleria.loadTheme("' . KT_STATIC_URL . KT_MODULES_DIR . $this->getName() . '/galleria/themes/' . $theme . '/galleria.' . $theme . '.min.js");';
-
-		switch ($item_plugin) {
+		switch (get_block_setting($item_id, 'gallery_plugin')) {
 			case 'flickr':
-				$flickr_set = get_block_setting($item_id, 'gallery_folder_f');
 				$js .= '
 					Galleria.run("#galleria", {
-						flickr: "set:' . $flickr_set . '",
+						flickr: "set:' . get_block_setting($item_id, 'gallery_folder') . '",
 						flickrOptions: {
 							sort: "date-posted-asc",
 							description: true,
@@ -337,6 +333,7 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 
 				break;
 
+			case 'kiwitrees':
 			default:
 				$js .= '
 					Galleria.ready(function(options) {
@@ -371,125 +368,187 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 	// Return the list of gallerys
 	private function getGalleryList()
 	{
-		return KT_DB::prepare(
-			"SELECT block_id,
-				bs1.setting_value AS gallery_title,
-				bs2.setting_value AS gallery_access,
-				bs3.setting_value AS gallery_description,
-				bs4.setting_value AS gallery_folder_w,
-				bs5.setting_value AS gallery_folder_f
+		return KT_DB::prepare("
+			SELECT block_id,
+			bs1.setting_value AS gallery_title,
+			bs2.setting_value AS gallery_access,
+			bs3.setting_value AS gallery_description,
+			bs4.setting_value AS gallery_folder
 			FROM `##block` b
 			JOIN `##block_setting` bs1 USING (block_id)
 			JOIN `##block_setting` bs2 USING (block_id)
 			JOIN `##block_setting` bs3 USING (block_id)
 			JOIN `##block_setting` bs4 USING (block_id)
-			JOIN `##block_setting` bs5 USING (block_id)
 			WHERE module_name=?
 			AND bs1.setting_name='gallery_title'
 			AND bs2.setting_name='gallery_access'
 			AND bs3.setting_name='gallery_description'
-			AND bs4.setting_name='gallery_folder_w'
-			AND bs5.setting_name='gallery_folder_f'
-			AND (gedcom_id IS NULL OR gedcom_id=?)
-			ORDER BY block_order"
-		)->execute([$this->getName(), KT_GED_ID])->fetchAll();
+			AND bs4.setting_name='gallery_folder'
+			AND (gedcom_id IS NULL OR gedcom_id = ?)
+			ORDER BY block_order
+		")->execute([$this->getName(), KT_GED_ID])->fetchAll();
 	}
 
 	// Return the list of gallerys for menu
 	private function getMenuGalleryList()
 	{
-		return KT_DB::prepare(
-			"SELECT block_id, bs1.setting_value AS gallery_title, bs2.setting_value AS gallery_access
+		return KT_DB::prepare("
+			SELECT block_id, 
+			bs1.setting_value AS gallery_title, 
+			bs2.setting_value AS gallery_access
 			FROM `##block` b
 			JOIN `##block_setting` bs1 USING (block_id)
 			JOIN `##block_setting` bs2 USING (block_id)
 			WHERE module_name=?
 			AND bs1.setting_name='gallery_title'
 			AND bs2.setting_name='gallery_access'
-			AND (gedcom_id IS NULL OR gedcom_id=?)
-			ORDER BY block_order"
-		)->execute([$this->getName(), KT_GED_ID])->fetchAll();
+			AND (gedcom_id IS NULL OR gedcom_id = ?)
+			ORDER BY block_order
+		")->execute([$this->getName(), KT_GED_ID])->fetchAll();
 	}
 
 	// Print the gallery display
 	private function mediaDisplay($sub_folder, $item_id, $version) {
 		global $MEDIA_DIRECTORY;
+
 		$item_plugin	= get_block_setting($item_id, 'gallery_plugin');
 		$images			= '';
 		$media_links 	= '';
 
 		// Get the related media items
-		$sub_folder	= str_replace($MEDIA_DIRECTORY, "",$sub_folder);
-		$sql		= "SELECT * FROM ##media WHERE m_filename LIKE '" . $sub_folder . "%' ORDER BY m_filename";
-		$rows		= KT_DB::prepare($sql)->execute()->fetchAll(PDO::FETCH_ASSOC);
+		$sub_folder	= str_replace($MEDIA_DIRECTORY, "", $sub_folder);
+		$sql		= " SELECT * 
+						FROM ##media 
+						WHERE `m_filename` LIKE '" . $sub_folder . "%'
+						ORDER BY `m_filename`
+					  ";
 
-		if ($item_plugin == 'kiwitrees') {
-			foreach ($rows as $rowm) {
-				// Get info on how to handle this media file
-				$media	= KT_Media::getInstance($rowm['m_id']);
-				if ($media && $media->canDisplayDetails()) {
-					$links = array_merge(
-						$media->fetchLinkedIndividuals(),
-						$media->fetchLinkedFamilies(),
-						$media->fetchLinkedSources()
-					);
-					$rawTitle = $rowm['m_titl'];
-					if (empty($rawTitle)) $rawTitle = get_gedcom_value('TITL', 2, $rowm['m_gedcom']);
-					if (empty($rawTitle)) $rawTitle = basename($rowm['m_filename']);
-					$mediaTitle		= htmlspecialchars(strip_tags($rawTitle));
-					$rawUrl			= $media->getHtmlUrlDirect();
-					$thumbUrl		= $media->getHtmlUrlDirect('thumb');
-					$media_notes	= $this->FormatGalleryNotes($rowm['m_gedcom']);
-					$mime_type		= $media->mimeType();
-					$gallery_links	= '';
+		switch ($item_plugin) {
+			case 'kiwitrees':
+				$rows = KT_DB::prepare($sql)->execute()->fetchAll(PDO::FETCH_ASSOC);
 
-					if (KT_USER_CAN_EDIT) {
-						$gallery_links .= '<div class="edit_links">' . KT_Controller_Media::getMediaListMenu($media, true) . '</div><hr>';
-					}
+				foreach ($rows as $rowm) {
+					// Get info on how to handle this media file
+					$media	= KT_Media::getInstance($rowm['m_id']);
+					if ($media && $media->canDisplayDetails()) {
 
-					if ($links) {
-						$gallery_links .= '<h5>' . KT_I18N::translate('Linked to:') .'</h5>';
-						$gallery_links .= '<div id="image_links">';
-							foreach ($links as $record) {
-									$gallery_links .= '<a href="' . $record->getHtmlUrl() . '">' . $record->getFullname().'</a><br>';
-							}
-						$gallery_links .= '</div>';
-					}
+						$rawTitle		= $rowm['m_titl'];
+						if (empty($rawTitle)) $rawTitle = get_gedcom_value('TITL', 2, $rowm['m_gedcom']);
+						if (empty($rawTitle)) $rawTitle = basename($rowm['m_filename']);
+						$mediaTitle		= htmlspecialchars(strip_tags($rawTitle));
 
-					$media_links = htmlspecialchars((string) $gallery_links);
-					if ($mime_type == 'application/pdf'){
-						$images .= '<a href="' . $rawUrl . '"><img class="iframe" src="' . $thumbUrl . '" data-title="' . $mediaTitle.'" data-layer="' . $media_links.'" data-description="' . $media_notes . '"></a>';
-					} else {
-						$images .= '<a href="' . $rawUrl . '"><img src="'.$thumbUrl.'" data-title="' .$mediaTitle . '" data-layer="' . $media_links . '" data-description="' . $media_notes . '"></a>';
+						$rawUrl			= $media->getHtmlUrlDirect();
+						$thumbUrl		= $media->getHtmlUrlDirect('thumb');
+						$media_notes	= $this->FormatGalleryNotes($rowm['m_gedcom']);
+						$mime_type		= $media->mimeType();
+
+						$links = array_merge(
+							$media->fetchLinkedIndividuals(),
+							$media->fetchLinkedFamilies(),
+							$media->fetchLinkedSources()
+						);
+						$gallery_links	= '';
+						if (KT_USER_CAN_EDIT) {
+							$gallery_links .= '
+								<div class="edit_links">' . 
+									KT_Controller_Media::getMediaListMenu($media, true) . '
+								</div>
+								<hr>';
+						}
+						if ($links) {
+							$gallery_links .= '
+								<div id="image_links">
+									<h5>' . KT_I18N::translate('Linked to:') .'</h5>';
+									foreach ($links as $record) {
+										$gallery_links .= '
+											<a href="' . $record->getHtmlUrl() . '">' . 
+												$record->getFullname() .'
+											</a>
+											<br>
+										';
+									}
+							$gallery_links .= '</div>';
+						}
+
+						$media_links = htmlspecialchars((string) $gallery_links);
+
+						if ($mime_type == 'application/pdf'){
+							$images .= '
+								<a href="' . $rawUrl . '">
+									<img 
+										class="iframe" 
+										src="' . $thumbUrl . '" 
+										data-title="' . $mediaTitle.'" 
+										data-layer="' . $media_links.'" 
+										data-description="' . $media_notes . '"
+									>
+								</a>
+							';
+						} else {
+							$images .= '
+								<a href="' . $rawUrl . '">
+									<img 
+										src="'.$thumbUrl.'" 
+										data-title="' .$mediaTitle . '" 
+										data-layer="' . $media_links . '" 
+										data-description="' . $media_notes . '"
+									>
+								</a>
+							';
+						}
 					}
 				}
-			}
-			if (KT_USER_CAN_ACCESS || !is_null($media_links)) {
-				$html = '
-					<div id="links_bar"></div>
-					<div id="galleria">
-				';
-			} else {
-				$html =
-					'<div id="galleria">';
-			}
-		} else {
-			$html = '<div id="galleria">';
-			$images .= '&nbsp;';
+				if (KT_USER_CAN_ACCESS || !is_null($media_links)) {
+					$html =
+						'<div id="links_bar" style="width:18%;"></div>'.
+						'<div id="galleria" style="width:80%; height: 720px;">';
+				} else {
+					$html = '<div id="galleria" style="width:100%;">';
+				}
+
+				break;
+			case 'uploads':
+				$sub_folder = 'uploads/' . get_block_setting($item_id, 'gallery_folder');
+				$html       = '<div id="galleria" style="width:100%;">';
+				$dir_name   = KT_STATIC_URL . $sub_folder;			
+				$files      = glob($dir_name . '*.{jpg,jpeg,png,JPG,JPEG,PNG}', GLOB_BRACE );
+				
+				foreach ($files as $file) {
+					$images .= '
+						<a href="' . $file . '">
+							<img 
+								src="'. $file .'" 
+							>
+						</a>
+					';
+				}
+				$html .= $sub_folder;
+				break;
+			case 'flickr':
+			default:
+				$html = '<div id="galleria" style="width:100%;">';
+				$images .= '&nbsp;';
+
+				break;
 		}
+
 		if ($images) {
 			$html .= $images . '
 				</div>
 				<a class="cell" id="copy" href="https://galleriajs.github.io/" target="_blank" rel="noopener noreferrer">
-			 		' . /* I18N: Copyright statement in gallery module */ KT_I18N::translate('Display by Galleria (%1s)', $version) . '
-			 	</a>
+					' . /* I18N: Copyright statement in gallery module */ KT_I18N::translate('Display by Galleria (%1s)', $version) . '
+				</a>
 			';
 		} else {
-			$html .= KT_I18N::translate('Gallery is empty. Please choose other gallery.').
-				'</div>
+			$html .= '
+				<div class="callout warning">' . 
+					KT_I18N::translate('This gallery is either empty or cannot be displayed here. Please choose another gallery.') . '
+				</div>
 				</div>';
 		}
+
 		return $html;
+
 	}
 
 }

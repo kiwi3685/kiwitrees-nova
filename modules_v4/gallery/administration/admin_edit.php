@@ -33,6 +33,7 @@ $save     = KT_Filter::post('save', '');
 $controller = new KT_Controller_Page();
 $controller
 	->pageHeader()
+	->setPageTitle(KT_I18N::translate('Edit gallery'))
 	->addExternalJavascript(KT_CKEDITOR_CLASSIC)
 	->addInlineJavascript('ckeditorStandard();');
 
@@ -54,8 +55,7 @@ if ($save) {
 
 	set_block_setting($block_id, 'gallery_title', KT_Filter::post('gallery_title', KT_REGEX_UNSAFE));
 	set_block_setting($block_id, 'gallery_description', KT_Filter::post('gallery_description', KT_REGEX_UNSAFE));
-	set_block_setting($block_id, 'gallery_folder_w', KT_Filter::post('gallery_folder_w', KT_REGEX_UNSAFE));
-	set_block_setting($block_id, 'gallery_folder_f', KT_Filter::post('gallery_folder_f', KT_REGEX_UNSAFE));
+	set_block_setting($block_id, 'gallery_folder', KT_Filter::post('gallery_folder', KT_REGEX_UNSAFE));
 	set_block_setting($block_id, 'gallery_access', KT_Filter::post('gallery_access', KT_REGEX_UNSAFE));
 	set_block_setting($block_id, 'gallery_plugin', KT_Filter::post('gallery_plugin', KT_REGEX_UNSAFE));
 
@@ -83,12 +83,9 @@ if ($save) {
 
 }
 
-$controller->setPageTitle(KT_I18N::translate('Edit gallery'));
-
 $item_title       = get_block_setting($block_id, 'gallery_title');
 $item_description = get_block_setting($block_id, 'gallery_description');
-$item_folder_w    = get_block_setting($block_id, 'gallery_folder_w');
-$item_folder_f    = get_block_setting($block_id, 'gallery_folder_f');
+$item_folder      = get_block_setting($block_id, 'gallery_folder');
 $item_access      = get_block_setting($block_id, 'gallery_access');
 $item_plugin      = get_block_setting($block_id, 'gallery_plugin');
 
@@ -124,38 +121,118 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 			<label class="cell medium-2">
 				<?php echo KT_I18N::translate('Source'); ?>
 			</label>
-			<div class="cell medium-5" id="kiwitrees-div">
-				<input 
-					id="kiwitrees-radio" 
-					type="radio" 
-					name="gallery_plugin" 
-					value="kiwitrees" 
-					<?php echo ($item_plugin == 'kiwitrees') ? ' checked' :  ''; ?> 
-				>
-				<?php echo KT_I18N::translate('Kiwitrees');	?>
-				<div class="input-group">
- 					<span class="input-group-label"><?php echo KT_I18N::translate('Media folder name'); ?></span>
-					<?php echo select_edit_control("gallery_folder_w", KT_Query_Media::folderList(), null, htmlspecialchars((string) $item_folder_w), ($item_plugin == 'kiwitrees') ? '' : 'disabled'); ?>
+			<div class="cell medium-10">
+				<div class="grid-x">
+					<div class="switch cell medium-1 tiny">
+						<?php $item_plugin == 'kiwitrees' ? $checked = 'checked' : $checked = ''; ?>
+						<input class="switch-input" id="kiwitrees-radio" type="radio" <?php echo $checked; ?> name="gallery_plugin" value="kiwitrees" onclick="hide_fields();">
+						<label class="switch-paddle" for="kiwitrees-radio">
+							<span class="show-for-sr"><?php echo KT_I18N::translate('Kiwitrees family tree media folder'); ?>	</span>
+							<span class="switch-active" aria-hidden="true"><?php echo KT_I18N::translate('on'); ?></span>
+							<span class="switch-inactive" aria-hidden="true"><?php echo KT_I18N::translate('off'); ?></span>
+						</label>
+					</div>
+					<div class="cell auto">
+						<?php echo KT_I18N::translate('Kiwitrees family tree media folder'); ?>						
+					</div>
+				</div>
+				<div class="grid-x">
+					<div class="switch cell medium-1 tiny">
+						<?php $item_plugin == 'flickr' ? $checked = 'checked' : $checked = ''; ?>
+						<input class="switch-input" id="flickr-radio" type="radio" <?php echo $checked; ?> name="gallery_plugin" value="flickr" onclick="hide_fields();">
+						<label class="switch-paddle" for="flickr-radio">
+							<span class="show-for-sr"><?php echo KT_I18N::translate('Flickr album set'); ?>	</span>
+							<span class="switch-active" aria-hidden="true"><?php echo KT_I18N::translate('on'); ?></span>
+							<span class="switch-inactive" aria-hidden="true"><?php echo KT_I18N::translate('off'); ?></span>
+						</label>
+					</div>
+					<div class="cell auto">
+						<?php echo KT_I18N::translate('Flickr album set'); ?>						
+					</div>
+				</div>
+				<div class="grid-x">
+					<div class="switch cell medium-1 tiny">
+						<?php $item_plugin == 'uploads' ? $checked = 'checked' : $checked = ''; ?>
+						<input class="switch-input" id="uploads-radio" type="radio" <?php echo $checked; ?> name="gallery_plugin" value="uploads" onclick="hide_fields();">
+						<label class="switch-paddle" for="uploads-radio">
+							<span class="show-for-sr"><?php echo KT_I18N::translate('Images uploaded to a kiwitrees un-regulated uploads folder'); ?>	</span>
+							<span class="switch-active" aria-hidden="true"><?php echo KT_I18N::translate('on'); ?></span>
+							<span class="switch-inactive" aria-hidden="true"><?php echo KT_I18N::translate('off'); ?></span>
+						</label>
+					</div>
+					<div class="cell auto">
+						<?php echo KT_I18N::translate('Kiwitrees un-regulated uploads folder'); ?>	
+					</div>
 				</div>
 			</div>
-			<div class="cell medium-5" id="flickr-div">
-				<input 
-					id="flickr-radio" 
-					type="radio" 
-					name="gallery_plugin" 
-					value="flicker" 
-					<?php echo ($item_plugin == 'flickr') ? ' checked' : ''; ?> 
-				>
-				<?php echo KT_I18N::translate('Flickr'); ?>
-				<div class="input-group">
-					<span class="input-group-label"><?php echo KT_I18N::translate('Flickr set number'); ?></span>
-					<input
-					 	class="input-group-field" 
-						id="flickr" 
-						type="text" 
-						name="gallery_folder_f" 
-						value="<?php echo htmlspecialchars((string) $item_folder_f); ?>"
-					>
+			<label class="cell medium-2">
+				<?php echo KT_I18N::translate('Folder'); ?>
+			</label>
+			<div class="cell medium-10">
+				<?php $item_plugin == 'kiwitrees' ? $kiwitreesStyle = '' : $kiwitreesStyle = 'style="display:none;"'; ?>
+				<?php $item_plugin == 'flickr'    ? $flickrStyle    = '' : $flickrStyle    = 'style="display:none;"'; ?>
+				<?php $item_plugin == 'uploads'   ? $uploadstyle    = '' : $uploadstyle    = 'style="display:none;"'; ?>
+
+				<div class="grid-x grid-margin-x kiwitreesInputGroup" <?php echo $kiwitreesStyle; ?>>
+					<div class="input-group cell medium-6">
+	 					<span class="input-group-label"><?php echo KT_I18N::translate('Media folder name'); ?></span>
+						<select 
+							id="kiwitrees" 
+							name="gallery_folder"
+						>
+							<?php foreach (KT_Query_Media::folderList() as $key => $value) {
+								if ($key == $item_folder) { ?>
+									<option 
+										value="<?php echo htmlspecialchars((string) $key); ?>" 
+										selected="selected"
+									>
+										<?php echo htmlspecialchars((string) $value); ?>
+									</option>
+								<?php } else { ?>
+									<option value="<?php echo htmlspecialchars((string) $key); ?>">
+										<?php echo htmlspecialchars((string) $value); ?>
+									</option>';
+								<?php }
+							} ?>
+						</select>
+					</div>
+					<div class="cell callout info-help">
+						<?php echo KT_I18N::translate('Select a folder from the dropdown. It must be a folder containing media files ragistered to the family tree selected for this gallery.'); ?>
+					</div>
+				</div>
+				<div class="grid-x grid-margin-x flickrInputGroup" <?php echo $flickrStyle; ?>>
+					<div class="input-group cell medium-6">
+						<span class="input-group-label"><?php echo KT_I18N::translate('Flickr set number'); ?></span>
+						<input
+						 	class="input-group-field" 
+							id="flickr" 
+							type="text" 
+							name="gallery_folder" 
+							value="<?php echo ($item_plugin == 'flickr' ? htmlspecialchars((string) $item_folder) : ''); ?>"
+							placeholder="123456789123456789"
+							<?php if ($item_plugin != 'flickr') {echo 'disabled';} ?>
+						>
+					</div>
+					<div class="cell callout info-help">
+						<?php echo KT_I18N::translate('This field requires the "set number" for a public Flickr album. The numbers will be something like 72157633272831222'); ?>
+					</div>
+				</div>
+				<div class="grid-x grid-margin-x uploadsInputGroup" <?php echo $uploadstyle; ?>>
+					<div class="input-group cell medium-6">
+						<span class="input-group-label"><?php echo KT_I18N::translate('Uploads sub-folder'); ?></span>
+						<input
+						 	class="input-group-field" 
+							id="uploads" 
+							type="text" 
+							name="gallery_folder" 
+							value="<?php echo ($item_plugin == 'uploads' ? htmlspecialchars((string) $item_folder) : ''); ?>"
+							placeholder="<?php echo KT_I18N::translate('my folder name'); ?>"
+							<?php if($item_plugin != 'uploads') {echo 'disabled';} ?>
+						>
+					</div>
+					<div class="cell callout info-help">
+						<?php echo KT_I18N::translate('Enter the sub-folder name that contains the images, and exists in a "kiwitrees/uploads/" folder, created specifically for images not managed as part of  any family tree\'s GEDCOM data.'); ?>
+					</div>
 				</div>
 			</div>
 			<label class="cell medium-2">
@@ -169,8 +246,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 				<?php echo KT_I18N::translate('Show for which family tree'); ?>
 			</label>
 			<div class="cell medium-4">
-				<?php echo select_edit_control('gedID', KT_Tree::getIdList(), '', $gedID); ?>
-				<?php // echo select_edit_control('gedcom_id', KT_Tree::getIdList(), '', $gedcom_id, 'tabindex="4"'); ?>
+				<?php echo select_edit_control('gedID', KT_Tree::getIdList(), KT_I18N::translate('All'), $gedID); ?>
 			</div>
 			<div class="cell medium-6"></div>
 			<label class="cell medium-2">

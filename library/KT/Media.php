@@ -107,7 +107,7 @@ class KT_Media extends KT_GedcomRecord
 			return $file;
 		}
 		// Does a user-generated thumbnail exist?
-		$user_thumb = preg_replace('/\.[a-z0-9]{3,5}$/i', '.png', $file);
+		$user_thumb = preg_replace('/\\.[a-z0-9]{3,5}$/i', '.png', $file);
 		if (file_exists($user_thumb)) {
 			return $user_thumb;
 		}
@@ -340,6 +340,10 @@ class KT_Media extends KT_GedcomRecord
 			}
 		}
 
+
+		if (!is_array($imgsize)) {
+			$imgsize = [];
+		}
 		if (!is_array($imgsize) || empty($imgsize['0'])) {
 			// this is not an image, OR the file doesn’t exist OR it is a url
 			$imgsize[0] = 0;

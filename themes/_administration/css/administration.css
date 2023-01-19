@@ -9609,6 +9609,7 @@ main #admin-content {
 	/* FIND DUPLICATES */
 	/* MMERGE RECORDS */
 	/* FAQ PAGE */
+	/* GALLERY PAGE */
 	/* RESEARCH LINKS */
 	/* Googlemaps Admin */
 	/* CLEAN UP TABLE */
@@ -10373,6 +10374,9 @@ main #admin-content #merge_records-page dl.cell dd.cell {
 }
 main #admin-content #merge_records-page button.returnToStart {
 	margin-top: 0.9375rem;
+}
+main #admin-content #gallery-page .kiwitreesInputGroup .input-group {
+	margin-bottom: 0;
 }
 main #admin-content #research_links-page button {
 	margin: 1rem;

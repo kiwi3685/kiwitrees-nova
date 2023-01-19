@@ -111,7 +111,9 @@ admin_awesome.php
 
 themes/*/scss
 
+# Unregulated folder for media uploads
 /uploads
+
 latest_ktn_version.txt
 developer_aids.txt
 

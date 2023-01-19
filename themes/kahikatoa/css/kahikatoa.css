@@ -71,6 +71,9 @@ div.reveal.media {
 .tabs-title {
 	border-right: 0.125rem groove #faf5e8;
 }
+.tabs-title.is-active {
+	background: #8a8a8a !important;
+}
 .tabs-title a {
 	font-weight: 600;
 }
@@ -11016,6 +11019,16 @@ div.last_change label {
 
 /* Gallery Module */
 /* adjustments to the module "classic" theme */
+.galleria-theme-classic .galleria-thumb-nav-left,
+.galleria-theme-classic .galleria-thumb-nav-right,
+.galleria-theme-classic .galleria-info-link,
+.galleria-theme-classic .galleria-info-close,
+.galleria-theme-classic .galleria-image-nav-left,
+.galleria-theme-classic .galleria-image-nav-right {
+	background-image: url("../images/classic-map.png");
+	background-repeat: no-repeat;
+}
+
 #gallery-page .gallery_description {
 	padding: 0.9375rem;
 }
@@ -11046,6 +11059,12 @@ div.last_change label {
 	border: 0.25rem inset;
 	border-radius: 0.5rem;
 	padding: 1rem !important;
+}
+#gallery-page .galleria-theme-classic .galleria-image iframe {
+	width: 85% !important;
+	height: 100% !important;
+	margin: auto;
+	display: block;
 }
 #gallery-page .galleria-theme-classic .galleria-loader {
 	background: none;
@@ -11097,20 +11116,6 @@ div.last_change label {
 	font-size: 0.8rem;
 	opacity: 1 !important;
 }
-#gallery-page .galleria-theme-classic .galleria-image-nav .galleria-image-nav-right svg.svg-inline--fa,
-#gallery-page .galleria-theme-classic .galleria-image-nav .galleria-image-nav-left svg.svg-inline--fa {
-	color: #ab3334;
-	width: 2rem;
-	height: 2rem;
-	font-weight: 900;
-}
-#gallery-page .galleria-theme-classic .galleria-thumbnails-container.galleria-carousel .galleria-thumb-nav-right svg.svg-inline--fa,
-#gallery-page .galleria-theme-classic .galleria-thumbnails-container.galleria-carousel .galleria-thumb-nav-left svg.svg-inline--fa {
-	color: #ab3334;
-	width: 2rem;
-	height: 2rem;
-	font-weight: 900;
-}
 #gallery-page #links_bar {
 	font-size: 0.9rem;
 	padding: 0 1rem;
@@ -11139,7 +11144,7 @@ div.last_change label {
 	padding: 0;
 }
 #gallery-page #links_bar #image_links {
-	font-size: initial;
+	font-size: 0.95rem;
 }
 #gallery-page a#copy {
 	font-size: 0.8rem;

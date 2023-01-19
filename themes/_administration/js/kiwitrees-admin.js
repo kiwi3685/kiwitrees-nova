@@ -20,7 +20,10 @@
  * along with Kiwitrees. If not, see <http://www.gnu.org/licenses/>.
  */
 
- // Onsubmit validation for the import/upload GEDCOM form
+ /**
+ * Onsubmit validation for the import/upload GEDCOM form
+ * 
+ */
  function checkGedcomImportForm(message) {
 	var old_file = jQuery("#gedcom_filename").val();
 	var method   = jQuery("input[name=action]:checked").val();
@@ -35,8 +38,11 @@
 	}
  }
 
-// Clear autocomplete input field.
-jQuery(".adminClearAutocomplete").click(function() {
+/**
+ * Clear autocomplete input field.
+ * 
+*/
+ jQuery(".adminClearAutocomplete").click(function() {
 	var clickElement = jQuery(this).attr("id");
 
 	jQuery("input[id=selectedValue-" + clickElement + "]").val("");
@@ -46,8 +52,37 @@ jQuery(".adminClearAutocomplete").click(function() {
 });
 
 /**
- * initialisation of icon-picker
+ * Hide / show and disable inputs for add & edit gallery plugin options
  * 
+*/
+function hide_fields() {
+	if (jQuery("input#kiwitrees-radio").is(":checked")){
+		jQuery("div.kiwitreesInputGroup").show();
+		jQuery("div.flickrInputGroup").hide();
+		jQuery("div.uploadsInputGroup").hide();
+		jQuery("select#kiwitrees").prop("disabled", false);
+		jQuery("input#flickr").prop("disabled", true);
+		jQuery("input#uploads").prop("disabled", true);
+	} else if (jQuery("input#flickr-radio").is(":checked")){
+		jQuery("div.kiwitreesInputGroup").hide();
+		jQuery("div.flickrInputGroup").show();
+		jQuery("div.uploadsInputGroup").hide();
+		jQuery("select#kiwitrees").prop("disabled", true);
+		jQuery("input#flickr").prop("disabled", false);
+		jQuery("input#uploads").prop("disabled", true);
+	} else if (jQuery("input#uploads-radio").is(":checked")){
+		jQuery("div.kiwitreesInputGroup").hide();
+		jQuery("div.flickrInputGroup").hide();
+		jQuery("div.uploadsInputGroup").show();
+		jQuery("select#kiwitrees").prop("disabled", true);
+		jQuery("input#flickr").prop("disabled", true);
+		jQuery("input#uploads").prop("disabled", false);
+	}
+
+};
+
+/**
+ * initialisation of icon-picker
  * 
 */
 function iconPicker() {

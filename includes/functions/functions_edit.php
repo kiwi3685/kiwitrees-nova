@@ -307,9 +307,9 @@ function edit_field_access_level($name, $selected = '', $extra = '', $priv = fal
 	if (false == $priv) {
 		$ACCESS_LEVEL = [
 			KT_PRIV_PUBLIC => KT_I18N::translate('Show to everyone'),
-			KT_PRIV_USER => KT_I18N::translate('Show to members'),
-			KT_PRIV_NONE => KT_I18N::translate('Show to managers'),
-			KT_PRIV_HIDE => KT_I18N::translate('Hide from everyone'),
+			KT_PRIV_USER   => KT_I18N::translate('Show to members'),
+			KT_PRIV_NONE   => KT_I18N::translate('Show to managers'),
+			KT_PRIV_HIDE   => KT_I18N::translate('Hide from everyone'),
 		];
 	} else {
 		$ACCESS_LEVEL = [
@@ -327,10 +327,10 @@ function edit_field_resn($name, $selected = '', $extra = '')
 {
 	$RESN = [
 		'' => '',
-		'none' => KT_I18N::translate('Show to everyone'), // Not valid GEDCOM, but very useful
-		'privacy' => KT_I18N::translate('Show to members'),
+		'none'         => KT_I18N::translate('Show to everyone'), // Not valid GEDCOM, but very useful
+		'privacy'      => KT_I18N::translate('Show to members'),
 		'confidential' => KT_I18N::translate('Show to managers'),
-		'locked' => KT_I18N::translate('Only managers can edit'),
+		'locked'       => KT_I18N::translate('Only managers can edit'),
 	];
 
 	return select_edit_control($name, $RESN, null, $selected, $extra);
@@ -342,8 +342,8 @@ function edit_field_contact($name, $selected = '', $extra = '')
 	// Different ways to contact the users
 	$CONTACT_METHODS = [
 		'messaging' => KT_I18N::translate('Kiwitrees sends emails'),
-		'mailto' => KT_I18N::translate('Mailto link'),
-		'none' => KT_I18N::translate('No contact'),
+		'mailto'    => KT_I18N::translate('Mailto link'),
+		'none'      => KT_I18N::translate('No contact'),
 	];
 
 	return select_edit_control($name, $CONTACT_METHODS, null, $selected, $extra);

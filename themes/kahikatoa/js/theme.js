@@ -93,13 +93,21 @@ function ckeditorStandard() {
                 { model: "heading6", view: "h6", title: "Heading 6", class: "ck-heading_heading6" }
             ]
         },
-
-//       toolbar: {
-//		    removeItems: [ "fontColor", "fontBackgroundColor" ],
-//		}
-//	})
-//	.then( editor => {
-//        console.log( Array.from( editor.ui.componentFactory.names() ) );
+        	toolbar: {
+		items: [
+			'sourceEditing', '|',
+			'undo', 'redo', '|',
+			'heading', 'alignment', '|',
+			'bold', 'underline', 'italic', 'strikethrough', 'subscript', 'superscript', '|',
+			'fontBackgroundColor', 'fontColor', 'fontFamily', 'fontSize', '|',
+			'bulletedList', 'numberedList', 'outdent', 'indent',
+			'-', // break point
+			'horizontalLine', 'link', /*'imageUpload', 'imageInsert',*/ 'code', 'highlight',
+			'insertTable', 'mediaEmbed', 'pageBreak', 'htmlEmbed', 'removeFormat', 'specialCharacters',
+			'findAndReplace'
+		],
+		shouldNotGroupWhenFull: true
+	},
 
     })
 	.then( editor => {

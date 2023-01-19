@@ -113,7 +113,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', ''); ?>
 		</div>
 	</fieldset>
 	<fieldset class="cell fieldset">
-		<legend class="h5"><?php echo KT_I18N::translate('Page contents list'); ?></legend>
+		<legend class="h5"><?php echo KT_I18N::translate('Faq list'); ?></legend>
 		<div class="grid-x">
 
 			<?php echo familyTree($gedID); ?>
