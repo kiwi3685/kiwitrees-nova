@@ -66,6 +66,11 @@ if ($save) {
 	}
 	set_block_setting($block_id, 'languages', implode(',', $languages));
 
+	// Check the "uploads" directory exists if it is needed
+	if (get_block_setting($block_id, 'gallery_plugin') == 'uploads') {
+		echo $this->checkUploadsDir();
+	}
+
 	switch ($save) {
 		case 1:
 			// save and re-edit
@@ -231,7 +236,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 						>
 					</div>
 					<div class="cell callout info-help">
-						<?php echo KT_I18N::translate('Enter the sub-folder name that contains the images, and exists in a "kiwitrees/uploads/" folder, created specifically for images not managed as part of  any family tree\'s GEDCOM data.'); ?>
+						<?php echo KT_I18N::translate('Enter the sub-folder name that contains the images, and exists in a "kiwitrees/uploads/" folder, created specifically for images not managed as part of  any family tree\'s GEDCOM data. If you have not already created the "uploads" folder it will be created automatically when you save this page.'); ?>
 					</div>
 				</div>
 			</div>

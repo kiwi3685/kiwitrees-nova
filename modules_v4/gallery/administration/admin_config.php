@@ -136,8 +136,11 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 				<table class="cell" id="gallery_edit">
 					<thead>
 						<tr>
-							<th style="width: 16%;">
+							<th style="width: 8%;">
 								<?php echo KT_I18N::translate('Order'); ?>
+							</th>
+							<th style="width: 8%;">
+								<?php echo KT_I18N::translate('ID'); ?>
 							</th>
 							<th style="width: 20%;">
 								<?php echo KT_I18N::translate('Tree'); ?>
@@ -165,10 +168,19 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 							$items = $galleryItems;
 						}
 
-						foreach ($items as $gallery) { ?>
+						foreach ($items as $gallery) { 
+
+							// Check the "uploads" directory exists if it is needed
+							if (get_block_setting($gallery->block_id, 'gallery_plugin') == 'uploads') {
+								echo $this->checkUploadsDir();
+							} ?>
+
 							<tr class="gallery_edit_pos">
 								<td>
 									<?php echo($gallery->block_order); ?>
+								</td>
+								<td>
+									<?php echo($gallery->block_id); ?>
 								</td>
 								<td>
 									<?php echo ($gallery->gedcom_id ? $trees[$gallery->gedcom_id]->tree_title_html : KT_I18N::translate('All')); ?>

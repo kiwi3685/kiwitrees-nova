@@ -312,6 +312,15 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 		}
 	}
 
+
+	private function checkUploadsDir()
+	{
+		if (!is_dir(KT_ROOT . 'uploads/')) {
+			@mkdir(KT_ROOT . 'uploads/', KT_PERM_EXE, true);
+ 		}
+		
+	}
+
 	private function getJavaScript($item_id)
 	{
 		$js = 'Galleria.loadTheme("' .  KT_STATIC_URL . KT_MODULES_DIR . $this->getName() . '/galleria/themes/classic/galleria.classic.min.js ");';
@@ -508,9 +517,9 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 
 				break;
 			case 'uploads':
-				$sub_folder = 'uploads/' . get_block_setting($item_id, 'gallery_folder');
+				$sub_folder = get_block_setting($item_id, 'gallery_folder');
 				$html       = '<div id="galleria" style="width:100%;">';
-				$dir_name   = KT_STATIC_URL . $sub_folder;			
+				$dir_name   = KT_STATIC_URL . 'uploads/' . $sub_folder;			
 				$files      = glob($dir_name . '*.{jpg,jpeg,png,JPG,JPEG,PNG}', GLOB_BRACE );
 				
 				foreach ($files as $file) {
