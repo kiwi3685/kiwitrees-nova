@@ -32,8 +32,8 @@ $save     = KT_Filter::post('save', '');
 
 $controller = new KT_Controller_Page();
 $controller
+	->setPageTitle(KT_I18N::translate('Edit a gallery'))
 	->pageHeader()
-	->setPageTitle(KT_I18N::translate('Edit gallery'))
 	->addExternalJavascript(KT_CKEDITOR_CLASSIC)
 	->addInlineJavascript('ckeditorStandard();');
 

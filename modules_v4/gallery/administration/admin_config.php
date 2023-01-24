@@ -36,8 +36,6 @@ $controller
 	->addExternalJavascript(KT_ICON_PICKER_JS)
 	->addExternalJavascript(KT_CKEDITOR_CLASSIC)
 	->addInlineJavascript('
-		jQuery("#gallery_tabs").tabs();
-
 		ckeditorStandard();
 
 		iconPicker();

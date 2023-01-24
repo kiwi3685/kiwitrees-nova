@@ -273,10 +273,12 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 
 		$menu = new KT_Menu($this->getMenuTitle(), 'module.php?mod=faq&amp;mod_action=show', 'menu-help');
 		$menu->addClass('', '', $this->getMenuIcon());
+
 		if (KT_USER_IS_ADMIN) {
 			$submenu = new KT_Menu(KT_I18N::translate('Edit faq items'), $this->getConfigLink(), 'menu-faq-edit');
 			$menu->addSubmenu($submenu);
 		}
+
 		return $menu;
 	}
 

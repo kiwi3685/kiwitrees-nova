@@ -30,6 +30,7 @@ $save	= KT_Filter::post('save', '');
 
 $controller = new KT_Controller_Page();
 $controller
+	->setPageTitle(KT_I18N::translate('Add faq item'))
 	->pageHeader()
 	->addExternalJavascript(KT_CKEDITOR_CLASSIC)
 	->addInlineJavascript('ckeditorStandard();');
@@ -85,7 +86,6 @@ if ($save) {
 
 }
 
-$controller->setPageTitle(KT_I18N::translate('Add faq item'));
 $block_id    = '';
 $header      = '';
 $faqbody     = '';

@@ -37,36 +37,65 @@ $controller
 
 		iconPicker();
 
+		jQuery("#pages_module").sortable({
+			items: ".sortme",
+			forceHelperSize: true,
+			forcePlaceholderSize: true,
+			opacity: 0.7,
+			cursor: "move",
+			axis: "y"
+		});
+
+		//-- update the order numbers after drag-n-drop sorting is complete
+		jQuery("#pages_module").bind("sortupdate", function(event, ui) {
+			jQuery("#"+jQuery(this).attr("id")+" input").each(
+				function (index, value) {
+					value.value = index+1;
+				}
+			);
+		});
+
 	');
 
 $action = KT_Filter::post('action');
 $gedID  = KT_Filter::post('gedID') ? KT_Filter::post('gedID') : KT_GED_ID;
 
-if ($action == 'update') {
-	set_module_setting($this->getName(), 'HEADER_TITLE', KT_Filter::post('NEW_HEADER_TITLE'));
-	set_module_setting($this->getName(), 'HEADER_ICON',  str_replace($iconStyle . ' ', '', KT_Filter::post('NEW_HEADER_ICON')));
-	set_module_setting($this->getName(), 'HEADER_DESCRIPTION', KT_Filter::post('NEW_HEADER_DESCRIPTION', KT_REGEX_UNSAFE)); // allow html
-	AddToLog($this->getName() . ' config updated', 'config');
+switch ($action) {
+	case 'update':
+		set_module_setting($this->getName(), 'HEADER_TITLE', KT_Filter::post('NEW_HEADER_TITLE'));
+		set_module_setting($this->getName(), 'HEADER_ICON',  str_replace($iconStyle . ' ', '', KT_Filter::post('NEW_HEADER_ICON')));
+		set_module_setting($this->getName(), 'HEADER_DESCRIPTION', KT_Filter::post('NEW_HEADER_DESCRIPTION', KT_REGEX_UNSAFE)); // allow html
+
+		AddToLog($this->getName() . ' config updated', 'config');
+		break;
+	case 'updatePagesList':
+		foreach ($items as $item) {
+			$order = KT_Filter::post('order-' . $item->block_id);
+			KT_DB::prepare(
+				"UPDATE `##block` SET block_order=? WHERE block_id=?"
+			)->execute(array($order, $item->block_id));
+		}
+		break;
 }
 
-$faqs = KT_DB::prepare("
-	SELECT block_id, block_order, gedcom_id, bs1.setting_value AS header, bs2.setting_value AS faqbody
+$items = KT_DB::prepare("
+	SELECT block_id, block_order, gedcom_id, bs1.setting_value AS pages_title, bs2.setting_value AS pages_content
 	FROM `##block` b
 	JOIN `##block_setting` bs1 USING (block_id)
 	JOIN `##block_setting` bs2 USING (block_id)
 	WHERE module_name = ?
-	AND bs1.setting_name = 'header'
-	AND bs2.setting_name = 'faqbody'
+	AND bs1.setting_name = 'pages_title'
+	AND bs2.setting_name = 'pages_content'
 	AND IFNULL(gedcom_id, ?) = ?
 	ORDER BY block_order
 ")->execute(array($this->getName(), $gedID, $gedID))->fetchAll();
 
 $min_block_order = KT_DB::prepare(
-	"SELECT MIN(block_order) FROM `##block` WHERE module_name=?"
+	"SELECT MIN(block_order) FROM `##block` WHERE module_name = ?"
 )->execute(array($this->getName()))->fetchOne();
 
 $max_block_order = KT_DB::prepare(
-	"SELECT MAX(block_order) FROM `##block` WHERE module_name=?"
+	"SELECT MAX(block_order) FROM `##block` WHERE module_name = ?"
 )->execute(array($this->getName()))->fetchOne();
 
 echo relatedPages($moduleTools, $this->getConfigLink());
@@ -111,7 +140,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', ''); ?>
 		</div>
 	</fieldset>
 	<fieldset class="cell fieldset">
-		<legend class="h5"><?php echo KT_I18N::translate('Faq list'); ?></legend>
+		<legend class="h5"><?php echo KT_I18N::translate('Pages list'); ?></legend>
 		<div class="grid-x">
 			<div class="cell medium-2">
 				<label for="ged"><?php echo KT_I18N::translate('Family tree'); ?></label>
@@ -124,12 +153,12 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', ''); ?>
 			<div class="cell medium-offset-1 auto text-right">
 				<button class="button primary" type="submit" onclick="location.href='module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_add&amp;gedID=<?php echo $gedID; ?>'">
 					<i class="<?php echo $iconStyle; ?> fa-plus"></i>
-					<?php echo KT_I18N::translate('Add faq item'); ?>
+					<?php echo KT_I18N::translate('Add page'); ?>
 				</button>
 			</div>
 
-			<?php if($faqs) { ?>
-				<table class="cell" id="faq_edit">
+			<?php if($items) { ?>
+				<table class="cell" id="pages_edit">
 					<thead>
 						<tr>
 							<th style="width: 8%;">
@@ -142,9 +171,9 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', ''); ?>
 								<?php echo KT_I18N::translate('Tree'); ?>
 							</th>
 							<th>
-								<?php echo KT_I18N::translate('Question'); ?>
+								<?php echo KT_I18N::translate('Title'); ?>
 							</th>
-							<th style="width: 20%;" colspan="3" class="text-center">
+							<th style="width: 20%;" colspan="4" class="text-center">
 								<?php echo KT_I18N::translate('Actions'); ?>
 							</th>
 						</tr>
@@ -152,48 +181,48 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', ''); ?>
 					<tbody>
 						<?php 
 						$trees = KT_Tree::getAll();
-						foreach ($faqs as $faq) { ?>
-							<tr class="faq_edit_pos">
+						foreach ($items as $item) { ?>
+							<tr class="pages_edit_pos">
 								<td>
-									<?php echo($faq->block_order); ?>
+									<?php echo($item->block_order); ?>
 								</td>
 								<td>
-									<?php echo($faq->block_id); ?>
+									<?php echo($item->block_id); ?>
 								</td>
 								<td>
 									<?php
-									if ($faq->gedcom_id == null) {
+									if ($item->gedcom_id == null) {
 										echo KT_I18N::translate('All');
 									} else {
-										echo $trees[$faq->gedcom_id]->tree_title_html;
+										echo $trees[$item->gedcom_id]->tree_title_html;
 									} ?>
 								</td>
 								<td>
-									<?php echo $faq->header; ?>
+									<?php echo $item->pages_title; ?>
 								</td>
 								<td>
-									<?php if ($faq->block_order == $min_block_order) { ?>
+									<?php if ($item->block_order == $min_block_order) { ?>
 										&nbsp;
 									<?php } else { ?>
-										<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_moveup&amp;block_id=<?php echo $faq->block_id; ?>">
+										<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_moveup&amp;block_id=<?php echo $item->block_id; ?>">
 											<i class="<?php echo $iconStyle; ?> fa-arrow-up"></i>
 										</a>
 									<?php } ?>
-											<?php if ($faq->block_order == $max_block_order) { ?>
+											<?php if ($item->block_order == $max_block_order) { ?>
 										&nbsp;
 									<?php } else { ?>
-										<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_movedown&amp;block_id=<?php echo $faq->block_id; ?>">
+										<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_movedown&amp;block_id=<?php echo $item->block_id; ?>">
 											<i class="<?php echo $iconStyle; ?> fa-arrow-down"></i>
 										</a>
 									<?php } ?>
 								</td>
 								<td>
-									<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit&amp;block_id=<?php echo $faq->block_id; ?>&amp;gedID=<?php echo $gedID; ?>">
+									<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit&amp;block_id=<?php echo $item->block_id; ?>&amp;gedID=<?php echo $gedID; ?>">
 										<?php echo KT_I18N::translate('Edit'); ?>
 									</a>
 								</td>
 								<td>
-									<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_delete&amp;block_id=<?php echo $faq->block_id; ?>" onclick="return confirm('<?php echo KT_I18N::translate('Are you sure you want to delete this faq entry?'); ?>');">
+									<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_delete&amp;block_id=<?php echo $item->block_id; ?>" onclick="return confirm('<?php echo KT_I18N::translate('Are you sure you want to delete this page?'); ?>');">
 										<?php echo KT_I18N::translate('Delete'); ?>
 									</a>
 								</td>
@@ -203,7 +232,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', ''); ?>
 				</table>
 			<?php } else { ?>
 				<div class="cell callout alert">
-					<?php echo KT_I18N::translate('The faq list is empty.'); ?>
+					<?php echo KT_I18N::translate('The item list is empty.'); ?>
 				</div>
 			<?php } ?>
 		</div>

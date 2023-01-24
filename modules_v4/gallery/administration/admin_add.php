@@ -27,8 +27,8 @@ global $MEDIA_DIRECTORY, $iconStyle;
 
 $controller = new KT_Controller_Page();
 $controller
+	->setPageTitle(KT_I18N::translate('Add a gallery'))
 	->pageHeader()
-	->setPageTitle(KT_I18N::translate('Add gallery'))
 	->addExternalJavascript(KT_CKEDITOR_CLASSIC)
 	->addInlineJavascript('ckeditorStandard();');
 

@@ -100,8 +100,8 @@ function ckeditorStandard() {
 			'heading', 'alignment', '|',
 			'bold', 'underline', 'italic', 'strikethrough', 'subscript', 'superscript', '|',
 			'fontBackgroundColor', 'fontColor', 'fontFamily', 'fontSize', '|',
-			'bulletedList', 'numberedList', 'outdent', 'indent',
 			'-', // break point
+			'bulletedList', 'numberedList', 'outdent', 'indent',
 			'horizontalLine', 'link', /*'imageUpload', 'imageInsert',*/ 'code', 'highlight',
 			'insertTable', 'mediaEmbed', 'pageBreak', 'htmlEmbed', 'removeFormat', 'specialCharacters',
 			'findAndReplace'

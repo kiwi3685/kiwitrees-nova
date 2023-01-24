@@ -153,7 +153,8 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 
 		// -- main GALLERIES menu item
 		$menu = new KT_Menu($this->getMenuTitle(), 'module.php?mod=' . $this->getName() . '&amp;mod_action=show&amp;gallery_id=' . $default_block, 'menu-my_gallery', 'down');
-		$menu->addClass('menuitem', 'menuitem_hover', 'fa-images');
+		$menu->addClass('', '', $this->getMenuIcon());
+
 		foreach ($this->getMenuGalleryList() as $item) {
 			$languages = get_block_setting($item->block_id, 'languages');
 			if ((!$languages || in_array(KT_LOCALE, explode(',', $languages))) && $item->gallery_access >= KT_USER_ACCESS_LEVEL) {
@@ -231,7 +232,7 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 						foreach ($item_list as $item) {
 							if ((!$languages || in_array(KT_LOCALE, explode(',', $languages))) && $item_id == $item->block_id && $item->gallery_access >= KT_USER_ACCESS_LEVEL) {
 								$item_gallery = '<div class="cell gallery_description">' . KT_I18N::translate($item->gallery_description) . '</div>' .
-									$this->mediaDisplay($item->gallery_folder, $item_id, $version);
+								$this->mediaDisplay($item->gallery_folder, $item_id, $version);
 							}
 						}
 						if (!isset($item_gallery)) {
@@ -388,7 +389,7 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 			JOIN `##block_setting` bs2 USING (block_id)
 			JOIN `##block_setting` bs3 USING (block_id)
 			JOIN `##block_setting` bs4 USING (block_id)
-			WHERE module_name=?
+			WHERE module_name = ?
 			AND bs1.setting_name='gallery_title'
 			AND bs2.setting_name='gallery_access'
 			AND bs3.setting_name='gallery_description'
