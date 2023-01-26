@@ -1,7 +1,7 @@
 <?php
 /**
  * Kiwitrees: Web based Family History software
- * Copyright (C) 2012 to 2022 kiwitrees.net
+ * Copyright (C) 2012 to 2022 kiwitrees.net.
  *
  * Derived from webtrees (www.webtrees.net)
  * Copyright (C) 2010 to 2012 webtrees development team
@@ -20,24 +20,27 @@
  * You should have received a copy of the GNU General Public License
  * along with Kiwitrees. If not, see <http://www.gnu.org/licenses/>.
  */
-
 if (!defined('KT_KIWITREES')) {
 	header('HTTP/1.0 403 Forbidden');
+
 	exit;
 }
 
 // print a table of individuals
-function format_indi_table($datalist, $option='') {
+function format_indi_table($datalist, $option = '')
+{
 	global $iconStyle, $GEDCOM, $SHOW_LAST_CHANGE, $SEARCH_SPIDER, $MAX_ALIVE_AGE, $controller;
 
 	if (KT_SCRIPT_NAME == 'search.php') {
-		$table_id = 'ID'.(int)(microtime(true)*1000000); // lists requires a unique ID in case there are multiple lists per page
+		$table_id = 'ID' . (int) (microtime(true) * 1000000); // lists requires a unique ID in case there are multiple lists per page
 	} else {
 		$table_id = 'indiTable';
 	}
 
 	$SHOW_EST_LIST_DATES = get_gedcom_setting(KT_GED_ID, 'SHOW_EST_LIST_DATES');
-	if ($option == 'MARR_PLAC') return;
+	if ('MARR_PLAC' == $option) {
+		return;
+	}
 
 	$controller
 		->addExternalJavascript(KT_DATATABLES_JS)
@@ -47,7 +50,8 @@ function format_indi_table($datalist, $option='') {
 	if (KT_USER_CAN_EDIT) {
 		$controller
 			->addExternalJavascript(KT_DATATABLES_BUTTONS)
-			->addExternalJavascript(KT_DATATABLES_HTML5);
+			->addExternalJavascript(KT_DATATABLES_HTML5)
+		;
 		$buttons = 'B';
 	} else {
 		$buttons = '';
@@ -64,7 +68,7 @@ function format_indi_table($datalist, $option='') {
 			jQuery("#' . $table_id . '").dataTable({
 				dom: \'<"top"p' . $buttons . 'f<"clear">irl>t<"bottom"pl>\',
 				' . KT_I18N::datatablesI18N() . ',
-				buttons: [{extend: "csvHtml5", exportOptions: {columns: [0,1,4,6,9,11,12,15,17] }}],
+				buttons: [{extend: "csvHtml5", exportOptions: {columns: ":visible"}}],
 				autoWidth: false,
 				processing: true,
 				retrieve: true,
@@ -82,7 +86,7 @@ function format_indi_table($datalist, $option='') {
 					/*  1 surn      */ { dataSort: 3, class: "indiListSurn"},
 					/*  2 GIVN,SURN */ { type: "unicode", visible: false },
 					/*  3 SURN,GIVN */ { type: "unicode", visible: false },
-					/*  4 sosa      */ { dataSort: 5, visible: ' . ($option === 'sosa' ? 'true' : 'false') . ' },
+					/*  4 sosa      */ { dataSort: 5, visible: ' . ('sosa' === $option ? 'true' : 'false') . ' },
 					/*  5 SOSA      */ { type: "num", visible: false },
 					/*  6 birt date */ { dataSort: 7, class: "show-for-medium indiListDate" },
 					/*  7 BIRT:DATE */ { visible: false },
@@ -103,7 +107,7 @@ function format_indi_table($datalist, $option='') {
 					/* 22 DEAT      */ { visible: false },
 					/* 23 TREE      */ { visible: false }
 				],
-				sorting: [[' . ($option === 'sosa' ? '4, "asc"' : '1, "asc"') . ']]
+				sorting: [[' . ('sosa' === $option ? '4, "asc"' : '1, "asc"') . ']]
 			});
 
 			jQuery("#buttons-' . $table_id . '")
@@ -134,11 +138,12 @@ function format_indi_table($datalist, $option='') {
 					btn.addClass("ui-state-active");
 					col.search(btn.data("filter-value")).draw();
 				}
-  			});
+			});
 
 			jQuery(".indi-list").css("visibility", "visible");
 			jQuery(".loading-image").css("display", "none");
-		');
+		')
+	;
 
 	$stats = new KT_Stats($GEDCOM);
 
@@ -150,7 +155,7 @@ function format_indi_table($datalist, $option='') {
 	}
 
 	// Inititialise chart data
-	for ($age = 0; $age <= $max_age; $age ++) {
+	for ($age = 0; $age <= $max_age; $age++) {
 		$deat_by_age[$age] = '';
 	}
 	for ($year = 1550; $year < 2030; $year += 10) {
@@ -177,7 +182,7 @@ function format_indi_table($datalist, $option='') {
 										title="' . KT_I18N::translate('Show only males.') . '"
 										type="button"
 									>
-									 	' . KT_Person::sexImage('M', 'medium') . '
+										' . KT_Person::sexImage('M', 'medium') . '
 									</button>
 									<button
 										class="button ui-state-default has-tip top"
@@ -212,7 +217,7 @@ function format_indi_table($datalist, $option='') {
 										data-disable-hover="false"
 										data-filter-column="22"
 										data-filter-value="N"
-										title="' . KT_I18N::translate('Show only individuals who are alive.').'"
+										title="' . KT_I18N::translate('Show only individuals who are alive.') . '"
 										type="button"
 									>
 										' . KT_I18N::translate('Alive') . '
@@ -224,7 +229,7 @@ function format_indi_table($datalist, $option='') {
 										data-disable-hover="false"
 										data-filter-column="22"
 										data-filter-value="Y"
-										title="' . KT_I18N::translate('Show only individuals who are dead.').'"
+										title="' . KT_I18N::translate('Show only individuals who are dead.') . '"
 										type="button"
 									>
 										' . KT_I18N::translate('Dead') . '
@@ -277,7 +282,7 @@ function format_indi_table($datalist, $option='') {
 										title="' . KT_I18N::translate('Show individuals born within the last 100 years.') . '"
 										type="button"
 									>
-										'.KT_Gedcom_Tag::getLabel('BIRT') . '&lt;=100
+										' . KT_Gedcom_Tag::getLabel('BIRT') . '&lt;=100
 									</button>
 									<button
 										class="button ui-state-default has-tip top"
@@ -348,8 +353,8 @@ function format_indi_table($datalist, $option='') {
 				</thead>
 				<tbody>';
 
-	$d100y			= new KT_Date(date('Y')-100);  // 100 years ago
-	$unique_indis	= array(); // Don't double-count indis with multiple names.
+	$d100y = new KT_Date(date('Y') - 100);  // 100 years ago
+	$unique_indis = []; // Don't double-count indis with multiple names.
 	foreach ($datalist as $key => $value) {
 		if (is_object($value)) { // Array of objects
 			$person = $value;
@@ -357,58 +362,70 @@ function format_indi_table($datalist, $option='') {
 			$person = KT_Person::getInstance($value);
 		} else { // Array of search results
 			$gid = $key;
-			if (isset($value['gid'])) $gid = $value['gid']; // from indilist
-			if (isset($value[4])) $gid = $value[4]; // from indilist ALL
+			if (isset($value['gid'])) {
+				$gid = $value['gid'];
+			} // from indilist
+			if (isset($value[4])) {
+				$gid = $value[4];
+			} // from indilist ALL
 			$person = KT_Person::getInstance($gid);
 		}
-		if (is_null($person)) continue;
-		if ($person->getType() !== 'INDI') continue;
+		if (is_null($person)) {
+			continue;
+		}
+		if ('INDI' !== $person->getType()) {
+			continue;
+		}
 		if (!$person->canDisplayName()) {
 			continue;
 		}
-		//-- place filtering
-		if ($option == 'BIRT_PLAC' && strstr($person->getBirthPlace(), $filter) === false) continue;
-		if ($option == 'DEAT_PLAC' && strstr($person->getDeathPlace(), $filter) === false) continue;
+		// -- place filtering
+		if ('BIRT_PLAC' == $option && false === strstr($person->getBirthPlace(), $filter)) {
+			continue;
+		}
+		if ('DEAT_PLAC' == $option && false === strstr($person->getDeathPlace(), $filter)) {
+			continue;
+		}
 		$html .= '<tr>';
-		//-- Indi name(s)
+		// -- Indi name(s)
 		$html .= '<td colspan="2" class="nowrap">';
 		foreach ($person->getAllNames() as $num => $name) {
-			if ($name['type'] == 'NAME') {
+			if ('NAME' == $name['type']) {
 				$title = '';
 			} else {
 				$title = 'title="' . strip_tags(KT_Gedcom_Tag::getLabel($name['type'], $person)) . '"';
 			}
 			if ($num == $person->getPrimaryName()) {
-				$class		= ' class="name2"';
-				$sex_image	= $person->getSexImage();
-				list($surn, $givn)=explode(',', $name['sort']);
+				$class = ' class="name2"';
+				$sex_image = $person->getSexImage();
+				[$surn, $givn] = explode(',', $name['sort']);
 			} else {
-				$class		= '';
-				$sex_image	= '';
+				$class = '';
+				$sex_image = '';
 			}
-			$html .= '<a '. $title . ' href="'. $person->getHtmlUrl() . '"' . $class . '>' . highlight_search_hits($name['full']) . '</a>' . $sex_image . '<br>';
+			$html .= '<a ' . $title . ' href="' . $person->getHtmlUrl() . '"' . $class . '>' . highlight_search_hits($name['full']) . '</a>' . $sex_image . '<br>';
 		}
 		// Indi parents
 		$html .= $person->getPrimaryParentsNames('parents details1', 'none');
 		$html .= '</td>';
 		// Dummy column to match colspan in header
 		$html .= '<td hidden></td>';
-		//-- GIVN/SURN
+		// -- GIVN/SURN
 		// Use "AAAA" as a separator (instead of ",") as Javascript.localeCompare() ignores
 		// punctuation and "ANN,ROACH" would sort after "ANNE,ROACH", instead of before it.
 		// Similarly, @N.N. would sort as NN.
 		$html .= '<td>' . KT_Filter::escapeHtml(str_replace('@P.N.', 'AAAA', $givn)) . 'AAAA' . KT_Filter::escapeHtml(str_replace('@N.N.', 'AAAA', $surn)) . '</td>';
 		$html .= '<td>' . KT_Filter::escapeHtml(str_replace('@N.N.', 'AAAA', $surn)) . 'AAAA' . KT_Filter::escapeHtml(str_replace('@P.N.', 'AAAA', $givn)) . '</td>';
-		//-- SOSA
-		if ($option === 'sosa') {
-			$html .= '<td><a href="relationship.php?pid1=' . $datalist[1] . '&amp;pid2=' . $person->getXref() . '" title="' . KT_I18N::translate('Relationships') . '">' . KT_I18N::number($key) . '</a></td><td>'. $key . '</td>';
+		// -- SOSA
+		if ('sosa' === $option) {
+			$html .= '<td><a href="relationship.php?pid1=' . $datalist[1] . '&amp;pid2=' . $person->getXref() . '" title="' . KT_I18N::translate('Relationships') . '">' . KT_I18N::number($key) . '</a></td><td>' . $key . '</td>';
 		} else {
 			$html .= '
 				<td>&nbsp;</td>
 				<td>0</td>
 			';
 		}
-		//-- Birth date
+		// -- Birth date
 		$html .= '<td>';
 		if ($birth_dates = $person->getAllBirthDates()) {
 			foreach ($birth_dates as $num => $birth_date) {
@@ -418,7 +435,7 @@ function format_indi_table($datalist, $option='') {
 				$html .= $birth_date->Display(!$SEARCH_SPIDER);
 			}
 			if ($birth_dates[0]->gregorianYear() >= 1550 && $birth_dates[0]->gregorianYear() < 2030 && !isset($unique_indis[$person->getXref()])) {
-				$birt_by_decade[(int)($birth_dates[0]->gregorianYear() / 10) * 10] .= $person->getSex();
+				$birt_by_decade[(int) ($birth_dates[0]->gregorianYear() / 10) * 10] .= $person->getSex();
 			}
 		} else {
 			$birth_date = $person->getEstimatedBirthDate();
@@ -430,11 +447,11 @@ function format_indi_table($datalist, $option='') {
 			$birth_dates[0] = new KT_Date('');
 		}
 		$html .= '</td>';
-		//-- Event date (sortable)hidden by datatables code
-		$html .= '<td>'. $birth_date->JD() . '</td>';
-		//-- Birth anniversary
+		// -- Event date (sortable)hidden by datatables code
+		$html .= '<td>' . $birth_date->JD() . '</td>';
+		// -- Birth anniversary
 		$html .= '<td>' . KT_Date::getAge($birth_dates[0], null, 2) . '</td>';
-		//-- Birth place
+		// -- Birth place
 		$html .= '<td>';
 		foreach ($person->getAllBirthPlaces() as $n => $birth_place) {
 			$tmp = new KT_Place($birth_place, KT_GED_ID);
@@ -449,13 +466,13 @@ function format_indi_table($datalist, $option='') {
 			}
 		}
 		$html .= '</td>';
-		//-- Number of children
+		// -- Number of children
 		$nchi = $person->getNumberOfChildren();
 		$html .= '
 			<td>' . KT_I18N::number($nchi) . '</td>
-			<td>' . $nchi. '</td>
+			<td>' . $nchi . '</td>
 		';
-		//-- Death date
+		// -- Death date
 		$html .= '<td>';
 		if ($death_dates = $person->getAllDeathDates()) {
 			foreach ($death_dates as $num => $death_date) {
@@ -465,7 +482,7 @@ function format_indi_table($datalist, $option='') {
 				$html .= $death_date->Display(!$SEARCH_SPIDER);
 			}
 			if ($death_dates[0]->gregorianYear() >= 1550 && $death_dates[0]->gregorianYear() < 2030 && !isset($unique_indis[$person->getXref()])) {
-				$deat_by_decade[(int)($death_dates[0]->gregorianYear() / 10) * 10] .= $person->getSex();
+				$deat_by_decade[(int) ($death_dates[0]->gregorianYear() / 10) * 10] .= $person->getSex();
 			}
 		} else {
 			$death_date = $person->getEstimatedDeathDate();
@@ -473,7 +490,7 @@ function format_indi_table($datalist, $option='') {
 			// Don't show estimates in the future.
 			if ($SHOW_EST_LIST_DATES && $death_date->MinJD() < KT_CLIENT_JD) {
 				$html .= $death_date->Display(!$SEARCH_SPIDER);
-			} else if ($person->isDead()) {
+			} elseif ($person->isDead()) {
 				$html .= KT_I18N::translate('Yes');
 			} else {
 				$html .= '&nbsp;';
@@ -481,11 +498,11 @@ function format_indi_table($datalist, $option='') {
 			$death_dates[0] = new KT_Date('');
 		}
 		$html .= '</td>';
-		//-- Event date (sortable)hidden by datatables code
+		// -- Event date (sortable)hidden by datatables code
 		$html .= '<td>' . $death_date->JD() . '</td>';
-		//-- Death anniversary
+		// -- Death anniversary
 		$html .= '<td>' . KT_Date::getAge($death_dates[0], null, 2) . '</td>';
-		//-- Age at death
+		// -- Age at death
 		$age = KT_Date::getAge($birth_dates[0], $death_dates[0], 0);
 		if (!isset($unique_indis[$person->getXref()]) && $age >= 0 && $age <= $max_age) {
 			$deat_by_age[$age] .= $person->getSex();
@@ -495,7 +512,7 @@ function format_indi_table($datalist, $option='') {
 			<td>' . KT_Date::getAge($birth_dates[0], $death_dates[0], 2) . '</td>
 			<td>' . KT_Date::getAge($birth_dates[0], $death_dates[0], 1) . '</td>
 		';
-		//-- Death place
+		// -- Death place
 		$html .= '<td>';
 		foreach ($person->getAllDeathPlaces() as $n => $death_place) {
 			$tmp = new KT_Place($death_place, KT_GED_ID);
@@ -505,28 +522,28 @@ function format_indi_table($datalist, $option='') {
 			if ($SEARCH_SPIDER) {
 				$html .= $tmp->getShortName();
 			} else {
-				$html .= '<a href="' . $tmp->getURL() . '" title="'. strip_tags($tmp->getFullName()) . '">';
+				$html .= '<a href="' . $tmp->getURL() . '" title="' . strip_tags($tmp->getFullName()) . '">';
 				$html .= highlight_search_hits($tmp->getShortName()) . '</a>';
 			}
 		}
 		$html .= '</td>';
-		//-- Last change
+		// -- Last change
 		if ($SHOW_LAST_CHANGE) {
 			$html .= '<td>' . $person->LastChangeTimestamp() . '</td>';
 		} else {
 			$html .= '<td>&nbsp;</td>';
 		}
-		//-- Last change hidden sort column
+		// -- Last change hidden sort column
 		if ($SHOW_LAST_CHANGE) {
 			$html .= '<td>' . $person->LastChangeTimestamp(true) . '</td>';
 		} else {
 			$html .= '<td>&nbsp;</td>';
 		}
-		//-- Sorting by gender
+		// -- Sorting by gender
 		$html .= '<td>';
 		$html .= $person->getSex();
 		$html .= '</td>';
-		//-- Filtering by birth date
+		// -- Filtering by birth date
 		$html .= '<td>';
 		if (!$person->canDisplayDetails() || KT_Date::Compare($birth_date, $d100y) > 0) {
 			$html .= 'Y100';
@@ -534,7 +551,7 @@ function format_indi_table($datalist, $option='') {
 			$html .= 'YES';
 		}
 		$html .= '</td>';
-		//-- Filtering by death date
+		// -- Filtering by death date
 		$html .= '<td>';
 		// Died in last 100 years?  Died?  Not dead?
 		if (KT_Date::Compare($death_dates[0], $d100y) > 0) {
@@ -545,11 +562,17 @@ function format_indi_table($datalist, $option='') {
 			$html .= 'N';
 		}
 		$html .= '</td>';
-		//-- Roots or Leaves ?
+		// -- Roots or Leaves ?
 		$html .= '<td>';
-		if (!$person->getChildFamilies()) { $html .= 'R'; }  // roots
-		elseif (!$person->isDead() && $person->getNumberOfChildren() < 1) { $html .= 'L'; } // leaves
-		else { $html .= '&nbsp;'; }
+		if (!$person->getChildFamilies()) {
+			$html .= 'R';
+		}  // roots
+		elseif (!$person->isDead() && $person->getNumberOfChildren() < 1) {
+			$html .= 'L';
+		} // leaves
+		else {
+			$html .= '&nbsp;';
+		}
 		$html .= '</td>';
 		$html .= '</tr>';
 		$unique_indis[$person->getXref()] = true;
@@ -568,7 +591,7 @@ function format_indi_table($datalist, $option='') {
 		</div>';
 
 	$html .= '
-		<div class="grid-x grid-margin-x grid-padding-x" id="indi_list_table-charts_'. $table_id. '" style="display:none">
+		<div class="grid-x grid-margin-x grid-padding-x" id="indi_list_table-charts_' . $table_id . '" style="display:none">
 			<div class="cell medium-3 text-center">
 				' . print_chart_by_decade($birt_by_decade, KT_I18N::translate('Decade of birth')) . '
 			</div>
@@ -583,9 +606,10 @@ function format_indi_table($datalist, $option='') {
 	return $html;
 }
 
-// print a simplified table of individuals, similar to main indiList, but with many ddetailed columns removed
+// print a simplified table of individuals, similar to main indiList, but with many detailed columns removed
 // Used in Statistics tables
-function simple_indi_table($datalist) {
+function simple_indi_table($datalist)
+{
 	global $iconStyle, $GEDCOM, $SEARCH_SPIDER, $MAX_ALIVE_AGE, $controller;
 
 	$SHOW_EST_LIST_DATES = get_gedcom_setting(KT_GED_ID, 'SHOW_EST_LIST_DATES');
@@ -598,7 +622,8 @@ function simple_indi_table($datalist) {
 	if (KT_USER_CAN_EDIT) {
 		$controller
 			->addExternalJavascript(KT_DATATABLES_BUTTONS)
-			->addExternalJavascript(KT_DATATABLES_HTML5);
+			->addExternalJavascript(KT_DATATABLES_HTML5)
+		;
 		$buttons = 'B';
 	} else {
 		$buttons = '';
@@ -615,7 +640,24 @@ function simple_indi_table($datalist) {
 			jQuery("#simpleIndiTable").dataTable({
 				dom: \'<"top"p' . $buttons . 'f<"clear">irl>t<"bottom"pl>\',
 				' . KT_I18N::datatablesI18N() . ',
-				buttons: [{extend: "csvHtml5", exportOptions: {columns: [0,1,4,6,7,9] }}],
+				buttons: [
+					{extend: "csvHtml5", 
+						exportOptions: {
+							columns: ":visible"
+						}
+					},
+					{text: "JSON",
+						action: function ( e, dt, button, config ) {
+							var data = dt.buttons.exportData({
+								columns: ":visible"
+							}); 
+							jQuery.fn.dataTable.fileSave(
+								new Blob( [ JSON.stringify( data ) ] ),
+								"Table export.json"
+							);
+						}
+					}
+				],
 				autoWidth: false,
 				processing: true,
 				retrieve: true,
@@ -648,7 +690,8 @@ function simple_indi_table($datalist) {
 
 			jQuery(".indi-list").css("visibility", "visible");
 			jQuery(".loading-image").css("display", "none");
-	');
+	')
+	;
 
 	$stats = new KT_Stats($GEDCOM);
 
@@ -660,7 +703,7 @@ function simple_indi_table($datalist) {
 	}
 
 	// Inititialise chart data
-	for ($age = 0; $age <= $max_age; $age ++) {
+	for ($age = 0; $age <= $max_age; $age++) {
 		$deat_by_age[$age] = '';
 	}
 	for ($year = 1550; $year < 2030; $year += 10) {
@@ -693,8 +736,8 @@ function simple_indi_table($datalist) {
 				</thead>
 				<tbody>';
 
-	$d100y			= new KT_Date(date('Y')-100);  // 100 years ago
-	$unique_indis	= array(); // Don't double-count indis with multiple names.
+	$d100y = new KT_Date(date('Y') - 100);  // 100 years ago
+	$unique_indis = []; // Don't double-count indis with multiple names.
 
 	foreach ($datalist as $key => $value) {
 		if (is_object($value)) { // Array of objects
@@ -703,123 +746,131 @@ function simple_indi_table($datalist) {
 			$person = KT_Person::getInstance($value);
 		} else { // Array of search results
 			$gid = $key;
-			if (isset($value['gid'])) $gid = $value['gid']; // from indilist
-			if (isset($value[4])) $gid = $value[4]; // from indilist ALL
+			if (isset($value['gid'])) {
+				$gid = $value['gid'];
+			} // from indilist
+			if (isset($value[4])) {
+				$gid = $value[4];
+			} // from indilist ALL
 			$person = KT_Person::getInstance($gid);
 		}
-		if (is_null($person)) continue;
-		if ($person->getType() !== 'INDI') continue;
+		if (is_null($person)) {
+			continue;
+		}
+		if ('INDI' !== $person->getType()) {
+			continue;
+		}
 		if (!$person->canDisplayName()) {
 			continue;
 		}
 		$html .= '<tr>';
-			//-- Indi name(s)
-			$html .= '<td colspan="2" class="nowrap">';
-				foreach ($person->getAllNames() as $num => $name) {
-					if ($name['type'] == 'NAME') {
-						$title = '';
-					} else {
-						$title = 'title="' . strip_tags(KT_Gedcom_Tag::getLabel($name['type'], $person)) . '"';
-					}
-					if ($num == $person->getPrimaryName()) {
-						$class		= ' class="name2"';
-						$sex_image	= $person->getSexImage();
-						list($surn, $givn)=explode(',', $name['sort']);
-					} else {
-						$class		= '';
-						$sex_image	= '';
-					}
-					$html .= '<a '. $title . ' href="'. $person->getHtmlUrl() . '"' . $class . '>' . $name['full'] . '</a>' . $sex_image . '<br>';
+		// -- Indi name(s)
+		$html .= '<td colspan="2" class="nowrap">';
+		foreach ($person->getAllNames() as $num => $name) {
+			if ('NAME' == $name['type']) {
+				$title = '';
+			} else {
+				$title = 'title="' . strip_tags(KT_Gedcom_Tag::getLabel($name['type'], $person)) . '"';
+			}
+			if ($num == $person->getPrimaryName()) {
+				$class = ' class="name2"';
+				$sex_image = $person->getSexImage();
+				[$surn, $givn] = explode(',', $name['sort']);
+			} else {
+				$class = '';
+				$sex_image = '';
+			}
+			$html .= '<a ' . $title . ' href="' . $person->getHtmlUrl() . '"' . $class . '>' . $name['full'] . '</a>' . $sex_image . '<br>';
+		}
+		$html .= '</td>';
+		// Dummy column to match colspan in header
+		$html .= '<td hidden></td>';
+		// -- GIVN/SURN
+		// Use "AAAA" as a separator (instead of ",") as Javascript.localeCompare() ignores
+		// punctuation and "ANN,ROACH" would sort after "ANNE,ROACH", instead of before it.
+		// Similarly, @N.N. would sort as NN.
+		$html .= '<td>';
+		$html .= KT_Filter::escapeHtml(str_replace('@P.N.', 'AAAA', $givn)) . 'AAAA' . KT_Filter::escapeHtml(str_replace('@N.N.', 'AAAA', $surn));
+		$html .= '</td>';
+		$html .= '<td>';
+		$html .= KT_Filter::escapeHtml(str_replace('@N.N.', 'AAAA', $surn)) . 'AAAA' . KT_Filter::escapeHtml(str_replace('@P.N.', 'AAAA', $givn));
+		$html .= '</td>';
+		// -- Birth date
+		$html .= '<td>';
+		if ($birth_dates = $person->getAllBirthDates()) {
+			foreach ($birth_dates as $num => $birth_date) {
+				if ($num) {
+					$html .= '<br>';
 				}
-			$html .= '</td>';
-			// Dummy column to match colspan in header
-			$html .= '<td hidden></td>';
-		//-- GIVN/SURN
-			// Use "AAAA" as a separator (instead of ",") as Javascript.localeCompare() ignores
-			// punctuation and "ANN,ROACH" would sort after "ANNE,ROACH", instead of before it.
-			// Similarly, @N.N. would sort as NN.
-			$html .= '<td>';
-				$html .= KT_Filter::escapeHtml(str_replace('@P.N.', 'AAAA', $givn)) . 'AAAA' . KT_Filter::escapeHtml(str_replace('@N.N.', 'AAAA', $surn));
-			$html .= '</td>';
-			$html .= '<td>';
-				$html .= KT_Filter::escapeHtml(str_replace('@N.N.', 'AAAA', $surn)) . 'AAAA' . KT_Filter::escapeHtml(str_replace('@P.N.', 'AAAA', $givn));
-			$html .= '</td>';
-			//-- Birth date
-			$html .= '<td>';
-				if ($birth_dates = $person->getAllBirthDates()) {
-					foreach ($birth_dates as $num => $birth_date) {
-						if ($num) {
-							$html .= '<br>';
-						}
-						$html .= $birth_date->Display(!$SEARCH_SPIDER);
-					}
-					if ($birth_dates[0]->gregorianYear() >= 1550 && $birth_dates[0]->gregorianYear() < 2030 && !isset($unique_indis[$person->getXref()])) {
-						$birt_by_decade[(int)($birth_dates[0]->gregorianYear() / 10) * 10] .= $person->getSex();
-					}
-				} else {
-					$birth_date = $person->getEstimatedBirthDate();
-					if ($SHOW_EST_LIST_DATES) {
-						$html .= $birth_date->Display(!$SEARCH_SPIDER);
-					} else {
-						$html .= '&nbsp;';
-					}
-					$birth_dates[0] = new KT_Date('');
+				$html .= $birth_date->Display(!$SEARCH_SPIDER);
+			}
+			if ($birth_dates[0]->gregorianYear() >= 1550 && $birth_dates[0]->gregorianYear() < 2030 && !isset($unique_indis[$person->getXref()])) {
+				$birt_by_decade[(int) ($birth_dates[0]->gregorianYear() / 10) * 10] .= $person->getSex();
+			}
+		} else {
+			$birth_date = $person->getEstimatedBirthDate();
+			if ($SHOW_EST_LIST_DATES) {
+				$html .= $birth_date->Display(!$SEARCH_SPIDER);
+			} else {
+				$html .= '&nbsp;';
+			}
+			$birth_dates[0] = new KT_Date('');
+		}
+		$html .= '</td>';
+		// -- Event date (sortable)hidden by datatables code
+		$html .= '<td>';
+		$html .= $birth_date->JD();
+		$html .= '</td>';
+		// -- Birth place
+		$html .= '<td>';
+		foreach ($person->getAllBirthPlaces() as $n => $birth_place) {
+			$tmp = new KT_Place($birth_place, KT_GED_ID);
+			if ($n) {
+				$html .= '<br>';
+			}
+			$html .= '<a href="' . $tmp->getURL() . '" title="' . strip_tags($tmp->getFullName()) . '">' . $tmp->getShortName() . '</a>';
+		}
+		$html .= '</td>';
+		// -- Death date
+		$html .= '<td>';
+		if ($death_dates = $person->getAllDeathDates()) {
+			foreach ($death_dates as $num => $death_date) {
+				if ($num) {
+					$html .= '<br>';
 				}
-			$html .= '</td>';
-			//-- Event date (sortable)hidden by datatables code
-			$html .= '<td>';
-				$html .= $birth_date->JD();
-			$html .= '</td>';
-			//-- Birth place
-			$html .= '<td>';
-				foreach ($person->getAllBirthPlaces() as $n => $birth_place) {
-					$tmp = new KT_Place($birth_place, KT_GED_ID);
-					if ($n) {
-						$html .= '<br>';
-					}
-					$html .= '<a href="' . $tmp->getURL() . '" title="' . strip_tags($tmp->getFullName()) . '">' . $tmp->getShortName() . '</a>';
-				}
-			$html .= '</td>';
-			//-- Death date
-			$html .= '<td>';
-				if ($death_dates = $person->getAllDeathDates()) {
-					foreach ($death_dates as $num => $death_date) {
-						if ($num) {
-							$html .= '<br>';
-						}
-						$html .= $death_date->Display(!$SEARCH_SPIDER);
-					}
-					if ($death_dates[0]->gregorianYear() >= 1550 && $death_dates[0]->gregorianYear() < 2030 && !isset($unique_indis[$person->getXref()])) {
-						$deat_by_decade[(int)($death_dates[0]->gregorianYear() / 10) * 10] .= $person->getSex();
-					}
-				} else {
-					$death_date = $person->getEstimatedDeathDate();
-					// Estimated death dates are a fixed number of years after the birth date.
-					// Don't show estimates in the future.
-					if ($SHOW_EST_LIST_DATES && $death_date->MinJD() < KT_CLIENT_JD) {
-						$html .= $death_date->Display(!$SEARCH_SPIDER);
-					} else if ($person->isDead()) {
-						$html .= KT_I18N::translate('Yes');
-					} else {
-						$html .= '&nbsp;';
-					}
-					$death_dates[0] = new KT_Date('');
-				}
-			$html .= '</td>';
-			//-- Event date (sortable)hidden by datatables code
-			$html .= '<td>';
-				$html .= $death_date->JD();
-			$html .= '</td>';
-			//-- Death place
-			$html .= '<td>';
-				foreach ($person->getAllDeathPlaces() as $n => $death_place) {
-					$tmp = new KT_Place($death_place, KT_GED_ID);
-					if ($n) {
-						$html .= '<br>';
-					}
-					$html .= '<a href="' . $tmp->getURL() . '" title="'. strip_tags($tmp->getFullName()) . '">' . $tmp->getShortName() . '</a>';
-				}
-			$html .= '</td>';
+				$html .= $death_date->Display(!$SEARCH_SPIDER);
+			}
+			if ($death_dates[0]->gregorianYear() >= 1550 && $death_dates[0]->gregorianYear() < 2030 && !isset($unique_indis[$person->getXref()])) {
+				$deat_by_decade[(int) ($death_dates[0]->gregorianYear() / 10) * 10] .= $person->getSex();
+			}
+		} else {
+			$death_date = $person->getEstimatedDeathDate();
+			// Estimated death dates are a fixed number of years after the birth date.
+			// Don't show estimates in the future.
+			if ($SHOW_EST_LIST_DATES && $death_date->MinJD() < KT_CLIENT_JD) {
+				$html .= $death_date->Display(!$SEARCH_SPIDER);
+			} elseif ($person->isDead()) {
+				$html .= KT_I18N::translate('Yes');
+			} else {
+				$html .= '&nbsp;';
+			}
+			$death_dates[0] = new KT_Date('');
+		}
+		$html .= '</td>';
+		// -- Event date (sortable)hidden by datatables code
+		$html .= '<td>';
+		$html .= $death_date->JD();
+		$html .= '</td>';
+		// -- Death place
+		$html .= '<td>';
+		foreach ($person->getAllDeathPlaces() as $n => $death_place) {
+			$tmp = new KT_Place($death_place, KT_GED_ID);
+			if ($n) {
+				$html .= '<br>';
+			}
+			$html .= '<a href="' . $tmp->getURL() . '" title="' . strip_tags($tmp->getFullName()) . '">' . $tmp->getShortName() . '</a>';
+		}
+		$html .= '</td>';
 		$html .= '</tr>';
 
 		$unique_indis[$person->getXref()] = true;
@@ -831,28 +882,27 @@ function simple_indi_table($datalist) {
 }
 
 // print a table of families
-function format_fam_table($datalist, $option = '') {
+function format_fam_table($datalist, $option = '')
+{
 	global $iconStyle, $GEDCOM, $SHOW_LAST_CHANGE, $SEARCH_SPIDER, $controller;
 
 	if (KT_SCRIPT_NAME == 'search.php') {
-		$table_id = 'ID'.(int)(microtime(true)*1000000); // lists requires a unique ID in case there are multiple lists per page
+		$table_id = 'ID' . (int) (microtime(true) * 1000000); // lists requires a unique ID in case there are multiple lists per page
 	} else {
 		$table_id = 'famTable';
 	}
 
-	if ($option=='BIRT_PLAC' || $option=='DEAT_PLAC') {
+	if ('BIRT_PLAC' == $option || 'DEAT_PLAC' == $option) {
 		return;
 	}
 
-	if ($option=='sort_children') {
+	if ('sort_children' == $option) {
 		$sorting = 'sorting: [[16, "desc"]]';
 	} else {
 		$sorting = 'sorting: [[1, "asc"]]';
 	}
 
 	$html = '';
-
-
 
 	$controller
 		->addExternalJavascript(KT_DATATABLES_JS)
@@ -862,7 +912,8 @@ function format_fam_table($datalist, $option = '') {
 	if (KT_USER_CAN_EDIT) {
 		$controller
 			->addExternalJavascript(KT_DATATABLES_BUTTONS)
-			->addExternalJavascript(KT_DATATABLES_HTML5);
+			->addExternalJavascript(KT_DATATABLES_HTML5)
+		;
 		$buttons = 'B';
 	} else {
 		$buttons = '';
@@ -875,7 +926,7 @@ function format_fam_table($datalist, $option = '') {
 			jQuery("#' . $table_id . '").dataTable( {
 				dom: \'<"top"p' . $buttons . 'f<"clear">irl>t<"bottom"pl>\',
 				' . KT_I18N::datatablesI18N() . ',
-				buttons: [{extend: "csvHtml5", exportOptions: {columns: [0,1,4,6,7,10,12,15,16] }}],
+				buttons: [{extend: "csvHtml5", exportOptions: {columns: ":visible"}}],
 				autoWidth: false,
 				processing: true,
 				retrieve: true,
@@ -944,18 +995,18 @@ function format_fam_table($datalist, $option = '') {
 					btn.addClass("ui-state-active");
 					col.search(btn.data("filter-value")).draw();
 				}
-  			});
+			});
 
 			jQuery(".fam-list").css("visibility", "visible");
 			jQuery(".loading-image").css("display", "none");
-	');
+	')
+	;
 
-	$stats		= new KT_Stats($GEDCOM);
-	$max_age	= max((int) $stats->oldestMarriageMaleAge(), (int) $stats->oldestMarriageFemaleAge()) + 1;
+	$stats = new KT_Stats($GEDCOM);
+	$max_age = max((int) $stats->oldestMarriageMaleAge(), (int) $stats->oldestMarriageFemaleAge()) + 1;
 
-
-	//-- init chart data
-	for ($age = 0; $age <= $max_age; $age ++) {
+	// -- init chart data
+	for ($age = 0; $age <= $max_age; $age++) {
 		$marr_by_age[$age] = '';
 	}
 	for ($year = 1550; $year < 2030; $year += 10) {
@@ -981,9 +1032,9 @@ function format_fam_table($datalist, $option = '') {
 										data-filter-column="21"
 										data-filter-value="N"
 										class="ui-state-default"
-										title="' . KT_I18N::translate('Show couples where both partners are alive.').'"
+										title="' . KT_I18N::translate('Show couples where both partners are alive.') . '"
 									>
-										' . KT_I18N::translate('Both alive').'
+										' . KT_I18N::translate('Both alive') . '
 									</button>
 									<button
 										class="button ui-state-default has-tip top"
@@ -994,7 +1045,7 @@ function format_fam_table($datalist, $option = '') {
 										data-filter-column="21"
 										data-filter-value="W"
 										class="ui-state-default"
-										title="' . KT_I18N::translate('Show couples where only the female partner is deceased.').'"
+										title="' . KT_I18N::translate('Show couples where only the female partner is deceased.') . '"
 									>
 										' . KT_I18N::translate('Widower') . '
 									</button>
@@ -1007,7 +1058,7 @@ function format_fam_table($datalist, $option = '') {
 										data-filter-column="21"
 										data-filter-value="H"
 										class="ui-state-default"
-										title="' . KT_I18N::translate('Show couples where only the male partner is deceased.').'"
+										title="' . KT_I18N::translate('Show couples where only the male partner is deceased.') . '"
 									>
 										' . KT_I18N::translate('Widow') . '
 									</button>
@@ -1020,7 +1071,7 @@ function format_fam_table($datalist, $option = '') {
 										data-filter-column="21"
 										data-filter-value="Y"
 										class="ui-state-default"
-										title="' . KT_I18N::translate('Show couples where both partners are deceased.').'"
+										title="' . KT_I18N::translate('Show couples where both partners are deceased.') . '"
 									>
 										' . KT_I18N::translate('Both dead') . '
 									</button>
@@ -1048,7 +1099,7 @@ function format_fam_table($datalist, $option = '') {
 										data-filter-column="22"
 										data-filter-value="L"
 										class="ui-state-default"
-										title="' . KT_I18N::translate('These are couples who are alive but have no children recorded in the database.').'"
+										title="' . KT_I18N::translate('These are couples who are alive but have no children recorded in the database.') . '"
 									>
 										' . KT_I18N::translate('Leaves') . '
 									</button>
@@ -1063,9 +1114,9 @@ function format_fam_table($datalist, $option = '') {
 										data-filter-column="20"
 										data-filter-value="U"
 										class="ui-state-default"
-										title="' . KT_I18N::translate('Show couples with an unknown marriage date.').'"
+										title="' . KT_I18N::translate('Show couples with an unknown marriage date.') . '"
 									>
-										' . KT_Gedcom_Tag::getLabel('MARR').'
+										' . KT_Gedcom_Tag::getLabel('MARR') . '
 									</button>
 									<button
 										class="button ui-state-default has-tip top"
@@ -1076,9 +1127,9 @@ function format_fam_table($datalist, $option = '') {
 										data-filter-column="20"
 										data-filter-value="YES"
 										class="ui-state-default"
-										title="' . KT_I18N::translate('Show couples who married more than 100 years ago.').'"
+										title="' . KT_I18N::translate('Show couples who married more than 100 years ago.') . '"
 									>
-										'.KT_Gedcom_Tag::getLabel('MARR') . '&gt;100
+										' . KT_Gedcom_Tag::getLabel('MARR') . '&gt;100
 									</button>
 									<button
 										class="button ui-state-default has-tip top"
@@ -1089,7 +1140,7 @@ function format_fam_table($datalist, $option = '') {
 										data-filter-column="20"
 										data-filter-value="Y100"
 										class="ui-state-default"
-										title="' . KT_I18N::translate('Show couples who married within the last 100 years.').'"
+										title="' . KT_I18N::translate('Show couples who married within the last 100 years.') . '"
 									>
 										' . KT_Gedcom_Tag::getLabel('MARR') . '&lt;=100
 									</button>
@@ -1102,7 +1153,7 @@ function format_fam_table($datalist, $option = '') {
 										data-filter-column="20"
 										data-filter-value="D"
 										class="ui-state-default"
-										title="' . KT_I18N::translate('Show divorced couples.').'"
+										title="' . KT_I18N::translate('Show divorced couples.') . '"
 									>
 										' . KT_Gedcom_Tag::getLabel('DIV') . '
 									</button>
@@ -1115,7 +1166,7 @@ function format_fam_table($datalist, $option = '') {
 										data-filter-column="20"
 										data-filter-value="M"
 										class="ui-state-default"
-										title="' . KT_I18N::translate('Show couples where either partner married more than once.').'"
+										title="' . KT_I18N::translate('Show couples where either partner married more than once.') . '"
 									>
 										' . KT_I18N::translate('Multiple marriages') . '
 									</button>
@@ -1128,26 +1179,26 @@ function format_fam_table($datalist, $option = '') {
 						<th>' . KT_Gedcom_Tag::getLabel('SURN') . '</th>
 						<th>HUSB:GIVN_SURN</th>
 						<th>HUSB:SURN_GIVN</th>
-						<th>'. KT_Gedcom_Tag::getLabel('AGE'). '</th>
+						<th>' . KT_Gedcom_Tag::getLabel('AGE') . '</th>
 						<th>AGE</th>
-						<th>'. KT_Gedcom_Tag::getLabel('GIVN'). '</th>
-						<th>'. KT_Gedcom_Tag::getLabel('SURN'). '</th>
+						<th>' . KT_Gedcom_Tag::getLabel('GIVN') . '</th>
+						<th>' . KT_Gedcom_Tag::getLabel('SURN') . '</th>
 						<th>WIFE:GIVN_SURN</th>
 						<th>WIFE:SURN_GIVN</th>
-						<th>'. KT_Gedcom_Tag::getLabel('AGE'). '</th>
+						<th>' . KT_Gedcom_Tag::getLabel('AGE') . '</th>
 						<th>AGE</th>
-						<th>'. KT_Gedcom_Tag::getLabel('MARR'). '</th>
+						<th>' . KT_Gedcom_Tag::getLabel('MARR') . '</th>
 						<th>MARR:DATE</th>
 						<th data-tooltip aria-haspopup="true" class="has-tip top" data-disable-hover="false" title="' . KT_I18N::translate('Years since marriage') . '">
 							<i class="' . $iconStyle . ' fa-bell"></i>
 						</th>
-						<th>'. KT_Gedcom_Tag::getLabel('PLAC'). '</th>
+						<th>' . KT_Gedcom_Tag::getLabel('PLAC') . '</th>
 						<th data-tooltip aria-haspopup="true" class="has-tip top" data-disable-hover="false" title="' . KT_I18N::translate('Number of children') . '">
 							<i class="' . $iconStyle . ' fa-child"></i>
 						</th>
 						<th>NCHI</th>
-						<th' .($SHOW_LAST_CHANGE?'':''). '>'. KT_Gedcom_Tag::getLabel('CHAN'). '</th>
-						<th' .($SHOW_LAST_CHANGE?'':''). '>CHAN</th>
+						<th' . ($SHOW_LAST_CHANGE ? '' : '') . '>' . KT_Gedcom_Tag::getLabel('CHAN') . '</th>
+						<th' . ($SHOW_LAST_CHANGE ? '' : '') . '>CHAN</th>
 						<th>MARR</th>
 						<th>DEAT</th>
 						<th>TREE</th>
@@ -1155,57 +1206,63 @@ function format_fam_table($datalist, $option = '') {
 				</thead>
 				<tbody>';
 
-	$d100y = new KT_Date(date('Y')-100);  // 100 years ago
+	$d100y = new KT_Date(date('Y') - 100);  // 100 years ago
 	foreach ($datalist as $family) {
-		//-- Retrieve husband and wife
+		// -- Retrieve husband and wife
 		$husb = $family->getHusband();
-		if (is_null($husb)) $husb = new KT_Person('');
+		if (is_null($husb)) {
+			$husb = new KT_Person('');
+		}
 		$wife = $family->getWife();
-		if (is_null($wife)) $wife = new KT_Person('');
+		if (is_null($wife)) {
+			$wife = new KT_Person('');
+		}
 		if (!$family->canDisplayDetails()) {
 			continue;
 		}
-		//-- place filtering
-		if ($option == 'MARR_PLAC' && strstr($family->getMarriagePlace(), $filter) === false) continue;
+		// -- place filtering
+		if ('MARR_PLAC' == $option && false === strstr($family->getMarriagePlace(), $filter)) {
+			continue;
+		}
 		$html .= '<tr>';
-		//-- Husband name(s)
+		// -- Husband name(s)
 		$html .= '<td colspan="2">';
-			foreach ($husb->getAllNames() as $num=>$name) {
-				if ($name['type'] == 'NAME') {
-					$title = '';
-				} else {
-					$title = 'title="' . strip_tags(KT_Gedcom_Tag::getLabel($name['type'], $husb)) . '"';
-				}
-				if ($num == $husb->getPrimaryName()) {
-					$class		= ' class="name2"';
-					$sex_image	= $husb->getSexImage();
-					list($surn, $givn) = explode(',', $name['sort']);
-				} else {
-					$class		= '';
-					$sex_image	= '';
-				}
-				// Only show married names if they are the name we are filtering by.
-				if ($name['type'] != '_MARNM' || $num == $husb->getPrimaryName()) {
-					$html .= '<a ' . $title . ' href="' . $family->getHtmlUrl() . '"' . $class . '>' . highlight_search_hits($name['full']) . '</a>' . $sex_image . '<br>';
-				}
+		foreach ($husb->getAllNames() as $num => $name) {
+			if ('NAME' == $name['type']) {
+				$title = '';
+			} else {
+				$title = 'title="' . strip_tags(KT_Gedcom_Tag::getLabel($name['type'], $husb)) . '"';
 			}
-			// Husband parents
-			$html .= $husb->getPrimaryParentsNames('parents details1', 'none');
+			if ($num == $husb->getPrimaryName()) {
+				$class = ' class="name2"';
+				$sex_image = $husb->getSexImage();
+				[$surn, $givn] = explode(',', $name['sort']);
+			} else {
+				$class = '';
+				$sex_image = '';
+			}
+			// Only show married names if they are the name we are filtering by.
+			if ('_MARNM' != $name['type'] || $num == $husb->getPrimaryName()) {
+				$html .= '<a ' . $title . ' href="' . $family->getHtmlUrl() . '"' . $class . '>' . highlight_search_hits($name['full']) . '</a>' . $sex_image . '<br>';
+			}
+		}
+		// Husband parents
+		$html .= $husb->getPrimaryParentsNames('parents details1', 'none');
 		$html .= '</td>';
 		// Dummy column to match colspan in header
 		$html .= '<td style="display:none;"></td>';
-		//-- Husb GIVN
+		// -- Husb GIVN
 		// Use "AAAA" as a separator (instead of ",") as Javascript.localeCompare() ignores
 		// punctuation and "ANN,ROACH" would sort after "ANNE,ROACH", instead of before it.
 		// Similarly, @N.N. would sort as NN.
 		$html .= '<td>' . KT_Filter::escapeHtml(str_replace('@P.N.', 'AAAA', $givn)) . 'AAAA' . KT_Filter::escapeHtml(str_replace('@N.N.', 'AAAA', $surn)) . '</td>';
 		$html .= '<td>' . KT_Filter::escapeHtml(str_replace('@N.N.', 'AAAA', $surn)) . 'AAAA' . KT_Filter::escapeHtml(str_replace('@P.N.', 'AAAA', $givn)) . '</td>';
 		$mdate = $family->getMarriageDate();
-		//-- Husband age
+		// -- Husband age
 		$hdate = $husb->getBirthDate();
 		if ($hdate->isOK() && $mdate->isOK()) {
 			if ($hdate->gregorianYear() >= 1550 && $hdate->gregorianYear() < 2030) {
-				$birt_by_decade[(int)($hdate->gregorianYear() / 10) * 10] .= $husb->getSex();
+				$birt_by_decade[(int) ($hdate->gregorianYear() / 10) * 10] .= $husb->getSex();
 			}
 			$hage = KT_Date::getAge($hdate, $mdate, 0);
 			if ($hage >= 0 && $hage <= $max_age) {
@@ -1216,45 +1273,45 @@ function format_fam_table($datalist, $option = '') {
 			<td>' . KT_Date::getAge($hdate, $mdate, 2) . '</td>
 			<td>' . KT_Date::getAge($hdate, $mdate, 1) . '</td>
 		';
-		//-- Wife name(s)
+		// -- Wife name(s)
 		$html .= '<td colspan="2">';
-			foreach ($wife->getAllNames() as $num => $name) {
-				if ($name['type'] == 'NAME') {
-					$title = '';
-				} else {
-					$title = 'title="' . strip_tags(KT_Gedcom_Tag::getLabel($name['type'], $wife)) . '"';
-				}
-				if ($num == $wife->getPrimaryName()) {
-					$class		= ' class="name2"';
-					$sex_image	= $wife->getSexImage();
-					list($surn, $givn) = explode(',', $name['sort']);
-				} else {
-					$class		= '';
-					$sex_image	= '';
-				}
-				// Only show married names if they are the name we are filtering by.
-				if ($name['type'] != '_MARNM' || $num == $wife->getPrimaryName()) {
-					$html .= '<a ' . $title . ' href="' . $family->getHtmlUrl() . '"' . $class . '>' . highlight_search_hits($name['full']) . '</a>' . $sex_image . '<br>';
-				}
+		foreach ($wife->getAllNames() as $num => $name) {
+			if ('NAME' == $name['type']) {
+				$title = '';
+			} else {
+				$title = 'title="' . strip_tags(KT_Gedcom_Tag::getLabel($name['type'], $wife)) . '"';
 			}
-			// Wife parents
-			$html .= $wife->getPrimaryParentsNames('parents details1', 'none');
+			if ($num == $wife->getPrimaryName()) {
+				$class = ' class="name2"';
+				$sex_image = $wife->getSexImage();
+				[$surn, $givn] = explode(',', $name['sort']);
+			} else {
+				$class = '';
+				$sex_image = '';
+			}
+			// Only show married names if they are the name we are filtering by.
+			if ('_MARNM' != $name['type'] || $num == $wife->getPrimaryName()) {
+				$html .= '<a ' . $title . ' href="' . $family->getHtmlUrl() . '"' . $class . '>' . highlight_search_hits($name['full']) . '</a>' . $sex_image . '<br>';
+			}
+		}
+		// Wife parents
+		$html .= $wife->getPrimaryParentsNames('parents details1', 'none');
 		$html .= '</td>';
 		// Dummy column to match colspan in header
 		$html .= '<td style="display:none;"></td>';
-		//-- Wife GIVN
-		//-- Husb GIVN
+		// -- Wife GIVN
+		// -- Husb GIVN
 		// Use "AAAA" as a separator (instead of ",") as Javascript.localeCompare() ignores
 		// punctuation and "ANN,ROACH" would sort after "ANNE,ROACH", instead of before it.
 		// Similarly, @N.N. would sort as NN.
-		$html .= '<td>' . KT_Filter::escapeHtml(str_replace('@P.N.', 'AAAA', $givn)) . 'AAAA'. KT_Filter::escapeHtml(str_replace('@N.N.', 'AAAA', $surn)) . '</td>';
-		$html .= '<td>' . KT_Filter::escapeHtml(str_replace('@N.N.', 'AAAA', $surn)) . 'AAAA'. KT_Filter::escapeHtml(str_replace('@P.N.', 'AAAA', $givn)) . '</td>';
+		$html .= '<td>' . KT_Filter::escapeHtml(str_replace('@P.N.', 'AAAA', $givn)) . 'AAAA' . KT_Filter::escapeHtml(str_replace('@N.N.', 'AAAA', $surn)) . '</td>';
+		$html .= '<td>' . KT_Filter::escapeHtml(str_replace('@N.N.', 'AAAA', $surn)) . 'AAAA' . KT_Filter::escapeHtml(str_replace('@P.N.', 'AAAA', $givn)) . '</td>';
 		$mdate = $family->getMarriageDate();
-		//-- Wife age
+		// -- Wife age
 		$wdate = $wife->getBirthDate();
 		if ($wdate->isOK() && $mdate->isOK()) {
 			if ($wdate->gregorianYear() >= 1550 && $wdate->gregorianYear() < 2030) {
-				$birt_by_decade[(int)($wdate->gregorianYear() / 10) * 10] .= $wife->getSex();
+				$birt_by_decade[(int) ($wdate->gregorianYear() / 10) * 10] .= $wife->getSex();
 			}
 			$wage = KT_Date::getAge($wdate, $mdate, 0);
 			if ($wage >= 0 && $wage <= $max_age) {
@@ -1265,89 +1322,97 @@ function format_fam_table($datalist, $option = '') {
 			<td>' . KT_Date::getAge($wdate, $mdate, 2) . '</td>
 			<td>' . KT_Date::getAge($wdate, $mdate, 1) . '</td>
 			';
-		//-- Marriage date
+		// -- Marriage date
 		$html .= '<td>';
-			if ($marriage_dates = $family->getAllMarriageDates()) {
-				foreach ($marriage_dates as $n => $marriage_date) {
-					if ($n) {
-						$html .= '<br>';
-					}
-					$html .= '<div>' . $marriage_date->Display(!$SEARCH_SPIDER) . '</div>';
-				}
-				if ($marriage_dates[0]->gregorianYear() >= 1550 && $marriage_dates[0]->gregorianYear() < 2030) {
-					$marr_by_decade[(int)($marriage_dates[0]->gregorianYear() / 10) * 10] .= $husb->getSex() . $wife->getSex();
-				}
-			} else if (get_sub_record(1, '1 _NMR', $family->getGedcomRecord())) {
-				$hus = $family->getHusband();
-				$wif = $family->getWife();
-				if (empty($wif) && !empty($hus)) $html .= KT_Gedcom_Tag::getLabel('_NMR', $hus);
-				else if (empty($hus) && !empty($wif)) $html .= KT_Gedcom_Tag::getLabel('_NMR', $wif);
-				else $html .= KT_Gedcom_Tag::getLabel('_NMR');
-			} else if (get_sub_record(1, '1 _NMAR', $family->getGedcomRecord())) {
-				$hus = $family->getHusband();
-				$wif = $family->getWife();
-				if (empty($wif) && !empty($hus)) $html .= KT_Gedcom_Tag::getLabel('_NMAR', $hus);
-				else if (empty($hus) && !empty($wif)) $html .= KT_Gedcom_Tag::getLabel('_NMAR', $wif);
-				else $html .= KT_Gedcom_Tag::getLabel('_NMAR');
-			} else {
-				$factdetail = explode(' ', trim($family->getMarriageRecord()));
-				if (isset($factdetail)) {
-					if (count($factdetail) >= 3) {
-						if (strtoupper($factdetail[2]) != "N") {
-							$html .= KT_I18N::translate('Yes');
-						} else {
-							$html .= KT_I18N::translate('No');
-						}
-					} else {
-						$html .= '&nbsp;';
-					}
-				}
-			}
-		$html .= '</td>';
-		//-- Event date (sortable)hidden by datatables code
-		$html .= '<td>';
-			if ($marriage_dates) {
-				$html .= $marriage_date->JD();
-			} else {
-				$html .= 0;
-			}
-		$html .= '</td>';
-		//-- Marriage anniversary
-		$html .= '<td>' . KT_Date::getAge($mdate, null, 2) . '</td>';
-		//-- Marriage place
-		$html .= '<td>';
-			foreach ($family->getAllMarriagePlaces() as $n => $marriage_place) {
-				$tmp = new KT_Place($marriage_place, KT_GED_ID);
+		if ($marriage_dates = $family->getAllMarriageDates()) {
+			foreach ($marriage_dates as $n => $marriage_date) {
 				if ($n) {
 					$html .= '<br>';
 				}
-				if ($SEARCH_SPIDER) {
-					$html .= $tmp->getShortName();
+				$html .= '<div>' . $marriage_date->Display(!$SEARCH_SPIDER) . '</div>';
+			}
+			if ($marriage_dates[0]->gregorianYear() >= 1550 && $marriage_dates[0]->gregorianYear() < 2030) {
+				$marr_by_decade[(int) ($marriage_dates[0]->gregorianYear() / 10) * 10] .= $husb->getSex() . $wife->getSex();
+			}
+		} elseif (get_sub_record(1, '1 _NMR', $family->getGedcomRecord())) {
+			$hus = $family->getHusband();
+			$wif = $family->getWife();
+			if (empty($wif) && !empty($hus)) {
+				$html .= KT_Gedcom_Tag::getLabel('_NMR', $hus);
+			} elseif (empty($hus) && !empty($wif)) {
+				$html .= KT_Gedcom_Tag::getLabel('_NMR', $wif);
+			} else {
+				$html .= KT_Gedcom_Tag::getLabel('_NMR');
+			}
+		} elseif (get_sub_record(1, '1 _NMAR', $family->getGedcomRecord())) {
+			$hus = $family->getHusband();
+			$wif = $family->getWife();
+			if (empty($wif) && !empty($hus)) {
+				$html .= KT_Gedcom_Tag::getLabel('_NMAR', $hus);
+			} elseif (empty($hus) && !empty($wif)) {
+				$html .= KT_Gedcom_Tag::getLabel('_NMAR', $wif);
+			} else {
+				$html .= KT_Gedcom_Tag::getLabel('_NMAR');
+			}
+		} else {
+			$factdetail = explode(' ', trim($family->getMarriageRecord()));
+			if (isset($factdetail)) {
+				if (count($factdetail) >= 3) {
+					if ('N' != strtoupper($factdetail[2])) {
+						$html .= KT_I18N::translate('Yes');
+					} else {
+						$html .= KT_I18N::translate('No');
+					}
 				} else {
-					$html .= '<a href="'. $tmp->getURL() . '" title="'. strip_tags($tmp->getFullName()) . '">';
-					$html .= highlight_search_hits($tmp->getShortName()) . '</a>';
+					$html .= '&nbsp;';
 				}
 			}
+		}
 		$html .= '</td>';
-		//-- Number of children
+		// -- Event date (sortable)hidden by datatables code
+		$html .= '<td>';
+		if ($marriage_dates) {
+			$html .= $marriage_date->JD();
+		} else {
+			$html .= 0;
+		}
+		$html .= '</td>';
+		// -- Marriage anniversary
+		$html .= '<td>' . KT_Date::getAge($mdate, null, 2) . '</td>';
+		// -- Marriage place
+		$html .= '<td>';
+		foreach ($family->getAllMarriagePlaces() as $n => $marriage_place) {
+			$tmp = new KT_Place($marriage_place, KT_GED_ID);
+			if ($n) {
+				$html .= '<br>';
+			}
+			if ($SEARCH_SPIDER) {
+				$html .= $tmp->getShortName();
+			} else {
+				$html .= '<a href="' . $tmp->getURL() . '" title="' . strip_tags($tmp->getFullName()) . '">';
+				$html .= highlight_search_hits($tmp->getShortName()) . '</a>';
+			}
+		}
+		$html .= '</td>';
+		// -- Number of children
 		$nchi = $family->getNumberOfChildren();
 		$html .= '
 			<td>' . KT_I18N::number($nchi) . '</td>
-			<td>'. $nchi. '</td>
+			<td>' . $nchi . '</td>
 		';
-		//-- Last change
+		// -- Last change
 		if ($SHOW_LAST_CHANGE) {
 			$html .= '<td>' . $family->LastChangeTimestamp() . '</td>';
 		} else {
 			$html .= '<td>&nbsp;</td>';
 		}
-		//-- Last change hidden sort column
+		// -- Last change hidden sort column
 		if ($SHOW_LAST_CHANGE) {
 			$html .= '<td>' . $family->LastChangeTimestamp(true) . '</td>';
 		} else {
 			$html .= '<td>&nbsp;</td>';
 		}
-		//-- Sorting by marriage date
+		// -- Sorting by marriage date
 		$html .= '<td>';
 		if (!$family->canDisplayDetails() || !$mdate->isOK()) {
 			$html .= 'U';
@@ -1361,28 +1426,46 @@ function format_fam_table($datalist, $option = '') {
 		if ($family->isDivorced()) {
 			$html .= 'D';
 		}
-		if (count($husb->getSpouseFamilies())>1 || count($wife->getSpouseFamilies())>1) {
+		if (count($husb->getSpouseFamilies()) > 1 || count($wife->getSpouseFamilies()) > 1) {
 			$html .= 'M';
 		}
 		$html .= '</td>';
-		//-- Sorting alive/dead
+		// -- Sorting alive/dead
 		$html .= '<td>';
-			if ($husb->isDead() && $wife->isDead()) $html .= 'Y';
-			if ($husb->isDead() && !$wife->isDead()) {
-				if ($wife->getSex() == 'F') $html .= 'H';
-				if ($wife->getSex() == 'M') $html .= 'W'; // male partners
+		if ($husb->isDead() && $wife->isDead()) {
+			$html .= 'Y';
+		}
+		if ($husb->isDead() && !$wife->isDead()) {
+			if ('F' == $wife->getSex()) {
+				$html .= 'H';
 			}
-			if (!$husb->isDead() && $wife->isDead()) {
-				if ($husb->getSex() == 'M') $html .= 'W';
-				if ($husb->getSex() == 'F') $html .= 'H'; // female partners
+			if ('M' == $wife->getSex()) {
+				$html .= 'W';
+			} // male partners
+		}
+		if (!$husb->isDead() && $wife->isDead()) {
+			if ('M' == $husb->getSex()) {
+				$html .= 'W';
 			}
-			if (!$husb->isDead() && !$wife->isDead()) $html .= 'N';
+			if ('F' == $husb->getSex()) {
+				$html .= 'H';
+			} // female partners
+		}
+		if (!$husb->isDead() && !$wife->isDead()) {
+			$html .= 'N';
+		}
 		$html .= '</td>';
-		//-- Roots or Leaves
+		// -- Roots or Leaves
 		$html .= '<td>';
-			if (!$husb->getChildFamilies() && !$wife->getChildFamilies()) { $html .= 'R'; } // roots
-			elseif (!$husb->isDead() && !$wife->isDead() && $family->getNumberOfChildren() < 1) { $html .= 'L'; } // leaves
-			else { $html .= '&nbsp;'; }
+		if (!$husb->getChildFamilies() && !$wife->getChildFamilies()) {
+			$html .= 'R';
+		} // roots
+		elseif (!$husb->isDead() && !$wife->isDead() && $family->getNumberOfChildren() < 1) {
+			$html .= 'L';
+		} // leaves
+		else {
+			$html .= '&nbsp;';
+		}
 		$html .= '</td>
 		</tr>';
 	}
@@ -1401,7 +1484,7 @@ function format_fam_table($datalist, $option = '') {
 		</div>';
 
 	$html .= '
-		<div class="grid-x grid-margin-x grid-padding-x" id="fam_list_table-charts_'. $table_id. '" style="display:none">
+		<div class="grid-x grid-margin-x grid-padding-x" id="fam_list_table-charts_' . $table_id . '" style="display:none">
 			<div class="cell medium-3 text-center">
 				' . print_chart_by_decade($birt_by_decade, KT_I18N::translate('Decade of birth')) . '
 			</div>
@@ -1418,7 +1501,8 @@ function format_fam_table($datalist, $option = '') {
 }
 
 // print a table of sources
-function format_sour_table($datalist) {
+function format_sour_table($datalist)
+{
 	global $iconStyle, $SHOW_LAST_CHANGE, $controller;
 
 	// Count the number of linked records.  These numbers include private records.
@@ -1437,9 +1521,8 @@ function format_sour_table($datalist) {
 		"SELECT CONCAT(l_to, '@', l_file), COUNT(*) FROM `##other` JOIN `##link` ON l_from = o_id AND l_file = o_file AND o_type = 'NOTE' AND l_type = 'SOUR' GROUP BY l_to, l_file"
 	)->fetchAssoc();
 
-
 	if (KT_SCRIPT_NAME == 'search.php') {
-		$table_id = 'ID' . (int)(microtime(true)*1000000); // lists requires a unique ID in case there are multiple lists per page
+		$table_id = 'ID' . (int) (microtime(true) * 1000000); // lists requires a unique ID in case there are multiple lists per page
 	} else {
 		$table_id = 'sourTable';
 	}
@@ -1452,7 +1535,8 @@ function format_sour_table($datalist) {
 	if (KT_USER_CAN_EDIT) {
 		$controller
 			->addExternalJavascript(KT_DATATABLES_BUTTONS)
-			->addExternalJavascript(KT_DATATABLES_HTML5);
+			->addExternalJavascript(KT_DATATABLES_HTML5)
+		;
 		$buttons = 'B';
 	} else {
 		$buttons = '';
@@ -1467,7 +1551,7 @@ function format_sour_table($datalist) {
 			jQuery("#' . $table_id . '").dataTable({
 				dom: \'<"top"' . $buttons . 'lp<"clear">irf>t<"bottom"pl>\',
 				' . KT_I18N::datatablesI18N() . ',
-				buttons: [{extend: "csv", exportOptions: {columns: [0,2,3,5,7,9] }}],
+				buttons: [{extend: "csvHtml5", exportOptions: {columns: ":visible"}}],
 				autoWidth: false,
 				processing: true,
 				retrieve: true,
@@ -1499,9 +1583,10 @@ function format_sour_table($datalist) {
 		   });
 		   jQuery("#' . $table_id . '").css("visibility", "visible");
 		   jQuery(".loading-image").css("display", "none");
-		');
+		')
+	;
 
-	//--table wrapper
+	// --table wrapper
 	$html .= '
 		<div class="cell text-center loading-image">
 			<i class="' . $iconStyle . ' fa-spinner fa-spin fa-3x"></i>
@@ -1522,12 +1607,12 @@ function format_sour_table($datalist) {
 						<th>#OBJE</th>
 						<th>' . KT_I18N::translate('Shared notes') . '</th>
 						<th>#NOTE</th>
-						<th>'. KT_Gedcom_Tag::getLabel('CHAN') . '</th>
+						<th>' . KT_Gedcom_Tag::getLabel('CHAN') . '</th>
 						<th>CHAN</th>
 						<th class="delete_src" style="' . (KT_USER_GEDCOM_ADMIN ? '' : 'display: none;') . '">
 							<input
 								type="button"
-								value = "' . KT_I18N::translate('Delete'). '"
+								value = "' . KT_I18N::translate('Delete') . '"
 								class="button tiny"
 								onclick="if (confirm(\'' . htmlspecialchars(KT_I18N::translate('Permanently delete these records?')) . '\')) {return checkbox_delete(\'sources\');} else {return false;}"
 								>
@@ -1536,94 +1621,94 @@ function format_sour_table($datalist) {
 					</tr>
 				</thead>
 				<tbody>';
-					$n = 0;
-					foreach ($datalist as $key => $value) {
-						if (is_object($value)) { // Array of objects
-							$source = $value;
-						} elseif (!is_array($value)) { // Array of IDs
-							$source = KT_Source::getInstance($key); // from placelist
-							if (is_null($source)) {
-								$source = KT_Source::getInstance($value);
-							}
-							unset($value);
-						} else { // Array of search results
-							$gid = '';
-							if (isset($value['gid'])) {
-								$gid = $value['gid'];
-							}
-							if (isset($value['gedcom'])) {
-								$source = new KT_Source($value['gedcom']);
-							} else {
-								$source = KT_Source::getInstance($gid);
-							}
-						}
-						if (!$source || !$source->canDisplayDetails()) {
-							continue;
-						}
-						$html .= '<tr>';
-							//-- Source name(s)
-							$html .= '<td>';
-								foreach ($source->getAllNames() as $n => $name) {
-									if ($n) {
-										$html .= '<br>';
-									}
-									if ($n == $source->getPrimaryName()) {
-										$html .= '<a class="name2" href="' . $source->getHtmlUrl() . '">' . highlight_search_hits($name['full']) . '</a>';
-									} else {
-										$html .= '<a href="' . $source->getHtmlUrl() . '">' . highlight_search_hits($name['full']) . '</a>';
-									}
-								}
-							$html .= '</td>';
-							// Sortable name
-							$html .= '<td>' . strip_tags($source->getFullName()) . '</td>';
-							$key = $source->getXref() . '@' . KT_GED_ID;
-							//-- Author
-							$html .= '<td>' . highlight_search_hits(htmlspecialchars((string) $source->getAuth())) . '</td>';
-								//-- Linked INDIs
-								$num = array_key_exists($key, $count_individuals) ? $count_individuals[$key] : 0;
-							$html .= '
+	$n = 0;
+	foreach ($datalist as $key => $value) {
+		if (is_object($value)) { // Array of objects
+			$source = $value;
+		} elseif (!is_array($value)) { // Array of IDs
+			$source = KT_Source::getInstance($key); // from placelist
+			if (is_null($source)) {
+				$source = KT_Source::getInstance($value);
+			}
+			unset($value);
+		} else { // Array of search results
+			$gid = '';
+			if (isset($value['gid'])) {
+				$gid = $value['gid'];
+			}
+			if (isset($value['gedcom'])) {
+				$source = new KT_Source($value['gedcom']);
+			} else {
+				$source = KT_Source::getInstance($gid);
+			}
+		}
+		if (!$source || !$source->canDisplayDetails()) {
+			continue;
+		}
+		$html .= '<tr>';
+		// -- Source name(s)
+		$html .= '<td>';
+		foreach ($source->getAllNames() as $n => $name) {
+			if ($n) {
+				$html .= '<br>';
+			}
+			if ($n == $source->getPrimaryName()) {
+				$html .= '<a class="name2" href="' . $source->getHtmlUrl() . '">' . highlight_search_hits($name['full']) . '</a>';
+			} else {
+				$html .= '<a href="' . $source->getHtmlUrl() . '">' . highlight_search_hits($name['full']) . '</a>';
+			}
+		}
+		$html .= '</td>';
+		// Sortable name
+		$html .= '<td>' . strip_tags($source->getFullName()) . '</td>';
+		$key = $source->getXref() . '@' . KT_GED_ID;
+		// -- Author
+		$html .= '<td>' . highlight_search_hits(htmlspecialchars((string) $source->getAuth())) . '</td>';
+		// -- Linked INDIs
+		$num = array_key_exists($key, $count_individuals) ? $count_individuals[$key] : 0;
+		$html .= '
 								<td>' . KT_I18N::number($num) . '</td>
-								<td>'. $num . '</td>
+								<td>' . $num . '</td>
 							';
-							//-- Linked FAMs
-							$num = array_key_exists($key, $count_families) ? $count_families[$key] : 0;
-							$html .= '
+		// -- Linked FAMs
+		$num = array_key_exists($key, $count_families) ? $count_families[$key] : 0;
+		$html .= '
 								<td>' . KT_I18N::number($num) . '</td>
-								<td>'. $num . '</td>
+								<td>' . $num . '</td>
 							';
-							//-- Linked OBJEcts
-							$num = array_key_exists($key, $count_media) ? $count_media[$key] : 0;
-							$html .= '
+		// -- Linked OBJEcts
+		$num = array_key_exists($key, $count_media) ? $count_media[$key] : 0;
+		$html .= '
 								<td>' . KT_I18N::number($num) . '</td>
-								<td>'. $num . '</td>
+								<td>' . $num . '</td>
 							';
-							//-- Linked NOTEs
-							$num = array_key_exists($key, $count_notes) ? $count_notes[$key] : 0;
-							$html .= '
+		// -- Linked NOTEs
+		$num = array_key_exists($key, $count_notes) ? $count_notes[$key] : 0;
+		$html .= '
 								<td>' . KT_I18N::number($num) . '</td>
-								<td>'. $num . '</td>
+								<td>' . $num . '</td>
 							';
-							//-- Last change
-							if ($SHOW_LAST_CHANGE) {
-								$html .= '<td>' . $source->LastChangeTimestamp() . '</td>';
-							} else {
-								$html .= '<td>&nbsp;</td>';
-							}
-							//-- Last change hidden sort column
-							if ($SHOW_LAST_CHANGE) {
-								$html .= '<td>' . $source->LastChangeTimestamp(true) . '</td>';
-							} else {
-								$html .= '<td>&nbsp;</td>';
-							}
-							//-- Select & delete
-							$html .= '<td style="' . (KT_USER_GEDCOM_ADMIN ? '' : 'display: none;') . '">
+		// -- Last change
+		if ($SHOW_LAST_CHANGE) {
+			$html .= '<td>' . $source->LastChangeTimestamp() . '</td>';
+		} else {
+			$html .= '<td>&nbsp;</td>';
+		}
+		// -- Last change hidden sort column
+		if ($SHOW_LAST_CHANGE) {
+			$html .= '<td>' . $source->LastChangeTimestamp(true) . '</td>';
+		} else {
+			$html .= '<td>&nbsp;</td>';
+		}
+		// -- Select & delete
+		$html .= '<td style="' . (KT_USER_GEDCOM_ADMIN ? '' : 'display: none;') . '">
 								<div class="delete_src">
-									<input type="checkbox" name="del_places[]" class="check" value="' . $source->getXref() . '" title="' . KT_I18N::translate('Delete') . '">'.
-								'</div>
+									<input type="checkbox" name="del_places[]" class="check" value="' . $source->getXref() . '" title="' . KT_I18N::translate('Delete') . '">' .
+			'</div>
 							</td>
 						</tr>';
-					}
-					$html .= '</tbody>
+	}
+	$html .= '</tbody>
 				</table>
 			</div>';
 
@@ -1631,7 +1716,8 @@ function format_sour_table($datalist) {
 }
 
 // print a table of shared notes
-function format_note_table($datalist) {
+function format_note_table($datalist)
+{
 	global $iconStyle, $SHOW_LAST_CHANGE, $controller;
 
 	// Count the number of linked records.  These numbers include private records.
@@ -1651,7 +1737,7 @@ function format_note_table($datalist) {
 	)->fetchAssoc();
 
 	if (KT_SCRIPT_NAME == 'search.php') {
-		$table_id = 'ID' . (int)(microtime(true)*1000000); // lists requires a unique ID in case there are multiple lists per page
+		$table_id = 'ID' . (int) (microtime(true) * 1000000); // lists requires a unique ID in case there are multiple lists per page
 	} else {
 		$table_id = 'noteTable';
 	}
@@ -1667,13 +1753,13 @@ function format_note_table($datalist) {
 				content: "",
 				autoClose: false,
 				boxWidth: "20rem",
-		        buttons: {
-		            confirm: {
-		                action: function(){
-		                    return checkbox_delete("notes");
-		                }
-		            }
-		        }
+				buttons: {
+					confirm: {
+						action: function(){
+							return checkbox_delete("notes");
+						}
+					}
+				}
 			});
 		')
 		->addExternalJavascript(KT_DATATABLES_JS)
@@ -1683,7 +1769,8 @@ function format_note_table($datalist) {
 	if (KT_USER_CAN_EDIT) {
 		$controller
 			->addExternalJavascript(KT_DATATABLES_BUTTONS)
-			->addExternalJavascript(KT_DATATABLES_HTML5);
+			->addExternalJavascript(KT_DATATABLES_HTML5)
+		;
 		$buttons = 'B';
 	} else {
 		$buttons = '';
@@ -1698,7 +1785,7 @@ function format_note_table($datalist) {
 			jQuery("#' . $table_id . '").dataTable({
 				dom: \'<"top"' . $buttons . 'lp<"clear">irf>t<"bottom"pl>\',
 				' . KT_I18N::datatablesI18N() . ',
-				buttons: [{extend: "csv", exportOptions: {columns: [0,1,3,5,7] }}],
+				buttons: [{extend: "csvHtml5", exportOptions: {columns: ":visible"}}],
 				autoWidth: false,
 				processing: true,
 				retrieve: true,
@@ -1728,7 +1815,8 @@ function format_note_table($datalist) {
 		   });
 			jQuery("#' . $table_id . '").css("visibility", "visible");
 			jQuery(".loading-image").css("display", "none");
-		');
+		')
+	;
 
 	$html .= '<div class="cell text-center loading-image"><i class="' . $iconStyle . ' fa-spinner fa-spin fa-3x"></i><span class="sr-only">Loading...</span></div>
 	<table class="shadow" id="' . $table_id . '">
@@ -1748,7 +1836,7 @@ function format_note_table($datalist) {
 				<th class="delete_src" style="' . (KT_USER_GEDCOM_ADMIN ? '' : 'display: none;') . '">
 					<input
 						type="button"
-						value = "' . KT_I18N::translate('Delete'). '"
+						value = "' . KT_I18N::translate('Delete') . '"
 						class="jsConfirm button tiny"
 					>
 					<input type="checkbox" onclick="toggle_select(this)" style="vertical-align:middle;">
@@ -1756,90 +1844,91 @@ function format_note_table($datalist) {
 			</tr>
 		</thead>
 		<tbody>';
-			$n = 0;
-			foreach ($datalist as $key => $value) {
-				if (is_object($value)) { // Array of objects
-					$note = $value;
-				} elseif (!is_array($value)) { // Array of IDs
-					$note = KT_Note::getInstance($key); // from placelist
-					if (is_null($note)) {
-						$note = KT_Note::getInstance($value);
-					}
-					unset($value);
-				} else { // Array of search results
-					$gid = '';
-					if (isset($value['gid'])) {
-						$gid = $value['gid'];
-					}
-					if (isset($value['gedcom'])) {
-						$note = new KT_Note($value['gedcom']);
-					} else {
-						$note = KT_Note::getInstance($gid);
-					}
-				}
-				if (!$note || !$note->canDisplayDetails()) {
-					continue;
-				}
-				$html .= '<tr>';
-					//-- Note title & link
-					$html .= '
+	$n = 0;
+	foreach ($datalist as $key => $value) {
+		if (is_object($value)) { // Array of objects
+			$note = $value;
+		} elseif (!is_array($value)) { // Array of IDs
+			$note = KT_Note::getInstance($key); // from placelist
+			if (is_null($note)) {
+				$note = KT_Note::getInstance($value);
+			}
+			unset($value);
+		} else { // Array of search results
+			$gid = '';
+			if (isset($value['gid'])) {
+				$gid = $value['gid'];
+			}
+			if (isset($value['gedcom'])) {
+				$note = new KT_Note($value['gedcom']);
+			} else {
+				$note = KT_Note::getInstance($gid);
+			}
+		}
+		if (!$note || !$note->canDisplayDetails()) {
+			continue;
+		}
+		$html .= '<tr>';
+		// -- Note title & link
+		$html .= '
 						<td>
 							<a class="name2" href="' . $note->getHtmlUrl() . '">' . highlight_search_hits($note->getFullName()) . '</a>
 						</td>
 					';
-					//-- Linked INDIs
-					$key = $note->getXref() . '@' . KT_GED_ID;
-					$num = array_key_exists($key, $count_individuals) ? $count_individuals[$key] : 0;
-					$html .= '
+		// -- Linked INDIs
+		$key = $note->getXref() . '@' . KT_GED_ID;
+		$num = array_key_exists($key, $count_individuals) ? $count_individuals[$key] : 0;
+		$html .= '
 						<td>' . KT_I18N::number($num) . '</td>
 						<td>' . $num . '</td>
 					';
-					//-- Linked FAMs
-					$num = array_key_exists($key, $count_families) ? $count_families[$key] : 0;
-					$html .= '
+		// -- Linked FAMs
+		$num = array_key_exists($key, $count_families) ? $count_families[$key] : 0;
+		$html .= '
 						<td>' . KT_I18N::number($num) . '</td>
 						<td>' . $num . '</td>
 					';
-					//-- Linked OBJEcts
-					$num = array_key_exists($key, $count_media) ? $count_media[$key] : 0;
-					$html .= '
-						<td>'. KT_I18N::number($num). '</td>
+		// -- Linked OBJEcts
+		$num = array_key_exists($key, $count_media) ? $count_media[$key] : 0;
+		$html .= '
+						<td>' . KT_I18N::number($num) . '</td>
 						<td>' . $num . '</td>
 					';
-					//-- Linked SOURs
-					$num = array_key_exists($key, $count_sources) ? $count_sources[$key] : 0;
-					$html .= '
-						<td>'. KT_I18N::number($num). '</td>
+		// -- Linked SOURs
+		$num = array_key_exists($key, $count_sources) ? $count_sources[$key] : 0;
+		$html .= '
+						<td>' . KT_I18N::number($num) . '</td>
 						<td>' . $num . '</td>
 					';
-					//-- Last change
-					if ($SHOW_LAST_CHANGE) {
-						$html .= '<td>' . $note->LastChangeTimestamp() . '</td>';
-					} else {
-						$html .= '<td></td>';
-					}
-					//-- Last change hidden sort column
-					if ($SHOW_LAST_CHANGE) {
-						$html .= '<td>' . $note->LastChangeTimestamp(true) . '</td>';
-					} else {
-						$html .= '<td>&nbsp;</td>';
-					}
-					//-- Select & delete
-					$html .= '<td style="' . (KT_USER_GEDCOM_ADMIN ? '' : 'display: none;') . '">
+		// -- Last change
+		if ($SHOW_LAST_CHANGE) {
+			$html .= '<td>' . $note->LastChangeTimestamp() . '</td>';
+		} else {
+			$html .= '<td></td>';
+		}
+		// -- Last change hidden sort column
+		if ($SHOW_LAST_CHANGE) {
+			$html .= '<td>' . $note->LastChangeTimestamp(true) . '</td>';
+		} else {
+			$html .= '<td>&nbsp;</td>';
+		}
+		// -- Select & delete
+		$html .= '<td style="' . (KT_USER_GEDCOM_ADMIN ? '' : 'display: none;') . '">
 						<div class="delete_src">
-							<input type="checkbox" name="del_places[]" class="check" value="' . $note->getXref() . '" title="' . KT_I18N::translate('Delete') . '">'.
-						'</div>
+							<input type="checkbox" name="del_places[]" class="check" value="' . $note->getXref() . '" title="' . KT_I18N::translate('Delete') . '">' .
+			'</div>
 					</td>
 				</tr>';
-			}
-		$html .= '</tbody>
+	}
+	$html .= '</tbody>
 	</table>';
 
 	return $html;
 }
 
 // print a table of repositories
-function format_repo_table($repos) {
+function format_repo_table($repos)
+{
 	global $iconStyle, $SHOW_LAST_CHANGE, $SEARCH_SPIDER, $controller;
 
 	// Count the number of linked records.  These numbers include private records.
@@ -1850,7 +1939,7 @@ function format_repo_table($repos) {
 	)->fetchAssoc();
 
 	if (KT_SCRIPT_NAME == 'search.php') {
-		$table_id = 'ID' . (int)(microtime(true)*1000000); // lists requires a unique ID in case there are multiple lists per page
+		$table_id = 'ID' . (int) (microtime(true) * 1000000); // lists requires a unique ID in case there are multiple lists per page
 	} else {
 		$table_id = 'repoTable';
 	}
@@ -1863,7 +1952,8 @@ function format_repo_table($repos) {
 	if (KT_USER_CAN_EDIT) {
 		$controller
 			->addExternalJavascript(KT_DATATABLES_BUTTONS)
-			->addExternalJavascript(KT_DATATABLES_HTML5);
+			->addExternalJavascript(KT_DATATABLES_HTML5)
+		;
 		$buttons = 'B';
 	} else {
 		$buttons = '';
@@ -1878,7 +1968,7 @@ function format_repo_table($repos) {
 			jQuery("#' . $table_id . '").dataTable({
 				dom: \'<"top"' . $buttons . 'lp<"clear">irf>t<"bottom"pl>\',
 				' . KT_I18N::datatablesI18N() . ',
-				buttons: [{extend: "csv", exportOptions: {columns: [0,1] }}],
+				buttons: [{extend: "csvHtml5", exportOptions: {columns: ":visible"}}],
 				autoWidth: false,
 				processing: true,
 				retrieve: true,
@@ -1895,16 +1985,17 @@ function format_repo_table($repos) {
 					/* 0 name      */ { type: "unicode" },
 					/* 1 #sour     */ { dataSort: 2, class: "text-center" },
 					/* 2 #SOUR     */ { type: "num", visible: false },
-					/* 3 CHAN      */ { dataSort: 4, visible: ' . ($SHOW_LAST_CHANGE?'true':'false') . ' },
+					/* 3 CHAN      */ { dataSort: 4, visible: ' . ($SHOW_LAST_CHANGE ? 'true' : 'false') . ' },
 					/* 4 CHAN_sort */ { visible: false },
-					/* 5 DELETE    */ { visible: ' . (KT_USER_GEDCOM_ADMIN ? 'true':'false') . ', sortable: false, class: "text-center" }
+					/* 5 DELETE    */ { visible: ' . (KT_USER_GEDCOM_ADMIN ? 'true' : 'false') . ', sortable: false, class: "text-center" }
 				]
 			});
 			jQuery("#' . $table_id . '").css("visibility", "visible");
 			jQuery(".loading-image").css("display", "none");
-		');
+		')
+	;
 
-	//--table wrapper
+	// --table wrapper
 	$html .= '
 		<div class="cell text-center loading-image">
 			<i class="' . $iconStyle . ' fa-spinner fa-spin fa-3x"></i>
@@ -1922,7 +2013,7 @@ function format_repo_table($repos) {
 						<th class="delete_src" style="' . (KT_USER_GEDCOM_ADMIN ? '' : 'display: none;') . '">
 							<input
 								type="button"
-								value = "' . KT_I18N::translate('Delete'). '"
+								value = "' . KT_I18N::translate('Delete') . '"
 								class="button tiny"
 								onclick="if (confirm(\'' . htmlspecialchars(KT_I18N::translate('Permanently delete these records?')) . '\')) {return checkbox_delete(\'repos\');} else {return false;}"
 							>
@@ -1931,53 +2022,53 @@ function format_repo_table($repos) {
 					</tr>
 				</thead>
 				<tbody>';
-					$n = 0;
-					foreach ($repos as $repo) {
-						if (!$repo->canDisplayDetails()) {
-							continue;
-						}
-						$html .= '
+	$n = 0;
+	foreach ($repos as $repo) {
+		if (!$repo->canDisplayDetails()) {
+			continue;
+		}
+		$html .= '
 						<tr>
 							<td>';
-								foreach ($repo->getAllNames() as $n => $name) {
-									if ($n) {
-										$html .= '<br>';
-									}
-									if ($n == $repo->getPrimaryName()) {
-										$html .= '<a class="name2" href="' . $repo->getHtmlUrl() . '">' . highlight_search_hits($name['full']) . '</a>';
-									} else {
-										$html .= '<a href="' . $repo->getHtmlUrl() . '">' . highlight_search_hits($name['full']) . '</a>';
-									}
-								}
-							$html .= '</td>';
-							$key = $repo->getXref() . '@' . KT_GED_ID;
-							//-- Linked SOURces
-							$num = array_key_exists($key, $count_sources) ? $count_sources[$key] : 0;
-							$html .= '
+		foreach ($repo->getAllNames() as $n => $name) {
+			if ($n) {
+				$html .= '<br>';
+			}
+			if ($n == $repo->getPrimaryName()) {
+				$html .= '<a class="name2" href="' . $repo->getHtmlUrl() . '">' . highlight_search_hits($name['full']) . '</a>';
+			} else {
+				$html .= '<a href="' . $repo->getHtmlUrl() . '">' . highlight_search_hits($name['full']) . '</a>';
+			}
+		}
+		$html .= '</td>';
+		$key = $repo->getXref() . '@' . KT_GED_ID;
+		// -- Linked SOURces
+		$num = array_key_exists($key, $count_sources) ? $count_sources[$key] : 0;
+		$html .= '
 								<td>' . KT_I18N::number($num) . '</td>
 								<td>' . $num . '</td>
 							';
-							//-- Last change
-							if ($SHOW_LAST_CHANGE) {
-								$html .= '<td>' . $repo->LastChangeTimestamp() . '</td>';
-							} else {
-								$html .= '<td>&nbsp;</td>';
-							}
-							//-- Last change hidden sort column
-							if ($SHOW_LAST_CHANGE) {
-								$html .= '<td>' . $repo->LastChangeTimestamp(true) . '</td>';
-							} else {
-								$html .= '<td>&nbsp;</td>';
-							}
-							//-- Select & delete
-							$html .= '<td style="' . (KT_USER_GEDCOM_ADMIN ? '' : 'display: none;') . '">
+		// -- Last change
+		if ($SHOW_LAST_CHANGE) {
+			$html .= '<td>' . $repo->LastChangeTimestamp() . '</td>';
+		} else {
+			$html .= '<td>&nbsp;</td>';
+		}
+		// -- Last change hidden sort column
+		if ($SHOW_LAST_CHANGE) {
+			$html .= '<td>' . $repo->LastChangeTimestamp(true) . '</td>';
+		} else {
+			$html .= '<td>&nbsp;</td>';
+		}
+		// -- Select & delete
+		$html .= '<td style="' . (KT_USER_GEDCOM_ADMIN ? '' : 'display: none;') . '">
 								<div class="delete_src">
 									<input type="checkbox" name="del_places[]" class="check" value="' . $repo->getXref() . '" title="' . KT_I18N::translate('Delete') . '">
 								</div>
 							</td>
 						</tr>';
-					}
-				$html .= '</tbody>
+	}
+	$html .= '</tbody>
 			</table>
 		</div>';
 
@@ -1985,12 +2076,13 @@ function format_repo_table($repos) {
 }
 
 // print a table of media objects
-function format_media_table($datalist) {
+function format_media_table($datalist)
+{
 	global $iconStyle, $SHOW_LAST_CHANGE, $controller;
 	$html = '';
 
 	if (KT_SCRIPT_NAME == 'search.php') {
-		$table_id = 'ID'.(int)(microtime(true)*1000000); // lists requires a unique ID in case there are multiple lists per page
+		$table_id = 'ID' . (int) (microtime(true) * 1000000); // lists requires a unique ID in case there are multiple lists per page
 	} else {
 		$table_id = 'mediaTable';
 	}
@@ -2009,7 +2101,7 @@ function format_media_table($datalist) {
 			jQuery("#' . $table_id . '").dataTable({
 				dom: \'<"top"' . $buttons . 'lp<"clear">irf>t<"bottom"pl>\',
 				' . KT_I18N::datatablesI18N() . ',
-				buttons: [{extend: "csv", exportOptions: {columns: [1,2,3,5,7] }}],
+				buttons: [{extend: "csvHtml5", exportOptions: {columns: ":visible"}}],
 				autoWidth: false,
 				processing: true,
 				retrieve: true,
@@ -2033,68 +2125,74 @@ function format_media_table($datalist) {
 			});
 			jQuery(".media-list").css("visibility", "visible");
 			jQuery(".loading-image").css("display", "none");
-		');
+		')
+	;
 
-	//--table wrapper
+	// --table wrapper
 	$html .= '<div class="loading-image">&nbsp;</div>';
 	$html .= '<div class="media-list">';
-	//-- table header
-	$html .= '<table class="shadow" id="'. $table_id . '"><thead><tr>';
-	$html .= '<th>'. KT_I18N::translate('Media') . '</th>';
-	$html .= '<th>'. KT_Gedcom_Tag::getLabel('TITL') . '</th>';
-	$html .= '<th>'. KT_I18N::translate('File name') . '</th>';
-	$html .= '<th>'. KT_I18N::translate('Individuals') . '</th>';
+	// -- table header
+	$html .= '<table class="shadow" id="' . $table_id . '"><thead><tr>';
+	$html .= '<th>' . KT_I18N::translate('Media') . '</th>';
+	$html .= '<th>' . KT_Gedcom_Tag::getLabel('TITL') . '</th>';
+	$html .= '<th>' . KT_I18N::translate('File name') . '</th>';
+	$html .= '<th>' . KT_I18N::translate('Individuals') . '</th>';
 	$html .= '<th>#INDI</th>';
-	$html .= '<th>'. KT_I18N::translate('Families') . '</th>';
+	$html .= '<th>' . KT_I18N::translate('Families') . '</th>';
 	$html .= '<th>#FAM</th>';
-	$html .= '<th>'. KT_I18N::translate('Sources') . '</th>';
+	$html .= '<th>' . KT_I18N::translate('Sources') . '</th>';
 	$html .= '<th>#SOUR</th>';
-	$html .= '<th' . ($SHOW_LAST_CHANGE?'':'') . '>'. KT_Gedcom_Tag::getLabel('CHAN') . '</th>';
-	$html .= '<th' . ($SHOW_LAST_CHANGE?'':'') . '>CHAN</th>';
+	$html .= '<th' . ($SHOW_LAST_CHANGE ? '' : '') . '>' . KT_Gedcom_Tag::getLabel('CHAN') . '</th>';
+	$html .= '<th' . ($SHOW_LAST_CHANGE ? '' : '') . '>CHAN</th>';
 	$html .= '</tr></thead>';
-	//-- table body
+	// -- table body
 	$html .= '<tbody>';
 	$n = 0;
 	foreach ($datalist as $key => $value) {
 		if (is_object($value)) { // Array of objects
-			$media=$value;
+			$media = $value;
 		} else {
-			$media = new KT_Media($value["GEDCOM"]);
-			if (is_null($media)) $media = KT_Media::getInstance($key);
-			if (is_null($media)) continue;
+			$media = new KT_Media($value['GEDCOM']);
+			if (is_null($media)) {
+				$media = KT_Media::getInstance($key);
+			}
+			if (is_null($media)) {
+				continue;
+			}
 		}
 		if ($media->canDisplayDetails()) {
 			$name = $media->getFullName();
-			$html .= "<tr>";
-			//-- Object thumbnail
-			$html .= '<td>'. $media->displayImage(). '</td>';
-			//-- Object name(s)
+			$html .= '<tr>';
+			// -- Object thumbnail
+			$html .= '<td>' . $media->displayImage() . '</td>';
+			// -- Object name(s)
 			$html .= '<td>';
-			$html .= '<a href="'. $media->getHtmlUrl(). '" class="list_item name2">';
-			$html .= highlight_search_hits($name). '</a>';
+			$html .= '<a href="' . $media->getHtmlUrl() . '" class="list_item name2">';
+			$html .= highlight_search_hits($name) . '</a>';
 			$html .= '</td>';
-			//-- File name
+			// -- File name
 			$html .= '<td>';
-			if (KT_USER_CAN_EDIT || KT_USER_CAN_ACCEPT)
-				$html .= '<br><a href="'. $media->getHtmlUrl(). '">'. basename($media->getFilename()). '</a>';
+			if (KT_USER_CAN_EDIT || KT_USER_CAN_ACCEPT) {
+				$html .= '<br><a href="' . $media->getHtmlUrl() . '">' . basename($media->getFilename()) . '</a>';
+			}
 			$html .= '</td>';
 
-			//-- Linked INDIs
-			$num=count($media->fetchLinkedIndividuals());
-			$html .= '<td>' . KT_I18N::number($num). '</td><td>' . $num. '</td>';
-			//-- Linked FAMs
-			$num=count($media->fetchLinkedfamilies());
-			$html .= '<td>' . KT_I18N::number($num). '</td><td>' . $num. '</td>';
-			//-- Linked SOURces
-			$num=count($media->fetchLinkedSources());
-			$html .= '<td>' . KT_I18N::number($num). '</td><td>' . $num. '</td>';
-			//-- Last change
+			// -- Linked INDIs
+			$num = count($media->fetchLinkedIndividuals());
+			$html .= '<td>' . KT_I18N::number($num) . '</td><td>' . $num . '</td>';
+			// -- Linked FAMs
+			$num = count($media->fetchLinkedfamilies());
+			$html .= '<td>' . KT_I18N::number($num) . '</td><td>' . $num . '</td>';
+			// -- Linked SOURces
+			$num = count($media->fetchLinkedSources());
+			$html .= '<td>' . KT_I18N::number($num) . '</td><td>' . $num . '</td>';
+			// -- Last change
 			if ($SHOW_LAST_CHANGE) {
 				$html .= '<td>' . $media->LastChangeTimestamp() . '</td>';
 			} else {
 				$html .= '<td>&nbsp;</td>';
 			}
-			//-- Last change hidden sort column
+			// -- Last change hidden sort column
 			if ($SHOW_LAST_CHANGE) {
 				$html .= '<td>' . $media->LastChangeTimestamp(true) . '</td>';
 			} else {
@@ -2111,13 +2209,14 @@ function format_media_table($datalist) {
 /**
  * Print a table of surnames, for the top surnames block, the indi/fam lists, etc.
  *
- * @param string[][] $surnames array (of SURN, of array of SPFX_SURN, of array of PID)
- * @param string $module_url "indilist.php" (counts of individuals) or "famlist.php" (counts of spouses)
- * @param string $sort "1" for ascending order by name, "2" for descending order by count
+ * @param string[][] $surnames   array (of SURN, of array of SPFX_SURN, of array of PID)
+ * @param string     $module_url "indilist.php" (counts of individuals) or "famlist.php" (counts of spouses)
+ * @param string     $sort       "1" for ascending order by name, "2" for descending order by count
  *
  * @return string
  */
-function format_surname_table($surnames, $module_url = '', $sort = '2') {
+function format_surname_table($surnames, $module_url = '', $sort = '2')
+{
 	global $iconStyle, $controller;
 	$html = '';
 	$controller
@@ -2130,7 +2229,7 @@ function format_surname_table($surnames, $module_url = '', $sort = '2') {
 			destroy: true,
 			autoWidth:false,
 			paging: false,
-			sorting: [[' . ($sort == '1' ? '1, "asc"' : '3, "desc"') . ']],
+			sorting: [[' . ('1' == $sort ? '1, "asc"' : '3, "desc"') . ']],
 			columns: [
 				/*  0 name  */ { dataSort:1 },
 				/*  1 NAME  */ { visible:false },
@@ -2141,14 +2240,15 @@ function format_surname_table($surnames, $module_url = '', $sort = '2') {
 
 			jQuery(".surname-list").css("visibility", "visible");
 			jQuery(".loading-image").css("display", "none");
-		');
+		')
+	;
 
 	if (strstr($module_url, 'list_families')) {
-		$col_heading	= KT_I18N::translate('Spouses');
-		$script_url		= 'module.php?mod=list_families&amp;mod_action=show&amp;';
+		$col_heading = KT_I18N::translate('Spouses');
+		$script_url = 'module.php?mod=list_families&amp;mod_action=show&amp;';
 	} else {
-		$col_heading	= KT_I18N::translate('Individuals');
-		$script_url		= 'module.php?mod=list_individuals&amp;mod_action=show&amp;';
+		$col_heading = KT_I18N::translate('Individuals');
+		$script_url = 'module.php?mod=list_individuals&amp;mod_action=show&amp;';
 	}
 
 	$html .= '
@@ -2163,44 +2263,44 @@ function format_surname_table($surnames, $module_url = '', $sort = '2') {
 				</tr>
 			</thead>
 			<tbody>';
-				foreach ($surnames as $surn => $surns) {
-					// Each surname links back to the indi/fam surname list
-					if ($surn) {
-						$url = $script_url . 'surname=' . rawurlencode((string) $surn) . '&amp;ged=' . KT_GEDURL . '&show_all_firstnames=yes';
-					} else {
-						$url = $script_url . 'alpha=,&amp;ged=' . KT_GEDURL;
-					}
-					$html .= '<tr>
+	foreach ($surnames as $surn => $surns) {
+		// Each surname links back to the indi/fam surname list
+		if ($surn) {
+			$url = $script_url . 'surname=' . rawurlencode((string) $surn) . '&amp;ged=' . KT_GEDURL . '&show_all_firstnames=yes';
+		} else {
+			$url = $script_url . 'alpha=,&amp;ged=' . KT_GEDURL;
+		}
+		$html .= '<tr>
 						<td>';
-							// Multiple surname variants, e.g. von Groot, van Groot, van der Groot, etc.
-							foreach ($surns as $spfxsurn => $indis) {
-								if ($spfxsurn) {
-									$html .= '<a href="' . $url . '">' . htmlspecialchars((string) $spfxsurn) . '</a><br>';
-								} else {
-									// No surname, but a value from "2 SURN"?  A common workaround for toponyms, etc.
-									$html .= '<a href="' . $url . '">' . htmlspecialchars((string) $surn) . '</a><br>';
-								}
-							}
-						$html .= '</td>';
-						// Sort column for name
-						$html .= '<td>' . $surn . '</td>';
-						// Surname count
-						$html .= '<td>';
-							$subtotal = 0;
-							foreach ($surns as $spfxsurn => $indis) {
-								$subtotal += count($indis);
-								$html .= KT_I18N::number(count($indis)) . '<br>';
-							}
-							// More than one surname variant? Show a subtotal
-							if (count($surns) > 1) {
-								$html .= KT_I18N::number($subtotal);
-							}
-						$html .= '</td>';
-						// add hidden numeric sort column
-						$html .= '<td>' . $subtotal . '</td>
+		// Multiple surname variants, e.g. von Groot, van Groot, van der Groot, etc.
+		foreach ($surns as $spfxsurn => $indis) {
+			if ($spfxsurn) {
+				$html .= '<a href="' . $url . '">' . htmlspecialchars((string) $spfxsurn) . '</a><br>';
+			} else {
+				// No surname, but a value from "2 SURN"?  A common workaround for toponyms, etc.
+				$html .= '<a href="' . $url . '">' . htmlspecialchars((string) $surn) . '</a><br>';
+			}
+		}
+		$html .= '</td>';
+		// Sort column for name
+		$html .= '<td>' . $surn . '</td>';
+		// Surname count
+		$html .= '<td>';
+		$subtotal = 0;
+		foreach ($surns as $spfxsurn => $indis) {
+			$subtotal += count($indis);
+			$html .= KT_I18N::number(count($indis)) . '<br>';
+		}
+		// More than one surname variant? Show a subtotal
+		if (count($surns) > 1) {
+			$html .= KT_I18N::number($subtotal);
+		}
+		$html .= '</td>';
+		// add hidden numeric sort column
+		$html .= '<td>' . $subtotal . '</td>
 					</tr>';
-				}
-			$html .= '</tbody>
+	}
+	$html .= '</tbody>
 		</table>
 	';
 
@@ -2211,44 +2311,46 @@ function format_surname_table($surnames, $module_url = '', $sort = '2') {
 // @param $surnames array (of SURN, of array of SPFX_SURN, of array of PID)
 // @param $module_url string, indilist or famlist
 // @param $totals, boolean, show totals after each name
-function format_surname_tagcloud($surnames, $module_url, $totals) {
+function format_surname_tagcloud($surnames, $module_url, $totals)
+{
 	$cloud = new Zend_Tag_Cloud(
-		array(
-			'tagDecorator' => array(
+		[
+			'tagDecorator' => [
 				'decorator' => 'HtmlTag',
-				'options' => array(
-					'htmlTags'		=> array(),
-					'fontSizeUnit'	=> '%',
-					'minFontSize'	=> 80,
-					'maxFontSize'	=> 250
-				)
-			),
-			'cloudDecorator' => array(
+				'options' => [
+					'htmlTags' => [],
+					'fontSizeUnit' => '%',
+					'minFontSize' => 80,
+					'maxFontSize' => 250,
+				],
+			],
+			'cloudDecorator' => [
 				'decorator' => 'HtmlCloud',
-				'options'	=> array(
-					'htmlTags'	=> array(
-						'div'	=> array(
-							'class' => 'tag_cloud'
-						)
-					)
-				)
-			)
-		)
+				'options' => [
+					'htmlTags' => [
+						'div' => [
+							'class' => 'tag_cloud',
+						],
+					],
+				],
+			],
+		]
 	);
 	foreach ($surnames as $surn => $surns) {
 		foreach ($surns as $spfxsurn => $indis) {
-			$cloud->appendTag(array(
-				'title'		=> $totals ? KT_I18N::translate('%1$s (%2$d)', '<span>' . $spfxsurn . '</span>', count($indis)) : $spfxsurn,
-				'weight'	=> count($indis),
-				'params'	=> array(
-					'url' =>$surn ?
+			$cloud->appendTag([
+				'title' => $totals ? KT_I18N::translate('%1$s (%2$d)', '<span>' . $spfxsurn . '</span>', count($indis)) : $spfxsurn,
+				'weight' => count($indis),
+				'params' => [
+					'url' => $surn ?
 						$module_url . '&amp;surname=' . urlencode($surn) . '&amp;ged=' . KT_GEDURL :
-						$module_url . '&amp;alpha=,&amp;ged=' . KT_GEDURL
-				)
-			));
+						$module_url . '&amp;alpha=,&amp;ged=' . KT_GEDURL,
+				],
+			]);
 		}
 	}
-	return (string)$cloud;
+
+	return (string) $cloud;
 }
 
 // Print a list of surnames.
@@ -2256,10 +2358,11 @@ function format_surname_tagcloud($surnames, $module_url, $totals) {
 // @param $style, 1=bullet list, 2=semicolon-separated list, 3=tabulated list with up to 4 columns
 // @param $totals, boolean, show totals after each name
 // @param $module_url string, indilist or famlist
-function format_surname_list($surnames, $style, $totals, $module_url) {
+function format_surname_list($surnames, $style, $totals, $module_url)
+{
 	global $iconStyle, $GEDCOM;
 
-	$html = array();
+	$html = [];
 	foreach ($surnames as $surn => $surns) {
 		// Each surname links back to the indilist
 		if ($surn) {
@@ -2274,88 +2377,95 @@ function format_surname_list($surnames, $style, $totals, $module_url) {
 			if ($first_spfxsurn) {
 				if (utf8_strtoupper($spfxsurn) == utf8_strtoupper($first_spfxsurn)) {
 					$surns[$first_spfxsurn] = array_merge($surns[$first_spfxsurn], $surns[$spfxsurn]);
-					unset ($surns[$spfxsurn]);
+					unset($surns[$spfxsurn]);
 				}
 			} else {
 				$first_spfxsurn = $spfxsurn;
 			}
 		}
-		$subhtml ='<a href="' . $url . '">' . htmlspecialchars(implode(KT_I18N::$list_separator, array_keys($surns))) . '</a>';
+		$subhtml = '<a href="' . $url . '">' . htmlspecialchars(implode(KT_I18N::$list_separator, array_keys($surns))) . '</a>';
 
 		if ($totals) {
-			$subtotal=0;
+			$subtotal = 0;
 			foreach ($surns as $spfxsurn => $indis) {
 				$subtotal += count($indis);
 			}
 			$subhtml .= '&nbsp;(' . KT_I18N::number($subtotal) . ')';
 		}
 		$html[] = $subhtml;
-
 	}
+
 	switch ($style) {
-	case 1:
-		return '<ul><li>' . implode('</li><li>', $html) . '</li></ul>';
-	case 2:
-		return implode(KT_I18N::$list_separator, $html);
-	case 3:
-		$i = 0;
-		$count = count($html);
-		$count_indi = 0;
-		$col = 1;
-		if ($count > 36) $col = 4;
-		else if ($count > 18) $col = 3;
-		else if ($count > 6) $col = 2;
-		$newcol = ceil($count/$col);
-		$html2 = '<table class="list_table shadow"><tr>';
-		$html2 .= '<td class="list_value" style="padding: 14px;">';
+		case 1:
+			return '<ul><li>' . implode('</li><li>', $html) . '</li></ul>';
 
-		foreach ($html as $surn=>$surns) {
-			$html2 .= $surns.'<br>';
-			$i ++;
-			if ($i == $newcol && $i < $count) {
-				$html2 .= '</td><td class="list_value" style="padding: 14px;">';
-				$newcol = $i + ceil($count / $col);
+		case 2:
+			return implode(KT_I18N::$list_separator, $html);
+
+		case 3:
+			$i = 0;
+			$count = count($html);
+			$count_indi = 0;
+			$col = 1;
+			if ($count > 36) {
+				$col = 4;
+			} elseif ($count > 18) {
+				$col = 3;
+			} elseif ($count > 6) {
+				$col = 2;
 			}
-		}
-		$html2 .= '</td></tr></table>';
+			$newcol = ceil($count / $col);
+			$html2 = '<table class="list_table shadow"><tr>';
+			$html2 .= '<td class="list_value" style="padding: 14px;">';
 
-		return $html2;
+			foreach ($html as $surn => $surns) {
+				$html2 .= $surns . '<br>';
+				$i++;
+				if ($i == $newcol && $i < $count) {
+					$html2 .= '</td><td class="list_value" style="padding: 14px;">';
+					$newcol = $i + ceil($count / $col);
+				}
+			}
+			$html2 .= '</td></tr></table>';
+
+			return $html2;
 	}
 }
 
 // print a table of stories
-function format_story_table($datalist) {
+function format_story_table($datalist)
+{
 	global $iconStyle, $controller;
 	$html = '';
 
-		if (KT_SCRIPT_NAME == 'search.php') {
-			$table_id = 'ID'.(int)(microtime(true)*1000000); // lists requires a unique ID in case there are multiple lists per page
-		} else {
-			$table_id = 'storyTable';
-		}
+	if (KT_SCRIPT_NAME == 'search.php') {
+		$table_id = 'ID' . (int) (microtime(true) * 1000000); // lists requires a unique ID in case there are multiple lists per page
+	} else {
+		$table_id = 'storyTable';
+	}
 
-		if (KT_USER_CAN_EDIT) {
-			$buttons = 'B';
-		} else {
-			$buttons = '';
-		}
+	if (KT_USER_CAN_EDIT) {
+		$buttons = 'B';
+	} else {
+		$buttons = '';
+	}
 
-		$controller
-			->addExternalJavascript(KT_DATATABLES_JS)
-			->addInlineJavascript('
+	$controller
+		->addExternalJavascript(KT_DATATABLES_JS)
+		->addInlineJavascript('
 			jQuery.fn.dataTableExt.oSort["unicode-asc" ]=function(a,b) {return a.replace(/<[^<]*>/, "").localeCompare(b.replace(/<[^<]*>/, ""))};
 			jQuery.fn.dataTableExt.oSort["unicode-desc"]=function(a,b) {return b.replace(/<[^<]*>/, "").localeCompare(a.replace(/<[^<]*>/, ""))};
 			jQuery("#' . $table_id . '").dataTable({
 			"sDom": \'<"H"pBf<"clear">irl>t<"F"pl>\',
 			' . KT_I18N::datatablesI18N() . ',
-			buttons: [{extend: "csv"}],
+			buttons: [{extend: "csvHtml5"}],
 			jQueryUI: true,
 			autoWidth: false,
 			processing: true,
 			retrieve: true,
 			columns: [
-                /* 0-name */ null,
-                /* 1-NAME */ null
+				/* 0-name */ null,
+				/* 1-NAME */ null
 			],
 			displayLength: 20,
 			pagingType: "full_numbers",
@@ -2364,9 +2474,10 @@ function format_story_table($datalist) {
 	   });
 			jQuery(".story-list").css("visibility", "visible");
 			jQuery(".loading-image").css("display", "none");
-		');
+		')
+	;
 
-	//--table wrapper
+	// --table wrapper
 	$html .= '
 		<div class="loading-image">&nbsp;</div>
 		<div class="story-list">
@@ -2378,48 +2489,49 @@ function format_story_table($datalist) {
 					</tr>
 				</thead>
 				<tbody>';
-					foreach ($datalist as $story) {
-						$story_title	= get_block_setting($story, 'title');
-						$xref			= explode(",", get_block_setting($story, 'xref'));
-						$count_xref		= count($xref);
-						// if one indi is private, the whole story is private.
-						$private = 0;
-						for ($x = 0; $x < $count_xref; $x ++) {
-							$indi[$x] = KT_Person::getInstance($xref[$x]);
-							if ($indi[$x] && !$indi[$x]->canDisplayDetails()) {
-								$private = $x+1;
-							}
-						}
-						if ($private == 0) {
-							$languages=get_block_setting($story, 'languages');
-							if (!$languages || in_array(KT_LOCALE, explode(',', $languages))) {
-								$html .= '
+	foreach ($datalist as $story) {
+		$story_title = get_block_setting($story, 'title');
+		$xref = explode(',', get_block_setting($story, 'xref'));
+		$count_xref = count($xref);
+		// if one indi is private, the whole story is private.
+		$private = 0;
+		for ($x = 0; $x < $count_xref; $x++) {
+			$indi[$x] = KT_Person::getInstance($xref[$x]);
+			if ($indi[$x] && !$indi[$x]->canDisplayDetails()) {
+				$private = $x + 1;
+			}
+		}
+		if (0 == $private) {
+			$languages = get_block_setting($story, 'languages');
+			if (!$languages || in_array(KT_LOCALE, explode(',', $languages))) {
+				$html .= '
 									<tr>
-										<td>'. highlight_search_hits($story_title) . '</td>
+										<td>' . highlight_search_hits($story_title) . '</td>
 										<td>';
-											for ($x = 0; $x < $count_xref; $x++) {
-												$indi[$x] = KT_Person::getInstance($xref[$x]);
-												if (!$indi[$x]){
-													$html .= '<p style="margin:0;" class="error">'. $xref[$x]. '</p>';
-												} else {
-													$html .= '<p style="margin:0;"><a href="' . $indi[$x]->getHtmlUrl() . '#stories" class="current">' . highlight_search_hits($indi[$x]->getFullName()) . '</a></p>';
-												}
-											}
-										$html .= '</td>
+				for ($x = 0; $x < $count_xref; $x++) {
+					$indi[$x] = KT_Person::getInstance($xref[$x]);
+					if (!$indi[$x]) {
+						$html .= '<p style="margin:0;" class="error">' . $xref[$x] . '</p>';
+					} else {
+						$html .= '<p style="margin:0;"><a href="' . $indi[$x]->getHtmlUrl() . '#stories" class="current">' . highlight_search_hits($indi[$x]->getFullName()) . '</a></p>';
+					}
+				}
+				$html .= '</td>
 									</tr>
 								';
-							}
-						}
-					}
+			}
+		}
+	}
 	$html .= '</tbody></table></div>';
 
 	return $html;
 }
 
 // print a list of recent changes
-function print_changes_list($change_ids, $sort) {
+function print_changes_list($change_ids, $sort)
+{
 	$n = 0;
-	$arr=array();
+	$arr = [];
 	foreach ($change_ids as $change_id) {
 		$record = KT_GedcomRecord::getInstance($change_id);
 		if (!$record || !$record->canDisplayDetails()) {
@@ -2427,27 +2539,31 @@ function print_changes_list($change_ids, $sort) {
 		}
 		// setup sorting parameters
 		$arr[$n]['record'] = $record;
-		$arr[$n]['jd'] = ($sort == 'name') ? 1 : $n;
+		$arr[$n]['jd'] = ('name' == $sort) ? 1 : $n;
 		$arr[$n]['anniv'] = $record->LastChangeTimestamp(true);
 		$arr[$n++]['fact'] = $record->getSortName(); // in case two changes have same timestamp
 	}
 
 	switch ($sort) {
-	case 'name':
-		uasort($arr, 'event_sort_name');
-		break;
-	case 'date_asc':
-		uasort($arr, 'event_sort');
-		$arr = array_reverse($arr);
-		break;
-	case 'date_desc':
-		uasort($arr, 'event_sort');
+		case 'name':
+			uasort($arr, 'event_sort_name');
+
+			break;
+
+		case 'date_asc':
+			uasort($arr, 'event_sort');
+			$arr = array_reverse($arr);
+
+			break;
+
+		case 'date_desc':
+			uasort($arr, 'event_sort');
 	}
 	$html = '';
 	foreach ($arr as $value) {
 		$html .= '<a href="' . $value['record']->getHtmlUrl() . '" class="list_item name2">' . $value['record']->getFullName() . '</a>';
 		$html .= '<div class="indent" style="margin-bottom:5px">';
-		if ($value['record']->getType() == 'INDI') {
+		if ('INDI' == $value['record']->getType()) {
 			if ($value['record']->getAddName()) {
 				$html .= '<a href="' . $value['record']->getHtmlUrl() . '" class="list_item">' . $value['record']->getAddName() . '</a>';
 			}
@@ -2455,28 +2571,35 @@ function print_changes_list($change_ids, $sort) {
 		$html .= /* I18N: [a record was] Changed on <date/time> by <user> */ KT_I18N::translate('Changed on %1$s by %2$s', $value['record']->LastChangeTimestamp(), $value['record']->LastChangeUser());
 		$html .= '</div>';
 	}
+
 	return $html;
 }
 
 // print a table of recent changes
-function print_changes_table($change_ids, $sort) {
+function print_changes_table($change_ids, $sort)
+{
 	global $iconStyle, $controller;
 
 	$return = '';
 	$n = 0;
 
-	$table_id = 'ID'.(int)(microtime(true)*1000000); // lists requires a unique ID in case there are multiple lists per page
+	$table_id = 'ID' . (int) (microtime(true) * 1000000); // lists requires a unique ID in case there are multiple lists per page
 
 	switch ($sort) {
-	case 'name':        //name
-		$aaSorting = "[5,'asc'], [4,'desc']";
-		break;
-	case 'date_asc':    //date ascending
-		$aaSorting = "[4,'asc'], [5,'asc']";
-		break;
-	case 'date_desc':   //date descending
-		$aaSorting = "[4,'desc'], [5,'asc']";
-		break;
+		case 'name':        // name
+			$aaSorting = "[5,'asc'], [4,'desc']";
+
+			break;
+
+		case 'date_asc':    // date ascending
+			$aaSorting = "[4,'asc'], [5,'asc']";
+
+			break;
+
+		case 'date_desc':   // date descending
+			$aaSorting = "[4,'desc'], [5,'asc']";
+
+			break;
 	}
 	$html = '';
 	$controller
@@ -2489,7 +2612,7 @@ function print_changes_table($change_ids, $sort) {
 				' . KT_I18N::datatablesI18N() . ',
 				autoWidth: false,
 				jQueryUI: true,
-				sorting: ['.$aaSorting.'],
+				sorting: [' . $aaSorting . '],
 				columns: [
 					/* 0-Type */    { sortable: false, class: "text-center" },
 					/* 1-Record */  { dataSort: 5 },
@@ -2503,10 +2626,11 @@ function print_changes_table($change_ids, $sort) {
 				stateSave: true,
 				stateDuration: -1
 			});
-		');
+		')
+	;
 
-		//-- table header
-		$html .= '
+	// -- table header
+	$html .= '
 			<table class="shadow" id="' . $table_id . '">
 				<thead>
 					<tr>
@@ -2521,51 +2645,65 @@ function print_changes_table($change_ids, $sort) {
 				<tbody>
 		';
 
-	//-- table body
+	// -- table body
 	foreach ($change_ids as $change_id) {
 		$record = KT_GedcomRecord::getInstance($change_id);
 		if (!$record || !$record->canDisplayDetails()) {
 			continue;
 		}
 		$indi = false;
+
 		switch ($record->getType()) {
-			case "INDI":
+			case 'INDI':
 				$icon = $record->getSexImage('small', '', '', false);
 				$indi = true;
+
 				break;
-			case "FAM":
+
+			case 'FAM':
 				$icon = '<i class="icon-button_family"></i>';
+
 				break;
-			case "OBJE":
+
+			case 'OBJE':
 				$icon = '<i class="icon-button_media"></i>';
+
 				break;
-			case "NOTE":
+
+			case 'NOTE':
 				$icon = '<i class="icon-button_note"></i>';
+
 				break;
-			case "SOUR":
+
+			case 'SOUR':
 				$icon = '<i class="icon-button_source"></i>';
+
 				break;
-			case "REPO":
+
+			case 'REPO':
 				$icon = '<i class="icon-button_repository"></i>';
+
 				break;
+
 			default:
 				$icon = '&nbsp;';
+
 				break;
 		}
 		$name = $record->getFullName();
-		++$n;
+		$n++;
 		$html .= '
 				<tr>
-					<td><a href="'. $record->getHtmlUrl() .'">'. $icon . '</a></td>
+					<td><a href="' . $record->getHtmlUrl() . '">' . $icon . '</a></td>
 					<td class="wrap">
-						<a href="'. $record->getHtmlUrl() .'">'. $name . '</a>';
-						if ($indi) {
-							$addname = $record->getAddName();
-							if ($addname) {
-								$html .= '<div class="indent"><a href="'. $record->getHtmlUrl() .'">'. $addname . '</a></div>';
-							}
-						}
-					$html .= '</td>
+						<a href="' . $record->getHtmlUrl() . '">' . $name . '</a>';
+		if ($indi) {
+			$addname = $record->getAddName();
+			if ($addname) {
+				$html .= '<div class="indent"><a href="' . $record->getHtmlUrl() . '">' . $addname . '</a></div>';
+			}
+		}
+		$html .= '</td>
 					<td class="wrap">' . $record->LastChangeTimestamp() . '</td>
 					<td class="wrap">' . $record->LastChangeUser() . '</td>
 					<td>' . $record->LastChangeTimestamp(true) . '</td>
@@ -2574,14 +2712,16 @@ function print_changes_table($change_ids, $sort) {
 	}
 
 	$html .= '</tbody></table>';
+
 	return $html;
 }
 
 // print a table of events
-function print_events_table($startjd, $endjd, $events='BIRT MARR DEAT', $only_living=false, $sort_by='anniv') {
+function print_events_table($startjd, $endjd, $events = 'BIRT MARR DEAT', $only_living = false, $sort_by = 'anniv')
+{
 	global $iconStyle, $controller;
 	$html = '';
-	$table_id = 'ID'.(int)(microtime(true)*1000000); // lists requires a unique ID in case there are multiple lists per page
+	$table_id = 'ID' . (int) (microtime(true) * 1000000); // lists requires a unique ID in case there are multiple lists per page
 	$controller
 		->addExternalJavascript(KT_DATATABLES_JS)
 		->addInlineJavascript('
@@ -2593,7 +2733,7 @@ function print_events_table($startjd, $endjd, $events='BIRT MARR DEAT', $only_li
 				lengthChange: false,
 				info: true,
 				paging: false,
-				sorting: [[ '.($sort_by=='alpha' ? 1 : 3).', "asc" ]],
+				sorting: [[ ' . ('alpha' == $sort_by ? 1 : 3) . ', "asc" ]],
 				columns: [
 					/* 0-Record */ { dataSort: 1 },
 					/* 1-NAME */   { visible: false },
@@ -2604,30 +2744,34 @@ function print_events_table($startjd, $endjd, $events='BIRT MARR DEAT', $only_li
 					/* 6-Event */  { }
 				]
 			});
-		');
+		')
+	;
 
 	// Did we have any output?  Did we skip anything?
 	$output = 0;
 	$filter = 0;
-	$filtered_events = array();
+	$filtered_events = [];
 
 	foreach (get_events_list($startjd, $endjd, $events) as $value) {
-		$record=$value['record'];
-		//-- only living people ?
+		$record = $value['record'];
+		// -- only living people ?
 		if ($only_living) {
-			if ($record->getType()=="INDI" && $record->isDead()) {
-				$filter ++;
+			if ('INDI' == $record->getType() && $record->isDead()) {
+				$filter++;
+
 				continue;
 			}
-			if ($record->getType()=="FAM") {
+			if ('FAM' == $record->getType()) {
 				$husb = $record->getHusband();
 				if (is_null($husb) || $husb->isDead()) {
-					$filter ++;
+					$filter++;
+
 					continue;
 				}
 				$wife = $record->getWife();
 				if (is_null($wife) || $wife->isDead()) {
-					$filter ++;
+					$filter++;
+
 					continue;
 				}
 			}
@@ -2637,22 +2781,22 @@ function print_events_table($startjd, $endjd, $events='BIRT MARR DEAT', $only_li
 		if (!$record->canDisplayDetails() || !canDisplayFact($record->getXref(), $record->getGedId(), $value['factrec'])) {
 			continue;
 		}
-		//-- Counter
-		$output ++;
+		// -- Counter
+		$output++;
 
-		if ($output==1) {
-			//-- table body
+		if (1 == $output) {
+			// -- table body
 			$html .= '
 				<table class="shadow" id="' . $table_id . '">
 					<thead>
 						<tr>
-							<th>'.KT_I18N::translate('Record').'</th>
+							<th>' . KT_I18N::translate('Record') . '</th>
 							<th>NAME</th>
-							<th>'.KT_Gedcom_Tag::getLabel('DATE').'</th>
+							<th>' . KT_Gedcom_Tag::getLabel('DATE') . '</th>
 							<th>DATE</th>
-							<th><i class="icon-reminder" title="'.KT_I18N::translate('Anniversary').'"></i></th>
+							<th><i class="icon-reminder" title="' . KT_I18N::translate('Anniversary') . '"></i></th>
 							<th>ANNIV</th>
-							<th style="min-width: 4rem;">'.KT_Gedcom_Tag::getLabel('EVEN').'</th>
+							<th style="min-width: 4rem;">' . KT_Gedcom_Tag::getLabel('EVEN') . '</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -2661,7 +2805,7 @@ function print_events_table($startjd, $endjd, $events='BIRT MARR DEAT', $only_li
 
 		$value['name'] = $record->getFullName();
 		$value['url'] = $record->getHtmlUrl();
-		if ($record->getType()=="INDI") {
+		if ('INDI' == $record->getType()) {
 			$value['sex'] = $record->getSexImage();
 		} else {
 			$value['sex'] = '';
@@ -2669,51 +2813,51 @@ function print_events_table($startjd, $endjd, $events='BIRT MARR DEAT', $only_li
 		$filtered_events[] = $value;
 	}
 
-	foreach ($filtered_events as $n=>$value) {
+	foreach ($filtered_events as $n => $value) {
 		$html .= '<tr>';
-			//-- Record name(s)
-			$name = $value['name'];
-			$html .= '<td class="wrap">';
-				if ($value['record']->getType() == "INDI") {
-					$html .= $value['sex'];
-				}
-				$html .= '<a href="'.$value['url'] . '">' . $name . '</a>';
-			$html .= '</td>';
-			//-- NAME
-			$html .= '<td>'; //hidden by datatables code
-				$html .= $value['record']->getSortName();
-			$html .= '</td>';
-			//-- Event date
-			$html .= '<td class="wrap">';
-				$html .= $value['date']->Display(empty($SEARCH_SPIDER));
-			$html .= '</td>';
-			//-- Event date (sortable)
-			$html .= '<td>'; //hidden by datatables code
-				$html .= $n;
-			$html .= '</td>';
-			//-- Anniversary
-			$anniv = $value['anniv'];
-			$html .= '
+		// -- Record name(s)
+		$name = $value['name'];
+		$html .= '<td class="wrap">';
+		if ('INDI' == $value['record']->getType()) {
+			$html .= $value['sex'];
+		}
+		$html .= '<a href="' . $value['url'] . '">' . $name . '</a>';
+		$html .= '</td>';
+			// -- NAME
+		$html .= '<td>'; // hidden by datatables code
+		$html .= $value['record']->getSortName();
+		$html .= '</td>';
+		// -- Event date
+		$html .= '<td class="wrap">';
+		$html .= $value['date']->Display(empty($SEARCH_SPIDER));
+		$html .= '</td>';
+			// -- Event date (sortable)
+		$html .= '<td>'; // hidden by datatables code
+		$html .= $n;
+		$html .= '</td>';
+		// -- Anniversary
+		$anniv = $value['anniv'];
+		$html .= '
 				<td>' . ($anniv ? KT_I18N::number($anniv) : '&nbsp;') . '</td>
-				<td>' . $anniv.'</td>
+				<td>' . $anniv . '</td>
 			';
-			//-- Event name
-			$html .= '<td class="wrap">';
-			$html .= '<a href="' . $value['url'] . '">' . KT_Gedcom_Tag::getLabel($value['fact']) . '</a>';
-			$html .= '&nbsp;</td>';
+		// -- Event name
+		$html .= '<td class="wrap">';
+		$html .= '<a href="' . $value['url'] . '">' . KT_Gedcom_Tag::getLabel($value['fact']) . '</a>';
+		$html .= '&nbsp;</td>';
 		$html .= '</tr>';
 	}
 
-	if ($output!=0) {
+	if (0 != $output) {
 		$html .= '</tbody></table>';
 	}
 
 	// Print a final summary message about restricted/filtered facts
-	$summary = "";
-	if ($endjd==KT_CLIENT_JD) {
+	$summary = '';
+	if (KT_CLIENT_JD == $endjd) {
 		// We're dealing with the Today's Events block
-		if ($output==0) {
-			if ($filter==0) {
+		if (0 == $output) {
+			if (0 == $filter) {
 				$summary = KT_I18N::translate('No events exist for today.');
 			} else {
 				$summary = KT_I18N::translate('No events for living people exist for today.');
@@ -2721,60 +2865,70 @@ function print_events_table($startjd, $endjd, $events='BIRT MARR DEAT', $only_li
 		}
 	} else {
 		// We're dealing with the Upcoming Events block
-		if ($output==0) {
-			if ($filter==0) {
-				if ($endjd==$startjd) {
+		if (0 == $output) {
+			if (0 == $filter) {
+				if ($endjd == $startjd) {
 					$summary = KT_I18N::translate('No events exist for tomorrow.');
 				} else {
 					// I18N: tanslation for %s==1 is unused; it is translated separately as “tomorrow”
-					$summary = KT_I18N::plural('No events exist for the next %s day.', 'No events exist for the next %s days.', $endjd-$startjd+1, KT_I18N::number($endjd-$startjd+1));
+					$summary = KT_I18N::plural('No events exist for the next %s day.', 'No events exist for the next %s days.', $endjd - $startjd + 1, KT_I18N::number($endjd - $startjd + 1));
 				}
 			} else {
-				if ($endjd==$startjd) {
+				if ($endjd == $startjd) {
 					$summary = KT_I18N::translate('No events for living people exist for tomorrow.');
 				} else {
 					// I18N: tanslation for %s==1 is unused; it is translated separately as “tomorrow”
-					$summary = KT_I18N::plural('No events for living people exist for the next %s day.', 'No events for living people exist for the next %s days.', $endjd-$startjd+1, KT_I18N::number($endjd-$startjd+1));
+					$summary = KT_I18N::plural('No events for living people exist for the next %s day.', 'No events for living people exist for the next %s days.', $endjd - $startjd + 1, KT_I18N::number($endjd - $startjd + 1));
 				}
 			}
 		}
 	}
-	if ($summary!="") {
-		$html .= '<p class="strong">'. $summary. '</p>';
+	if ('' != $summary) {
+		$html .= '<p class="strong">' . $summary . '</p>';
 	}
 
 	return $html;
 }
 
 /**
- * print a list of events
+ * print a list of events.
  *
  * This performs the same function as print_events_table(), but formats the output differently.
+ *
+ * @param mixed $startjd
+ * @param mixed $endjd
+ * @param mixed $events
+ * @param mixed $only_living
+ * @param mixed $sort_by
  */
-function print_events_list($startjd, $endjd, $events='BIRT MARR DEAT', $only_living=false, $sort_by='anniv') {
+function print_events_list($startjd, $endjd, $events = 'BIRT MARR DEAT', $only_living = false, $sort_by = 'anniv')
+{
 	// Did we have any output?  Did we skip anything?
-	$filtered_events	= array();
-	$output				= 0;
-	$filter				= 0;
-	$html				= '';
+	$filtered_events = [];
+	$output = 0;
+	$filter = 0;
+	$html = '';
 
 	foreach (get_events_list($startjd, $endjd, $events) as $value) {
 		$record = KT_GedcomRecord::getInstance($value['id']);
-		//-- only living people ?
+		// -- only living people ?
 		if ($only_living) {
-			if ($record->getType() == "INDI" && $record->isDead()) {
-				$filter ++;
+			if ('INDI' == $record->getType() && $record->isDead()) {
+				$filter++;
+
 				continue;
 			}
-			if ($record->getType() == "FAM") {
+			if ('FAM' == $record->getType()) {
 				$husb = $record->getHusband();
 				if (is_null($husb) || $husb->isDead()) {
-					$filter ++;
+					$filter++;
+
 					continue;
 				}
 				$wife = $record->getWife();
 				if (is_null($wife) || $wife->isDead()) {
-					$filter ++;
+					$filter++;
+
 					continue;
 				}
 			}
@@ -2784,11 +2938,11 @@ function print_events_list($startjd, $endjd, $events='BIRT MARR DEAT', $only_liv
 		if (!$record->canDisplayDetails() || !canDisplayFact($record->getXref(), $record->getGedId(), $value['factrec'])) {
 			continue;
 		}
-		$output ++;
+		$output++;
 
-		$value['name']	= $record->getFullName();
-		$value['url']	= $record->getHtmlUrl();
-		if ($record->getType()=="INDI") {
+		$value['name'] = $record->getFullName();
+		$value['url'] = $record->getHtmlUrl();
+		if ('INDI' == $record->getType()) {
 			$value['sex'] = $record->getSexImage();
 		} else {
 			$value['sex'] = '';
@@ -2798,34 +2952,37 @@ function print_events_list($startjd, $endjd, $events='BIRT MARR DEAT', $only_liv
 
 	// Now we've filtered the list, we can sort by event, if required
 	switch ($sort_by) {
-	case 'anniv':
-		uasort($filtered_events, 'event_sort');
-		break;
-	case 'alpha':
-		uasort($filtered_events, 'event_sort_name');
-		break;
+		case 'anniv':
+			uasort($filtered_events, 'event_sort');
+
+			break;
+
+		case 'alpha':
+			uasort($filtered_events, 'event_sort_name');
+
+			break;
 	}
 
 	foreach ($filtered_events as $value) {
 		$html .= '<a href="' . $value['url'] . '" class="list_item name2">' . $value['name'] . $value['sex'] . '</a>
 		<div class="indent">' .
 			KT_Gedcom_Tag::getLabel($value['fact']) . ' - ' . $value['date']->Display(true);
-			if ($value['anniv'] != 0) {
-				 $html .= ' (' . KT_I18N::translate('%s year anniversary', $value['anniv']) . ')';
-			}
-			if (!empty($value['plac'])) {
-				$tmp = new KT_Place($value['plac'], KT_GED_ID);
-				$html .= ' - <a href="' . $tmp->getURL() . '">' . $tmp->getFullName() . '</a>';
-			}
+		if (0 != $value['anniv']) {
+			$html .= ' (' . KT_I18N::translate('%s year anniversary', $value['anniv']) . ')';
+		}
+		if (!empty($value['plac'])) {
+			$tmp = new KT_Place($value['plac'], KT_GED_ID);
+			$html .= ' - <a href="' . $tmp->getURL() . '">' . $tmp->getFullName() . '</a>';
+		}
 		$html .= '</div>';
 	}
 
 	// Print a final summary message about restricted/filtered facts
 	$summary = '';
-	if ($endjd == KT_CLIENT_JD) {
+	if (KT_CLIENT_JD == $endjd) {
 		// We're dealing with the Today's Events block
-		if ($output == 0) {
-			if ($filter == 0) {
+		if (0 == $output) {
+			if (0 == $filter) {
 				$summary = '<div class="callout alert">' .
 					KT_I18N::translate('No events exist for today.') .
 				'</div>';
@@ -2837,8 +2994,8 @@ function print_events_list($startjd, $endjd, $events='BIRT MARR DEAT', $only_liv
 		}
 	} else {
 		// We're dealing with the Upcoming Events block
-		if ($output == 0) {
-			if ($filter == 0) {
+		if (0 == $output) {
+			if (0 == $filter) {
 				if ($endjd == $startjd) {
 					$summary = '<div class="callout alert">' .
 						KT_I18N::translate('No events exist for tomorrow.') .
@@ -2846,7 +3003,7 @@ function print_events_list($startjd, $endjd, $events='BIRT MARR DEAT', $only_liv
 				} else {
 					$summary = '<div class="callout alert">' .
 						// I18N: tanslation for %s==1 is unused; it is translated separately as “tomorrow”
-						KT_I18N::plural('No events exist for the next %s day.', 'No events exist for the next %s days.', $endjd-$startjd+1, KT_I18N::number($endjd-$startjd+1)) .
+						KT_I18N::plural('No events exist for the next %s day.', 'No events exist for the next %s days.', $endjd - $startjd + 1, KT_I18N::number($endjd - $startjd + 1)) .
 					'</div>';
 				}
 			} else {
@@ -2857,7 +3014,7 @@ function print_events_list($startjd, $endjd, $events='BIRT MARR DEAT', $only_liv
 				} else {
 					$summary = '<div class="callout alert">' .
 						// I18N: tanslation for %s==1 is unused; it is translated separately as “tomorrow”
-						KT_I18N::plural('No events for living people exist for the next %s day.', 'No events for living people exist for the next %s days.', $endjd-$startjd+1, KT_I18N::number($endjd-$startjd+1)) .
+						KT_I18N::plural('No events for living people exist for the next %s day.', 'No events for living people exist for the next %s days.', $endjd - $startjd + 1, KT_I18N::number($endjd - $startjd + 1)) .
 					'</div>';
 				}
 			}
@@ -2872,108 +3029,122 @@ function print_events_list($startjd, $endjd, $events='BIRT MARR DEAT', $only_liv
 }
 
 // print a chart by age using Google chart API
-function print_chart_by_age($data, $title) {
+function print_chart_by_age($data, $title)
+{
 	$count = 0;
 	$agemax = 0;
 	$vmax = 0;
 	$avg = 0;
-	foreach ($data as $age=>$v) {
+	foreach ($data as $age => $v) {
 		$n = strlen($v);
 		$vmax = max($vmax, $n);
 		$agemax = max($agemax, $age);
 		$count += $n;
-		$avg += $age*$n;
+		$avg += $age * $n;
 	}
-	if ($count<1) return;
-	$avg = round($avg/$count);
-	$chart_url = "https://chart.googleapis.com/chart?cht=bvs"; // chart type
-	$chart_url .= "&amp;chs=725x150"; // size
-	$chart_url .= "&amp;chbh=3,2,2"; // bvg : 4,1,2
-	$chart_url .= "&amp;chf=bg,s,FFFFFF99"; //background color
-	$chart_url .= "&amp;chco=0000FF,FFA0CB,FF0000"; // bar color
-	$chart_url .= "&amp;chdl=".rawurlencode(KT_I18N::translate('Males'))."|".rawurlencode(KT_I18N::translate('Females'))."|".rawurlencode(KT_I18N::translate('Average age').": ".$avg); // legend & average age
-	$chart_url .= "&amp;chtt=".rawurlencode((string) $title); // title
-	$chart_url .= "&amp;chxt=x,y,r"; // axis labels specification
-	$chart_url .= "&amp;chm=V,FF0000,0,".($avg-0.3).",1"; // average age line marker
-	$chart_url .= "&amp;chxl=0:|"; // label
-	for ($age=0; $age<=$agemax; $age+=5) {
-		$chart_url .= $age."|||||"; // x axis
+	if ($count < 1) {
+		return;
 	}
-	$chart_url .= "|1:||".rawurlencode(KT_I18N::percentage($vmax/$count)); // y axis
-	$chart_url .= "|2:||";
+	$avg = round($avg / $count);
+	$chart_url = 'https://chart.googleapis.com/chart?cht=bvs'; // chart type
+	$chart_url .= '&amp;chs=725x150'; // size
+	$chart_url .= '&amp;chbh=3,2,2'; // bvg : 4,1,2
+	$chart_url .= '&amp;chf=bg,s,FFFFFF99'; // background color
+	$chart_url .= '&amp;chco=0000FF,FFA0CB,FF0000'; // bar color
+	$chart_url .= '&amp;chdl=' . rawurlencode(KT_I18N::translate('Males')) . '|' . rawurlencode(KT_I18N::translate('Females')) . '|' . rawurlencode(KT_I18N::translate('Average age') . ': ' . $avg); // legend & average age
+	$chart_url .= '&amp;chtt=' . rawurlencode((string) $title); // title
+	$chart_url .= '&amp;chxt=x,y,r'; // axis labels specification
+	$chart_url .= '&amp;chm=V,FF0000,0,' . ($avg - 0.3) . ',1'; // average age line marker
+	$chart_url .= '&amp;chxl=0:|'; // label
+	for ($age = 0; $age <= $agemax; $age += 5) {
+		$chart_url .= $age . '|||||'; // x axis
+	}
+	$chart_url .= '|1:||' . rawurlencode(KT_I18N::percentage($vmax / $count)); // y axis
+	$chart_url .= '|2:||';
 	$step = $vmax;
-	for ($d=$vmax; $d>0; $d--) {
-		if ($vmax<($d*10+1) && ($vmax % $d)==0) $step = $d;
-	}
-	if ($step==$vmax) {
-		for ($d=$vmax-1; $d>0; $d--) {
-			if (($vmax-1)<($d*10+1) && (($vmax-1) % $d)==0) $step = $d;
+	for ($d = $vmax; $d > 0; $d--) {
+		if ($vmax < ($d * 10 + 1) && ($vmax % $d) == 0) {
+			$step = $d;
 		}
 	}
-	for ($n=$step; $n<$vmax; $n+=$step) {
-		$chart_url .= $n."|";
+	if ($step == $vmax) {
+		for ($d = $vmax - 1; $d > 0; $d--) {
+			if (($vmax - 1) < ($d * 10 + 1) && (($vmax - 1) % $d) == 0) {
+				$step = $d;
+			}
+		}
 	}
-	$chart_url .= rawurlencode((string) $vmax." / ".$count); // r axis
-	$chart_url .= "&amp;chg=100,".round(100*$step/$vmax, 1).",1,5"; // grid
-	$chart_url .= "&amp;chd=s:"; // data : simple encoding from A=0 to 9=61
-	$CHART_ENCODING61 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-	for ($age=0; $age<=$agemax; $age++) {
-		$chart_url .= $CHART_ENCODING61[(int)(substr_count($data[$age], "M")*61/$vmax)];
+	for ($n = $step; $n < $vmax; $n += $step) {
+		$chart_url .= $n . '|';
 	}
-	$chart_url .= ",";
-	for ($age=0; $age<=$agemax; $age++) {
-		$chart_url .= $CHART_ENCODING61[(int)(substr_count($data[$age], "F")*61/$vmax)];
+	$chart_url .= rawurlencode((string) $vmax . ' / ' . $count); // r axis
+	$chart_url .= '&amp;chg=100,' . round(100 * $step / $vmax, 1) . ',1,5'; // grid
+	$chart_url .= '&amp;chd=s:'; // data : simple encoding from A=0 to 9=61
+	$CHART_ENCODING61 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+	for ($age = 0; $age <= $agemax; $age++) {
+		$chart_url .= $CHART_ENCODING61[(int) (substr_count($data[$age], 'M') * 61 / $vmax)];
 	}
-	$html = '<img src="'. $chart_url. '" alt="'. $title. '" title="'. $title. '" class="gchart">';
-	return $html;
+	$chart_url .= ',';
+	for ($age = 0; $age <= $agemax; $age++) {
+		$chart_url .= $CHART_ENCODING61[(int) (substr_count($data[$age], 'F') * 61 / $vmax)];
+	}
+
+	return '<img src="' . $chart_url . '" alt="' . $title . '" title="' . $title . '" class="gchart">';
 }
 
 // print a chart by decade using Google chart API
-function print_chart_by_decade($data, $title) {
+function print_chart_by_decade($data, $title)
+{
 	$count = 0;
 	$vmax = 0;
-	foreach ($data as $age=>$v) {
+	foreach ($data as $age => $v) {
 		$n = strlen($v);
 		$vmax = max($vmax, $n);
 		$count += $n;
 	}
-	if ($count<1) return;
-	$chart_url = "https://chart.googleapis.com/chart?cht=bvs"; // chart type
-	$chart_url .= "&amp;chs=360x150"; // size
-	$chart_url .= "&amp;chbh=3,3"; // bvg : 4,1,2
-	$chart_url .= "&amp;chf=bg,s,FFFFFF99"; //background color
-	$chart_url .= "&amp;chco=0000FF,FFA0CB"; // bar color
-	$chart_url .= "&amp;chtt=".rawurlencode((string) $title); // title
-	$chart_url .= "&amp;chxt=x,y,r"; // axis labels specification
-	$chart_url .= "&amp;chxl=0:|&lt;|||"; // <1570
-	for ($y=1600; $y<2030; $y+=50) {
-		$chart_url .= $y."|||||"; // x axis
+	if ($count < 1) {
+		return;
 	}
-	$chart_url .= "|1:||".rawurlencode(KT_I18N::percentage($vmax/$count)); // y axis
-	$chart_url .= "|2:||";
+	$chart_url = 'https://chart.googleapis.com/chart?cht=bvs'; // chart type
+	$chart_url .= '&amp;chs=360x150'; // size
+	$chart_url .= '&amp;chbh=3,3'; // bvg : 4,1,2
+	$chart_url .= '&amp;chf=bg,s,FFFFFF99'; // background color
+	$chart_url .= '&amp;chco=0000FF,FFA0CB'; // bar color
+	$chart_url .= '&amp;chtt=' . rawurlencode((string) $title); // title
+	$chart_url .= '&amp;chxt=x,y,r'; // axis labels specification
+	$chart_url .= '&amp;chxl=0:|&lt;|||'; // <1570
+	for ($y = 1600; $y < 2030; $y += 50) {
+		$chart_url .= $y . '|||||'; // x axis
+	}
+	$chart_url .= '|1:||' . rawurlencode(KT_I18N::percentage($vmax / $count)); // y axis
+	$chart_url .= '|2:||';
 	$step = $vmax;
-	for ($d=$vmax; $d>0; $d--) {
-		if ($vmax<($d*10+1) && ($vmax % $d)==0) $step = $d;
-	}
-	if ($step==$vmax) {
-		for ($d=$vmax-1; $d>0; $d--) {
-			if (($vmax-1)<($d*10+1) && (($vmax-1) % $d)==0) $step = $d;
+	for ($d = $vmax; $d > 0; $d--) {
+		if ($vmax < ($d * 10 + 1) && ($vmax % $d) == 0) {
+			$step = $d;
 		}
 	}
-	for ($n=$step; $n<$vmax; $n+=$step) {
-		$chart_url .= $n."|";
+	if ($step == $vmax) {
+		for ($d = $vmax - 1; $d > 0; $d--) {
+			if (($vmax - 1) < ($d * 10 + 1) && (($vmax - 1) % $d) == 0) {
+				$step = $d;
+			}
+		}
 	}
-	$chart_url .= rawurlencode((string) $vmax." / ".$count); // r axis
-	$chart_url .= "&amp;chg=100,".round(100*$step/$vmax, 1).",1,5"; // grid
-	$chart_url .= "&amp;chd=s:"; // data : simple encoding from A=0 to 9=61
-	$CHART_ENCODING61 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-	for ($y=1570; $y<2030; $y+=10) {
-		$chart_url .= $CHART_ENCODING61[(int)(substr_count($data[$y], "M")*61/$vmax)];
+	for ($n = $step; $n < $vmax; $n += $step) {
+		$chart_url .= $n . '|';
 	}
-	$chart_url .= ",";
-	for ($y=1570; $y<2030; $y+=10) {
-		$chart_url .= $CHART_ENCODING61[(int)(substr_count($data[$y], "F")*61/$vmax)];
+	$chart_url .= rawurlencode((string) $vmax . ' / ' . $count); // r axis
+	$chart_url .= '&amp;chg=100,' . round(100 * $step / $vmax, 1) . ',1,5'; // grid
+	$chart_url .= '&amp;chd=s:'; // data : simple encoding from A=0 to 9=61
+	$CHART_ENCODING61 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+	for ($y = 1570; $y < 2030; $y += 10) {
+		$chart_url .= $CHART_ENCODING61[(int) (substr_count($data[$y], 'M') * 61 / $vmax)];
 	}
-	$html = '<img src="'. $chart_url. '" alt="'. $title. '" title="'. $title. '" class="gchart">';
-	return $html;
+	$chart_url .= ',';
+	for ($y = 1570; $y < 2030; $y += 10) {
+		$chart_url .= $CHART_ENCODING61[(int) (substr_count($data[$y], 'F') * 61 / $vmax)];
+	}
+
+	return '<img src="' . $chart_url . '" alt="' . $title . '" title="' . $title . '" class="gchart">';
 }
