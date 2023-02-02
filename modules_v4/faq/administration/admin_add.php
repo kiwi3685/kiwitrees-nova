@@ -36,12 +36,12 @@ $controller
 	->addInlineJavascript('ckeditorStandard();');
 
 if ($save) {
-	$block_id 		= KT_Filter::postInteger('block_id');
-	$block_order 	= KT_Filter::postInteger('block_order');
-	$header      	= KT_Filter::post('header',  KT_REGEX_UNSAFE);
-	$faqbody     	= KT_Filter::post('faqbody', KT_REGEX_UNSAFE);
-	$gedID 			= KT_Filter::post('gedID');
-	$languages 		= array();
+	$block_id         = KT_Filter::postInteger('block_id');
+	$block_order      = KT_Filter::postInteger('block_order');
+	$item_title       = KT_Filter::post('faq_title',  KT_REGEX_UNSAFE);
+	$item_description = KT_Filter::post('faq_description', KT_REGEX_UNSAFE);
+	$gedID            = KT_Filter::post('gedID');
+	$languages        = array();
 
 	KT_DB::prepare(
 		"INSERT INTO `##block` (gedcom_id, module_name, block_order) VALUES (NULLIF(?, ''), ?, ?)"
@@ -53,8 +53,8 @@ if ($save) {
 
 	$block_id = KT_DB::getInstance()->lastInsertId();
 
-	set_block_setting($block_id, 'header', $header);
-	set_block_setting($block_id, 'faqbody', $faqbody); 
+	set_block_setting($block_id, 'faq_title', $item_title);
+	set_block_setting($block_id, 'faq_description', $item_description); 
 
 	foreach (KT_I18N::used_languages() as $code=>$name) {
 		if (KT_Filter::postBool('lang_' . $code)) {

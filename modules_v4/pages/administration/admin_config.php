@@ -25,6 +25,9 @@ require KT_ROOT . 'includes/functions/functions_edit.php';
 include KT_THEME_URL . 'templates/adminData.php';
 global $iconStyle;
 
+$gedID  	= KT_Filter::post('gedID') ? KT_Filter::post('gedID') : '';
+$action     = KT_Filter::post('action');
+
 $controller = new KT_Controller_Page();
 $controller
 	->restrictAccess(KT_USER_IS_ADMIN)
@@ -57,25 +60,12 @@ $controller
 
 	');
 
-$action = KT_Filter::post('action');
-$gedID  = KT_Filter::post('gedID') ? KT_Filter::post('gedID') : KT_GED_ID;
-
-switch ($action) {
-	case 'update':
+if ($action == 'update') {
 		set_module_setting($this->getName(), 'HEADER_TITLE', KT_Filter::post('NEW_HEADER_TITLE'));
 		set_module_setting($this->getName(), 'HEADER_ICON',  str_replace($iconStyle . ' ', '', KT_Filter::post('NEW_HEADER_ICON')));
 		set_module_setting($this->getName(), 'HEADER_DESCRIPTION', KT_Filter::post('NEW_HEADER_DESCRIPTION', KT_REGEX_UNSAFE)); // allow html
 
 		AddToLog($this->getName() . ' config updated', 'config');
-		break;
-	case 'updatePagesList':
-		foreach ($items as $item) {
-			$order = KT_Filter::post('order-' . $item->block_id);
-			KT_DB::prepare(
-				"UPDATE `##block` SET block_order=? WHERE block_id=?"
-			)->execute(array($order, $item->block_id));
-		}
-		break;
 }
 
 $items = KT_DB::prepare("
@@ -97,6 +87,15 @@ $min_block_order = KT_DB::prepare(
 $max_block_order = KT_DB::prepare(
 	"SELECT MAX(block_order) FROM `##block` WHERE module_name = ?"
 )->execute(array($this->getName()))->fetchOne();
+
+if ($action == 'updatePagesList') {
+	foreach ($items as $item) {
+		$order = KT_Filter::post('order-' . $item->block_id);
+		KT_DB::prepare(
+			"UPDATE `##block` SET block_order=? WHERE block_id=?"
+		)->execute(array($order, $item->block_id));
+	}
+}
 
 echo relatedPages($moduleTools, $this->getConfigLink());
 
@@ -182,7 +181,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', ''); ?>
 						<?php 
 						$trees = KT_Tree::getAll();
 						foreach ($items as $item) { ?>
-							<tr class="pages_edit_pos">
+							<tr">
 								<td>
 									<?php echo($item->block_order); ?>
 								</td>
@@ -224,6 +223,11 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', ''); ?>
 								<td>
 									<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_delete&amp;block_id=<?php echo $item->block_id; ?>" onclick="return confirm('<?php echo KT_I18N::translate('Are you sure you want to delete this page?'); ?>');">
 										<?php echo KT_I18N::translate('Delete'); ?>
+									</a>
+								</td>
+								<td>
+									<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=show&amp;pages_id=<?php echo $item->block_id; ?>&amp;gedID=<?php echo $gedID; ?>" target="_blank">
+										<?php echo KT_I18N::translate('View'); ?>
 									</a>
 								</td>
 							</tr>

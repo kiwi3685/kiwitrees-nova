@@ -25,6 +25,9 @@ require KT_ROOT . 'includes/functions/functions_edit.php';
 include KT_THEME_URL . 'templates/adminData.php';
 global $iconStyle;
 
+$action = KT_Filter::post('action');
+$gedID  = KT_Filter::post('gedID') ? KT_Filter::post('gedID') : KT_GED_ID;
+
 $controller = new KT_Controller_Page();
 $controller
 	->restrictAccess(KT_USER_IS_ADMIN)
@@ -39,24 +42,22 @@ $controller
 
 	');
 
-$action = KT_Filter::post('action');
-$gedID  = KT_Filter::post('gedID') ? KT_Filter::post('gedID') : KT_GED_ID;
-
 if ($action == 'update') {
 	set_module_setting($this->getName(), 'HEADER_TITLE', KT_Filter::post('NEW_HEADER_TITLE'));
 	set_module_setting($this->getName(), 'HEADER_ICON',  str_replace($iconStyle . ' ', '', KT_Filter::post('NEW_HEADER_ICON')));
 	set_module_setting($this->getName(), 'HEADER_DESCRIPTION', KT_Filter::post('NEW_HEADER_DESCRIPTION', KT_REGEX_UNSAFE)); // allow html
+
 	AddToLog($this->getName() . ' config updated', 'config');
 }
 
-$faqs = KT_DB::prepare("
-	SELECT block_id, block_order, gedcom_id, bs1.setting_value AS header, bs2.setting_value AS faqbody
+$items = KT_DB::prepare("
+	SELECT block_id, block_order, gedcom_id, bs1.setting_value AS faq_title, bs2.setting_value AS faq_description
 	FROM `##block` b
 	JOIN `##block_setting` bs1 USING (block_id)
 	JOIN `##block_setting` bs2 USING (block_id)
 	WHERE module_name = ?
-	AND bs1.setting_name = 'header'
-	AND bs2.setting_name = 'faqbody'
+	AND bs1.setting_name = 'faq_title'
+	AND bs2.setting_name = 'faq_description'
 	AND IFNULL(gedcom_id, ?) = ?
 	ORDER BY block_order
 ")->execute(array($this->getName(), $gedID, $gedID))->fetchAll();
@@ -128,7 +129,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', ''); ?>
 				</button>
 			</div>
 
-			<?php if($faqs) { ?>
+			<?php if($items) { ?>
 				<table class="cell" id="faq_edit">
 					<thead>
 						<tr>
@@ -144,7 +145,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', ''); ?>
 							<th>
 								<?php echo KT_I18N::translate('Question'); ?>
 							</th>
-							<th style="width: 20%;" colspan="3" class="text-center">
+							<th style="width: 20%;" colspan="4" class="text-center">
 								<?php echo KT_I18N::translate('Actions'); ?>
 							</th>
 						</tr>
@@ -152,49 +153,54 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', ''); ?>
 					<tbody>
 						<?php 
 						$trees = KT_Tree::getAll();
-						foreach ($faqs as $faq) { ?>
+						foreach ($items as $item) { ?>
 							<tr class="faq_edit_pos">
 								<td>
-									<?php echo($faq->block_order); ?>
+									<?php echo($item->block_order); ?>
 								</td>
 								<td>
-									<?php echo($faq->block_id); ?>
+									<?php echo($item->block_id); ?>
 								</td>
 								<td>
 									<?php
-									if ($faq->gedcom_id == null) {
+									if ($item->gedcom_id == null) {
 										echo KT_I18N::translate('All');
 									} else {
-										echo $trees[$faq->gedcom_id]->tree_title_html;
+										echo $trees[$item->gedcom_id]->tree_title_html;
 									} ?>
 								</td>
 								<td>
-									<?php echo $faq->header; ?>
+									<?php echo $item->faq_title; ?>
 								</td>
 								<td>
-									<?php if ($faq->block_order == $min_block_order) { ?>
+									<?php if ($item->block_order == $min_block_order) { ?>
 										&nbsp;
 									<?php } else { ?>
-										<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_moveup&amp;block_id=<?php echo $faq->block_id; ?>">
+										<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_moveup&amp;block_id=<?php echo $item->block_id; ?>">
 											<i class="<?php echo $iconStyle; ?> fa-arrow-up"></i>
 										</a>
 									<?php } ?>
-											<?php if ($faq->block_order == $max_block_order) { ?>
+											<?php if ($item->block_order == $max_block_order) { ?>
 										&nbsp;
 									<?php } else { ?>
-										<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_movedown&amp;block_id=<?php echo $faq->block_id; ?>">
+										<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_movedown&amp;block_id=<?php echo $item->block_id; ?>">
 											<i class="<?php echo $iconStyle; ?> fa-arrow-down"></i>
 										</a>
 									<?php } ?>
 								</td>
 								<td>
-									<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit&amp;block_id=<?php echo $faq->block_id; ?>&amp;gedID=<?php echo $gedID; ?>">
+									<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit&amp;block_id=<?php echo $item->block_id; ?>&amp;gedID=<?php echo $gedID; ?>">
 										<?php echo KT_I18N::translate('Edit'); ?>
 									</a>
 								</td>
 								<td>
-									<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_delete&amp;block_id=<?php echo $faq->block_id; ?>" onclick="return confirm('<?php echo KT_I18N::translate('Are you sure you want to delete this faq entry?'); ?>');">
+									<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_delete&amp;block_id=<?php echo $item->block_id; ?>" onclick="return confirm('<?php echo KT_I18N::translate('Are you sure you want to delete this faq entry?'); ?>');">
 										<?php echo KT_I18N::translate('Delete'); ?>
+									</a>
+								</td>
+								<td>
+									<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=show&amp;faq_id=<?php echo $item->block_id; ?>&amp;gedID=<?php echo $gedID; ?>" target="_blank">
+										<?php echo KT_I18N::translate('View'); ?>
 									</a>
 								</td>
 							</tr>

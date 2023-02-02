@@ -251,7 +251,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 				<?php echo KT_I18N::translate('Show for which family tree'); ?>
 			</label>
 			<div class="cell medium-4">
-				<?php echo select_edit_control('gedID', KT_Tree::getIdList(), KT_I18N::translate('All'), $gedID); ?>
+				<?php echo select_edit_control('gedID', KT_Tree::getIdList(), '', $gedID); ?>
 			</div>
 			<div class="cell medium-6"></div>
 			<label class="cell medium-2">

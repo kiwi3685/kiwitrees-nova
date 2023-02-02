@@ -226,10 +226,10 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 			')
 		;
 
-		$item_id = KT_Filter::get('pages_id');
+		$item_id     = KT_Filter::get('pages_id');
 		$count_items = 0;
-		$item_list = $this->getPagesList();
-		foreach ($item_list as $item) {
+		$items       = $this->getPagesList();
+		foreach ($items as $item) {
 			$languages = get_block_setting($item->block_id, 'languages');
 			if ((!$languages || in_array(KT_LOCALE, explode(',', $languages))) && $item->pages_access >= KT_USER_ACCESS_LEVEL) {
 				$count_items = $count_items + 1;
@@ -244,7 +244,7 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 				</div>				
 				<?php if ($count_items > 1) { ?>
 					<ul class="cell tabs" data-tabs id="pages-tabs">
-						<?php foreach ($item_list as $item) {
+						<?php foreach ($items as $item) {
 							$languages = get_block_setting($item->block_id, 'languages');
 							if ((!$languages || in_array(KT_LOCALE, explode(',', $languages))) && $item->pages_access >= KT_USER_ACCESS_LEVEL) {
 								$class = ($item_id == $item->block_id ? 'is-active' : ''); ?>
@@ -263,7 +263,7 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 					<div class="grid-x">
 						<?php
 							$item_pages = '';
-							foreach ($item_list as $item) {
+							foreach ($items as $item) {
 								if ((!$languages || in_array(KT_LOCALE, explode(',', $languages))) && $item_id == $item->block_id && $item->pages_access >= KT_USER_ACCESS_LEVEL) {
 									$item_content = $item->pages_content;
 								}

@@ -38,8 +38,8 @@ $controller
 if ($save) {
 	$block_id      = KT_Filter::postInteger('block_id');
 	$block_order   = KT_Filter::postInteger('block_order');
-	$pages_title   = KT_Filter::post('pages_title',  KT_REGEX_UNSAFE);
-	$pages_content = KT_Filter::post('pages_content', KT_REGEX_UNSAFE);
+	$item_title   = KT_Filter::post('pages_title',  KT_REGEX_UNSAFE);
+	$item_content = KT_Filter::post('pages_content', KT_REGEX_UNSAFE);
 	$gedID         = KT_Filter::post('gedID');
 	$languages     = array();
 
@@ -53,8 +53,8 @@ if ($save) {
 
 	$block_id = KT_DB::getInstance()->lastInsertId();
 
-	set_block_setting($block_id, 'pages_title', $pages_title);
-	set_block_setting($block_id, 'pages_content', $pages_content); 
+	set_block_setting($block_id, 'pages_title', $item_title);
+	set_block_setting($block_id, 'pages_content', $item_content); 
 
 	foreach (KT_I18N::used_languages() as $code=>$name) {
 		if (KT_Filter::postBool('lang_' . $code)) {
@@ -87,8 +87,8 @@ if ($save) {
 }
 
 $block_id    = '';
-$pages_title      = '';
-$pages_content     = '';
+$item_title      = '';
+$item_content     = '';
 $item_access = KT_I18N::translate('All');
 
 $block_order = KT_DB::prepare(
@@ -106,13 +106,13 @@ echo pageStart('pages_details', $controller->getPageTitle()); ?>
 				<?php echo KT_I18N::translate('Title'); ?>				
 			</label>
 			<div class="cell medium-10">
-				<input type="text" name="pages_title" value="<?php echo htmlspecialchars((string) $pages_title); ?>">
+				<input type="text" name="pages_title" value="<?php echo htmlspecialchars((string) $item_title); ?>">
 			</div>
 			<label class="cell medium-2">
 				<?php echo KT_I18N::translate('Content'); ?>
 			</label>
 			<div class="cell medium-10">
-				<textarea name="pages_content" class="html-edit"><?php echo htmlspecialchars((string) $pages_content); ?></textarea>
+				<textarea name="pages_content" class="html-edit"><?php echo htmlspecialchars((string) $item_content); ?></textarea>
 			</div>
 			<label class="cell medium-2">
 				<?php echo KT_I18N::translate('Pages order'); ?>

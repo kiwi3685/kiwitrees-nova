@@ -52,11 +52,18 @@ try {
 }
 
 try {
+    self::exec("UPDATE `##block_setting`  SET `setting_name` = REPLACE(`setting_name`, 'header', 'faq_title')");
+} catch (PDOException $ex) {
+    // Perhaps we have already deleted this data?
+}try {
+    self::exec("UPDATE `##block_setting`  SET `setting_name` = REPLACE(`setting_name`, 'faqbody', 'faq_description')");
+} catch (PDOException $ex) {
+    // Perhaps we have already deleted this data?
+}try {
     self::exec("UPDATE `##block_setting`  SET `setting_name` = REPLACE(`setting_name`, 'plugin', 'gallery_plugin')");
 } catch (PDOException $ex) {
     // Perhaps we have already deleted this data?
 }
-
 try {
     self::exec("UPDATE `##block_setting`  SET `setting_name` = REPLACE(`setting_name`, 'gallery_folder_f', 'gallery_folder')");
 } catch (PDOException $ex) {

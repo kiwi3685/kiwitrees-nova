@@ -9641,7 +9641,7 @@ main #admin-content .listStyleNone {
 }
 main #admin-content .accordion .accordion-item .accordion-title:before {
 	content: "";
-	font-family: "Font Awesome 6 Solid";
+	font-family: "Font Awesome 6 Free";
 	display: none;
 }
 main #admin-content .accordion .accordion-item.is-active > .accordion-title:before {
@@ -9773,7 +9773,7 @@ main #admin-content .tabs-content .accordion .accordion-title svg {
 }
 main #admin-content .tabs-content .accordion .accordion-title:before {
 	content: "";
-	font-family: "Font Awesome 6 Solid";
+	font-family: "Font Awesome 6 Free";
 	display: none;
 }
 main #admin-content .tabs-content .accordion.is-active > .accordion-title:before {

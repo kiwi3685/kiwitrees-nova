@@ -1,0 +1,472 @@
+// Local Galleria theme - Kahikatoa
+// -----------------------------
+//
+// Table of Contents:
+//
+//  1. Global
+//  2. Adapted version of Galleria kahikatoa theme
+//  3. Gallery Module (excl. native galleria styles)
+//
+
+@import '/Users/nigelosborne/Sites/foundation-sites/scss/util/util';
+@import url('https://fonts.googleapis.com/css?family=Taviraj');
+
+// fix for escaped unicode references to fontawesome icons
+@mixin variable-icon-font($icon-code) {
+	font: var(--fa-font-solid);
+	content: #{"\"\\"}#{$icon-code + "\""};
+}
+
+//  1. Global
+// -----------
+$fontAwesomeFamily: 'Font Awesome 6 Free'; // Must match setting in theme.php (e.g. 'solid' matches 'fas'; 'regular' matches 'far')
+
+$global-font-size: 100%;
+$global-width: rem-calc(100rem);
+$global-lineheight: 1.5;
+$foundation-palette: (
+  primary: #ab3334, // red
+  secondary: #faf5e8, // off-white
+  success: #3adb76, // green
+  warning: #ffae00, // yellow
+  alert: #ab3334, // red
+);
+
+$light-gray: #e0e0e0;
+$medium-gray: #cacaca;
+$dark-gray: #8a8a8a;
+$black: #331919; // dark-brown
+$white: #fffff4;
+$autocomplete: #eee8aa;
+$body-font-family: "Taviraj", serif;
+$body-antialiased: true;
+$global-margin: 1rem;
+$global-padding: 1rem;
+$global-weight-normal: 400;
+$global-weight-medium: 600;
+$global-weight-bold: 900;
+$global-radius: 0;
+$global-text-direction: ltr;
+$global-flexbox: false;
+$print-transparent-backgrounds: true;
+$print-hrefs: false;
+$warning-color: #ff0000; // red
+$highlight-color: #fff000; // yellow
+
+/* color variables */
+@include add-foundation-colors;
+
+$body-background: $secondary-color;
+$body-font-color: $black;
+
+$male: #0193b7; // blue
+$female: lighten($alert-color, 30%); // a lighter version of red
+$unknown: $dark-gray;
+
+//  2. Adapted version of Galleria kahikatoa theme
+//  ---------------------------------------------
+
+#galleria {
+	border: 0.25rem inset $light-gray;
+	display: inline-block;
+	font-family: $body-font-family !important;
+	height: 800px;
+	vertical-align: top;
+	&.kiwitreesLinked {
+		width: 84%;
+	}
+	&.kiwitrees,
+	&.uploads,
+	&.other {
+		display: block;
+		margin: auto;
+		width: 93%;
+	}
+}
+
+.galleria-layer {
+	display: none!important;
+}
+
+#galleria-loader {
+	height: 1px !important;
+}
+
+.galleria-theme-kahikatoa {
+	position: relative;
+	overflow: hidden;
+	background: none;
+	img {
+		-moz-user-select: none;
+		-webkit-user-select: none;
+		-o-user-select: none;
+	}
+
+	.galleria-stage {
+		position: absolute;
+		top: 10px;
+		bottom: 90px;
+		left: 10px;
+		right: 50px;
+		overflow: hidden;
+		margin: 10px 8px 60px 8px;
+	}
+
+	.galleria-bar {
+		background:$secondary-color;
+		bottom: 10px;
+		color: $primary-color;
+		font-size: 1rem;
+		height: 130px;
+		left: 1%;
+		overflow: hidden;
+		position: absolute;
+		right: auto;
+		width: 95%;
+		z-index: 3;
+		.galleria-fullscreen,
+		.galleria-play {
+			cursor: pointer;
+			position: absolute;
+			top: 5px;
+		}
+
+		.galleria-fullscreen {
+			border-right: 1px solid $dark-gray;
+			left: 10px;
+			&::before {
+				font-family: $fontAwesomeFamily;
+				@include variable-icon-font('f35d');
+				display: none;
+			}
+		}
+
+		.galleria-play {
+			left: 50px;
+			&::before {
+				font-family: $fontAwesomeFamily;
+				@include variable-icon-font('f04b');
+				display: none;
+			}
+		}
+	}
+
+	.galleria-play.pause {
+		left: 50px;
+		&::before {
+			font-family: $fontAwesomeFamily;
+			@include variable-icon-font('f04c');
+			display: none;
+		}
+	}
+
+	.galleria-thumbnails-container {
+		border-top: 1px solid $dark-gray;
+		height: 100px;
+		bottom: 0;
+		font-size: 1.25rem;
+		position: absolute;
+		left: 20px;
+		right: 20px;
+		z-index: 2;
+		margin-bottom: 0;
+		padding: 0 1.25rem;
+		.disabled {
+			opacity: .2;
+			cursor: default;
+		}
+		.galleria-thumb-nav-left {
+			cursor: pointer;
+			position: absolute;
+			left: 0;
+			top: 40px;
+			z-index: 3;
+			&::before {
+				font-family: $fontAwesomeFamily;
+				@include variable-icon-font('f0d9');
+				display: none;
+			}
+		}
+		.galleria-thumb-nav-right {
+			cursor: pointer;
+			position: absolute;
+			top: 40px;
+			z-index: 3;
+			right: 0;
+			&::before {
+				font-family: $fontAwesomeFamily;
+				@include variable-icon-font('f0da');
+				display: none;
+			}
+		}
+	}
+
+	.galleria-thumbnails {
+		.galleria-image {
+			height: 90px;
+			width: auto;
+			background: none;
+			margin: 5px;
+			border: 1px solid $dark-gray;
+			float: left;
+			cursor: pointer;
+			&.active {
+				border: 5px solid $primary-color;
+			}
+		}
+	}
+
+	.galleria-counter {
+		position: absolute;
+		top: 0;
+		right: 0;
+		color: $primary-color;
+		font-size: 15px;
+		z-index: 4;
+	}
+
+	.galleria-loader {
+		-webkit-animation: fa-spin 2s infinite linear;
+  		animation: fa-spin 2s infinite linear;
+		font-size: 3rem;
+		position: absolute;
+		top: 50%;
+		right: 50%;
+		z-index: 2;
+		display: none;
+		&::before {
+			font-family: $fontAwesomeFamily;
+			@include variable-icon-font('f110');
+			display: none;
+		}
+	}
+
+	.galleria-info {
+		color: $primary-color;
+		left: 40px;
+		position: absolute;
+		top: -5px;
+		width: 90%;
+		z-index: 2;
+		.galleria-info-text {
+			background-color: $white;
+			font-size: 16px;
+			padding: 16px;
+			display: none;
+			.galleria-info-title {
+				font-weight: 900;
+				margin: 0;
+				color: $primary-color;
+				margin-bottom: 7px;
+			}
+			.galleria-info-description {
+				font-size: 15px;
+				font-style: italic;
+				margin: 0;
+				color: $primary-color;
+			}
+		}
+	}
+
+	.galleria-info-link {
+		cursor: pointer;
+		font-size: 1.25rem;
+		left: -30px;
+		position: absolute;
+		top: 0;
+		&::before {
+			font-family: $fontAwesomeFamily;
+			@include variable-icon-font('f05a');
+			display: none;
+		}
+	}
+
+	.galleria-info-close {
+		cursor: pointer;
+		display: none;
+		font-size: 1.25rem;
+		left: -30px;
+		position: absolute;
+		top: 0;
+		&::before {
+			font-family: $fontAwesomeFamily;
+			@include variable-icon-font('f00d');
+			display: none;
+		}
+	}
+
+	.galleria-image-nav {
+		font-size: 2rem;
+		left: 0;
+		margin-top: -62px;
+		position: absolute;
+		top: 50%;
+		width: 100%;
+		height: 62px;
+		.galleria-image-nav-left {
+			background-color: $medium-gray;
+			cursor: pointer;
+			left: 0;
+			position: absolute;
+			top: 0;
+			z-index: 2;
+			&::before {
+				font-family: $fontAwesomeFamily;
+				@include variable-icon-font('f053');
+				display: none;
+			}
+		}
+		.galleria-image-nav-right {
+			background-color: $medium-gray;
+			cursor: pointer;
+			font-size: 2rem;
+			right: 0;
+			position: absolute;
+			top: 0;
+			z-index: 2;
+			&::before {
+				font-family: $fontAwesomeFamily;
+				@include variable-icon-font('f054');
+				display: none;
+			}
+		}
+	}
+}
+
+.galleria-theme-kahikatoa.notouch {
+	.galleria-info-link {
+		&:hover {
+			opacity: 1;
+		}
+	}
+
+	.galleria-image-nav-left {
+		&:hover {
+			opacity: 1;
+		}
+	}
+
+	.galleria-image-nav-right {
+		&:hover {
+			opacity: 1;
+		}
+	}
+
+	.galleria-thumb-nav-left {
+		&:hover {
+			opacity: 1;
+			background-color: $dark-gray;
+		}
+	}
+
+	.galleria-thumb-nav-right {
+		&:hover {
+			opacity: 1;
+			background-color: $dark-gray;
+		}
+	}
+
+	.galleria-thumbnails-container {
+		.disabled {
+			&:hover {
+				opacity: .2;
+				background-color: transparent;
+			}
+		}
+	}
+}
+
+.galleria-theme-kahikatoa.touch {
+	.galleria-info-link {
+		&:active {
+			opacity: 1;
+		}
+	}
+
+	.galleria-image-nav-left {
+		&:active {
+			opacity: 1;
+		}
+	}
+
+	.galleria-image-nav-right {
+		&:active {
+			opacity: 1;
+		}
+	}
+
+	.galleria-thumb-nav-left {
+		&:active {
+			opacity: 1;
+			background-color: $dark-gray;
+		}
+	}
+
+	.galleria-thumb-nav-right {
+		&:active {
+			opacity: 1;
+			background-color: $dark-gray;
+		}
+	}
+}
+
+.galleria-theme-kahikatoa.galleria-container.videoplay {
+	.galleria-info {
+		display: none !important;
+	}
+}
+
+//  3. Gallery Module (excl. native galleria styles)
+// -------------------------------------------------
+#gallery-page {
+
+	.tabs-content {
+		padding: 1rem;
+	}
+
+	.gallery_description {
+		padding: 0.9375rem;
+	}
+
+	#links_bar {
+		display: inline-block;
+		font-size: 0.9rem;
+		width: 15%;
+		vertical-align: top;
+		h5 {
+			margin: 0 0 10px 0;
+			padding: 0;
+		}
+		hr {
+			clear: both;
+			margin: 5px 0 10px;
+		}
+		.image_option {
+			img {
+				margin: 5px;
+			}
+		}
+		.edit_links {
+			ul.menu {
+				text-align: left;
+				justify-content: left;
+				li {
+					display: block;
+					justify-content: left;
+					a {
+						padding: 0;
+					}
+				}
+			}
+		}
+		#image_links {
+			font-size: 0.95rem;
+			margin: 0 0.5rem;
+		}
+	}
+
+	a#copy {
+		font-size: 0.8rem;
+		font-style: italic;
+	}
+}

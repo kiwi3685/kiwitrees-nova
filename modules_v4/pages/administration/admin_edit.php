@@ -53,9 +53,9 @@ if ($save) {
 		$block_id
 	));
 
-	set_block_setting($block_id, 'pages_title', $pages_title);
-	set_block_setting($block_id, 'pages_content', $pages_content); 
-	set_block_setting($block_id, 'pages_access', $item_access);
+	set_block_setting($block_id, 'pages_title', $item_title);
+	set_block_setting($block_id, 'pages_content', $item_content); 
+	set_block_setting($block_id, 'pages_access', $item_content);
 
 	foreach (KT_I18N::used_languages() as $code=>$name) {
 		if (KT_Filter::postBool('lang_' . $code)) {
@@ -82,8 +82,8 @@ if ($save) {
 
 $item_title   = get_block_setting($block_id, 'pages_title');
 $item_content = get_block_setting($block_id, 'pages_content');
-$item_folder      = get_block_setting($block_id, 'gallery_folder');
-$item_access   = KT_I18N::translate('All');
+$item_access  = get_block_setting($block_id, 'pages_access');
+
 
 $block_order = KT_DB::prepare(
 	"SELECT block_order FROM `##block` WHERE block_id = ?"
@@ -103,13 +103,13 @@ echo pageStart('pages_details', $controller->getPageTitle()); ?>
 		<div class="grid-x grid-margin-y">
 
 			<label class="cell medium-2">
-				<?php echo KT_I18N::translate('Question'); ?>				
+				<?php echo KT_I18N::translate('Title'); ?>				
 			</label>
 			<div class="cell medium-10">
 				<input type="text" name="pages_title" value="<?php echo htmlspecialchars((string) $item_title); ?>">
 			</div>
 			<label class="cell medium-2">
-				<?php echo KT_I18N::translate('Answer'); ?>
+				<?php echo KT_I18N::translate('Content'); ?>
 			</label>
 			<div class="cell medium-10">
 				<textarea name="item_content" class="html-edit"><?php echo htmlspecialchars((string) $item_content); ?></textarea>
@@ -132,7 +132,7 @@ echo pageStart('pages_details', $controller->getPageTitle()); ?>
 				<?php echo KT_I18N::translate('Access level'); ?>
 			</label>
 			<div class="cell medium-4">
-				<?php echo edit_field_access_level('item_access', $item_access); ?>
+				<?php echo edit_field_access_level('pages_access', $item_access); ?>
 			</div>
 			<div class="cell medium-6"></div>			<label class="cell medium-2">
 				<?php echo KT_I18N::translate('Show this block for which languages?'); ?>

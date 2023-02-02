@@ -31,19 +31,19 @@ $save     = KT_Filter::post('save', '');
 
 $controller = new KT_Controller_Page();
 $controller
-	->setPageTitle(KT_I18N::translate('Edit an faq item'));
+	->setPageTitle(KT_I18N::translate('Edit an faq item'))
 	->pageHeader()
 	->addExternalJavascript(KT_CKEDITOR_CLASSIC)
 	->addInlineJavascript('ckeditorStandard();');
 
 if ($save) {
-	$block_id 		= KT_Filter::postInteger('block_id');
-	$block_order 	= (int)KT_Filter::post('block_order');
-	$gedID 			= KT_Filter::post('gedID');
-	$header      	= KT_Filter::post('header',  KT_REGEX_UNSAFE); // allow html
-	$faqbody     	= KT_Filter::post('faqbody', KT_REGEX_UNSAFE); // allow html
-	$item_access	= KT_Filter::post('faq_access');
-	$languages 		= array();
+	$block_id          = KT_Filter::postInteger('block_id');
+	$block_order       = (int)KT_Filter::post('block_order');
+	$gedID             = KT_Filter::post('gedID');
+	$item_title        = KT_Filter::post('faq_title',  KT_REGEX_UNSAFE); // allow html
+	$item_description = KT_Filter::post('faq_description', KT_REGEX_UNSAFE); // allow html
+	$item_access       = KT_Filter::post('faq_access');
+	$languages         = array();
 
 	KT_DB::prepare(
 		"UPDATE `##block` SET gedcom_id = NULLIF(?, ''), block_order = ? WHERE block_id = ?"
@@ -53,8 +53,8 @@ if ($save) {
 		$block_id
 	));
 
-	set_block_setting($block_id, 'header', $header);
-	set_block_setting($block_id, 'faqbody', $faqbody); 
+	set_block_setting($block_id, 'faq_title', $item_title);
+	set_block_setting($block_id, 'faq_description', $item_description); 
 	set_block_setting($block_id, 'faq_access', $item_access);
 
 	foreach (KT_I18N::used_languages() as $code=>$name) {
@@ -80,8 +80,8 @@ if ($save) {
 	}
 }
 
-$header      = get_block_setting($block_id, 'header');
-$faqbody     = get_block_setting($block_id, 'faqbody');
+$item_title      = get_block_setting($block_id, 'faq_title');
+$item_description     = get_block_setting($block_id, 'faq_description');
 $item_access = KT_I18N::translate('All');
 
 $block_order = KT_DB::prepare(
@@ -105,13 +105,13 @@ echo pageStart('faq_details', $controller->getPageTitle()); ?>
 				<?php echo KT_I18N::translate('Question'); ?>				
 			</label>
 			<div class="cell medium-10">
-				<input type="text" name="header" value="<?php echo htmlspecialchars((string) $header); ?>">
+				<input type="text" name="faq_title" value="<?php echo htmlspecialchars((string) $item_title); ?>">
 			</div>
 			<label class="cell medium-2">
 				<?php echo KT_I18N::translate('Answer'); ?>
 			</label>
 			<div class="cell medium-10">
-				<textarea name="faqbody" class="html-edit"><?php echo htmlspecialchars((string) $faqbody); ?></textarea>
+				<textarea name="faq_description" class="html-edit"><?php echo htmlspecialchars((string) $item_description); ?></textarea>
 			</div>
 			<label class="cell medium-2">
 				<?php echo KT_I18N::translate('Faq menu order'); ?>
@@ -133,7 +133,8 @@ echo pageStart('faq_details', $controller->getPageTitle()); ?>
 			<div class="cell medium-4">
 				<?php echo edit_field_access_level('faq_access', $item_access); ?>
 			</div>
-			<div class="cell medium-6"></div>			<label class="cell medium-2">
+			<div class="cell medium-6"></div>
+			<label class="cell medium-2">
 				<?php echo KT_I18N::translate('Show this block for which languages?'); ?>
 			</label>
 			<div class="cell medium-10">
