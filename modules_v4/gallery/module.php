@@ -138,7 +138,7 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 	}
 
 	// Return the list of gallerys
-	private function getGalleryList()
+	private function getItemList()
 	{
 		$sql = "
 			SELECT block_id, block_order,
@@ -185,7 +185,7 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 			return null;
 		}
 
-		$items      = $this->getGalleryList();
+		$items      = $this->getItemList();
 		$minBlockId = min(array_column($items, 'block_id'));
 
 		// -- main GALLERIES menu item
@@ -233,7 +233,7 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 		global $MEDIA_DIRECTORY, $controller;
 
 		$item_id    = KT_Filter::get('gallery_id');
-		$items      = $this->getGalleryList();
+		$items      = $this->getItemList();
 
 		$controller = new KT_Controller_Page();
 		$controller

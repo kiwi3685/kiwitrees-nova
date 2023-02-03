@@ -143,6 +143,46 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 		return get_module_setting($this->getName(), 'HEADER_DESCRIPTION', $default_description);
 	}
 
+	// Return the list of gallerys
+	private function getItemList()
+	{
+		$sql = "
+			SELECT block_id, block_order,
+			bs1.setting_value AS gallery_title,
+			bs2.setting_value AS gallery_access,
+			bs3.setting_value AS gallery_description,
+			bs4.setting_value AS gallery_folder
+			FROM `##block` b
+			JOIN `##block_setting` bs1 USING (block_id)
+			JOIN `##block_setting` bs2 USING (block_id)
+			JOIN `##block_setting` bs3 USING (block_id)
+			JOIN `##block_setting` bs4 USING (block_id)
+			WHERE module_name = ?
+			AND bs1.setting_name = 'gallery_title'
+			AND bs2.setting_name = 'gallery_access'
+			AND bs3.setting_name = 'gallery_description'
+			AND bs4.setting_name = 'gallery_folder'
+			AND (gedcom_id IS NULL OR gedcom_id = ?)
+			ORDER BY block_order
+		";
+
+		$items = KT_DB::prepare($sql)->execute([$this->getName(), KT_GED_ID])->fetchAll();
+
+		$itemList = [];
+
+		// Filter for valid lanuage and access
+		foreach ($items as $item) {
+			$languages   = get_block_setting($item->block_id, 'languages');
+			$item_access = get_block_setting($item->block_id, 'gallery_access');
+			if ((!$languages || in_array(KT_LOCALE, explode(',', $languages))) && $item_access >= KT_USER_ACCESS_LEVEL) {
+				$itemList[] = $item;
+			}
+		}
+
+		return $itemList;
+
+	}
+
 	// Implement KT_Module_Menu
 	public function getMenu()
 	{
@@ -152,13 +192,12 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 			return null;
 		}
 
-		$block_id = KT_Filter::get('block_id');
+		$block_id     = KT_Filter::get('block_id');
 		$blockId_list = [];
-		foreach ($this->getMenupagesList() as $item) {
-			$languages = get_block_setting($item->block_id, 'languages');
-			if ((!$languages || in_array(KT_LOCALE, explode(',', $languages))) && $item->pages_access >= KT_USER_ACCESS_LEVEL) {
-				$blockId_list[] = $item->block_id;
-			}
+		$items        = $this->getItemList();
+
+		foreach ($items as $item) {
+			$blockId_list[] = $item->block_id;
 		}
 
 		if (!empty($blockId_list)) {
@@ -171,13 +210,10 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 		$menu = new KT_Menu($this->getMenuTitle(), 'module.php?mod=' . $this->getName() . '&amp;mod_action=show#' . $default_block, 'menu-my_pages', 'down');
 		$menu->addClass('', '', $this->getMenuIcon());
 
-		foreach ($this->getMenupagesList() as $item) {
-			$languages = get_block_setting($item->block_id, 'languages');
-			if ((!$languages || in_array(KT_LOCALE, explode(',', $languages))) && $item->pages_access >= KT_USER_ACCESS_LEVEL) {
-				$path = 'module.php?mod=' . $this->getName() . '&amp;mod_action=show#' . $item->block_id;
-				$submenu = new KT_Menu(KT_I18N::translate($item->pages_title), $path, 'menu-my_pages-' . $item->block_id);
-				$menu->addSubmenu($submenu);
-			}
+		foreach ($items as $item) {
+			$path = 'module.php?mod=' . $this->getName() . '&amp;mod_action=show#' . $item->block_id;
+			$submenu = new KT_Menu(KT_I18N::translate($item->pages_title), $path, 'menu-my_pages-' . $item->block_id);
+			$menu->addSubmenu($submenu);
 		}
 
 		if (KT_USER_IS_ADMIN) {
@@ -228,12 +264,10 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 
 		$item_id     = KT_Filter::get('pages_id');
 		$count_items = 0;
-		$items       = $this->getPagesList();
+		$items       = $this->getItemList();
+
 		foreach ($items as $item) {
-			$languages = get_block_setting($item->block_id, 'languages');
-			if ((!$languages || in_array(KT_LOCALE, explode(',', $languages))) && $item->pages_access >= KT_USER_ACCESS_LEVEL) {
-				$count_items = $count_items + 1;
-			}
+			$count_items = $count_items + 1;
 		}
 
 		echo pageStart('pages', $controller->getPageTitle()); ?>
@@ -245,34 +279,28 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 				<?php if ($count_items > 1) { ?>
 					<ul class="cell tabs" data-tabs id="pages-tabs">
 						<?php foreach ($items as $item) {
-							$languages = get_block_setting($item->block_id, 'languages');
-							if ((!$languages || in_array(KT_LOCALE, explode(',', $languages))) && $item->pages_access >= KT_USER_ACCESS_LEVEL) {
-								$class = ($item_id == $item->block_id ? 'is-active' : ''); ?>
-								<li class="tabs-title <?php echo $class; ?>">
-									<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=show&amp;pages_id=<?php echo $item->block_id; ?>">
-										<span title="<?php echo KT_I18N::translate($item->pages_title); ?>"><?php echo KT_I18N::translate($item->pages_title); ?>
-										</span>
-									</a>
-								</li>
-							<?php }
-							} ?>
+							$class = ($item_id == $item->block_id ? 'is-active' : ''); ?>
+							<li class="tabs-title <?php echo $class; ?>">
+								<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=show&amp;pages_id=<?php echo $item->block_id; ?>">
+									<span title="<?php echo KT_I18N::translate($item->pages_title); ?>"><?php echo KT_I18N::translate($item->pages_title); ?>
+									</span>
+								</a>
+							</li>
+						<?php } ?>
 					</ul>
 				<?php } ?>
 
 				<div class="cell tabs-content" data-tabs-content="pages-tabs">
 					<div class="grid-x">
-						<?php
-							$item_pages = '';
-							foreach ($items as $item) {
-								if ((!$languages || in_array(KT_LOCALE, explode(',', $languages))) && $item_id == $item->block_id && $item->pages_access >= KT_USER_ACCESS_LEVEL) {
-									$item_content = $item->pages_content;
-								}
-							}
-							if (!isset($item_content)) {
-								echo '<div class="cell callout warning">' . KT_I18N::translate('Pages will be added shortly') . '</div>';
-							} else {
-								echo $item_content;
-							} ?>
+						<?php $item_pages = '';
+						foreach ($items as $item) {
+							$item_content = $item->pages_content;
+						}
+						if (!isset($item_content)) {
+							echo '<div class="cell callout warning">' . KT_I18N::translate('Pages will be added shortly') . '</div>';
+						} else {
+							echo $item_content;
+						} ?>
 					</div>
 				</div>
 
@@ -294,43 +322,4 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 		)->execute([$block_id]);
 	}
 
-	// Return the list of pagess
-	private function getPagesList()
-	{
-		return KT_DB::prepare("
-			SELECT block_id, 
-			bs1.setting_value AS pages_title, 
-			bs2.setting_value AS pages_access, 
-			bs3.setting_value AS pages_description,
-			bs4.setting_value AS pages_content
-			FROM `##block` b
-			JOIN `##block_setting` bs1 USING (block_id)
-			JOIN `##block_setting` bs2 USING (block_id)
-			JOIN `##block_setting` bs3 USING (block_id)
-			JOIN `##block_setting` bs4 USING (block_id)
-			WHERE module_name = ?
-			AND bs1.setting_name = 'pages_title'
-			AND bs2.setting_name = 'pages_access'
-			AND bs3.setting_name = 'pages_description'
-			AND bs3.setting_name = 'pages_content'
-			AND (gedcom_id IS NULL OR gedcom_id = ?)
-			ORDER BY block_order
-		")->execute([$this->getName(), KT_GED_ID])->fetchAll();
-	}
-
-	// Return the list of pages for menu
-	private function getMenupagesList()
-	{
-		return KT_DB::prepare(
-			'SELECT block_id, bs1.setting_value AS pages_title, bs2.setting_value AS pages_access' .
-			' FROM `##block` b' .
-			' JOIN `##block_setting` bs1 USING (block_id)' .
-			' JOIN `##block_setting` bs2 USING (block_id)' .
-			' WHERE module_name=?' .
-			" AND bs1.setting_name='pages_title'" .
-			" AND bs2.setting_name='pages_access'" .
-			' AND (gedcom_id IS NULL OR gedcom_id=?)' .
-			' ORDER BY block_order'
-		)->execute([$this->getName(), KT_GED_ID])->fetchAll();
-	}
 }

@@ -122,6 +122,71 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 		return $HEADER_DESCRIPTION;
 	}
 
+	// Return the list of gallerys
+	private function getItemList($search)
+	{
+		$sql = "
+			SELECT block_id, block_order,
+			bs1.setting_value AS faq_title,
+			bs2.setting_value AS faq_access,
+			bs3.setting_value AS faq_description
+			FROM `##block` b
+			JOIN `##block_setting` bs1 USING (block_id)
+			JOIN `##block_setting` bs2 USING (block_id)
+			JOIN `##block_setting` bs3 USING (block_id)
+			WHERE module_name = ?
+			AND bs1.setting_name = 'faq_title'
+			AND bs2.setting_name = 'faq_access'
+			AND bs3.setting_name = 'faq_description'
+			AND (gedcom_id IS NULL OR gedcom_id = ?)
+			AND (bs2.setting_value LIKE '%" . $search . "%' OR bs1.setting_value LIKE '% . $search . %')
+			ORDER BY block_order
+		";
+
+		$items = KT_DB::prepare($sql)->execute([$this->getName(), KT_GED_ID])->fetchAll();
+
+		$itemList = [];
+
+		// Filter for valid lanuage and access
+		foreach ($items as $item) {
+			$languages   = get_block_setting($item->block_id, 'languages');
+			$item_access = get_block_setting($item->block_id, 'faq_access');
+			if ((!$languages || in_array(KT_LOCALE, explode(',', $languages))) && $item_access >= KT_USER_ACCESS_LEVEL) {
+				$itemList[] = $item;
+			}
+		}
+
+		return $itemList;
+
+	}
+
+	// Implement KT_Module_Menu
+	public function getMenu() {
+		global $SEARCH_SPIDER;
+
+		if ($SEARCH_SPIDER) {
+			return null;
+		}
+
+		$items = KT_DB::prepare(
+			"SELECT block_id FROM `##block` b WHERE module_name=? AND IFNULL(gedcom_id, ?)=?"
+		)->execute(array($this->getName(), KT_GED_ID, KT_GED_ID))->fetchAll();
+
+		if (!$items) {
+			return null;
+		}
+
+		$menu = new KT_Menu($this->getMenuTitle(), 'module.php?mod=faq&amp;mod_action=show', 'menu-help');
+		$menu->addClass('', '', $this->getMenuIcon());
+
+		if (KT_USER_IS_ADMIN) {
+			$submenu = new KT_Menu(KT_I18N::translate('Edit faq items'), $this->getConfigLink(), 'menu-faq-edit');
+			$menu->addSubmenu($submenu);
+		}
+
+		return $menu;
+	}
+
 	private function show() {
 		global $controller;
 		$controller = new KT_Controller_Page();
@@ -135,7 +200,9 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 			$search = '%';
 		};
 
-		echo pageStart('faq', $controller->getPageTitle()); ?>
+		echo pageStart('faq', $controller->getPageTitle());
+
+			 $items = $this->getItemList($search); ?>
 
 			<div class="grid-x">
 				<div class="cell">
@@ -149,28 +216,25 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 						placeholder="<?php echo KT_I18N::translate('Search faq'); ?>"
 					>
 				</form>
-				<div class="cell accordion" data-accordion data-allow-all-closed="true" data-deep-link="true">
-					<?php $items = $this->getFaqList($search);
 
-					foreach ($items as $item) {
+				<div class="cell accordion" data-accordion data-allow-all-closed="true" data-deep-link="true">
+					<?php foreach ($items as $item) {
 						$item_title       = get_block_setting($item->block_id, 'faq_title');
 						$item_description = get_block_setting($item->block_id, 'faq_description');
 						$item_access      = get_block_setting($item->block_id, 'faq_access');
 						$languages        = get_block_setting($item->block_id, 'languages');
-
-						if (!$languages || in_array(KT_LOCALE, explode(',', $languages)) && $item_access >= KT_USER_ACCESS_LEVEL) {?>
-							<div class="accordion-item" data-accordion-item>
-								<a href="#" class="accordion-title">
-									<span><?php echo $this->faq_search_hits($item->faq_title, $search); ?></span>
-								</a>
-								<div class="accordion-content" data-tab-content>
-									<?php echo $this->faq_search_hits(substr($item_description, 0, 1) == '<' ? $item_description : nl2br($item_description), $search); ?>
-								</div>
+						?>
+						<div class="accordion-item" data-accordion-item>
+							<a href="#" class="accordion-title">
+								<span><?php echo $this->faq_search_hits($item->faq_title, $search); ?></span>
+							</a>
+							<div class="accordion-content" data-tab-content>
+								<?php echo $this->faq_search_hits(substr($item_description, 0, 1) == '<' ? $item_description : nl2br($item_description), $search); ?>
 							</div>
-						<?php }
-					} ?>
-
+						</div>
+					<?php } ?>
 				</div>
+
 			</div>
 
 		<?php echo pageClose();
@@ -245,56 +309,6 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 				"UPDATE `##block` SET block_order=? WHERE block_id=?"
 			)->execute(array($block_order, $swap_block->block_id));
 		}
-	}
-
-	// Implement KT_Module_Menu
-	public function getMenu() {
-		global $SEARCH_SPIDER;
-
-		if ($SEARCH_SPIDER) {
-			return null;
-		}
-
-		$items = KT_DB::prepare(
-			"SELECT block_id FROM `##block` b WHERE module_name=? AND IFNULL(gedcom_id, ?)=?"
-		)->execute(array($this->getName(), KT_GED_ID, KT_GED_ID))->fetchAll();
-
-		if (!$items) {
-			return null;
-		}
-
-		$menu = new KT_Menu($this->getMenuTitle(), 'module.php?mod=faq&amp;mod_action=show', 'menu-help');
-		$menu->addClass('', '', $this->getMenuIcon());
-
-		if (KT_USER_IS_ADMIN) {
-			$submenu = new KT_Menu(KT_I18N::translate('Edit faq items'), $this->getConfigLink(), 'menu-faq-edit');
-			$menu->addSubmenu($submenu);
-		}
-
-		return $menu;
-	}
-
-	// Return the list of faqs
-	private function getFaqList($search)
-	{
-		return KT_DB::prepare("
-			SELECT block_id,
-			bs1.setting_value AS faq_title,
-			bs2.setting_value AS faq_access,
-			bs3.setting_value AS faq_description
-			FROM `##block` b
-			JOIN `##block_setting` bs1 USING (block_id)
-			JOIN `##block_setting` bs2 USING (block_id)
-			JOIN `##block_setting` bs3 USING (block_id)
-			WHERE module_name = ?
-			AND bs1.setting_name='faq_title'
-			AND bs2.setting_name='faq_access'
-			AND bs3.setting_name='faq_description'
-			AND (gedcom_id IS NULL OR gedcom_id = ?)
-			AND (bs2.setting_value LIKE '%" . $search . "%' OR bs1.setting_value LIKE '% . $search . %')
-			ORDER BY block_order
-		")->execute([$this->getName(), KT_GED_ID])->fetchAll();
-
 	}
 
 	// Return search of faqs
