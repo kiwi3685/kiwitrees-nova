@@ -162,6 +162,8 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 
 		$items = KT_DB::prepare($sql)->execute([$this->getName(), KT_GED_ID])->fetchAll();
 
+		$itemList = [];
+
 		// Filter for valid lanuage and access
 		foreach ($items as $item) {
 			$languages   = get_block_setting($item->block_id, 'languages');
@@ -174,7 +176,6 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 		return $itemList;
 
 	}
-
 
 	// Implement KT_Module_Menu
 	public function getMenu()
