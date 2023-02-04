@@ -172,7 +172,7 @@ switch ($action) {
 							<h6><?php echo $message; ?></h6>
 						</div>
 					<?php } ?>
-					<div class="grid-x grid-margin-x grid-margin-y">
+					<div class="grid-x grid-margin-x">
 						<div class="cell medium-8 medium-offset-2">
 							<label for="user_name" class="h6"><?php echo KT_I18N::translate('User name'); ?>
 								<input type="text" id="user_name" name="username" required value="<?php echo htmlspecialchars((string) $username); ?>" autofocus>
