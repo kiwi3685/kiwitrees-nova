@@ -25,8 +25,8 @@ require KT_ROOT . 'includes/functions/functions_edit.php';
 include KT_THEME_URL . 'templates/adminData.php';
 global $iconStyle;
 
-$action = KT_Filter::post('action');
-$gedID  = KT_Filter::post('gedID') ? KT_Filter::post('gedID') : KT_GED_ID;
+$gedID  	= KT_Filter::post('gedID') ? KT_Filter::post('gedID') : '';
+$action     = KT_Filter::post('action');
 
 $controller = new KT_Controller_Page();
 $controller
@@ -58,9 +58,8 @@ $items = KT_DB::prepare("
 	WHERE module_name = ?
 	AND bs1.setting_name = 'faq_title'
 	AND bs2.setting_name = 'faq_description'
-	AND IFNULL(gedcom_id, ?) = ?
 	ORDER BY block_order
-")->execute(array($this->getName(), $gedID, $gedID))->fetchAll();
+")->execute(array($this->getName()))->fetchAll();
 
 $min_block_order = KT_DB::prepare(
 	"SELECT MIN(block_order) FROM `##block` WHERE module_name=?"
@@ -153,6 +152,18 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', ''); ?>
 					<tbody>
 						<?php 
 						$trees = KT_Tree::getAll();
+
+						if (!$gedID) {
+							$items = $items;
+						} else {
+							foreach ($items as $faq) {
+								if ($faq->gedcom_id == $gedID || is_null($faq->gedcom_id)) {
+									$faqItems[] = $faq;
+								}
+							}
+							$items = $faqItems;
+						}
+
 						foreach ($items as $item) { ?>
 							<tr class="faq_edit_pos">
 								<td>

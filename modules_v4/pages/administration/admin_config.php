@@ -76,9 +76,8 @@ $items = KT_DB::prepare("
 	WHERE module_name = ?
 	AND bs1.setting_name = 'pages_title'
 	AND bs2.setting_name = 'pages_content'
-	AND IFNULL(gedcom_id, ?) = ?
 	ORDER BY block_order
-")->execute(array($this->getName(), $gedID, $gedID))->fetchAll();
+")->execute(array($this->getName()))->fetchAll();
 
 $min_block_order = KT_DB::prepare(
 	"SELECT MIN(block_order) FROM `##block` WHERE module_name = ?"
@@ -180,8 +179,19 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', ''); ?>
 					<tbody>
 						<?php 
 						$trees = KT_Tree::getAll();
+
+						if (!$gedID) {
+							$items = $items;
+						} else {
+							foreach ($items as $page) {
+								if ($page->gedcom_id == $gedID || is_null($page->gedcom_id)) {
+									$pageItems[] = $page;
+								}
+							}
+							$items = $pageItems;
+						}
 						foreach ($items as $item) { ?>
-							<tr">
+							<tr>
 								<td>
 									<?php echo($item->block_order); ?>
 								</td>

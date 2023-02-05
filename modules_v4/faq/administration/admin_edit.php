@@ -88,8 +88,8 @@ $block_order = KT_DB::prepare(
 	"SELECT block_order FROM `##block` WHERE block_id = ?"
 )->execute(array($block_id))->fetchOne();
 
-$gedcom_id = KT_DB::prepare(
-	"SELECT gedcom_id FROM `##block` WHERE block_id = ?"
+$gedID            = KT_DB::prepare(
+	"SELECT gedcom_id FROM `##block` WHERE block_id=?"
 )->execute(array($block_id))->fetchOne();
 
 echo relatedPages($moduleTools, $this->getConfigLink());

@@ -62,13 +62,15 @@ function edit_text_inline($name, $value, $controller = null)
 	return $html . '<script>' . $js . '</script>';
 }
 
-// Create a <select> control for a form
-// $name     - the ID for the form element
-// $values   - array of value=>display items
-// $empty    - if not null, then add an entry ""=>$empty
-// $selected - the currently selected item (if any)
-// $extra    - extra markup for field (e.g. tab key sequence)
-function select_edit_control($name, $values, $empty, $selected, $extra = '')
+/**
+ * Create a <select> control for a form
+ * $name     - the ID for the form element
+ * $values   - array of value=>display items
+ * $empty    - if not null, then add an entry ""=>$empty
+ * $selected - the currently selected item (if any)
+ * $extra    - extra markup for field (e.g. tab key sequence or onclick())
+ */
+function select_edit_control($name, $values, $empty, $selected = '', $extra = '')
 {
 	if (is_null($empty)) {
 		$html = '';

@@ -187,7 +187,7 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 		}
 
 		$items      = $this->getItemList();
-		$minBlockId = min(array_column($items, 'block_id'));
+		$minBlockId = $items ? min(array_column($items, 'block_id')) : '';
 
 		// -- main GALLERIES menu item
 		$menu = new KT_Menu(
@@ -245,7 +245,8 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 			->addInlineJavaScript($this->getJavaScript($item_id))
 		;
 
-		echo pageStart('gallery', $controller->getPageTitle()); ?>
+		echo pageStart('gallery', $controller->getPageTitle());
+			$item_gallery = ''; ?>
 
 			<div class="grid-x">
 				<div class="cell">
