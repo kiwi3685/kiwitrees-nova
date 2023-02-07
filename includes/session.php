@@ -46,7 +46,7 @@ define ('KT_USE_CDN', false);
 if (KT_USE_CDN) {
 	define('KT_FOUNDATION_JS',				'https://cdn.jsdelivr.net/npm/foundation-sites@6.7.5/dist/js/foundation.min.js" crossorigin="anonymous"'); //6.7.4
 	define('KT_JQUERY_JS',					'https://code.jquery.com/jquery-3.6.0.min.js integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"'); //3.6.0
-	define('KT_JQUERYUI_JS',				'https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.1/jquery-ui.min.js'); // 1.13.1
+	define('KT_JQUERYUI_JS',				'https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js'); // 1.13.2
 	define('KT_DATEPICKER_JS',				'https://cdn.jsdelivr.net/npm/foundation-datepicker@1.5.6/js/foundation-datepicker.min.js'); //1.5.6
 	define('KT_DATATABLES_JS',				'https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js'); //1.10.20
 	define('KT_DATATABLES_CSS',				'https://cdn.datatables.net/1.10.20/css/dataTables.foundation.min.css'); //1.10.20
