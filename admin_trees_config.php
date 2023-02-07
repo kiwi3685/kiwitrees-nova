@@ -436,17 +436,18 @@ echo pageStart('family_tree_config', $controller->getPageTitle(), 'y', '', 'admi
 							</div>
 							<div class="cell large-9">
 								<?php
-									$person = KT_Person::getInstance(get_gedcom_setting($gedID, 'PEDIGREE_ROOT_ID'));
+									$person   = KT_Person::getInstance(get_gedcom_setting($gedID, 'PEDIGREE_ROOT_ID'));
 									$lifeSpan = $person ? strip_tags($person->getLifespanName()) : '';
-								echo autocompleteHtml(
-									'default',
-									'INDI',
-									'',
-									$lifeSpan,
-									'',
-									'NEW_PEDIGREE_ROOT_ID',
-									''
-								);?>
+									echo autocompleteHtml(
+										'default',
+										'INDI',
+										'',
+										$lifeSpan,
+										'',
+										'NEW_PEDIGREE_ROOT_ID',
+										''
+									);
+								?>
 								<div class="cell callout info-help ">
 									<?php echo KT_I18N::translate('This individual will be selected by default when viewing charts and reports.'); ?>
 								</div>
