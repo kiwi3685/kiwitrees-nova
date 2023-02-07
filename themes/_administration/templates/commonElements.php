@@ -192,6 +192,12 @@ function singleButton($title = '') {
 				   	KT_I18N::translate($title) . '
 						<i class="' . $iconStyle . ' fa-arrow-right"></i>';
 				break;
+			case 'Save new order':
+			   echo '
+				   <button class="button primary" type="submit">
+						<i class="' . $iconStyle . ' fa-bars"></i>' .
+				   	KT_I18N::translate($title);
+				break;
 			} ?>
 
 	   </button>

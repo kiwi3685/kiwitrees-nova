@@ -82,6 +82,26 @@ function hide_fields() {
 };
 
 /**
+ * Sort items in a table
+ * Used in config page of FAQ, Gallery, Pages, and Stories modules
+ * 
+ */
+function tableSort() {
+
+	jQuery("#reorderTable").sortable({items: ".sortme", forceHelperSize: true, forcePlaceholderSize: true, opacity: 0.7, cursor: "move", axis: "y"});
+
+	//-- update the order numbers after drag-n-drop sorting is complete
+	jQuery("#reorderTable").bind("sortupdate", function(event, ui) {
+		jQuery("#"+jQuery(this).attr("id")+" input").each(
+			function (index, value) {
+				value.value = index+1;
+			}
+		);
+	});
+
+}
+
+/**
  * initialisation of icon-picker
  * 
 */
