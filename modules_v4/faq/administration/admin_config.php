@@ -40,6 +40,8 @@ $controller
 
 		iconPicker();
 
+		tableSort();
+
 	');
 
 if ($action == 'update') {
@@ -61,13 +63,19 @@ $items = KT_DB::prepare("
 	ORDER BY block_order
 ")->execute(array($this->getName()))->fetchAll();
 
-$min_block_order = KT_DB::prepare(
-	"SELECT MIN(block_order) FROM `##block` WHERE module_name=?"
-)->execute(array($this->getName()))->fetchOne();
-
-$max_block_order = KT_DB::prepare(
-	"SELECT MAX(block_order) FROM `##block` WHERE module_name=?"
-)->execute(array($this->getName()))->fetchOne();
+//Update block order after move, and make the new order take effect immediately
+foreach ($items as $this->getName => $item) {
+	$order = KT_Filter::post('taborder-' . $item->block_id);
+	if ($order) {
+		KT_DB::prepare(
+			'UPDATE `##block` SET block_order = ? WHERE block_id = ?'
+		)->execute([$order, $item->block_id]);
+		$item->block_order = $order;
+	}
+}
+uasort($items, function ($x, $y) {
+	return (int)($x->block_order > $y->block_order);
+});
 
 echo relatedPages($moduleTools, $this->getConfigLink());
 
@@ -128,101 +136,94 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', ''); ?>
 				</button>
 			</div>
 
-			<?php if($items) { ?>
-				<table class="cell" id="faq_edit">
-					<thead>
-						<tr>
-							<th style="width: 8%;">
-								<?php echo KT_I18N::translate('Order'); ?>
-							</th>
-							<th style="width: 8%;">
-								<?php echo KT_I18N::translate('ID'); ?>
-							</th>
-							<th style="width: 20%;">
-								<?php echo KT_I18N::translate('Tree'); ?>
-							</th>
-							<th>
-								<?php echo KT_I18N::translate('Question'); ?>
-							</th>
-							<th style="width: 20%;" colspan="4" class="text-center">
-								<?php echo KT_I18N::translate('Actions'); ?>
-							</th>
-						</tr>
-					</thead>
-					<tbody>
-						<?php 
-						$trees = KT_Tree::getAll();
-
-						if (!$gedID) {
-							$items = $items;
-						} else {
-							foreach ($items as $faq) {
-								if ($faq->gedcom_id == $gedID || is_null($faq->gedcom_id)) {
-									$faqItems[] = $faq;
-								}
-							}
-							$items = $faqItems;
-						}
-
-						foreach ($items as $item) { ?>
-							<tr class="faq_edit_pos">
-								<td>
-									<?php echo($item->block_order); ?>
-								</td>
-								<td>
-									<?php echo($item->block_id); ?>
-								</td>
-								<td>
-									<?php
-									if ($item->gedcom_id == null) {
-										echo KT_I18N::translate('All');
-									} else {
-										echo $trees[$item->gedcom_id]->tree_title_html;
-									} ?>
-								</td>
-								<td>
-									<?php echo $item->faq_title; ?>
-								</td>
-								<td>
-									<?php if ($item->block_order == $min_block_order) { ?>
-										&nbsp;
-									<?php } else { ?>
-										<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_moveup&amp;block_id=<?php echo $item->block_id; ?>">
-											<i class="<?php echo $iconStyle; ?> fa-arrow-up"></i>
-										</a>
-									<?php } ?>
-											<?php if ($item->block_order == $max_block_order) { ?>
-										&nbsp;
-									<?php } else { ?>
-										<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_movedown&amp;block_id=<?php echo $item->block_id; ?>">
-											<i class="<?php echo $iconStyle; ?> fa-arrow-down"></i>
-										</a>
-									<?php } ?>
-								</td>
-								<td>
-									<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit&amp;block_id=<?php echo $item->block_id; ?>&amp;gedID=<?php echo $gedID; ?>">
-										<?php echo KT_I18N::translate('Edit'); ?>
-									</a>
-								</td>
-								<td>
-									<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_delete&amp;block_id=<?php echo $item->block_id; ?>" onclick="return confirm('<?php echo KT_I18N::translate('Are you sure you want to delete this faq entry?'); ?>');">
-										<?php echo KT_I18N::translate('Delete'); ?>
-									</a>
-								</td>
-								<td>
-									<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=show&amp;faq_id=<?php echo $item->block_id; ?>&amp;gedID=<?php echo $gedID; ?>" target="_blank">
-										<?php echo KT_I18N::translate('View'); ?>
-									</a>
-								</td>
+			<form class="cell" method="post" name="configform" action="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_config">
+				<?php if($items) { ?>
+					<table class="cell" id="reorderTable">
+						<thead>
+							<tr>
+								<th class="order" colspan=2>
+									<?php echo KT_I18N::translate('Order'); ?>
+								</th>
+								<th class="id">
+									<?php echo KT_I18N::translate('ID'); ?>
+								</th>
+								<th class="tree">
+									<?php echo KT_I18N::translate('Tree'); ?>
+								</th>
+								<th>
+									<?php echo KT_I18N::translate('Question'); ?>
+								</th>
+								<th class="action" colspan="4">
+									<?php echo KT_I18N::translate('Actions'); ?>
+								</th>
 							</tr>
-						<?php } ?>
-					</tbody>
-				</table>
-			<?php } else { ?>
-				<div class="cell callout alert">
-					<?php echo KT_I18N::translate('The faq list is empty.'); ?>
-				</div>
-			<?php } ?>
+						</thead>
+						<tbody>
+							<?php 
+							$trees = KT_Tree::getAll();
+
+							if (!$gedID) {
+								$items = $items;
+							} else {
+								foreach ($items as $faq) {
+									if ($faq->gedcom_id == $gedID || is_null($faq->gedcom_id)) {
+										$faqItems[] = $faq;
+									}
+								}
+								$items = $faqItems;
+							}
+
+							foreach ($items as $item) { ?>
+								<tr class="sortme">
+									<td>
+										<i class="<?php echo $iconStyle; ?> fa-bars"></i>
+									</td>
+									<td>
+										<input type="text" value="<?php echo($item->block_order); ?>" name="taborder-<?php echo($item->block_id); ?>">
+									</td>
+									<td>
+										<?php echo($item->block_id); ?>
+									</td>
+									<td>
+										<?php
+										if ($item->gedcom_id == null) {
+											echo KT_I18N::translate('All');
+										} else {
+											echo $trees[$item->gedcom_id]->tree_title_html;
+										} ?>
+									</td>
+									<td>
+										<?php echo $item->faq_title; ?>
+									</td>
+									<td>
+										<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit&amp;block_id=<?php echo $item->block_id; ?>&amp;gedID=<?php echo $gedID; ?>">
+											<?php echo KT_I18N::translate('Edit'); ?>
+										</a>
+									</td>
+									<td>
+										<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_delete&amp;block_id=<?php echo $item->block_id; ?>" onclick="return confirm('<?php echo KT_I18N::translate('Are you sure you want to delete this faq entry?'); ?>');">
+											<?php echo KT_I18N::translate('Delete'); ?>
+										</a>
+									</td>
+									<td>
+										<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=show&amp;faq_id=<?php echo $item->block_id; ?>&amp;gedID=<?php echo $gedID; ?>" target="_blank">
+											<?php echo KT_I18N::translate('View'); ?>
+										</a>
+									</td>
+								</tr>
+							<?php } ?>
+						</tbody>
+					</table>
+				<?php } else { ?>
+					<div class="cell callout alert">
+						<?php echo KT_I18N::translate('The faq list is empty.'); ?>
+					</div>
+				<?php }
+
+				echo singleButton('Save new order'); ?>
+
+			</form>
+
 		</div>
 	</fieldset>
 

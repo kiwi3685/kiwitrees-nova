@@ -40,23 +40,25 @@ $controller
 
 		iconPicker();
 
-		jQuery("#pages_module").sortable({
-			items: ".sortme",
-			forceHelperSize: true,
-			forcePlaceholderSize: true,
-			opacity: 0.7,
-			cursor: "move",
-			axis: "y"
-		});
+		tableSort();
+
+//		jQuery("#pages_module").sortable({
+//			items: ".sortme",
+//			forceHelperSize: true,
+//			forcePlaceholderSize: true,
+//			opacity: 0.7,
+//			cursor: "move",
+//			axis: "y"
+//		});
 
 		//-- update the order numbers after drag-n-drop sorting is complete
-		jQuery("#pages_module").bind("sortupdate", function(event, ui) {
-			jQuery("#"+jQuery(this).attr("id")+" input").each(
-				function (index, value) {
-					value.value = index+1;
-				}
-			);
-		});
+//		jQuery("#pages_module").bind("sortupdate", function(event, ui) {
+//			jQuery("#"+jQuery(this).attr("id")+" input").each(
+//				function (index, value) {
+//					value.value = index+1;
+//				}
+//			);
+//		});
 
 	');
 
@@ -79,22 +81,19 @@ $items = KT_DB::prepare("
 	ORDER BY block_order
 ")->execute(array($this->getName()))->fetchAll();
 
-$min_block_order = KT_DB::prepare(
-	"SELECT MIN(block_order) FROM `##block` WHERE module_name = ?"
-)->execute(array($this->getName()))->fetchOne();
-
-$max_block_order = KT_DB::prepare(
-	"SELECT MAX(block_order) FROM `##block` WHERE module_name = ?"
-)->execute(array($this->getName()))->fetchOne();
-
-if ($action == 'updatePagesList') {
-	foreach ($items as $item) {
-		$order = KT_Filter::post('order-' . $item->block_id);
+//Update block order after move, and make the new order take effect immediately
+foreach ($items as $this->getName => $item) {
+	$order = KT_Filter::post('taborder-' . $item->block_id);
+	if ($order) {
 		KT_DB::prepare(
-			"UPDATE `##block` SET block_order=? WHERE block_id=?"
-		)->execute(array($order, $item->block_id));
+			'UPDATE `##block` SET block_order = ? WHERE block_id = ?'
+		)->execute([$order, $item->block_id]);
+		$item->block_order = $order;
 	}
 }
+uasort($items, function ($x, $y) {
+	return (int)($x->block_order > $y->block_order);
+});
 
 echo relatedPages($moduleTools, $this->getConfigLink());
 
@@ -156,22 +155,22 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', ''); ?>
 			</div>
 
 			<?php if($items) { ?>
-				<table class="cell" id="pages_edit">
+				<table class="cell" id="reorderTable">
 					<thead>
 						<tr>
-							<th style="width: 8%;">
+							<th class="order" colspan=2>
 								<?php echo KT_I18N::translate('Order'); ?>
 							</th>
-							<th style="width: 8%;">
+							<th class="id">
 								<?php echo KT_I18N::translate('ID'); ?>
 							</th>
-							<th style="width: 20%;">
+							<th class="tree">
 								<?php echo KT_I18N::translate('Tree'); ?>
 							</th>
 							<th>
 								<?php echo KT_I18N::translate('Title'); ?>
 							</th>
-							<th style="width: 20%;" colspan="4" class="text-center">
+							<th class="action" colspan="4">
 								<?php echo KT_I18N::translate('Actions'); ?>
 							</th>
 						</tr>
@@ -191,9 +190,12 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', ''); ?>
 							$items = $pageItems;
 						}
 						foreach ($items as $item) { ?>
-							<tr>
+							<tr class="sortme">
 								<td>
-									<?php echo($item->block_order); ?>
+									<i class="<?php echo $iconStyle; ?> fa-bars"></i>
+								</td>
+								<td>
+									<input type="text" value="<?php echo($item->block_order); ?>" name="taborder-<?php echo($item->block_id); ?>">
 								</td>
 								<td>
 									<?php echo($item->block_id); ?>
@@ -208,22 +210,6 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', ''); ?>
 								</td>
 								<td>
 									<?php echo $item->pages_title; ?>
-								</td>
-								<td>
-									<?php if ($item->block_order == $min_block_order) { ?>
-										&nbsp;
-									<?php } else { ?>
-										<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_moveup&amp;block_id=<?php echo $item->block_id; ?>">
-											<i class="<?php echo $iconStyle; ?> fa-arrow-up"></i>
-										</a>
-									<?php } ?>
-											<?php if ($item->block_order == $max_block_order) { ?>
-										&nbsp;
-									<?php } else { ?>
-										<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_movedown&amp;block_id=<?php echo $item->block_id; ?>">
-											<i class="<?php echo $iconStyle; ?> fa-arrow-down"></i>
-										</a>
-									<?php } ?>
 								</td>
 								<td>
 									<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit&amp;block_id=<?php echo $item->block_id; ?>&amp;gedID=<?php echo $gedID; ?>">
