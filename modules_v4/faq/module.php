@@ -121,7 +121,7 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 			SELECT block_id, block_order,
 			bs1.setting_value AS faq_title,
 			bs2.setting_value AS faq_access,
-			bs3.setting_value AS faq_description
+			bs3.setting_value AS faq_content
 			FROM `##block` b
 			JOIN `##block_setting` bs1 USING (block_id)
 			JOIN `##block_setting` bs2 USING (block_id)
@@ -129,7 +129,7 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 			WHERE module_name = ?
 			AND bs1.setting_name = 'faq_title'
 			AND bs2.setting_name = 'faq_access'
-			AND bs3.setting_name = 'faq_description'
+			AND bs3.setting_name = 'faq_content'
 			AND (gedcom_id IS NULL OR gedcom_id = ?)
 			AND (bs2.setting_value LIKE '%" . $search . "%' OR bs1.setting_value LIKE '% . $search . %')
 			ORDER BY block_order
@@ -212,7 +212,7 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 				<div class="cell accordion" data-accordion data-allow-all-closed="true" data-deep-link="true">
 					<?php foreach ($items as $item) {
 						$item_title       = get_block_setting($item->block_id, 'faq_title');
-						$item_description = get_block_setting($item->block_id, 'faq_description');
+						$item_description = get_block_setting($item->block_id, 'faq_content');
 						$item_access      = get_block_setting($item->block_id, 'faq_access');
 						$languages        = get_block_setting($item->block_id, 'languages');
 						?>

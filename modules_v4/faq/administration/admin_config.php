@@ -53,13 +53,13 @@ if ($action == 'update') {
 }
 
 $items = KT_DB::prepare("
-	SELECT block_id, block_order, gedcom_id, bs1.setting_value AS faq_title, bs2.setting_value AS faq_description
+	SELECT block_id, block_order, gedcom_id, bs1.setting_value AS faq_title, bs2.setting_value AS faq_content
 	FROM `##block` b
 	JOIN `##block_setting` bs1 USING (block_id)
 	JOIN `##block_setting` bs2 USING (block_id)
 	WHERE module_name = ?
 	AND bs1.setting_name = 'faq_title'
-	AND bs2.setting_name = 'faq_description'
+	AND bs2.setting_name = 'faq_content'
 	ORDER BY block_order
 ")->execute(array($this->getName()))->fetchAll();
 
