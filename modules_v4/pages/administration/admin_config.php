@@ -42,24 +42,6 @@ $controller
 
 		tableSort();
 
-//		jQuery("#pages_module").sortable({
-//			items: ".sortme",
-//			forceHelperSize: true,
-//			forcePlaceholderSize: true,
-//			opacity: 0.7,
-//			cursor: "move",
-//			axis: "y"
-//		});
-
-		//-- update the order numbers after drag-n-drop sorting is complete
-//		jQuery("#pages_module").bind("sortupdate", function(event, ui) {
-//			jQuery("#"+jQuery(this).attr("id")+" input").each(
-//				function (index, value) {
-//					value.value = index+1;
-//				}
-//			);
-//		});
-
 	');
 
 if ($action == 'update') {
@@ -150,7 +132,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', ''); ?>
 			<div class="cell medium-offset-1 auto text-right">
 				<button class="button primary" type="submit" onclick="location.href='module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_add&amp;gedID=<?php echo $gedID; ?>'">
 					<i class="<?php echo $iconStyle; ?> fa-plus"></i>
-					<?php echo KT_I18N::translate('Add page'); ?>
+					<?php echo KT_I18N::translate('Add a page'); ?>
 				</button>
 			</div>
 
@@ -231,7 +213,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', ''); ?>
 					</tbody>
 				</table>
 			<?php } else { ?>
-				<div class="cell callout alert">
+				<div class="cell callout warning">
 					<?php echo KT_I18N::translate('The item list is empty.'); ?>
 				</div>
 			<?php } ?>

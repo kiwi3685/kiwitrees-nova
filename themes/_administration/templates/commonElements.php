@@ -112,7 +112,8 @@ function pageStart($title, $pageTitle = '', $includeTitle = 'y', $subTitle = '',
 function autocompleteHtml($suffix, $type, $tree, $valueInput, $placeHolder, $inputName, $valueHidden, $required = '', $other = '', $validator = '' ) {
 	global $iconStyle;
 
-	$class = KT_SCRIPT_NAME == 'admin_trees_config.php' ? 'hidden' : '';
+//	$class = (KT_SCRIPT_NAME == 'admin_trees_config.php') ? 'hidden' : '';
+	$class = '';
 
 	$html = '
 		<div id="select-' . $suffix . '" class="input-group autocomplete_container ' . $class . '">

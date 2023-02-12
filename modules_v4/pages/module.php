@@ -66,31 +66,16 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 			case 'admin_config':
 			case 'admin_edit':
 				require KT_ROOT . KT_MODULES_DIR . $this->getName() . '/administration/' . $mod_action . '.php';
-
 				break;
-
 			case 'show':
 				$this->show();
-
 				break;
-
 			case 'admin_delete':
 				$this->delete();
 				$this->config();
-
 				break;
-
-			case 'admin_movedown':
-				$this->movedown();
-				$this->config();
-
-				break;
-
-			case 'admin_moveup':
-				$this->moveup();
-				$this->config();
-
-				break;
+			default:
+				header('HTTP/1.0 404 Not Found');
 		}
 	}
 
@@ -296,9 +281,11 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 						foreach ($items as $item) {
 							$item_content = $item->pages_content;
 						}
-						if (!isset($item_content)) {
-							echo '<div class="cell callout warning">' . KT_I18N::translate('Pages will be added shortly') . '</div>';
-						} else {
+						if (!isset($item_content)) { ?>
+							<div class="cell callout warning">
+								<?php echo KT_I18N::translate('No pages have been written yet'); ?>
+							</div>
+						<?php } else {
 							echo $item_content;
 						} ?>
 					</div>

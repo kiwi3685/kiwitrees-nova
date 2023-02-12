@@ -37,13 +37,12 @@ $controller
 	->addInlineJavascript('ckeditorStandard();');
 
 if ($save) {
-	$block_id          = KT_Filter::postInteger('block_id');
-	$block_order       = (int)KT_Filter::post('block_order');
-	$gedID             = KT_Filter::post('gedID');
-	$item_title        = KT_Filter::post('faq_title',  KT_REGEX_UNSAFE); // allow html
-	$item_description = KT_Filter::post('faq_description', KT_REGEX_UNSAFE); // allow html
-	$item_access       = KT_Filter::post('faq_access');
-	$languages         = array();
+	$block_id     = KT_Filter::postInteger('block_id');
+	$block_order  = KT_Filter::postInteger('block_order');
+	$item_title   = KT_Filter::post('faq_title',  KT_REGEX_UNSAFE); // allow html
+	$item_content = KT_Filter::post('faq_content', KT_REGEX_UNSAFE); // allow html
+	$item_access  = KT_Filter::post('faq_access');
+	$languages    = array();
 
 	KT_DB::prepare(
 		"UPDATE `##block` SET gedcom_id = NULLIF(?, ''), block_order = ? WHERE block_id = ?"
@@ -54,7 +53,7 @@ if ($save) {
 	));
 
 	set_block_setting($block_id, 'faq_title', $item_title);
-	set_block_setting($block_id, 'faq_description', $item_description); 
+	set_block_setting($block_id, 'faq_content', $item_content); 
 	set_block_setting($block_id, 'faq_access', $item_access);
 
 	foreach (KT_I18N::used_languages() as $code=>$name) {
@@ -68,27 +67,27 @@ if ($save) {
 		case 1:
 			// save and re-edit
 			?><script>
-				window.location='module.php?mod=faq&mod_action=admin_edit&block_id=' . $block_id . '&gedID=' . $gedID;
+				window.location='module.php?mod=<?php echo $this->getName(); ?>&mod_action=admin_edit&block_id=' . $block_id . '&gedID=' . $gedID;
 			</script><?php
 		break;
 		case 2:
 			// save & close
 			?><script>
-				window.location='module.php?mod=faq&mod_action=admin_config';
+				window.location='module.php?mod=<?php echo $this->getName(); ?>&mod_action=admin_config';
 			</script><?php
 		break;
 	}
 }
 
-$item_title      = get_block_setting($block_id, 'faq_title');
-$item_description     = get_block_setting($block_id, 'faq_description');
-$item_access = KT_I18N::translate('All');
+$item_title   = get_block_setting($block_id, 'faq_title');
+$item_content = get_block_setting($block_id, 'faq_content');
+$item_access  = KT_I18N::translate('All');
 
 $block_order = KT_DB::prepare(
 	"SELECT block_order FROM `##block` WHERE block_id = ?"
 )->execute(array($block_id))->fetchOne();
 
-$gedID            = KT_DB::prepare(
+$gedID       = KT_DB::prepare(
 	"SELECT gedcom_id FROM `##block` WHERE block_id=?"
 )->execute(array($block_id))->fetchOne();
 
@@ -96,7 +95,7 @@ echo relatedPages($moduleTools, $this->getConfigLink());
 
 echo pageStart('faq_details', $controller->getPageTitle()); ?>
 
-	<form class="cell" name="faq" method="post" action="module.php?mod=faq&amp;mod_action=admin_edit">
+	<form class="cell" name="faq" method="post" action="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit">
 		<input type="hidden" name="block_id" value="<?php echo $block_id; ?>">
 
 		<div class="grid-x grid-margin-y">
@@ -111,7 +110,7 @@ echo pageStart('faq_details', $controller->getPageTitle()); ?>
 				<?php echo KT_I18N::translate('Answer'); ?>
 			</label>
 			<div class="cell medium-10">
-				<textarea name="faq_description" class="html-edit"><?php echo htmlspecialchars((string) $item_description); ?></textarea>
+				<textarea name="faq_content" class="html-edit"><?php echo htmlspecialchars((string) $item_content); ?></textarea>
 			</div>
 			<label class="cell medium-2">
 				<?php echo KT_I18N::translate('Faq menu order'); ?>
@@ -150,7 +149,7 @@ echo pageStart('faq_details', $controller->getPageTitle()); ?>
 					<i class="<?php echo $iconStyle; ?> fa-save"></i>
 					<?php echo KT_I18N::translate('Save and close'); ?>
 				</button>
-				<button class="button hollow" type="button" onclick="window.location='module.php?mod=faq&amp;mod_action=admin_config'">
+				<button class="button hollow" type="button" onclick="window.location='module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_config'">
 					<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 					<?php echo KT_I18N::translate('Cancel'); ?>
 				</button>

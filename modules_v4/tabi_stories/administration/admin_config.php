@@ -53,15 +53,27 @@ if ($action == 'update') {
 }
 
 $items = KT_DB::prepare("
-	SELECT block_id, block_order, gedcom_id, bs1.setting_value AS faq_title, bs2.setting_value AS faq_description
+	SELECT block_id, block_order, gedcom_id, xref, bs1.setting_value AS story_title, bs2.setting_value AS story_content
 	FROM `##block` b
 	JOIN `##block_setting` bs1 USING (block_id)
 	JOIN `##block_setting` bs2 USING (block_id)
 	WHERE module_name = ?
-	AND bs1.setting_name = 'faq_title'
-	AND bs2.setting_name = 'faq_description'
+	AND bs1.setting_name = 'story_title'
+	AND bs2.setting_name = 'story_content'
 	ORDER BY block_order
 ")->execute(array($this->getName()))->fetchAll();
+
+$new_xref = KT_Filter::get('xref', KT_REGEX_XREF);
+
+// transfer old xref in ##block to new xref in ##block_setting
+foreach ($items as $item) {
+	if (null != $item->xref) {
+		set_block_setting($item->block_id, 'xref', $item->xref);
+		KT_DB::prepare(
+			'UPDATE `##block` SET xref = NULL WHERE block_id=?'
+		)->execute([$item->block_id]);
+	}
+}
 
 //Update block order after move, and make the new order take effect immediately
 foreach ($items as $this->getName => $item) {
@@ -110,7 +122,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', ''); ?>
 						<?php echo KT_I18N::translate('Page description'); ?>
 					</label>
 					<div class="cell medium-9">
-						<textarea name="NEW_HEADER_DESCRIPTION" class="html-edit" placeholder="<?php echo KT_I18N::translate('This text will be displayed at the top of the page.'); ?>"><?php echo $this->getSummaryDescription(); ?></textarea>
+						<textarea name="NEW_HEADER_DESCRIPTION" class="html-edit" placeholder="<?php echo KT_I18N::translate('This text will be displayed at the top of the story list page.'); ?>"><?php echo $this->getSummaryDescription(); ?></textarea>
 					</div>
 				</div>
 
@@ -118,8 +130,9 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', ''); ?>
 			</form>
 		</div>
 	</fieldset>
+
 	<fieldset class="cell fieldset">
-		<legend class="h5"><?php echo KT_I18N::translate('Faq list'); ?></legend>
+		<legend class="h5"><?php echo KT_I18N::translate('Story list'); ?></legend>
 		<div class="grid-x">
 			<div class="cell medium-2">
 				<label for="ged"><?php echo KT_I18N::translate('Family tree'); ?></label>
@@ -132,98 +145,140 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', ''); ?>
 			<div class="cell medium-offset-1 auto text-right">
 				<button class="button primary" type="submit" onclick="location.href='module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_add&amp;gedID=<?php echo $gedID; ?>'">
 					<i class="<?php echo $iconStyle; ?> fa-plus"></i>
-					<?php echo KT_I18N::translate('Add an faq item'); ?>
+					<?php echo KT_I18N::translate('Add a story'); ?>
 				</button>
 			</div>
 
 			<form class="cell" method="post" name="configform" action="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_config">
-				<?php if($items) { ?>
 					<table class="cell" id="reorderTable">
 						<thead>
 							<tr>
-								<th class="order" colspan=2>
+								<th colspan=2>
 									<?php echo KT_I18N::translate('Order'); ?>
 								</th>
-								<th class="id">
+								<th>
 									<?php echo KT_I18N::translate('ID'); ?>
 								</th>
-								<th class="tree">
+								<th>
 									<?php echo KT_I18N::translate('Tree'); ?>
 								</th>
 								<th>
-									<?php echo KT_I18N::translate('Question'); ?>
+									<?php echo KT_I18N::translate('Story title'); ?>
 								</th>
-								<th class="action" colspan="4">
+								<th>
+									<?php echo KT_I18N::translate('Individual'); ?>
+								</th>
+								<?php $new_xref ? $columns = 3 : $columns = 2; ?>
+								<th colspan="<?php echo $columns; ?>" class="text-center">
 									<?php echo KT_I18N::translate('Actions'); ?>
 								</th>
 							</tr>
 						</thead>
+					<?php if ($items) { ?>
 						<tbody>
-							<?php 
-							$trees = KT_Tree::getAll();
+							<?php
+							$order      = 1;
+							$trees      = KT_Tree::getAll();
+							$countItems = 0;
 
-							if (!$gedID) {
-								$items = $items;
-							} else {
-								foreach ($items as $faq) {
-									if ($faq->gedcom_id == $gedID || is_null($faq->gedcom_id)) {
-										$faqItems[] = $faq;
-									}
+							foreach ($items as $item) {						
+								if ($item->gedcom_id == $gedID || $gedID == '') {								
+									$xref       = explode(',', get_block_setting($item->block_id, 'xref'));
+									$count_xref = count($xref); ?>
+
+									<tr class="sortme">
+										<td>
+											<i class="<?php echo $iconStyle; ?> fa-bars"></i>
+										</td>
+										<td>
+											<input type="text" value="<?php echo($item->block_order); ?>" name="taborder-<?php echo($item->block_id); ?>">										
+										</td>
+										<td>
+											<?php echo($item->block_id); ?>
+										</td>
+										<td>
+											<?php
+											if ($item->gedcom_id == null) {
+												echo KT_I18N::translate('All');
+											} else {
+												echo $trees[$item->gedcom_id]->tree_title_html;
+											} ?>
+										</td>
+										<td>
+											<?php echo $item->story_title; ?>
+										</td>
+										<td class="small">
+
+											<?php foreach($xref as $indiRef) {
+												$sql    = "SELECT * FROM `##individuals` WHERE i_file LIKE " . $item->gedcom_id . " AND i_id = '" . $indiRef . "'";
+												$row    = KT_DB::prepare($sql)->execute()->fetchOneRow();
+												$person = $person = KT_Person::getInstance(array(
+													'xref'   =>$row->i_id, 
+													'ged_id' =>$row->i_file,  
+													'type'   =>'INDI', 
+													'gedrec' =>$row->i_gedcom)
+												);
+
+												if ($person) { ?>
+													<a href="<?php echo $person->getHtmlUrl(); ?>#stories" class="current">
+														<?php echo $person->getFullName(); ?>
+													</a>
+												<?php } else { ?>
+													<span class="error"><?php echo $indiRef; ?></span>
+												<?php }
+
+											} ?>
+
+										</td>
+										<td >
+											<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit&amp;block_id=<?php echo $item->block_id; ?>&amp;gedID=<?php echo $gedID; ?>">
+												<?php echo KT_I18N::translate('Edit'); ?>
+											</a>
+										</td>
+										<td>
+											<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_delete&amp;block_id=<?php echo $item->block_id; ?>" onclick="return confirm('<?php echo KT_I18N::translate('Are you sure you want to delete this story?'); ?>');">
+												<?php echo KT_I18N::translate('Delete'); ?>
+											</a>
+										</td>
+
+										<?php if ($new_xref) { ?>
+											<td class="text-center">
+												<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=story_link&amp;block_id=<?php echo $item->block_id; ?>&amp;xref=<?php echo $new_xref; ?>" onclick="return confirm('<?php echo KT_I18N::translate('Are you sure you want to link to this story?'); ?>');">
+													<?php echo KT_I18N::translate('Link'); ?>
+												</a>
+											</td>
+
+										<?php } ?>
+									</tr>
+									<?php
+									++$order;
+									++$countItems;
+								} else {
+									
 								}
-								$items = $faqItems;
-							}
-
-							foreach ($items as $item) { ?>
-								<tr class="sortme">
-									<td>
-										<i class="<?php echo $iconStyle; ?> fa-bars"></i>
-									</td>
-									<td>
-										<input type="text" value="<?php echo($item->block_order); ?>" name="taborder-<?php echo($item->block_id); ?>">
-									</td>
-									<td>
-										<?php echo($item->block_id); ?>
-									</td>
-									<td>
-										<?php
-										if ($item->gedcom_id == null) {
-											echo KT_I18N::translate('All');
-										} else {
-											echo $trees[$item->gedcom_id]->tree_title_html;
-										} ?>
-									</td>
-									<td>
-										<?php echo $item->faq_title; ?>
-									</td>
-									<td>
-										<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit&amp;block_id=<?php echo $item->block_id; ?>&amp;gedID=<?php echo $gedID; ?>">
-											<?php echo KT_I18N::translate('Edit'); ?>
-										</a>
-									</td>
-									<td>
-										<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_delete&amp;block_id=<?php echo $item->block_id; ?>" onclick="return confirm('<?php echo KT_I18N::translate('Are you sure you want to delete this faq entry?'); ?>');">
-											<?php echo KT_I18N::translate('Delete'); ?>
-										</a>
-									</td>
-									<td>
-										<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=show&amp;faq_id=<?php echo $item->block_id; ?>&amp;gedID=<?php echo $gedID; ?>" target="_blank">
-											<?php echo KT_I18N::translate('View'); ?>
-										</a>
-									</td>
-								</tr>
-							<?php } ?>
-						</tbody>
-					</table>
-				<?php } else { ?>
-					<div class="cell callout warning">
-						<?php echo KT_I18N::translate('The faq list is empty.'); ?>
-					</div>
-				<?php }
-
-				echo singleButton('Save new order'); ?>
+ 							} ?>
+						</tbody>					
+						<?php if($countItems == 0 && !is_null($gedID)) {
+							$new_xref ? $columns = 8 : $columns = 7; ?>
+							<tfoot><tr><td colspan="<?php echo $columns; ?>" >
+								<div class="cell callout warning">
+									<?php echo KT_I18N::translate('The stories list for this tree is empty.'); ?>
+								</div>
+							<tfoot><tr><td>
+						<?php }
+					} else {
+						$new_xref ? $columns = 8 : $columns = 7; ?>
+						<tfoot><tr><td colspan="<?php echo $columns; ?>" >
+							<div class="cell callout warning">
+								<?php echo KT_I18N::translate('The stories list is empty.'); ?>
+							</div>
+						<tfoot><tr><td>
+					<?php } ?>
+				</table>
+				
+				<?php echo singleButton(); ?>
 
 			</form>
-
 		</div>
 	</fieldset>
 

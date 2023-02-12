@@ -36,13 +36,14 @@ $gedID 	= KT_Filter::post('gedID');
 $save	= KT_Filter::post('save', '');
 
 if ($save) {
-	// ##block table entries
-	$block_id 		= KT_Filter::postInteger('block_id');
-	$block_order 	= KT_Filter::postInteger('block_order');
-	$gedID 			= KT_Filter::post('gedID');
-	$header      	= KT_Filter::post('header',  KT_REGEX_UNSAFE);
-	$gallerybody    = KT_Filter::post('gallerybody', KT_REGEX_UNSAFE);
-	$languages 		= array();
+	$block_id     = KT_Filter::postInteger('block_id');
+	$block_order  = KT_Filter::postInteger('block_order');
+	$item_title   = KT_Filter::post('gallery_title',   KT_REGEX_UNSAFE);
+	$item_content = KT_Filter::post('gallery_content', KT_REGEX_UNSAFE);
+	$item_access  = KT_Filter::post('gallery_access',  KT_REGEX_UNSAFE);
+	$item_folder  = KT_Filter::post('gallery_folder',  KT_REGEX_UNSAFE);
+	$item_plugin  = KT_Filter::post('gallery_plugin',  KT_REGEX_UNSAFE);
+	$languages    = array();
 
 	KT_DB::prepare(
 		"INSERT INTO `##block` (gedcom_id, module_name, block_order) VALUES (NULLIF(?, ''), ?, ?)"
@@ -54,12 +55,11 @@ if ($save) {
 
 	$block_id = KT_DB::getInstance()->lastInsertId();
 
-	// ##block_setting table entries
-	set_block_setting($block_id, 'gallery_title', KT_Filter::post('gallery_title', KT_REGEX_UNSAFE));
-	set_block_setting($block_id, 'gallery_description', KT_Filter::post('gallery_description', KT_REGEX_UNSAFE));
-	set_block_setting($block_id, 'gallery_folder', KT_Filter::post('gallery_folder', KT_REGEX_UNSAFE));
-	set_block_setting($block_id, 'gallery_access', KT_Filter::post('gallery_access', KT_REGEX_UNSAFE));
-	set_block_setting($block_id, 'gallery_plugin', KT_Filter::post('gallery_plugin', KT_REGEX_UNSAFE));
+	set_block_setting($block_id, 'gallery_title',   $item_title);
+	set_block_setting($block_id, 'gallery_content', $item_content);
+	set_block_setting($block_id, 'gallery_folder',  $item_folder);
+	set_block_setting($block_id, 'gallery_access',  $item_access);
+	set_block_setting($block_id, 'gallery_plugin',  $item_plugin);
 
 	foreach (KT_I18N::used_languages() as $code=>$name) {
 		if (KT_Filter::postBool('lang_' . $code)) {
@@ -77,19 +77,19 @@ if ($save) {
 		case 1:
 			// save and re-edit
 			?><script>
-				window.location='module.php?mod=gallery&mod_action=admin_edit&block_id=<?php echo $block_id; ?>&gedID=<?php echo $gedID; ?>
+				window.location='module.php?mod=<?php echo $this->getName(); ?>&mod_action=admin_edit&block_id=<?php echo $block_id; ?>&gedID=<?php echo $gedID; ?>
 			</script><?php
 		break;
 		case 2:
 			// save & close
 			?><script>
-				window.location='module.php?mod=gallery&mod_action=admin_config&gedID=<?php echo $gedID; ?>';
+				window.location='module.php?mod=<?php echo $this->getName(); ?>&mod_action=admin_config&gedID=<?php echo $gedID; ?>';
 			</script><?php
 		break;
 		case 3:
 			// save and add another
 			?><script>
-				window.location='module.php?mod=gallery&mod_action=admin_add';
+				window.location='module.php?mod=<?php echo $this->getName(); ?>&mod_action=admin_add';
 			</script><?php
 		break;
 	}
@@ -97,13 +97,10 @@ if ($save) {
 }	
 
 $block_id         = '';
-$header           = '';
-$gallerybody      = '';
 $item_title       = '';
-$item_description = '';
-$item_folder      = '';
+$item_content     = '';
 $item_access      = KT_I18N::translate('All');
-$gedID            = '';
+$item_folder      = '';
 $item_plugin      = 'kiwitrees';
 
 $block_order = KT_DB::prepare(
@@ -114,7 +111,7 @@ echo relatedPages($moduleTools, $this->getConfigLink());
 
 echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-guide/gallery/'); ?>
 
-	<form class="cell" name="gallery" method="post" action="module.php?mod=gallery&amp;mod_action=admin_add">
+	<form class="cell" name="gallery" method="post" action="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_add">
 		<input type="hidden" name="block_id" value="<?php echo $block_id; ?>">
 		<div class="grid-x grid-margin-x grid-margin-y">
 			<label class="cell medium-2">
@@ -127,7 +124,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 				<?php echo KT_I18N::translate('Description'); ?>
 			</label>
 			<div class="cell medium-10">
-				<textarea name="gallery_description" class="html-edit"><?php echo htmlspecialchars((string) $item_description); ?></textarea>
+				<textarea name="gallery_content" class="html-edit"><?php echo htmlspecialchars((string) $item_content); ?></textarea>
 			</div>
 			<label class="cell medium-2">
 				<?php echo KT_I18N::translate('Source'); ?>
@@ -269,7 +266,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 					<i class="<?php echo $iconStyle; ?> fa-save"></i>
 					<?php echo KT_I18N::translate('Save and add another'); ?>
 				</button>
-				<button class="button hollow" type="button" onclick="window.location='module.php?mod=gallery&amp;mod_action=admin_config'">
+				<button class="button hollow" type="button" onclick="window.location='module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_config'">
 					<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 					<?php echo KT_I18N::translate('Cancel'); ?>
 				</button>

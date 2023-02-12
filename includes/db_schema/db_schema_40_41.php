@@ -50,28 +50,38 @@ try {
 } catch (PDOException $ex) {
     // Perhaps we have already deleted this data?
 }
-
 try {
-    self::exec("UPDATE `##block_setting`  SET `setting_name` = REPLACE(`setting_name`, 'header', 'faq_title')");
-} catch (PDOException $ex) {
-    // Perhaps we have already deleted this data?
-}try {
-    self::exec("UPDATE `##block_setting`  SET `setting_name` = REPLACE(`setting_name`, 'faqbody', 'faq_description')");
-} catch (PDOException $ex) {
-    // Perhaps we have already deleted this data?
-}try {
-    self::exec("UPDATE `##block_setting`  SET `setting_name` = REPLACE(`setting_name`, 'plugin', 'gallery_plugin')");
+    self::exec("UPDATE `##block_setting`  SET `setting_name` = 'faq_title' WHERE `setting_name` = 'header'");
 } catch (PDOException $ex) {
     // Perhaps we have already deleted this data?
 }
 try {
-    self::exec("UPDATE `##block_setting`  SET `setting_name` = REPLACE(`setting_name`, 'gallery_folder_f', 'gallery_folder')");
+    self::exec("UPDATE `##block_setting`  SET `setting_name` = 'faq_content' WHERE `setting_name` = 'faqbody'");
 } catch (PDOException $ex) {
     // Perhaps we have already deleted this data?
 }
- 
 try {
-     self::exec("UPDATE `##block_setting`  SET `setting_name` = REPLACE(`setting_name`, 'gallery_folder_w', 'gallery_folder')");
+    self::exec("UPDATE `##block_setting`  SET `setting_name` = 'gallery_plugin' WHERE `setting_name` = 'plugin'");
+} catch (PDOException $ex) {
+    // Perhaps we have already deleted this data?
+}
+try {
+    self::exec("UPDATE `##block_setting`  SET `setting_name` = 'gallery_folder' WHERE `setting_name` = 'gallery_folder_f'");
+} catch (PDOException $ex) {
+    // Perhaps we have already deleted this data?
+}
+try {
+    self::exec("UPDATE `##block_setting`  SET `setting_name` = 'gallery_folder' WHERE `setting_name` = 'gallery_folder_w'");
+} catch (PDOException $ex) {
+    // Perhaps we have already deleted this data?
+}
+try {
+    self::exec("UPDATE `##block_setting`  SET `setting_name` = 'story_content' WHERE `setting_name` = 'story_body'");
+} catch (PDOException $ex) {
+    // Perhaps we have already deleted this data?try {
+}
+try {
+    self::exec("UPDATE `##block_setting`  SET `setting_name` = 'story_title' WHERE `setting_name` = 'title'");
 } catch (PDOException $ex) {
     // Perhaps we have already deleted this data?
 }

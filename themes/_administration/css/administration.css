@@ -9607,9 +9607,12 @@ main #admin-content {
 	/* ADD UNLINKED */
 	/* MISSING DATA */
 	/* FIND DUPLICATES */
-	/* MMERGE RECORDS */
+	/* MERGE RECORDS */
+	/* HTML-BASED PAGES */
 	/* FAQ PAGE */
 	/* GALLERY PAGE */
+	/* PAGES PAGE */
+	/* STORIES PAGE */
 	/* RESEARCH LINKS */
 	/* Googlemaps Admin */
 	/* CLEAN UP TABLE */
@@ -10375,8 +10378,75 @@ main #admin-content #merge_records-page dl.cell dd.cell {
 main #admin-content #merge_records-page button.returnToStart {
 	margin-top: 0.9375rem;
 }
+main #admin-content #faq-page table#reorderTable thead tr th.order,
+main #admin-content #gallery-page table#reorderTable thead tr th.order,
+main #admin-content #pages-page table#reorderTable thead tr th.order,
+main #admin-content #tabi_stories-page table#reorderTable thead tr th.order {
+	width: 8%;
+}
+main #admin-content #faq-page table#reorderTable thead tr th.id,
+main #admin-content #gallery-page table#reorderTable thead tr th.id,
+main #admin-content #pages-page table#reorderTable thead tr th.id,
+main #admin-content #tabi_stories-page table#reorderTable thead tr th.id {
+	width: 5%;
+}
+main #admin-content #faq-page table#reorderTable thead tr th.tree,
+main #admin-content #gallery-page table#reorderTable thead tr th.tree,
+main #admin-content #pages-page table#reorderTable thead tr th.tree,
+main #admin-content #tabi_stories-page table#reorderTable thead tr th.tree {
+	width: 20%;
+}
+main #admin-content #faq-page table#reorderTable thead tr th.action,
+main #admin-content #gallery-page table#reorderTable thead tr th.action,
+main #admin-content #pages-page table#reorderTable thead tr th.action,
+main #admin-content #tabi_stories-page table#reorderTable thead tr th.action {
+	text-align: center;
+	width: 15%;
+}
+main #admin-content #faq-page table#reorderTable tbody,
+main #admin-content #gallery-page table#reorderTable tbody,
+main #admin-content #pages-page table#reorderTable tbody,
+main #admin-content #tabi_stories-page table#reorderTable tbody {
+	font-size: 0.95rem;
+}
+main #admin-content #faq-page table#reorderTable tbody tr.sortme td input,
+main #admin-content #gallery-page table#reorderTable tbody tr.sortme td input,
+main #admin-content #pages-page table#reorderTable tbody tr.sortme td input,
+main #admin-content #tabi_stories-page table#reorderTable tbody tr.sortme td input {
+	border: none;
+	box-sizing: unset;
+	width: 2rem;
+	height: auto;
+	padding: 0;
+	margin: 0;
+	background: none;
+	box-shadow: none;
+}
 main #admin-content #gallery-page .kiwitreesInputGroup .input-group {
 	margin-bottom: 0;
+}
+main #admin-content #tabi_stories-page div.small span,
+main #admin-content #tabi_stories-page div.small a,
+main #admin-content #tabi_stories-page td.small span,
+main #admin-content #tabi_stories-page td.small a {
+	font-size: 0.9rem;
+}
+main #admin-content #tabi_stories-page table#reorderTable thead tr th.action {
+	text-align: center;
+	width: 12%;
+}
+main #admin-content #tabi_stories-page table#reorderTable tbody td a {
+	display: block;
+}
+main #admin-content #tabi_stories-page table#reorderTable tfoot {
+	background: none;
+	color: inherit;
+}
+main #admin-content #tabi_stories-page table#reorderTable tfoot td, main #admin-content #tabi_stories-page table#reorderTable tfoot th {
+	font-weight: normal;
+}
+main #admin-content #tabi_stories-page .linkedIndis {
+	margin-top: 0.9375rem;
 }
 main #admin-content #research_links-page button {
 	margin: 1rem;

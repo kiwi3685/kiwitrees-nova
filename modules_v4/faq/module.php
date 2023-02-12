@@ -65,14 +65,6 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 				$this->delete();
 				require KT_ROOT . KT_MODULES_DIR . $this->getName() . '/administration/admin_config.php';
 				break;
-			case 'admin_movedown':
-				$this->movedown();
-				require KT_ROOT . KT_MODULES_DIR . $this->getName() . '/administration/admin_config.php';
-				break;
-			case 'admin_moveup':
-				$this->moveup();
-				require KT_ROOT . KT_MODULES_DIR . $this->getName() . '/administration/admin_config.php';
-				break;
 			case 'show':
 				$this->show();
 				break;
@@ -251,64 +243,6 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 		KT_DB::prepare(
 			"DELETE FROM `##block` WHERE block_id=?"
 		)->execute(array($block_id));
-	}
-
-	private function moveup() {
-		$block_id = KT_Filter::get('block_id');
-
-		$block_order = KT_DB::prepare('
-			SELECT block_order
-			 FROM `##block`
-			  WHERE block_id = ?
-		')->execute(array($block_id))->fetchOne();
-
-		$swap_block = KT_DB::prepare('
-			SELECT block_order, block_id
-			 FROM `##block`
-			 WHERE block_order=(
-			 	SELECT MAX(block_order) FROM `##block` WHERE block_order < ? AND module_name = ?
-			 )
-			 AND module_name = ?
-			LIMIT 1
-		')->execute(array($block_order, $this->getName(), $this->getName()))->fetchOneRow();
-
-		if ($swap_block) {
-			KT_DB::prepare('
-				UPDATE `##block` 
-				SET block_order = ? 
-				WHERE block_id= ?
-			')->execute(array($swap_block->block_order, $block_id));
-			KT_DB::prepare('
-				UPDATE `##block` 
-				SET block_order = ? 
-				WHERE block_id=?
-			')->execute(array($block_order, $swap_block->block_id));
-		}
-	}
-
-	private function movedown() {
-		$block_id = KT_Filter::get('block_id');
-
-		$block_order = KT_DB::prepare(
-			"SELECT block_order FROM `##block` WHERE block_id=?"
-		)->execute(array($block_id))->fetchOne();
-
-		$swap_block = KT_DB::prepare(
-			"SELECT block_order, block_id".
-			" FROM `##block`".
-			" WHERE block_order=(".
-			"  SELECT MIN(block_order) FROM `##block` WHERE block_order>? AND module_name=?".
-			" ) AND module_name=?".
-			" LIMIT 1"
-		)->execute(array($block_order, $this->getName(), $this->getName()))->fetchOneRow();
-		if ($swap_block) {
-			KT_DB::prepare(
-				"UPDATE `##block` SET block_order=? WHERE block_id=?"
-			)->execute(array($swap_block->block_order, $block_id));
-			KT_DB::prepare(
-				"UPDATE `##block` SET block_order=? WHERE block_id=?"
-			)->execute(array($block_order, $swap_block->block_id));
-		}
 	}
 
 	// Return search of faqs

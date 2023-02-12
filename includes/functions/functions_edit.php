@@ -82,7 +82,7 @@ function select_edit_control($name, $values, $empty, $selected = '', $extra = ''
 		}
 	}
 	// A completely empty list would be invalid, and break various things
-	if (empty($values) && empty($html)) {
+	if (empty($values) && is_null($empty)) {
 		$html = '<option value=""></option>';
 	}
 	foreach ($values as $key => $value) {

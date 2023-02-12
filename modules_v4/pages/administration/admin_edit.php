@@ -68,13 +68,13 @@ if ($save) {
 		case 1:
 			// save and re-edit
 			?><script>
-				window.location='module.php?mod=pages&mod_action=admin_edit&block_id=' . $block_id . '&gedID=' . $gedID;
+				window.location='module.php?mod=<?php echo $this->getName(); ?>&mod_action=admin_edit&block_id=' . $block_id . '&gedID=' . $gedID;
 			</script><?php
 		break;
 		case 2:
 			// save & close
 			?><script>
-				window.location='module.php?mod=pages&mod_action=admin_config';
+				window.location='module.php?mod=<?php echo $this->getName(); ?>&mod_action=admin_config';
 			</script><?php
 		break;
 	}
@@ -97,7 +97,7 @@ echo relatedPages($moduleTools, $this->getConfigLink());
 
 echo pageStart('pages_details', $controller->getPageTitle()); ?>
 
-	<form class="cell" name="pages" method="post" action="module.php?mod=pages&amp;mod_action=admin_edit">
+	<form class="cell" name="pages" method="post" action="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit">
 		<input type="hidden" name="block_id" value="<?php echo $block_id; ?>">
 
 		<div class="grid-x grid-margin-y">
@@ -150,7 +150,7 @@ echo pageStart('pages_details', $controller->getPageTitle()); ?>
 					<i class="<?php echo $iconStyle; ?> fa-save"></i>
 					<?php echo KT_I18N::translate('Save and close'); ?>
 				</button>
-				<button class="button hollow" type="button" onclick="window.location='module.php?mod=pages&amp;mod_action=admin_config'">
+				<button class="button hollow" type="button" onclick="window.location='module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_config'">
 					<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 					<?php echo KT_I18N::translate('Cancel'); ?>
 				</button>

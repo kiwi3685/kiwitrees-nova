@@ -36,12 +36,12 @@ $controller
 	->addInlineJavascript('ckeditorStandard();');
 
 if ($save) {
-	$block_id      = KT_Filter::postInteger('block_id');
-	$block_order   = KT_Filter::postInteger('block_order');
-	$item_title   = KT_Filter::post('pages_title',  KT_REGEX_UNSAFE);
+	$block_id     = KT_Filter::postInteger('block_id');
+	$block_order  = KT_Filter::postInteger('block_order');
+	$item_title   = KT_Filter::post('pages_title',   KT_REGEX_UNSAFE);
 	$item_content = KT_Filter::post('pages_content', KT_REGEX_UNSAFE);
-	$gedID         = KT_Filter::post('gedID');
-	$languages     = array();
+	$item_access  = KT_Filter::post('pages_access',  KT_REGEX_UNSAFE);
+	$languages    = array();
 
 	KT_DB::prepare(
 		"INSERT INTO `##block` (gedcom_id, module_name, block_order) VALUES (NULLIF(?, ''), ?, ?)"
@@ -53,8 +53,9 @@ if ($save) {
 
 	$block_id = KT_DB::getInstance()->lastInsertId();
 
-	set_block_setting($block_id, 'pages_title', $item_title);
+	set_block_setting($block_id, 'pages_title',   $item_title);
 	set_block_setting($block_id, 'pages_content', $item_content); 
+	set_block_setting($block_id, 'pages_access',  $item_access); 
 
 	foreach (KT_I18N::used_languages() as $code=>$name) {
 		if (KT_Filter::postBool('lang_' . $code)) {
@@ -67,29 +68,29 @@ if ($save) {
 		case 1:
 			// save and re-edit
 			?><script>
-				window.location='module.php?mod=pages&mod_action=admin_edit&block_id=<?php echo $block_id; ?>&gedID=<?php echo $gedID; ?>
+				window.location='module.php?mod=<?php echo $this->getName(); ?>&mod_action=admin_edit&block_id=<?php echo $block_id; ?>&gedID=<?php echo $gedID; ?>
 			</script><?php
 		break;
 		case 2:
 			// save & close
 			?><script>
-				window.location='module.php?mod=pages&mod_action=admin_config';
+				window.location='module.php?mod=<?php echo $this->getName(); ?>&mod_action=admin_config';
 			</script><?php
 		break;
 		case 3:
 			// save and add new
 			?><script>
-				window.location='module.php?mod=pages&mod_action=admin_add';
+				window.location='module.php?mod=<?php echo $this->getName(); ?>&mod_action=admin_add';
 			</script><?php
 		break;
 	}
 
 }
 
-$block_id    = '';
-$item_title      = '';
-$item_content     = '';
-$item_access = KT_I18N::translate('All');
+$block_id     = '';
+$item_title   = '';
+$item_content = '';
+$item_access  = KT_I18N::translate('All');
 
 $block_order = KT_DB::prepare(
 	"SELECT IFNULL(MAX(block_order) + 1, 0) FROM `##block` WHERE module_name = ?"
@@ -99,7 +100,7 @@ echo relatedPages($moduleTools, $this->getConfigLink());
 
 echo pageStart('pages_details', $controller->getPageTitle()); ?>
 
-	<form class="cell" name="pages" method="post" action="module.php?mod=pages&amp;mod_action=admin_add">
+	<form class="cell" name="pages" method="post" action="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_add">
 		<input type="hidden" name="block_id" value="<?php echo $block_id; ?>">
 		<div class="grid-x grid-margin-y">
 			<label class="cell medium-2">
@@ -155,7 +156,7 @@ echo pageStart('pages_details', $controller->getPageTitle()); ?>
 					<i class="<?php echo $iconStyle; ?> fa-save"></i>
 					<?php echo KT_I18N::translate('Save and add another'); ?>
 				</button>
-				<button class="button hollow" type="button" onclick="window.location='module.php?mod=pages&amp;mod_action=admin_config'">
+				<button class="button hollow" type="button" onclick="window.location='module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_config'">
 					<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 					<?php echo KT_I18N::translate('Cancel'); ?>
 				</button>

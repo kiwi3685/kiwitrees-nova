@@ -134,7 +134,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 			<div class="cell medium-offset-1 auto text-right">
 				<button class="button primary" type="submit" onclick="location.href='module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_add&amp;gedID=<?php echo $gedID; ?>'">
 					<i class="<?php echo $iconStyle; ?> fa-plus"></i>
-					<?php echo KT_I18N::translate('Add gallery'); ?>
+					<?php echo KT_I18N::translate('Add a gallery'); ?>
 				</button>
 			</div>
 
@@ -218,7 +218,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 						</tbody>
 					</table>
 				<?php } else { ?>
-					<div class="cell callout alert">
+					<div class="cell callout warning">
 						<?php echo KT_I18N::translate('The gallery list is empty.'); ?>
 					</div>
 				<?php } ?>
