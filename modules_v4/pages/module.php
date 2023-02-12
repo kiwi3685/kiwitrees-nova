@@ -135,7 +135,7 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 			SELECT block_id, block_order,
 			bs1.setting_value AS gallery_title,
 			bs2.setting_value AS gallery_access,
-			bs3.setting_value AS gallery_description,
+			bs3.setting_value AS gallery_content,
 			bs4.setting_value AS gallery_folder
 			FROM `##block` b
 			JOIN `##block_setting` bs1 USING (block_id)
@@ -145,7 +145,7 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 			WHERE module_name = ?
 			AND bs1.setting_name = 'gallery_title'
 			AND bs2.setting_name = 'gallery_access'
-			AND bs3.setting_name = 'gallery_description'
+			AND bs3.setting_name = 'gallery_content'
 			AND bs4.setting_name = 'gallery_folder'
 			AND (gedcom_id IS NULL OR gedcom_id = ?)
 			ORDER BY block_order

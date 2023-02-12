@@ -48,7 +48,7 @@ case 'gallery_title':
 	$text=KT_I18N::translate('This is a brief title. It is displayed in two places.<ol><li> It is used as the main menu item name if your theme uses names, and you have more than one gallery. If you only have one gallery, then the title of that gallery is used. It should be kept short or it might break the menu display.</li><li>It is used as the main title on the display page, above the tabbed list of galleries.</li></ol>');
 	break;
 
-case 'gallery_description':
+case 'gallery_content':
 	$title=KT_I18N::translate('Gallery description');
 	$text=KT_I18N::translate('This is a sub-heading that will display below the Summary page title, above the tabbed list of galleries. It can contain HTML elements including an image if you wish. Simply ensure there is no content if you do not want to display it.');
 	break;

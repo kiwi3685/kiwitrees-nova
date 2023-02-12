@@ -136,7 +136,7 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 			SELECT block_id, block_order,
 			bs1.setting_value AS gallery_title,
 			bs2.setting_value AS gallery_access,
-			bs3.setting_value AS gallery_description,
+			bs3.setting_value AS gallery_content,
 			bs4.setting_value AS gallery_folder
 			FROM `##block` b
 			JOIN `##block_setting` bs1 USING (block_id)
@@ -146,7 +146,7 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 			WHERE module_name = ?
 			AND bs1.setting_name = 'gallery_title'
 			AND bs2.setting_name = 'gallery_access'
-			AND bs3.setting_name = 'gallery_description'
+			AND bs3.setting_name = 'gallery_content'
 			AND bs4.setting_name = 'gallery_folder'
 			AND (gedcom_id IS NULL OR gedcom_id = ?)
 			ORDER BY block_order
@@ -262,8 +262,8 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 					<?php  foreach ($items as $item) {
 						if ($items && $item_id == $item->block_id) {
 							$item_gallery = '
-								<div class="cell gallery_description">' . 
-									KT_I18N::translate($item->gallery_description) . '
+								<div class="cell gallery_content">' . 
+									KT_I18N::translate($item->gallery_content) . '
 								</div>' .
 								$this->mediaDisplay($item->gallery_folder, $item_id);
 						}
