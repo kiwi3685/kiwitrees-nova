@@ -88,6 +88,7 @@ class KT_GedcomRecord {
 		}
 
 		// Look for the record in the database
+		if (!is_array($data)) {
 			$data = self::fetchGedcomRecord($pid, $ged_id);
 
 			// If we can edit, then we also need to be able to see pending records.
