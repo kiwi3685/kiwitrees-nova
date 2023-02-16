@@ -239,32 +239,32 @@ echo pageStart('admin', KT_I18N::translate('Dashboard')); ?>
 								// Kiwitrees version check
 								if ($latest_version) {
 									if (version_compare(KT_VERSION, $latest_version) < 0) { ?>
-										<div class="callout large-4 alert">
+										<div class="cell callout alert auto">
 											<?php echo /* I18N: %s is a URL/link to the project website */ KT_I18N::translate('Version %s of kiwitrees is now available at %s.', $latest_version, ' <a class="current" href="' . KT_KIWITREES_URL . '/services/downloads/">kiwitrees.net downloads</a>'); ?>
 										</div>
 									<?php } else { ?>
-										<div class="callout large-4 success">
+										<div class="cell callout success auto">
 											<?php echo /* I18N: %s is a URL/link to the project website */ KT_I18N::translate('Your version of kiwitrees is the latest available.'); ?>
 										</div>
 									<?php }
 								} else { ?>
-									<div class="callout large-4 warning">
+									<div class="cell callout warning auto">
 										<?php echo /* I18N: %s is a URL/link to the project website */ KT_I18N::translate('No kiwitrees upgrade information is available.'); ?>
 									</div>
 								<?php }
 								// PHP version check
 								if (version_compare(phpversion(), '8.2', '<')) {
 									if (version_compare(phpversion(), '7.1', '<')) { ?>
-										<div class="callout large-4 alert">
+										<div class="cell callout alert">
 											<?php echo  KT_I18N::translate('Kiwitrees is no longer compatible with versions of PHP older than 7.1'); ?>
 										</div>
 									<?php } else { ?>
-										<div class="callout large-4 success">
+										<div class="cell callout success">
 											<?php echo  KT_I18N::translate('Kiwitrees is compatible with this version of PHP.'); ?>
 										</div>
 									<?php }
 								} else { ?>
-									<div class="callout large-4 warning">
+									<div class="cell callout warning auto">
 										<?php echo  KT_I18N::translate('Kiwitrees is not yet tested for compatibility with your version of PHP. It might work, but if you find any issues please report them on the <a class="current" href="%s" target="_blank">kiwitrees support forum</a>', KT_SUPPORT_URL); ?>
 									</div>
 								<?php }
