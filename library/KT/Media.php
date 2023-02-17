@@ -30,6 +30,8 @@ class KT_Media extends KT_GedcomRecord
 {
 	public $title; // TODO: these should be private, with getTitle() and getFilename() functions
 	public $file;
+	public $thumbimagesize;
+	public $mainimagesize;
 
 	// Create a Media object from either raw GEDCOM data or a database row
 	public function __construct($data)
