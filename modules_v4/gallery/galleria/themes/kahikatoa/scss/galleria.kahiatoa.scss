@@ -67,7 +67,7 @@ $unknown: $dark-gray;
 //  ---------------------------------------------
 
 #galleria {
-	border: 0.25rem inset $light-gray;
+//	border: 0.25rem inset $light-gray;
 	display: inline-block;
 	font-family: $body-font-family !important;
 	height: 800px;
@@ -113,7 +113,7 @@ $unknown: $dark-gray;
 	}
 
 	.galleria-bar {
-		background:$secondary-color;
+		background: none;
 		bottom: 10px;
 		color: $primary-color;
 		font-size: 1rem;
@@ -227,7 +227,7 @@ $unknown: $dark-gray;
 
 	.galleria-loader {
 		-webkit-animation: fa-spin 2s infinite linear;
-  		animation: fa-spin 2s infinite linear;
+		animation: fa-spin 2s infinite linear;
 		font-size: 3rem;
 		position: absolute;
 		top: 50%;

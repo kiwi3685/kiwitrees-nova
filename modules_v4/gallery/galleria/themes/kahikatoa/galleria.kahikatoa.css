@@ -1,7 +1,6 @@
 @import url("https://fonts.googleapis.com/css?family=Taviraj");
 /* color variables */
 #galleria {
-	border: 0.25rem inset #e0e0e0;
 	display: inline-block;
 	font-family: "Taviraj", serif !important;
 	height: 800px;
@@ -44,7 +43,7 @@
 	margin: 10px 8px 60px 8px;
 }
 .galleria-theme-kahikatoa .galleria-bar {
-	background: #faf5e8;
+	background: none;
 	bottom: 10px;
 	color: #ab3334;
 	font-size: 1rem;
