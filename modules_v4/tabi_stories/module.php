@@ -221,7 +221,7 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 	// Implement class KT_Module_IndiTab
 	public function getTabContent()
 	{
-		global $controller;
+		global $controller, $iconStyle;
 
 		$block_ids =
 			KT_DB::prepare("
@@ -238,10 +238,11 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 				KT_GED_ID,
 			])->fetchOneColumn();
 
-		$html = '';
-		$class = '';
-		$ids = [];
+		$html          = '';
+		$class         = '';
+		$ids           = [];
 		$count_stories = 0;
+
 		foreach ($block_ids as $block_id) {
 			$block_order = get_block_order($block_id);
 			// check how many stories can be shown in a language
@@ -251,6 +252,7 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 				$ids[] = $block_order;
 			}
 		}
+
 		// establish first story id from lowest block_order
 		$ids ? $first_story = min($ids) : $first_story = '';
 		foreach ($block_ids as $block_id) {
@@ -259,86 +261,92 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 				$first_story = $block_id;
 			}
 		}
+
 		ob_start();
+			if (KT_USER_GEDCOM_ADMIN) { // change this to KT_USER_CAN_EDIT to allow editors to create first story.?>
 
-		if (KT_USER_GEDCOM_ADMIN) { // change this to KT_USER_CAN_EDIT to allow editors to create first story.?>
-			<div style="border-bottom:thin solid #aaa; margin:-10px; padding-bottom:2px;">
-				<span>
-					<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit&amp;xref=<?php echo $controller->record->getXref(); ?>">
-						<i style="margin: 0 3px 0 10px;" class="icon-button_addnote">&nbsp;</i>
-						<?php echo KT_I18N::translate('Add story'); ?>
-					</a>
-				</span>
-				<span>
-					<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_config&amp;xref=<?php echo $controller->record->getXref(); ?>">
-						<i style="margin: 0 3px 0 10px;" class="icon-button_linknote">&nbsp;</i>
-						<?php echo KT_I18N::translate('Link this individual to an existing story '); ?>
-					</a>
-				</span>
-			</div>
-		<?php }
-
-		if ($count_stories > 1) {
-			$class = 'story';
-			$controller->addInlineJavascript('
-				// Start with all stories hidden except the first
-				jQuery("#story_contents div.story").hide();
-				jQuery("#story_contents #stories_" + ' . $first_story . ').show();
-
-				// Calculate scroll value
-				var posn = jQuery("#navbar").height() - jQuery("#indi_header").height() + jQuery(".ui-tabs-nav").height() + 25;
-				if (jQuery("#navbar").css("position") == "fixed") {
-					var posn = jQuery("#indi_header").height() + jQuery(".ui-tabs-nav").height() - 20;
-				}
-
-				// On clicking a title hide all stories except the chosen one
-				jQuery("#contents_list a").click(function(e){
-					e.preventDefault();
-					var id = jQuery(this).attr("id").split("_");
-					jQuery("#story_contents .story").hide();
-					jQuery("#story_contents #stories_" + id[1]).show();
-					jQuery("html, body").stop().animate({scrollTop: jQuery("#stories").offset().top - posn}, 2000);
-				});
-			'); ?>
-
-			<h4><?php echo KT_I18N::translate('List of stories'); ?></h4>
-			<ol id="contents_list">
-				<?php foreach ($block_ids as $block_id) {
-					$languages = get_block_setting($block_id, 'languages');
-					if (!$languages || in_array(KT_LOCALE, explode(',', $languages))) { ?>
-						<li style="padding:2px 8px;">
-							<a href="#" id="title_<?php echo $block_id; ?>"><?php echo get_block_setting($block_id, 'title'); ?></a>
-						</li>
-					<?php }
-					} ?>
-			</ol>
-			<hr class="stories_divider">
-		<?php } ?>
-		<div id="story_contents">
-			<?php foreach ($block_ids as $block_id) {
-				$languages = get_block_setting($block_id, 'languages');
-				if (!$languages || in_array(KT_LOCALE, explode(',', $languages))) { ?>
-					<div id="stories_<?php echo $block_id; ?>" class="<?php echo $class; ?>">
-						<?php if (KT_USER_CAN_EDIT) { ?>
-							<div style="margin-top:15px;">
-								<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit&amp;block_id=<?php echo $block_id; ?>">
-									<i style="margin: 0 3px 0 0;" class="icon-button_note">&nbsp;</i><?php echo KT_I18N::translate('Edit story'); ?>
-								</a>
-							</div>
-						<?php } ?>
-						<h1><?php echo get_block_setting($block_id, 'story_title'); ?></h1>
-						<div style="white-space: normal;">
-							<?php echo get_block_setting($block_id, 'story_content'); ?>
+				<div class="cell tabHeader">
+					<div class="grid-x">
+						<div class="cell shrink">
+							<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit&amp;xref=<?php echo $controller->record->getXref(); ?>">
+								<i class="<?php echo $iconStyle; ?> fa-plus"></i>
+								<?php echo KT_I18N::translate('Add story'); ?>
+							</a>
 						</div>
-						<?php if ($count_stories > 1) { ?>
-							<hr class="stories_divider">
-						<?php } ?>
+						<div class="cell auto">
+							<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_config&amp;xref=<?php echo $controller->record->getXref(); ?>">
+								<i class="<?php echo $iconStyle; ?> fa-link"></i>
+								<?php echo KT_I18N::translate('Link this individual to an existing story '); ?>
+							</a>
+						</div>
 					</div>
-				<?php }
-				} ?>
-		</div>
+				</div>
 
-		<?php return '<div id="stories_tab_content">' . ob_get_clean() . '</div>';
+				<?php if ($count_stories > 1) {
+					$class = 'story';
+					$controller->addInlineJavascript('
+						// Start with all stories hidden except the first
+						jQuery("#story_contents div.story").hide();
+						jQuery("#story_contents #stories_" + ' . $first_story . ').show();
+
+						// Calculate scroll value
+						var posn = jQuery("#navbar").height() - jQuery("#indi_header").height() + jQuery(".ui-tabs-nav").height() + 25;
+						if (jQuery("#navbar").css("position") == "fixed") {
+							var posn = jQuery("#indi_header").height() + jQuery(".ui-tabs-nav").height() - 20;
+						}
+
+						// On clicking a title hide all stories except the chosen one
+						jQuery("#contents_list a").click(function(e){
+							e.preventDefault();
+							var id = jQuery(this).attr("id").split("_");
+							jQuery("#story_contents .story").hide();
+							jQuery("#story_contents #stories_" + id[1]).show();
+							jQuery("html, body").stop().animate({scrollTop: jQuery("#stories").offset().top - posn}, 2000);
+						});
+					'); ?>
+
+					<h4><?php echo KT_I18N::translate('List of stories'); ?></h4>
+					<ol id="contents_list">
+						<?php foreach ($block_ids as $block_id) {
+							$languages = get_block_setting($block_id, 'languages');
+							if (!$languages || in_array(KT_LOCALE, explode(',', $languages))) { ?>
+								<li style="padding:2px 8px;">
+									<a href="#" id="title_<?php echo $block_id; ?>"><?php echo get_block_setting($block_id, 'title'); ?></a>
+								</li>
+							<?php }
+							} ?>
+					</ol>
+					<hr class="stories_divider">
+				<?php } ?>
+
+				<div class="grid-x grid-margin-y" id="story_contents">
+					<?php foreach ($block_ids as $block_id) {
+						$languages = get_block_setting($block_id, 'languages');
+						if (!$languages || in_array(KT_LOCALE, explode(',', $languages))) { ?>
+							<div class="cell <?php echo $class; ?>" id="stories_<?php echo $block_id; ?>">
+								<?php if (KT_USER_CAN_EDIT) { ?>
+									<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit&amp;block_id=<?php echo $block_id; ?>">
+										<i class="<?php echo $iconStyle; ?> fa-pen-to-square"></i>
+										<?php echo KT_I18N::translate('Edit story'); ?>
+									</a>
+								<?php } ?>
+								<h3 class="text-center">
+									<?php echo get_block_setting($block_id, 'story_title'); ?>
+								</h3>
+
+								<?php echo get_block_setting($block_id, 'story_content'); ?>
+
+								<?php if ($count_stories > 1) { ?>
+									<hr class="stories_divider">
+								<?php } ?>
+							</div>
+						<?php }
+					} ?>
+				</div>
+			<?php }
+
+		return '<div id="stories_tab_content">' . ob_get_clean() . '</div>';
+
 	}
 
 	private function show_list()

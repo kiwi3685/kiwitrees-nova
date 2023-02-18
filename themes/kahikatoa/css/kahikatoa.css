@@ -10010,6 +10010,9 @@ div[id$=-page] button[type=submit] {
 	font-size: 90%;
 	text-align: justify;
 }
+#indi-page .tabs-panel #tabi_attributes_content .button-group .button {
+	margin: 0;
+}
 #indi-page .tabs-panel #tabi_dna_content hr {
 	border: solid 0.025rem #faf5e8;
 }
