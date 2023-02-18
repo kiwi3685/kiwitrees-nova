@@ -26,7 +26,8 @@ if (!defined('KT_KIWITREES')) {
 	exit;
 }
 
-class KT_Controller_Hourglass extends KT_Controller_Chart {
+class KT_Controller_Hourglass extends KT_Controller_Chart
+{
 	var $pid = "";
 
 	var $canedit = false;
@@ -39,9 +40,12 @@ class KT_Controller_Hourglass extends KT_Controller_Chart {
 	var $dgenerations;
 	var $box_width;
 	var $name;
+	var $hourPerson
+
 	// Left and right get reversed on RTL pages
 	private $left_arrow;
 	private $right_arrow;
+
 	//  the following are ajax variables  //
 	var $ARID;
 
@@ -52,12 +56,12 @@ class KT_Controller_Hourglass extends KT_Controller_Chart {
 		parent::__construct();
 
 		// Extract parameters from from
-		$this->pid        =safe_GET_xref('rootid');
-		$this->show_full  =safe_GET('show_full',   array('0', '1'), $PEDIGREE_FULL_DETAILS);
-		$this->show_spouse=safe_GET('show_spouse', array('0', '1'), '0');
-		$this->generations=safe_GET_integer('generations', 2, $MAX_DESCENDANCY_GENERATIONS, 3);
-		$this->box_width  =safe_GET_integer('box_width',   50, 300, 100);
-		$box_width           =safe_GET_integer('box_width',            50, 300, 100);
+		$this->pid         =safe_GET_xref('rootid');
+		$this->show_full   =safe_GET('show_full',   array('0', '1'), $PEDIGREE_FULL_DETAILS);
+		$this->show_spouse =safe_GET('show_spouse', array('0', '1'), '0');
+		$this->generations =safe_GET_integer('generations', 2, $MAX_DESCENDANCY_GENERATIONS, 3);
+		$this->box_width   =safe_GET_integer('box_width',   50, 300, 100);
+		$box_width         =safe_GET_integer('box_width',            50, 300, 100);
 
 		// This is passed as a global.  A parameter would be better...
 		$show_full=$this->show_full;
@@ -74,10 +78,10 @@ class KT_Controller_Hourglass extends KT_Controller_Chart {
 		}
 
 		// -- size of the detailed boxes based upon optional width parameter
-		$Dbwidth=($box_width*$bwidth)/100;
-		$Dbheight=($box_width*$bheight)/100;
-		$bwidth=$Dbwidth;
-		$bheight=$Dbheight;
+		$Dbwidth  =($box_width*$bwidth)/100;
+		$Dbheight =($box_width*$bheight)/100;
+		$bwidth   =$Dbwidth;
+		$bheight  =$Dbheight;
 
 		// -- adjust size of the compact box
 		if (!$this->show_full) {

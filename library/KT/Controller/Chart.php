@@ -30,6 +30,7 @@ class KT_Controller_Chart extends KT_Controller_Page {
 	public $root;
 	public $rootid;
 	public $error_message = null;
+	public $show_full;
 
 	public function __construct($show_full = 1) {
 		parent::__construct();

@@ -1328,7 +1328,7 @@ function print_fact_sources($factrec, $level, $return=false) {
 				$data .= '<div class="fact_SOUR">';
 				$data .= '<span>';
 				$elementID = $sid."-".(int)(microtime(true)*1000000);
-				$src_media = trim(get_gedcom_value('OBJE', '1', $source->getGedcomRecord()), '@');
+				$src_media = trim((string) get_gedcom_value('OBJE', '1', $source->getGedcomRecord()), '@');
 				$data .= KT_I18N::translate('Source').':</span> <span class="field">';
 				$data .= '<a href="'.$source->getHtmlUrl().'">'.$source->getFullName().'</a>';
 				if ($EXPAND_SOURCES) {
@@ -1507,7 +1507,7 @@ function print_address_structure($factrec, $level, $format='') {
 
 // Print a row for the sources tab on the individual page
 function print_main_sources(KT_Event $fact, $level) {
-	global $SHOW_FACT_ICONS;
+	global $SHOW_FACT_ICONS, $iconStyle;
 
 	$factrec = $fact->getGedcomRecord();
 	$linenum = $fact->getLineNumber();

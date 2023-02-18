@@ -2159,7 +2159,7 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 							$level1_checked = ' checked="checked"';
 							$level2_checked = '';
 						}
-						if (false !== strpos($bdm, 'B')) { ?>
+						if ($bdm && false !== strpos($bdm, 'B')) { ?>
 							<div class="cell medium-2">
 								<?php echo KT_I18N::translate('Individual'); ?>
 								<?php echo simple_switch(
@@ -2193,7 +2193,7 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 							}
 						}
 
-						if (false !== strpos($bdm, 'D')) {
+						if ($bdm && false !== strpos($bdm, 'D')) {
 							if (preg_match_all('/(' . KT_REGEX_TAG . ')/', $QUICK_REQUIRED_FACTS, $matches)) {
 								foreach ($matches[1] as $match) {
 									if (in_array($match, explode('|', KT_EVENTS_DEAT))) { ?>
@@ -2214,7 +2214,7 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 							}
 						}
 
-						if (false !== strpos($bdm, 'M')) { ?>
+						if ($bdm && false !== strpos($bdm, 'M')) { ?>
 							<div class="cell medium-2">
 								<?php echo KT_I18N::translate('Family'); ?>
 								<?php echo simple_switch(
@@ -2884,7 +2884,7 @@ function linkMedia($mediaid, $linktoid, $level = 1, $chan = true)
 	$gedrec = find_gedcom_record($linktoid, KT_GED_ID, true);
 
 	// -- check if we are re-editing an unaccepted link that is not already in the DB
-	if (false !== strpos($gedrec, "1 OBJE @{$mediaid}@")) {
+	if ($gedrec && false !== strpos($gedrec, "1 OBJE @{$mediaid}@")) {
 		return false;
 	}
 

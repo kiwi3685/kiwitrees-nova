@@ -30,14 +30,15 @@ class KT_Place {
 	const GEDCOM_SEPARATOR = ', ';
 	private $gedcom_place;  // e.g. array("Westminster", "London", "England")
 	private $gedcom_id;     // We may have the same place in different trees
+	private $place_id; 
 
 	public function __construct($gedcom_place, $gedcom_id) {
 		if ($gedcom_place) {
 			$this->gedcom_place=explode(self::GEDCOM_SEPARATOR, $gedcom_place);
 		} else {
 			// Empty => "Top Level"
-			$this->gedcom_place=array();
-			$this->place_id=0;
+			$this->gedcom_place = array();
+			$this->place_id     = 0;
 		}
 		$this->gedcom_id=$gedcom_id;
 	}
