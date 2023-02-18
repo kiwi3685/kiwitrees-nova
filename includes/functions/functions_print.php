@@ -1398,14 +1398,21 @@ function print_add_new_fact($id, $usedfacts, $type)
 					return;
 			}
 			$addfacts = array_merge(CheckFactUnique($uniquefacts, $usedfacts, $type), $addfacts);
-	$quickfacts = array_intersect($quickfacts, $addfacts);
-	$translated_addfacts = [];
-	foreach ($addfacts as $addfact) {
-		$translated_addfacts[$addfact] = KT_Gedcom_Tag::getLabel($addfact);
-	}
-	uasort($translated_addfacts, 'factsort'); ?>
+			$quickfacts = array_intersect($quickfacts, $addfacts);
+			$translated_addfacts = [];
+			foreach ($addfacts as $addfact) {
+				$translated_addfacts[$addfact] = KT_Gedcom_Tag::getLabel($addfact);
+			}
+			uasort($translated_addfacts, 'factsort');
+
+			if ($type == 'INDI_ATTRIB') {
+				$label = KT_I18N::translate('Add attribute');
+			} else {
+				$label = KT_I18N::translate('Add event');
+			} ?>
+
 			<div class="cell medium-3 fact-title">
-				<label class="h6"><?php echo KT_I18N::translate('Add fact or event'); ?></label>
+				<label class="h6"><?php echo $label; ?></label>
 			</div>
 			<div class="cell medium-8 fact-detail">
 				<form method="get" name="newfactform" action="" onsubmit="return false;">
