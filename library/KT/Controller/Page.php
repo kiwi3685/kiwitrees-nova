@@ -53,7 +53,9 @@ class KT_Controller_Page extends KT_Controller_Base {
 			->addExternalJavascript(KT_FOUNDATION_JS)
 			->addExternalJavascript(KT_FONTAWESOME_JS)
 			->addExternalJavascript(KT_KIWITREES_JS_URL)
-			->addExternalJavascript(KT_JQUERY_SHORTEN);
+//			->addExternalJavascript(KT_JQUERY_SHORTEN)
+//			->addExternalJavascript(KT_PROGRESS_JS)
+		;
 	}
 
 	// Shutdown activity

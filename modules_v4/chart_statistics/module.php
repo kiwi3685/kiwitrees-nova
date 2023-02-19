@@ -125,7 +125,7 @@ class chart_statistics_KT_Module extends KT_Module implements KT_Module_Chart {
 
 			<?php include_once 'statistics.js.php'; ?>
 
-			<div class="callout alert small"  data-closable>
+			<div class="callout alert small" data-closable>
 				<div class="grid-x">
 					<div class="cell">
 						<?php echo KT_I18N::translate('Click on highlighted links to see more details for each statistic.'); ?>

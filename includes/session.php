@@ -78,6 +78,7 @@ define('KT_D3_JS',							KT_STATIC_URL . 'js/d3.min.js'); // Installed from http
 define('KT_CHOSEN_JS',						KT_STATIC_URL . 'library/chosen/chosen.jquery.min.js'); // chosen-package-1.87 from https://github.com/harvesthq/chosen
 define('KT_CONFIRM_JS',						KT_STATIC_URL . 'library/jquery-confirm/dist/jquery-confirm.min.js'); // Ver 3.3.4 from https://craftpip.github.io/jquery-confirm/
 define('KT_ICON_PICKER_JS',					KT_STATIC_URL . 'library/fontawesome-iconpicker/dist/js/fontawesome-iconpicker.min.js'); // ver 3.2.1 from https://github.com/itsjavi/fontawesome-iconpicker
+define('KT_PROGRESS_JS',					KT_STATIC_URL . 'js/progress.min.js');
 
 // kiwitrees own javascript libraries
 define('KT_KIWITREES_JS_URL',				KT_STATIC_URL . 'js/kiwitrees.min.js'); // used system wide, via Pages KT class
