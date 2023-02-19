@@ -40,7 +40,7 @@ class KT_Controller_Hourglass extends KT_Controller_Chart
 	var $dgenerations;
 	var $box_width;
 	var $name;
-	var $hourPerson
+	var $hourPerson;
 
 	// Left and right get reversed on RTL pages
 	private $left_arrow;
