@@ -103,6 +103,7 @@ interface KT_Module_Footer {
 abstract class KT_Module {
 
 	private $_title = null;
+	public $getName;
 
 	public function __toString() {
 		// We need to call getTitle() frequently (e.g. uasort callback function), but
