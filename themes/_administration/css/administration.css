@@ -10451,9 +10451,18 @@ main #admin-content #tabi_stories-page table#reorderTable tfoot td, main #admin-
 main #admin-content #tabi_stories-page .linkedIndis {
 	margin-top: 0.9375rem;
 }
+main #admin-content #research_links-page fieldset {
+	width: 100%;
+}
 main #admin-content #research_links-page button {
 	margin: 1rem;
 	text-align: left;
+}
+main #admin-content #research_links-page .topButton button {
+	margin: 0 0.9375rem 0.9375rem 0.9375rem;
+}
+main #admin-content #research_links-page table td {
+	padding: 0 0.9375rem;
 }
 main #admin-content #research_links-page h6,
 main #admin-content #research_links-page .h6 {
