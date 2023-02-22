@@ -27,6 +27,7 @@ if (!defined('KT_KIWITREES')) {
 }
 
 class batch_update_KT_Module extends KT_Module implements KT_Module_Config{
+
 	// Extend KT_Module
 	public function getTitle() {
 		return /* I18N: Name of a module */ KT_I18N::translate('Batch update');
@@ -40,19 +41,27 @@ class batch_update_KT_Module extends KT_Module implements KT_Module_Config{
 	// Extend KT_Module
 	public function modAction($mod_action) {
 		switch($mod_action) {
-		case 'admin_batch_update':
-			$controller = new KT_Controller_Page();
-			$controller
-				->setPageTitle(KT_I18N::translate('Batch update'))
-				->restrictAccess(KT_USER_IS_ADMIN)
-				->pageHeader();
+			case 'admin_batch_update':
+				$controller = new KT_Controller_Page();
+				$controller
+					->setPageTitle(KT_I18N::translate('Batch update'))
+					->restrictAccess(KT_USER_IS_ADMIN)
+					->pageHeader()
+					->addInlineJavascript('
+						if (jQuery("#batch_update-page pre").length != 0) {
+							jQuery("html, body").animate({
+								scrollTop: jQuery("#batch_update-page pre").offset().top
+							}, 2000);
+						}
+					')
+				;
 
-			// TODO: these files should be methods in this class
-			require KT_ROOT . KT_MODULES_DIR . $this->getName() . '/' . $mod_action.'.php';
-			$mod = new batch_update;
-			echo $mod->main();
+				// TODO: these files should be methods in this class
+				require KT_ROOT . KT_MODULES_DIR . $this->getName() . '/' . $mod_action.'.php';
+				$mod = new batch_update;
+				echo $mod->main();
 			break;
-		default:
+			default:
 			header('HTTP/1.0 404 Not Found');
 		}
 	}

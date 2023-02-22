@@ -9618,6 +9618,8 @@ main #admin-content {
 	/* CLEAN UP TABLE */
 	/* MODULE PAGES */
 	/* PAGES MODULE */
+	/* STORIES MODULE */
+	/* BATCH UPDATE */
 }
 main #admin-content #system-status div {
 	margin-top: 0.25rem;
@@ -10588,6 +10590,19 @@ main #admin-content #tabi_stories td:nth-child(1) {
 }
 main #admin-content #tabi_stories td:nth-child(4), main #admin-content #tabi_stories td:nth-child(5), main #admin-content #tabi_stories td:nth-child(6), main #admin-content #tabi_stories td:nth-child(7) {
 	width: 6rem;
+}
+main #admin-content #batch_update-page pre {
+	background-color: #e6e6e6;
+	font-size: 0.85rem;
+	padding: 0.9375rem;
+	margin: 0 0.9375rem;
+}
+main #admin-content #batch_update-page #batch_update-results .added_text {
+	background-color: #ffd780;
+	color: #ff0000;
+}
+main #admin-content #batch_update-page #batch_update-results .deleted_text {
+	text-decoration: line-through;
 }
 
 footer {

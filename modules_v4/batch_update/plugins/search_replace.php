@@ -54,7 +54,7 @@ class search_replace_bu_plugin extends base_plugin {
 	function updateRecord($xref, $gedrec) {
 		// Allow "\n" to indicate a line-feed in replacement text.
 		// Back-references such as $1, $2 are handled automatically.
-		return preg_replace('/'.$this->regex.'/mu'.$this->case, str_replace('\n', "\n", $this->replace), $gedrec);
+		return preg_replace('/'.$this->regex.'/mu'.$this->case, str_replace('\n', "\n", (string)$this->replace), $gedrec);
 	}
 
 	function getOptions() {
@@ -67,7 +67,7 @@ class search_replace_bu_plugin extends base_plugin {
 		$this->error = '';
 		switch ($this->method) {
 		case 'exact':
-			$this->regex = preg_quote($this->search, '/');
+			$this->regex = preg_quote((string)$this->search, '/');
 			break;
 		case 'words':
 			$this->regex = '\b' . preg_quote($this->search, '/') . '\b';
@@ -95,37 +95,69 @@ class search_replace_bu_plugin extends base_plugin {
 			'words'		=> KT_I18N::translate('Match the exact text, unless it occurs in the middle of a word.'),
 			'wildcards'	=> KT_I18N::translate('Use a &laquo;?&raquo; to match a single character, use &laquo;*&raquo; to match zero or more characters.'),
 			'regex'		=> KT_I18N::translate('Regular expressions are an advanced pattern matching technique.  See <a href="http://php.net/manual/en/regexp.reference.php" target="_new">php.net/manual/en/regexp.reference.php</a> for futher details.'),
-		);
+		); ?>
 
-		return
-			'<label>
-				<span>' . KT_I18N::translate('Search method') . '</span>
-				<select name="method" onchange="this.form.submit();">
-					<option value="exact"'    . ($this->method == 'exact'     ? ' selected="selected"' : '').'>' . KT_I18N::translate('Exact text') . '</option>
-					<option value="words"'    . ($this->method == 'words'     ? ' selected="selected"' : '').'>' . KT_I18N::translate('Whole words only') . '</option>
-					<option value="wildcards"'. ($this->method == 'wildcards' ? ' selected="selected"' : '').'>' . KT_I18N::translate('Wildcards') . '</option>
-					<option value="regex"'    . ($this->method == 'regex'     ? ' selected="selected"' : '').'>' . KT_I18N::translate('Regular expression') . '</option>
-				</select>
-				<p><em>' . $descriptions[$this->method] . '</em>' . $this->error . '</p>
-			</label>
+		
+		<div class="cell medium-2">
 			<label>
-				<span>' . KT_I18N::translate('Case insensitive') . '</span>
-				<input type="checkbox" name="case" value="i" ' . ($this->case == 'i' ? 'checked="checked"' : '') . '" onchange="this.form.submit();">
-				<p><em>' . KT_I18N::translate('Tick this box to match both upper and lower case letters.') . '</em></p>
-			</label>' .
-			parent::getOptionsForm() . '
-			<hr>
-			<label>
-				<span>' . KT_I18N::translate('Search text/pattern') . '</span>
-				<input id="search" name="search" value="' . KT_Filter::escapeHtml($this->search) . '">' . print_specialchar_link('search') . '
+				<?php echo KT_I18N::translate('Search method'); ?>
 			</label>
+		</div>
+		<div class="cell medium-4">
+			<select name="method" onchange="this.form.submit();">
+				<option value="exact"<?php echo ($this->method == 'exact'     ? ' selected="selected"' : ''); ?>><?php echo KT_I18N::translate('Exact text'); ?></option>
+				<option value="words"<?php echo ($this->method == 'words'     ? ' selected="selected"' : ''); ?>><?php echo KT_I18N::translate('Whole words only'); ?></option>
+				<option value="wildcards"<?php echo ($this->method == 'wildcards' ? ' selected="selected"' : ''); ?>><?php echo KT_I18N::translate('Wildcards'); ?></option>
+				<option value="regex"<?php echo ($this->method == 'regex'     ? ' selected="selected"' : ''); ?>><?php echo KT_I18N::translate('Regular expression'); ?></option>
+			</select>
+		</div>
+		<div class="cell callout medium-6 info-help">
+			<?php echo $descriptions[$this->method]; ?>
+		</div>
+		<?php if ($this->error) { ?>
+			<div class="cell callout alert">
+				<?php echo $this->error; ?>
+			</div>
+		<?php } ?>
+		<div class="cell medium-2">
 			<label>
-				<span>' . KT_I18N::translate('Replacement text') . '</span>
-				<input id="replace" name="replace" value="' . KT_Filter::escapeHtml($this->replace) . '">' . print_specialchar_link('replace') . '
+				<?php echo KT_I18N::translate('Case insensitive'); ?>
 			</label>
-			<button class="button" onchange="this.form.submit();">
-				<i class="' . $iconStyle . ' fa-play-circle"></i>' .
-				KT_I18N::translate('Start') . '
-			</button>';
-	}
+		</div>
+		<div class="cell medium-4">
+			<input type="checkbox" name="case" value="i" <?php echo ($this->case == 'i' ? 'checked="checked"' : ''); ?> onchange="this.form.submit();">
+		</div>
+		<div class="cell callout medium-6 info-help">
+			<?php echo KT_I18N::translate('Tick this box to match both upper and lower case letters.'); ?>
+		</div>
+
+		<?php echo parent::getOptionsForm(); ?>
+
+		<div class="cell medium-2">
+			<label>
+				<?php echo KT_I18N::translate('Search text/pattern'); ?>
+			</label>
+		</div>
+		<div class="cell medium-4">
+			<input type="text" id="search" name="search" value="<?php echo KT_Filter::escapeHtml($this->search); ?>">
+		</div>
+		<div class="cell medium-6"><?php echo print_specialchar_link('search'); ?></div>
+		<div class="cell medium-2">
+			<label>
+				<?php echo KT_I18N::translate('Replacement text'); ?>
+			</label>
+		</div>
+		<div class="cell medium-4">
+			<input type="text" id="replace" name="replace" value="<?php echo KT_Filter::escapeHtml($this->replace); ?>">
+		</div>
+		<div class="cell medium-6"><?php echo print_specialchar_link('replace'); ?></div>
+
+		<button class="button" onchange="this.form.submit();" name="start" value="start">
+			<i class="<?php echo $iconStyle; ?> fa-play-circle"></i>
+			<?php echo KT_I18N::translate('Start'); ?>
+		</button>
+
+		<hr class="cell">
+
+	<?php }
 }
