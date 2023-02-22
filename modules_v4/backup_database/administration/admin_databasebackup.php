@@ -22,24 +22,28 @@
  */
 
  require KT_ROOT . 'includes/functions/functions_edit.php';
+ include KT_THEME_URL . 'templates/adminData.php';
+
  global $iconStyle;
 
  $action		= KT_Filter::post("action");
 
  $controller	= new KT_Controller_Page();
  $controller
-     ->requireAdminLogin()
-     ->setPageTitle(KT_I18N::translate('Backup database'))
-     ->pageHeader();
-?>
+	 ->requireAdminLogin()
+	 ->setPageTitle(KT_I18N::translate('Backup database'))
+	 ->pageHeader();
 
+echo relatedPages($moduleTools, $this->getConfigLink());
 
- <div class="cell" id="database_backup">
-     <iframe src="<?php echo KT_MODULES_DIR . $this->getName() . '/index.php" width="100%" height="700"'; ?>">
-         <p>
-             <?php echo KT_I18N::translate('Sorry, your browser does not support iframes'); ?>
-         </p>
-     </iframe>
- </div>
+echo pageStart('db_backup', $controller->getPageTitle()); ?>
 
-<?php
+	<div class="cell" id="database_backup">
+		<iframe src="<?php echo KT_MODULES_DIR . $this->getName() . '/index.php" width="100%" height="700"'; ?>">
+			<p>
+				<?php echo KT_I18N::translate('Sorry, your browser does not support iframes'); ?>
+			</p>
+		</iframe>
+	</div>
+
+<?php pageClose();
