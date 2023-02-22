@@ -218,6 +218,10 @@ class sitemap_KT_Module extends KT_Module implements KT_Module_Config {
 	}
 
 	private function admin() {
+		include KT_THEME_URL . 'templates/adminData.php';
+
+		global $iconStyle;
+
 		$controller = new KT_Controller_Page();
 		$controller
 			->restrictAccess(KT_USER_IS_ADMIN)
@@ -235,47 +239,87 @@ class sitemap_KT_Module extends KT_Module implements KT_Module_Config {
 			)->execute();
 		}
 
-		$include_any=false;
-		echo
-			'<h3>', $this->getTitle(), '</h3>',
-			'<p>',
-			/* I18N: The www.sitemaps.org site is translated into many languages (e.g. http://www.sitemaps.org/fr/) - choose an appropriate URL. */
-			KT_I18N::translate('Sitemaps are a way for webmasters to tell search engines about the pages on a website that are available for crawling.  All major search engines support sitemaps.  For more information, see <a href="http://www.sitemaps.org/">www.sitemaps.org</a>.').
-			'</p>',
-			'<p>', KT_I18N::translate('Which family trees should be included in the sitemaps?'), '</p>',
-			'<form method="post" action="module.php?mod=' . $this->getName() . '&amp;mod_action=admin">',
-			'<input type="hidden" name="action" value="save">';
-		foreach (KT_Tree::getAll() as $tree) {
-			echo '<p><input type="checkbox" name="include', $tree->tree_id, '"';
-			if (get_gedcom_setting($tree->tree_id, 'include_in_sitemap')) {
-				echo ' checked="checked"';
-				$include_any=true;
-			}
-			echo '>', $tree->tree_title_html, '</p>';
-		}
-		echo '
-			<button class="btn btn-primary save" type="submit">
-				<i class="' . $iconStyle . ' fa-save"></i>'.
-				KT_I18N::translate('Save').'
-			</button>
+		$include_any = false;
+
+		echo relatedPages($moduleTools, $this->getConfigLink());
+
+		echo pageStart('sitemap', $controller->getPageTitle()); ?>
+
+			<div class="cell callout info-help">
+				<?php echo /* I18N: The www.sitemaps.org site is translated into many languages (e.g. http://www.sitemaps.org/fr/) - choose an appropriate URL. */
+				KT_I18N::translate('
+					Sitemaps are a way for webmasters to tell search engines about the pages on a 
+					website that are available for crawling.  
+					All major search engines support sitemaps.  
+					For more information, see <a href="http://www.sitemaps.org/">www.sitemaps.org</a>.
+				'); ?>
+			</div>
+
+			<form class="cell" method="post" action="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin">
+				<input type="hidden" name="action" value="save">
+
+				<div class="grid-x grid-margin-x grid-margin-y">
+					<div class="cell medium-4">
+						<?php echo KT_I18N::translate('Which family trees should be included in the sitemaps?'); ?>
+					</div>
+					<div class="cell medium-8">				
+						<?php foreach (KT_Tree::getAll() as $tree) { ?>
+							<p>
+								<input type="checkbox" name="include<?php echo $tree->tree_id; ?>"
+									<?php if (get_gedcom_setting($tree->tree_id, 'include_in_sitemap')) { ?>
+										 checked="checked"
+										<?php $include_any = true;
+									} ?>
+								>
+								<?php echo $tree->tree_title_html; ?>
+							</p>
+						<?php } ?>
+					</div>
+					<div class="cell">
+						<?php singleButton(); ?>
+					</div>
+				</div>
+
 			</form>
-			<hr>';
 
-		if ($include_any) {
-			$site_map_url1=KT_SERVER_NAME.KT_SCRIPT_PATH.'module.php?mod='.$this->getName().'&amp;mod_action=generate&amp;file=sitemap.xml';
-			$site_map_url2=rawurlencode(KT_SERVER_NAME.KT_SCRIPT_PATH.'module.php?mod='.$this->getName().'&mod_action=generate&file=sitemap.xml');
-			echo '<p>', KT_I18N::translate('To tell search engines that sitemaps are available, you should add the following line to your robots.txt file.'), '</p>';
-			echo
-				'<pre>Sitemap: ', $site_map_url1, '</pre>',
-				'<hr>',
-				'<p>', KT_I18N::translate('To tell search engines that sitemaps are available, you can use the following links.'), '</p>',
-				'<ul>',
-				// This list comes from http://en.wikipedia.org/wiki/Sitemaps
-				'<li><a target="_new" href="http://www.bing.com/webmaster/ping.aspx?siteMap='.$site_map_url2.'">Bing</a></li>',
-				'<li><a target="_new" href="http://www.google.com/webmasters/tools/ping?sitemap='.$site_map_url2.'">Google</a></li>',
-				'</ul>';
+			<hr class="cell">
 
-		}
+			<?php if ($include_any) {
+				$site_map_url1 = KT_SERVER_NAME . KT_SCRIPT_PATH . 'module.php?mod=' . $this->getName() . '&amp;mod_action=generate&amp;file=sitemap.xml';
+				$site_map_url2 = rawurlencode(KT_SERVER_NAME.KT_SCRIPT_PATH . 'module.php?mod=' . $this->getName() . '&mod_action=generate&file=sitemap.xml'); ?>
+
+				<div class="cell callout info-help">
+					<?php echo KT_I18N::translate('
+						To tell search engines that sitemaps are available, 
+						you should add the following line to your robots.txt file.
+					'); ?>
+					<pre>Sitemap: <?php echo $site_map_url1; ?></pre>
+				</div>
+
+				<div class="cell callout info-help">
+					<?php echo KT_I18N::translate('
+						To tell search engines that sitemaps are available, 
+						you can use the following links.
+					'); ?>
+					<ul>
+						<!-- This list comes from http://en.wikipedia.org/wiki/Sitemaps -->
+						<li>
+							<a target="_new" href="http://www.bing.com/webmaster/ping.aspx?siteMap=<?php echo $site_map_url2; ?>">
+								Bing
+							</a>
+						</li>
+						<li>
+							<a target="_new" href="http://www.google.com/webmasters/tools/ping?sitemap=<?php echo $site_map_url2; ?>">
+								Google
+							</a>
+						</li>
+					</ul>
+				</div>
+
+			<?php }
+
+		pageClose();
+
 	}
 
 	// Implement KT_Module_Config

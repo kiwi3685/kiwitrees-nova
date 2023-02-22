@@ -9620,6 +9620,7 @@ main #admin-content {
 	/* PAGES MODULE */
 	/* STORIES MODULE */
 	/* BATCH UPDATE */
+	/* SITEMAPS */
 }
 main #admin-content #system-status div {
 	margin-top: 0.25rem;
@@ -10603,6 +10604,9 @@ main #admin-content #batch_update-page #batch_update-results .added_text {
 }
 main #admin-content #batch_update-page #batch_update-results .deleted_text {
 	text-decoration: line-through;
+}
+main #admin-content #sitemap-page pre {
+	color: #34689c;
 }
 
 footer {
