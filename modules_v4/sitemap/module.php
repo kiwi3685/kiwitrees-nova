@@ -298,8 +298,7 @@ class sitemap_KT_Module extends KT_Module implements KT_Module_Config {
 
 				<div class="cell callout info-help">
 					<?php echo KT_I18N::translate('
-						To tell search engines that sitemaps are available, 
-						you can use the following links.
+						You can also use the following links to directly tell these major search engines that sitemaps are available.
 					'); ?>
 					<ul>
 						<!-- This list comes from http://en.wikipedia.org/wiki/Sitemaps -->
