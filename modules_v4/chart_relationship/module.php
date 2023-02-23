@@ -205,11 +205,11 @@ class chart_relationship_KT_Module extends KT_Module implements KT_Module_Chart,
 
 		echo pageStart('relations_config', KT_I18N::translate('Relationship calculation options'), '', '', '/faqs/general-topics/displaying-relationships/'); ?>
 
-			<div class="grid-x">
-				<div class="cell medium-2">
-					<label for="ged"><?php echo KT_I18N::translate('Family tree'); ?></label>
+			<div class="grid-x grid-margin-x">
+				<div class="cell medium-3">
+					<label for="ged" style="padding: 0 2rem;"><?php echo KT_I18N::translate('Family tree'); ?></label>
 				</div>
-				<div class="cell medium-4">
+				<div class="cell medium-4 auto">
 					<form method="post" action="#" name="tree">
 						<?php echo select_edit_control('ged', KT_Tree::getIdList(), KT_I18N::translate('All'), KT_GEDCOM, ' onchange="tree.submit();"'); ?>
 					</form>
@@ -334,7 +334,9 @@ class chart_relationship_KT_Module extends KT_Module implements KT_Module_Chart,
 						<div class="grid-x grid-margin-x">
 							<!-- RELATIONS TO DEFAULT INDIVIDUAL -->
 							<div class="cell callout info-help">
-								<?php echo /* I18N: Configuration option */ KT_I18N::translate('How to determine relationships to the default individual'); ?>
+								<strong>
+									<?php echo /* I18N: Configuration option */ KT_I18N::translate('How to determine relationships to the default individual'); ?>
+								</strong>
 							</div>
 							<div class="cell medium-4">
 								<label>
@@ -431,9 +433,12 @@ class chart_relationship_KT_Module extends KT_Module implements KT_Module_Chart,
 									<?php echo simple_switch('NEW_TAB_REL_TO_DEFAULT_INDI_SHOW_CA', $rel1_ca, '', '', 'Yes', 'No', 'small'); ?>
 								</div>
 							</div>
+							<hr class="cell">
 							<!-- RELATIONS BETWEEN PARENTS -->
 							<div class="cell callout info-help">
-								<?php echo /* I18N: Configuration option */ KT_I18N::translate('How to determine relationships between parents'); ?>
+								<strong>
+									<?php echo /* I18N: Configuration option */ KT_I18N::translate('How to determine relationships between parents'); ?>
+								</strong>
 							</div>
 							<div class="cell medium-4">
 								<label>
@@ -491,9 +496,12 @@ class chart_relationship_KT_Module extends KT_Module implements KT_Module_Chart,
 									<?php echo simple_switch('NEW_TAB_REL_OF_PARENTS_SHOW_CA', $rel2_ca, '', '', 'Yes', 'No', 'small'); ?>
 								</div>
 							</div>
+							<hr class="cell">
 							<!-- RELATIONS TO SPOUSES -->
 							<div class="cell callout info-help">
-								<?php echo /* I18N: Configuration option */ KT_I18N::translate('How to determine relationships to spouses'); ?>
+								<strong>
+									<?php echo /* I18N: Configuration option */ KT_I18N::translate('How to determine relationships to spouses'); ?>
+								</strong>
 							</div>
 							<div class="cell medium-4">
 								<label>
