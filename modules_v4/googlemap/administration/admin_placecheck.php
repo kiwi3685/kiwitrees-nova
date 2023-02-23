@@ -156,17 +156,17 @@ echo pageStart('gm_config', $controller->getPageTitle()); ?>
 						  </select>
 					</div>
 				<?php } ?>
-				<div class="cell medium-3">
-					<div class="checkbox">
-						<label>
-							<?php echo KT_I18N::translate('Include fully matched places: '); ?>
-							<input type="checkbox" name="matching" value="1" onchange="this.form.submit();"
-								<?php if ($matching) {
-									echo ' checked="checked"';
-								} ?>
-							>
-						</label>
-					</div>
+				<div class="cell medium-2 text-right">
+					<label>
+						<?php echo KT_I18N::translate('Include fully matched places: '); ?>
+					</label>
+				</div>
+				<div class="cell auto text-left checkbox">
+					<input type="checkbox" name="matching" value="1" onchange="this.form.submit();"
+						<?php if ($matching) {
+							echo ' checked="checked"';
+						} ?>
+					>
 				</div>
 			</div>
 		</form>
