@@ -136,7 +136,7 @@ class research_links_KT_Module extends KT_Module implements KT_Module_Config, KT
 			AddToLog($this->getTitle().' config updated', 'config');
 		}
 
-		$all_plugins = $this->getPluginList(); // all plugins with area names
+		$all_plugins      = $this->getPluginList(); // all plugins with area names
 		$RESEARCH_PLUGINS = unserialize(get_module_setting($this->getName(), 'RESEARCH_PLUGINS')); // enabled plugins
 
 		echo relatedPages($moduleTools, $this->getConfigLink());
@@ -156,14 +156,20 @@ class research_links_KT_Module extends KT_Module implements KT_Module_Config, KT
 								// reset returns the first value in an array
 								// we take the area code from the first plugin in this area
 								$area_code = reset($plugins)->getSearchArea(); ?>
-								<div class="cell medium-2">
-									<input type="radio" name="NEW_RESEARCH_PLUGINS_DEFAULT_AREA" value="<?php echo $area; ?>"
+
+								<div class="cell medium-3 switch tiny">
+									<input class="switch-input" id="<?php echo $area_code; ?>" type="radio" name="NEW_RESEARCH_PLUGINS_DEFAULT_AREA"
 										<?php if (get_module_setting($this->getName(), 'RESEARCH_PLUGINS_DEFAULT_AREA') === $area) { ?>
 											 checked="checked"
 										<?php } ?>
 									>
-									<label><?php echo $area; ?></label>
-								</div>
+									<label class="switch-paddle" for="<?php echo $area_code; ?>">
+										<span class="show-for-sr"><?php echo $area; ?></span>
+										<span class="switch-active" aria-hidden="true"><?php echo KT_I18N::translate('Yes'); ?></span>
+										<span class="switch-inactive" aria-hidden="true"><?php echo KT_I18N::translate('No'); ?></span>
+									</label>
+									<label class="areaList"><?php echo $area; ?></label>
+								</div>							
 							<?php } ?>
 						</div>
 					</fieldset>
@@ -175,8 +181,16 @@ class research_links_KT_Module extends KT_Module implements KT_Module_Config, KT
 						</legend>
 						<div class="grid-x">
 							<div class="cell medium-10">
-								<input id="checkbox1" type="checkbox" onclick="toggle_select(this)">
-								<label for="checkbox1" class="h6"><?php echo KT_I18N::translate('Select all'); ?></label>
+								<div class="grid-x">
+									<div class="cell small-3 medium-2 large-1">
+										<label for="checkbox1">
+											<?php echo KT_I18N::translate('Select all'); ?>
+										</label>
+									</div>
+									<div class="cell auto">
+										<input id="checkbox1" type="checkbox" onclick="toggle_select(this)">
+									</div>
+								</div>
 							</div>
 							<div class="cell medium-2 text-right topButton">
 								<?php singleButton(); ?>
@@ -207,7 +221,7 @@ class research_links_KT_Module extends KT_Module implements KT_Module_Config, KT
 													<td><?php echo $area; ?></td>
 													<td><?php echo $this->getCurrency($plugin); ?></td>
 													<td>
-													 	<?php if ($plugin->createLinkOnly()) { ?>
+														<?php if ($plugin->createLinkOnly()) { ?>
 															 (<i class="<?php echo $iconStyle; ?> fa-link" style="font-size: 1em; margin:0;"></i>)
 														<?php } ?>
 													</td>
@@ -438,7 +452,7 @@ class research_links_KT_Module extends KT_Module implements KT_Module_Config, KT
 										<?php if ($sel_area && in_array($area, $sel_area)) {
 											echo ' checked="checked"';
 										} ?>
-									 	 value="<?php echo $area; ?>">
+										 value="<?php echo $area; ?>">
 									<label for="area_<?php echo $area_code; ?>"><?php echo $area; ?></label>
 								</span>
 							<?php } ?>

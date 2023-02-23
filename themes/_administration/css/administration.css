@@ -9646,12 +9646,14 @@ main #admin-content .listStyleNone {
 	list-style: none;
 }
 main #admin-content .accordion .accordion-item .accordion-title:before {
-	content: "";
 	font-family: "Font Awesome 6 Free";
+	font: var(--fa-font-solid);
+	content: "\f150";
 	display: none;
 }
 main #admin-content .accordion .accordion-item.is-active > .accordion-title:before {
-	content: "";
+	font: var(--fa-font-solid);
+	content: "\f151";
 }
 main #admin-content .accordion .accordion-item .accordion-title {
 	color: #fefefe;
@@ -9778,12 +9780,14 @@ main #admin-content .tabs-content .accordion .accordion-title svg {
 	margin-top: 0.5rem;
 }
 main #admin-content .tabs-content .accordion .accordion-title:before {
-	content: "";
+	font: var(--fa-font-solid);
+	content: "\f150";
 	font-family: "Font Awesome 6 Free";
 	display: none;
 }
 main #admin-content .tabs-content .accordion.is-active > .accordion-title:before {
-	content: "";
+	font: var(--fa-font-solid);
+	content: "\f151";
 }
 main #admin-content .faq_link {
 	float: right;
@@ -10466,7 +10470,17 @@ main #admin-content #research_links-page table td {
 }
 main #admin-content #research_links-page h6,
 main #admin-content #research_links-page .h6 {
+	display: grid;
 	font-weight: 600;
+}
+main #admin-content #research_links-page #research_links_table_filter {
+	margin-bottom: 0.375rem;
+}
+main #admin-content #research_links-page label.areaList {
+	display: inline-flex;
+	font-size: 0.95rem;
+	line-height: 1.5;
+	vertical-align: top;
 }
 main #admin-content #source_check-page .dataTables_wrapper,
 main #admin-content #source_review-page .dataTables_wrapper {
@@ -10703,16 +10717,19 @@ div.dataTables_wrapper table.dataTable thead tr th.has-tip {
 	display: table-cell;
 }
 div.dataTables_wrapper table.dataTable thead tr th.sorting_asc::after, div.dataTables_wrapper table.dataTable thead tr th.sorting_desc::after, div.dataTables_wrapper table.dataTable thead tr th.sorting::after {
-	content: "";
+	font: var(--fa-font-solid);
+	content: "\f0dc";
 	display: none;
-	font-family: "Font Awesome 5 Solid";
+	font-family: "Font Awesome 6 Free";
 	font-weight: 900;
 }
 div.dataTables_wrapper table.dataTable thead tr th.sorting_asc::after {
-	content: "";
+	font: var(--fa-font-solid);
+	content: "\f0de";
 }
 div.dataTables_wrapper table.dataTable thead tr th.sorting_desc::after {
-	content: "";
+	font: var(--fa-font-solid);
+	content: "\f0dd";
 }
 div.dataTables_wrapper table.dataTable thead tr th.sorting_disabled::after {
 	content: "";
@@ -10851,4 +10868,47 @@ div.dataTables_wrapper table.dataTable thead tr th svg {
 }
 .iconpicker-popover.popover .iconpicker-items .iconpicker-item .svg-inline--fa {
 	height: 1.375em;
+}
+
+/* Hide standard checkbox */
+input[type=checkbox] {
+	/* Add if not using autoprefixer */
+	-webkit-appearance: none;
+	appearance: none;
+	/* For iOS < 15 to remove gradient background */
+	background-color: transparent;
+	/* Not removed via appearance */
+	margin: 0;
+}
+
+/* Create standard unchecked box */
+input[type=checkbox] {
+	appearance: none;
+	background-color: #fefefe;
+	cursor: pointer;
+	font: inherit;
+	width: 1.25rem;
+	height: 1.25rem;
+	border: 0.1125rem solid #878787;
+	border-radius: 0.25rem;
+	margin: 0.25rem 0.125rem 0;
+	/* center tick mark */
+	display: grid;
+	place-content: center;
+}
+
+input[type=checkbox]::before {
+	content: "";
+	width: 1.25rem;
+	height: 1.25rem;
+	transform: scale(0);
+	transition: 120ms transform ease-in-out;
+	box-shadow: inset 1.25rem 1.25rem #5da423;
+	/* add tick mark */
+	transform-origin: bottom left;
+	clip-path: polygon(28% 38%, 41% 53%, 75% 24%, 86% 38%, 40% 78%, 15% 50%);
+}
+
+input[type=checkbox]:checked::before {
+	transform: scale(1);
 }

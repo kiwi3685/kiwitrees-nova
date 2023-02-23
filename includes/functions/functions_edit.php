@@ -265,7 +265,7 @@ function edit_field_yes_no($name, $selected = false, $extra = 'class="radio_inli
 // Print an edit control for a checkbox
 function checkbox($name, $is_checked = false, $extra = '')
 {
-	return '<input type="checkbox" name="' . $name . '" value="1" ' . ($is_checked ? 'checked="checked" ' : '') . $extra . '>';
+	return '<input type="checkbox" name="' . $name . '" value="1" ' . ($is_checked ? ' checked ' : '') . $extra . '><label></label>';
 }
 
 // Print an edit control for a checkbox, with a hidden field to store one of the two states.

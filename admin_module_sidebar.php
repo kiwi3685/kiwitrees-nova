@@ -1,7 +1,7 @@
 <?php
 /**
  * Kiwitrees: Web based Family History software
- * Copyright (C) 2012 to 2022 kiwitrees.net
+ * Copyright (C) 2012 to 2022 kiwitrees.net.
  *
  * Derived from webtrees (www.webtrees.net)
  * Copyright (C) 2010 to 2012 webtrees development team
@@ -20,10 +20,12 @@
  * You should have received a copy of the GNU General Public License
  * along with Kiwitrees. If not, see <http://www.gnu.org/licenses/>.
  */
-
 define('KT_SCRIPT_NAME', 'admin_module_sidebar.php');
+
 require 'includes/session.php';
+
 require KT_ROOT . 'includes/functions/functions_edit.php';
+
 include KT_THEME_URL . 'templates/adminData.php';
 
 global $iconStyle;
@@ -44,29 +46,29 @@ $controller
 				}
 			);
 		});
-	');
+	')
+;
 
-$modules	= KT_Module::getActiveSidebars(KT_GED_ID, KT_PRIV_HIDE);
-$action		= KT_Filter::post('action');
+$modules = KT_Module::getActiveSidebars(KT_GED_ID, KT_PRIV_HIDE);
+$action = KT_Filter::post('action');
 
-if ($action == 'update_mods' && KT_Filter::checkCsrf()) {
-	foreach ($modules as $module_name=>$module) {
+if ('update_mods' == $action && KT_Filter::checkCsrf()) {
+	foreach ($modules as $module_name => $module) {
 		foreach (KT_Tree::getAll() as $tree) {
 			$access_level = KT_Filter::post("access-{$module_name}-{$tree->tree_id}", KT_REGEX_INTEGER, $module->defaultAccessLevel());
 			KT_DB::prepare(
 				"REPLACE INTO `##module_privacy` (module_name, gedcom_id, component, access_level) VALUES (?, ?, 'sidebar', ?)"
-			)->execute(array($module_name, $tree->tree_id, $access_level));
+			)->execute([$module_name, $tree->tree_id, $access_level]);
 		}
-		$order = KT_Filter::post('order-'.$module_name);
+		$order = KT_Filter::post('order-' . $module_name);
 		KT_DB::prepare(
-			"UPDATE `##module` SET sidebar_order=? WHERE module_name=?"
-		)->execute(array($order, $module_name));
-		$module->order=$order; // Make the new order take effect immediately
+			'UPDATE `##module` SET sidebar_order = ? WHERE module_name = ?'
+		)->execute([$order, $module_name]);
+		$module->order = $order; // Make the new order take effect immediately
 	}
 	uasort($modules, function ($x, $y) {
 		return $x->order <=> $y->order;
 	});
-
 }
 
 echo relatedPages($module_config, KT_SCRIPT_NAME);
@@ -102,22 +104,22 @@ echo pageStart('sidebars', $controller->getPageTitle()); ?>
 				<tbody>
 					<?php
 					$order = 1;
-					foreach ($modules as $module) {
-						?>
+foreach ($modules as $module) {
+	?>
 						<tr class="sortme">
 							<td>
 								<i class="<?php echo $iconStyle; ?> fa-bars"></i>
 							</td>
 							<td>
 								<?php
-								if ( $module instanceof KT_Module_Config ) {
-									echo '<a href="', $module->getConfigLink(), '">';
-								}
-								echo $module->getTitle();
-								if ( $module instanceof KT_Module_Config && array_key_exists($module->getName(), KT_Module::getActiveModules() ) ) {
-									echo ' <i class="' . $iconStyle . ' fa-gears"></i></a>';
-								}
-								?>
+			if ($module instanceof KT_Module_Config) {
+				echo '<a href="', $module->getConfigLink(), '">';
+			}
+			echo $module->getTitle();
+	if ($module instanceof KT_Module_Config && array_key_exists($module->getName(), KT_Module::getActiveModules())) {
+		echo ' <i class="' . $iconStyle . ' fa-gears"></i></a>';
+	}
+	?>
 							</td>
 							<td>
 								<?php echo $module->getDescription(); ?>
@@ -134,14 +136,14 @@ echo pageStart('sidebars', $controller->getPageTitle()); ?>
 											</td>
 											<td>
 												<?php
-													$access_level = KT_DB::prepare(
-														"SELECT access_level FROM `##module_privacy` WHERE gedcom_id=? AND module_name=? AND component='sidebar'"
-													)->execute(array($tree->tree_id, $module->getName()))->fetchOne();
-													if ($access_level === null) {
-														$access_level = $module->defaultAccessLevel();
-													}
-													echo edit_field_access_level('access-' . $module->getName() . '-' . $tree->tree_id, $access_level);
-												?>
+						$access_level = KT_DB::prepare(
+		"SELECT access_level FROM `##module_privacy` WHERE gedcom_id=? AND module_name=? AND component='sidebar'"
+	)->execute([$tree->tree_id, $module->getName()])->fetchOne();
+										if (null === $access_level) {
+											$access_level = $module->defaultAccessLevel();
+										}
+										echo edit_field_access_level('access-' . $module->getName() . '-' . $tree->tree_id, $access_level);
+										?>
 											</td>
 										</tr>
 									<?php } ?>
@@ -150,8 +152,8 @@ echo pageStart('sidebars', $controller->getPageTitle()); ?>
 						</tr>
 					<?php
 					$order++;
-					}
-					?>
+}
+?>
 				</tbody>
 			</table>
 			<button class="button" type="submit">
