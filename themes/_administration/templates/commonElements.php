@@ -239,7 +239,7 @@ function submitButtons($extra = '', $onClick = '') {
  *
  * @return string[]
  */
-function resetButtons($onClick = '') {
+function resetButtons($firstButton = 'Show', $onClick = '') {
    global $iconStyle;
 
    $onClickHtml = '';
@@ -254,7 +254,7 @@ function resetButtons($onClick = '') {
 	   <div class="cell align-left button-group">
 		   <button id="buttonSubmit" class="button primary" type="submit">
 			   <i class="' . $iconStyle . ' fa-eye"></i>'
-				. KT_I18N::translate('Show') .
+				. KT_I18N::translate($firstButton) .
 		   '</button>
 		   <button class="button hollow" type="submit" name="reset" value="reset" ' . $onClickHtml . '>
 			   <i class="' . $iconStyle . ' fa-rotate"></i>'

@@ -106,6 +106,10 @@ class chart_relationship_KT_Module extends KT_Module implements KT_Module_Chart,
 
 	private function config() {
 		require KT_ROOT . 'includes/functions/functions_edit.php';
+		include KT_THEME_URL . 'templates/adminData.php';
+
+		global $iconStyle;
+
 		$controller = new KT_Controller_Page();
 		$controller
 			->restrictAccess(KT_USER_IS_ADMIN)
@@ -196,240 +200,365 @@ class chart_relationship_KT_Module extends KT_Module implements KT_Module_Chart,
 		$rel2_ca	 = get_gedcom_setting(KT_GED_ID, 'TAB_REL_OF_PARENTS_SHOW_CA');
 		$rel3_ca	 = get_gedcom_setting(KT_GED_ID, 'TAB_REL_TO_SPOUSE_SHOW_CA');
 
-		?>
 
-		<div id="relations_config">
-			<a class="current faq_link" href="<?php echo KT_KIWITREES_URL; ?>/faqs/general-topics/displaying-relationships/" target="_blank" rel="noopener noreferrer" title="<?php echo KT_I18N::translate('View FAQ for this page.'); ?>"><?php echo KT_I18N::translate('View FAQ for this page.'); ?><i class="' . $iconStyle . ' fa-comments"></i></a>
-			<h2><?php echo /* I18N: Configuration page title */ KT_I18N::translate('Relationship calculation options'); ?></h2>
-			<form method="post" action="#" name="tree">
-				<div class="config_options">
-					<label><?php echo KT_I18N::translate('Family tree'); ?></label>
-					<?php echo select_ged_control('ged', KT_Tree::getNameList(), null, KT_GEDCOM, ' onchange="tree.submit();"'); ?>
+		echo relatedPages($moduleTools, $this->getConfigLink());
+
+		echo pageStart('relations_config', KT_I18N::translate('Relationship calculation options'), '', '', '/faqs/general-topics/displaying-relationships/'); ?>
+
+			<div class="grid-x">
+				<div class="cell medium-2">
+					<label for="ged"><?php echo KT_I18N::translate('Family tree'); ?></label>
 				</div>
-			</form>
-			<form method="post" name="rela_form" action="<?php echo $this->getConfigLink(); ?>">
-				<input type="hidden" name="save" value="1">
-				<div id="config-chart">
-					<h3><?php echo /* I18N: Configuration option */ KT_I18N::translate('Chart settings'); ?></h3>
-					<h4 class="accepted"><?php echo /* I18N: Configuration option */ KT_I18N::translate('Options to show in the chart'); ?></h4>
-					<div class="config_options">
-						<label><?php echo KT_I18N::translate('Find a closest relationship via common ancestors'); ?></label>
-						<div class="input_group">
-							<?php echo edit_field_yes_no('NEW_CHART_1', $chart1); ?>
-							<div class="helpcontent">
-								<?php echo /* I18N: Configuration option */ KT_I18N::translate('Determines the shortest path between two individuals via a LCA (lowest common ancestor), i.e. a common ancestor who only appears on the path once.') ?>
-							</div>
-						</div>
-					</div>
-					<div class="config_options">
-						<label><?php echo KT_I18N::translate('Find all smallest lowest common ancestors, show a closest connection for each'); ?></label>
-						<div class="input_group">
-							<?php echo edit_field_yes_no('NEW_CHART_2', $chart2); ?>
-							<div class="helpcontent">
-								<?php echo /* I18N: Configuration option */ KT_I18N::translate('Each SLCA (smallest lowest common ancestor) essentially represents a part of the tree which both individuals share (as part of their ancestors). More technically, the SLCA set of two individuals is a subset of the LCA set (excluding all LCAs that are themselves ancestors of other LCAs).') ?>
-							</div>
-						</div>
-					</div>
-					<div class="config_options">
-						<label><?php echo KT_I18N::translate('Find all relationships via lowest common ancestors'); ?></label>
-						<div class="input_group">
-							<?php echo edit_field_yes_no('NEW_CHART_3', $chart3); ?>
-							<div class="helpcontent">
-								<?php echo /* I18N: Configuration option */ KT_I18N::translate('All paths between the two individuals that contribute to the CoR (Coefficient of Relationship), as defined here: <a href = "http://www.genetic-genealogy.co.uk/Toc115570135.html" target="_blank" rel="noopener noreferrer">Coefficient of Relationship</a>'); ?>
-							</div>
-						</div>
-					</div>
-					<div class="config_options">
-						<label><?php echo KT_I18N::translate('Find the closest overall connections (preferably via common ancestors)'); ?></label>
-						<div class="input_group">
-							<?php echo edit_field_yes_no('NEW_CHART_4', $chart4); ?>
-							<div class="helpcontent">
-								<?php echo /* I18N: Configuration option */ KT_I18N::translate('Prefers partial paths via common ancestors, even if there is no direct common ancestor.') ?>
-							</div>
-						</div>
-					</div>
-					<div class="config_options">
-						<label><?php echo KT_I18N::translate('Find a closest relationship via common ancestors, or fallback to the closest overall connection'); ?></label>
-						<div class="input_group">
-							<?php echo edit_field_yes_no('NEW_CHART_7', $chart7); ?>
-							<div class="helpcontent">
-								<?php echo /* I18N: Configuration option */ KT_I18N::translate('For close relationships similar to the previous option, but faster. Internally just a combination of two other methods.') ?>
-							</div>
-						</div>
-					</div>
-					<div class="config_options">
-						<label><?php echo KT_I18N::translate('Find the closest overall connections'); ?></label>
-						<div class="input_group">
-							<?php echo edit_field_yes_no('NEW_CHART_5', $chart5); ?>
-						</div>
-					</div>
-					<div class="config_options">
-						<label><?php echo /* I18N: Configuration option */ KT_I18N::translate('Find other/all overall connections'); ?></label>
-						<div class="input_group">
-							<?php echo edit_field_yes_no('NEW_CHART_6', $chart6); ?>
-						</div>
-					</div>
-					<div class="config_options">
-						<label><?php echo KT_I18N::translate('How much recursion to use when searching for relationships'); ?></label>
-						<div class="input_group">
-							<?php echo radio_buttons('NEW_RELATIONSHIP_RECURSION', $recursionOptions, $rec_options, 'class="radio_inline"'); ?>
-							<div class="helpcontent">
-								<?php echo /* I18N: Configuration option for relationship chart */ KT_I18N::translate('Searching for all possible relationships can take a lot of time in complex trees, This option can help limit the extent of relationships included in the relationship chart.'); ?>
-							</div>
-						 </div>
-					</div>
+				<div class="cell medium-4">
+					<form method="post" action="#" name="tree">
+						<?php echo select_edit_control('ged', KT_Tree::getIdList(), KT_I18N::translate('All'), KT_GEDCOM, ' onchange="tree.submit();"'); ?>
+					</form>
 				</div>
-				<div id="config-tab">
-					<h3><?php echo /* I18N: Configuration option */ KT_I18N::translate('Families tab settings'); ?></h3>
-					<!-- RELATIONS TO DEFAULT INDIVIDUAL -->
-					<h4 class="accepted"><?php echo /* I18N: Configuration option */ KT_I18N::translate('How to determine relationships to the default individual'); ?></h4>
-					<div class="config_options">
-						<label><?php echo /* I18N: Configuration option */ KT_I18N::translate('Do not show any relationship'); ?></label>
-						<div class="input_group">
-							<input type="radio" name="NEW_TAB_REL_TO_DEFAULT_INDI" value="0" <?php echo ($rel1 === '0') ? 'checked' : ''; ?>>
+
+				<form class="cell" method="post" name="rela_form" action="<?php echo $this->getConfigLink(); ?>">
+					<input type="hidden" name="save" value="1">
+					
+					<fieldset class="fieldset" id="config-chart">
+						<legend class="h5">
+							<?php echo /* I18N: Configuration option */ KT_I18N::translate('Chart settings'); ?>
+						</legend>
+						<div class="grid-x grid-margin-x">
+							<div class="cell callout info-help">
+								<?php echo /* I18N: Configuration option */ KT_I18N::translate('Options related to the the relationship chart'); ?>								
+							</div>
+							<div class="cell medium-4">
+								<label>
+									<?php echo KT_I18N::translate('Find a closest relationship via common ancestors'); ?>
+								</label>
+							</div>
+							<div class="cell medium-8">
+								<div class="input_group">
+									<?php echo simple_switch('NEW_CHART_1', $chart1, '', '', 'Yes', 'No', 'small'); ?>
+									<div class="cell callout info-help">
+										<?php echo /* I18N: Configuration option */ KT_I18N::translate('Determines the shortest path between two individuals via a LCA (lowest common ancestor), i.e. a common ancestor who only appears on the path once.') ?>
+									</div>
+								</div>
+							</div>
+							<div class="cell medium-4">
+								<label>
+									<?php echo KT_I18N::translate('Find all smallest lowest common ancestors, show a closest connection for each'); ?>
+								</label>
+							</div>
+							<div class="cell medium-8">
+								<div class="input_group">
+									<?php echo simple_switch('NEW_CHART_2', $chart2, '', '', 'Yes', 'No', 'small'); ?>
+									<div class="cell callout info-help">
+										<?php echo /* I18N: Configuration option */ KT_I18N::translate('Each SLCA (smallest lowest common ancestor) essentially represents a part of the tree which both individuals share (as part of their ancestors). More technically, the SLCA set of two individuals is a subset of the LCA set (excluding all LCAs that are themselves ancestors of other LCAs).') ?>
+									</div>
+								</div>
+							</div>
+							<div class="cell medium-4">
+								<label>
+									<?php echo KT_I18N::translate('Find all relationships via lowest common ancestors'); ?>
+								</label>
+							</div>
+							<div class="cell medium-8">
+								<div class="input_group">
+									<?php echo simple_switch('NEW_CHART_3', $chart3, '', '', 'Yes', 'No', 'small'); ?>
+									<div class="cell callout info-help">
+										<?php echo /* I18N: Configuration option */ KT_I18N::translate('All paths between the two individuals that contribute to the CoR (Coefficient of Relationship), as defined here: <a href = "http://www.genetic-genealogy.co.uk/Toc115570135.html" target="_blank" rel="noopener noreferrer">Coefficient of Relationship</a>'); ?>
+									</div>
+								</div>
+							</div>
+							<div class="cell medium-4">
+								<label>
+									<?php echo KT_I18N::translate('Find the closest overall connections (preferably via common ancestors)'); ?>
+								</label>
+							</div>
+							<div class="cell medium-8">
+								<div class="input_group">
+									<?php echo simple_switch('NEW_CHART_4', $chart4, '', '', 'Yes', 'No', 'small'); ?>
+									<div class="cell callout info-help">
+										<?php echo /* I18N: Configuration option */ KT_I18N::translate('Prefers partial paths via common ancestors, even if there is no direct common ancestor.') ?>
+									</div>
+								</div>
+							</div>
+							<div class="cell medium-4">
+								<label>
+									<?php echo KT_I18N::translate('Find a closest relationship via common ancestors, or fallback to the closest overall connection'); ?>
+								</label>
+							</div>
+							<div class="cell medium-8">
+								<div class="input_group">
+									<?php echo simple_switch('NEW_CHART_7', $chart7, '', '', 'Yes', 'No', 'small'); ?>
+									<div class="cell callout info-help">
+										<?php echo /* I18N: Configuration option */ KT_I18N::translate('For close relationships similar to the previous option, but faster. Internally just a combination of two other methods.') ?>
+									</div>
+								</div>
+							</div>
+							<div class="cell medium-4">
+								<label>
+									<?php echo KT_I18N::translate('Find the closest overall connections'); ?>
+								</label>
+							</div>
+							<div class="cell medium-8">
+								<div class="input_group">
+									<?php echo simple_switch('NEW_CHART_5', $chart5, '', '', 'Yes', 'No', 'small'); ?>
+								</div>
+							</div>
+							<div class="cell medium-4">
+								<label>
+									<?php echo /* I18N: Configuration option */ KT_I18N::translate('Find other/all overall connections'); ?>
+								</label>
+							</div>
+							<div class="cell medium-8">
+								<div class="input_group">
+									<?php echo simple_switch('NEW_CHART_6', $chart6, '', '', 'Yes', 'No', 'small'); ?>
+								</div>
+							</div>
+							<div class="cell medium-4">
+								<label>
+									<?php echo KT_I18N::translate('How much recursion to use when searching for relationships'); ?>
+								</label>
+							</div>
+							<div class="cell medium-8">
+								<div class="input_group">
+									<?php echo radio_buttons('NEW_RELATIONSHIP_RECURSION', $recursionOptions, $rec_options, 'class="radio_inline"'); ?>
+									<div class="cell callout info-help">
+										<?php echo /* I18N: Configuration option for relationship chart */ KT_I18N::translate('Searching for all possible relationships can take a lot of time in complex trees, This option can help limit the extent of relationships included in the relationship chart.'); ?>
+									</div>
+								 </div>
+							</div>
 						</div>
-					</div>
-					<div class="config_options">
-						<div class="helpcontent">
-							<?php echo /* I18N: Configuration option */ KT_I18N::translate('The following options refer to the same algorithms used in the relationships chart. Choose any one of these.') ?>
+					</fieldset>
+
+					<fieldset class="fieldset" id="config-tab">
+						<legend class="h5">
+							<?php echo /* I18N: Configuration option */ KT_I18N::translate('Families tab settings'); ?>
+						</legend>
+						<div class="grid-x grid-margin-x">
+							<!-- RELATIONS TO DEFAULT INDIVIDUAL -->
+							<div class="cell callout info-help">
+								<?php echo /* I18N: Configuration option */ KT_I18N::translate('How to determine relationships to the default individual'); ?>
+							</div>
+							<div class="cell medium-4">
+								<label>
+									<?php echo /* I18N: Configuration option */ KT_I18N::translate('Do not show any relationship'); ?>
+								</label>
+							</div>
+							<div class="cell medium-8">
+								<div class="input_group">
+									<input type="radio" name="NEW_TAB_REL_TO_DEFAULT_INDI" value="0" <?php echo ($rel1 === '0') ? 'checked' : ''; ?>>
+								</div>
+							</div>
+							<div class="cell callout info-help">
+								<?php echo /* I18N: Configuration option */ KT_I18N::translate('
+									The following options refer to the same algorithms used in the relationships chart. Choose any one of these.
+								') ?>
+							</div>
+							<div class="cell medium-4">
+								<label class="indent">
+									<?php echo KT_I18N::translate('Find a closest relationship via common ancestors'); ?>
+								</label>
+							</div>
+							<div class="cell medium-8">
+								<div class="input_group">
+									<input type="radio" name="NEW_TAB_REL_TO_DEFAULT_INDI" value="1" <?php echo ($rel1 === '1') ? 'checked' : ''; ?>>
+								</div>
+							</div>
+							<div class="cell medium-4">
+								<label class="indent">
+									<?php echo KT_I18N::translate('Find all smallest lowest common ancestors, show a closest connection for each'); ?>
+								</label>
+							</div>
+							<div class="cell medium-8">
+								<div class="input_group">
+									<input type="radio" name="NEW_TAB_REL_TO_DEFAULT_INDI" value="2" <?php echo ($rel1 === '2') ? 'checked' : ''; ?>>
+								</div>
+							</div>
+							<div class="cell medium-4">
+								<label class="indent">
+									<?php echo KT_I18N::translate('Find all relationships via lowest common ancestors'); ?>
+								</label>
+							</div>
+							<div class="cell medium-8">
+								<div class="input_group">
+									<input type="radio" name="NEW_TAB_REL_TO_DEFAULT_INDI" value="3" <?php echo ($rel1 === '3') ? 'checked' : ''; ?>>
+								</div>
+							</div>
+							<div class="cell medium-4">
+								<label class="indent">
+									<?php echo KT_I18N::translate('Find the closest overall connections (preferably via common ancestors)'); ?>
+								</label>
+							</div>
+							<div class="cell medium-8">
+								<div class="input_group">
+									<input type="radio" name="NEW_TAB_REL_TO_DEFAULT_INDI" value="4" <?php echo ($rel1 === '4') ? 'checked' : ''; ?>>
+								</div>
+							</div>
+							<div class="cell medium-4">
+								<label class="indent">
+									<?php echo KT_I18N::translate('Find a closest relationship via common ancestors, or fallback to the closest overall connection'); ?>
+								</label>
+							</div>
+							<div class="cell medium-8">
+								<div class="input_group">
+									<input type="radio" name="NEW_TAB_REL_TO_DEFAULT_INDI" value="7" <?php echo ($rel1 === '7') ? 'checked' : ''; ?>>
+								</div>
+							</div>
+							<div class="cell medium-4">
+								<label class="indent">
+									<?php echo KT_I18N::translate('Find the closest overall connections') ?>
+								</label>
+							</div>
+							<div class="cell medium-8">
+								<div class="input_group">
+									<input type="radio" name="NEW_TAB_REL_TO_DEFAULT_INDI" value="5" <?php echo ($rel1 === '5') ? 'checked' : ''; ?>>
+								</div>
+							</div>
+							<div class="cell medium-4">
+								<label class="indent">
+									<?php echo KT_I18N::translate('Find other/all overall connections') ?>
+								</label>
+							</div>
+							<div class="cell medium-8">
+								<div class="input_group">
+									<input type="radio" name="NEW_TAB_REL_TO_DEFAULT_INDI" value="6" <?php echo ($rel1 === '6') ? 'checked' : ''; ?>>
+								</div>
+							</div>
+							<div class="cell medium-4">
+								<label>
+									<?php echo /* I18N: Configuration option */ KT_I18N::translate('Show common ancestors'); ?>
+								</label>
+							</div>
+							<div class="cell medium-8">
+								<div class="input_group">
+									<?php echo simple_switch('NEW_TAB_REL_TO_DEFAULT_INDI_SHOW_CA', $rel1_ca, '', '', 'Yes', 'No', 'small'); ?>
+								</div>
+							</div>
+							<!-- RELATIONS BETWEEN PARENTS -->
+							<div class="cell callout info-help">
+								<?php echo /* I18N: Configuration option */ KT_I18N::translate('How to determine relationships between parents'); ?>
+							</div>
+							<div class="cell medium-4">
+								<label>
+									<?php echo /* I18N: Configuration option */ KT_I18N::translate('Do not show any relationship'); ?>
+								</label>
+							</div>
+							<div class="cell medium-8">
+								<div class="input_group">
+									<input type="radio" name="NEW_TAB_REL_OF_PARENTS" value="0" <?php echo ($rel2 === '0') ? 'checked' : ''; ?>>
+								</div>
+							</div>
+							<div class="cell callout info-help">
+								<?php echo /* I18N: Configuration option */ KT_I18N::translate('The following options refer to the same algorithms used in the relationships chart. Choose any one of these.') ?>
+							</div>
+							<div class="cell medium-4">
+								<label class="indent">
+									<?php echo KT_I18N::translate('Find a closest relationship via common ancestors'); ?>
+								</label>
+							</div>
+							<div class="cell medium-8">
+								<div class="input_group">
+									<input type="radio" name="NEW_TAB_REL_OF_PARENTS" value="1" <?php echo ($rel2 === '1') ? 'checked' : ''; ?>>
+								</div>
+							</div>
+							<div class="cell medium-4">
+								<label class="indent">
+									<?php echo KT_I18N::translate('Find all smallest lowest common ancestors, show a closest connection for each'); ?>
+								</label>
+							</div>
+							<div class="cell medium-8">
+								<div class="input_group">
+									<input type="radio" name="NEW_TAB_REL_OF_PARENTS" value="2" <?php echo ($rel2 === '2') ? 'checked' : ''; ?>>
+								</div>
+							</div>
+							<div class="cell medium-4">
+								<label class="indent">
+									<?php echo KT_I18N::translate('Find all relationships via lowest common ancestors'); ?>
+								</label>
+							</div>
+							<div class="cell medium-8">
+								<div class="input_group">
+									<input type="radio" name="NEW_TAB_REL_OF_PARENTS" value="3" <?php echo ($rel2 === '3') ? 'checked' : ''; ?>>
+								</div>
+							</div>
+							<div class="cell callout info-help">
+								<?php echo /* I18N: Configuration option */ KT_I18N::translate('Searching for overall connections is not included here because there is always a trivial HUSB - WIFE connection.') ?>
+							</div>
+							<div class="cell medium-4">
+								<label>
+									<?php echo /* I18N: Configuration option */ KT_I18N::translate('Show common ancestors'); ?>
+								</label>
+							</div>
+							<div class="cell medium-8">
+								<div class="input_group">
+									<?php echo simple_switch('NEW_TAB_REL_OF_PARENTS_SHOW_CA', $rel2_ca, '', '', 'Yes', 'No', 'small'); ?>
+								</div>
+							</div>
+							<!-- RELATIONS TO SPOUSES -->
+							<div class="cell callout info-help">
+								<?php echo /* I18N: Configuration option */ KT_I18N::translate('How to determine relationships to spouses'); ?>
+							</div>
+							<div class="cell medium-4">
+								<label>
+									<?php echo /* I18N: Configuration option */ KT_I18N::translate('Do not show any relationship'); ?>
+								</label>
+							</div>
+							<div class="cell medium-8">
+								<div class="input_group">
+									<input type="radio" name="NEW_TAB_REL_TO_SPOUSE" value="0" <?php echo ($rel3 === '0') ? 'checked' : ''; ?>>
+								</div>
+							</div>
+							<div class="cell callout info-help">
+								<?php echo /* I18N: Configuration option */ KT_I18N::translate('The following options refer to the same algorithms used in the relationships chart. Choose any one of these.') ?>
+							</div>
+							<div class="cell medium-4">
+								<label class="indent">
+									<?php echo KT_I18N::translate('Find a closest relationship via common ancestors'); ?>
+								</label>
+							</div>
+							<div class="cell medium-8">
+								<div class="input_group">
+									<input type="radio" name="NEW_TAB_REL_TO_SPOUSE" value="1" <?php echo ($rel3 === '1') ? 'checked' : ''; ?>>
+								</div>
+							</div>
+							<div class="cell medium-4">
+								<label class="indent">
+									<?php echo KT_I18N::translate('Find all smallest lowest common ancestors, show a closest connection for each'); ?>
+								</label>
+							</div>
+							<div class="cell medium-8">
+								<div class="input_group">
+									<input type="radio" name="NEW_TAB_REL_TO_SPOUSE" value="2" <?php echo ($rel3 === '2') ? 'checked' : ''; ?>>
+								</div>
+							</div>
+							<div class="cell medium-4">
+								<label class="indent">
+									<?php echo KT_I18N::translate('Find all relationships via lowest common ancestors'); ?>
+								</label>
+							</div>
+							<div class="cell medium-8">
+								<div class="input_group">
+									<input type="radio" name="NEW_TAB_REL_TO_SPOUSE" value="3" <?php echo ($rel3 === '3') ? 'checked' : ''; ?>>
+								</div>
+							</div>
+							<div class="cell callout info-help">
+								<?php echo /* I18N: Configuration option */ KT_I18N::translate('Searching for overall connections is not included here because there is always a trivial HUSB - WIFE connection.') ?>
+							</div>
+							<div class="cell medium-4">
+								<label>
+									<?php echo /* I18N: Configuration option */ KT_I18N::translate('Show common ancestors'); ?>
+								</label>
+							</div>
+							<div class="cell medium-8">
+								<div class="input_group">
+									<?php echo simple_switch('NEW_TAB_REL_TO_SPOUSE_SHOW_CA', $rel3_ca, '', '', 'Yes', 'No', 'small'); ?>
+								</div>
+							</div>
 						</div>
-						<label class="indent"><?php echo KT_I18N::translate('Find a closest relationship via common ancestors'); ?></label>
-						<div class="input_group">
-							<input type="radio" name="NEW_TAB_REL_TO_DEFAULT_INDI" value="1" <?php echo ($rel1 === '1') ? 'checked' : ''; ?>>
-						</div>
-					</div>
-					<div class="config_options">
-						<label class="indent"><?php echo KT_I18N::translate('Find all smallest lowest common ancestors, show a closest connection for each'); ?></label>
-						<div class="input_group">
-							<input type="radio" name="NEW_TAB_REL_TO_DEFAULT_INDI" value="2" <?php echo ($rel1 === '2') ? 'checked' : ''; ?>>
-						</div>
-					</div>
-					<div class="config_options">
-						<label class="indent"><?php echo KT_I18N::translate('Find all relationships via lowest common ancestors'); ?></label>
-						<div class="input_group">
-							<input type="radio" name="NEW_TAB_REL_TO_DEFAULT_INDI" value="3" <?php echo ($rel1 === '3') ? 'checked' : ''; ?>>
-						</div>
-					</div>
-					<div class="config_options">
-						<label class="indent"><?php echo KT_I18N::translate('Find the closest overall connections (preferably via common ancestors)'); ?></label>
-						<div class="input_group">
-							<input type="radio" name="NEW_TAB_REL_TO_DEFAULT_INDI" value="4" <?php echo ($rel1 === '4') ? 'checked' : ''; ?>>
-						</div>
-					</div>
-					<div class="config_options">
-						<label class="indent"><?php echo KT_I18N::translate('Find a closest relationship via common ancestors, or fallback to the closest overall connection'); ?></label>
-						<div class="input_group">
-							<input type="radio" name="NEW_TAB_REL_TO_DEFAULT_INDI" value="7" <?php echo ($rel1 === '7') ? 'checked' : ''; ?>>
-						</div>
-					</div>
-					<div class="config_options">
-						<label class="indent"><?php echo KT_I18N::translate('Find the closest overall connections') ?></label>
-						<div class="input_group">
-							<input type="radio" name="NEW_TAB_REL_TO_DEFAULT_INDI" value="5" <?php echo ($rel1 === '5') ? 'checked' : ''; ?>>
-						</div>
-					</div>
-					<div class="config_options">
-						<label class="indent"><?php echo KT_I18N::translate('Find other/all overall connections') ?></label>
-						<div class="input_group">
-							<input type="radio" name="NEW_TAB_REL_TO_DEFAULT_INDI" value="6" <?php echo ($rel1 === '6') ? 'checked' : ''; ?>>
-						</div>
-					</div>
-					<div class="config_options">
-						<label><?php echo /* I18N: Configuration option */ KT_I18N::translate('Show common ancestors'); ?></label>
-						<div class="input_group">
-							<?php echo edit_field_yes_no('NEW_TAB_REL_TO_DEFAULT_INDI_SHOW_CA', $rel1_ca); ?>
-						</div>
-					</div>
-					<!-- RELATIONS BETWEEN PARENTS -->
-					<h4 class="accepted"><?php echo /* I18N: Configuration option */ KT_I18N::translate('How to determine relationships between parents'); ?></h4>
-					<div class="config_options">
-						<label><?php echo /* I18N: Configuration option */ KT_I18N::translate('Do not show any relationship'); ?></label>
-						<div class="input_group">
-							<input type="radio" name="NEW_TAB_REL_OF_PARENTS" value="0" <?php echo ($rel2 === '0') ? 'checked' : ''; ?>>
-						</div>
-					</div>
-					<div class="config_options">
-						<div class="helpcontent">
-							<?php echo /* I18N: Configuration option */ KT_I18N::translate('The following options refer to the same algorithms used in the relationships chart. Choose any one of these.') ?>
-						</div>
-						<label class="indent"><?php echo KT_I18N::translate('Find a closest relationship via common ancestors'); ?></label>
-						<div class="input_group">
-							<input type="radio" name="NEW_TAB_REL_OF_PARENTS" value="1" <?php echo ($rel2 === '1') ? 'checked' : ''; ?>>
-						</div>
-					</div>
-					<div class="config_options">
-						<label class="indent"><?php echo KT_I18N::translate('Find all smallest lowest common ancestors, show a closest connection for each'); ?></label>
-						<div class="input_group">
-							<input type="radio" name="NEW_TAB_REL_OF_PARENTS" value="2" <?php echo ($rel2 === '2') ? 'checked' : ''; ?>>
-						</div>
-					</div>
-					<div class="config_options">
-						<label class="indent"><?php echo KT_I18N::translate('Find all relationships via lowest common ancestors'); ?></label>
-						<div class="input_group">
-							<input type="radio" name="NEW_TAB_REL_OF_PARENTS" value="3" <?php echo ($rel2 === '3') ? 'checked' : ''; ?>>
-						</div>
-					<div class="helpcontent">
-						<?php echo /* I18N: Configuration option */ KT_I18N::translate('Searching for overall connections is not included here because there is always a trivial HUSB - WIFE connection.') ?>
-					</div>
-					</div>
-					<div class="config_options">
-						<label><?php echo /* I18N: Configuration option */ KT_I18N::translate('Show common ancestors'); ?></label>
-						<div class="input_group">
-							<?php echo edit_field_yes_no('NEW_TAB_REL_OF_PARENTS_SHOW_CA', $rel2_ca); ?>
-						</div>
-					</div>
-					<!-- RELATIONS TO SPOUSES -->
-					<h4 class="accepted"><?php echo /* I18N: Configuration option */ KT_I18N::translate('How to determine relationships to spouses'); ?></h4>
-					<div class="config_options">
-						<label><?php echo /* I18N: Configuration option */ KT_I18N::translate('Do not show any relationship'); ?></label>
-						<div class="input_group">
-							<input type="radio" name="NEW_TAB_REL_TO_SPOUSE" value="0" <?php echo ($rel3 === '0') ? 'checked' : ''; ?>>
-						</div>
-					</div>
-					<div class="config_options">
-						<div class="helpcontent">
-							<?php echo /* I18N: Configuration option */ KT_I18N::translate('The following options refer to the same algorithms used in the relationships chart. Choose any one of these.') ?>
-						</div>
-						<label class="indent"><?php echo KT_I18N::translate('Find a closest relationship via common ancestors'); ?></label>
-						<div class="input_group">
-							<input type="radio" name="NEW_TAB_REL_TO_SPOUSE" value="1" <?php echo ($rel3 === '1') ? 'checked' : ''; ?>>
-						</div>
-					</div>
-					<div class="config_options">
-						<label class="indent"><?php echo KT_I18N::translate('Find all smallest lowest common ancestors, show a closest connection for each'); ?></label>
-						<div class="input_group">
-							<input type="radio" name="NEW_TAB_REL_TO_SPOUSE" value="2" <?php echo ($rel3 === '2') ? 'checked' : ''; ?>>
-						</div>
-					</div>
-					<div class="config_options">
-						<label class="indent"><?php echo KT_I18N::translate('Find all relationships via lowest common ancestors'); ?></label>
-						<div class="input_group">
-							<input type="radio" name="NEW_TAB_REL_TO_SPOUSE" value="3" <?php echo ($rel3 === '3') ? 'checked' : ''; ?>>
-						</div>
-					<div class="helpcontent">
-						<?php echo /* I18N: Configuration option */ KT_I18N::translate('Searching for overall connections is not included here because there is always a trivial HUSB - WIFE connection.') ?>
-					</div>
-					</div>
-					<div class="config_options">
-						<label><?php echo /* I18N: Configuration option */ KT_I18N::translate('Show common ancestors'); ?></label>
-						<div class="input_group">
-							<?php echo edit_field_yes_no('NEW_TAB_REL_TO_SPOUSE_SHOW_CA', $rel3_ca); ?>
-						</div>
-					</div>
-				</div>
-				<button class="btn btn-primary save" type="submit">
-					<i class="' . $iconStyle . ' fa-save"></i>
-					<?php echo KT_I18N::translate('Save'); ?>
-				</button>
-			</form>
-			<form method="post" name="rela_form" action="<?php echo $this->getConfigLink(); ?>">
-				<input type="hidden" name="reset" value="1">
-				<button class="btn btn-primary reset" type="submit">
-					<i class="' . $iconStyle . ' fa-sync"></i>
-					<?php echo KT_I18N::translate('Reset'); ?>
-				</button>
-			</form>
-		</div>
-	<?php }
+					</fieldset>
+
+					<?php echo resetButtons('Save', ''); ?>
+
+				</form>
+			</div>
+		<?php pageClose();
+	}
 
 }
