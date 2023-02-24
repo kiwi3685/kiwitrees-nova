@@ -28,6 +28,12 @@ if (!defined('KT_KIWITREES')) {
 
 class KT_Controller_Branches extends KT_Controller_Page {
 
+	public $surn;
+	public $soundex_std;
+	public $soundex_dm;
+	public $ged;
+	public $user_ancestors;
+
 	/**
 	 * Create a branches list controller
 	 */
