@@ -10875,6 +10875,31 @@ div.last_change label {
 	margin-bottom: 1rem;
 }
 
+#chart_relationship-page button.button.swap {
+	margin-top: 0;
+}
+#chart_relationship-page fieldset.fieldset {
+	margin: 0;
+	padding: 0.5rem 1rem;
+}
+#chart_relationship-page fieldset.fieldset div.detailLevel {
+	margin: 0;
+	padding: 0;
+}
+#chart_relationship-page fieldset.fieldset div.detailLevel input {
+	margin: 0;
+}
+#chart_relationship-page fieldset.fieldset div.detailLevel label {
+	font-size: 1rem;
+	line-height: normal;
+	padding: 0;
+}
+#chart_relationship-page table[id^=rel_] {
+	border-collapse: collapse;
+	margin: 20px auto;
+	width: auto;
+}
+
 #research_links-page .check-boxes input {
 	vertical-align: middle;
 }
