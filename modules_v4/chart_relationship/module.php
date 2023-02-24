@@ -41,14 +41,14 @@ class chart_relationship_KT_Module extends KT_Module implements KT_Module_Chart,
 	// Extend KT_Module
 	public function modAction($mod_action) {
 		switch($mod_action) {
-		case 'show':
-			$this->show();
-			break;
-		case 'admin_config':
-			$this->config();
-			break;
-		default:
-			header('HTTP/1.0 404 Not Found');
+			case 'show':
+				require KT_ROOT . KT_MODULES_DIR . $this->getName() . '/' . $mod_action . '.php';
+				break;
+			case 'admin_config':
+				$this->config();
+				break;
+			default:
+				header('HTTP/1.0 404 Not Found');
 		}
 	}
 
@@ -86,7 +86,7 @@ class chart_relationship_KT_Module extends KT_Module implements KT_Module_Chart,
 			}
 			$menu = new KT_Menu(
 				KT_USER_GEDCOM_ID ? KT_I18N::translate('Relationship to me') : $this->getTitle(),
-				'relationship.php?pid1=' . $pid1 .'&amp;pid2=' . $pid2 .'&amp;ged=' . KT_GEDURL,
+				'module.php?mod='.$this->getName().'&amp;mod_action=show&amp;pid1=' . $pid1 .'&amp;pid2=' . $pid2 .'&amp;ged=' . KT_GEDURL,
 				'menu-chart-relationship'
 			);
 			$menus[] = $menu;
@@ -96,7 +96,7 @@ class chart_relationship_KT_Module extends KT_Module implements KT_Module_Chart,
 			$pid2 = $PEDIGREE_ROOT_ID ? $PEDIGREE_ROOT_ID : '';
 			$menu = new KT_Menu(
 				KT_USER_GEDCOM_ID ? KT_I18N::translate('Relationship to me') : $this->getTitle(),
-				'relationship.php?pid1=' . $pid1 .'&amp;pid2=' . $pid2 .'&amp;ged=' . KT_GEDURL,
+				'module.php?mod='.$this->getName().'&amp;mod_action=show&amp;pid1=' . $pid1 .'&amp;pid2=' . $pid2 .'&amp;ged=' . KT_GEDURL,
 				'menu-chart-relationship'
 			);
 			$menus[] = $menu;
@@ -233,7 +233,7 @@ class chart_relationship_KT_Module extends KT_Module implements KT_Module_Chart,
 							</div>
 							<div class="cell medium-8">
 								<div class="input_group">
-									<?php echo simple_switch('NEW_CHART_1', $chart1, '', '', 'Yes', 'No', 'small'); ?>
+									<?php echo simple_switch('NEW_CHART_1', 1, $chart1, '', 'Yes', 'No', 'small'); ?>
 									<div class="cell callout info-help">
 										<?php echo /* I18N: Configuration option */ KT_I18N::translate('Determines the shortest path between two individuals via a LCA (lowest common ancestor), i.e. a common ancestor who only appears on the path once.') ?>
 									</div>
@@ -246,7 +246,7 @@ class chart_relationship_KT_Module extends KT_Module implements KT_Module_Chart,
 							</div>
 							<div class="cell medium-8">
 								<div class="input_group">
-									<?php echo simple_switch('NEW_CHART_2', $chart2, '', '', 'Yes', 'No', 'small'); ?>
+									<?php echo simple_switch('NEW_CHART_2', 1, $chart2, '', 'Yes', 'No', 'small'); ?>
 									<div class="cell callout info-help">
 										<?php echo /* I18N: Configuration option */ KT_I18N::translate('Each SLCA (smallest lowest common ancestor) essentially represents a part of the tree which both individuals share (as part of their ancestors). More technically, the SLCA set of two individuals is a subset of the LCA set (excluding all LCAs that are themselves ancestors of other LCAs).') ?>
 									</div>
@@ -259,7 +259,7 @@ class chart_relationship_KT_Module extends KT_Module implements KT_Module_Chart,
 							</div>
 							<div class="cell medium-8">
 								<div class="input_group">
-									<?php echo simple_switch('NEW_CHART_3', $chart3, '', '', 'Yes', 'No', 'small'); ?>
+									<?php echo simple_switch('NEW_CHART_3', 1, $chart3, '', 'Yes', 'No', 'small'); ?>
 									<div class="cell callout info-help">
 										<?php echo /* I18N: Configuration option */ KT_I18N::translate('All paths between the two individuals that contribute to the CoR (Coefficient of Relationship), as defined here: <a href = "http://www.genetic-genealogy.co.uk/Toc115570135.html" target="_blank" rel="noopener noreferrer">Coefficient of Relationship</a>'); ?>
 									</div>
@@ -272,7 +272,7 @@ class chart_relationship_KT_Module extends KT_Module implements KT_Module_Chart,
 							</div>
 							<div class="cell medium-8">
 								<div class="input_group">
-									<?php echo simple_switch('NEW_CHART_4', $chart4, '', '', 'Yes', 'No', 'small'); ?>
+									<?php echo simple_switch('NEW_CHART_4', 1, $chart4, '', 'Yes', 'No', 'small'); ?>
 									<div class="cell callout info-help">
 										<?php echo /* I18N: Configuration option */ KT_I18N::translate('Prefers partial paths via common ancestors, even if there is no direct common ancestor.') ?>
 									</div>
@@ -285,7 +285,7 @@ class chart_relationship_KT_Module extends KT_Module implements KT_Module_Chart,
 							</div>
 							<div class="cell medium-8">
 								<div class="input_group">
-									<?php echo simple_switch('NEW_CHART_7', $chart7, '', '', 'Yes', 'No', 'small'); ?>
+									<?php echo simple_switch('NEW_CHART_7', 1, $chart7, '', 'Yes', 'No', 'small'); ?>
 									<div class="cell callout info-help">
 										<?php echo /* I18N: Configuration option */ KT_I18N::translate('For close relationships similar to the previous option, but faster. Internally just a combination of two other methods.') ?>
 									</div>
@@ -298,7 +298,7 @@ class chart_relationship_KT_Module extends KT_Module implements KT_Module_Chart,
 							</div>
 							<div class="cell medium-8">
 								<div class="input_group">
-									<?php echo simple_switch('NEW_CHART_5', $chart5, '', '', 'Yes', 'No', 'small'); ?>
+									<?php echo simple_switch('NEW_CHART_5', 1, $chart5, '', 'Yes', 'No', 'small'); ?>
 								</div>
 							</div>
 							<div class="cell medium-4">
@@ -308,7 +308,7 @@ class chart_relationship_KT_Module extends KT_Module implements KT_Module_Chart,
 							</div>
 							<div class="cell medium-8">
 								<div class="input_group">
-									<?php echo simple_switch('NEW_CHART_6', $chart6, '', '', 'Yes', 'No', 'small'); ?>
+									<?php echo simple_switch('NEW_CHART_6', 1, $chart6, '', 'Yes', 'No', 'small'); ?>
 								</div>
 							</div>
 							<div class="cell medium-4">
