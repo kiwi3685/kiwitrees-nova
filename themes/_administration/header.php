@@ -92,8 +92,8 @@ $this
 						<li>
 							<?php if (KT_USER_GEDCOM_ID) { ?>
 								<a href="individual.php?pid=<?php echo KT_USER_GEDCOM_ID; ?>&amp;ged=<?php echo KT_GEDURL; ?>">
-									<i class="<?php echo $iconStyle; ?> fa-male show-for-medium"></i>
-									<?php echo KT_I18N::translate('My individual record'); ?>
+									<i class="<?php echo $iconStyle; ?> fa-male show-for-small"></i>
+									<span class="show-for-medium"><?php echo KT_I18N::translate('My individual record'); ?></span>
 								</a>
 							<?php } ?>
 						</li>
