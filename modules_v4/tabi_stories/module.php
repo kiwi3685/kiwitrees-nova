@@ -268,7 +268,7 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 				<div class="cell tabHeader">
 					<div class="grid-x">
 						<div class="cell shrink">
-							<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit&amp;xref=<?php echo $controller->record->getXref(); ?>">
+							<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_add&amp;xref=<?php echo $controller->record->getXref(); ?>">
 								<i class="<?php echo $iconStyle; ?> fa-plus"></i>
 								<?php echo KT_I18N::translate('Add story'); ?>
 							</a>

@@ -94,7 +94,7 @@ if ($save) {
 $item_title   = get_block_setting($block_id, 'story_title');
 $item_content = get_block_setting($block_id, 'story_content');
 $item_access  = KT_I18N::translate('All');
-$xref         = explode(',', get_block_setting($block_id, 'xref'));
+$xref         = is_array(get_block_setting($block_id, 'xref')) ? explode(',', get_block_setting($block_id, 'xref')) : get_block_setting($block_id, 'xref');
 $count_xref   = $xref ? count($xref) : 0;
 
 $block_order  = KT_DB::prepare(
@@ -108,10 +108,10 @@ $gedcom_id   = KT_DB::prepare(
 echo relatedPages($moduleTools, $this->getConfigLink());
 
 echo pageStart($this->getName(), $controller->getPageTitle()); ?>
-<?php echo $count_xref; ?>
+
 	<!-- Family tree -->
 	<div class="cell medium-2">
-		<label for="gedID"><?php echo KT_I18N::translate('Current family tree'); ?></label>
+		<label for="gedID"><?php echo KT_I18N::translate('Active family tree'); ?></label>
 	</div>
 	<div class="cell medium-4">
 		<form id="tree" method="post" action="#" name="tree">

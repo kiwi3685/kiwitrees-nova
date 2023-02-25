@@ -9921,6 +9921,9 @@ div[id$=-page] button[type=submit] {
 #indi-page .tabs-panel {
 	/* Census assistant */
 }
+#indi-page .tabs-panel div[id$=tab_content] {
+	min-height: 3.75rem;
+}
 #indi-page .tabs-panel .tabHeader {
 	border-bottom: 0.0125rem solid #ab3334;
 	padding: 0.5rem;
