@@ -10001,12 +10001,15 @@ main #admin-content #custom_theme-page ul li input {
 main #admin-content #custom_theme-page select option.new {
 	color: #ff0000;
 }
-main #admin-content #cleanup input[type=checkbox] {
-	margin-left: 0.65rem;
-	margin-right: 0.8rem;
+main #admin-content #site_clean-page #cleanup .input-group .input-group-field input[type=checkbox] {
+	height: auto;
 }
-main #admin-content #cleanup .svg-inline--fa.fa-fw {
-	width: 2.25em;
+main #admin-content #site_clean-page #cleanup .input-group .input-group-field.folder {
+	color: #34689c;
+}
+main #admin-content #site_clean-page #cleanup .input-group .svg-inline--fa.fa-fw {
+	font-size: 1.25rem;
+	width: auto;
 }
 main #admin-content #server-use ul li:last-of-type {
 	font-weight: 600;
@@ -10889,7 +10892,7 @@ input[type=radio] {
 /* Create standard unchecked box */
 /* From ModernCSS.dev © 2022 ThinkDoBeCreate - Stephanie Eckles
 		https://moderncss.dev/pure-css-custom-styled-radio-buttons/
-    https://moderncss.dev/pure-css-custom-checkbox-style/
+	https://moderncss.dev/pure-css-custom-checkbox-style/
 */
 input[type=checkbox],
 input[type=radio] {

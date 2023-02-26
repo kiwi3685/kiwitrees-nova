@@ -77,8 +77,8 @@ echo pageStart('site_clean', $controller->getPageTitle()); ?>
 	<?php } ?>
 
 	<form class="cell" name="delete_form" method="post" action="">
-		<div id="cleanup" class="grid-x">
-			<ul class="cell medium-offset-1">
+		
+			<div id="cleanup" class="grid-x">
 				<?php
 				$dir	 = dir(KT_DATA_DIR);
 				$entries = array();
@@ -91,27 +91,28 @@ echo pageStart('site_clean', $controller->getPageTitle()); ?>
 						$file_path = KT_DATA_DIR . $entry;
 						$icon = '<i class="' . $iconStyle . ' ' . (is_dir($file_path)? 'fa-folder-open' : 'fa-folder') . '"></i>';
 						if (in_array($entry, $locked_by_context)) { ?>
-							<li class="facts_value" name="<?php echo $entry; ?>" id="lock_<?php echo $entry; ?>" >
-								<i class="alert <?php echo $iconStyle; ?> fa-ban fa-fw"></i>
-								<?php echo $icon; ?>
-								<span><?php echo $entry; ?></span>
-						<?php } else { ?>
-							<li class="facts_value" name="<?php echo $entry; ?>" id="li_<?php echo $entry; ?>" >
-								<input type="checkbox" name="to_delete[]" value="<?php echo $entry; ?>">
-								<?php echo $icon; ?>
-								<?php echo $entry; ?>
-								<?php $element[] = 'li_' . $entry; ?>
+							<div class="cell small-4 medium-1 small-offset-1 input-group" name="<?php echo $entry; ?>" id="lock_<?php echo $entry; ?>" >
+								<span class="input-group-field"><i class="alert <?php echo $iconStyle; ?> fa-ban fa-fw"></i></span>
+								<span class="input-group-field folder"><?php echo $icon; ?></span>
+								<span class="input-group-field"><?php echo $entry; ?></span>
+							<?php } else { ?>
+							<div class="cell small-4 medium-1 small-offset-1 input-group" name="<?php echo $entry; ?>" id="li_<?php echo $entry; ?>" >
+								<span class="input-group-field"><input type="checkbox" name="to_delete[]" value="<?php echo $entry; ?>"></span>
+								<span class="input-group-field folder"><?php echo $icon; ?></span>
+								<span class="input-group-field"><?php echo $entry; ?></span>
+								<?php $element[] = 'li_' . $entry; ?>									
 						<?php } ?>
-						</li>
+						</div>
+						<div class="cell small-8 medium-11"></div>
 					<?php }
 				}
 				$dir->close(); ?>
-			</ul>
+			</div>
 			<button class="button" type="submit">
 				<i class="<?php echo $iconStyle; ?> fa-trash-can"></i>
 				<?php echo KT_I18N::translate('Delete'); ?>
 			</button>
-		</div>
+		
 	</form>
 
 <?php echo pageClose();
