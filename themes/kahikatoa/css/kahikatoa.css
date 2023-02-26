@@ -9848,6 +9848,9 @@ div[id$=-page] button[type=submit] {
 #indi-page #sex {
 	cursor: pointer;
 }
+#indi-page .indiHeader a.gallery.thumbnail {
+	margin-bottom: 0;
+}
 #indi-page .indiHeader img {
 	border: 0.1rem solid #ab3334;
 	border-radius: 0.5rem;
@@ -9914,9 +9917,6 @@ div[id$=-page] button[type=submit] {
 }
 #indi-page .elderdate .svg-inline--fa {
 	margin: 0;
-}
-#indi-page ul#indiTabs {
-	margin-top: 1rem;
 }
 #indi-page .tabs-panel {
 	/* Census assistant */
