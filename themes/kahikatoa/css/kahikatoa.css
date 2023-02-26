@@ -12374,3 +12374,65 @@ table.dataTable td {
 	position: absolute;
 	display: inline-block;
 }
+
+/* Hide standard checkbox */
+input[type=checkbox],
+input[type=radio] {
+	/* Add if not using autoprefixer */
+	-webkit-appearance: none;
+	appearance: none;
+	/* For iOS < 15 to remove gradient background */
+	background-color: transparent;
+	/* Not removed via appearance */
+	margin: 0;
+}
+
+/* Create standard unchecked box */
+/* From ModernCSS.dev © 2022 ThinkDoBeCreate - Stephanie Eckles
+		https://moderncss.dev/pure-css-custom-styled-radio-buttons/
+	https://moderncss.dev/pure-css-custom-checkbox-style/
+*/
+input[type=checkbox],
+input[type=radio] {
+	appearance: none;
+	background-color: #fffff4;
+	cursor: pointer;
+	font: inherit;
+	width: 1.25rem;
+	height: 1.25rem;
+	border: 0.1125rem solid #faf5e8;
+	border-radius: 0.25rem;
+	margin: 0.25rem 0.125rem 0;
+	/* center tick mark */
+	display: inline-grid;
+	place-content: center;
+}
+
+input[type=radio] {
+	border-radius: 50%;
+}
+
+input[type=checkbox]::before,
+input[type=radio]::before {
+	content: "";
+	width: 1.25rem;
+	height: 1.25rem;
+	transform: scale(0);
+	transition: 120ms transform ease-in-out;
+	box-shadow: inset 1.25rem 1.25rem #3adb76;
+}
+
+/* add tick mark */
+input[type=checkbox]::before {
+	transform-origin: bottom left;
+	clip-path: polygon(28% 38%, 41% 53%, 75% 24%, 86% 38%, 40% 78%, 15% 50%);
+}
+
+input[type=radio]::before {
+	border-radius: 50%;
+}
+
+input[type=checkbox]:checked::before,
+input[type=radio]:checked::before {
+	transform: scale(1);
+}
