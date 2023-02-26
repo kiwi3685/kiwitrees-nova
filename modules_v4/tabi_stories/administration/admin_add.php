@@ -53,9 +53,15 @@ if ($save) {
 	$item_title   = KT_Filter::post('story_title',   KT_REGEX_UNSAFE);
 	$item_content = KT_Filter::post('story_content', KT_REGEX_UNSAFE);
 	$item_access  = KT_Filter::post('story_access',  KT_REGEX_UNSAFE);
-	$languages    = array();
-	$xref         = array();
 
+	$languages    = array();
+	foreach (KT_I18N::used_languages() as $code => $name) {
+		if (KT_Filter::postBool('lang_' . $code)) {
+			$languages[] = $code;
+		}
+	}
+
+	$xref         = array();
 	foreach (KT_Filter::post('xref') as $indi_ref => $name) {
 		$xref[] = $name;
 	}
@@ -70,17 +76,11 @@ if ($save) {
 
 	$block_id = KT_DB::getInstance()->lastInsertId();
 
-	set_block_setting($block_id, 'xref', rtrim(implode(',', $xref)));
+	set_block_setting($block_id, 'xref', rtrim(implode(',', $xref), ","));
 	set_block_setting($block_id, 'story_title',   $item_title);
 	set_block_setting($block_id, 'story_content', $item_content); 
 	set_block_setting($block_id, 'story_access',  $item_access); 
-
-	foreach (KT_I18N::used_languages() as $code => $name) {
-		if (KT_Filter::postBool('lang_' . $code)) {
-			$languages[] = $code;
-		}
-	}
-	set_block_setting($block_id, 'languages', rtrim(implode(',', $languages)));
+	set_block_setting($block_id, 'languages', rtrim(implode(',', $languages), ","));
 
 	switch ($save) {
 		case 1:

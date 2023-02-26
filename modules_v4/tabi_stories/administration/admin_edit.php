@@ -63,7 +63,7 @@ if ($save) {
 		$block_id
 	));
 
-	set_block_setting($block_id, 'xref', implode(',', $xref));
+	set_block_setting($block_id, 'xref',rtrim(implode(',', $xref), ","));
 	set_block_setting($block_id, 'story_title',   $item_title);
 	set_block_setting($block_id, 'story_content', $item_content); 
 	set_block_setting($block_id, 'story_access',  $item_access);
@@ -73,7 +73,7 @@ if ($save) {
 			$languages[] = $code;
 		}
 	}
-	set_block_setting($block_id, 'languages', implode(',', $languages));
+	set_block_setting($block_id, 'languages', rtrim(implode(',', $languages), ","));
 
 	switch ($save) {
 		case 1:
