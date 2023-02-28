@@ -9616,6 +9616,7 @@ main #admin-content {
 	/* GALLERY PAGE */
 	/* PAGES PAGE */
 	/* STORIES PAGE */
+	/* ALBUM MODULE */
 	/* RESEARCH LINKS */
 	/* Googlemaps Admin */
 	/* CLEAN UP TABLE */
@@ -10462,6 +10463,40 @@ main #admin-content #tabi_stories-page table#reorderTable tfoot td, main #admin-
 main #admin-content #tabi_stories-page .linkedIndis {
 	margin-top: 0.9375rem;
 }
+main #admin-content #tabi_album-page table#album-config {
+	border-collapse: separate;
+	width: 100%;
+}
+main #admin-content #tabi_album-page table#album-config thead th,
+main #admin-content #tabi_album-page table#album-config thead th input {
+	max-width: 6rem;
+	text-align: center;
+}
+main #admin-content #tabi_album-page table#album-config thead th.albumGroup {
+	font-size: 0.875rem;
+}
+main #admin-content #tabi_album-page table#album-config tbody th {
+	background-color: #e6e6e6;
+}
+main #admin-content #tabi_album-page table#album-config tbody th span.rotate {
+	display: block;
+	/* Safari */
+	-webkit-transform: rotate(-90deg);
+	/* Firefox */
+	-moz-transform: rotate(-90deg);
+	/* IE */
+	-ms-transform: rotate(-90deg);
+	/* Opera */
+	-o-transform: rotate(-90deg);
+	/* Internet Explorer */
+	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+}
+main #admin-content #tabi_album-page table#album-config tbody td:nth-child(n+2) {
+	text-align: center;
+}
+main #admin-content #tabi_album-page button.reset {
+	margin: -4.35rem 7rem 0;
+}
 main #admin-content #research_links-page fieldset {
 	width: 100%;
 }
@@ -10579,6 +10614,10 @@ main #admin-content table#clean th {
 }
 main #admin-content table#clean td select {
 	margin-top: 1rem;
+}
+main #admin-content #manage_modules-page div.callout.warning {
+	padding: 0.65rem 0.9375rem 0;
+	font-size: 0.95rem;
 }
 main #admin-content table.modules_table table.modules_table2 {
 	margin: 0;
@@ -10748,6 +10787,10 @@ div.dataTables_wrapper table.dataTable thead tr th svg {
 	position: absolute;
 	right: 0.125rem;
 	top: 0.75rem;
+}
+div.dataTables_wrapper table#installed_table thead tr th svg.fa-gears {
+	left: 0.75rem;
+	right: initial;
 }
 
 /* Fix title-bar fuc */

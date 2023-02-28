@@ -94,58 +94,60 @@ $controller
 	  	jQuery("#installed_table").dataTable({
 			dom: \'<"top"pBf<"clear">irl>t<"bottom"pl>\',
 			' . KT_I18N::datatablesI18N() . ',
-			buttons: [{extend: "csvHtml5", exportOptions: {columns: [0,6,9,12,15,17] }}],
+			buttons: [{extend: "csvHtml5"}],
 			autoWidth: false,
 			processing: true,
 			pagingType: "full_numbers",
 			stateSave: true,
 			stateDuration: -1,
-			sorting: [[ 2, "asc" ]],
+			sorting: [[ 3, "asc" ]],
 			columns : [
 				/*  0 enable		*/ { dataSort: 1, sClass: "center" },
 				/*  1 status		*/ { type: "unicode", visible: false },
-				/*  2 name			*/ { sType: "html"},
-				/*  3 description	*/ null,
-				/*  4 block        	*/ { sClass: "center" },
-				/*  5 chart			*/ { sClass: "center" },
-				/*  6 footer		*/ { sClass: "center" },
-				/*  7 list			*/ { sClass: "center" },
-				/*  8 menu			*/ { sClass: "center" },
-				/*  9 report		*/ { sClass: "center" },
-				/* 10 sidebar		*/ { sClass: "center" },
-				/* 11 indi-tab		*/ { sClass: "center" },
-				/* 12 widget		*/ { sClass: "center" },
-				/* 13 fam-tab		*/ { sClass: "center" }
+				/*	2 config		*/ { sType: "html"},
+				/*  3 name			*/ { sType: "html"},
+				/*  4 description	*/ null,
+				/*  5 block        	*/ { sClass: "center" },
+				/*  6 chart			*/ { sClass: "center" },
+				/*  7 footer		*/ { sClass: "center" },
+				/*  8 list			*/ { sClass: "center" },
+				/*  9 menu			*/ { sClass: "center" },
+				/* 10 report		*/ { sClass: "center" },
+				/* 11 sidebar		*/ { sClass: "center" },
+				/* 12 indi-tab		*/ { sClass: "center" },
+				/* 13 widget		*/ { sClass: "center" },
+				/* 14 fam-tab		*/ { sClass: "center" }
 			]
 		});
 	');
 
 echo relatedPages($module_config, KT_SCRIPT_NAME);
 
-echo pageStart('module-admin', $controller->getPageTitle()); ?>
+echo pageStart('manage_modules', $controller->getPageTitle()); ?>
 
 	<form class="cell" method="post" action="<?php echo KT_SCRIPT_NAME; ?>">
 			<input type="hidden" name="action" value="update_mods">
 			<?php echo KT_Filter::getCsrf(); ?>
 			<div class="grid-x grid-margin-y">
 				<div class="cell">
-					<table id="installed_table">
+					<table id="installed_table" class="scroll stack">
 						<thead>
 							<tr>
 								<th><?php echo KT_I18N::translate('Enabled'); ?></th>
 								<th>STATUS</th>
-								<th style="width: 120px;"><?php echo KT_I18N::translate('Module'); ?></th>
-								<th style="width: 400px;"><?php echo KT_I18N::translate('Description'); ?></th>
-								<th><?php echo KT_I18N::translate('Block'); ?></th>
-								<th><?php echo KT_I18N::translate('Chart'); ?></th>
-								<th><?php echo KT_I18N::translate('Footer'); ?></th>
-								<th><?php echo KT_I18N::translate('List'); ?></th>
-								<th><?php echo KT_I18N::translate('Menu'); ?></th>
-								<th><?php echo KT_I18N::translate('Report'); ?></th>
-								<th><?php echo KT_I18N::translate('Sidebar'); ?></th>
-								<th><?php echo KT_I18N::translate('Indi tab'); ?></th>
-								<th><?php echo KT_I18N::translate('Widget'); ?></th>
-								<th><?php echo KT_I18N::translate('Fam tab'); ?></th>
+								<th style="width: 7.5rem;"><?php echo KT_I18N::translate('Module'); ?></th>
+								<th style="width: 2rem;"><i class="<?php echo $iconStyle; ?> fa-gears"></i></th>
+								<th style="width: 18rem;"><?php echo KT_I18N::translate('Description'); ?></th>
+								<th class="hide-for-small-only"><?php echo KT_I18N::translate('Block'); ?></th>
+								<th class="hide-for-small-only"><?php echo KT_I18N::translate('Chart'); ?></th>
+								<th class="hide-for-small-only"><?php echo KT_I18N::translate('Footer'); ?></th>
+								<th class="hide-for-small-only"><?php echo KT_I18N::translate('List'); ?></th>
+								<th class="hide-for-small-only"><?php echo KT_I18N::translate('Menu'); ?></th>
+								<th class="hide-for-small-only"><?php echo KT_I18N::translate('Report'); ?></th>
+								<th class="hide-for-small-only"><?php echo KT_I18N::translate('Sidebar'); ?></th>
+								<th class="hide-for-small-only"><?php echo KT_I18N::translate('Indi tab'); ?></th>
+								<th class="hide-for-small-only"><?php echo KT_I18N::translate('Widget'); ?></th>
+								<th class="hide-for-small-only"><?php echo KT_I18N::translate('Fam tab'); ?></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -157,26 +159,26 @@ echo pageStart('module-admin', $controller->getPageTitle()); ?>
 										'<tr>
 											<td>' . two_state_checkbox('status-' . $module_name, $status == 'enabled') . '</td>
 											<td>' . $status . '</td>
+											<td>' . $module->getTitle() . '</td>
 											<td>';
 												if ( $module instanceof KT_Module_Config ) {
 													echo '<a href="' . $module->getConfigLink() . '">';
 												}
-												echo $module->getTitle();
 												if ( $module instanceof KT_Module_Config && array_key_exists( $module_name, KT_Module::getActiveModules() ) ) {
 													echo ' <i class="' . $iconStyle . ' fa-gears"></i></a>';
 												}
 											echo '</td>
 											<td>' . $module->getDescription() . '</td>
-											<td>', $module instanceof KT_Module_Block   	? ($module->isGedcomBlock() ? KT_I18N::translate('Home') : KT_I18N::translate('Other')) : '-', '</td>
-											<td>', $module instanceof KT_Module_Chart   	? KT_I18N::translate('Chart') : '-', '</td>
-											<td>', $module instanceof KT_Module_Footer   	? KT_I18N::translate('Footer') : '-', '</td>
-											<td>', $module instanceof KT_Module_List   		? KT_I18N::translate('List') : '-', '</td>
-											<td>', $module instanceof KT_Module_Menu    	? KT_I18N::translate('Menu') : '-', '</td>
-											<td>', $module instanceof KT_Module_Report  	? KT_I18N::translate('Report') : '-', '</td>
-											<td>', $module instanceof KT_Module_Sidebar 	? KT_I18N::translate('Sidebar') : '-', '</td>
-											<td>', $module instanceof KT_Module_IndiTab     ? KT_I18N::translate('Indi tab') : '-', '</td>
-											<td>', $module instanceof KT_Module_Widget  	? KT_I18N::translate('Widget') : '-', '</td>
-											<td>', $module instanceof KT_Module_FamTab      ? KT_I18N::translate('Fam tab') : '-', '</td>
+											<td class="hide-for-small-only">', $module instanceof KT_Module_Block   	? ($module->isGedcomBlock() ? KT_I18N::translate('Home') : KT_I18N::translate('Other')) : '-', '</td>
+											<td class="hide-for-small-only">', $module instanceof KT_Module_Chart   	? KT_I18N::translate('Chart') : '-', '</td>
+											<td class="hide-for-small-only">', $module instanceof KT_Module_Footer   	? KT_I18N::translate('Footer') : '-', '</td>
+											<td class="hide-for-small-only">', $module instanceof KT_Module_List   		? KT_I18N::translate('List') : '-', '</td>
+											<td class="hide-for-small-only">', $module instanceof KT_Module_Menu    	? KT_I18N::translate('Menu') : '-', '</td>
+											<td class="hide-for-small-only">', $module instanceof KT_Module_Report  	? KT_I18N::translate('Report') : '-', '</td>
+											<td class="hide-for-small-only">', $module instanceof KT_Module_Sidebar 	? KT_I18N::translate('Sidebar') : '-', '</td>
+											<td class="hide-for-small-only">', $module instanceof KT_Module_IndiTab     ? KT_I18N::translate('Indi tab') : '-', '</td>
+											<td class="hide-for-small-only">', $module instanceof KT_Module_Widget  	? KT_I18N::translate('Widget') : '-', '</td>
+											<td class="hide-for-small-only">', $module instanceof KT_Module_FamTab      ? KT_I18N::translate('Fam tab') : '-', '</td>
 										</tr>
 									';
 								} else {
@@ -187,21 +189,22 @@ echo pageStart('module-admin', $controller->getPageTitle()); ?>
 											<td></td>
 											<td></td>
 											<td class="error">' . $module_name . '</td>
+											<td></td>
 											<td>
 												<a class="error" href="' . KT_SCRIPT_NAME . '?action=delete_module&amp;module_name=' . $module_name .'">' .
 													KT_I18N::translate('This module cannot be found.  Delete its configuration settings.') .
 												'</a>
 											</td>
-											<td></td>
-											<td></td>
-											<td></td>
-											<td></td>
-											<td></td>
-											<td></td>
-											<td></td>
-											<td></td>
-											<td></td>
-											<td></td>
+											<td class="hide-for-small-only"></td>
+											<td class="hide-for-small-only"></td>
+											<td class="hide-for-small-only"></td>
+											<td class="hide-for-small-only"></td>
+											<td class="hide-for-small-only"></td>
+											<td class="hide-for-small-only"></td>
+											<td class="hide-for-small-only"></td>
+											<td class="hide-for-small-only"></td>
+											<td class="hide-for-small-only"></td>
+											<td class="hide-for-small-only"></td>
 										</tr>';
 								}
 							}
@@ -209,12 +212,9 @@ echo pageStart('module-admin', $controller->getPageTitle()); ?>
 						</tbody>
 					</table>
 				</div>
-				<div class="cell">
-					<button class="button" type="submit">
-						<i class="<?php echo $iconStyle; ?> fa-save"></i>
-						<?php echo KT_I18N::translate('Save'); ?>
-					</button>
-				</div>
+
+				<?php echo singleButton('', 1); ?>
+
 			</div>
 		</form>
 

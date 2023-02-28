@@ -42,7 +42,7 @@ function pageStart($title, $pageTitle = '', $includeTitle = 'y', $subTitle = '',
 	}
 
 	if ($subTitle !== '') {
-		$subTitle = '<h4>' . $subTitle . '</h4>';
+		$subTitle = '<h5>' . $subTitle . '</h5>';
 	}
 
 	return '
@@ -62,7 +62,7 @@ function pageStart($title, $pageTitle = '', $includeTitle = 'y', $subTitle = '',
  * print end of all pages
  */
  function pageClose() {
- 	'</div>';
+	'</div>';
  }
 
 /**
@@ -129,9 +129,9 @@ function autocompleteHtml($suffix, $type, $tree, $valueInput, $placeHolder, $inp
 				if ($other) {$html .= $other;}
 			$html .= '>
 			<input
- 				type="hidden"
- 				name="' . $inputName . '"
- 				id="selectedValue-' . $suffix . '"';
+				type="hidden"
+				name="' . $inputName . '"
+				id="selectedValue-' . $suffix . '"';
 				if ($valueHidden) {$html .= 'value="' . $valueHidden . '"';}
 				if ($validator) {$html .= $validator;}
 			$html .= '>
@@ -154,54 +154,75 @@ function autocompleteHtml($suffix, $type, $tree, $valueInput, $placeHolder, $inp
  *
  * @return string[]
  */
-function singleButton($title = '') {
-   global $iconStyle; ?>
+function singleButton($title = '', $note = '') {
+   global $iconStyle;
 
-	<?php switch ($title) {
-		   	case 'Save':
-		   	default:
-		   	$title = 'Save';
-				echo '
-					<button class="button primary" type="submit">
-						<i class="' . $iconStyle . ' fa-save"></i>' .
-				   	KT_I18N::translate($title);
+   if ($note) {
+		switch ($note) {
+			case '1':
+				$noteText = KT_I18n::translate('
+					Note: This save button only records changes to the visisble modules above. 
+					Modules on other pages of the table are not saved.
+				');
 				break;
-			case 'Show':
-				echo '
-					<button class="button primary" type="submit">
-						<i class="' . $iconStyle . ' fa-eye"></i>' .
-				   	KT_I18N::translate($title);
-				break;
-			case 'Continue':
-			   echo '
-					<button class="button" type="submit">
-						<i class="' . $iconStyle . ' fa-play"></i>' .
-				   	KT_I18N::translate($title);
-				break;
-			case 'Back':
-				echo '
-					<button class="button primary" type="button" onclick="history.back()">
-						<i class="' . $iconStyle . ' fa-arrow-left"></i>' .
-				   	KT_I18N::translate($title);
-				break;
+	   }
+	} ?>
 
-			case 'Next':
-			case 'Import':
-			case 'Merge':
-			   echo '
-				   <button class="button primary" type="submit">' .
-				   	KT_I18N::translate($title) . '
-						<i class="' . $iconStyle . ' fa-arrow-right"></i>';
-				break;
-			case 'Save new order':
-			   echo '
-				   <button class="button primary" type="submit">
-						<i class="' . $iconStyle . ' fa-bars"></i>' .
-				   	KT_I18N::translate($title);
-				break;
+		<div class="cell medium-2">
+
+			<?php switch ($title) {
+				case 'Save':
+				default:
+				$title = 'Save';
+					echo '
+						<button class="button primary" type="submit">
+							<i class="' . $iconStyle . ' fa-save"></i>' .
+						KT_I18N::translate($title);
+					break;
+				case 'Show':
+					echo '
+						<button class="button primary" type="submit">
+							<i class="' . $iconStyle . ' fa-eye"></i>' .
+						KT_I18N::translate($title);
+					break;
+				case 'Continue':
+				   echo '
+						<button class="button" type="submit">
+							<i class="' . $iconStyle . ' fa-play"></i>' .
+						KT_I18N::translate($title);
+					break;
+				case 'Back':
+					echo '
+						<button class="button primary" type="button" onclick="history.back()">
+							<i class="' . $iconStyle . ' fa-arrow-left"></i>' .
+						KT_I18N::translate($title);
+					break;
+
+				case 'Next':
+				case 'Import':
+				case 'Merge':
+				   echo '
+					   <button class="button primary" type="submit">' .
+						KT_I18N::translate($title) . '
+							<i class="' . $iconStyle . ' fa-arrow-right"></i>';
+					break;
+				case 'Save new order':
+				   echo '
+					   <button class="button primary" type="submit">
+							<i class="' . $iconStyle . ' fa-bars"></i>' .
+						KT_I18N::translate($title);
+					break;
 			} ?>
 
-	   </button>
+			</button>
+		</div>
+
+	   <?php if ($note) { ?>
+			<div class="cell medium-9 callout warning">
+				<?php echo $noteText; ?>
+			</div>
+	   <?php } ?>
+	
 
    <?php
 }
@@ -347,8 +368,8 @@ function relatedPages($links, $self = '') {
 
 	// remove summary page and links to self
 	foreach ($links as $key => $item) {
-	    if (strstr($key, 'admin_summary_') || $key = $self) {
-	        unset($links[$key]);
+		if (strstr($key, 'admin_summary_') || $key = $self) {
+			unset($links[$key]);
 		}
 	}
 
