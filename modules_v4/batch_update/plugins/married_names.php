@@ -136,7 +136,7 @@ class married_names_bu_plugin extends base_plugin
 					</option>
 			</select>
 		</div>
-		<div class="cell callout medium-6"></div>
+		<div class="cell medium-6"></div>
 
 		<button class="button" onchange="this.form.submit();" name="start" value="start">
 			<i class="<?php echo $iconStyle; ?> fa-play-circle"></i>

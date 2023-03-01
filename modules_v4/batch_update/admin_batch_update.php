@@ -158,128 +158,132 @@ class batch_update
 		// HTML common to all pages
 		echo self::getJavascript();
 		include KT_THEME_URL . 'templates/adminData.php';
+
 		$start = KT_Filter::get('start') ? KT_Filter::get('start') : '';
 
 		echo relatedPages($moduleTools, 'module.php?mod=batch_update&amp;mod_action=admin_batch_update');
 
 		echo pageStart('batch_update', KT_I18N::translate('Batch update')); ?>
 
-		<div class="cell callout info-help">
-			<?php echo /* I18N: Help text for Batch update tools. */ KT_I18N::translate('These tools can help fix common issues in GEDCOM data, if used with caution.'); ?>
-		</div>
+			<div class="cell callout info-help">
+				<?php echo /* I18N: Help text for Batch update tools. */ KT_I18N::translate('These tools can help fix common issues in GEDCOM data, if used with caution.'); ?>
+			</div>
 
-		<form class="cell" id="batch_update_form" action="module.php" method="get">
-			<input type="hidden" name="mod" value="batch_update">
-			<input type="hidden" name="mod_action" value="admin_batch_update">
-			<input type="hidden" name="xref"   value="<?php echo $this->xref; ?>">
-			<input type="hidden" name="action" value="">
-			<input type="hidden" name="data"   value="">
+			<form class="cell" id="batch_update_form" action="module.php" method="get">
+				<input type="hidden" name="mod" value="batch_update">
+				<input type="hidden" name="mod_action" value="admin_batch_update">
+				<input type="hidden" name="xref"   value="<?php echo $this->xref; ?>">
+				<input type="hidden" name="action" value="">
+				<input type="hidden" name="data"   value="">
+				<input type="hidden" name="start"  value="<?php echo $start; ?>">
 
-			<div class="grid-x grid-margin-x">
-				<div class="cell medium-2">
-					<label for="gedID"><?php echo KT_I18N::translate('Family tree'); ?></label>
-				</div>
-				<div class="cell medium-4">
-					<form method="post" action="#" name="tree">
-						<?php echo select_edit_control('ged', KT_Tree::getNameList(), '', KT_GEDCOM, 'onchange="reset_reload();"'); ?>
-					</form>
-				</div>
-				<div class="cell callout medium-6 info-help">
-					<?php echo KT_I18N::translate('If you have multiple family trees, select the one you want to edit here'); ?>
-				</div>
-
-				<div class="cell medium-2">
-					<label>
-						<?php echo KT_I18N::translate('Select a tool'); ?>
-					</label>
-				</div>
-				<div class="cell medium-4">
-					<select name="plugin" onchange="reset_reload();">
-						<?php  if (!$this->plugin) { ?>
-							<option value="" selected="selected"></option>
-						<?php }
-						foreach ($this->plugins as $class => $plugin) { ?>
-							<option 
-								value="<?php echo $class; ?>"
-								<?php echo ($this->plugin == $class ? ' selected="selected"' : ''); ?>
-							>
-								<?php echo $plugin->getName(); ?>
-							</option>
-						<?php } ?>
-					</select>
-				</div>
-				<?php if ($this->PLUGIN) { ?>
+				<div class="grid-x grid-margin-x">
+					<div class="cell medium-2">
+						<label for="gedID"><?php echo KT_I18N::translate('Family tree'); ?></label>
+					</div>
+					<div class="cell medium-4">
+						<form method="post" action="#" name="tree">
+							<?php echo select_edit_control('ged', KT_Tree::getNameList(), '', KT_GEDCOM, 'onchange="reset_reload();"'); ?>
+						</form>
+					</div>
 					<div class="cell callout medium-6 info-help">
-						<?php echo $this->PLUGIN->getDescription(); ?>
+						<?php echo KT_I18N::translate('If you have multiple family trees, select the one you want to edit here'); ?>
 					</div>
-				<?php } else { ?>
-					<div class="cell medium-6"></div>
-				<?php }
 
-				if (!get_user_setting(KT_USER_ID, 'auto_accept')) { ?>
-					<div class="cell callout alert">
-						<?php echo KT_I18N::translate('
-							Your user account does not have "automatically approve changes" enabled.  
-							You will only be able to change one record at a time.
-						'); ?>
+					<div class="cell medium-2">
+						<label>
+							<?php echo KT_I18N::translate('Select a tool'); ?>
+						</label>
 					</div>
-				<?php }
-
-				// If a plugin is selected, display the details
-				if ($this->PLUGIN) {
-					$this->PLUGIN->getOptionsForm();
-
-					if ('_all' == substr($this->action, -4)) {
-						// Reset - otherwise we might "undo all changes", which refreshes the
-						// page, which makes them all again! ?>
-						<script>
-							reset_reload();
-						</script>
-					<?php } else {
-
-						if ($start) {
-							if ($this->curr_xref) {
-								// Create an object, so we can get the latest version of the name.
-								$object = KT_GedcomRecord::getInstance($this->curr_xref);
-								$object->setGedcomRecord($this->record); ?>
-
-								<div class="grid-x grid-margin-y" id="batch_update-results">
-									<div class="cell">
-										<?php self::createSubmitButton(KT_I18N::translate('Previous'), $this->prev_xref); ?>
-										<?php self::createSubmitButton(KT_I18N::translate('Next'), $this->next_xref); ?>
-
-										<a href="<?php echo $object->getHtmlUrl(); ?>">
-											<span class="bu_name"><?php echo $object->getFullName(); ?></span>
-										</a>
-									</div>
-
-									<div class="cell">
-										<?php echo $this->PLUGIN->getActionPreview($this->curr_xref, $this->record); ?>
-									</div>
-
-									<?php if (get_user_setting(KT_USER_ID, 'auto_accept')) { ?>
-										<div class="cell callout alert">
-											<?php echo KT_I18N::translate('
-												You should create a backup GEDCOM file before using the <strong>Update all</strong> option.
-											'); ?>
-										</div>
-									<?php }
-									echo implode('', $this->PLUGIN->getActionButtons($this->curr_xref, $this->record)); ?>
-
-								</div>
-
-							<?php } else { ?>
-								<div id="batch_update-results" class="cell callout warning">
-									<?php echo KT_I18N::translate('Nothing found'); ?>
-								</div>
+					<div class="cell medium-4">
+						<select name="plugin" onchange="reset_reload();">
+							<?php  if (!$this->plugin) { ?>
+								<option value="" selected="selected"></option>
 							<?php }
-						}
-					}
-				} ?>
-			</form>
-		</div>
+							foreach ($this->plugins as $class => $plugin) { ?>
+								<option 
+									value="<?php echo $class; ?>"
+									<?php echo ($this->plugin == $class ? ' selected="selected"' : ''); ?>
+								>
+									<?php echo $plugin->getName(); ?>
+								</option>
+							<?php } ?>
+						</select>
+					</div>
+					<?php if ($this->PLUGIN) { ?>
+						<div class="cell callout medium-6 info-help">
+							<?php echo $this->PLUGIN->getDescription(); ?>
+						</div>
+					<?php } else { ?>
+						<div class="cell medium-6"></div>
+					<?php }
 
-	<?php }
+					if (!get_user_setting(KT_USER_ID, 'auto_accept')) { ?>
+						<div class="cell callout alert">
+							<?php echo KT_I18N::translate('
+								Your user account does not have "automatically approve changes" enabled.  
+								You will only be able to change one record at a time.
+							'); ?>
+						</div>
+					<?php }
+
+					// If a plugin is selected, display the details
+					if ($this->PLUGIN) {
+						$this->PLUGIN->getOptionsForm();
+
+						if ('_all' == substr($this->action, -4)) {
+							// Reset - otherwise we might "undo all changes", which refreshes the
+							// page, which makes them all again! ?>
+							<script>
+								reset_reload();
+							</script>
+						<?php } else {
+
+							if ($start) {
+								if ($this->curr_xref) {
+									// Create an object, so we can get the latest version of the name.
+									$object = KT_GedcomRecord::getInstance($this->curr_xref);
+									$object->setGedcomRecord($this->record); ?>
+
+									<div class="grid-x grid-margin-y" id="batch_update-results">
+										<div class="cell">
+											<?php self::createSubmitButton(KT_I18N::translate('Previous'), $this->prev_xref); ?>
+											<?php self::createSubmitButton(KT_I18N::translate('Next'), $this->next_xref); ?>
+
+											<a href="<?php echo $object->getHtmlUrl(); ?>">
+												<span class="bu_name"><?php echo $object->getFullName(); ?></span>
+											</a>
+										</div>
+
+										<div class="cell">
+											<?php echo $this->PLUGIN->getActionPreview($this->curr_xref, $this->record); ?>
+										</div>
+
+										<?php if (get_user_setting(KT_USER_ID, 'auto_accept')) { ?>
+											<div class="cell callout alert">
+												<?php echo KT_I18N::translate('
+													You should create a backup GEDCOM file before using the <strong>Update all</strong> option.
+												'); ?>
+											</div>
+										<?php }
+										echo implode('', $this->PLUGIN->getActionButtons($this->curr_xref, $this->record)); ?>
+
+									</div>
+
+								<?php } else { ?>
+									<div id="batch_update-results" class="cell callout warning">
+										<?php echo KT_I18N::translate('Nothing found'); ?>
+									</div>
+								<?php }
+							}
+						}
+					} ?>
+				</form>
+			</div>
+
+		<?php echo pageClose();
+
+	}
 
 	// Find the next record that needs to be updated
 	public function findNextXref($xref)

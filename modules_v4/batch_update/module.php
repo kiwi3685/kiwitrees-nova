@@ -51,7 +51,7 @@ class batch_update_KT_Module extends KT_Module implements KT_Module_Config{
 						if (jQuery("#batch_update-page pre").length != 0) {
 							jQuery("html, body").animate({
 								scrollTop: jQuery("#batch_update-page pre").offset().top
-							}, 2000);
+							}, 0);
 						}
 					')
 				;
