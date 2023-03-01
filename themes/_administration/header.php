@@ -80,7 +80,7 @@ $this
 
 	<body id="body">
 		<nav id="admin-head" class="grid-x">
-			<div class="top-bar first-top-bar">
+			<div class="cell top-bar first-top-bar">
 				<div class="top-bar-left">
 					<ul class="dropdown menu" data-dropdown-menu>
 						<li class="show-for-large">
@@ -128,7 +128,7 @@ $this
 					</ul>
 				</div>
 			</div>
-			<div class="top-bar second-top-bar">
+			<div class="cell top-bar second-top-bar">
 				<div id="admin-title" class="top-bar-left text-center h3">
 					<?php echo KT_I18N::translate('Administration'); ?>
 				</div>
