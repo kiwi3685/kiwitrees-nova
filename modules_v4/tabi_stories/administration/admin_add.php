@@ -123,7 +123,7 @@ echo pageStart($this->getName(), $controller->getPageTitle()); ?>
 	</div>
 	<div class="cell medium-4">
 		<form id="tree" method="post" action="#" name="tree">
-			<?php echo select_ged_control('gedID', KT_Tree::getIdList(), null, $tree, ' onchange="tree.submit();"'); ?>
+			<?php echo select_ged_control('gedID', KT_Tree::getIdList(), null, $gedID, ' onchange="tree.submit();"'); ?>
 		</form>
 	</div>
 	<div class="cell medium-6">

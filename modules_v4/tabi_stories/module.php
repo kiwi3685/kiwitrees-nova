@@ -66,7 +66,7 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 			case 'admin_config':
 			case 'admin_edit':
 				require KT_ROOT . KT_MODULES_DIR . $this->getName() . '/administration/' . $mod_action . '.php';
-				break;			case 'admin_edit':
+				break;
 				$this->edit();
 				break;
 			case 'show_list':
