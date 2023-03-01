@@ -50,15 +50,15 @@ class tabi_album_KT_Module extends KT_Module implements KT_Module_IndiTab, KT_Mo
 	// Extend KT_Module
 	public function modAction($mod_action) {
 		switch($mod_action) {
-		case 'admin_config':
-			$this->config();
-			break;
-		case 'admin_reset':
-			$this->album_reset();
-			$this->config();
-			break;
-		default:
-			header('HTTP/1.0 404 Not Found');
+			case 'admin_config':
+				require KT_ROOT . KT_MODULES_DIR . $this->getName() . '/administration/' . $mod_action . '.php';
+				break;
+			case 'admin_reset':
+				$this->album_reset();
+				$this->config();
+				break;
+			default:
+				header('HTTP/1.0 404 Not Found');
 		}
 	}
 
@@ -86,7 +86,7 @@ class tabi_album_KT_Module extends KT_Module implements KT_Module_IndiTab, KT_Mo
 			$ALBUM_GROUPS = 4;
 		}
 
-		require_once KT_ROOT . KT_MODULES_DIR . $this->getName() . '/album_print_media.php';
+		require_once KT_ROOT . KT_MODULES_DIR . $this->getName() . '/administration/album_print_media.php';
 		$html='<div id="'.$this->getName().'_content">';
 			//Show Album header Links
 			if (KT_USER_CAN_EDIT) {
@@ -205,145 +205,5 @@ class tabi_album_KT_Module extends KT_Module implements KT_Module_IndiTab, KT_Mo
 		return '';
 	}
 
-	private function config() {
-		require KT_ROOT . 'includes/functions/functions_edit.php';
-		$controller = new KT_Controller_Page();
-		$controller
-			->restrictAccess(KT_USER_IS_ADMIN)
-			->setPageTitle($this->getTitle())
-			->pageHeader();
 
-		if (KT_Filter::postBool('save')) {
-			$ALBUM_GROUPS = KT_Filter::post('NEW_ALBUM_GROUPS');
-			$ALBUM_TITLES = KT_Filter::postArray('NEW_ALBUM_TITLES');
-			$ALBUM_OPTIONS = KT_Filter::postArray('NEW_ALBUM_OPTIONS');
-			if (isset($ALBUM_GROUPS)) set_module_setting($this->getName(), 'ALBUM_GROUPS', $ALBUM_GROUPS);
-			if (!empty($ALBUM_TITLES)) set_module_setting($this->getName(), 'ALBUM_TITLES', serialize($ALBUM_TITLES));
-			if (!empty($ALBUM_OPTIONS)) set_module_setting($this->getName(), 'ALBUM_OPTIONS', serialize($ALBUM_OPTIONS));
-
-			AddToLog($this->getTitle().' set to new values', 'config');
-		}
-		$SHOW_FIND = KT_Filter::post('show');
-		$HIDE_FIND = KT_Filter::post('hide');
-		$ALBUM_GROUPS = get_module_setting($this->getName(), 'ALBUM_GROUPS');
-		$ALBUM_TITLES = unserialize(get_module_setting($this->getName(), 'ALBUM_TITLES'));
-		$ALBUM_OPTIONS = unserialize(get_module_setting($this->getName(), 'ALBUM_OPTIONS'));
-
-		if (!isset($ALBUM_GROUPS)) {
-			$ALBUM_GROUPS = 4;
-		}
-
-		if (empty($ALBUM_TITLES)) {
-			$ALBUM_TITLES = array(
-				KT_I18N::translate('Photos'),
-				KT_I18N::translate('Documents'),
-				KT_I18N::translate('Census'),
-				KT_I18N::translate('Other')
-			);
-		}
-
-		$default_groups = array(
-				KT_I18N::translate('Other'),
-				KT_I18N::translate('Other'),
-				KT_I18N::translate('Documents'),
-				KT_I18N::translate('Documents'),
-				KT_I18N::translate('Other'),
-				KT_I18N::translate('Documents'),
-				KT_I18N::translate('Census'),
-				KT_I18N::translate('Documents'),
-				KT_I18N::translate('Documents'),
-				KT_I18N::translate('Documents'),
-				KT_I18N::translate('Census'),
-				KT_I18N::translate('Census'),
-				KT_I18N::translate('Documents'),
-				KT_I18N::translate('Other'),
-				KT_I18N::translate('Photos'),
-				KT_I18N::translate('Photos'),
-				KT_I18N::translate('Photos'),
-				KT_I18N::translate('Other')
-		);
-
-		if (empty($ALBUM_OPTIONS))	{
-			$ALBUM_OPTIONS = array_combine(array_keys(KT_Gedcom_Tag::getFileFormTypes()), $default_groups);
-		}
-
-		$html = '<div id="album_config">';
-			$html .= '<a class="current faq_link" href="' . KT_KIWITREES_URL . '/faqs/modules-faqs/album/" target="_blank" rel="noopener noreferrer" title="'. KT_I18N::translate('View FAQ for this page.'). '">'. KT_I18N::translate('View FAQ for this page.'). '<i class="' . $iconStyle . ' fa-comments"></i></a>
-			<h2>' .$controller->getPageTitle(). '</h2>
-			<h3>' . KT_I18N::translate('Configure display of grouped media items using GEDCOM media tag TYPE.').  '</h3>';
-
-			// check for emty groups
-			foreach ($ALBUM_TITLES as $value) {
-				if(!in_array($value, $ALBUM_OPTIONS)) echo '<script>alert(\''.KT_I18N::translate('You can not have any empty group.').'\')</script>';
-			}
-
-			$html .= '<form method="post" name="album_form" action="'.$this->getConfigLink().'">
-				<input type="hidden" name="save" value="1">
-				<div id="album_groups">
-					<label for="NEW_ALBUM_GROUPS">'.KT_I18N::translate('Number of groups').'</label>'.
-					select_edit_control('NEW_ALBUM_GROUPS',
-						array(
-							0=>KT_I18N::number(0),
-							1=>KT_I18N::number(1),
-							2=>KT_I18N::number(2),
-							3=>KT_I18N::number(3),
-							4=>KT_I18N::number(4),
-							5=>KT_I18N::number(5),
-							6=>KT_I18N::number(6),
-							7=>KT_I18N::number(7)
-						), null, $ALBUM_GROUPS);
-
-				$html .= '</div>
-				<div id="album_options">
-					<label for="NEW_ALBUM_OPTIONS">'.KT_I18N::translate('Match groups to types').'</label>
-					<table>';
-						$html .= '<tr><th colspan="2" rowspan="2"></th><th colspan="' . $ALBUM_GROUPS . '">' . KT_I18N::translate('Groups (These must always be English titles)') . '</th></tr>';
-							for ($i = 0; $i < $ALBUM_GROUPS; $i++) {
-								$html .= '<th style="min-width:130px;"><input type="input" name="NEW_ALBUM_TITLES[]" value="' . (isset($ALBUM_TITLES[$i]) ? $ALBUM_TITLES[$i] : "") .  '"></th>';
-							}
-						$html .= '</tr>';
-							$html .= '<tr><th rowspan="19" style="max-width:25px;"><span class="rotate">' . KT_I18N::translate('Types') . '</span></th></tr>';
-							foreach ($ALBUM_OPTIONS as $key=>$value) {
-								$translated_type = KT_Gedcom_Tag::getFileFormTypeValue($key);
-								$html .= '
-									<tr>
-										<td>' .$translated_type. '</td>';
-										for ($i = 0; $i < $ALBUM_GROUPS; $i++) {
-											if (isset($ALBUM_TITLES[$i]) && $value == $ALBUM_TITLES[$i]) {
-												$html .= '<td><input type="radio" name="NEW_ALBUM_OPTIONS[' .$key. ']" value="' . (isset($ALBUM_TITLES[$i]) ? $ALBUM_TITLES[$i] : "") . '" checked="checked"></td>';
-											} else {
-												$html .= '<td><input type="radio" name="NEW_ALBUM_OPTIONS[' .$key. ']" value="' . (isset($ALBUM_TITLES[$i]) ? $ALBUM_TITLES[$i] : "") . '"></td>';
-											}
-										}
-									$html .= '</tr>
-								';
-							}
-					$html .= '</table>
-				</div>
-				<button class="btn btn-primary save" type="submit">
-					<i class="' . $iconStyle . ' fa-save"></i>'.
-					KT_I18N::translate('Save').'
-				</button>
-			</form>
-			<button class="btn btn-primary reset" type="submit" onclick="if (confirm(\''.KT_I18N::translate('The settings will be reset to default (for all trees). Are you sure you want to do this?').'\')) window.location.href=\'module.php?mod='.$this->getName().'&amp;mod_action=admin_reset\';">
-				<i class="' . $iconStyle . ' fa-sync"></i>'.
-				KT_I18N::translate('Reset').'
-			</button>
-			<form method="post" name="find_show" action="'.$this->getConfigLink().'">
-				<div id="album_find">
-				    <input type="hidden" name="show">
-				    <a class="current" href="javascript:document.find_show.submit()">'.KT_I18N::translate('Show media objects with no TYPE'). '</a>';
-					if (isset($SHOW_FIND) && !isset($HIDE_FIND)) {
-						$html .= '<div id="show_list">' .$this->find_no_type(). '</div>
-						<input type="submit" name="hide" value="'.KT_I18N::translate('close'). '">';
-					}
-				$html .= '</div>
-			</form>
-		</div>';
-		// output
-		ob_start();
-		$html .= ob_get_contents();
-		ob_end_clean();
-		echo $html;
-	}
 }
