@@ -27,8 +27,8 @@ if (!defined('KT_KIWITREES')) {
 }
 
 class sitemap_KT_Module extends KT_Module implements KT_Module_Config {
-	const RECORDS_PER_VOLUME=500;    // Keep sitemap files small, for memory, CPU and max_allowed_packet limits.
-	const CACHE_LIFE        =1209600; // Two weeks
+	const RECORDS_PER_VOLUME = 500;    // Keep sitemap files small, for memory, CPU and max_allowed_packet limits.
+	const CACHE_LIFE         = 1209600; // Two weeks
 
 	// Extend KT_Module
 	public function getTitle() {
@@ -48,7 +48,7 @@ class sitemap_KT_Module extends KT_Module implements KT_Module_Config {
 			break;
 		case 'generate':
 			Zend_Session::writeClose();
-			$this->generate(safe_GET('file'));
+			$this->generate(KT_Filter::get('file'));
 			break;
 		default:
 			header('HTTP/1.0 404 Not Found');
@@ -303,12 +303,12 @@ class sitemap_KT_Module extends KT_Module implements KT_Module_Config {
 					<ul>
 						<!-- This list comes from http://en.wikipedia.org/wiki/Sitemaps -->
 						<li>
-							<a target="_new" href="http://www.bing.com/webmaster/ping.aspx?siteMap=<?php echo $site_map_url2; ?>">
+							<a target="_new" href="https://www.bing.com/webmaster/ping.aspx?siteMap=<?php echo $site_map_url2; ?>">
 								Bing
 							</a>
 						</li>
 						<li>
-							<a target="_new" href="http://www.google.com/webmasters/tools/ping?sitemap=<?php echo $site_map_url2; ?>">
+							<a target="_new" href="https://www.google.com/webmasters/tools/ping?sitemap=<?php echo $site_map_url2; ?>">
 								Google
 							</a>
 						</li>
