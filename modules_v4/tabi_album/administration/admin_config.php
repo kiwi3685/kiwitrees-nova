@@ -195,10 +195,16 @@ echo pageStart(
 		</div>
 	</form>
 	<div class="cell">
-		<button class="button primary reset" type="submit" onclick="if (confirm('<?php echo KT_I18N::translate('The settings will be reset to default (for all trees). Are you sure you want to do this?'); ?>")) window.location.href=\'module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_reset';">
+		<button 
+			class="button primary reset" 
+			type="submit" 
+			onclick="if (confirm('<?php echo KT_I18N::translate('The settings will be reset to default (for all trees). Are you sure you want to do this?'); ?>')) window.location.href='module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_reset';"
+		>
 			<i class="<?php echo $iconStyle; ?> fa-rotate"></i>
 			<?php echo KT_I18N::translate('Reset'); ?>
 		</button>
+
+
 	</div>
 	<form class="cell" method="post" name="find_show" action="<?php echo $this->getConfigLink(); ?>">
 		<div id="album_find">

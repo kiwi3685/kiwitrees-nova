@@ -55,7 +55,7 @@ class tabi_album_KT_Module extends KT_Module implements KT_Module_IndiTab, KT_Mo
 				break;
 			case 'admin_reset':
 				$this->album_reset();
-				$this->config();
+				require KT_ROOT . KT_MODULES_DIR . $this->getName() . '/administration/admin_config.php';
 				break;
 			default:
 				header('HTTP/1.0 404 Not Found');
