@@ -72,7 +72,7 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 				break;
 			case 'admin_delete':
 				$this->delete();
-				$this->config();
+				require KT_ROOT . KT_MODULES_DIR . $this->getName() . '/administration/admin_config.php';
 				break;
 			default:
 				header('HTTP/1.0 404 Not Found');
