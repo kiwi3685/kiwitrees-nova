@@ -371,7 +371,7 @@ function detailedView($pid)
  */
 function header_links($META_DESCRIPTION, $META_ROBOTS, $META_GENERATOR, $LINK_CANONICAL)
 {
-	global $KT_TREE, $view;
+	global $KT_TREE, $view, $controller;
 	$header_links = '';
 	if (!empty($LINK_CANONICAL)) {
 		$header_links .= '<link rel="canonical" href="' . $LINK_CANONICAL . '">';
