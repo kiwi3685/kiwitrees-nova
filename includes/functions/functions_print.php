@@ -378,15 +378,14 @@ function header_links($META_DESCRIPTION, $META_ROBOTS, $META_GENERATOR, $LINK_CA
 	}
 	if (!empty($META_DESCRIPTION)) {
 		global $controller, $ctype;
-		$pageTitle = controller->getPageTitle() ? strip_tags($controller->getPageTitle() : '';
 
 		switch ($ctype) {
 			case '':
 				if ('simple' != $view) {
 					if ($KT_TREE) {
-						$header_links .= '<meta name="description" content="' . htmlspecialchars($pageTitle . ' - ' . $KT_TREE->tree_title_html)) . '">';
+						$header_links .= '<meta name="description" content="' . htmlspecialchars(strip_tags($controller->getPageTitle() . ' - ' . $KT_TREE->tree_title_html)) . '">';
 					} else {
-						$header_links .= '<meta name="description" content="' . htmlspecialchars($pageTitle)) . '">';
+						$header_links .= '<meta name="description" content="' . htmlspecialchars(strip_tags($controller->getPageTitle())) . '">';
 					}
 				}
 
