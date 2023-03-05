@@ -141,7 +141,7 @@ echo pageStart(
 			</div>
 			<fieldset class="cell fieldset">
 				<legend><?php echo KT_I18N::translate('Match groups to types'); ?></legend>
-				<div class="grid-x">
+				<div class="grid-x table-scroll">
 					<table class="cell" id="album-config">
 						<thead>
 							<tr>
