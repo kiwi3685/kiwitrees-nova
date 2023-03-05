@@ -425,16 +425,34 @@ function login_link()
 }
 
 // Generate a logout link
-function logout_link($icon = true)
+function logout_link($icon = true, $mobile = false)
 {
 	global $SEARCH_SPIDER, $iconStyle;
 
 	if ($SEARCH_SPIDER) {
 		return '';
 	}
-	$icon ? $icon = '<i class="' . $iconStyle . ' fa-lock-open show-for-medium"></i>' : $icon = '';
+	$icon ? $icon = '<i class="' . $iconStyle . ' fa-lock-open"></i>' : $icon = '';
 
-	return '<a href="index.php?logout=1">' . $icon . KT_I18N::translate('Logout') . '</a>';
+	if ($mobile == 'mobile') {
+		return '
+			<li>
+				<a href="index.php?logout=1">' . 
+					$icon . '
+				</a>
+				<span class="mobileLabel">' . KT_I18N::translate('Logout') . '</span>
+			</li>
+		';
+	} else {
+		return '
+			<a href="index.php?logout=1">' . 
+				$icon . KT_I18N::translate('Logout') . '
+			</a>
+		';
+	}
+
+
+	
 }
 
 // generate Who is online list

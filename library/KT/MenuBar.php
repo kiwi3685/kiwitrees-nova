@@ -28,8 +28,12 @@ if (!defined('KT_KIWITREES')) {
 
 class KT_MenuBar {
 
-	public static function getGedcomMenu() {
-		$menu = new KT_Menu(KT_I18N::translate('Home'), 'index.php?ged=' . KT_GEDURL, 'menu-tree');
+	public static function getGedcomMenu($mobile = false) {
+		if ($mobile == 'mobile') {
+			$menu = new KT_Menu(KT_I18N::translate('Home'), '#', 'menu-tree');
+		} else {
+			$menu = new KT_Menu(KT_I18N::translate('Home'), 'index.php?ged=' . KT_GEDURL, 'menu-tree');
+		}
 		$menu->addClass('', '', 'fa-house');
 		if (count(KT_Tree::getAll()) > 1 || KT_Site::preference('ALLOW_CHANGE_GEDCOM')) {
 			foreach (KT_Tree::getAll() as $tree) {
@@ -220,14 +224,18 @@ class KT_MenuBar {
 		return $menu;
 	}
 
-	public static function getLanguageMenu() {
+	public static function getLanguageMenu($mobile = false) {
 		global $SEARCH_SPIDER;
 		$languages = KT_I18N::used_languages();
 
 		if ($SEARCH_SPIDER) {
 			return null;
 		} else {
-			$menu = new KT_Menu(KT_I18N::translate('Language'), '#', 'menu-language');
+			if ($mobile == 'mobile') {
+				$menu = new KT_Menu(KT_I18N::translate('Language'), '#', 'menu-language');
+			} else {
+				$menu = new KT_Menu(KT_I18N::translate('Language'), '#', 'menu-language');
+			}		
 			$menu->addClass('', '', 'fa-globe');
 
 			foreach ($languages as $lang=>$name) {

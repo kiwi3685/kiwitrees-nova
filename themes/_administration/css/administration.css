@@ -9413,8 +9413,7 @@ div[id$=-page] div.cell.titles {
 div.relatedPages {
 	border-bottom: 0.125rem solid #e6e6e6;
 	box-shadow: 0.25rem 0.25rem 0.5rem 0 #878787;
-	bottom: 1rem;
-	margin-top: 0.125rem;
+	margin-top: 1.5rem;
 }
 div.relatedPages label {
 	display: inline-block;
@@ -9426,6 +9425,22 @@ div.relatedPages .button.large-down-expanded {
 	margin: 0 0.125rem 0.125rem 0;
 	width: 13%;
 	white-space: nowrap;
+}
+div.relatedPages.hide-for-large {
+	box-shadow: none;
+}
+div.relatedPages.hide-for-large label {
+	display: block;
+	font-size: 0.9rem;
+	font-weight: normal;
+	line-height: 0;
+	margin: 0.5rem;
+	padding: 0;
+}
+div.relatedPages.hide-for-large .button.hollow.tiny {
+	font-size: 0.75rem;
+	margin: 0.25rem;
+	padding: 0.25rem;
 }
 
 /* standard colors as classes */
@@ -9472,65 +9487,116 @@ body main {
 	width: 10rem;
 }
 
-#admin-head {
+nav#admin-head {
 	background-color: #34689c;
 	color: #fefefe;
+	z-index: 1;
 }
-#admin-head .top-bar {
+nav#admin-head .top-bar {
 	width: 100%;
 }
-#admin-head .top-bar .top-bar-right .input-group {
+nav#admin-head .top-bar .top-bar-right .input-group {
 	margin-bottom: 0;
 }
-#admin-head .top-bar .top-bar-right .input-group svg.svg-inline--fa.fa-magnifying-glass {
+nav#admin-head .top-bar .top-bar-right .input-group svg.svg-inline--fa.fa-magnifying-glass {
 	color: #34689c;
 }
-#admin-head .top-bar .top-bar-left .menu a {
+nav#admin-head .top-bar .top-bar-left .menu a {
 	color: #fefefe;
 }
-#admin-head .top-bar .top-bar-left .menu a svg {
+nav#admin-head .top-bar .top-bar-left .menu a svg {
 	margin: 0 0.25rem;
 }
-#admin-head .top-bar .top-bar-left .menu .is-dropdown-submenu {
+nav#admin-head .top-bar .top-bar-left .menu .is-dropdown-submenu {
 	top: 70%;
 }
-#admin-head .top-bar .top-bar-left .menu .is-dropdown-submenu a {
+nav#admin-head .top-bar .top-bar-left .menu .is-dropdown-submenu a {
 	color: #1b1212;
 	font-size: 90%;
 	padding: 0.25rem;
 }
-#admin-head .top-bar .top-bar-left .menu .is-dropdown-submenu a:hover {
+nav#admin-head .top-bar .top-bar-left .menu .is-dropdown-submenu a:hover {
 	background-color: #e6e6e6;
 	color: #5da423;
 }
-#admin-head .top-bar .top-bar-left .menu li ul li svg {
+nav#admin-head .top-bar .top-bar-left .menu li ul li svg {
 	display: none;
 }
-#admin-head .top-bar .top-bar-left .menu li ul li span {
+nav#admin-head .top-bar .top-bar-left .menu li ul li span {
 	color: #1b1212;
 }
-#admin-head .title-bar {
-	/* for responsive menu */
-	background: none;
-	width: 100%;
-}
-#admin-head .title-bar div.reponsiveMenu {
-	margin: auto;
-}
-#admin-head .title-bar div.reponsiveMenu .title-bar-title {
-	display: inline-block;
-	vertical-align: middle;
-	font-weight: bold;
-	font-size: 1.25rem;
-	color: #fefefe;
-	margin: 0 0.5rem;
-}
-#admin-head #admin-title {
+nav#admin-head #admin-title {
 	background-color: #34689c;
 	color: #fefefe;
 	margin: 0;
+	padding: 0.5rem;
+}
+nav#admin-head div.hide-for-large {
+	background-color: #34689c;
+	position: fixed;
+}
+nav#admin-head div.hide-for-large ul.dropdown.menu {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	font-size: 1.25rem;
+	list-style: none;
+	justify-content: space-around;
+	margin: 0;
+	padding: 0.25rem 0.75rem;
+	width: 100%;
+}
+nav#admin-head div.hide-for-large ul.dropdown.menu svg.svg-inline--fa {
+	color: #fefefe;
+}
+nav#admin-head div.hide-for-large ul.dropdown.menu li,
+nav#admin-head div.hide-for-large ul.dropdown.menu li.is-dropdown-submenu-parent {
+	text-align: center;
+	width: 3rem;
+}
+nav#admin-head div.hide-for-large ul.dropdown.menu li a::after,
+nav#admin-head div.hide-for-large ul.dropdown.menu li.is-dropdown-submenu-parent a::after {
+	display: none;
+}
+nav#admin-head div.hide-for-large ul.dropdown.menu li span.mobileLabel,
+nav#admin-head div.hide-for-large ul.dropdown.menu li.is-dropdown-submenu-parent span.mobileLabel {
+	color: #fefefe;
+	display: inline-block;
+	font-size: 0.8rem;
+	text-align: center;
+	vertical-align: top;
+}
+nav#admin-head div.hide-for-large ul.dropdown.menu li ul.is-dropdown-submenu,
+nav#admin-head div.hide-for-large ul.dropdown.menu li.is-dropdown-submenu-parent ul.is-dropdown-submenu {
+	padding: 0.25rem 0.5rem;
+	top: 100%;
+}
+nav#admin-head div.hide-for-large ul.dropdown.menu li ul.is-dropdown-submenu li,
+nav#admin-head div.hide-for-large ul.dropdown.menu li.is-dropdown-submenu-parent ul.is-dropdown-submenu li {
+	padding: 0;
+	width: 100%;
+}
+nav#admin-head div.hide-for-large ul.dropdown.menu li ul.is-dropdown-submenu li a,
+nav#admin-head div.hide-for-large ul.dropdown.menu li.is-dropdown-submenu-parent ul.is-dropdown-submenu li a {
+	font-size: 1rem;
+	line-height: 1.25rem;
+	padding: 0;
+	text-align: initial;
+	white-space: nowrap;
+}
+nav#admin-head div.hide-for-large ul.dropdown.menu li ul.is-dropdown-submenu li a svg.svg-inline--fa,
+nav#admin-head div.hide-for-large ul.dropdown.menu li.is-dropdown-submenu-parent ul.is-dropdown-submenu li a svg.svg-inline--fa {
+	display: none;
+}
+nav#admin-head div.hide-for-large ul.dropdown.menu li ul.search,
+nav#admin-head div.hide-for-large ul.dropdown.menu li.is-dropdown-submenu-parent ul.search {
+	list-style-type: none;
+	margin: 0;
 }
 
+main .mobile-space {
+	height: 3rem;
+}
 main aside {
 	box-shadow: 0.25rem 0.25rem 0.5rem 0 #878787;
 	clip-path: inset(0 -1rem 0 0);
@@ -10469,7 +10535,7 @@ main #admin-content #tabi_album-page table#album-config {
 }
 main #admin-content #tabi_album-page table#album-config thead th,
 main #admin-content #tabi_album-page table#album-config thead th input {
-	max-width: 6rem;
+	max-width: 95%;
 	text-align: center;
 }
 main #admin-content #tabi_album-page table#album-config thead th.albumGroup {
@@ -10967,7 +11033,7 @@ input[type=radio]::before {
 	height: 1.25rem;
 	transform: scale(0);
 	transition: 120ms transform ease-in-out;
-	box-shadow: inset 1.25rem 1.25rem #5da423;
+	box-shadow: inset 1.25rem 1.25rem #34689c;
 }
 
 /* add tick mark */

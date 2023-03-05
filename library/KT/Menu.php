@@ -103,11 +103,13 @@ class KT_Menu {
 	// Get the menu as a simple list - for accessible interfaces, search engines and CSS menus
 	function getMenuAsList() {
 		global $iconStyle;
+
 		if ($iconStyle) {
-			$icon = '<i class="' . $iconStyle . ' ' . $this->iconclass . ' fa-fw show-for-medium"></i>';
+			$icon = '<i class="' . $iconStyle . ' ' . $this->iconclass . ' fa-fw"></i>';
 		} else {
 			$icon = '';
 		}
+
 		$link = '';
 		if ($this->link && strpos($this->label, "<a href") !== 0) {
 			if ($this->target !== null) {
@@ -282,6 +284,39 @@ class KT_Menu {
 			</ul>
 		';
 		return $option_link;
+	}
+
+	function getMobileMenu() {
+		global $iconStyle;
+
+		if ($iconStyle) {
+			$icon = '<i class="' . $iconStyle . ' ' . $this->iconclass . ' fa-fw"></i>';
+		} else {
+			$icon = '';
+		} ?>
+
+		<li>
+			<a href="<?php echo $this->link; ?>"><?php echo $icon; ?></a>
+			<span class="mobileLabel"><?php echo $this->label; ?></span>
+
+			<?php if ($this->submenus) { ?>
+				<ul class="vertical menu nested expanded">
+					<?php foreach ($this->submenus as $submenu) {
+						if ($submenu) {
+							if ($this->onclick !== null) {
+								$submenu->link .= "\" onclick=\"{$this->onclick}";
+							} ?>
+							
+							<li>
+								<a href="<?php echo $submenu->link; ?>"><?php echo $submenu->label; ?></a>
+							</li>
+
+						<?php }
+					} ?>
+				</ul>
+			<?php } ?>
+		</li>
+		<?php 
 	}
 
 }

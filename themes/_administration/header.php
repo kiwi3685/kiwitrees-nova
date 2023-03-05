@@ -59,6 +59,21 @@ $this
 			location.reload();
 		});
 
+		// Expand / close search field when on small device
+		jQuery(function() {
+		  jQuery(".search")
+		    .bind("click", function(event) {
+		      jQuery(".search-field").toggleClass("expand-search");
+
+		      // if the search field is expanded, focus on it
+		      if (jQuery(".search-field").hasClass("expand-search")) {
+		        jQuery(".search-field").focus();
+		      }
+		    })
+		});
+
+
+
 	');
 
 ?>
@@ -68,6 +83,7 @@ $this
 	<head>
 		<meta charset="utf-8" />
 		<meta http-equiv="x-ua-compatible" content="ie=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title><?php echo htmlspecialchars((string) $title); ?></title>
 		<link rel="icon" href="<?php echo KT_THEME_URL; ?>images/kt.png" type="image/png">
 		<link rel="stylesheet" href="<?php echo KT_DATATABLES_CSS; ?>">
@@ -80,7 +96,59 @@ $this
 
 	<body id="body">
 		<nav id="admin-head" class="grid-x">
-			<div class="cell top-bar first-top-bar">
+
+			<!-- Mobile top menu bar -->
+			<div class="cell hide-for-large">
+				<div class="grid-x">
+					<div class="cell">
+						<ul class="dropdown menu" data-dropdown-menu>
+							<li>
+								<a href="#" data-toggle="admin-menu">
+									<i class="<?php echo $iconStyle; ?> fa-bars"></i>
+								</a>
+								<span class="mobileLabel"><?php echo KT_I18N::translate('Menu'); ?></span>
+							</li>
+
+							<?php 
+							$gedcomMenu = KT_MenuBar::getGedcomMenu('mobile');
+							echo $gedcomMenu->getMobileMenu();
+
+							if (KT_USER_GEDCOM_ID) { ?>
+							<li>
+								<a href="individual.php?pid=<?php echo KT_USER_GEDCOM_ID; ?>&amp;ged=<?php echo KT_GEDURL; ?>">
+									<i class="<?php echo $iconStyle; ?> fa-male"></i>
+								</a>
+								<span class="mobileLabel"><?php echo KT_I18N::translate('Me'); ?></span>
+							</li>
+							<?php }
+
+							$language_menu = KT_MenuBar::getLanguageMenu('mobile');
+							echo $language_menu->getMobileMenu();
+
+							echo logout_link(true, 'mobile'); ?>
+
+							<li>
+								<form class="header-search" action="search.php" method="post">
+									<input type="hidden" name="action" value="general">
+									<input type="hidden" name="topsearch" value="yes">
+									<ul class="search">
+										<a href="#" data-toggle="searchInpput">
+											<i class="<?php echo $iconStyle; ?> fa-magnifying-glass"></i>
+										</a>
+										<li>
+											<input id="searchInpput" class="dropdown-pane" data-position="left" data-alignment="top" type="search" name="query" placeholder="<?php echo KT_I18N::translate('Search family tree'); ?>" data-dropdown data-auto-focus="true">
+										</li>
+									</ul>
+								</form>
+								<span class="mobileLabel"><?php echo KT_I18N::translate('Search'); ?></span>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<!-- Standard top menu bar -->
+			<div class="cell top-bar first-top-bar show-for-large">
 				<div class="top-bar-left">
 					<ul class="dropdown menu" data-dropdown-menu>
 						<li class="show-for-large">
@@ -128,25 +196,15 @@ $this
 					</ul>
 				</div>
 			</div>
-			<div class="cell top-bar second-top-bar">
-				<div id="admin-title" class="top-bar-left text-center h3">
-					<?php echo KT_I18N::translate('Administration'); ?>
-				</div>
+			<div id="admin-title" class="cell text-center h3 show-for-medium">
+				<?php echo KT_I18N::translate('Administration'); ?>
 			</div>
-			<!-- responsive menu -->
-			<div class="title-bar" data-hide-for="large" data-responsive-toggle="admin-menu" style="display: none;">
-				<div class="reponsiveMenu">
-					<button type="button" data-toggle="admin-menu">
-						<i class="menu-icon"></i>
-						<div class="title-bar-title"><?php echo KT_I18N::translate('Menu'); ?></div>
-					</button>
-				<div>
-			</div>
-		</nav>
 
+		</nav>
 		<main class="grid-x grid-padding-x">
+			<div class="cell mobile-space show-for-small-only"></div>
 			<aside class="cell large-2">
-				<ul id="admin-menu" class="vertical menu">
+				<ul id="admin-menu" class="vertical menu show-for-large" data-toggler="show-for-large">
 					<li class="admin-menu-title">
 						<a <?php echo (KT_SCRIPT_NAME == "admin.php" ? 'class="current" ' : ''); ?>href="admin.php">
 							<i class="<?php echo $iconStyle; ?> fa-gauge"></i>

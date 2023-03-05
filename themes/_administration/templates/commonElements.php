@@ -371,26 +371,33 @@ function relatedPages($links, $self = '') {
 		if (strstr($key, 'admin_summary_') || $key = $self) {
 			unset($links[$key]);
 		}
-	}
+	} ?>
 
-	$html =  '
-		<div class="grid-x relatedPages show-for-medium">
-			<div class="cell text-right">
-				<label>' .
-					KT_I18N::translate('Related pages') . '
-				</label>';
+	<div class="grid-x relatedPages show-for-large">
+		<div class="cell text-right">
+			<label>
+				<?php echo KT_I18N::translate('Related pages'); ?>
+			</label>
 
-				foreach ($links as $link => $title) {
-						$html .= '
-							<a href="' . $link. '" class="button small large-down-expanded">
-							' . $title . '
-						</a>';
-				}
-
-			$html .= '</div>
+			<?php foreach ($links as $link => $title) { ?>
+				<a href="<?php echo $link; ?>" class="button small large-down-expanded">
+					<?php echo $title; ?>
+				</a>
+			<?php } ?>
 		</div>
-	';
+	</div>
 
-	return $html;
-
+	<div class="grid-x relatedPages hide-for-large">
+		<div class="cell">
+			<label>
+				<?php echo KT_I18N::translate('Related pages'); ?>
+			</label>
+			<?php foreach ($links as $link => $title) { ?>
+				<a href="<?php echo $link; ?>" class="button tiny hollow primary">
+					<?php echo $title; ?>
+				</a>
+			<?php } ?>
+		</div>
+	</div>
+	<?php
 }
