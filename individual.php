@@ -182,7 +182,7 @@ if ($highlightImage) {
 					<div class="cell">
 						<div class="grid-x indiHeader">
 							<?php if ($highlightImage) { ?>
-								<div class="cell medium-3 large-2 small-text-center medium-text-left">
+								<div class="cell medium-3 large-2 text-center medium-text-left">
 									<?php echo $controller->record->displayImage(); ?>
 								</div>
 							<?php } ?>

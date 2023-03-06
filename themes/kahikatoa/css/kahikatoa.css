@@ -9860,12 +9860,6 @@ div[id$=-page] button[type=submit] {
 	max-width: 100%;
 	width: 10rem;
 }
-@media print, screen and (max-width: 64.06125em) {
-	#indi-page .indiHeader img {
-		height: 9rem;
-		margin: 1rem auto;
-	}
-}
 #indi-page .indiHeader i.icon-silhouette-M,
 #indi-page .indiHeader i.icon-silhouette-F,
 #indi-page .indiHeader i.icon-silhouette-U {
