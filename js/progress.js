@@ -1,6 +1,6 @@
 /**
  * Kiwitrees: Web based Family History software
- * Copyright (C) 2012 to 2022 kiwitrees.net
+ * Copyright (C) 2012 to 2023 kiwitrees.net
  *
  * Derived from http://talkerscode.com/webtricks/display-progress-bar-while-page-loads-using-jquery.php
  *

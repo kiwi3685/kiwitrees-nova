@@ -1,6 +1,6 @@
 /**
  * Kiwitrees: Web based Family History software
- * Copyright (C) 2012 to 2022 kiwitrees.net
+ * Copyright (C) 2012 to 2023 kiwitrees.net
  *
  * Derived from webtrees (www.webtrees.net)
  * Copyright (C) 2010 to 2012 webtrees development team
@@ -17,7 +17,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
- * along with Kiwitrees. If not, see <http://www.gnu.org/licenses/>.
+ * along with Kiwitrees. If not, see <http://www.gnu.org/licenses/>
  */
 
 /**
