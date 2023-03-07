@@ -9553,7 +9553,7 @@ nav div.hide-for-large ul.dropdown.menu li.is-dropdown-submenu-parent ul.is-drop
 }
 nav div.hide-for-large ul.dropdown.menu li.is-dropdown-submenu-parent ul.is-dropdown-submenu li a {
 	font-size: 0.95rem;
-	line-height: 1.125rem;
+	line-height: 1.5rem;
 	padding: 0;
 	text-align: initial;
 	white-space: nowrap;

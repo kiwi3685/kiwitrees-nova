@@ -111,89 +111,12 @@
 
 				<!-- Mobile top menu bar -->
 				<div class="cell hide-for-large">
-					<div class="grid-x">
-						<div class="cell">
-							<ul class="dropdown menu" data-dropdown-menu>
-								<li class="is-dropdown-submenu-parent opens-right">
-									<a href="#" data-toggle="MainMenu">
-										<i class="<?php echo $iconStyle; ?> fa-bars"></i>
-									</a>
-								</li>
-								<?php foreach (KT_MenuBar::getOtherMenus('mobile') as $menu) {
-									if (strpos($menu, KT_I18N::translate('Login')) && !KT_USER_ID ) { ?>
-										<li class="is-dropdown-submenu-parent">
-											<?php echo login_link('mobile'); ?>
-										</li>
-									<?php } else {
-										echo $menu->getMobileMenu();
-									}
-								}
-								?>
-								<li class="is-dropdown-submenu-parent opens-right">
-									<form class="header-search" action="search.php" method="post">
-										<input type="hidden" name="action" value="general">
-										<input type="hidden" name="topsearch" value="yes">
-										<ul class="search">
-											<a href="#" data-toggle="searchInpput">
-												<i class="<?php echo $iconStyle; ?> fa-magnifying-glass"></i>
-											</a>
-											<li>
-												<input id="searchInpput" class="dropdown-pane" data-position="left" data-alignment="top" type="search" name="query" placeholder="<?php echo KT_I18N::translate('Search family tree'); ?>" data-dropdown data-auto-focus="true">
-											</li>
-										</ul>
-									</form>
-								</li>
-							</ul>
-						</div>
-					</div>
+					<?php echo MobileTopBarMenu($menuID = 'MainMenu'); ?>
 				</div>
 
 				<!-- Standard top menu bar -->
 				<div class="cell top-bar first-top-bar show-for-large">
-					<div class="top-bar-left">
-						<ul class="dropdown menu" data-dropdown-menu>
-							<?php if ($show_widgetbar) { ?>
-								<li>
-									<button class="button clear widget" type="button" data-toggle="widgetBar" title="<?php echo KT_I18N::translate('Widget bar'); ?>">
-										<i class="<?php echo $iconStyle; ?> fa-bars fa-2x"></i>
-									</button>
-								</li>
-							<?php } ?>
-							<li class="show-for-large">
-								<i class="kiwitrees_logo"></i>
-							</li>
-							<?php foreach (KT_MenuBar::getOtherMenus() as $menu) {
-								if (strpos($menu, KT_I18N::translate('Login')) && !KT_USER_ID && KT_Module::getModuleByName('login_block')) {
-									$class_name	= 'login_block_KT_Module';
-									$module		= new $class_name; ?>
-									<li>
-										<a href="#">
-											<?php echo (KT_Site::preference('USE_REGISTRATION_MODULE') ? KT_I18N::translate('Login or Register') : KT_I18N::translate('Login')); ?>
-										</a>
-										<ul id="login_popup">
-											<li><?php echo $module->getBlock('login_block'); ?></li>
-										</ul>
-									</li>
-								<?php } else {
-									echo $menu->getMenuAsList();
-								}
-							} ?>
-						</ul>
-					</div>
-					<div class="top-bar-right">
-						<ul class="menu">
-							<li>
-								<form action="search.php" method="post">
-									<div class="input-group">
-										<input type="hidden" name="action" value="general">
-										<input type="hidden" name="topsearch" value="yes">
-										<input type="search"  name="query" placeholder="<?php echo KT_I18N::translate('Search family tree'); ?>" class="input-group-field">
-										<span class="input-group-label"><i class="<?php echo $iconStyle; ?> fa-magnifying-glass"></i></span>
-									</div>
-								</form>
-							</li>
-						</ul>
-					</div>
+					<?php echo TopBarMenu($show_widgetbar); ?>
 				</div>
 
 				<!-- Common menu parts -->
