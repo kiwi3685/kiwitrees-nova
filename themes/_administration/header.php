@@ -59,21 +59,6 @@ $this
 			location.reload();
 		});
 
-		// Expand / close search field when on small device
-		jQuery(function() {
-		  jQuery(".search")
-		    .bind("click", function(event) {
-		      jQuery(".search-field").toggleClass("expand-search");
-
-		      // if the search field is expanded, focus on it
-		      if (jQuery(".search-field").hasClass("expand-search")) {
-		        jQuery(".search-field").focus();
-		      }
-		    })
-		});
-
-
-
 	');
 
 ?>
@@ -106,24 +91,20 @@ $this
 								<a href="#" data-toggle="admin-menu">
 									<i class="<?php echo $iconStyle; ?> fa-bars"></i>
 								</a>
-								<span class="mobileLabel"><?php echo KT_I18N::translate('Menu'); ?></span>
 							</li>
 
 							<?php 
-							$gedcomMenu = KT_MenuBar::getGedcomMenu('mobile');
-							echo $gedcomMenu->getMobileMenu();
+							echo KT_MenuBar::getGedcomMenu()->getMobileMenu();
 
 							if (KT_USER_GEDCOM_ID) { ?>
 							<li>
 								<a href="individual.php?pid=<?php echo KT_USER_GEDCOM_ID; ?>&amp;ged=<?php echo KT_GEDURL; ?>">
 									<i class="<?php echo $iconStyle; ?> fa-male"></i>
 								</a>
-								<span class="mobileLabel"><?php echo KT_I18N::translate('Me'); ?></span>
 							</li>
 							<?php }
 
-							$language_menu = KT_MenuBar::getLanguageMenu('mobile');
-							echo $language_menu->getMobileMenu();
+							echo KT_MenuBar::getLanguageMenu()->getMobileMenu();
 
 							echo logout_link(true, 'mobile'); ?>
 
@@ -140,7 +121,6 @@ $this
 										</li>
 									</ul>
 								</form>
-								<span class="mobileLabel"><?php echo KT_I18N::translate('Search'); ?></span>
 							</li>
 						</ul>
 					</div>

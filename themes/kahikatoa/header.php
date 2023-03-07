@@ -22,51 +22,51 @@
  */
 
  if (!defined('KT_KIWITREES')) {
- 	header('HTTP/1.0 403 Forbidden');
- 	exit;
+	header('HTTP/1.0 403 Forbidden');
+	exit;
  }
 
  global $ALL_CAPS, $iconStyle;
  include 'templates/commonElements.php';
 
  $this
- 	->addExternalJavascript (KT_JQUERY_COLORBOX_URL)
- 	->addExternalJavascript (KT_JQUERY_WHEELZOOM_URL)
- 	->addExternalJavascript (KT_JQUERY_AUTOSIZE)
- 	->addExternalJavascript (KT_THEME_JS)
- 	->addInlineJavascript ('
- 		activate_colorbox();
- 		jQuery.extend(jQuery.colorbox.settings, {
- 		    slideshowStart	:"' . KT_I18N::translate('Play') . '",
- 			slideshowStop	:"' . KT_I18N::translate('Stop') . '",
-            previous        :"<i class=\"' . $iconStyle . ' fa-angle-left\"></i>",
-            next            :"<i class=\"' . $iconStyle . ' fa-angle-right\"></i>",
-            close           :"<i class=\"' . $iconStyle . ' fa-xmark\"></i>",
- 		});
- 		// Add colorbox to pdf-files
- 		jQuery("body").on("click", "a.gallery", function(event) {
- 			jQuery("a[type^=application].gallery").colorbox({
- 				title: function(){
- 							var url = jQuery(this).attr("href");
- 							var img_title = jQuery(this).data("title");
- 							return "<a href=\"" + url + "\" target=\"_blank\">" + img_title + " - '.
- 							KT_I18N::translate('Open in full browser window').'</a>";
- 						}
- 			});
- 		});
+	->addExternalJavascript (KT_JQUERY_COLORBOX_URL)
+	->addExternalJavascript (KT_JQUERY_WHEELZOOM_URL)
+	->addExternalJavascript (KT_JQUERY_AUTOSIZE)
+	->addExternalJavascript (KT_THEME_JS)
+	->addInlineJavascript ('
+		activate_colorbox();
+		jQuery.extend(jQuery.colorbox.settings, {
+			slideshowStart	:"' . KT_I18N::translate('Play') . '",
+			slideshowStop	:"' . KT_I18N::translate('Stop') . '",
+			previous        :"<i class=\"' . $iconStyle . ' fa-angle-left\"></i>",
+			next            :"<i class=\"' . $iconStyle . ' fa-angle-right\"></i>",
+			close           :"<i class=\"' . $iconStyle . ' fa-xmark\"></i>",
+		});
+		// Add colorbox to pdf-files
+		jQuery("body").on("click", "a.gallery", function(event) {
+			jQuery("a[type^=application].gallery").colorbox({
+				title: function(){
+							var url = jQuery(this).attr("href");
+							var img_title = jQuery(this).data("title");
+							return "<a href=\"" + url + "\" target=\"_blank\">" + img_title + " - '.
+							KT_I18N::translate('Open in full browser window').'</a>";
+						}
+			});
+		});
 
- 		jQuery("textarea").autosize();
- 	');
+		jQuery("textarea").autosize();
+	');
 
  if ($ALL_CAPS) {
- 	$this->addInlineJavascript('all_caps();');
+	$this->addInlineJavascript('all_caps();');
  }
 
  if (KT_USER_ID && KT_SCRIPT_NAME != 'index.php') {
- 	$show_widgetbar = true;
- 	$this->addInlineJavascript ('widget_bar();');
+	$show_widgetbar = true;
+	$this->addInlineJavascript ('widget_bar();');
  } else {
- 	$show_widgetbar = false;
+	$show_widgetbar = false;
  }
 
  ?>
@@ -78,17 +78,17 @@
 		<meta http-equiv="x-ua-compatible" content="ie=edge">
 		<?php echo header_links($META_DESCRIPTION, $META_ROBOTS, $META_GENERATOR, $LINK_CANONICAL); ?>
 		<title><?php echo htmlspecialchars((string) $title); ?></title>
-        <!--Generic favicons-->
-        <link rel="icon" sizes="16x16" href="<?php echo KT_THEME_URL; ?>images/favicon.png">
-        <link rel="icon" sizes="32x32" href="<?php echo KT_THEME_URL; ?>images/favicon-32.png">
-        <link rel="icon" sizes="128x128" href="<?php echo KT_THEME_URL; ?>images/favicon-128.png">
-        <link rel="icon" sizes="192x192" href="<?php echo KT_THEME_URL; ?>images/favicon-192.png">
-        <!--Android-->
-        <link rel="shortcut icon" sizes="196x196" href="<?php echo KT_THEME_URL; ?>images/favicon-196.png">
-        <!--iPad-->
-        <link rel="apple-touch-icon" sizes="152x152" href="<?php echo KT_THEME_URL; ?>images/favicon-152.png">
-        <!--iPhone-->
-        <link rel="apple-touch-icon" sizes="180x180" href="<?php echo KT_THEME_URL; ?>images/apple-touch-icon.png">
+		<!--Generic favicons-->
+		<link rel="icon" sizes="16x16" href="<?php echo KT_THEME_URL; ?>images/favicon.png">
+		<link rel="icon" sizes="32x32" href="<?php echo KT_THEME_URL; ?>images/favicon-32.png">
+		<link rel="icon" sizes="128x128" href="<?php echo KT_THEME_URL; ?>images/favicon-128.png">
+		<link rel="icon" sizes="192x192" href="<?php echo KT_THEME_URL; ?>images/favicon-192.png">
+		<!--Android-->
+		<link rel="shortcut icon" sizes="196x196" href="<?php echo KT_THEME_URL; ?>images/favicon-196.png">
+		<!--iPad-->
+		<link rel="apple-touch-icon" sizes="152x152" href="<?php echo KT_THEME_URL; ?>images/favicon-152.png">
+		<!--iPhone-->
+		<link rel="apple-touch-icon" sizes="180x180" href="<?php echo KT_THEME_URL; ?>images/apple-touch-icon.png">
 		<?php if ($view !='simple') { ?>
 			<link rel="stylesheet" href="<?php echo KT_DATATABLES_CSS; ?>">
 			<link rel="stylesheet" href="<?php echo KT_DATEPICKER_CSS; ?>">
@@ -101,14 +101,55 @@
 	<body>
 		<?php if ($view !='simple') { ?>
 			<?php if ($show_widgetbar) { ?>
-				<div class="widget-bar off-canvas position-left" id="widgetBar" data-off-canvas>
+				<div class="widget-bar off-canvas position-left show-for-large" id="widgetBar" data-off-canvas>
 					<?php include_once 'widget-bar.php'; ?>
 				</div>
 				<div class="cell off-canvas-content" data-off-canvas-content> <!-- closed in footer -->
 			<?php } ?>
 
 			<nav class="grid-x hide-for-print">
-				<div class="top-bar first-top-bar">
+
+				<!-- Mobile top menu bar -->
+				<div class="cell hide-for-large">
+					<div class="grid-x">
+						<div class="cell">
+							<ul class="dropdown menu" data-dropdown-menu>
+								<li class="is-dropdown-submenu-parent opens-right">
+									<a href="#" data-toggle="MainMenu">
+										<i class="<?php echo $iconStyle; ?> fa-bars"></i>
+									</a>
+								</li>
+								<?php foreach (KT_MenuBar::getOtherMenus('mobile') as $menu) {
+									if (strpos($menu, KT_I18N::translate('Login')) && !KT_USER_ID ) { ?>
+										<li class="is-dropdown-submenu-parent">
+											<?php echo login_link('mobile'); ?>
+										</li>
+									<?php } else {
+										echo $menu->getMobileMenu();
+									}
+								}
+								?>
+								<li class="is-dropdown-submenu-parent opens-right">
+									<form class="header-search" action="search.php" method="post">
+										<input type="hidden" name="action" value="general">
+										<input type="hidden" name="topsearch" value="yes">
+										<ul class="search">
+											<a href="#" data-toggle="searchInpput">
+												<i class="<?php echo $iconStyle; ?> fa-magnifying-glass"></i>
+											</a>
+											<li>
+												<input id="searchInpput" class="dropdown-pane" data-position="left" data-alignment="top" type="search" name="query" placeholder="<?php echo KT_I18N::translate('Search family tree'); ?>" data-dropdown data-auto-focus="true">
+											</li>
+										</ul>
+									</form>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+
+				<!-- Standard top menu bar -->
+				<div class="cell top-bar first-top-bar show-for-large">
 					<div class="top-bar-left">
 						<ul class="dropdown menu" data-dropdown-menu>
 							<?php if ($show_widgetbar) { ?>
@@ -121,22 +162,22 @@
 							<li class="show-for-large">
 								<i class="kiwitrees_logo"></i>
 							</li>
-                    <?php foreach (KT_MenuBar::getOtherMenus() as $menu) {
-      					if (strpos($menu, KT_I18N::translate('Login')) && !KT_USER_ID && KT_Module::getModuleByName('login_block')) {
-      						$class_name	= 'login_block_KT_Module';
-      						$module		= new $class_name; ?>
-      						<li>
-      							<a href="#">
-      								<?php echo (KT_Site::preference('USE_REGISTRATION_MODULE') ? KT_I18N::translate('Login or Register') : KT_I18N::translate('Login')); ?>
-      							</a>
-      							<ul id="login_popup">
-      								<li><?php echo $module->getBlock('login_block'); ?></li>
-      							</ul>
-      						</li>
-      					<?php } else {
-      						echo $menu->getMenuAsList();
-      					}
-      				} ?>
+							<?php foreach (KT_MenuBar::getOtherMenus() as $menu) {
+								if (strpos($menu, KT_I18N::translate('Login')) && !KT_USER_ID && KT_Module::getModuleByName('login_block')) {
+									$class_name	= 'login_block_KT_Module';
+									$module		= new $class_name; ?>
+									<li>
+										<a href="#">
+											<?php echo (KT_Site::preference('USE_REGISTRATION_MODULE') ? KT_I18N::translate('Login or Register') : KT_I18N::translate('Login')); ?>
+										</a>
+										<ul id="login_popup">
+											<li><?php echo $module->getBlock('login_block'); ?></li>
+										</ul>
+									</li>
+								<?php } else {
+									echo $menu->getMenuAsList();
+								}
+							} ?>
 						</ul>
 					</div>
 					<div class="top-bar-right">
@@ -148,24 +189,20 @@
 										<input type="hidden" name="topsearch" value="yes">
 										<input type="search"  name="query" placeholder="<?php echo KT_I18N::translate('Search family tree'); ?>" class="input-group-field">
 										<span class="input-group-label"><i class="<?php echo $iconStyle; ?> fa-magnifying-glass"></i></span>
-					                </div>
+									</div>
 								</form>
 							</li>
-					    </ul>
+						</ul>
 					</div>
 				</div>
+
+				<!-- Common menu parts -->
 				<div class="top-bar second-top-bar">
 					<div class="top-bar-left">
-						<div class="treetitle text-center medium-text-left"><?php echo KT_TREE_TITLE; ?></div>
+						<div class="treetitle text-center large-text-left"><?php echo KT_TREE_TITLE; ?></div>
 						<div class="subtitle show-for-large"><?php echo KT_TREE_SUBTITLE; ?></div>
 					</div>
-					<div class="top-bar-right main-menu">
-						<!-- responsive menu -->
-						<div class="title-bar" data-hide-for="medium" data-responsive-toggle="kiwitrees-menu">
-							<button class="menu-icon" type="button" data-toggle="kiwitrees-menu"></button>
-							<div class="title-bar-title"><?php echo KT_I18N::translate('Menu'); ?></div>
-						</div>
-						<!-- normal menu -->
+					<div class="top-bar-right main-menu show-for-large" id="MainMenu" data-toggler="show-for-large">
 						<ul id="kiwitrees-menu" class="menu vertical medium-horizontal icons icon-top align-right" data-responsive-menu="accordion medium-dropdown">
 							<?php foreach (KT_MenuBar::getMainMenus() as $menu) {
 								echo $menu->getMenuAsList();

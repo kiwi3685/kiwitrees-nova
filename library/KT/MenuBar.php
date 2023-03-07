@@ -1,7 +1,7 @@
 <?php
 /**
  * Kiwitrees: Web based Family History software
- * Copyright (C) 2012 to 2023 kiwitrees.net
+ * Copyright (C) 2012 to 2023 kiwitrees.net.
  *
  * Derived from webtrees (www.webtrees.net)
  * Copyright (C) 2010 to 2012 webtrees development team
@@ -20,21 +20,19 @@
  * You should have received a copy of the GNU General Public License
  * along with Kiwitrees. If not, see <http://www.gnu.org/licenses/>
  */
-
 if (!defined('KT_KIWITREES')) {
 	header('HTTP/1.0 403 Forbidden');
+
 	exit;
 }
 
-class KT_MenuBar {
-
-	public static function getGedcomMenu($mobile = false) {
-		if ($mobile == 'mobile') {
-			$menu = new KT_Menu(KT_I18N::translate('Home'), '#', 'menu-tree');
-		} else {
-			$menu = new KT_Menu(KT_I18N::translate('Home'), 'index.php?ged=' . KT_GEDURL, 'menu-tree');
-		}
+class KT_MenuBar
+{
+	public static function getGedcomMenu()
+	{
+		$menu = new KT_Menu('<span class="show-for-medium">' . KT_I18N::translate('Home') . '</span>', 'index.php?ged=' . KT_GEDURL, 'menu-tree');
 		$menu->addClass('', '', 'fa-house');
+
 		if (count(KT_Tree::getAll()) > 1 || KT_Site::preference('ALLOW_CHANGE_GEDCOM')) {
 			foreach (KT_Tree::getAll() as $tree) {
 				$submenu = new KT_Menu(
@@ -45,10 +43,12 @@ class KT_MenuBar {
 				$menu->addSubmenu($submenu);
 			}
 		}
+
 		return $menu;
 	}
 
-	public static function getMyAccountMenu() {
+	public static function getMyAccountMenu()
+	{
 		global $PEDIGREE_FULL_DETAILS, $PEDIGREE_LAYOUT;
 
 		$showFull = ($PEDIGREE_FULL_DETAILS) ? 1 : 0;
@@ -58,74 +58,75 @@ class KT_MenuBar {
 			return null;
 		}
 
-		//-- main menu
-		$menu = new KT_Menu(getUserFullName(KT_USER_ID), '#', 'menu-mylogout');
+		// -- main menu
+		$menu = new KT_Menu('<span class="show-for-medium">' . getUserFullName(KT_USER_ID) . '</span>', '#', 'menu-mylogout');
+		$menu->addClass('', '', 'fa-male');
 
-		//-- edit account submenu
+		// -- edit account submenu
 		$submenu = new KT_Menu(KT_I18N::translate('My account'), 'edituser.php', 'menu-myaccount');
 		$menu->addSubmenu($submenu);
 
 		if (KT_USER_GEDCOM_ID) {
-			//-- my_pedigree submenu
+			// -- my_pedigree submenu
 			$submenu = new KT_Menu(
 				KT_I18N::translate('My pedigree'),
-				'pedigree.php?ged=' . KT_GEDURL . '&amp;rootid=' . KT_USER_GEDCOM_ID . "&amp;show_full=' . $showFull . '&amp;talloffset=' . '$showLayout . '",
+				'pedigree.php?ged=' . KT_GEDURL . '&amp;rootid=' . KT_USER_GEDCOM_ID . "&amp;show_full=' . {$showFull} . '&amp;talloffset=' . '{$showLayout} . '",
 				'menu-mypedigree'
 			);
 			$menu->addSubmenu($submenu);
-			//-- my_indi submenu
+			// -- my_indi submenu
 			$submenu = new KT_Menu(KT_I18N::translate('My individual record'), 'individual.php?pid=' . KT_USER_GEDCOM_ID . '&amp;ged=' . KT_GEDURL, 'menu-myrecord');
 			$menu->addSubmenu($submenu);
 		}
 
-		//-- admin submenu (only if not already included in main or other menu)
+		// -- admin submenu (only if not already included in main or other menu)
 		if (
 			KT_USER_GEDCOM_ADMIN
 			&& !(
-				array_key_exists('menu_admin_main', KT_Module::getActiveMenus()) ||
-				array_key_exists('menu_admin_other', KT_Module::getActiveMenus())
+				array_key_exists('menu_admin_main', KT_Module::getActiveMenus())
+				|| array_key_exists('menu_admin_other', KT_Module::getActiveMenus())
 			)
 		) {
-				$submenu = new KT_Menu(KT_I18N::translate('Administration'), 'admin.php', 'menu-admin');
-				$menu->addSubmenu($submenu);
+			$submenu = new KT_Menu(KT_I18N::translate('Administration'), 'admin.php', 'menu-admin');
+			$menu->addSubmenu($submenu);
 		}
 
 		if (KT_USER_IS_ADMIN) {
-			//-- change home page blocks submenu
+			// -- change home page blocks submenu
 			if (KT_SCRIPT_NAME === 'index.php') {
-				$submenu = new KT_Menu(KT_I18N::translate('Change the home page blocks'), 'index_edit.php?gedcom_id=' . KT_GED_ID,'menu-change-blocks');
+				$submenu = new KT_Menu(KT_I18N::translate('Change the home page blocks'), 'index_edit.php?gedcom_id=' . KT_GED_ID, 'menu-change-blocks');
 				$menu->addSubmenu($submenu);
 			}
 
-			//-- change footer blocks submenu
+			// -- change footer blocks submenu
 			if (KT_SCRIPT_NAME === 'index.php') {
-				$submenu = new KT_Menu(KT_I18N::translate('Change the footer blocks'), 'footer_edit.php?gedcom_id=' . KT_GED_ID,'menu-change-blocks');
+				$submenu = new KT_Menu(KT_I18N::translate('Change the footer blocks'), 'footer_edit.php?gedcom_id=' . KT_GED_ID, 'menu-change-blocks');
 				$menu->addSubmenu($submenu);
 			}
 		}
 
-		//-- logout
+		// -- logout
 		$submenu = new KT_Menu(logout_link(false), '', 'menu-logout');
 		$menu->addSubmenu($submenu);
 
 		return $menu;
-
 	}
 
 	// Main menu Administration links (called by module "menu_admin_main")
-	public static function getAdminMenu() {
-		$menu = new KT_Menu(KT_I18N::translate('Administration'), 'admin.php', 'menu-admin');
+	public static function getAdminMenu()
+	{
+		$menu = new KT_Menu('<span class="show-for-medium">' . KT_I18N::translate('Administration') . '</span>', 'admin.php', 'menu-admin');
 		$menu->addClass('', '', 'fa-gears');
 
 		$adminMenus = [
-			KT_I18N::translate('Dashboard') 		=> "admin.php",
-			KT_I18N::translate('Website') 			=> "admin_summary_site.php",
-			KT_I18N::translate('Family trees') 		=> "admin_summary_trees.php",
-			KT_I18N::translate('User management') 	=> "admin_summary_users.php",
-			KT_I18N::translate('Media objects') 	=> "admin_summary_media.php",
-			KT_I18N::translate('Modules') 			=> "admin_summary_modules.php",
-			KT_I18N::translate('Customizing') 		=> "admin_summary_custom.php",
-			KT_I18N::translate('Tools') 			=> "admin_summary_tools.php"
+			KT_I18N::translate('Dashboard') => 'admin.php',
+			KT_I18N::translate('Website') => 'admin_summary_site.php',
+			KT_I18N::translate('Family trees') => 'admin_summary_trees.php',
+			KT_I18N::translate('User management') => 'admin_summary_users.php',
+			KT_I18N::translate('Media objects') => 'admin_summary_media.php',
+			KT_I18N::translate('Modules') => 'admin_summary_modules.php',
+			KT_I18N::translate('Customizing') => 'admin_summary_custom.php',
+			KT_I18N::translate('Tools') => 'admin_summary_tools.php',
 		];
 		foreach ($adminMenus as $key => $value) {
 			$submenu = new KT_Menu($key, $value, '');
@@ -133,10 +134,10 @@ class KT_MenuBar {
 		}
 
 		return $menu;
-
 	}
 
-	public static function getChartsMenu() {
+	public static function getChartsMenu()
+	{
 		global $SEARCH_SPIDER, $controller;
 		if ($SEARCH_SPIDER || !KT_GED_ID) {
 			return null;
@@ -149,7 +150,7 @@ class KT_MenuBar {
 			$menu->addClass('', '', 'fa-sitemap');
 
 			uasort($active_charts, function ($x, $y) {
-				return KT_I18N::strcasecmp((string)$x, (string)$y);
+				return KT_I18N::strcasecmp((string) $x, (string) $y);
 			});
 
 			foreach ($active_charts as $chart) {
@@ -159,11 +160,13 @@ class KT_MenuBar {
 					}
 				}
 			}
+
 			return $menu;
 		}
 	}
 
-	public static function getListsMenu() {
+	public static function getListsMenu()
+	{
 		global $SEARCH_SPIDER, $controller;
 
 		$active_lists = KT_Module::getActiveLists();
@@ -184,14 +187,20 @@ class KT_MenuBar {
 				$menu->addSubmenu($submenu);
 			}
 		}
+
 		return $menu;
 	}
 
 	/**
-	* get the reports menu
-	* @return KT_Menu the menu item
-	*/
-	public static function getReportsMenu($pid='', $famid='') {
+	 * get the reports menu.
+	 *
+	 * @param mixed $pid
+	 * @param mixed $famid
+	 *
+	 * @return KT_Menu the menu item
+	 */
+	public static function getReportsMenu($pid = '', $famid = '')
+	{
 		global $SEARCH_SPIDER;
 
 		$active_reports = KT_Module::getActiveReports();
@@ -208,10 +217,12 @@ class KT_MenuBar {
 				$menu->addSubmenu($submenu);
 			}
 		}
+
 		return $menu;
 	}
 
-	public static function getSearchMenu() {
+	public static function getSearchMenu()
+	{
 		global $SEARCH_SPIDER;
 
 		if ($SEARCH_SPIDER) {
@@ -224,54 +235,51 @@ class KT_MenuBar {
 		return $menu;
 	}
 
-	public static function getLanguageMenu($mobile = false) {
+	public static function getLanguageMenu()
+	{
 		global $SEARCH_SPIDER;
 		$languages = KT_I18N::used_languages();
 
 		if ($SEARCH_SPIDER) {
 			return null;
-		} else {
-			if ($mobile == 'mobile') {
-				$menu = new KT_Menu(KT_I18N::translate('Language'), '#', 'menu-language');
-			} else {
-				$menu = new KT_Menu(KT_I18N::translate('Language'), '#', 'menu-language');
-			}		
-			$menu->addClass('', '', 'fa-globe');
-
-			foreach ($languages as $lang=>$name) {
-				$submenu = new KT_Menu(KT_I18N::translate($name), get_query_url(array('lang' => $lang), '&amp;'), 'menu-language-' . $lang);
-				if (KT_LOCALE == $lang) {
-					$submenu->addClass('','','lang-active');
-				}
-				$menu->addSubMenu($submenu);
-			}
-			if (count($menu->submenus)>1) {
-				return $menu;
-			} else {
-				return null;
-			}
 		}
+		$menu = new KT_Menu('<span class="show-for-medium">' . KT_I18N::translate('Language') . '</span>', '#', 'menu-language');
+		$menu->addClass('', '', 'fa-language');
+
+		foreach ($languages as $lang => $name) {
+			$submenu = new KT_Menu(KT_I18N::translate($name), get_query_url(['lang' => $lang], '&amp;'), 'menu-language-' . $lang);
+			if (KT_LOCALE == $lang) {
+				$submenu->addClass('', '', 'lang-active');
+			}
+			$menu->addSubMenu($submenu);
+		}
+		if (count($menu->submenus) > 1) {
+			return $menu;
+		}
+
+		return null;
 	}
 
-	public static function getLoginDropdownMenu() {
+	public static function getLoginDropdownMenu()
+	{
 		global $SEARCH_SPIDER;
 
 		if ($SEARCH_SPIDER) {
 			return null;
-		} else {
-			$dropdown	= menu_login_dropdown_KT_Module::login_dropdown();
-			$label		= KT_Site::preference('USE_REGISTRATION_MODULE') ? KT_I18N::translate('Login or Register') : KT_I18N::translate('Login');
-
-			$menu		= new KT_Menu($label,'#', 'menu-login');
-			$submenu	= new KT_Menu($dropdown, null, 'menu-login_popup');
-			$menu->addClass('', '', 'fa-lock');
-			$menu->addSubMenu($submenu);
-
-			return $menu;
 		}
+		$dropdown = menu_login_dropdown_KT_Module::login_dropdown();
+		$label = KT_I18N::translate('Login');
+
+		$menu = new KT_Menu($label, '#', 'menu-login');
+		$submenu = new KT_Menu($dropdown, null, 'menu-login_popup');
+		$menu->addClass('', '', 'fa-lock');
+		$menu->addSubMenu($submenu);
+
+		return $menu;
 	}
 
-	public static function getFavoritesMenu() {
+	public static function getFavoritesMenu()
+	{
 		global $controller, $SEARCH_SPIDER;
 		$iconStyle = '';
 
@@ -294,16 +302,18 @@ class KT_MenuBar {
 				return null;
 			}
 		}
-		// Sort $favorites alphabetically?
 
-		$menu = new KT_Menu(KT_I18N::translate('Favorites'), '#', 'menu-favorites');
+		$menu = new KT_Menu('<span class="show-for-medium">' . KT_I18N::translate('Favorites') . '</span>', '#', 'menu-favourites');
+		$menu->addClass('', '', 'fa-heart');
 
 		foreach ($favorites as $favorite) {
-			switch($favorite['type']) {
+			switch ($favorite['type']) {
 				case 'URL':
 					$submenu = new KT_Menu($favorite['title'], $favorite['url']);
 					$menu->addSubMenu($submenu);
-				break;
+
+					break;
+
 				case 'INDI':
 				case 'FAM':
 				case 'SOUR':
@@ -314,44 +324,49 @@ class KT_MenuBar {
 						$submenu = new KT_Menu($obj->getFullName(), $obj->getHtmlUrl());
 						$menu->addSubMenu($submenu);
 					}
-				break;
+
+					break;
 			}
 		}
 
 		if ($show_user_favs) {
 			if (isset($controller->record) && $controller->record instanceof KT_GedcomRecord) {
 				$submenu = new KT_Menu(KT_I18N::translate('Add to favorites'), '#');
-				$submenu->addOnclick("jQuery.post('module.php?mod=widget_favorites&amp;mod_action=menu-add-favorite',{xref:'".$controller->record->getXref()."'},function(){location.reload();})");
+				$submenu->addOnclick("jQuery.post('module.php?mod=widget_favorites&amp;mod_action=menu-add-favorite',{xref:'" . $controller->record->getXref() . "'},function(){location.reload();})");
 				$menu->addSubMenu($submenu);
 			}
 		}
+
 		return $menu;
 	}
 
-	public static function getMainMenus() {
-		$menus = array();
+	public static function getMainMenus()
+	{
+		$menus = [];
 		foreach (KT_Module::getActiveMenus() as $module) {
-			if ($module->MenuType() == 'main' || !$module->MenuType()) {
+			if ('main' == $module->MenuType() || !$module->MenuType()) {
 				$menu = $module->getMenu();
 				if ($menu) {
 					$menus[] = $menu;
 				}
 			}
 		}
+
 		return $menus;
 	}
 
-	public static function getOtherMenus() {
-		$menus = array();
+	public static function getOtherMenus()
+	{
+		$menus = [];
 		foreach (KT_Module::getActiveMenus() as $module) {
-			if ($module->MenuType() == 'other') {
+			if ('other' == $module->MenuType()) {
 				$menu = $module->getMenu();
 				if ($menu) {
 					$menus[] = $menu;
 				}
 			}
 		}
+
 		return $menus;
 	}
-
 }

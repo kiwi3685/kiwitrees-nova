@@ -9534,12 +9534,14 @@ nav#admin-head #admin-title {
 nav#admin-head div.hide-for-large {
 	background-color: #34689c;
 	position: fixed;
+	z-index: 999;
 }
 nav#admin-head div.hide-for-large ul.dropdown.menu {
 	display: flex;
 	flex-direction: row;
 	flex-wrap: nowrap;
 	font-size: 1.25rem;
+	height: 3.5rem;
 	list-style: none;
 	justify-content: space-around;
 	margin: 0;

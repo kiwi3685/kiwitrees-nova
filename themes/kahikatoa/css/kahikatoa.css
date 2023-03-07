@@ -9510,9 +9510,69 @@ nav .top-bar.second-top-bar .main-menu .title-bar .menu-icon {
 	margin-left: 0.5rem;
 	margin-right: 0.5rem;
 }
+nav div.hide-for-large {
+	background-color: #ab3334;
+	position: fixed;
+	z-index: 999;
+}
+nav div.hide-for-large ul.dropdown.menu {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	font-size: 1.5rem;
+	list-style: none;
+	justify-content: space-around;
+	margin: 0;
+	padding: 0.25rem 0.25rem 0;
+	width: 100%;
+}
+nav div.hide-for-large ul.dropdown.menu svg.svg-inline--fa {
+	color: #fffff4;
+}
+nav div.hide-for-large ul.dropdown.menu li.is-dropdown-submenu-parent {
+	height: 3.5rem;
+	width: 3rem;
+}
+nav div.hide-for-large ul.dropdown.menu li.is-dropdown-submenu-parent a::after {
+	display: none;
+}
+nav div.hide-for-large ul.dropdown.menu li.is-dropdown-submenu-parent span.mobileLabel {
+	color: #fffff4;
+	display: inline-block;
+	font-size: 0.8rem;
+	text-align: center;
+	vertical-align: top;
+}
+nav div.hide-for-large ul.dropdown.menu li.is-dropdown-submenu-parent ul.is-dropdown-submenu {
+	padding: 0.25rem 0.5rem;
+	top: 100%;
+}
+nav div.hide-for-large ul.dropdown.menu li.is-dropdown-submenu-parent ul.is-dropdown-submenu li {
+	padding: 0;
+	width: 100%;
+}
+nav div.hide-for-large ul.dropdown.menu li.is-dropdown-submenu-parent ul.is-dropdown-submenu li a {
+	font-size: 0.95rem;
+	line-height: 1.125rem;
+	padding: 0;
+	text-align: initial;
+	white-space: nowrap;
+}
+nav div.hide-for-large ul.dropdown.menu li.is-dropdown-submenu-parent ul.is-dropdown-submenu li a svg.svg-inline--fa {
+	display: none;
+}
+nav div.hide-for-large ul.dropdown.menu li.is-dropdown-submenu-parent ul.search {
+	list-style-type: none;
+	margin: 0;
+}
 
 main {
 	padding: 1rem 0;
+}
+@media print, screen and (max-width: 64.06125em) {
+	main {
+		padding-top: 4rem;
+	}
 }
 
 footer {
@@ -12005,7 +12065,7 @@ div.dataTables_wrapper table.dataTable thead tr th svg.fa-bell, div.dataTables_w
 	}
 }
 
-/* sizes are 48 - 48.0625 - 64 - 64.0625 em */
+/* sizes are max 48 (small), min 48.0625 max 64 (medium), min 64.0625 (large)  em */
 @media screen and (max-width: 48em) {
 	nav .top-bar.second-top-bar {
 		padding: 0.5rem;
@@ -12126,6 +12186,10 @@ div.dataTables_paginate ul.pagination li.paginate_button.current {
 	nav .top-bar.first-top-bar .top-bar-right ul li .input-group-field {
 		max-width: 100%;
 	}
+	nav .top-bar.second-top-bar {
+		position: relative;
+		top: 3.7rem;
+	}
 	nav .top-bar.second-top-bar .main-menu {
 		padding-top: 0;
 	}
@@ -12148,7 +12212,7 @@ div.dataTables_paginate ul.pagination li.paginate_button.current {
 	}
 
 	.treetitle {
-		font-size: 2rem;
+		font-size: 1.25rem;
 	}
 }
 @media screen and (min-width: 64.0625em) {

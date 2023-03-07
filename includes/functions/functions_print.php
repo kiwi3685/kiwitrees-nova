@@ -410,18 +410,25 @@ function header_links($META_DESCRIPTION, $META_ROBOTS, $META_GENERATOR, $LINK_CA
 }
 
 // Generate a login link
-function login_link()
+function login_link($mobile = false)
 {
-	global $SEARCH_SPIDER;
+	global $SEARCH_SPIDER, $iconStyle;
 
 	if ($SEARCH_SPIDER) {
 		return '';
 	}
 
-	return
-		'<a href="' . KT_LOGIN_URL . '?url=' . rawurlencode(get_query_url()) . '">'
-			. (KT_Site::preference('USE_REGISTRATION_MODULE') ? KT_I18N::translate('Login or Register') : KT_I18N::translate('Login')) . '
+	if ($mobile) {
+		return
+			'<a href="' . KT_LOGIN_URL . '?url=' . rawurlencode(get_query_url()) . '" >
+				<i class="' . $iconStyle . ' fa-lock"></i>
 			</a>';
+	} else {
+		return
+			'<a href="' . KT_LOGIN_URL . '?url=' . rawurlencode(get_query_url()) . '">'
+				. (KT_Site::preference('USE_REGISTRATION_MODULE') ? KT_I18N::translate('Login or Register') : KT_I18N::translate('Login')) . '
+			</a>';
+	}
 }
 
 // Generate a logout link
@@ -440,7 +447,6 @@ function logout_link($icon = true, $mobile = false)
 				<a href="index.php?logout=1">' . 
 					$icon . '
 				</a>
-				<span class="mobileLabel">' . KT_I18N::translate('Logout') . '</span>
 			</li>
 		';
 	} else {
