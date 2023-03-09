@@ -9471,7 +9471,7 @@ nav .top-bar.second-top-bar .subtitle {
 	font-style: italic;
 	padding: 0 1rem 0.5rem;
 }
-nav .top-bar.second-top-bar .main-menu {
+nav .top-bar.second-top-bar .main-menu ul.menu.dropdown {
 	background-color: #ab3334;
 	padding-top: 3rem;
 }
@@ -9501,17 +9501,45 @@ nav .top-bar.second-top-bar .main-menu ul.menu.dropdown .is-dropdown-submenu a:h
 nav .top-bar.second-top-bar .main-menu ul.menu.dropdown .is-dropdown-submenu a svg {
 	display: none;
 }
-nav .top-bar.second-top-bar .main-menu .title-bar {
-	/* for responsive menu */
-	width: 100%;
-	margin-top: 0.5rem;
+nav .top-bar.second-top-bar .main-menu ul.menu.accordion-menu {
+	background-color: #faf5e8;
+	margin-top: -2.275rem;
+	position: absolute;
+	width: 96%;
+	z-index: 99;
 }
-nav .top-bar.second-top-bar .main-menu .title-bar .menu-icon {
-	margin-left: 0.5rem;
-	margin-right: 0.5rem;
+nav .top-bar.second-top-bar .main-menu ul.menu.accordion-menu li svg.svg-inline--fa {
+	display: none;
+}
+nav .top-bar.second-top-bar .main-menu ul.menu.accordion-menu li a {
+	color: #ab3334;
+	line-height: 0.75;
+}
+nav .top-bar.second-top-bar .main-menu ul.menu.accordion-menu li a span {
+	font-size: 1.125rem;
+	margin: 0 1rem;
+}
+nav .top-bar.second-top-bar .main-menu ul.menu.accordion-menu li a:hover {
+	color: #2c1616;
+}
+nav .top-bar.second-top-bar .main-menu ul.menu.accordion-menu li.is-active a {
+	color: #331919;
+}
+nav .top-bar.second-top-bar .main-menu ul.menu.accordion-menu .is-dropdown-submenu a {
+	font-size: 0.875rem;
+	padding: 0.35rem 0.5rem;
+	white-space: nowrap;
+}
+nav .top-bar.second-top-bar .main-menu ul.menu.accordion-menu .is-dropdown-submenu a:hover {
+	background-color: #faf5e8;
+	color: #faf5e8;
+}
+nav .top-bar.second-top-bar .main-menu ul.menu.accordion-menu .is-dropdown-submenu a svg.svg-inline--fa {
+	display: none;
 }
 nav div.hide-for-large {
 	background-color: #ab3334;
+	border-bottom: 0.125rem solid #faf5e8;
 	position: fixed;
 	z-index: 999;
 }
@@ -9529,39 +9557,47 @@ nav div.hide-for-large ul.dropdown.menu {
 nav div.hide-for-large ul.dropdown.menu svg.svg-inline--fa {
 	color: #fffff4;
 }
-nav div.hide-for-large ul.dropdown.menu li.is-dropdown-submenu-parent {
+nav div.hide-for-large ul.dropdown.menu li.is-dropdown-submenu-parent,
+nav div.hide-for-large ul.dropdown.menu li.mobileLink {
 	height: 3.5rem;
 	width: 3rem;
 }
-nav div.hide-for-large ul.dropdown.menu li.is-dropdown-submenu-parent a::after {
+nav div.hide-for-large ul.dropdown.menu li.is-dropdown-submenu-parent a::after,
+nav div.hide-for-large ul.dropdown.menu li.mobileLink a::after {
 	display: none;
 }
-nav div.hide-for-large ul.dropdown.menu li.is-dropdown-submenu-parent span.mobileLabel {
+nav div.hide-for-large ul.dropdown.menu li.is-dropdown-submenu-parent span.mobileLabel,
+nav div.hide-for-large ul.dropdown.menu li.mobileLink span.mobileLabel {
 	color: #fffff4;
 	display: inline-block;
 	font-size: 0.8rem;
 	text-align: center;
 	vertical-align: top;
 }
-nav div.hide-for-large ul.dropdown.menu li.is-dropdown-submenu-parent ul.is-dropdown-submenu {
+nav div.hide-for-large ul.dropdown.menu li.is-dropdown-submenu-parent ul.is-dropdown-submenu,
+nav div.hide-for-large ul.dropdown.menu li.mobileLink ul.is-dropdown-submenu {
 	padding: 0.25rem 0.5rem;
 	top: 100%;
 }
-nav div.hide-for-large ul.dropdown.menu li.is-dropdown-submenu-parent ul.is-dropdown-submenu li {
+nav div.hide-for-large ul.dropdown.menu li.is-dropdown-submenu-parent ul.is-dropdown-submenu li,
+nav div.hide-for-large ul.dropdown.menu li.mobileLink ul.is-dropdown-submenu li {
 	padding: 0;
 	width: 100%;
 }
-nav div.hide-for-large ul.dropdown.menu li.is-dropdown-submenu-parent ul.is-dropdown-submenu li a {
+nav div.hide-for-large ul.dropdown.menu li.is-dropdown-submenu-parent ul.is-dropdown-submenu li a,
+nav div.hide-for-large ul.dropdown.menu li.mobileLink ul.is-dropdown-submenu li a {
 	font-size: 0.95rem;
 	line-height: 1.5rem;
 	padding: 0;
 	text-align: initial;
 	white-space: nowrap;
 }
-nav div.hide-for-large ul.dropdown.menu li.is-dropdown-submenu-parent ul.is-dropdown-submenu li a svg.svg-inline--fa {
+nav div.hide-for-large ul.dropdown.menu li.is-dropdown-submenu-parent ul.is-dropdown-submenu li a svg.svg-inline--fa,
+nav div.hide-for-large ul.dropdown.menu li.mobileLink ul.is-dropdown-submenu li a svg.svg-inline--fa {
 	display: none;
 }
-nav div.hide-for-large ul.dropdown.menu li.is-dropdown-submenu-parent ul.search {
+nav div.hide-for-large ul.dropdown.menu li.is-dropdown-submenu-parent ul.search,
+nav div.hide-for-large ul.dropdown.menu li.mobileLink ul.search {
 	list-style-type: none;
 	margin: 0;
 }
@@ -9571,7 +9607,7 @@ main {
 }
 @media print, screen and (max-width: 64.06125em) {
 	main {
-		padding-top: 4rem;
+		padding-top: 4.5rem;
 	}
 }
 

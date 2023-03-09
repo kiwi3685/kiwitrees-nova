@@ -183,7 +183,7 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 
 		// -- main GALLERIES menu item
 		$menu = new KT_Menu(
-			$this->getMenuTitle(), 
+			'<span>' . $this->getMenuTitle() . '</span>', 
 			'module.php?mod=' . $this->getName() . '&amp;mod_action=show&amp;gallery_id=' . $minBlockId, 'menu-my_gallery', 'down'
 		);
 		$menu->addClass('', '', $this->getMenuIcon());

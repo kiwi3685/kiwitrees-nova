@@ -192,7 +192,7 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 		}
 
 		// -- main PAGES menu item
-		$menu = new KT_Menu($this->getMenuTitle(), 'module.php?mod=' . $this->getName() . '&amp;mod_action=show#' . $default_block, 'menu-my_pages', 'down');
+		$menu = new KT_Menu('<span>' . $this->getMenuTitle() . '</span>', 'module.php?mod=' . $this->getName() . '&amp;mod_action=show#' . $default_block, 'menu-my_pages', 'down');
 		$menu->addClass('', '', $this->getMenuIcon());
 
 		foreach ($items as $item) {

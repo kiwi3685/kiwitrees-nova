@@ -168,7 +168,7 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 			return null;
 		}
 
-		$menu = new KT_Menu($this->getMenuTitle(), 'module.php?mod=faq&amp;mod_action=show', 'menu-help');
+		$menu = new KT_Menu('<span>' . $this->getMenuTitle() . '</span>', 'module.php?mod=faq&amp;mod_action=show', 'menu-help');
 		$menu->addClass('', '', $this->getMenuIcon());
 
 		if (KT_USER_IS_ADMIN) {

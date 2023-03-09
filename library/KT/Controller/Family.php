@@ -117,7 +117,7 @@ class KT_Controller_Family extends KT_Controller_GedcomRecord {
 		}
 
 		// edit menu
-		$menu = new KT_Menu(KT_I18N::translate('Edit'), '#', 'menu-fam');
+		$menu = new KT_Menu('<span>' . KT_I18N::translate('Edit') . '</span>', '#', 'menu-fam');
 		$menu->addLabel($menu->label, 'down');
 		$menu->addClass('', '', 'fa-pen-to-square');
 

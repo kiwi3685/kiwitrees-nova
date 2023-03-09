@@ -490,7 +490,7 @@ class extra_menus_KT_Module extends KT_Module implements KT_Module_Menu, KT_Modu
 		)->execute(array($default_block, 'new_tab'))->fetchOne();
 
 		//-- main menu item
-		$menu = new KT_Menu($main_menu_title, $main_menu_address, $this->getName(), 'down');
+		$menu = new KT_Menu('<span>' . $main_menu_title . '</span>', $main_menu_address, $this->getName(), 'down');
 		$menu->addClass('menuitem', 'menuitem_hover', '');
 
 		if ($main_menu_target == 1) {

@@ -30,7 +30,7 @@ class KT_MenuBar
 {
 	public static function getGedcomMenu()
 	{
-		$menu = new KT_Menu('<span class="show-for-medium">' . KT_I18N::translate('Home') . '</span>', 'index.php?ged=' . KT_GEDURL, 'menu-tree');
+		$menu = new KT_Menu('<span>' . KT_I18N::translate('Home') . '</span>', 'index.php?ged=' . KT_GEDURL, 'menu-tree');
 		$menu->addClass('', '', 'fa-house');
 
 		if (count(KT_Tree::getAll()) > 1 || KT_Site::preference('ALLOW_CHANGE_GEDCOM')) {
@@ -146,7 +146,7 @@ class KT_MenuBar
 		if ($active_charts) {
 			$indi_xref = $controller->getSignificantIndividual()->getXref();
 			$PEDIGREE_ROOT_ID = get_gedcom_setting(KT_GED_ID, 'PEDIGREE_ROOT_ID');
-			$menu = new KT_Menu(KT_I18N::translate('Charts'), '#', 'menu-chart');
+			$menu = new KT_Menu('<span>' . KT_I18N::translate('Charts') . '</span>', '#', 'menu-chart');
 			$menu->addClass('', '', 'fa-sitemap');
 
 			uasort($active_charts, function ($x, $y) {
@@ -175,7 +175,7 @@ class KT_MenuBar
 			return null;
 		}
 
-		$menu = new KT_Menu(KT_I18N::translate('Lists'), '#', 'menu-list');
+		$menu = new KT_Menu('<span>' . KT_I18N::translate('Lists') . '</span>', '#', 'menu-list');
 		$menu->addClass('', '', 'fa-list');
 
 		uasort($active_lists, function ($x, $y) {
@@ -209,7 +209,7 @@ class KT_MenuBar
 			return null;
 		}
 
-		$menu = new KT_Menu(KT_I18N::translate('Reports'), '#', 'menu-report');
+		$menu = new KT_Menu('<span>' . KT_I18N::translate('Reports') . '</span>', '#', 'menu-report');
 		$menu->addClass('', '', 'fa-file-alt');
 
 		foreach ($active_reports as $report) {
@@ -229,7 +229,7 @@ class KT_MenuBar
 			return null;
 		}
 
-		$menu = new KT_Menu(KT_I18N::translate('Search'), 'search.php?ged=' . KT_GEDURL, 'menu-search');
+		$menu = new KT_Menu('<span>' . KT_I18N::translate('Search'), 'search.php?ged=' . KT_GEDURL, 'menu-search');
 		$menu->addClass('', '', 'fa-magnifying-glass');
 
 		return $menu;

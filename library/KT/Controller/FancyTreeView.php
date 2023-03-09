@@ -1401,7 +1401,7 @@ class KT_Controller_FancyTreeView {
 			}
 
 			if ($FTV_SETTINGS) {
-				$menu = new KT_Menu(KT_I18N::translate('Overview'), '#', 'menu-fancy_treeview_descendants');
+				$menu = new KT_Menu('<span>' . KT_I18N::translate('Overview') . '</span>', '#', 'menu-fancy_treeview_descendants');
 				if ($FTV_GED_SETTINGS_A) {
 					foreach($FTV_GED_SETTINGS_A as $FTV_ITEM) {
 						if (KT_Person::getInstance($FTV_ITEM['PID']) && KT_Person::getInstance($FTV_ITEM['PID'])->canDisplayDetails() ) {

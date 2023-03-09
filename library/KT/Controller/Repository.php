@@ -74,7 +74,7 @@ class KT_Controller_Repository extends KT_Controller_GedcomRecord {
 		}
 
 		// edit menu
-		$menu = new KT_Menu(KT_I18N::translate('Edit'), '#', 'menu-repo');
+		$menu = new KT_Menu('<span>' . KT_I18N::translate('Edit') . '</span>', '#', 'menu-repo');
 		$menu->addClass('', '', 'fa-pen-to-square');
 
 		if (KT_USER_CAN_EDIT) {

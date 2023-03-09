@@ -86,7 +86,7 @@ class contact_KT_Module extends KT_Module implements KT_Module_Menu {
 			return '';
 		} else {
 			$menu = new KT_Menu(
-                $this->getMenuTitle(),
+				'<span>' . $this->getMenuTitle() . '</span>',
                 'module.php?mod=' . $this->getName() . '&amp;mod_action=show&amp;url=' . KT_SERVER_NAME . KT_SCRIPT_PATH . addslashes(urlencode(get_query_url())),
                 'menu-contact'
             );

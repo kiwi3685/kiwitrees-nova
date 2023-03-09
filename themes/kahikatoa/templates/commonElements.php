@@ -316,7 +316,7 @@ function MobileTopBarMenu($menuID = 'MainMenu')
 	<div class="grid-x">
 		<div class="cell">
 			<ul class="dropdown menu" data-dropdown-menu>
-				<li>
+				<li class="mobileLink">
 					<a href="#" data-toggle="<?php echo $menuID; ?>">
 						<i class="<?php echo $iconStyle; ?> fa-bars"></i>
 					</a>

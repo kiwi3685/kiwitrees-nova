@@ -384,7 +384,7 @@ class clippings_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module
 			return null;
 		}
 		//-- main clippings menu item
-		$menu = new KT_Menu($this->getTitle(), '#', 'menu-clippings');
+		$menu = new KT_Menu('<span>' . $this->getTitle(). '</span>', '#', 'menu-clippings');
 		$menu->addClass('', '', 'fa-cart-arrow-down');
 
 			$submenu = new KT_Menu($this->getTitle(), 'module.php?mod=clippings&amp;mod_action=index&amp;ged='.KT_GEDURL, 'menu-clippingscart');

@@ -297,7 +297,6 @@ class KT_Menu {
 
 		<li>
 			<a href="<?php echo $this->link; ?>"><?php echo $icon; ?></a>
-			<span class="mobileLabel"><?php echo $this->label; ?></span>
 
 			<?php if ($this->submenus) { ?>
 				<ul class="vertical menu nested expanded">

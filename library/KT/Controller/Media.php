@@ -76,7 +76,7 @@ class KT_Controller_Media extends KT_Controller_GedcomRecord {
 		}
 
 		// edit menu
-		$menu = new KT_Menu(KT_I18N::translate('Edit'), 'addmedia.php?action=editmedia&amp;pid=' . $this->record->getXref(), 'menu-obje');
+		$menu = new KT_Menu('<span>' . KT_I18N::translate('Edit') . '</span>', 'addmedia.php?action=editmedia&amp;pid=' . $this->record->getXref(), 'menu-obje');
 		$menu->addTarget('_blank');
 		$menu->addClass('', '', 'fa-pen-to-square');
 

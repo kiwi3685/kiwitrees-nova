@@ -347,7 +347,7 @@ class KT_Controller_Individual extends KT_Controller_GedcomRecord {
 			return null;
 		}
 		// edit menu
-		$menu = new KT_Menu(KT_I18N::translate('Edit'), '#', 'menu-indi');
+		$menu = new KT_Menu('<span>' . KT_I18N::translate('Edit') . '</span>', '#', 'menu-indi');
 		$menu->addLabel($menu->label, 'down');
 		$menu->addClass('', '', 'fa-pen-to-square');
 
