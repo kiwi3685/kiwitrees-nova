@@ -37,7 +37,7 @@ $controller
  * $custom [array]
  */
 $custom = array(
-	 "admin_custom_lang.php"							=> array(
+	 "admin_custom_lang.php" => array(
  	   KT_I18N::translate('Custom translations'),
 	   KT_I18N::translate('
 	   		Modify language translations that you want to be different from the
@@ -47,7 +47,7 @@ $custom = array(
 	   KT_I18N::translate('Administrator access only'),
 	   'alert'
    ),
-	 "admin_custom_theme.php"							=> array(
+	 "admin_custom_theme.php" => array(
  	   KT_I18N::translate('Custom file editing'),
 	   KT_I18N::translate('
 	   		Create and edit personalized theme files for your site,
@@ -77,23 +77,20 @@ echo pageStart('custom_admin', $controller->getPageTitle()); ?>
 	</div>
 	<div class="cell">
 		<div class="grid-x grid-margin-x grid-margin-y">
-			<?php foreach ($custom as $title => $file) {
+			<?php foreach ($custom as $link => $file) {
 				if (($file[3] == 'alert' && KT_USER_IS_ADMIN) || ($file[3] != 'alert' && KT_USER_GEDCOM_ADMIN)) {
-					if ($title == KT_I18N::translate('Custom javascript') && !KT_Module::isActiveMenu(KT_GED_ID, 'custom_js', KT_USER_ACCESS_LEVEL)) {
+					if ($link == KT_I18N::translate('Custom javascript') && !KT_Module::isActiveMenu(KT_GED_ID, 'custom_js', KT_USER_ACCESS_LEVEL)) {
 						continue;
-					} ?>
-					<div class="card cell">
-						<div class="card-divider">
-							<a href="<?php echo $title; ?>">
-								<?php echo $file[0]; ?>
-							</a>
-							<span class="<?php echo $file[3]; ?>" data-tooltip title="<?php echo $file[2]; ?>" data-position="top" data-alignment="right"><i class="<?php echo $iconStyle; ?> fa-user"></i>
-						</div>
-						<div class="card-section">
-							<?php echo $file[1]; ?>
-						</div>
-					</div>
-				<?php }
+					}
+					$title  = $file[0];
+					$user    = '<span class="show-for-medium ' . $file[3] . '" data-tooltip title="' . $file[2] . '" data-position="top" data-alignment="right">
+									<i class ="' . $iconStyle . ' fa-user"></i>
+								</span>';
+					$descr   = $file[1];
+
+					echo AdminSummaryCard ($link, $title, $user, $descr);
+
+				}
 			} ?>
 		</div>
 	</div>

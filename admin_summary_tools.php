@@ -42,19 +42,17 @@ echo pageStart('tools_admin', $controller->getPageTitle()); ?>
 	<div class="cell">
 		<div class="grid-x grid-margin-x grid-margin-y">
 			<?php foreach (KT_Module::getActiveModules(true) as $module) {
-				if ($module instanceof KT_Module_Config && $module->getName() !== 'custom_js') { ?>
-					<div class="card cell">
-						<div class="card-divider">
-							<a href="<?php echo $module->getConfigLink(); ?>">
-								<?php echo $module->getTitle(); ?>
-							</a>
-							<span class="alert" data-tooltip title="<?php echo $module->getTitle(); ?>" data-position="top" data-alignment="right"><i class="<?php echo $iconStyle; ?> fa-user"></i>
-						</div>
-						<div class="card-section">
-							<?php echo $module->getDescription(); ?>
-						</div>
-					</div>
-				<?php }
+				if ($module instanceof KT_Module_Config && $module->getName() !== 'custom_js') {
+					$link 	 = $module->getConfigLink();
+					$title  = $module->getTitle();
+					$user    = '<span class="show-for-medium alert" data-tooltip title="" data-position="top" data-alignment="right">
+									<i class ="' . $iconStyle . ' fa-user"></i>
+								</span>';
+					$descr   = $module->getDescription();
+
+					echo AdminSummaryCard ($link, $title, $user, $descr);
+
+				}
 			} ?>
 		</div>
 	</div>

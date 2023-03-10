@@ -401,3 +401,44 @@ function relatedPages($links, $self = '') {
 	</div>
 	<?php
 }
+
+/**
+ * Summary page cards
+ *
+ * 
+ * 
+ */
+ function AdminSummaryCard ($link, $title, $user, $descr, $image = false, $x = false) {
+ 	global $iconStyle;
+ 	?>
+		<div class="card cell small-6 medium-3">
+			<div class="card-divider text-center medium-text-left">
+				<a href="<?php echo $link; ?>">
+					<?php echo $title; ?>
+				</a>
+				<?php echo $user; ?>
+			</div>
+			<div class="card-section">
+				<?php if (!$image || $link == 'admin_modules.php') { ?>
+					<p><?php echo $descr; ?></p>
+				<?php } else {
+					echo $image;
+				} ?>
+			</div>
+		</div>
+		<!-- hidden reveal - main image -->
+		<?php if ($image && $x) { ?>
+			<div class="reveal" id="moduleImage<?php echo $x; ?>" data-reveal>
+				<h6 class="text-center">
+					<?php echo $title; ?>
+					<button class="close-button" aria-label="Dismiss image" type="button" data-close>
+						<span aria-hidden="true">
+							<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
+						</span>
+					</button>
+				</h6>
+				<?php echo $image; ?>
+			</div>
+		<?php } 
+
+ }

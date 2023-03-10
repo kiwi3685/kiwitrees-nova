@@ -9909,29 +9909,7 @@ main #admin-content #modules_admin-page div.card,
 main #admin-content #custom_admin-page div.card,
 main #admin-content #tools_admin-page div.card {
 	box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
-	height: 13rem;
-}
-@media screen and (min-width: 48.0625em) {
-	main #admin-content #site_admin-page div.card,
-main #admin-content #tree_admin-page div.card,
-main #admin-content #user_admin-page div.card,
-main #admin-content #media_admin-page div.card,
-main #admin-content #modules_admin-page div.card,
-main #admin-content #custom_admin-page div.card,
-main #admin-content #tools_admin-page div.card {
-		width: 33%;
-	}
-}
-@media screen and (min-width: 64.0625em) {
-	main #admin-content #site_admin-page div.card,
-main #admin-content #tree_admin-page div.card,
-main #admin-content #user_admin-page div.card,
-main #admin-content #media_admin-page div.card,
-main #admin-content #modules_admin-page div.card,
-main #admin-content #custom_admin-page div.card,
-main #admin-content #tools_admin-page div.card {
-		width: 22%;
-	}
+	height: 15.8rem;
 }
 main #admin-content #site_admin-page div.card div.card-divider a,
 main #admin-content #tree_admin-page div.card div.card-divider a,
@@ -9967,13 +9945,17 @@ main #admin-content #media_admin-page div.card div.card-section,
 main #admin-content #modules_admin-page div.card div.card-section,
 main #admin-content #custom_admin-page div.card div.card-section,
 main #admin-content #tools_admin-page div.card div.card-section {
-	height: 75%;
+	height: 4rem;
+	padding: 0;
 }
-main #admin-content #modules_admin-page div.card {
-	height: 16rem;
-}
-main #admin-content #modules_admin-page div.card div.card-section {
-	height: 78%;
+main #admin-content #site_admin-page div.card div.card-section p,
+main #admin-content #tree_admin-page div.card div.card-section p,
+main #admin-content #user_admin-page div.card div.card-section p,
+main #admin-content #media_admin-page div.card div.card-section p,
+main #admin-content #modules_admin-page div.card div.card-section p,
+main #admin-content #custom_admin-page div.card div.card-section p,
+main #admin-content #tools_admin-page div.card div.card-section p {
+	padding: 1rem;
 }
 main #admin-content #modules_admin-page div.card div.card-section img {
 	width: 100%;
