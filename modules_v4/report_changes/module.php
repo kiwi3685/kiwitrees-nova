@@ -181,7 +181,7 @@ class report_changes_KT_Module extends KT_Module implements KT_Module_Report {
             <form class="hide-for-print" name="changes" id="changes" method="post" action="module.php?mod=' . $this->getName() . '&mod_action=show">
                 <input type="hidden" name="action" value="go">
                 <div class="grid-x grid-margin-x">
-                    <div class="cell callout info-help help_content">
+                    <div class="cell callout info-help">
                         ' . /* I18N: help for resource facts and events module */
                         KT_I18N::translate('
                             A list of data changes for the current family tree based on <b>either</b>

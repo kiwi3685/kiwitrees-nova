@@ -112,7 +112,7 @@ class report_census_KT_Module extends KT_Module implements KT_Module_Report {
 			<?php echo pageStart('report_census', KT_I18N::translate('Individuals with missing census data', '', $this->getDescription())); ?>
 				<form class="hide-for-print" name="surnlist" id="surnlist" method="post" action="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=show">
 					<div class="grid-x grid-margin-x">
-						<div class="cell callout info-help help_content">
+						<div class="cell callout info-help">
 							<?php echo KT_I18N::translate('
 								Enter a surname, then select any combination of Census place and Census date.
 								<br>

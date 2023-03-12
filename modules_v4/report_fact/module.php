@@ -153,7 +153,7 @@ class report_fact_KT_Module extends KT_Module implements KT_Module_Report {
 			<form class="cell hide-for-print" name="resource" id="resource" method="post" action="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=show&amp;ged=<?php echo KT_GEDURL; ?>">
 				<input type="hidden" name="go" value="1">
 				<div class="grid-x grid-margin-x">
-					<div class="cell callout info-help help_content">
+					<div class="cell callout info-help">
 						<?php echo /* I18N: help for report facts and events module */
 							KT_I18N::translate('
 								The list of available facts and events are those set by the site administrator as

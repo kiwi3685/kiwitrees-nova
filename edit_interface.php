@@ -331,7 +331,7 @@ switch ($actionA) {
     				<input type="hidden" name="action" value="addnoteaction">
     				<input type="hidden" name="noteid" value="newnote">
     				<div id="add_facts">
-                        <div class="cell callout info-help help_content">
+                        <div class="cell callout info-help">
                             <?php echo KT_I18N::translate('
                                 Shared Notes are free-form text and will appear in the Fact Details section of the page.
                                 <br>
@@ -1108,7 +1108,7 @@ switch ($actionA) {
 				<input type="hidden" name="pid" value="<?php echo $pid; ?>">
                 <input type="hidden" name="num_note_lines" value="<?php echo $num_note_lines; ?>">
 
-                <div class="cell callout info-help help_content">
+                <div class="cell callout info-help">
                     <?php echo KT_I18N::translate('
                         Shared Notes are free-form text and will appear in the Fact Details section of the page.
                         <br>
