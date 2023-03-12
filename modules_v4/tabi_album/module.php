@@ -78,62 +78,11 @@ class tabi_album_KT_Module extends KT_Module implements KT_Module_IndiTab, KT_Mo
 	}
 
 	// Implement KT_Module_IndiTab
-	public function getTabContent() {
-		global $controller;
-
-		$ALBUM_GROUPS = get_module_setting($this->getName(), 'ALBUM_GROUPS');
-		if (!isset($ALBUM_GROUPS)) {
-			$ALBUM_GROUPS = 4;
-		}
-
-		require_once KT_ROOT . KT_MODULES_DIR . $this->getName() . '/administration/album_print_media.php';
-		$html='<div id="'.$this->getName().'_content">';
-			//Show Album header Links
-			if (KT_USER_CAN_EDIT) {
-				$html.='<div class="descriptionbox rela">';
-				// Add a media object
-				if (get_gedcom_setting(KT_GED_ID, 'MEDIA_UPLOAD') >= KT_USER_ACCESS_LEVEL) {
-					$html.='<span><a href="addmedia.php?action=showmediaform&amp;linktoid=' . $controller->record->getXref() . '" target="_blank" rel="noopener noreferrer"><i style="margin: 0 3px 0 10px;" class="icon-image_add">&nbsp;</i>' .KT_I18N::translate('Add a media object'). '</a></span>';
-					// Link to an existing item
-					$html.='<span><a href="inverselink.php?linktoid=' . $controller->record->getXref() . '&amp;linkto=person" target="_blank"><i style="margin: 0 3px 0 10px;" class="icon-image_link">&nbsp;</i>' .KT_I18N::translate('Link to an existing media object'). '</a></span>';
-				}
-				if (KT_USER_GEDCOM_ADMIN && $this->get_media_count()>1) {
-					// Popup Reorder Media
-					$html.='<span><a href="#" onclick="reorder_media(\''.$controller->record->getXref().'\')"><i style="margin: 0 3px 0 10px;" class="icon-image_sort">&nbsp;</i>' .KT_I18N::translate('Re-order media'). '</a></span>';
-				}
-				$html.='</div>';
-			}
-		$media_found = false;
-
-		$html .= '<div style="width:100%; vertical-align:top;">';
-		ob_start();
-		if ($ALBUM_GROUPS == 0) {
-			album_print_media($controller->record->getXref(), 0, true);
-		} else {
-			for ($i = 0; $i < $ALBUM_GROUPS; $i++) {
-				ob_start();
-				album_print_media($controller->record->getXref(), 0, true, $i);
-				$print_row = ob_get_contents();
-				$check = strrpos($print_row, "class=\"pic\"");
-				if(!$check) {
-					ob_end_clean();
-				} else {
-					ob_end_flush();
-				}
-			}
-		}
-		return
-			$html.
-			ob_get_clean().
-			'</div>';
-	}
-
-
-	// Implement KT_Module_IndiTab
 	public function canLoadAjax() {
 		global $SEARCH_SPIDER;
 
-		return !$SEARCH_SPIDER; // Search engines cannot use AJAX
+//		return !$SEARCH_SPIDER; // Search engines cannot use AJAX
+		return false;
 	}
 
 	// Implement KT_Module_IndiTab
@@ -187,14 +136,14 @@ class tabi_album_KT_Module extends KT_Module implements KT_Module_IndiTab, KT_Mo
 					</tr>';
 					for ($i=0; $i<$ct; ++$i) {
 						$mediaobject = $medialist[$i];
-						$html .= '<tr>
+						$html  .=  '<tr>
 							<td>' . $mediaobject->displayImage() . '</td>
 							<td>
 								<a href="addmedia.php?action=editmedia&pid=' . $mediaobject->getXref() . '" target="_blank">' . $mediaobject->getFullName() . '</a>
 							</td>
 						</tr>';
 					}
-				$html .= '</table>';
+				$html  .=  '</table>';
 		} else {
 			$html = '<p>' .KT_I18N::translate('No media objects found'). '</p>';
 		}
@@ -204,6 +153,89 @@ class tabi_album_KT_Module extends KT_Module implements KT_Module_IndiTab, KT_Mo
 	private function getJS() {
 		return '';
 	}
+
+		// Implement KT_Module_IndiTab
+	public function getTabContent() {
+		global $SHOW_RELATIVES_EVENTS, $controller, $iconStyle;
+		require_once KT_ROOT . KT_MODULES_DIR . $this->getName() . '/administration/album_print_media.php';
+
+		$media_found = false;
+
+		$ALBUM_GROUPS = get_module_setting($this->getName(), 'ALBUM_GROUPS');
+		if (!isset($ALBUM_GROUPS)) {
+			$ALBUM_GROUPS = 4;
+		}
+		?>
+
+		<div id="<?php echo $this->getName(); ?>_content">
+
+			<?php if (KT_USER_CAN_EDIT) { ?>
+				<div class="cell tabHeader">
+					<?php if (get_gedcom_setting(KT_GED_ID, 'MEDIA_UPLOAD') >= KT_USER_ACCESS_LEVEL) { ?>
+						<div class="grid-x">
+							<?php if ($SHOW_RELATIVES_EVENTS) { ?>
+								<div class="cell shrink">
+									<a 
+										href="addmedia.php?action=showmediaform&amp;linktoid=<?php echo $controller->record->getXref(); ?>" 
+										target="_blank" 
+										rel="noopener noreferrer"
+									>
+										<i class="<?php echo $iconStyle; ?> fa fa-camera-retro"></i>
+										<?php echo KT_I18N::translate('Add a media object'); ?>
+									</a>
+								</div>
+							<?php }
+							if (file_exists(KT_Site::preference('INDEX_DIRECTORY') . 'histo.' . KT_LOCALE . '.php')) { ?>
+								<div class="cell shrink">
+									<a 
+										href="inverselink.php?linktoid=<?php echo $controller->record->getXref(); ?>&amp;linkto=person" 
+										target="_blank"
+									>
+										<i class="<?php echo $iconStyle; ?> fa fa-link"></i>
+										<?php echo KT_I18N::translate('Link to an existing media object'); ?>
+									</a>
+								</div>
+							<?php }
+
+							if (KT_USER_GEDCOM_ADMIN && $this->get_media_count() > 1) { ?>
+								<div class="cell auto">
+									<a 
+										href="#" onclick="reorder_media('<?php echo $controller->record->getXref(); ?>')" 
+										target="_blank"
+									>
+										<i class="<?php echo $iconStyle; ?> fa fa-shuffle"></i>
+										<?php echo KT_I18N::translate('Re-order media'); ?>
+									</a>
+								</div>
+							<?php } ?>
+
+
+						</div>
+					<?php } ?>
+				</div>
+			<?php }
+
+			if ($ALBUM_GROUPS == 0) {
+				album_print_media($controller->record->getXref(), 0, true);
+			} else {
+				for ($i = 0; $i < $ALBUM_GROUPS; $i++) {
+					ob_start();
+						album_print_media($controller->record->getXref(), 0, true, $i);
+						$print_row = ob_get_contents();
+						$check     = strrpos($print_row, "class=\"pic\"");
+					if(!$check) {
+						ob_end_clean();
+					} else {
+						ob_end_flush();
+					}
+				}
+			} ?>
+
+		</div>
+
+		<?php
+	}
+
 
 
 }

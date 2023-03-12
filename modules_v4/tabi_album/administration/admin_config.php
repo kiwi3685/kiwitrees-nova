@@ -31,21 +31,26 @@ $controller
 	->pageHeader()
 ;
 
+$success = 0;
+
 if (KT_Filter::postBool('save')) {
 	$ALBUM_GROUPS  = KT_Filter::post('NEW_ALBUM_GROUPS');
 	$ALBUM_TITLES  = KT_Filter::postArray('NEW_ALBUM_TITLES');
 	$ALBUM_OPTIONS = KT_Filter::postArray('NEW_ALBUM_OPTIONS');
 	if (isset($ALBUM_GROUPS)) {
 		set_module_setting($this->getName(), 'ALBUM_GROUPS', $ALBUM_GROUPS);
+		$success = $success + 1;
 	}
 	if (!empty($ALBUM_TITLES)) {
 		set_module_setting($this->getName(), 'ALBUM_TITLES', serialize($ALBUM_TITLES));
+		$success = $success + 1;
 	}
 	if (!empty($ALBUM_OPTIONS)) {
 		set_module_setting($this->getName(), 'ALBUM_OPTIONS', serialize($ALBUM_OPTIONS));
+		$success = $success + 1;
 	}
 
-	AddToLog($this->getTitle() . ' set to new values', 'config');
+	$success = 3 ? AddToLog($this->getTitle() . ' set to new values', 'config') : AddToLog($this->getTitle() . ' FAILED to set new values', 'config');
 }
 
 $SHOW_FIND     = KT_Filter::post('show');

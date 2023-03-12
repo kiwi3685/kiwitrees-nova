@@ -10106,6 +10106,39 @@ div[id$=-page] button[type=submit] {
 #indi-page .tabs-panel #tabi_attributes_content .button-group .button {
 	margin: 0;
 }
+#indi-page .tabs-panel #tabi_album_content [id^=thumbcontainer] {
+	border-bottom: 0.125rem solid #ab3334;
+	margin-bottom: 0.9rem;
+}
+#indi-page .tabs-panel #tabi_album_content [id^=thumbcontainer] .cell {
+	background-color: #fffff4;
+	height: 12rem;
+	padding: 0.25rem;
+}
+#indi-page .tabs-panel #tabi_album_content [id^=thumbcontainer] .cell .pic {
+	margin-top: 0.25rem;
+}
+#indi-page .tabs-panel #tabi_album_content [id^=thumbcontainer] .cell .pic a img {
+	height: 7rem;
+	width: auto;
+}
+#indi-page .tabs-panel #tabi_album_content [id^=thumbcontainer] .cell ul.album.vertical.menu.dropdown li {
+	display: block;
+}
+#indi-page .tabs-panel #tabi_album_content [id^=thumbcontainer] .cell ul.album.vertical.menu.dropdown li a {
+	background: #fffff4;
+	font-size: 0.9rem;
+	padding: 0;
+	text-align: center;
+}
+#indi-page .tabs-panel #tabi_album_content [id^=thumbcontainer] .cell ul.album.vertical.menu.dropdown li ul.is-dropdown-submenu {
+	left: 0.25rem;
+	min-width: 10rem;
+	top: 2.975rem;
+}
+#indi-page .tabs-panel #tabi_album_content [id^=thumbcontainer] .cell ul.album.vertical.menu.dropdown li ul.is-dropdown-submenu li a {
+	font-size: 0.9rem;
+}
 #indi-page .tabs-panel #tabi_dna_content hr {
 	border: solid 0.025rem #faf5e8;
 }

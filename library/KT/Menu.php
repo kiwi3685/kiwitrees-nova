@@ -182,61 +182,143 @@ class KT_Menu {
 		}
 	}
 
+	function getFoundationDropdownMenu($ID = '') {
+		global $menucount;
+
+		if (!isset($menucount)) {
+			$menucount = 0;
+		} else {
+			$menucount ++;
+		}
+		$subsID = $menucount.rand();
+		$c  = count($this->submenus);
+		?>
+
+		<ul class="album vertical menu dropdown align-center" data-dropdown-menu style="max-width: 250px;">
+			<li>
+				<?php echo $this->label; ?>
+
+				<?php if ($c > 0) {
+					$submenuid = 'menu' . $subsID . '_subs'; ?>
+					<ul class="menu vertical">
+						<?php foreach ($this->submenus as $submenu) {
+							$submenu->parentmenu = $submenuid;
+							echo $submenu->getFoundationSubMenu($submenuid);
+						} ?>
+					</ul>		
+				<?php } ?>
+			</li>
+		</ul>
+
+		<?php
+	}
+
+	function getFoundationSubMenu($submenuid) {
+
+		switch ($this->class) {
+			case 'submenuitemNote': ?>
+				<li>
+					<a href="#" class="<?php echo $this->class; ?>" data-toggle="<?php echo $submenuid; ?>">
+						<?php echo $this->label; ?>
+					</a>
+				</li>
+				<div 
+					class="dropdown-pane" 
+					data-position="right" 
+					data-alignment="top" 
+					id="<?php echo $submenuid; ?>" 
+					data-dropdown 
+				>
+					<p><?php echo $this->onclick; ?></p>
+				</div>
+				<?php break;
+			default : ?>
+				<li>
+					<a href="<?php echo $this->link; ?>" class="<?php echo $this->class; ?>">
+						<?php echo $this->label; ?>
+					</a>
+				</li>
+				<?php break;
+			break;
+		}
+
+	}
+
+
 	function getMenu() {
 		global $menucount, $TEXT_DIRECTION, $KT_IMAGES;
 
 		if (!isset($menucount)) {
 			$menucount = 0;
 		} else {
-			$menucount++;
+			$menucount ++;
 		}
 		$id = $menucount.rand();
-		$c = count($this->submenus);
-		$output = '<div id="menu' . $id . '" class="' . $this->class . '">';
-			$link = '<a href="' . $this->link . '" onmouseover="';
+		$c  = count($this->submenus);
+		?>
+		
+		<div id="menu<?php echo $id; ?>" class="<?php echo $this->class; ?>">
+
+			<a href="<?php echo $this->link; ?>" onmouseover="
+				<?php $link = '';
 				if ($c >= 0) {
 					$link .= 'show_submenu(\'menu' . $id . '_subs\', \'menu' . $id . '\', \'' . $this->flyout . '\');';
 				}
+
 				$link .= '" onmouseout="';
 				if ($c >= 0) {
 					$link .= 'timeout_submenu(\'menu' . $id . '_subs\');';
 				}
+
 				if ($this->onclick !== null) {
 					$link .= '" onclick="' . $this->onclick . '"';
 				}
-				if ($this->target !== null) {
-					$link .= '" target="'.$this->target;
-				}
-			$link .= '">';
-				$output .= $link;
-				$output .= $this->label;
-			$output .= '</a>';
 
-			if ($c > 0) {
-				$submenuid = 'menu' . $id . '_subs';
-				if ($TEXT_DIRECTION == 'ltr') {
-					$output .= '<div style="text-align: left;">';
-				} else {
-					$output .= '<div style="text-align: right;">';
+				if ($this->target !== null) {
+					$link .= '" target="' . $this->target;
 				}
-					$output .= '<div id="menu' . $id . '_subs" class="' . $this->submenuclass . '" style="position: absolute; visibility: hidden; z-index: 100;';
-					if ($this->flyout == 'right') {
-						if ($TEXT_DIRECTION == 'ltr') {
-							$output .= ' left: 80px;';
-						} else {
-							$output .= ' right: 50px;';
-						}
-					}
-					$output .= '" onmouseover="show_submenu(\'' . $this->parentmenu . '\'); show_submenu(\'' . $submenuid . '\');" onmouseout="timeout_submenu(\'menu' . $id . '_subs\');">';
-					foreach ($this->submenus as $submenu) {
-						$submenu->parentmenu = $submenuid;
-						$output .= $submenu->getMenu();
-					}
-					$output .= '</div>
-				</div>';
-			}
-		$output .= '</div>';
-		return $output;
+				?>
+				<?php echo $link; ?>
+			">
+				<?php echo $this->label; ?>
+			</a>
+
+			<?php if ($c > 0) {
+				$submenuid = 'menu' . $id . '_subs';
+
+				if ($TEXT_DIRECTION == 'ltr') { ?>
+					<div style="text-align: left;">
+				<?php } else { ?>
+					<div style="text-align: right;">
+				<?php } ?>
+						<div 
+							id="menu<?php echo $id; ?>_subs" 
+							class="<?php echo $this->submenuclass; ?>" 
+							style="
+								position: absolute; 
+								visibility: hidden; 
+								z-index: 100;
+								<?php if ($this->flyout == 'right') {
+									if ($TEXT_DIRECTION == 'ltr') { ?>
+										 left: 80px;
+									<?php } else { ?>							
+										 right: 50px;
+									<?php }
+								} ?>
+							"
+							onmouseover="show_submenu('<?php echo $this->parentmenu; ?>'); show_submenu('<?php echo $submenuid; ?>');" 
+							onmouseout="timeout_submenu('menu<?php echo $id; ?>_subs');"
+						>
+							<?php foreach ($this->submenus as $submenu) {
+								$submenu->parentmenu = $submenuid;
+								echo $submenu->getMenu();
+							} ?>
+						</div>
+					</div>
+			<?php } ?>
+		
+		</div>
+		<?php
 	}
 
 	/**

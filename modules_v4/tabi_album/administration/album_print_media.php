@@ -1,7 +1,7 @@
 <?php
 /**
  * Kiwitrees: Web based Family History software
- * Copyright (C) 2012 to 2023 kiwitrees.net
+ * Copyright (C) 2012 to 2023 kiwitrees.net.
  *
  * Derived from webtrees (www.webtrees.net)
  * Copyright (C) 2010 to 2012 webtrees development team
@@ -20,61 +20,65 @@
  * You should have received a copy of the GNU General Public License
  * along with Kiwitrees. If not, see <http://www.gnu.org/licenses/>
  */
-
 if (!defined('KT_KIWITREES')) {
 	header('HTTP/1.0 403 Forbidden');
+
 	exit;
 }
 
 /**
  * -----------------------------------------------------------------------------
- * Print the links to media objects
- * @param string $pid		The the xref id of the object to find media records related to
- * @param int $level		The level of media object to find
- * @param boolean $related	Whether or not to grab media from related records
+ * Print the links to media objects.
+ *
+ * @param string $pid     The the xref id of the object to find media records related to
+ * @param int    $level   The level of media object to find
+ * @param bool   $related Whether or not to grab media from related records
+ * @param mixed  $kind
+ * @param mixed  $noedit
  */
-function album_print_media($pid, $level=1, $related=false, $kind=0, $noedit=false) {
+function album_print_media($pid, $level = 1, $related = false, $kind = 0, $noedit = false)
+{
 	global $GEDCOM;
 
-	$ALBUM_GROUPS = get_module_setting('album', 'ALBUM_GROUPS');
-	$ALBUM_TITLES = unserialize(get_module_setting('album', 'ALBUM_TITLES'));
-	$ALBUM_OPTIONS = unserialize(get_module_setting('album', 'ALBUM_OPTIONS'));
+	$ALBUM_GROUPS  = get_module_setting('tabi_album', 'ALBUM_GROUPS') ? get_module_setting('tabi_album', 'ALBUM_GROUPS') : '';
+	$ALBUM_TITLES  = get_module_setting('tabi_album', 'ALBUM_TITLES') ? unserialize(get_module_setting('tabi_album', 'ALBUM_TITLES')) : [];
+	$ALBUM_OPTIONS = get_module_setting('tabi_album', 'ALBUM_OPTIONS') ? unserialize(get_module_setting('tabi_album', 'ALBUM_OPTIONS')) : [];
 
 	if (!isset($ALBUM_GROUPS)) {
 		$ALBUM_GROUPS = 4;
 	}
 
 	if (empty($ALBUM_TITLES)) {
-		$ALBUM_TITLES = array(
+		$ALBUM_TITLES = [
 			KT_I18N::translate('Photos'),
 			KT_I18N::translate('Documents'),
 			KT_I18N::translate('Census'),
-			KT_I18N::translate('Other')
-		);
+			KT_I18N::translate('Other'),
+		];
 	}
 
-	$default_groups = array(
-			KT_I18N::translate('Other'),
-			KT_I18N::translate('Other'),
-			KT_I18N::translate('Documents'),
-			KT_I18N::translate('Documents'),
-			KT_I18N::translate('Other'),
-			KT_I18N::translate('Documents'),
-			KT_I18N::translate('Census'),
-			KT_I18N::translate('Documents'),
-			KT_I18N::translate('Documents'),
-			KT_I18N::translate('Documents'),
-			KT_I18N::translate('Census'),
-			KT_I18N::translate('Census'),
-			KT_I18N::translate('Documents'),
-			KT_I18N::translate('Other'),
-			KT_I18N::translate('Photos'),
-			KT_I18N::translate('Photos'),
-			KT_I18N::translate('Photos'),
-			KT_I18N::translate('Other')
-	);
+	$default_groups = [
+		KT_I18N::translate('Other'),
+		KT_I18N::translate('Other'),
+		KT_I18N::translate('Documents'),
+		KT_I18N::translate('Documents'),
+		KT_I18N::translate('Other'),
+		KT_I18N::translate('Documents'),
+		KT_I18N::translate('Census'),
+		KT_I18N::translate('Documents'),
+		KT_I18N::translate('Documents'),
+		KT_I18N::translate('Documents'),
+		KT_I18N::translate('Census'),
+		KT_I18N::translate('Census'),
+		KT_I18N::translate('Documents'),
+		KT_I18N::translate('Other'),
+		KT_I18N::translate('Photos'),
+		KT_I18N::translate('Photos'),
+		KT_I18N::translate('Photos'),
+		KT_I18N::translate('Other'),
+	];
 
-	if (empty($ALBUM_OPTIONS))	{
+	if (empty($ALBUM_OPTIONS)) {
 		$ALBUM_OPTIONS = array_combine(array_keys(KT_Gedcom_Tag::getFileFormTypes()), $default_groups);
 	}
 
@@ -86,16 +90,16 @@ function album_print_media($pid, $level=1, $related=false, $kind=0, $noedit=fals
 	} else {
 		$regexp = '/\n\d OBJE @(.*)@/';
 	}
-	//-- find all of the related individuals
-	$ids = array($person->getXref());
+	// -- find all of the related individuals
+	$ids = [$person->getXref()];
 	if ($related) {
 		foreach ($person->getSpouseFamilies() as $family) {
 			$ids[] = $family->getXref();
 			$ctf += preg_match_all($regexp, $family->getGedcomRecord(), $match, PREG_SET_ORDER);
 		}
 	}
-	//-- If they exist, get a list of the sorted current objects in the indi gedcom record  -  (1 _KT_OBJE_SORT @xxx@ .... etc) ----------
-	$sort_current_objes = array();
+	// -- If they exist, get a list of the sorted current objects in the indi gedcom record  -  (1 _KT_OBJE_SORT @xxx@ .... etc) ----------
+	$sort_current_objes = [];
 	$sort_ct = preg_match_all('/\n1 _KT_OBJE_SORT @(.*)@/', $person->getGedcomRecord(), $sort_match, PREG_SET_ORDER);
 	for ($i = 0; $i < $sort_ct; $i++) {
 		if (!isset($sort_current_objes[$sort_match[$i][1]])) {
@@ -109,12 +113,12 @@ function album_print_media($pid, $level=1, $related=false, $kind=0, $noedit=fals
 	// create ORDER BY list from Gedcom sorted records list  ---------------------------
 	$orderbylist = ' ORDER BY '; // initialize
 	foreach ($sort_match as $id) {
-		$orderbylist .= "m_id='$id[1]' DESC, ";
+		$orderbylist .= "m_id='{$id[1]}' DESC, ";
 	}
 	$orderbylist = rtrim($orderbylist, ', ');
 
-	//-- get a list of the current objects in the record
-	$current_objes = array();
+	// -- get a list of the current objects in the record
+	$current_objes = [];
 	$ct = preg_match_all($regexp, $person->getGedcomRecord(), $match, PREG_SET_ORDER);
 	for ($i = 0; $i < $ct; $i++) {
 		if (!isset($current_objes[$match[$i][1]])) {
@@ -134,25 +138,29 @@ function album_print_media($pid, $level=1, $related=false, $kind=0, $noedit=fals
 		JOIN `##link` ON (m_id=l_to AND m_file=l_file AND l_type='OBJE')
 		WHERE m_file=? AND l_from IN (
     ";
-	$i=0;
-	$vars = array(KT_GED_ID);
+	$i = 0;
+	$vars = [KT_GED_ID];
 	foreach ($ids as $media_id) {
-		if ($i > 0) $sqlmm .= ", ";
-		$sqlmm .= "?";
+		if ($i > 0) {
+			$sqlmm .= ', ';
+		}
+		$sqlmm .= '?';
 		$vars[] = $media_id;
 		$i++;
 	}
 	$sqlmm .= ')';
 
-	if ($ALBUM_GROUPS != 0) {
+	$tt = '';
+
+	if ($ALBUM_GROUPS > 0) {
 		// Set type of media from call in album
 		for ($i = 0; $i < $ALBUM_GROUPS; $i++) {
 			if ($i == $kind) {
 				$tt = $ALBUM_TITLES[$i];
 				$sqlmm .= ' AND (';
-				foreach ($ALBUM_OPTIONS as $key=>$value) {
+				foreach ($ALBUM_OPTIONS as $key => $value) {
 					if ($value == $tt) {
-						$sqlmm .= "m_gedcom LIKE '%TYPE " .strtolower($key). "%' OR ";
+						$sqlmm .= "m_gedcom LIKE '%TYPE " . strtolower($key) . "%' OR ";
 					}
 					if ($tt == KT_I18N::translate('Other')) {
 						$sqlmm .= "m_gedcom NOT LIKE '%TYPE %' OR ";
@@ -168,80 +176,89 @@ function album_print_media($pid, $level=1, $related=false, $kind=0, $noedit=fals
 		$sqlmm .= $orderbylist;
 	}
 
-	$rows = KT_DB::prepare($sqlmm)->execute($vars)->fetchAll(PDO::FETCH_ASSOC);
-	$numm = count($rows);
-	$foundObjs = array();
+	$rows      = KT_DB::prepare($sqlmm)->execute($vars)->fetchAll(PDO::FETCH_ASSOC);
+	$numm      = count($rows);
+	$foundObjs = [];
 
-// Begin to Layout the Album Media Rows
+	// Begin to Layout the Album Media Rows
 	if ($numm > 0) {
-		if ($ALBUM_GROUPS != 0) {
-			echo '<table class="facts_table">
-				<tr>
-					<td class="descriptionbox" style="width:150px; text-align:center; vertical-align:middle;">
-						<span style="font-weight:900;">', KT_I18N::translate($tt),'</span>
-					</td>
-					<td class="optionbox">';
-		}
-					echo '<div id="thumbcontainer', $kind, '">';
-						// Start pulling media items into thumbcontainer div ==============================
-						foreach ($rows as $rowm) {
-							if (isset($foundObjs[$rowm['m_id']])) {
+		if (0 != $ALBUM_GROUPS) { ?>
+			<div class="grid-x">
+				<div class="cell text-center h5">
+					<?php echo KT_I18N::translate($tt); ?>
+				</div>
+		<?php } ?>
+
+				<div id="thumbcontainer<?php echo $kind; ?>" class="grid-x grid-margin-x grid-margin-y">
+
+					<?php // Start pulling media items into thumbcontainer div
+					foreach ($rows as $rowm) {
+						if (isset($foundObjs[$rowm['m_id']])) {
+							if (isset($current_objes[$rowm['m_id']])) {
+								$current_objes[$rowm['m_id']]--;
+							}
+
+							continue;
+						}
+						$rows = [];
+
+						// -- if there is a change to this media item then get the
+						// -- updated media item and show it
+						if ($newrec = find_updated_record($rowm['m_id'], $ged_id)) {
+							$row = [];
+							$row['m_id'] = $rowm['m_id'];
+							$row['m_file'] = $ged_id;
+							$row['m_filename'] = get_gedcom_value('FILE', 1, $newrec);
+							$row['m_titl'] = get_gedcom_value('TITL', 1, $newrec);
+							if (empty($row['m_titl'])) {
+								$row['m_titl'] = get_gedcom_value('FILE:TITL', 1, $newrec);
+							}
+							$row['m_gedcom'] = $newrec;
+							$et = preg_match('/\.(\w+)$/', $row['m_filename'], $ematch);
+							$ext = '';
+							if ($et > 0) {
+								$ext = $ematch[1];
+							}
+							$row['m_ext'] = $ext;
+							$row['pid'] = $pid;
+							$rows['new'] = $row;
+							$rows['old'] = $rowm;
+						} else {
+							if (!isset($current_objes[$rowm['m_id']]) && ($rowm['pid'] == $pid)) {
+								$rows['old'] = $rowm;
+							} else {
+								$rows['normal'] = $rowm;
 								if (isset($current_objes[$rowm['m_id']])) {
 									$current_objes[$rowm['m_id']]--;
 								}
-								continue;
-							}
-							$rows=array();
-
-							//-- if there is a change to this media item then get the
-							//-- updated media item and show it
-							if (($newrec=find_updated_record($rowm['m_id'], $ged_id))) {
-								$row = array();
-								$row['m_id'] = $rowm['m_id'];
-								$row['m_file'] = $ged_id;
-								$row['m_filename'] = get_gedcom_value('FILE', 1, $newrec);
-								$row['m_titl'] = get_gedcom_value('TITL', 1, $newrec);
-								if (empty($row['m_titl'])) $row['m_titl'] = get_gedcom_value('FILE:TITL', 1, $newrec);
-								$row['m_gedcom'] = $newrec;
-								$et = preg_match('/\.(\w+)$/', $row['m_filename'], $ematch);
-								$ext = '';
-								if ($et > 0) $ext = $ematch[1];
-								$row['m_ext'] = $ext;
-								$row['pid'] = $pid;
-								$rows['new'] = $row;
-								$rows['old'] = $rowm;
-							} else {
-								if (!isset($current_objes[$rowm['m_id']]) && ($rowm['pid'] == $pid)) {
-									$rows['old'] = $rowm;
-								} else {
-									$rows['normal'] = $rowm;
-									if (isset($current_objes[$rowm['m_id']])) {
-										$current_objes[$rowm['m_id']]--;
-									}
-								}
-							}
-							foreach ($rows as $rtype => $rowm) {
-								$res = album_print_media_row($rtype, $rowm, $pid);
-								$media_found = $media_found || $res;
-								$foundObjs[$rowm['m_id']] = true;
 							}
 						}
-					echo '</div>';
-		if ($ALBUM_GROUPS != 0)	 {
-				echo '</td>
-			</tr>
-			</table>';
-		}
+						foreach ($rows as $rtype => $rowm) {
+							$res = album_print_media_row($rtype, $rowm, $pid);
+							$media_found = $media_found || $res;
+							$foundObjs[$rowm['m_id']] = true;
+						}
+					} ?>
+
+				</div>
+
+				<?php if (0 != $ALBUM_GROUPS) { ?>
+
+			</div>
+
+		<?php }
 	}
 }
 
 /**
- * print a media row in a table
+ * print a media row in a table.
+ *
  * @param string $rtype whether this is a 'new', 'old', or 'normal' media row... this is used to determine if the rows should be printed with an outline color
- * @param array $rowm - An array with the details about this media item
- * @param string $pid - The record id this media item was attached to
+ * @param array  $rowm  - An array with the details about this media item
+ * @param string $pid   - The record id this media item was attached to
  */
-function album_print_media_row($rtype, $rowm, $pid) {
+function album_print_media_row($rtype, $rowm, $pid)
+{
 	global $sort_i, $notes;
 
 	$media = KT_Media::getInstance($rowm['m_id']);
@@ -257,102 +274,111 @@ function album_print_media_row($rtype, $rowm, $pid) {
 	}
 
 	// Highlight Album Thumbnails - Changed=new (blue), Changed=old (red), Changed=no (none)
-	 if ($rtype=='new') {
-		echo '<div class="album_new"><div class="pic">';
-	} else if ($rtype=='old') {
-		echo '<div class="album_old"><div class="pic">';
-	} else {
-		echo '<div class="album_norm"><div class="pic">';
-	}
+	if ('new' == $rtype) { ?>
+		<div class="cell album_new small-3 medium-2 text-center">
+			<div class="pic">
+	<?php } elseif ('old' == $rtype) { ?>
+		<div class="cell album_old small-3 medium-2 text-center">
+			<div class="pic">
+	<?php } else { ?>
+		<div class="cell album_norm small-3 medium-2 text-center">
+			<div class="pic">
+	<?php }
 
-	//  Get the title of the media
-	if ($media) {
-		$mediaTitle = $media->getFullName();
-	} else {
-		$mediaTitle = $rowm['m_id'];
-	}
+			//  Get the title of the media
+			if ($media) {
+				$mediaTitle = $media->getFullName();
+			} else {
+				$mediaTitle = $rowm['m_id'];
+			}
 
-	//Get media item Notes
-	$haystack = $rowm['m_gedcom'];
-	$needle   = '1 NOTE';
-	$before   = substr($haystack, 0, strpos($haystack, $needle));
-	$after    = substr(strstr($haystack, $needle), strlen($needle));
-	$final    = $before.$needle.$after;
-	$notes    = htmlspecialchars(addslashes(print_fact_notes($final, 1, true, true)), ENT_QUOTES);
+			// Get media item Notes
+			$haystack  = $rowm['m_gedcom'];
+			$needle    = '1 NOTE';
+			$before    = substr($haystack, 0, strpos($haystack, $needle));
+			$after     = substr(strstr($haystack, $needle), strlen($needle));
+			$final     = $before . $needle . $after;
+			$notes     = htmlspecialchars(addslashes(print_fact_notes($final, 1, true, true)), ENT_QUOTES);
 
-	// Prepare Below Thumbnail  menu ----------------------------------------------------
-	$mtitle = '<div class="album_media_title">' . $mediaTitle . '</div>';
-	$menu = new KT_Menu();
-	$menu->addLabel($mtitle, 'right');
+			// Prepare Below Thumbnail  menu ----------------------------------------------------
+			$menuID    = 'menu' . (int) (microtime(true) * 1000000);
+			$menuTitle = '<a href="#" class="album_media_title" data-toggle="' . $menuID . '">' . $mediaTitle . '</a>';
+			$menu      = new KT_Menu();
+			$menu->addLabel($menuTitle);
 
-	if ($rtype=='old') {
-		// Do not print menu if item has changed and this is the old item
-	} else {
-		// Continue printing menu
-		$menu->addClass('', 'submenu');
+			if ('old' == $rtype) {
+				// Do not print menu if item has changed and this is the old item
+			} else {
+				// Continue printing menu
+				$menu->addClass('', 'submenu');
 
-		// View Notes
-		if (strpos($rowm['m_gedcom'], "\n1 NOTE")) {
-			$submenu = new KT_Menu(KT_I18N::translate('View Notes'), '#');
-			// Notes Tooltip ----------------------------------------------------
-			$submenu->addOnclick("modalNotes('". $notes ."','". KT_I18N::translate('View Notes') ."'); return false;");
-			$submenu->addClass("submenuitem");
-			$menu->addSubMenu($submenu);
-		}
-		//View Details
-		$submenu = new KT_Menu(KT_I18N::translate('View Details'), KT_SERVER_NAME.KT_SCRIPT_PATH . "mediaviewer.php?mid=".$rowm['m_id'].'&amp;ged='.KT_GEDURL, 'right');
-		$submenu->addClass("submenuitem");
-		$menu->addSubMenu($submenu);
-
-		//View Sources
-		$source_menu = null;
-		foreach ($media->getAllFactsByType('SOUR') as $source_fact) {
-			$source = KT_Source::getInstance(trim($source_fact->detail, '@'));
-			if ($source && $source->canDisplayDetails()) {
-				if (!$source_menu) {
-					// Group sources under a top level menu
-					$source_menu = new KT_Menu(KT_I18N::translate('Sources'), '#', null, 'right', 'right');
-					$source_menu->addClass('submenuitem', 'submenu');
+				// View Notes
+				if (strpos($rowm['m_gedcom'], "\n1 NOTE")) {
+					$submenu = new KT_Menu(KT_I18N::translate('View Notes'), '#');
+					// Notes Tooltip ----------------------------------------------------
+//					$submenu->addOnclick("modalNotes('" . $notes . "','" . KT_I18N::translate('View Notes') . "'); return false;");					
+					$submenu->addOnclick($notes);					
+					$submenu->addClass('submenuitemNote');
+					$menu->addSubMenu($submenu);
 				}
-				//now add a link to the actual source as a submenu
-				$submenu = new KT_Menu(new KT_Menu(strip_tags($source->getFullName()), $source->getHtmlUrl()));
-				$submenu->addClass('submenuitem', 'submenu');
-				$source_menu->addSubMenu($submenu);
-			}
-		}
-		if ($source_menu) {
-			$menu->addSubMenu($source_menu);
-		}
-
-		if (KT_USER_CAN_EDIT) {
-			// Edit Media
-			$submenu = new KT_Menu(KT_I18N::translate('Edit media'), 'addmedia.php?action=editmedia&amp;pid=' . $rowm['m_id']);
-			$submenu->addTarget('_blank');
-			$submenu->addClass('submenuitem');
-			$menu->addSubMenu($submenu);
-			// Manage Links
-			if (KT_USER_IS_ADMIN) {
-				$submenu = new KT_Menu(KT_I18N::translate('Manage links'));
-               			$submenu->addOnclick("window.open('inverselink.php?mediaid=" . $rowm['m_id'] . "&linkto=manage&ged=" . KT_GEDCOM . "', '_blank', null)");
+				// View Details
+				$submenu = new KT_Menu(KT_I18N::translate('View Details'), KT_SERVER_NAME . KT_SCRIPT_PATH . 'mediaviewer.php?mid=' . $rowm['m_id'] . '&amp;ged=' . KT_GEDURL, 'right');
 				$submenu->addClass('submenuitem');
-				$menu->addSubmenu($submenu);
-				// Unlink Media
-				$submenu = new KT_Menu(KT_I18N::translate('Unlink Media'));
-				$submenu->addOnclick("return delete_fact('$pid', 'OBJE', '" . $rowm['m_id'] . "', '".KT_I18N::translate('Are you sure you want to delete this link?')."');");
-				$submenu->addClass("submenuitem");
 				$menu->addSubMenu($submenu);
+
+				// View Sources
+				$source_menu = null;
+				foreach ($media->getAllFactsByType('SOUR') as $source_fact) {
+					$source = KT_Source::getInstance(trim($source_fact->detail, '@'));
+					if ($source && $source->canDisplayDetails()) {
+						if (!$source_menu) {
+							// Group sources under a top level menu
+							$source_menu = new KT_Menu(KT_I18N::translate('Sources'), '#', null, 'right', 'right');
+							$source_menu->addClass('submenuitem', 'submenu');
+						}
+						// now add a link to the actual source as a submenu
+						$submenu = new KT_Menu(new KT_Menu(strip_tags($source->getFullName()), $source->getHtmlUrl()));
+						$submenu->addClass('submenuitem', 'submenu');
+						$source_menu->addSubMenu($submenu);
+					}
+				}
+				if ($source_menu) {
+					$menu->addSubMenu($source_menu);
+				}
+
+				if (KT_USER_CAN_EDIT) {
+					// Edit Media
+					$submenu = new KT_Menu(KT_I18N::translate('Edit media'), 'addmedia.php?action=editmedia&amp;pid=' . $rowm['m_id']);
+					$submenu->addTarget('_blank');
+					$submenu->addClass('submenuitem');
+					$menu->addSubMenu($submenu);
+					// Manage Links
+					if (KT_USER_IS_ADMIN) {
+						$submenu = new KT_Menu(KT_I18N::translate('Manage links'));
+						$submenu->addOnclick("window.open('inverselink.php?mediaid=" . $rowm['m_id'] . '&linkto=manage&ged=' . KT_GEDCOM . "', '_blank', null)");
+						$submenu->addClass('submenuitem');
+						$menu->addSubmenu($submenu);
+						// Unlink Media
+						$submenu = new KT_Menu(KT_I18N::translate('Unlink Media'));
+						$submenu->addOnclick("return delete_fact('{$pid}', 'OBJE', '" . $rowm['m_id'] . "', '" . KT_I18N::translate('Are you sure you want to delete this link?') . "');");
+						$submenu->addClass('submenuitem');
+						$menu->addSubMenu($submenu);
+					}
+				}
 			}
-		}
-	}
 
-	// Start Thumbnail Enclosure table ---------------------------------------------
-	// Print Thumbnail
-	if ($media) {echo $media->displayImage();}
-	echo '</div>';
+			// Thumbnail Enclosure
+			if ($media) {
+				echo $media->displayImage();
+			} ?>
 
-	//View Edit Menu
-	echo '<div>', $menu->getMenu(), '</div>';
-	echo '</div>';
+		</div>
 
-	return true;
+		<?php // View Edit Menu ?>	
+		<?php echo $menu->getFoundationDropdownMenu($menuID); ?>
+
+	</div>
+
+	<?php
+
 }
