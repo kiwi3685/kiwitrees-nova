@@ -34,7 +34,7 @@ $controller
 
 echo pageStart('tools_admin', $controller->getPageTitle()); ?>
 
-	<div class="cell callout info-help help_content">
+	<div class="cell callout info-help summary">
 		<?php echo KT_I18N::translate('
 			A collection of tools to perform site-wide functions. Includes backups, batch data updates, and configuration of them more complex modules
 		'); ?>
@@ -43,14 +43,13 @@ echo pageStart('tools_admin', $controller->getPageTitle()); ?>
 		<div class="grid-x grid-margin-x grid-margin-y">
 			<?php foreach (KT_Module::getActiveModules(true) as $module) {
 				if ($module instanceof KT_Module_Config && $module->getName() !== 'custom_js') {
-					$link 	 = $module->getConfigLink();
-					$title  = $module->getTitle();
-					$user    = '<span class="show-for-medium alert" data-tooltip title="" data-position="top" data-alignment="right">
-									<i class ="' . $iconStyle . ' fa-user"></i>
-								</span>';
+					$link    = $module->getConfigLink();
+					$title   = $module->getTitle();
+					$user    = 'alert';
+					$tooltip = KT_I18N::translate('Administrator access only');
 					$descr   = $module->getDescription();
 
-					echo AdminSummaryCard ($link, $title, $user, $descr);
+					echo AdminSummaryCard ($link, $title, $user, $tooltip, $descr);
 
 				}
 			} ?>

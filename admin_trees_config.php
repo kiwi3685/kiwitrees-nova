@@ -861,7 +861,7 @@ echo pageStart('family_tree_config', $controller->getPageTitle(), 'y', '', 'admi
 						<input type="hidden" name="default_resn_id">
 						<input type="hidden" name="action" value="update-resn">
 						<div class="grid-x grid-margin-x">
-							<div class="cell callout info-help help_content">
+							<div class="cell callout info-help">
 								<?php echo KT_I18N::translate('You can set access restrictions for a specific record, event, or attribute by adding it below. These settings will be applied where other general restrictions do not exist.'); ?>
 							</div>
 							<div class="cell">

@@ -36,24 +36,24 @@ $controller
  * Array of family tree administration menu items
  * $ft_tools [array]
  */
-$media = array(
-	"admin_media.php"			=> array(
+$media = [
+	"admin_media.php"			=> [
 		KT_I18N::translate('Manage media'),
 		KT_I18N::translate('List, filter, and edit all media objects'),
 		KT_I18N::translate('Administrator access only'),
 		'alert'
-	),
-	"admin_media_upload.php"	=> array(
+	],
+	"admin_media_upload.php"	=> [
 		KT_I18N::translate('Upload media objects'),
 		KT_I18N::translate('Upload small batches of media objects at one time (1 to 6)'),
 		KT_I18N::translate('Administrator access only'),
 		'alert'
-	),
-);
+	],
+];
 
 echo pageStart('media_admin', $controller->getPageTitle()); ?>
 
-	<div class="cell callout info-help help_content">
+	<div class="cell callout info-help">
 		<?php echo KT_I18N::translate('
 		Add, delete, edit and manage site-wide media objects
 		'); ?>
@@ -61,13 +61,12 @@ echo pageStart('media_admin', $controller->getPageTitle()); ?>
 	<div class="cell">
 		<div class="grid-x grid-margin-x grid-margin-y">
 			<?php foreach ($media as $link => $file) {
-				$title  = $file[0];
-				$user    = '<span class="show-for-medium ' . $file[3] . '" data-tooltip title="' . $file[2] . '" data-position="top" data-alignment="right">
-								<i class ="' . $iconStyle . ' fa-user"></i>
-							</span>';
+				$title   = $file[0];
 				$descr   = $file[1];
+				$tooltip = $file[2];
+				$user    = $file[3];
 
-				echo AdminSummaryCard ($link, $title, $user, $descr);
+				echo AdminSummaryCard ($link, $title, $user, $tooltip, $descr);
 
 			} ?>
 		</div>

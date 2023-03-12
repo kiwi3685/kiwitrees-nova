@@ -36,36 +36,36 @@ $controller
  * Array of site administration menu items
  * $site_tools [array]
  */
-$user_tools = array(
-	 "admin_users.php"	=> array(
+$user_tools = [
+	 "admin_users.php"	=> [
 		KT_I18N::translate('Manage users'),
 		KT_I18N::translate('List all users, with links to edit, delete, masquerade, and view details for each'),
 		KT_I18N::translate('Administrator access only'),
 		'alert'
-	),
-	 "admin_users.php?action=edit"		=> array(
+	],
+	 "admin_users.php?action=edit"		=> [
 		KT_I18N::translate('Add a new user'),
 		KT_I18N::translate('Direct link to manually add a new user'),
 		KT_I18N::translate('Administrator access only'),
 		'alert'
-	),
-	 "admin_users.php?action=messaging"		=> array(
+	],
+	 "admin_users.php?action=messaging"		=> [
 		KT_I18N::translate('Broadcast messages'),
 		KT_I18N::translate('Send an email message to various bulk groups of users, based on the length of their membership'),
 		KT_I18N::translate('Administrator access only'),
 		'alert'
-	),
-	 "admin_users.php?action=cleanup"	=> array(
+	],
+	 "admin_users.php?action=cleanup"	=> [
 		KT_I18N::translate('Delete inactive users'),
 		KT_I18N::translate('Remove users in bulk for a variety of optional reasons'),
 		KT_I18N::translate('Administrator access only'),
 		'alert'
-	),
-);
+	],
+];
 
 echo pageStart('user_admin', $controller->getPageTitle()); ?>
 
-	<div class="cell callout info-help help_content">
+	<div class="cell callout info-help summary">
 		<?php echo KT_I18N::translate('
 			Add, delete, edit and manage users
 		'); ?>
@@ -73,13 +73,12 @@ echo pageStart('user_admin', $controller->getPageTitle()); ?>
 	<div class="cell">
 		<div class="grid-x grid-margin-x grid-margin-y">
 			<?php foreach ($user_tools as $link => $file) {
-				$title  = $file[0];
-				$user    = '<span class="show-for-medium ' . $file[3] . '" data-tooltip title="' . $file[2] . '" data-position="top" data-alignment="right">
-								<i class ="' . $iconStyle . ' fa-user"></i>
-							</span>';
+				$title   = $file[0];
 				$descr   = $file[1];
+				$tooltip = $file[2];
+				$user    = $file[3];
 
-				echo AdminSummaryCard ($link, $title, $user, $descr);
+				echo AdminSummaryCard ($link, $title, $user, $tooltip, $descr);
 
 			} ?>
 		</div>

@@ -36,8 +36,8 @@ $controller
  * Array of site administration menu items
  * $custom [array]
  */
-$custom = array(
-	 "admin_custom_lang.php" => array(
+$custom = [
+	 "admin_custom_lang.php" => [
  	   KT_I18N::translate('Custom translations'),
 	   KT_I18N::translate('
 	   		Modify language translations that you want to be different from the
@@ -46,8 +46,8 @@ $custom = array(
 		'),
 	   KT_I18N::translate('Administrator access only'),
 	   'alert'
-   ),
-	 "admin_custom_theme.php" => array(
+   ],
+	 "admin_custom_theme.php" => [
  	   KT_I18N::translate('Custom file editing'),
 	   KT_I18N::translate('
 	   		Create and edit personalized theme files for your site,
@@ -55,8 +55,8 @@ $custom = array(
 		'),
 	   KT_I18N::translate('Administrator access only'),
 	   'alert'
-   ),
-	 "module.php?mod=custom_js&mod_action=admin_config"	=> array(
+   ],
+	 "module.php?mod=custom_js&mod_action=admin_config"	=> [
  	   KT_I18N::translate('Custom javascript'),
 	   KT_I18N::translate('
 	   		Add or edit any javascript you need for your site here.
@@ -64,13 +64,13 @@ $custom = array(
 		'),
 	   KT_I18N::translate('Administrator access only'),
 	   'alert'
-   ),
-);
+   ],
+];
 asort($custom);
 
 echo pageStart('custom_admin', $controller->getPageTitle()); ?>
 
-	<div class="cell callout info-help help_content">
+	<div class="cell callout info-help summary">
 		<?php echo KT_I18N::translate('
 			Tools to help personalize your site beyond the standard features set.
 		'); ?>
@@ -82,14 +82,12 @@ echo pageStart('custom_admin', $controller->getPageTitle()); ?>
 					if ($link == KT_I18N::translate('Custom javascript') && !KT_Module::isActiveMenu(KT_GED_ID, 'custom_js', KT_USER_ACCESS_LEVEL)) {
 						continue;
 					}
-					$title  = $file[0];
-					$user    = '<span class="show-for-medium ' . $file[3] . '" data-tooltip title="' . $file[2] . '" data-position="top" data-alignment="right">
-									<i class ="' . $iconStyle . ' fa-user"></i>
-								</span>';
+					$title   = $file[0];
 					$descr   = $file[1];
+					$tooltip = $file[2];
+					$user    = $file[3];
 
-					echo AdminSummaryCard ($link, $title, $user, $descr);
-
+					echo AdminSummaryCard ($link, $title, $user, $tooltip, $descr);
 				}
 			} ?>
 		</div>

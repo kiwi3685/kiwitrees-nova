@@ -36,50 +36,49 @@ $controller
  * Array of site administration menu items
  * $site_tools [array]
  */
-$site_tools = array(
-	 "admin_site_config.php"	=> array(
+$site_tools = [
+	 "admin_site_config.php"	=> [
 		KT_I18N::translate('Configuration'),
 		KT_I18N::translate('Global settings that apply to all family trees'),
 		KT_I18N::translate('Administrator access only'),
 		'alert'
-	),
-	 "admin_site_logs.php"		=> array(
+	],
+	 "admin_site_logs.php"		=> [
 		KT_I18N::translate('%s logs', KT_KIWITREES),
 		KT_I18N::translate('A filterable log of site-wide activities'),
 		KT_I18N::translate('Administrator access only'),
 		'alert'
-	),
-	 "admin_site_info.php"		=> array(
+	],
+	 "admin_site_info.php"		=> [
 		KT_I18N::translate('Server information'),
 		KT_I18N::translate('Information about the configuration of your PHP and SQL installation'),
 		KT_I18N::translate('Administrator access only'),
 		'alert'
-	),
-	 "admin_site_access.php"	=> array(
+	],
+	 "admin_site_access.php"	=> [
 		KT_I18N::translate('Access rules'),
 		KT_I18N::translate('Restrict access to the site, using IP addresses and user-agent strings'),
 		KT_I18N::translate('Administrator access only'),
 		'alert'
-	),
-	 "admin_site_clean.php"		=> array(
+	],
+	 "admin_site_clean.php"		=> [
 		KT_I18N::translate('Data folder management'),
 		KT_I18N::translate('Delete any files or folders no longer required from the \'data\' folder'),
 		KT_I18N::translate('Administrator access only'),
 		'alert'
-	),
-	 "admin_site_use.php"		=> array(
+	],
+	 "admin_site_use.php"		=> [
 		KT_I18N::translate('Server usage'),
 		KT_I18N::translate('A quick summary of the space currently being used on your web server'),
 		KT_I18N::translate('Administrator access only'),
 		'alert'
-	)
-);
-//var_dump($site_tools);
+	]
+];
 asort($site_tools);
 
 echo pageStart('site_admin', $controller->getPageTitle()); ?>
 
-	<div class="cell callout info-help help_content">
+	<div class="cell callout info-help summary">
 		<?php echo KT_I18N::translate('
 		Configuration, management, logs, and other activities related to the overall website.
 		'); ?>
@@ -87,13 +86,12 @@ echo pageStart('site_admin', $controller->getPageTitle()); ?>
 	<div class="cell">
 		<div class="grid-x grid-margin-x grid-margin-y">
 			<?php foreach ($site_tools as $link => $file) {
-				$title  = $file[0];
-				$user    = '<span class="show-for-medium ' . $file[3] . '" data-tooltip title="' . $file[2] . '" data-position="top" data-alignment="right">
-								<i class ="' . $iconStyle . ' fa-user"></i>
-							</span>';
+				$title   = $file[0];
 				$descr   = $file[1];
+				$tooltip = $file[2];
+				$user    = $file[3];
 
-				echo AdminSummaryCard ($link, $title, $user, $descr);
+				echo AdminSummaryCard ($link, $title, $user, $tooltip, $descr);
 
 			} ?>
 		</div>

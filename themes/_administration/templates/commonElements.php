@@ -1,7 +1,7 @@
 <?php
 /**
  * Kiwitrees: Web based Family History software
- * Copyright (C) 2012 to 2023 kiwitrees.net
+ * Copyright (C) 2012 to 2023 kiwitrees.net.
  *
  * Derived from webtrees (www.webtrees.net)
  * Copyright (C) 2010 to 2012 webtrees development team
@@ -20,28 +20,33 @@
  * You should have received a copy of the GNU General Public License
  * along with Kiwitrees. If not, see <http://www.gnu.org/licenses/>
  */
-
 if (!defined('KT_KIWITREES')) {
 	header('HTTP/1.0 403 Forbidden');
+
 	exit;
 }
 
 /**
- * print start of all pages
+ * print start of all pages.
  *
- * @param string $title name of page
+ * @param string $title        name of page
+ * @param mixed  $pageTitle
+ * @param mixed  $includeTitle
+ * @param mixed  $subTitle
+ * @param mixed  $faq
  */
-function pageStart($title, $pageTitle = '', $includeTitle = 'y', $subTitle = '', $faq = '') {
+function pageStart($title, $pageTitle = '', $includeTitle = 'y', $subTitle = '', $faq = '')
+{
 	$pageTitle ? $pageTitle = $pageTitle : $pageTitle = $title;
 	$faq ? $faq = faqLink($faq) : $faq = '';
 
-	if ($includeTitle == 'n') {
+	if ('n' == $includeTitle) {
 		$pageTitle = '';
 	} else {
 		$pageTitle = '<h3>' . $pageTitle . '</h3>';
 	}
 
-	if ($subTitle !== '') {
+	if ('' !== $subTitle) {
 		$subTitle = '<h5>' . $subTitle . '</h5>';
 	}
 
@@ -52,26 +57,28 @@ function pageStart($title, $pageTitle = '', $includeTitle = 'y', $subTitle = '',
 				$subTitle .
 			'</div>
 			<div class="cell medium-3 text-right">' .
-				$faq . 
+				$faq .
 			'</div>';
 
 	// function pageClose() must be added after content to close this div element
 }
 
 /**
- * print end of all pages
+ * print end of all pages.
  */
- function pageClose() {
-	'</div>';
- }
+function pageClose()
+{
+}
 
 /**
- * print Family tree select box and label
+ * print Family tree select box and label.
  *
+ * @param mixed $gedID
+ * @param mixed $other
  */
- function familyTree($gedID, $other=' onchange="tree.submit();"') {
-
-	 return '
+function familyTree($gedID, $other = ' onchange="tree.submit();"')
+{
+	return '
 		<div class="cell medium-2">
 			<label for="ged">' . KT_I18N::translate('Family tree') . '</label>
 		</div>
@@ -81,15 +88,15 @@ function pageStart($title, $pageTitle = '', $includeTitle = 'y', $subTitle = '',
 			</form>
 		</div>
 	';
- }
+}
 
 /**
- * Provides consistent structure of autocomplete elements
+ * Provides consistent structure of autocomplete elements.
  *
- * @param string $suffix :  variable used as suffix on element IDs
- * @param string $type : variable (uppercase) to specifiy autocomplete type (INDI, FAM, SOUR, etc)
- * @param string $tree :  variable used with  'autocomplete-ged-' in some cases
- * @param string $valueInput :  variable displayed in visible input field
+ * @param string $suffix      :  variable used as suffix on element IDs
+ * @param string $type        : variable (uppercase) to specifiy autocomplete type (INDI, FAM, SOUR, etc)
+ * @param string $tree        :  variable used with  'autocomplete-ged-' in some cases
+ * @param string $valueInput  :  variable displayed in visible input field
  * @param string $valueHidden :  variable used in hidden input field
  * @param string $placeHolder : variable used as placeholder in visible input field
  *
@@ -107,9 +114,13 @@ function pageStart($title, $pageTitle = '', $includeTitle = 'y', $subTitle = '',
  *   'required' // Optional required setting
  *   'string' // optional other entry
  * );
- *
+ * @param mixed $inputName
+ * @param mixed $required
+ * @param mixed $other
+ * @param mixed $validator
  */
-function autocompleteHtml($suffix, $type, $tree, $valueInput, $placeHolder, $inputName, $valueHidden, $required = '', $other = '', $validator = '' ) {
+function autocompleteHtml($suffix, $type, $tree, $valueInput, $placeHolder, $inputName, $valueHidden, $required = '', $other = '', $validator = '')
+{
 	global $iconStyle;
 
 //	$class = (KT_SCRIPT_NAME == 'admin_trees_config.php') ? 'hidden' : '';
@@ -120,21 +131,33 @@ function autocompleteHtml($suffix, $type, $tree, $valueInput, $placeHolder, $inp
 			<input
 				id="autocompleteInput-' . $suffix . '"
 				data-autocomplete-type="' . $type . '"';
-				if ($tree) {$html .= 'data-autocomplete-ged="' . $tree . '"';}
-				$html .= '
+	if ($tree) {
+		$html .= 'data-autocomplete-ged="' . $tree . '"';
+	}
+	$html .= '
 				type="text"
 				value="' . $valueInput . '"';
-				if ($placeHolder) {$html .= 'placeholder="' . $placeHolder . '"';}
-				if ($required) {$html .= ' required ';}
-				if ($other) {$html .= $other;}
-			$html .= '>
+	if ($placeHolder) {
+		$html .= 'placeholder="' . $placeHolder . '"';
+	}
+	if ($required) {
+		$html .= ' required ';
+	}
+	if ($other) {
+		$html .= $other;
+	}
+	$html .= '>
 			<input
 				type="hidden"
 				name="' . $inputName . '"
 				id="selectedValue-' . $suffix . '"';
-				if ($valueHidden) {$html .= 'value="' . $valueHidden . '"';}
-				if ($validator) {$html .= $validator;}
-			$html .= '>
+	if ($valueHidden) {
+		$html .= 'value="' . $valueHidden . '"';
+	}
+	if ($validator) {
+		$html .= $validator;
+	}
+	$html .= '>
 			<span class="input-group-label">
 				<button id="' . $suffix . '" type="button" class="adminClearAutocomplete autocomplete_icon">
 					<i class="' . $iconStyle . ' fa-xmark"></i>
@@ -144,28 +167,32 @@ function autocompleteHtml($suffix, $type, $tree, $valueInput, $placeHolder, $inp
 	';
 
 	return $html;
-
 }
 
 /**
- * A basic "Show" single submit buttons
- * 
+ * A basic "Show" single submit buttons.
+ *
  * @string  single-quoted name to display on button like 'Save'
+ *
+ * @param mixed $title
+ * @param mixed $note
  *
  * @return string[]
  */
-function singleButton($title = '', $note = '') {
-   global $iconStyle;
+function singleButton($title = '', $note = '')
+{
+	global $iconStyle;
 
-   if ($note) {
+	if ($note) {
 		switch ($note) {
 			case '1':
 				$noteText = KT_I18n::translate('
 					Note: This save button only records changes to the visisble modules above. 
 					Modules on other pages of the table are not saved.
 				');
+
 				break;
-	   }
+		}
 	} ?>
 
 		<div class="cell medium-2">
@@ -173,44 +200,54 @@ function singleButton($title = '', $note = '') {
 			<?php switch ($title) {
 				case 'Save':
 				default:
-				$title = 'Save';
+					$title = 'Save';
 					echo '
 						<button class="button primary" type="submit">
 							<i class="' . $iconStyle . ' fa-save"></i>' .
 						KT_I18N::translate($title);
+
 					break;
+
 				case 'Show':
 					echo '
 						<button class="button primary" type="submit">
 							<i class="' . $iconStyle . ' fa-eye"></i>' .
 						KT_I18N::translate($title);
+
 					break;
+
 				case 'Continue':
-				   echo '
+					echo '
 						<button class="button" type="submit">
 							<i class="' . $iconStyle . ' fa-play"></i>' .
 						KT_I18N::translate($title);
+
 					break;
+
 				case 'Back':
 					echo '
 						<button class="button primary" type="button" onclick="history.back()">
 							<i class="' . $iconStyle . ' fa-arrow-left"></i>' .
 						KT_I18N::translate($title);
+
 					break;
 
 				case 'Next':
 				case 'Import':
 				case 'Merge':
-				   echo '
+					echo '
 					   <button class="button primary" type="submit">' .
 						KT_I18N::translate($title) . '
 							<i class="' . $iconStyle . ' fa-arrow-right"></i>';
+
 					break;
+
 				case 'Save new order':
-				   echo '
+					echo '
 					   <button class="button primary" type="submit">
 							<i class="' . $iconStyle . ' fa-bars"></i>' .
 						KT_I18N::translate($title);
+
 					break;
 			} ?>
 
@@ -228,19 +265,23 @@ function singleButton($title = '', $note = '') {
 }
 
 /**
- * A standard "Save / Cancel" pair of buttons, used on many pages
+ * A standard "Save / Cancel" pair of buttons, used on many pages.
+ *
+ * @param mixed $extra
+ * @param mixed $onClick
  *
  * @return string[]
  */
-function submitButtons($extra = '', $onClick = '') {
-   global $iconStyle;
-   $onClickHtml = '';
+function submitButtons($extra = '', $onClick = '')
+{
+	global $iconStyle;
+	$onClickHtml = '';
 
-   if ($onClick) {
-	   $onClickHtml = 'onclick=' . $onClick;
-   }
+	if ($onClick) {
+		$onClickHtml = 'onclick=' . $onClick;
+	}
 
-   ?>
+	?>
    <div class="cell align-left button-group">
 	   <button class="button primary" type="submit">
 			<i class="<?php echo $iconStyle; ?> fa-save"></i>
@@ -256,22 +297,26 @@ function submitButtons($extra = '', $onClick = '') {
 }
 
 /**
- * A standard "Show / Reset" pair of buttons, used on report pages
+ * A standard "Show / Reset" pair of buttons, used on report pages.
+ *
+ * @param mixed $firstButton
+ * @param mixed $onClick
  *
  * @return string[]
  */
-function resetButtons($firstButton = 'Show', $onClick = '') {
-   global $iconStyle;
+function resetButtons($firstButton = 'Show', $onClick = '')
+{
+	global $iconStyle;
 
-   $onClickHtml = '';
-   $submitReset = '<input type="hidden" name="reset" value="1">';
+	$onClickHtml = '';
+	$submitReset = '<input type="hidden" name="reset" value="1">';
 
-   if($onClick) {
-	   $onClickHtml = 'onclick="' . $onClick . ';"';
-	   $submitReset = '';
-   }
+	if ($onClick) {
+		$onClickHtml = 'onclick="' . $onClick . ';"';
+		$submitReset = '';
+	}
 
-   $buttonHtml = '
+	$buttonHtml = '
 	   <div class="cell align-left button-group">
 		   <button id="buttonSubmit" class="button primary" type="submit">
 			   <i class="' . $iconStyle . ' fa-eye"></i>'
@@ -284,18 +329,21 @@ function resetButtons($firstButton = 'Show', $onClick = '') {
 	   </div>
    ';
 
-   return $buttonHtml;
-
+	return $buttonHtml;
 }
 
 /**
- * Create a link to faqs
+ * Create a link to faqs.
+ *
+ * @param mixed $url
  *
  * @return string[]
  */
-function faqLink($url) {
+function faqLink($url)
+{
 	global $iconStyle;
 	$link = KT_KIWITREES_URL . $url;
+
 	return '
 		<div class="cell">
 			<a
@@ -318,7 +366,8 @@ function faqLink($url) {
 // $empty    - if not null, then add an entry ""=>$empty
 // $selected - the currently selected item (if any)
 // $access    - extra markup for field (e.g. tab key sequence)
-function select_ged_control($name, $values, $empty, $selected, $extra='') {
+function select_ged_control($name, $values, $empty, $selected, $extra = '')
+{
 	if (is_null($empty)) {
 		$html = '';
 	} else {
@@ -332,9 +381,9 @@ function select_ged_control($name, $values, $empty, $selected, $extra='') {
 	if (empty($values) && empty($html)) {
 		$html = '<option value=""></option>';
 	}
-	foreach ($values as $key=>$value) {
+	foreach ($values as $key => $value) {
 		if (userGedcomAdmin(KT_USER_ID, $key)) {
-			if ((string)$key === (string)$selected) { // Because "0" != ""
+			if ((string) $key === (string) $selected) { // Because "0" != ""
 				$html .= '<option value="' . htmlspecialchars((string) $key) . '" selected="selected" dir="auto">' . htmlspecialchars((string) $value) . '</option>';
 			} else {
 				$html .= '<option value="' . htmlspecialchars((string) $key) . '" dir="auto">' . htmlspecialchars((string) $value) . '</option>';
@@ -342,12 +391,13 @@ function select_ged_control($name, $values, $empty, $selected, $extra='') {
 		}
 	}
 
-	$element_id = $name . '-' . (int)(microtime(true)*1000000);
+	$element_id = $name . '-' . (int) (microtime(true) * 1000000);
 
-	return '<select id="' . $element_id.'" name="' . $name . '" ' . $extra .'>' . $html . '</select>';
+	return '<select id="' . $element_id . '" name="' . $name . '" ' . $extra . '>' . $html . '</select>';
 }
 
-function loadingImage() {
+function loadingImage()
+{
 	global $iconStyle;
 
 	return '
@@ -359,11 +409,15 @@ function loadingImage() {
 }
 
 /**
- * Print links to related admin pages
+ * Print links to related admin pages.
  *
  * //@param string $title name of page
+ *
+ * @param mixed $links
+ * @param mixed $self
  */
-function relatedPages($links, $self = '') {
+function relatedPages($links, $self = '')
+{
 	global $iconStyle;
 
 	// remove summary page and links to self
@@ -403,42 +457,71 @@ function relatedPages($links, $self = '') {
 }
 
 /**
- * Summary page cards
+ * Summary page cards.
  *
- * 
- * 
+ * @param string $link		// href link to summary page
+ * @param string $title		// title of the module linked to
+ * @param string $user		// type and color of usr icon (alert, warning)
+ * @param string $tooltip	// text displyed on hover on user icon
+ * @param string $descr		// text description of the module linked to, when an image is not used
+ * @param string $image		// an image used in place of the descr (description)
+ * @param int	 $x			// unique number applied to images used as description for cliable link
  */
- function AdminSummaryCard ($link, $title, $user, $descr, $image = false, $x = false) {
- 	global $iconStyle;
- 	?>
-		<div class="card cell small-6 medium-3">
-			<div class="card-divider text-center medium-text-left">
-				<a href="<?php echo $link; ?>">
-					<?php echo $title; ?>
-				</a>
-				<?php echo $user; ?>
-			</div>
-			<div class="card-section">
-				<?php if (!$image || $link == 'admin_modules.php') { ?>
-					<p><?php echo $descr; ?></p>
-				<?php } else {
-					echo $image;
-				} ?>
-			</div>
-		</div>
-		<!-- hidden reveal - main image -->
-		<?php if ($image && $x) { ?>
-			<div class="reveal" id="moduleImage<?php echo $x; ?>" data-reveal>
-				<h6 class="text-center">
-					<?php echo $title; ?>
-					<button class="close-button" aria-label="Dismiss image" type="button" data-close>
-						<span aria-hidden="true">
-							<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
-						</span>
-					</button>
-				</h6>
-				<?php echo $image; ?>
-			</div>
-		<?php } 
+function AdminSummaryCard($link, $title, $user, $tooltip, $descr, $image = false, $x = 0)
+{
+	global $iconStyle;
 
- }
+	$dropdownID = 'dropdownID' . (int) (microtime(true) * 1000000); ?>
+
+	<div class="card cell small-6 medium-3">
+		<div class="card-divider text-center medium-text-left">
+			<a href="<?php echo $link; ?>">
+				<?php echo $title; ?>
+			</a>
+			<span 
+				class="show-for-small-only info" 
+				data-position="top" 
+				data-alignment="right" 
+				data-toggle="<?php echo $dropdownID; ?>"
+			>
+					<i class ="<?php echo $iconStyle; ?> fa-circle-info"></i>
+			</span>
+			<span 
+				class="show-for-medium <?php echo $user; ?>" 
+				data-tooltip title="<?php echo $tooltip; ?>" 
+				data-position="top" 
+				data-alignment="right"
+			>
+					<i class ="<?php echo $iconStyle; ?> fa-user"></i>
+			</span>
+		</div>
+		<div class="card-section show-for-medium">
+			<?php if (!$image || 'admin_modules.php' == $link) { ?>
+				<p><?php echo $descr; ?></p>
+			<?php } else {
+				echo $image;
+			} ?>
+		</div>
+	</div>
+
+	<!-- hidden reveal - main image -->
+	<?php if ($image && $x) { ?>
+		<div class="reveal" id="moduleImage<?php echo $x; ?>" data-reveal>
+			<h6 class="text-center">
+				<?php echo $title; ?>
+				<button class="close-button" aria-label="Dismiss image" type="button" data-close>
+					<span aria-hidden="true">
+						<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
+					</span>
+				</button>
+			</h6>
+			<?php echo $image; ?>
+		</div>
+	<?php } ?>
+
+	<div class="dropdown-pane" id="<?php echo $dropdownID; ?>" data-dropdown data-close-on-click=true>
+		<?php echo $descr; ?>
+	</div>
+	<?php
+
+}

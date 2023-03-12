@@ -38,7 +38,7 @@ class backup_database_KT_Module extends KT_Module implements KT_Module_Config {
 
 	// Extend class KT_Module
 	public function getDescription() {
-		return KT_I18N::translate('Provides access to MyOOS [Dumper]. A database backup tool.');
+		return KT_I18N::translate('Provides access to MyOOS[Dumper], a database backup tool.');
 	}
 
 	// Implement KT_Module_Config

@@ -9660,6 +9660,7 @@ main aside ul#admin-menu form .input-group .input-group-label a {
 	padding: 0;
 }
 main #admin-content {
+	min-height: 80vh;
 	/* Dashboard */
 	/* Media upload */
 	/* ADMINISTRATION summary pages*/
@@ -9909,7 +9910,6 @@ main #admin-content #modules_admin-page div.card,
 main #admin-content #custom_admin-page div.card,
 main #admin-content #tools_admin-page div.card {
 	box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
-	height: 15.8rem;
 }
 main #admin-content #site_admin-page div.card div.card-divider a,
 main #admin-content #tree_admin-page div.card div.card-divider a,
@@ -9918,7 +9918,17 @@ main #admin-content #media_admin-page div.card div.card-divider a,
 main #admin-content #modules_admin-page div.card div.card-divider a,
 main #admin-content #custom_admin-page div.card div.card-divider a,
 main #admin-content #tools_admin-page div.card div.card-divider a {
+	height: 3rem;
 	width: 94%;
+}
+main #admin-content #site_admin-page div.card div.card-divider span,
+main #admin-content #tree_admin-page div.card div.card-divider span,
+main #admin-content #user_admin-page div.card div.card-divider span,
+main #admin-content #media_admin-page div.card div.card-divider span,
+main #admin-content #modules_admin-page div.card div.card-divider span,
+main #admin-content #custom_admin-page div.card div.card-divider span,
+main #admin-content #tools_admin-page div.card div.card-divider span {
+	margin-top: -0.75rem;
 }
 main #admin-content #site_admin-page div.card div.card-divider span.alert,
 main #admin-content #tree_admin-page div.card div.card-divider span.alert,
@@ -9938,6 +9948,16 @@ main #admin-content #custom_admin-page div.card div.card-divider span.warning,
 main #admin-content #tools_admin-page div.card div.card-divider span.warning {
 	color: #ffae00;
 }
+main #admin-content #site_admin-page div.card div.card-divider span.info,
+main #admin-content #tree_admin-page div.card div.card-divider span.info,
+main #admin-content #user_admin-page div.card div.card-divider span.info,
+main #admin-content #media_admin-page div.card div.card-divider span.info,
+main #admin-content #modules_admin-page div.card div.card-divider span.info,
+main #admin-content #custom_admin-page div.card div.card-divider span.info,
+main #admin-content #tools_admin-page div.card div.card-divider span.info {
+	color: #34689c;
+	font-size: 1.25rem;
+}
 main #admin-content #site_admin-page div.card div.card-section,
 main #admin-content #tree_admin-page div.card div.card-section,
 main #admin-content #user_admin-page div.card div.card-section,
@@ -9945,7 +9965,6 @@ main #admin-content #media_admin-page div.card div.card-section,
 main #admin-content #modules_admin-page div.card div.card-section,
 main #admin-content #custom_admin-page div.card div.card-section,
 main #admin-content #tools_admin-page div.card div.card-section {
-	height: 4rem;
 	padding: 0;
 }
 main #admin-content #site_admin-page div.card div.card-section p,
@@ -10863,7 +10882,7 @@ div.dataTables_wrapper table#installed_table thead tr th svg.fa-gears {
 
 /* sizes are 48 - 48.0625 - 64 - 64.0625 em */
 @media print, screen and (max-width: 64.0625em) {
-	.info-help {
+	.info-help:not(.summary) {
 		display: none;
 	}
 
