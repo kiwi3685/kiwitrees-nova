@@ -119,48 +119,41 @@ class research_links_KT_Module extends KT_Module implements KT_Module_Config, KT
 					stateSave		: true,
 					stateDuration	: -1,
 					paginate		: false,
-					columns : [
-						/*  0 enabled	*/	{dataSort: 1, sClass: "center"},
-						/*  0 null		*/	{type: "unicode", visible: false},
-						/*  0 name		*/	null,
-						/*  0 area		*/	null,
-						/*  0 pay		*/	{sClass: "center"},
-						/*  0 links		*/	{sClass: "center"},
-					]
 				});
 			');
 
-		if (KT_Filter::postBool('save')) {
-			set_module_setting($this->getName(), 'RESEARCH_PLUGINS', serialize(KT_Filter::post('NEW_RESEARCH_PLUGINS')));
+		if (KT_Filter::postBool('saveArea')) {
 			set_module_setting($this->getName(), 'RESEARCH_PLUGINS_DEFAULT_AREA', KT_Filter::post('NEW_RESEARCH_PLUGINS_DEFAULT_AREA'));
-			AddToLog($this->getTitle().' config updated', 'config');
+			AddToLog($this->getTitle().' default area updated', 'config');
+		}
+		if (KT_Filter::postBool('savePlugins')) {
+			set_module_setting($this->getName(), 'RESEARCH_PLUGINS', serialize(KT_Filter::post('NEW_RESEARCH_PLUGINS')));
+			AddToLog($this->getTitle().' enabled plugins updated', 'config');
 		}
 
 		$all_plugins      = $this->getPluginList(); // all plugins with area names
-		$RESEARCH_PLUGINS = unserialize(get_module_setting($this->getName(), 'RESEARCH_PLUGINS')); // enabled plugins
+		$RESEARCH_PLUGINS = unserialize((string) get_module_setting($this->getName(), 'RESEARCH_PLUGINS')); // enabled plugins
+		$DEFAULT_AREA     = get_module_setting($this->getName(), 'RESEARCH_PLUGINS_DEFAULT_AREA');
 
 		echo relatedPages($moduleTools, $this->getConfigLink());
 
 		echo pageStart('research_links', $controller->getPageTitle()); ?>
 
-			<form classs="cell" method="post" action="<?php echo $this->getConfigLink(); ?>">
-				<input type="hidden" name="save" value="1">
-
-				<div class="grid-x grid-margin-x">
-					<fieldset class="fieldset">
-						<legend class="h6">
-							<?php echo KT_I18N::translate('Select the research area to set as default. This area will open first in the sidebar.'); ?>
-						</legend>
+				<fieldset class="fieldset">
+					<legend class="h6">
+						<?php echo KT_I18N::translate('Select the research area to set as default. This area will open first in the sidebar.'); ?>
+					</legend>
+					<form classs="cell" method="post" name="areaForm" action="<?php echo $this->getConfigLink(); ?>">
+						<input type="hidden" name="saveArea" value="1">
 						<div class="grid-x">
 							<?php foreach ($all_plugins as $area => $plugins) {
 								// reset returns the first value in an array
 								// we take the area code from the first plugin in this area
 								$area_code = reset($plugins)->getSearchArea(); ?>
-
 								<div class="cell medium-3 switch tiny">
-									<input class="switch-input" id="<?php echo $area_code; ?>" type="radio" name="NEW_RESEARCH_PLUGINS_DEFAULT_AREA"
-										<?php if (get_module_setting($this->getName(), 'RESEARCH_PLUGINS_DEFAULT_AREA') === $area) { ?>
-											 checked="checked"
+									<input class="switch-input" id="<?php echo $area_code; ?>" type="radio" name="NEW_RESEARCH_PLUGINS_DEFAULT_AREA" value="<?php echo $area; ?>"
+										<?php if ($DEFAULT_AREA == $area) { ?>
+											 checked
 										<?php } ?>
 									>
 									<label class="switch-paddle" for="<?php echo $area_code; ?>">
@@ -170,73 +163,76 @@ class research_links_KT_Module extends KT_Module implements KT_Module_Config, KT
 									</label>
 									<label class="areaList"><?php echo $area; ?></label>
 								</div>							
+
 							<?php } ?>
 						</div>
-					</fieldset>
-				</div>
-				<div class="grid-x grid-margin-x">
+						<?php singleButton(); ?>
+					</form>
+				</fieldset>
 					<fieldset class="fieldset">
 						<legend class="h6">
 							<?php echo KT_I18N::translate('Select the links you want to use in the sidebar'); ?>
 						</legend>
-						<div class="grid-x">
-							<div class="cell medium-10">
-								<div class="grid-x">
-									<div class="cell small-3 medium-2 large-1">
-										<label for="checkbox1">
-											<?php echo KT_I18N::translate('Select all'); ?>
-										</label>
-									</div>
-									<div class="cell auto">
-										<input id="checkbox1" type="checkbox" onclick="toggle_select(this)">
+						<form classs="cell" method="post" name="pluginsForm" action="<?php echo $this->getConfigLink(); ?>">
+							<input type="hidden" name="savePlugins" value="1">
+							<div class="grid-x">
+								<div class="cell medium-10">
+									<div class="grid-x">
+										<div class="cell small-3 medium-2 large-1">
+											<label for="checkbox1">
+												<?php echo KT_I18N::translate('Select all'); ?>
+											</label>
+										</div>
+										<div class="cell auto">
+											<input id="checkbox1" type="checkbox" onclick="toggle_select(this)">
+										</div>
 									</div>
 								</div>
-							</div>
-							<div class="cell medium-2 text-right topButton">
+								<div class="cell medium-2 text-right topButton">
+									<?php singleButton(); ?>
+								</div>
+								<div class="cell">
+									<table id="research_links_table" style="width: 100%;">
+										<thead>
+											<th> <?php echo KT_I18N::translate('Enabled'); ?></th>
+											<th>test</th>
+											<th> <?php echo KT_I18N::translate('Name'); ?></th>
+											<th> <?php echo KT_I18N::translate('Area'); ?></th>
+											<th> <?php echo KT_I18N::translate('Pay to view'); ?></th>
+											<th> <?php echo KT_I18N::translate('Links only'); ?></th>
+										</thead>
+										<tbody>
+											<?php foreach ($all_plugins as $area => $plugins) {
+												foreach ($plugins as $label => $plugin) {
+													if (is_array($RESEARCH_PLUGINS) && array_key_exists($label, $RESEARCH_PLUGINS)) {
+														$enabled = $RESEARCH_PLUGINS[$label];
+													} else {
+														$enabled = '0';
+													} ?>
+													<tr>
+														<td>
+															<?php echo checkbox('NEW_RESEARCH_PLUGINS[' . $label . ']', $enabled, ' class="check"'); ?>
+														</td>
+														<td><?php echo $enabled; ?></td>
+														<td><?php echo $plugin->getName(); ?></td>
+														<td><?php echo $area; ?></td>
+														<td><?php echo $this->getCurrency($plugin); ?></td>
+														<td>
+															<?php if ($plugin->createLinkOnly()) { ?>
+																 (<i class="<?php echo $iconStyle; ?> fa-link" style="font-size: 1em; margin:0;"></i>)
+															<?php } ?>
+														</td>
+													</tr>
+												<?php }
+											} ?>
+										</tbody>
+									</table>
+								</div>
 								<?php singleButton(); ?>
 							</div>
-
-							<div class="cell">
-								<table id="research_links_table" style="width: 100%;">
-									<thead>
-										<th> <?php echo KT_I18N::translate('Enabled'); ?></th>
-										<th></th>
-										<th> <?php echo KT_I18N::translate('Name'); ?></th>
-										<th> <?php echo KT_I18N::translate('Area'); ?></th>
-										<th> <?php echo KT_I18N::translate('Pay to view'); ?></th>
-										<th> <?php echo KT_I18N::translate('Links only'); ?></th>
-									</thead>
-									<tbody>
-										<?php foreach ($all_plugins as $area => $plugins) {
-											foreach ($plugins as $label => $plugin) {
-												if (is_array($RESEARCH_PLUGINS) && array_key_exists($label, $RESEARCH_PLUGINS)) {
-													$enabled = $RESEARCH_PLUGINS[$label];
-												} else {
-													$enabled = '0';
-												} ?>
-												<tr>
-													<td><?php echo checkbox('NEW_RESEARCH_PLUGINS[' . $label . ']', $enabled, ' class="check"'); ?></td>
-													<td><?php echo $enabled; ?></td>
-													<td><?php echo $plugin->getName(); ?></td>
-													<td><?php echo $area; ?></td>
-													<td><?php echo $this->getCurrency($plugin); ?></td>
-													<td>
-														<?php if ($plugin->createLinkOnly()) { ?>
-															 (<i class="<?php echo $iconStyle; ?> fa-link" style="font-size: 1em; margin:0;"></i>)
-														<?php } ?>
-													</td>
-												</tr>
-											<?php }
-										} ?>
-									</tbody>
-								</table>
-							</div>
-
-							<?php singleButton(); ?>
-						</div>
+						</form>
 					</fieldset>
-				</div>
-			</form>
+			
 
 		<?php pageClose();
 	}
