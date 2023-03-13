@@ -31,10 +31,10 @@ $controller
 	->setPageTitle(KT_I18N::translate('Report menu items administration'))
 	->pageHeader();
 
-$modules   = KT_Module::getActiveLists(KT_GED_ID, KT_PRIV_HIDE);
-$component = 'report';
-$infoHelp  = KT_I18N::translate('The order of these items under the main menu "Reports" is fixed at alphabetical, based on the current display language in use.') . '<br>' . KT_I18N::translate('The "Access level" setting "Hide from everyone" means exactly that, including Administrators.');
-$pageTitle = $controller->getPageTitle();
+$modules    = KT_Module::getActiveReports(KT_GED_ID, KT_PRIV_HIDE);
+$component  = 'report';
+$infoHelp   = KT_I18N::translate('The order of these items under the main menu "Reports" is fixed at alphabetical, based on the current display language in use.') . '<br>' . KT_I18N::translate('The "Access level" setting "Hide from everyone" means exactly that, including Administrators.');
+$pageTitle  = $controller->getPageTitle();
 $col1Header = KT_I18N::translate('Report');
 
 echo adminModules($modules, $component, $infoHelp, $pageTitle, $col1Header);
