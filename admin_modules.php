@@ -212,9 +212,7 @@ echo pageStart('manage_modules', $controller->getPageTitle()); ?>
 						</tbody>
 					</table>
 				</div>
-
 				<?php echo singleButton('', 1); ?>
-
 			</div>
 		</form>
 

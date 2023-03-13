@@ -23,10 +23,7 @@
 
 define('KT_SCRIPT_NAME', 'admin_module_blocks.php');
 require 'includes/session.php';
-require KT_ROOT . 'includes/functions/functions_edit.php';
-include KT_THEME_URL . 'templates/adminData.php';
-
-global $iconStyle;
+include KT_THEME_URL . 'templates/adminModuleTemplate.php';
 
 $controller = new KT_Controller_Page();
 $controller
@@ -34,99 +31,10 @@ $controller
 	->setPageTitle(KT_I18N::translate('Home page blocks administration'))
 	->pageHeader();
 
-$modules	= KT_Module::getActiveBlocks(KT_GED_ID, KT_PRIV_HIDE);
-$action		= KT_Filter::post('action');
+$modules    = KT_Module::getActiveBlocks(KT_GED_ID, KT_PRIV_HIDE);
+$component  = 'block';
+$infoHelp   = KT_I18N::translate('To change the order of these blocks go to the Home page, and select "Change the Home page blocks" from the options under your user name at the top of the page,') . '<br>' . KT_I18N::translate('The "Access level" setting "Hide from everyone" means exactly that, including Administrators.');
+$pageTitle  = $controller->getPageTitle();
+$col1Header = KT_I18N::translate('Block');
 
-if ($action == 'update_mods' && KT_Filter::checkCsrf()) {
-	foreach ($modules as $module_name=>$module) {
-		foreach (KT_Tree::getAll() as $tree) {
-			$value = KT_Filter::post("access-{$module_name}-{$tree->tree_id}", KT_REGEX_INTEGER, $module->defaultAccessLevel());
-			KT_DB::prepare(
-				"REPLACE INTO `##module_privacy` (module_name, gedcom_id, component, access_level) VALUES (?, ?, 'block', ?)"
-			)->execute(array($module_name, $tree->tree_id, $value));
-		}
-	}
-}
-
-echo relatedPages($module_config, KT_SCRIPT_NAME);
-
-echo pageStart('blocks', $controller->getPageTitle()); ?>
-
-	<form class="cell" method="post" action="<?php echo KT_SCRIPT_NAME; ?>">
-		<input type="hidden" name="action" value="update_mods">
-		<?php echo KT_Filter::getCsrf(); ?>
-		<div class="grid-x show-for-medium">
-			<div class="cell medium-10">
-				<div class="cell callout info-help ">
-					<?php echo KT_I18N::translate('To change the order of these blocks go to the Home page, and select "Change the Home page blocks" from the options under your user name at the top of the page'); ?>
-					<?php echo KT_I18N::translate('The "Access level" setting "Hide from everyone" means exactly that, including Administrators.'); ?>
-				</div>
-			</div>
-			<div class="cell medium-1 medium-offset-1 vertical">
-				<button class="button" type="submit">
-					<i class="<?php echo $iconStyle; ?> fa-save"></i>
-					<?php echo KT_I18N::translate('Save'); ?>
-				</button>
-			</div>
-		</div>
-		<table id="blocks_table" class="modules_table">
-			<thead>
-				<tr>
-					<th><?php echo KT_I18N::translate('Block'); ?></th>
-					<th><?php echo KT_I18N::translate('Description'); ?></th>
-					<th><?php echo KT_I18N::translate('Access level'); ?></th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php
-				foreach ($modules as $module) {
-					?>
-					<tr>
-						</td>
-						<td>
-							<?php
-							if ( $module instanceof KT_Module_Config ) {
-								echo '<a href="', $module->getConfigLink(), '">';
-							}
-							echo $module->getTitle();
-							if ( $module instanceof KT_Module_Config && array_key_exists($module->getName(), KT_Module::getActiveModules() ) ) {
-								echo ' <i class="' . $iconStyle . ' fa-gears"></i></a>';
-							}
-							?>
-						</td>
-						<td>
-							<?php echo $module->getDescription(); ?>
-						</td>
-						<td>
-							<table class="modules_table2">
-								<?php foreach (KT_Tree::getAll() as $tree) { ?>
-									<tr>
-										<td>
-											<?php echo $tree->tree_title_html; ?>
-										</td>
-										<td>
-											<?php
-												$access_level = KT_DB::prepare(
-													"SELECT access_level FROM `##module_privacy` WHERE gedcom_id=? AND module_name=? AND component='block'"
-												)->execute(array($tree->tree_id, $module->getName()))->fetchOne();
-												if ($access_level === null) {
-													$access_level = $module->defaultAccessLevel();
-												}
-												echo edit_field_access_level('access-' . $module->getName() . '-' . $tree->tree_id, $access_level);
-											?>
-										</td>
-									</tr>
-								<?php } ?>
-							</table>
-						</td>
-					</tr>
-				<?php } ?>
-			</tbody>
-		</table>
-		<button class="button" type="submit">
-			<i class="<?php echo $iconStyle; ?> fa-save"></i>
-			<?php echo KT_I18N::translate('Save'); ?>
-		</button>
-	</form>
-
-<?php echo pageClose();
+echo adminModules($modules, $component, $infoHelp, $pageTitle, $col1Header);

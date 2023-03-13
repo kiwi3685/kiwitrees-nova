@@ -23,10 +23,7 @@
 
 define('KT_SCRIPT_NAME', 'admin_module_widgets.php');
 require 'includes/session.php';
-require KT_ROOT . 'includes/functions/functions_edit.php';
-include KT_THEME_URL . 'templates/adminData.php';
-
-global $iconStyle;
+include KT_THEME_URL . 'templates/adminModuleTemplate.php';
 
 $controller = new KT_Controller_Page();
 $controller
@@ -34,10 +31,10 @@ $controller
 	->setPageTitle(KT_I18N::translate('Widget modules administration'))
 	->pageHeader()
 	->addInlineJavascript('
-    jQuery("#widgets_table").sortable({items: ".sortme", forceHelperSize: true, forcePlaceholderSize: true, opacity: 0.7, cursor: "move", axis: "y"});
+    jQuery("#widgetsTable").sortable({items: ".sortme", forceHelperSize: true, forcePlaceholderSize: true, opacity: 0.7, cursor: "move", axis: "y"});
 
     //-- update the order numbers after drag-n-drop sorting is complete
-    jQuery("#widgets_table").bind("sortupdate", function(event, ui) {
+    jQuery("#widgetsTable").bind("sortupdate", function(event, ui) {
 			jQuery("#"+jQuery(this).attr("id")+" input").each(
 				function (index, value) {
 					value.value = index+1;
@@ -46,117 +43,11 @@ $controller
 		});
 	');
 
-$modules	= KT_Module::getActiveWidgets(KT_GED_ID, KT_PRIV_HIDE);
-$action		= KT_Filter::post('action');
+$modules    = KT_Module::getActiveWidgets(KT_GED_ID, KT_PRIV_HIDE);
+$component  = 'widgets';
+$infoHelp   = KT_I18N::translate('"Drag & drop" each module, or manually adjust the order numbers, to change the order these modules will be displayed in.') . '<br>' . KT_I18N::translate('The "Access level" setting "Hide from everyone" means exactly that, including Administrators.');
+$pageTitle  = $controller->getPageTitle();
+$col1Header = KT_I18N::translate('Widgets');
+$sortAble   = true;
 
-if ($action == 'update_mods' && KT_Filter::checkCsrf()) {
-	foreach ($modules as $module_name=>$module) {
-		foreach (KT_Tree::getAll() as $tree) {
-			$access_level = KT_Filter::post("access-{$module_name}-{$tree->tree_id}", KT_REGEX_INTEGER, $module->defaultAccessLevel());
-			KT_DB::prepare(
-				"REPLACE INTO `##module_privacy` (module_name, gedcom_id, component, access_level) VALUES (?, ?, 'widget', ?)"
-			)->execute(array($module_name, $tree->tree_id, $access_level));
-		}
-		$order = KT_Filter::post('order-'.$module_name);
-		KT_DB::prepare(
-			"UPDATE `##module` SET widget_order=? WHERE module_name=?"
-		)->execute(array($order, $module_name));
-		$module->order=$order; // Make the new order take effect immediately
-	}
-	uasort($modules, function ($x, $y) {
-		return $x->order <=> $y->order;
-	});
-
-}
-
-echo relatedPages($module_config, KT_SCRIPT_NAME);
-
-echo pageStart('widgets', $controller->getPageTitle()); ?>
-
-	<form class="cell" method="post" action="<?php echo KT_SCRIPT_NAME; ?>">
-			<input type="hidden" name="action" value="update_mods">
-			<?php echo KT_Filter::getCsrf(); ?>
-			<div class="grid-x show-for-medium">
-				<div class="cell medium-10">
-					<div class="cell callout info-help ">
-						<?php echo KT_I18N::translate('"Drag & drop" each module, or manually adjust the order numbers, to change the order these modules will be displayed in.'); ?>
-						<?php echo KT_I18N::translate('The "Access level" setting "Hide from everyone" means exactly that, including Administrators.'); ?>
-					</div>
-				</div>
-				<div class="cell medium-1 medium-offset-1">
-					<button class="button" type="submit">
-						<i class="<?php echo $iconStyle; ?> fa-save"></i>
-						<?php echo KT_I18N::translate('Save'); ?>
-					</button>
-				</div>
-			</div>
-			<table id="widgets_table" class="modules_table">
-				<thead>
-					<tr>
-						<th colspan="2"><?php echo KT_I18N::translate('Widget'); ?></th>
-						<th><?php echo KT_I18N::translate('Description'); ?></th>
-						<th><?php echo KT_I18N::translate('Order'); ?></th>
-						<th><?php echo KT_I18N::translate('Access level'); ?></th>
-					</tr>
-				</thead>
-				<tbody>
-					<?php
-					$order = 1;
-					foreach ($modules as $module) { ?>
-						<tr class="sortme">
-							<td>
-								<i class="<?php echo $iconStyle; ?> fa-bars"></i>
-							</td>
-							<td>
-								<?php
-								if ( $module instanceof KT_Module_Config ) {
-									echo '<a href="', $module->getConfigLink(), '">';
-								}
-								echo $module->getTitle();
-								if ( $module instanceof KT_Module_Config && array_key_exists($module->getName(), KT_Module::getActiveModules() ) ) {
-									echo ' <i class="' . $iconStyle . ' fa-gears"></i></a>';
-								}
-								?>
-							</td>
-							<td>
-								<?php echo $module->getDescription(); ?>
-							</td>
-							<td>
-								<input type="number" min="1" max="99" value="<?php echo $order; ?>" name="order-<?php echo $module->getName(); ?>">
-							</td>
-							<td>
-								<table class="modules_table2">
-									<?php foreach (KT_Tree::getAll() as $tree) { ?>
-										<tr>
-											<td>
-												<?php echo $tree->tree_title_html; ?>
-											</td>
-											<td>
-												<?php
-													$access_level = KT_DB::prepare(
-														"SELECT access_level FROM `##module_privacy` WHERE gedcom_id=? AND module_name=? AND component='widget'"
-													)->execute(array($tree->tree_id, $module->getName()))->fetchOne();
-													if ($access_level === null) {
-														$access_level = $module->defaultAccessLevel();
-													}
-													echo edit_field_access_level('access-' . $module->getName() . '-' . $tree->tree_id, $access_level, '', true);
-												?>
-											</td>
-										</tr>
-									<?php } ?>
-								</table>
-							</td>
-						</tr>
-					<?php
-					$order++;
-					}
-					?>
-				</tbody>
-			</table>
-			<button class="button" type="submit">
-				<i class="<?php echo $iconStyle; ?> fa-save"></i>
-				<?php echo KT_I18N::translate('Save'); ?>
-			</button>
-		</form>
-
-<?php echo pageClose();
+echo adminModules($modules, $component, $infoHelp, $pageTitle, $col1Header, $sortAble);
