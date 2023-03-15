@@ -184,12 +184,12 @@ function album_print_media($pid, $level = 1, $related = false, $kind = 0, $noedi
 	if ($numm > 0) {
 		if (0 != $ALBUM_GROUPS) { ?>
 			<div class="grid-x">
-				<div class="cell text-center h5">
+				<h5 class="cell text-center">
 					<?php echo KT_I18N::translate($tt); ?>
-				</div>
+				</h5>
 		<?php } ?>
 
-				<div id="thumbcontainer<?php echo $kind; ?>" class="grid-x grid-margin-x grid-margin-y">
+				<div id="thumbcontainer<?php echo $kind; ?>" class="cell thumbGroup">
 
 					<?php // Start pulling media items into thumbcontainer div
 					foreach ($rows as $rowm) {
@@ -273,34 +273,101 @@ function album_print_media_row($rtype, $rowm, $pid)
 		return false;
 	}
 
+	//  Get the title of the media
+	if ($media) {
+		$mediaTitle = $media->getFullName();
+	} else {
+		$mediaTitle = $rowm['m_id'];
+	}
+
+	// Get media item Notes
+	$noteTitle = '';
+	$noteItem  = '';
+	if (strpos($rowm['m_gedcom'], "\n1 NOTE")) {
+		$haystack  = $rowm['m_gedcom'];
+		$needle    = '1 NOTE';
+		$before    = substr($haystack, 0, strpos($haystack, $needle));
+		$after     = substr(strstr($haystack, $needle), strlen($needle));
+		$final     = $before . $needle . $after;
+		$noteTitle = KT_I18N::translate('Note');
+		$noteItem  = '<dd>' . htmlspecialchars(addslashes(print_fact_notes($final, 1, true, true)), ENT_QUOTES) . '</dd>';
+	}
+
+	// Get media item Sources
+	$sourceTitle  = '';
+	$sourceItems  = '';
+	$countSources = 0;
+	if ($media->getAllFactsByType('SOUR')) {
+		foreach ($media->getAllFactsByType('SOUR') as $source_fact) {
+			$source = KT_Source::getInstance(trim($source_fact->detail, '@'));
+			if ($source && $source->canDisplayDetails()) {
+				if (!$sourceItems || $countSources == 1) {
+					$sourceTitle = KT_I18N::translate('Source');
+				} else {
+					$sourceTitle = KT_I18N::translate('Sources');
+				}
+
+				$sourceItems .= '<dd><a class="" href="' . $source->getHtmlUrl() . '">' . $source->getFullName() . '</a></dd>';
+
+				$countSources ++;
+			}
+		}
+		$sourceItems .= '</dd>';
+	}
+
+
+
 	// Highlight Album Thumbnails - Changed=new (blue), Changed=old (red), Changed=no (none)
-	if ('new' == $rtype) { ?>
-		<div class="cell album_new small-3 medium-2 text-center">
-			<div class="pic">
-	<?php } elseif ('old' == $rtype) { ?>
-		<div class="cell album_old small-3 medium-2 text-center">
-			<div class="pic">
-	<?php } else { ?>
-		<div class="cell album_norm small-3 medium-2 text-center">
-			<div class="pic">
+
+	if ($rtype) {
+		switch ($rtype) {
+			case 'new' : ?>
+				<div class="album_new text-center">
+				<?php break;
+			case 'old' : ?>
+				<div class="album_old text-center">
+				<?php break;
+			default : ?>
+				<div class="album_norm text-center">
+		<?php }
+	} else { ?>
+		<div class="album_norm text-center">
 	<?php }
 
-			//  Get the title of the media
-			if ($media) {
-				$mediaTitle = $media->getFullName();
-			} else {
-				$mediaTitle = $rowm['m_id'];
-			}
+		if ($noteItem || $sourceItems) {
+			global $iconStyle;
+			$dropdownID = 'dropdownID' . (int) (microtime(true) * 1000000); ?>
+			<span 
+				class="info" 
+				data-toggle="<?php echo $dropdownID; ?>"
+			>
+					<i class ="<?php echo $iconStyle; ?> fa-circle-info"></i>
+			</span>
+			<div 
+				class="dropdown-pane shadow" 
+				id="<?php echo $dropdownID; ?>"
+				data-parent-class="thumbGroup"
+				data-v-offset="80"
+				data-hover="true" 
+				data-hover-pane="true"
+				data-dropdown
+			>
+				<dl>
+					<?php if ($noteItem) { ?>
+				  		<dt><?php echo $noteTitle; ?></dt>
+				  		<?php echo $noteItem;
+				  	}
+				  	if ($sourceItems) { ?>
+					  <dt><?php echo $sourceTitle; ?></dt>
+					  <?php echo $sourceItems;
+					 } ?>
+				</dl>					
+			</div>
+		<?php } ?>
 
-			// Get media item Notes
-			$haystack  = $rowm['m_gedcom'];
-			$needle    = '1 NOTE';
-			$before    = substr($haystack, 0, strpos($haystack, $needle));
-			$after     = substr(strstr($haystack, $needle), strlen($needle));
-			$final     = $before . $needle . $after;
-			$notes     = htmlspecialchars(addslashes(print_fact_notes($final, 1, true, true)), ENT_QUOTES);
+		<div class="pic">
 
-			// Prepare Below Thumbnail  menu ----------------------------------------------------
+			<?php // Prepare Below Thumbnail  menu ----------------------------------------------------
 			$menuID    = 'menu' . (int) (microtime(true) * 1000000);
 			$menuTitle = '<a href="#" class="album_media_title" data-toggle="' . $menuID . '">' . $mediaTitle . '</a>';
 			$menu      = new KT_Menu();
@@ -312,39 +379,11 @@ function album_print_media_row($rtype, $rowm, $pid)
 				// Continue printing menu
 				$menu->addClass('', 'submenu');
 
-				// View Notes
-				if (strpos($rowm['m_gedcom'], "\n1 NOTE")) {
-					$submenu = new KT_Menu(KT_I18N::translate('View Notes'), '#');
-					// Notes Tooltip ----------------------------------------------------
-//					$submenu->addOnclick("modalNotes('" . $notes . "','" . KT_I18N::translate('View Notes') . "'); return false;");					
-					$submenu->addOnclick($notes);					
-					$submenu->addClass('submenuitemNote');
-					$menu->addSubMenu($submenu);
-				}
 				// View Details
 				$submenu = new KT_Menu(KT_I18N::translate('View Details'), KT_SERVER_NAME . KT_SCRIPT_PATH . 'mediaviewer.php?mid=' . $rowm['m_id'] . '&amp;ged=' . KT_GEDURL, 'right');
 				$submenu->addClass('submenuitem');
 				$menu->addSubMenu($submenu);
 
-				// View Sources
-				$source_menu = null;
-				foreach ($media->getAllFactsByType('SOUR') as $source_fact) {
-					$source = KT_Source::getInstance(trim($source_fact->detail, '@'));
-					if ($source && $source->canDisplayDetails()) {
-						if (!$source_menu) {
-							// Group sources under a top level menu
-							$source_menu = new KT_Menu(KT_I18N::translate('Sources'), '#', null, 'right', 'right');
-							$source_menu->addClass('submenuitem', 'submenu');
-						}
-						// now add a link to the actual source as a submenu
-						$submenu = new KT_Menu(new KT_Menu(strip_tags($source->getFullName()), $source->getHtmlUrl()));
-						$submenu->addClass('submenuitem', 'submenu');
-						$source_menu->addSubMenu($submenu);
-					}
-				}
-				if ($source_menu) {
-					$menu->addSubMenu($source_menu);
-				}
 
 				if (KT_USER_CAN_EDIT) {
 					// Edit Media
@@ -374,8 +413,10 @@ function album_print_media_row($rtype, $rowm, $pid)
 
 		</div>
 
-		<?php // View Edit Menu ?>	
-		<?php echo $menu->getFoundationDropdownMenu($menuID); ?>
+		<ul class="album vertical menu dropdown align-center" data-dropdown-menu>
+			<?php echo $menu->getFoundationDropdownMenu(); ?>
+			<?php //echo $menu->getMenuAsList(); ?>
+		</ul>
 
 	</div>
 

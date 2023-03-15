@@ -78,7 +78,7 @@ class KT_Menu {
 		$this->flyout	= $flyout;
 	}
 
-	function addClass($class, $submenuclass = '', $iconclass = 'icon_general')
+	function addClass($class, $submenuclass = '', $iconclass = '')
 	{
 		$this->class		= $class;
 		$this->submenuclass	= $submenuclass;
@@ -182,68 +182,35 @@ class KT_Menu {
 		}
 	}
 
-	function getFoundationDropdownMenu($ID = '') {
-		global $menucount;
-
-		if (!isset($menucount)) {
-			$menucount = 0;
+	function getFoundationDropdownMenu() {
+		$link = '';
+		if ($this->link) {
+			if ($this->target !== null) {
+				$link .= ' target="' . $this->target . '"';
+			}
+			if ($this->link == '#') {
+				if ($this->onclick !== null) {
+					$link .= ' onclick="' . $this->onclick . '"';
+				}
+			}	
+			$html = '<a class="" href="' . $this->link . '"' . $link . '>' . $this->label . '</a>';
 		} else {
-			$menucount ++;
-		}
-		$subsID = $menucount.rand();
-		$c  = count($this->submenus);
-		?>
-
-		<ul class="album vertical menu dropdown align-center" data-dropdown-menu style="max-width: 250px;">
-			<li>
-				<?php echo $this->label; ?>
-
-				<?php if ($c > 0) {
-					$submenuid = 'menu' . $subsID . '_subs'; ?>
-					<ul class="menu vertical">
-						<?php foreach ($this->submenus as $submenu) {
-							$submenu->parentmenu = $submenuid;
-							echo $submenu->getFoundationSubMenu($submenuid);
-						} ?>
-					</ul>		
-				<?php } ?>
-			</li>
-		</ul>
-
-		<?php
-	}
-
-	function getFoundationSubMenu($submenuid) {
-
-		switch ($this->class) {
-			case 'submenuitemNote': ?>
-				<li>
-					<a href="#" class="<?php echo $this->class; ?>" data-toggle="<?php echo $submenuid; ?>">
-						<?php echo $this->label; ?>
-					</a>
-				</li>
-				<div 
-					class="dropdown-pane" 
-					data-position="right" 
-					data-alignment="top" 
-					id="<?php echo $submenuid; ?>" 
-					data-dropdown 
-				>
-					<p><?php echo $this->onclick; ?></p>
-				</div>
-				<?php break;
-			default : ?>
-				<li>
-					<a href="<?php echo $this->link; ?>" class="<?php echo $this->class; ?>">
-						<?php echo $this->label; ?>
-					</a>
-				</li>
-				<?php break;
-			break;
+			$html = $this->label;
 		}
 
-	}
+		if ($this->submenus) {
+			$html .= '<ul class="menu vertical>';
+				foreach ($this->submenus as $submenu) {
+					if ($submenu) {
+						$html .= $submenu->getMenuAsList();
+					}
+				}
+			$html .= '</ul>';
+		}
 
+		return '<li>' . $html . '</li>';
+
+	}
 
 	function getMenu() {
 		global $menucount, $TEXT_DIRECTION, $KT_IMAGES;

@@ -167,7 +167,7 @@ class tabi_album_KT_Module extends KT_Module implements KT_Module_IndiTab, KT_Mo
 		}
 		?>
 
-		<div id="<?php echo $this->getName(); ?>_content">
+		<div id="<?php echo $this->getName(); ?>_content" class="grid-x">
 
 			<?php if (KT_USER_CAN_EDIT) { ?>
 				<div class="cell tabHeader">
@@ -213,23 +213,27 @@ class tabi_album_KT_Module extends KT_Module implements KT_Module_IndiTab, KT_Mo
 						</div>
 					<?php } ?>
 				</div>
-			<?php }
+			<?php } ?>
 
-			if ($ALBUM_GROUPS == 0) {
-				album_print_media($controller->record->getXref(), 0, true);
-			} else {
-				for ($i = 0; $i < $ALBUM_GROUPS; $i++) {
-					ob_start();
-						album_print_media($controller->record->getXref(), 0, true, $i);
-						$print_row = ob_get_contents();
-						$check     = strrpos($print_row, "class=\"pic\"");
-					if(!$check) {
-						ob_end_clean();
-					} else {
-						ob_end_flush();
+			<div class="cell">
+
+				<?php if ($ALBUM_GROUPS == 0) {
+					album_print_media($controller->record->getXref(), 0, true);
+				} else {
+					for ($i = 0; $i < $ALBUM_GROUPS; $i++) {
+						ob_start();
+							album_print_media($controller->record->getXref(), 0, true, $i);
+							$print_row = ob_get_contents();
+							$check     = strrpos($print_row, "class=\"pic\"");
+						if(!$check) {
+							ob_end_clean();
+						} else {
+							ob_end_flush();
+						}
 					}
-				}
-			} ?>
+				} ?>
+
+			</div>
 
 		</div>
 
