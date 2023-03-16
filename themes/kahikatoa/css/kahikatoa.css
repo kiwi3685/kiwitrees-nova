@@ -11059,29 +11059,63 @@ div.last_change label {
 	margin-bottom: 1rem;
 }
 
-#chart_relationship-page button.button.swap {
+#relationship-page button.button.swap {
 	margin-top: 0;
 }
-#chart_relationship-page fieldset.fieldset {
+#relationship-page fieldset.fieldset {
 	margin: 0;
 	padding: 0.5rem 1rem;
 }
-#chart_relationship-page fieldset.fieldset div.detailLevel {
+#relationship-page fieldset.fieldset div.detailLevel {
 	margin: 0;
 	padding: 0;
 }
-#chart_relationship-page fieldset.fieldset div.detailLevel input {
+#relationship-page fieldset.fieldset div.detailLevel input {
 	margin: 0;
 }
-#chart_relationship-page fieldset.fieldset div.detailLevel label {
+#relationship-page fieldset.fieldset div.detailLevel label {
 	font-size: 1rem;
-	line-height: normal;
-	padding: 0;
+	line-height: 2rem;
+	vertical-align: bottom;
 }
-#chart_relationship-page table[id^=rel_] {
+#relationship-page table[id^=rel_] {
 	border-collapse: collapse;
 	margin: 20px auto;
 	width: auto;
+}
+#relationship-page table[id^=rel_] tbody {
+	border: none;
+}
+#relationship-page table[id^=rel_] tbody tr {
+	background-color: #faf5e8;
+	border: none;
+}
+#relationship-page table[id^=rel_] tbody svg.svg-inline--fa {
+	margin-top: 0.125rem;
+}
+#relationship-page table[id^=rel_] tbody div.vline {
+	height: 4rem;
+	margin-bottom: 0.275rem;
+	text-align: center;
+}
+#relationship-page table[id^=rel_] tbody div.vline div {
+	display: inline-block;
+	font-size: 0.9rem;
+	width: 50%;
+}
+#relationship-page table[id^=rel_] tbody div.vline div span {
+	background-color: #faf5e8;
+}
+#relationship-page table[id^=rel_] tbody div.hline div {
+	font-size: 0.9rem;
+	text-align: center;
+	width: 5rem;
+}
+#relationship-page table[id^=rel_] tbody div.hline div span {
+	background-color: #faf5e8;
+}
+#relationship-page div.callout {
+	margin-top: 0.9375rem;
 }
 
 #research_links-page .check-boxes input {
@@ -12604,7 +12638,7 @@ input[type=radio]::before {
 	height: 1.25rem;
 	transform: scale(0);
 	transition: 120ms transform ease-in-out;
-	box-shadow: inset 1.25rem 1.25rem #3adb76;
+	box-shadow: inset 1.25rem 1.25rem #ab3334;
 }
 
 /* add tick mark */

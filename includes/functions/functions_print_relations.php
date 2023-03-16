@@ -77,10 +77,9 @@ function printSlcasBetween($person1, $person2, $mode, $recursion, $showCa, $type
 			continue;
 		}
 		if ($html) { // when relationship used as embedded html
-//			$person2 = KT_Person::getInstance($displayRef);
 			echo KT_I18N::translate('%1$s is your %2$s.', strip_tags($person2->getFullName()), get_relationship_name_from_path(implode('', $relationships), $person1, $person2));
 		} else {
-			echo '<a href="relationship.php?pid1=' . $person1->getXref() . '&pid2=' . $person2->getXref() . '&ged=' . KT_GEDURL . '&find=4" target="_blank" rel="noopener noreferrer">' .
+			echo '<a href="module.php?mod=chart_relationship&mod_action=show&pid1=' . $person1->getXref() . '&pid2=' . $person2->getXref() . '&ged=' . KT_GEDURL . '&find=4" target="_blank" rel="noopener noreferrer">' .
 				KT_I18N::translate('Relationship:&nbsp;') . '
 			</a>';
 			echo KT_I18N::translate('%1$s is %2$s of %3$s',

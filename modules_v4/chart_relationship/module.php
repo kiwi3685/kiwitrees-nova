@@ -42,7 +42,7 @@ class chart_relationship_KT_Module extends KT_Module implements KT_Module_Chart,
 	public function modAction($mod_action) {
 		switch($mod_action) {
 			case 'show':
-				require KT_ROOT . KT_MODULES_DIR . $this->getName() . '/' . $mod_action . '.php';
+				$this->show();
 				break;
 			case 'admin_config':
 				$this->config();
@@ -65,7 +65,7 @@ class chart_relationship_KT_Module extends KT_Module implements KT_Module_Chart,
 
 	// Implement KT_Module_Config
 	public function getConfigLink() {
-		return 'module.php?mod='.$this->getName().'&amp;mod_action=admin_config';
+		return 'module.php?mod=' . $this->getName().'&amp;mod_action=admin_config';
 	}
 
 	// Implement KT_Module_Chart
@@ -86,7 +86,7 @@ class chart_relationship_KT_Module extends KT_Module implements KT_Module_Chart,
 			}
 			$menu = new KT_Menu(
 				KT_USER_GEDCOM_ID ? KT_I18N::translate('Relationship to me') : $this->getTitle(),
-				'module.php?mod='.$this->getName().'&amp;mod_action=show&amp;pid1=' . $pid1 .'&amp;pid2=' . $pid2 .'&amp;ged=' . KT_GEDURL,
+				'relationship.php?pid1=' . $pid1 .'&amp;pid2=' . $pid2 .'&amp;ged=' . KT_GEDURL,
 				'menu-chart-relationship'
 			);
 			$menus[] = $menu;
@@ -96,7 +96,7 @@ class chart_relationship_KT_Module extends KT_Module implements KT_Module_Chart,
 			$pid2 = $PEDIGREE_ROOT_ID ? $PEDIGREE_ROOT_ID : '';
 			$menu = new KT_Menu(
 				KT_USER_GEDCOM_ID ? KT_I18N::translate('Relationship to me') : $this->getTitle(),
-				'module.php?mod='.$this->getName().'&amp;mod_action=show&amp;pid1=' . $pid1 .'&amp;pid2=' . $pid2 .'&amp;ged=' . KT_GEDURL,
+				'relationship.php?pid1=' . $pid1 .'&amp;pid2=' . $pid2 .'&amp;ged=' . KT_GEDURL,
 				'menu-chart-relationship'
 			);
 			$menus[] = $menu;
@@ -121,6 +121,10 @@ class chart_relationship_KT_Module extends KT_Module implements KT_Module_Chart,
 					jQuery("div.config_options:even").addClass("even");
 				});
 			');
+
+		$gedID 	= KT_Filter::post('gedID') ? KT_Filter::post('gedID') : KT_GED_ID;
+		$tree 	= KT_Tree::getNameFromId($gedID);
+
 
 		// Possible options for the recursion option
 		$recursionOptions = array(
@@ -148,57 +152,57 @@ class chart_relationship_KT_Module extends KT_Module implements KT_Module_Chart,
 		$rel3_ca	 = '1';
 
 		if (KT_Filter::postBool('reset')) {
-			set_gedcom_setting(KT_GED_ID, 'CHART_1',							1);
-			set_gedcom_setting(KT_GED_ID, 'CHART_2',							0);
-			set_gedcom_setting(KT_GED_ID, 'CHART_3',							1);
-			set_gedcom_setting(KT_GED_ID, 'CHART_4',							1);
-			set_gedcom_setting(KT_GED_ID, 'CHART_5',							0);
-			set_gedcom_setting(KT_GED_ID, 'CHART_6',							1);
-			set_gedcom_setting(KT_GED_ID, 'CHART_7',							0);
-			set_gedcom_setting(KT_GED_ID, 'RELATIONSHIP_RECURSION', 			99);
-			set_gedcom_setting(KT_GED_ID, 'TAB_REL_TO_DEFAULT_INDI',			'1');
-			set_gedcom_setting(KT_GED_ID, 'TAB_REL_OF_PARENTS',					'1');
-			set_gedcom_setting(KT_GED_ID, 'TAB_REL_TO_SPOUSE',					'1');
-			set_gedcom_setting(KT_GED_ID, 'TAB_REL_TO_DEFAULT_INDI_SHOW_CA',	'1');
-			set_gedcom_setting(KT_GED_ID, 'TAB_REL_OF_PARENTS_SHOW_CA',			'1');
-			set_gedcom_setting(KT_GED_ID, 'TAB_REL_TO_SPOUSE_SHOW_CA',			'1');
+			set_gedcom_setting($gedID, 'CHART_1',							1);
+			set_gedcom_setting($gedID, 'CHART_2',							0);
+			set_gedcom_setting($gedID, 'CHART_3',							1);
+			set_gedcom_setting($gedID, 'CHART_4',							1);
+			set_gedcom_setting($gedID, 'CHART_5',							0);
+			set_gedcom_setting($gedID, 'CHART_6',							1);
+			set_gedcom_setting($gedID, 'CHART_7',							0);
+			set_gedcom_setting($gedID, 'RELATIONSHIP_RECURSION', 			99);
+			set_gedcom_setting($gedID, 'TAB_REL_TO_DEFAULT_INDI',			'1');
+			set_gedcom_setting($gedID, 'TAB_REL_OF_PARENTS',					'1');
+			set_gedcom_setting($gedID, 'TAB_REL_TO_SPOUSE',					'1');
+			set_gedcom_setting($gedID, 'TAB_REL_TO_DEFAULT_INDI_SHOW_CA',	'1');
+			set_gedcom_setting($gedID, 'TAB_REL_OF_PARENTS_SHOW_CA',			'1');
+			set_gedcom_setting($gedID, 'TAB_REL_TO_SPOUSE_SHOW_CA',			'1');
 
 			AddToLog($this->getTitle().' set to default values', 'config');
 		}
 
 		if (KT_Filter::postBool('save')) {
-			set_gedcom_setting(KT_GED_ID, 'CHART_1',							KT_Filter::postBool('NEW_CHART_1', $chart1));
-			set_gedcom_setting(KT_GED_ID, 'CHART_2',							KT_Filter::postBool('NEW_CHART_2', $chart2));
-			set_gedcom_setting(KT_GED_ID, 'CHART_3',							KT_Filter::postBool('NEW_CHART_3', $chart3));
-			set_gedcom_setting(KT_GED_ID, 'CHART_4',							KT_Filter::postBool('NEW_CHART_4', $chart4));
-			set_gedcom_setting(KT_GED_ID, 'CHART_5',							KT_Filter::postBool('NEW_CHART_5', $chart5));
-			set_gedcom_setting(KT_GED_ID, 'CHART_6',							KT_Filter::postBool('NEW_CHART_6', $chart6));
-			set_gedcom_setting(KT_GED_ID, 'CHART_7',							KT_Filter::postBool('NEW_CHART_7', $chart7));
-			set_gedcom_setting(KT_GED_ID, 'RELATIONSHIP_RECURSION', 			KT_Filter::post('NEW_RELATIONSHIP_RECURSION', KT_REGEX_INTEGER, $rec_options));
-			set_gedcom_setting(KT_GED_ID, 'TAB_REL_TO_DEFAULT_INDI',			KT_Filter::post('NEW_TAB_REL_TO_DEFAULT_INDI', KT_REGEX_INTEGER, $rel1));
-			set_gedcom_setting(KT_GED_ID, 'TAB_REL_OF_PARENTS',					KT_Filter::post('NEW_TAB_REL_OF_PARENTS', KT_REGEX_INTEGER, $rel2));
-			set_gedcom_setting(KT_GED_ID, 'TAB_REL_TO_SPOUSE',					KT_Filter::post('NEW_TAB_REL_TO_SPOUSE', KT_REGEX_INTEGER, $rel3));
-			set_gedcom_setting(KT_GED_ID, 'TAB_REL_TO_DEFAULT_INDI_SHOW_CA',	KT_Filter::post('NEW_TAB_REL_TO_DEFAULT_INDI_SHOW_CA', KT_REGEX_INTEGER, $rel1_ca));
-			set_gedcom_setting(KT_GED_ID, 'TAB_REL_OF_PARENTS_SHOW_CA',			KT_Filter::post('NEW_TAB_REL_OF_PARENTS_SHOW_CA', KT_REGEX_INTEGER, $rel2_ca));
-			set_gedcom_setting(KT_GED_ID, 'TAB_REL_TO_SPOUSE_SHOW_CA',			KT_Filter::post('NEW_TAB_REL_TO_SPOUSE_SHOW_CA', KT_REGEX_INTEGER, $rel3_ca));
+			set_gedcom_setting($gedID, 'CHART_1',							KT_Filter::postBool('NEW_CHART_1', $chart1));
+			set_gedcom_setting($gedID, 'CHART_2',							KT_Filter::postBool('NEW_CHART_2', $chart2));
+			set_gedcom_setting($gedID, 'CHART_3',							KT_Filter::postBool('NEW_CHART_3', $chart3));
+			set_gedcom_setting($gedID, 'CHART_4',							KT_Filter::postBool('NEW_CHART_4', $chart4));
+			set_gedcom_setting($gedID, 'CHART_5',							KT_Filter::postBool('NEW_CHART_5', $chart5));
+			set_gedcom_setting($gedID, 'CHART_6',							KT_Filter::postBool('NEW_CHART_6', $chart6));
+			set_gedcom_setting($gedID, 'CHART_7',							KT_Filter::postBool('NEW_CHART_7', $chart7));
+			set_gedcom_setting($gedID, 'RELATIONSHIP_RECURSION', 			KT_Filter::post('NEW_RELATIONSHIP_RECURSION', KT_REGEX_INTEGER, $rec_options));
+			set_gedcom_setting($gedID, 'TAB_REL_TO_DEFAULT_INDI',			KT_Filter::post('NEW_TAB_REL_TO_DEFAULT_INDI', KT_REGEX_INTEGER, $rel1));
+			set_gedcom_setting($gedID, 'TAB_REL_OF_PARENTS',					KT_Filter::post('NEW_TAB_REL_OF_PARENTS', KT_REGEX_INTEGER, $rel2));
+			set_gedcom_setting($gedID, 'TAB_REL_TO_SPOUSE',					KT_Filter::post('NEW_TAB_REL_TO_SPOUSE', KT_REGEX_INTEGER, $rel3));
+			set_gedcom_setting($gedID, 'TAB_REL_TO_DEFAULT_INDI_SHOW_CA',	KT_Filter::post('NEW_TAB_REL_TO_DEFAULT_INDI_SHOW_CA', KT_REGEX_INTEGER, $rel1_ca));
+			set_gedcom_setting($gedID, 'TAB_REL_OF_PARENTS_SHOW_CA',			KT_Filter::post('NEW_TAB_REL_OF_PARENTS_SHOW_CA', KT_REGEX_INTEGER, $rel2_ca));
+			set_gedcom_setting($gedID, 'TAB_REL_TO_SPOUSE_SHOW_CA',			KT_Filter::post('NEW_TAB_REL_TO_SPOUSE_SHOW_CA', KT_REGEX_INTEGER, $rel3_ca));
 
 			AddToLog($this->getTitle().' set to new values', 'config');
 		}
 
-		$chart1		 = get_gedcom_setting(KT_GED_ID, 'CHART_1');
-		$chart2		 = get_gedcom_setting(KT_GED_ID, 'CHART_2');
-		$chart3		 = get_gedcom_setting(KT_GED_ID, 'CHART_3');
-		$chart4		 = get_gedcom_setting(KT_GED_ID, 'CHART_4');
-		$chart5		 = get_gedcom_setting(KT_GED_ID, 'CHART_5');
-		$chart6		 = get_gedcom_setting(KT_GED_ID, 'CHART_6');
-		$chart7		 = get_gedcom_setting(KT_GED_ID, 'CHART_7');
-		$rec_options = get_gedcom_setting(KT_GED_ID, 'RELATIONSHIP_RECURSION');
-		$rel1		 = get_gedcom_setting(KT_GED_ID, 'TAB_REL_TO_DEFAULT_INDI');
-		$rel2		 = get_gedcom_setting(KT_GED_ID, 'TAB_REL_OF_PARENTS');
-		$rel3		 = get_gedcom_setting(KT_GED_ID, 'TAB_REL_TO_SPOUSE');
-		$rel1_ca	 = get_gedcom_setting(KT_GED_ID, 'TAB_REL_TO_DEFAULT_INDI_SHOW_CA');
-		$rel2_ca	 = get_gedcom_setting(KT_GED_ID, 'TAB_REL_OF_PARENTS_SHOW_CA');
-		$rel3_ca	 = get_gedcom_setting(KT_GED_ID, 'TAB_REL_TO_SPOUSE_SHOW_CA');
+		$chart1		 = get_gedcom_setting($gedID, 'CHART_1');
+		$chart2		 = get_gedcom_setting($gedID, 'CHART_2');
+		$chart3		 = get_gedcom_setting($gedID, 'CHART_3');
+		$chart4		 = get_gedcom_setting($gedID, 'CHART_4');
+		$chart5		 = get_gedcom_setting($gedID, 'CHART_5');
+		$chart6		 = get_gedcom_setting($gedID, 'CHART_6');
+		$chart7		 = get_gedcom_setting($gedID, 'CHART_7');
+		$rec_options = get_gedcom_setting($gedID, 'RELATIONSHIP_RECURSION');
+		$rel1		 = get_gedcom_setting($gedID, 'TAB_REL_TO_DEFAULT_INDI');
+		$rel2		 = get_gedcom_setting($gedID, 'TAB_REL_OF_PARENTS');
+		$rel3		 = get_gedcom_setting($gedID, 'TAB_REL_TO_SPOUSE');
+		$rel1_ca	 = get_gedcom_setting($gedID, 'TAB_REL_TO_DEFAULT_INDI_SHOW_CA');
+		$rel2_ca	 = get_gedcom_setting($gedID, 'TAB_REL_OF_PARENTS_SHOW_CA');
+		$rel3_ca	 = get_gedcom_setting($gedID, 'TAB_REL_TO_SPOUSE_SHOW_CA');
 
 
 		echo relatedPages($moduleTools, $this->getConfigLink());
@@ -211,7 +215,7 @@ class chart_relationship_KT_Module extends KT_Module implements KT_Module_Chart,
 				</div>
 				<div class="cell medium-4 auto">
 					<form method="post" action="#" name="tree">
-						<?php echo select_edit_control('ged', KT_Tree::getIdList(), KT_I18N::translate('All'), KT_GEDCOM, ' onchange="tree.submit();"'); ?>
+						<?php echo select_edit_control('ged', KT_Tree::getIdList(), KT_I18N::translate('All'), $gedID, ' onchange="tree.submit();"'); ?>
 					</form>
 				</div>
 
