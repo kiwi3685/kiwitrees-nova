@@ -66,17 +66,17 @@ class chart_ancestry_KT_Module extends KT_Module implements KT_Module_Chart {
 		$indi_xref	= $controller->getSignificantIndividual()->getXref();
 		$menus		= array();
 		$menu		= new KT_Menu(
-			$this->getTitle(),
-			'module.php?mod=' . $this->getName() . '&amp;mod_action=show&amp;rootid=' . $indi_xref . '&amp;ged=' . KT_GEDURL,
-			'menu-chart-ancestry'
-		);
+							$this->getTitle(),
+							'module.php?mod=' . $this->getName() . '&amp;mod_action=show&amp;rootid=' . $indi_xref . '&amp;ged=' . KT_GEDURL,
+							'menu-chart-ancestry'
+						);
 		$menus[] = $menu;
 		return $menus;
 	}
 
 	// Display chart
 	public function show() {
-		global $MAX_PEDIGREE_GENERATIONS, $controller, $iconStyle;
+		global $controller, $iconStyle, $MAX_PEDIGREE_GENERATIONS;
 
 		$controller = new KT_Controller_Ancestry();
 		$controller
@@ -94,6 +94,9 @@ class chart_ancestry_KT_Module extends KT_Module implements KT_Module_Chart {
 			<form name="people" id="people" method="get" action="?">
 				<input type="hidden" name="mod" value="<?php echo $this->getName(); ?>">
 				<input type="hidden" name="mod_action" value="show">
+
+<?php echo KT_SCRIPT_NAME; ?>
+
 				<div class="grid-x grid-margin-x">
 					<label class="h5 cell medium-6 large-4" for="autocompleteInput-chartAncestry"><?php echo KT_I18N::translate('Individual'); ?>
 						<?php echo autocompleteHtml(

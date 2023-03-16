@@ -76,7 +76,7 @@ function pageClose()
  * Returns :  $html
  *
  * Example:
- *  <?php echo autocompleteHtml(
+ *  autocompleteHtml(
  * 	 'dna_id_b', // id
  * 	 'INDI', // TYPE
  * 	 '', // autocomplete-ged
@@ -84,11 +84,12 @@ function pageClose()
  * 	 '', // placeholder
  * 	 'dna_id_b', // hidden input name
  * 	 $dna_id_b // hidden input value
- * ); ?>
+ * )
  * @param mixed $inputName
  * @param mixed $required
  * @param mixed $other
  */
+
 function autocompleteHtml($suffix, $type, $tree, $valueInput, $placeHolder, $inputName, $valueHidden, $required = '', $other = '')
 {
 	global $iconStyle;

@@ -23,11 +23,8 @@
 define('KT_SCRIPT_NAME', 'admin_trees_merge.php');
 
 require './includes/session.php';
-
 require_once KT_ROOT . 'includes/functions/functions_edit.php';
-
 require_once KT_ROOT . 'includes/functions/functions_import.php';
-
 include KT_THEME_URL . 'templates/adminData.php';
 
 $recordTypes = [
@@ -141,7 +138,7 @@ echo pageStart('merge_records', $controller->getPageTitle()); ?>
 
 	<?php } ?>
 
-	<?php if ('choose' != $action) {
+	<?php if ('choose' != $action && $gedrecTo && $gedrecFrom) {
 		$factsFrom = [];
 		$factsTo   = [];
 

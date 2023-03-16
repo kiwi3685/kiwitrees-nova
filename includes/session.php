@@ -589,7 +589,7 @@ if (KT_USER_ID) {
 }
 
 // Set the theme
-if (substr(KT_SCRIPT_NAME, 0, 5) == 'admin' || KT_SCRIPT_NAME == 'module.php' && substr(safe_GET('mod_action'), 0, 5) == 'admin') {
+if (substr(KT_SCRIPT_NAME, 0, 5) == 'admin' || KT_SCRIPT_NAME == 'module.php' && substr(KT_Filter::get('mod_action'), 0, 5) == 'admin') {
 	// Administration scripts begin with �admin� and use a special administration theme
 	define('KT_THEME_DIR', KT_THEMES_DIR.'_administration/');
 } else {

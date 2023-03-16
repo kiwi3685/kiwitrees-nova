@@ -23,40 +23,36 @@
 define('KT_SCRIPT_NAME', 'admin_trees_duplicates.php');
 
 require './includes/session.php';
-
 require KT_ROOT . 'includes/functions/functions_edit.php';
-
-include KT_THEME_URL . 'templates/adminData.php';
-
 include KT_THEME_URL . 'templates/adminData.php';
 
 global $iconStyle;
 
-	$gedID        = KT_Filter::post('gedID') ? KT_Filter::post('gedID') : KT_GED_ID;
-	$tree         = KT_Tree::getNameFromId($gedID);
-	$action       = KT_Filter::post('action', 'go', '');
-	$surn         = KT_Filter::post('surname', '[^<>&%{};]*');
-	$givn         = KT_Filter::post('given', '[^<>&%{};]*');
-	$exact_givn   = KT_Filter::postBool('exact_givn');
-	$exact_surn   = KT_Filter::postBool('exact_surn');
-	$married      = KT_Filter::postBool('married');
-	$gender       = KT_Filter::post('gender');
-	$date         = KT_Filter::postInteger('date') ? KT_Filter::postInteger('date') : '';
-	$range        = KT_Filter::postInteger('range');
-	$maxYear      = date('Y') + 1;
+$gedID        = KT_Filter::post('gedID') ? KT_Filter::post('gedID') : KT_GED_ID;
+$tree         = KT_Tree::getNameFromId($gedID);
+$action       = KT_Filter::post('action', 'go', '');
+$surn         = KT_Filter::post('surname', '[^<>&%{};]*');
+$givn         = KT_Filter::post('given', '[^<>&%{};]*');
+$exact_givn   = KT_Filter::postBool('exact_givn');
+$exact_surn   = KT_Filter::postBool('exact_surn');
+$married      = KT_Filter::postBool('married');
+$gender       = KT_Filter::post('gender');
+$date         = KT_Filter::postInteger('date') ? KT_Filter::postInteger('date') : '';
+$range        = KT_Filter::postInteger('range');
+$maxYear      = date('Y') + 1;
 
-	if (KT_Filter ::getBool('reset')) {
-		$action       = '';
-		$gedID        = KT_GED_ID;
-		$surn         = '';
-		$givn         = '';
-		$exact_givn   = '';
-		$exact_surn   = '';
-		$married      = '';
-		$gender       = '';
-		$date         = '';
-		$range        = '';
-	}
+if (KT_Filter ::getBool('reset')) {
+	$action       = '';
+	$gedID        = KT_GED_ID;
+	$surn         = '';
+	$givn         = '';
+	$exact_givn   = '';
+	$exact_surn   = '';
+	$married      = '';
+	$gender       = '';
+	$date         = '';
+	$range        = '';
+}
 
 $controller = new KT_Controller_Page();
 $controller

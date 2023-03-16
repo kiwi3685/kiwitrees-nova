@@ -35,6 +35,7 @@ class KT_Controller_Ancestry extends KT_Controller_Chart {
 	var $addname;
 	var $chart_style;
 	var $cellwidth;
+	var $generations;
 
 	/**
 	 * Startup activity

@@ -400,8 +400,8 @@ function kt_error_handler($errno, $errstr, $errfile, $errline)
 		if (KT_ERROR_LEVEL == 0) {
 			return;
 		}
-		$fmt_msg = "<br>ERROR {$errno}: {$errstr}<br>";
-		$log_msg = "ERROR {$errno}: {$errstr};";
+		$fmt_msg = '<br>ERROR ' . $errno . ' : ' . $errstr . '<br>';
+		$log_msg = 'ERROR  ' . $errno . ' : ' . $errstr;
 		// Although debug_backtrace should always exist in PHP5, without this check, PHP sometimes crashes.
 		// Possibly calling it generates an error, which causes infinite recursion??
 		if ($errno < 16 && function_exists('debug_backtrace') && false === strstr($errstr, 'headers already sent by')) {
