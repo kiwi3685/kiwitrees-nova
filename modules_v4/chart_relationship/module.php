@@ -41,9 +41,6 @@ class chart_relationship_KT_Module extends KT_Module implements KT_Module_Chart,
 	// Extend KT_Module
 	public function modAction($mod_action) {
 		switch($mod_action) {
-			case 'show':
-				$this->show();
-				break;
 			case 'admin_config':
 				$this->config();
 				break;
