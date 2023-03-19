@@ -210,7 +210,7 @@ if ($highlightImage) {
 			foreach ($controller->tabs as $tab) {
 				echo $tab->getPreLoadContent();
 			} ?>
-			<ul class="cell tabs" data-tabs id="indiTabs" data-deep-link="true" data-allow-all-closed="true" data-responsive-accordion-tabs="tabs small-accordion medium-tabs" >
+			<ul class="cell accordion" id="indiTabs" data-deep-link="true" data-allow-all-closed="true" data-responsive-accordion-tabs="accordion medium-tabs" >
 				<?php foreach ($controller->tabs as $tab) {
 					if ($tab->isGrayedOut()) {
 						$greyed_out = ' rela';
