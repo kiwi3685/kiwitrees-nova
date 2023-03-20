@@ -336,7 +336,8 @@ if (!defined('KT_KIWITREES')) {
 			numtabs[p] = 0;
 			npo[p] = new Array();
 			for (var q = 0; q < locations.length; q++) {
-				if (jQuery.inArray(np[p], locations[q][7])==0) {
+
+				if(np[p].indexOf(locations[q][7]) ==0) {
 					npo[p][numtabs[p]] = q;
 					numtabs[p]++;
 				}

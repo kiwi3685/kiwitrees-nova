@@ -28,15 +28,15 @@ if (!defined('KT_KIWITREES')) {
 
 global $GM_API_KEY;
 
-$GM_API_KEY = get_module_setting('googlemap', 'GM_API_KEY', ''); // Optional Google Map API key
+$GM_API_KEY = get_module_setting('googlemap', 'GM_API_KEY', ''); // Required Google Map API key
 
 if ($GM_API_KEY) {
-	$key = '&key=' . $GM_API_KEY;
+	$key = '?key=' . $GM_API_KEY;
 } else {
 	$key = '';
 }
 
-define('KT_GM_SCRIPT', 'https://maps.google.com/maps/api/js?v=3&amp;language=' . KT_LOCALE . $key);
+define('KT_GM_SCRIPT','https://maps.googleapis.com/maps/api/js' . $key . '&v=3&language=\'' . KT_LOCALE . '\'&callback=Function.prototype');
 
 // http://www.google.com/permissions/guidelines.html
 //
@@ -428,7 +428,7 @@ class googlemap_KT_Module extends KT_Module implements KT_Module_Config, KT_Modu
 
 		<!-- Start of map scripts -->
 		<?php
-		echo '<script src="' . KT_GM_SCRIPT . '"></script>';
+		echo '<script src="' . KT_GM_SCRIPT . '&callback=loadMap()"></script>';
 		$controller->addInlineJavascript($this->pedigree_map_js());
 
 	}
