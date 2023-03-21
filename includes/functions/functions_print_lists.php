@@ -88,18 +88,18 @@ function format_indi_table($datalist, $option = '')
 					/*  3 SURN,GIVN */ { type: "unicode", visible: false },
 					/*  4 sosa      */ { dataSort: 5, visible: ' . ('sosa' === $option ? 'true' : 'false') . ' },
 					/*  5 SOSA      */ { type: "num", visible: false },
-					/*  6 birt date */ { dataSort: 7, class: "show-for-medium indiListDate" },
+					/*  6 birt date */ { dataSort: 7, class: "indiListDate" },
 					/*  7 BIRT:DATE */ { visible: false },
-					/*  8 anniv     */ { dataSort: 7, class: "show-for-medium indiListAnniv" },
-					/*  9 birt plac */ { type: "unicode", class: "show-for-medium" },
-					/* 10 children  */ { dataSort: 11, class: "show-for-medium indiListAnniv" },
+					/*  8 anniv     */ { dataSort: 7, class: "indiListAnniv" },
+					/*  9 birt plac */ { type: "unicode", class: "" },
+					/* 10 children  */ { dataSort: 11, class: "indiListAnniv" },
 					/* 11 CHILDREN  */ { type: "num", visible: false },
-					/* 12 deat date */ { dataSort: 13, class: "show-for-medium indiListDate" },
+					/* 12 deat date */ { dataSort: 13, class: "indiListDate" },
 					/* 13 DEAT:DATE */ { visible: false },
-					/* 14 anniv     */ { dataSort: 13, class: "show-for-medium indiListAnniv" },
-					/* 15 age       */ { dataSort: 16, class: "show-for-medium indiListAnniv" },
-					/* 16 AGE       */ { type: "num", class: "show-for-medium", visible: false },
-					/* 17 deat plac */ { type: "unicode", class: "show-for-medium indiListAnniv" },
+					/* 14 anniv     */ { dataSort: 13, class: "indiListAnniv" },
+					/* 15 age       */ { dataSort: 16, class: "indiListAnniv" },
+					/* 16 AGE       */ { type: "num", visible: false },
+					/* 17 deat plac */ { type: "unicode", class: "indiListAnniv" },
 					/* 18 CHAN      */ { dataSort: 19, visible: ' . ($SHOW_LAST_CHANGE ? 'true' : 'false') . ' },
 					/* 19 CHAN_sort */ { visible: false },
 					/* 20 SEX       */ { visible: false },
@@ -166,7 +166,7 @@ function format_indi_table($datalist, $option = '')
 	$html = '
 		<div class="loading-image">&nbsp;</div>
 		<div class="indi-list clearfix" style="visibility: hidden;">
-			<table class="shadow" id="' . $table_id . '">
+			<table class="shadow scroll" id="' . $table_id . '">
 				<thead>
 					<tr class="first-row-header">
 						<th colspan="24">
@@ -209,7 +209,7 @@ function format_indi_table($datalist, $option = '')
 										' . KT_Person::sexImage('U', 'medium') . '
 									</button>
 								</div>
-								<div class="cell medium-5 expanded button-group show-for-medium">
+								<div class="cell medium-5 expanded button-group">
 									<button
 										class="button ui-state-default has-tip top"
 										data-tooltip
@@ -259,7 +259,7 @@ function format_indi_table($datalist, $option = '')
 										' . KT_Gedcom_Tag::getLabel('DEAT') . '&lt;=100
 									</button>
 								</div>
-								<div class="cell medium-5 expanded button-group show-for-medium">
+								<div class="cell medium-5 expanded button-group">
 									<button
 										class="button ui-state-default has-tip top"
 										data-tooltip
@@ -314,8 +314,8 @@ function format_indi_table($datalist, $option = '')
 					</tr>
 					<tr class="second-row-header">
 						<th colspan="6" class="text-center">' . KT_I18N::translate('Name') . '</th>
-						<th colspan="6" class="text-center show-for-medium">' . KT_Gedcom_Tag::getLabel('BIRT') . '</th>
-						<th colspan="6" class="text-center show-for-medium">' . KT_Gedcom_Tag::getLabel('DEAT') . '</th>
+						<th colspan="6" class="text-center">' . KT_Gedcom_Tag::getLabel('BIRT') . '</th>
+						<th colspan="6" class="text-center">' . KT_Gedcom_Tag::getLabel('DEAT') . '</th>
 						<th colspan="6"></th>
 					</tr>
 					<tr class="third-row-header">
@@ -595,7 +595,7 @@ function format_indi_table($datalist, $option = '')
 			<div class="cell medium-3 text-center">
 				' . print_chart_by_decade($birt_by_decade, KT_I18N::translate('Decade of birth')) . '
 			</div>
-			<div class="cell medium-6 text-center show-for-medium">
+			<div class="cell medium-6 text-center">
 				' . print_chart_by_age($deat_by_age, KT_I18N::translate('Age related to death year')) . '
 			</div>
 			<div class="cell medium-3 text-center">
@@ -675,12 +675,12 @@ function simple_indi_table($datalist)
 					/* 1 surn      */ { dataSort: 3, class: "indiListSurn", "width": "10%" },
 					/* 2 GIVN,SURN */ { type: "unicode", visible: false },
 					/* 3 SURN,GIVN */ { type: "unicode", visible: false },
-					/* 4 birt date */ { dataSort: 5, class: "show-for-medium", "width": "20%" },
+					/* 4 birt date */ { dataSort: 5, "width": "20%" },
 					/* 5 BIRT:DATE */ { visible: false },
-					/* 6 birt plac */ { type: "unicode", class: "show-for-medium", "width": "20%" },
-					/* 7 deat date */ { dataSort: 8, class: "show-for-medium", "width": "20%" },
+					/* 6 birt plac */ { type: "unicode", "width": "20%" },
+					/* 7 deat date */ { dataSort: 8, class, "width": "20%" },
 					/* 8 DEAT:DATE */ { visible: false },
-					/* 9 deat plac */ { type: "unicode", class: "show-for-medium", "width": "20%" },
+					/* 9 deat plac */ { type: "unicode", "width": "20%" },
 				],
 				columnDefs: [{
 					targets: "_all", width: "10%"
@@ -714,12 +714,12 @@ function simple_indi_table($datalist)
 	$html = '
 		<div class="loading-image">&nbsp;</div>
 		<div class="indi-list clearfix" style="visibility: hidden;">
-			<table class="shadow" id="simpleIndiTable">
+			<table class="shadow scroll" id="simpleIndiTable">
 				<thead>
 					<tr>
 						<th colspan="4" class="text-center">' . KT_I18N::translate('Name') . '</th>
-						<th colspan="3" class="text-center show-for-medium">' . KT_Gedcom_Tag::getLabel('BIRT') . '</th>
-						<th colspan="3" class="text-center show-for-medium">' . KT_Gedcom_Tag::getLabel('DEAT') . '</th>
+						<th colspan="3" class="text-center">' . KT_Gedcom_Tag::getLabel('BIRT') . '</th>
+						<th colspan="3" class="text-center">' . KT_Gedcom_Tag::getLabel('DEAT') . '</th>
 					</tr>
 					<tr>
 						<th data-tooltip aria-haspopup="true" class="has-tip top" data-disable-hover="false" title="' . KT_I18N::translate('Sort by given names') . '">' . KT_Gedcom_Tag::getLabel('GIVN') . '</th>
@@ -1017,12 +1017,12 @@ function format_fam_table($datalist, $option = '')
 	$html = '
 		<div class="loading-image">&nbsp;</div>
 		<div class="fam-list clearfix">
-			<table class="shadow" id="' . $table_id . '">
+			<table class="shadow scroll" id="' . $table_id . '">
 				<thead>
 					<tr>
 						<th colspan="23">
 							<div class="grid-x">
-								<div class="cell medium-4 expanded button-group show-for-medium">
+								<div class="cell medium-4 expanded button-group">
 									<button
 										class="button ui-state-default has-tip top"
 										data-tooltip
@@ -1076,7 +1076,7 @@ function format_fam_table($datalist, $option = '')
 										' . KT_I18N::translate('Both dead') . '
 									</button>
 								</div>
-								<div class="cell medium-3 expanded button-group show-for-medium">
+								<div class="cell medium-3 expanded button-group">
 									<button
 										class="button ui-state-default has-tip top"
 										data-tooltip
@@ -1104,7 +1104,7 @@ function format_fam_table($datalist, $option = '')
 										' . KT_I18N::translate('Leaves') . '
 									</button>
 								</div>
-								<div class="cell medium-5 expanded button-group show-for-medium">
+								<div class="cell medium-5 expanded button-group">
 									<button
 										class="button ui-state-default has-tip top"
 										data-tooltip
@@ -1488,7 +1488,7 @@ function format_fam_table($datalist, $option = '')
 			<div class="cell medium-3 text-center">
 				' . print_chart_by_decade($birt_by_decade, KT_I18N::translate('Decade of birth')) . '
 			</div>
-			<div class="cell medium-6 text-center show-for-medium">
+			<div class="cell medium-6 text-center">
 				' . print_chart_by_age($marr_by_age, KT_I18N::translate('Age in year of marriage')) . '
 			</div>
 			<div class="cell medium-3 text-center">
@@ -1568,17 +1568,17 @@ function format_sour_table($datalist)
 					/*  0 title     */ { dataSort: 1 },
 					/*  1 TITL      */ { visible: false, type: "unicode" },
 					/*  2 author    */ { type: "unicode" },
-					/*  3 #indi     */ { dataSort: 4, class: "minWidth text-center show-for-medium" },
+					/*  3 #indi     */ { dataSort: 4, class: "minWidth text-center" },
 					/*  4 #INDI     */ { type: "num", visible: false },
-					/*  5 #fam      */ { dataSort: 6, class: "minWidth text-center show-for-medium" },
+					/*  5 #fam      */ { dataSort: 6, class: "minWidth text-center" },
 					/*  6 #FAM      */ { type: "num", visible: false },
-					/*  7 #obje     */ { dataSort: 8, class: "minWidth text-center show-for-medium" },
+					/*  7 #obje     */ { dataSort: 8, class: "minWidth text-center" },
 					/*  8 #OBJE     */ { type: "num", visible: false },
-					/*  9 #note     */ { dataSort: 10, class: "minWidth text-center show-for-medium" },
+					/*  9 #note     */ { dataSort: 10, class: "minWidth text-center" },
 					/* 10 #NOTE     */ { type: "num", visible: false },
-					/* 11 CHAN      */ { dataSort: 12, visible: ' . ($SHOW_LAST_CHANGE ? 'true' : 'false') . ', class: "text-center show-for-medium" },
+					/* 11 CHAN      */ { dataSort: 12, visible: ' . ($SHOW_LAST_CHANGE ? 'true' : 'false') . ', class: "text-center" },
 					/* 12 CHAN_sort */ { visible: false },
-					/* 13 DELETE    */ { sortable: false, class: "text-center show-for-medium" }
+					/* 13 DELETE    */ { sortable: false, class: "text-center" }
 				]
 		   });
 		   jQuery("#' . $table_id . '").css("visibility", "visible");
@@ -1593,7 +1593,7 @@ function format_sour_table($datalist)
 			<span class="sr-only">Loading...</span>
 		</div>
 		<div class="sour-list">
-			<table class="shadow" id="' . $table_id . '">
+			<table class="shadow scroll" id="' . $table_id . '">
 				<thead>
 					<tr>
 						<th>' . KT_Gedcom_Tag::getLabel('TITL') . '</th>
@@ -1800,17 +1800,17 @@ function format_note_table($datalist)
 				stateDuration: -1,
 				columns: [
 					/*  0 title     */ { type: "unicode" },
-					/*  1 #indi     */ { dataSort: 2, class: "text-center show-for-medium" },
+					/*  1 #indi     */ { dataSort: 2, class: "text-center" },
 					/*  2 #INDI     */ { type: "num", visible: false },
-					/*  3 #fam      */ { dataSort: 4, class: "text-center show-for-medium" },
+					/*  3 #fam      */ { dataSort: 4, class: "text-center" },
 					/*  4 #FAM      */ { type: "num", visible: false },
-					/*  5 #obje     */ { dataSort: 6, class: "text-center show-for-medium" },
+					/*  5 #obje     */ { dataSort: 6, class: "text-center" },
 					/*  6 #OBJE     */ { type: "num", visible: false },
-					/*  7 #sour     */ { dataSort: 8, class: "text-center show-for-medium" },
+					/*  7 #sour     */ { dataSort: 8, class: "text-center" },
 					/*  8 #SOUR     */ { type: "num", visible: false },
-					/*  9 CHAN      */ { dataSort: 10, visible: ' . ($SHOW_LAST_CHANGE ? 'true' : 'false') . ', class: "text-center show-for-medium" },
+					/*  9 CHAN      */ { dataSort: 10, visible: ' . ($SHOW_LAST_CHANGE ? 'true' : 'false') . ', class: "text-center" },
 					/* 10 CHAN_sort */ { visible: false },
-					/* 11 DELETE    */ { sortable: false, class: "text-center show-for-medium" }
+					/* 11 DELETE    */ { sortable: false, class: "text-center" }
 				]
 		   });
 			jQuery("#' . $table_id . '").css("visibility", "visible");
@@ -1819,7 +1819,7 @@ function format_note_table($datalist)
 	;
 
 	$html .= '<div class="cell text-center loading-image"><i class="' . $iconStyle . ' fa-spinner fa-spin fa-3x"></i><span class="sr-only">Loading...</span></div>
-	<table class="shadow" id="' . $table_id . '">
+	<table class="shadow scroll" id="' . $table_id . '">
 		<thead>
 			<tr>
 				<th>' . KT_Gedcom_Tag::getLabel('TITL') . '</th>
@@ -2002,7 +2002,7 @@ function format_repo_table($repos)
 			<span class="sr-only">Loading...</span>
 		</div>
 		<div class="repo-list">
-			<table class="shadow" id="' . $table_id . '">
+			<table class="shadow scroll" id="' . $table_id . '">
 				<thead>
 					<tr>
 						<th>' . KT_I18N::translate('Repository name') . '</th>
@@ -2132,7 +2132,7 @@ function format_media_table($datalist)
 	$html .= '<div class="loading-image">&nbsp;</div>';
 	$html .= '<div class="media-list">';
 	// -- table header
-	$html .= '<table class="shadow" id="' . $table_id . '"><thead><tr>';
+	$html .= '<table class="shadow scroll" id="' . $table_id . '"><thead><tr>';
 	$html .= '<th>' . KT_I18N::translate('Media') . '</th>';
 	$html .= '<th>' . KT_Gedcom_Tag::getLabel('TITL') . '</th>';
 	$html .= '<th>' . KT_I18N::translate('File name') . '</th>';
@@ -2481,7 +2481,7 @@ function format_story_table($datalist)
 	$html .= '
 		<div class="loading-image">&nbsp;</div>
 		<div class="story-list">
-			<table class="shadow" id="' . $table_id . '">
+			<table class="shadow scroll" id="' . $table_id . '">
 				<thead>
 					<tr>
 						<th>' . KT_I18N::translate('Story title') . '</th>
@@ -2631,7 +2631,7 @@ function print_changes_table($change_ids, $sort)
 
 	// -- table header
 	$html .= '
-			<table class="shadow" id="' . $table_id . '">
+			<table class="shadow scroll" id="' . $table_id . '">
 				<thead>
 					<tr>
 						<th>&nbsp;</th>
@@ -2787,7 +2787,7 @@ function print_events_table($startjd, $endjd, $events = 'BIRT MARR DEAT', $only_
 		if (1 == $output) {
 			// -- table body
 			$html .= '
-				<table class="shadow" id="' . $table_id . '">
+				<table class="shadow scroll" id="' . $table_id . '">
 					<thead>
 						<tr>
 							<th>' . KT_I18N::translate('Record') . '</th>
