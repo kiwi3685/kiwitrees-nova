@@ -29,6 +29,7 @@ global $iconStyle;
  $precision = [
 	 0 => KT_I18N::translate('Country'),
 	 1 => KT_I18N::translate('State'),
+	 2 => KT_I18N::translate('City'),
 	 3 => KT_I18N::translate('Neighbourhood'),
 	 4 => KT_I18N::translate('House'),
 	 5 => KT_I18N::translate('Max')
@@ -37,9 +38,10 @@ global $iconStyle;
  $selected = [
 	 '0' => $GOOGLEMAP_PRECISION_0,
 	 '1' => $GOOGLEMAP_PRECISION_1,
-	 '3' => $GOOGLEMAP_PRECISION_2,
-	 '4' => $GOOGLEMAP_PRECISION_3,
-	 '5' => $GOOGLEMAP_PRECISION_4
+	 '2' => $GOOGLEMAP_PRECISION_2,
+	 '3' => $GOOGLEMAP_PRECISION_3,
+	 '4' => $GOOGLEMAP_PRECISION_4,
+	 '5' => $GOOGLEMAP_PRECISION_5
  ];
 
  $controller = new KT_Controller_Page();

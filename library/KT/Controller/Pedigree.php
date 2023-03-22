@@ -43,6 +43,12 @@ class KT_Controller_Pedigree extends KT_Controller_Chart {
 	var $prevyoffset;
 	var $offsetarray;
 	var $minyoffset;
+	var $linewidth;
+	var $shadowcolor;
+	var $shadowblur;
+	var $shadowoffsetX;
+	var $shadowoffsetY;
+	var $box_width;
 
 	public function __construct() {
 		global $PEDIGREE_FULL_DETAILS, $PEDIGREE_LAYOUT, $MAX_PEDIGREE_GENERATIONS;

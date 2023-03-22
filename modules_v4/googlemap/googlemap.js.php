@@ -37,8 +37,6 @@ if (!defined('KT_KIWITREES')) {
 	var map = null;
 	var head = '';
 	var dir = '';
-//	var svzoom = '';
-
 	var infowindow = new google.maps.InfoWindow( {
 		// size: new google.maps.Size(150,50),
 		// maxWidth: 600
@@ -214,12 +212,18 @@ if (!defined('KT_KIWITREES')) {
 
 	function loadMap() {
 		<?php
-			global $GOOGLEMAP_MAP_TYPE, $PEDIGREE_GENERATIONS, $MAX_PEDIGREE_GENERATIONS, $SHOW_HIGHLIGHT_IMAGES;
+			global 
+				$GOOGLEMAP_MAP_TYPE, 
+				$PEDIGREE_GENERATIONS, 
+				$MAX_PEDIGREE_GENERATIONS, 
+				$SHOW_HIGHLIGHT_IMAGES, 
+				$GOOGLEMAP_MIN_ZOOM, 
+				$GOOGLEMAP_MAX_ZOOM
+			;
 		?>
 
 		// Create the map and mapOptions
 		var mapOptions = {
-			zoom: 7,
 			center: map_center,
 			mapTypeId: google.maps.MapTypeId.<?php echo $GOOGLEMAP_MAP_TYPE; ?>, // ROADMAP, SATELLITE, HYBRID, TERRAIN
 			mapTypeControlOptions: {
@@ -233,6 +237,7 @@ if (!defined('KT_KIWITREES')) {
 			streetViewControl: true,							// Show Pegman or not
 			scrollwheel: false
 		};
+
 		map = new google.maps.Map(document.getElementById('map_pane'), mapOptions);
 
 		// Close any infowindow when map is clicked
@@ -241,8 +246,8 @@ if (!defined('KT_KIWITREES')) {
 		});
 
 		// Create the Home DIV and call the HomeControl() constructor in this DIV.
-		var homeControlDiv = document.createElement('DIV');
-		var homeControl = new HomeControl(homeControlDiv, map);
+		var homeControlDiv   = document.createElement('DIV');
+		var homeControl      = new HomeControl(homeControlDiv, map);
 		homeControlDiv.index = 1;
 		map.controls[google.maps.ControlPosition.TOP_RIGHT].push(homeControlDiv);
 
@@ -315,16 +320,15 @@ if (!defined('KT_KIWITREES')) {
 					// Element 13. This Individual's Highlighted image.
 					"<?php if (!empty($pid)) { echo $image; } else { echo ''; } ?>",
 
-					// Elements 14-20 Streetview parameters
+					// Elements 14-15
 					"<?php if (!empty($gmark['media'])) { echo $gmark['media']; } ?>",
 					"<?php if (!empty($gmark['icon'])) { echo $gmark['icon']; } ?>"
 				],
-
 			<?php } ?>
 		];
 
 		// Set the Marker bounds
-		var bounds = new google.maps.LatLngBounds ();
+		var bounds = new google.maps.LatLngBounds();
 
 		// Calculate tabs to be placed for each marker
 		var np = new Array();
@@ -336,8 +340,7 @@ if (!defined('KT_KIWITREES')) {
 			numtabs[p] = 0;
 			npo[p] = new Array();
 			for (var q = 0; q < locations.length; q++) {
-
-				if(np[p].indexOf(locations[q][7]) ==0) {
+				if(np[p].indexOf(locations[q][7]) == 0) {
 					npo[p][numtabs[p]] = q;
 					numtabs[p]++;
 				}
@@ -347,20 +350,21 @@ if (!defined('KT_KIWITREES')) {
 		// Loop through all location markers
 		for (var i = 0; i < locations.length; i++) {
 			// obtain the attributes of each marker
-			var event = locations[i][0];							// Event or Fact
-			var lat = locations[i][1];								// Latitude
-			var lng = locations[i][2];								// Longitude
-			var date = locations[i][3];								// Date of event or fact
-			var info = ''//locations[i][4];								// info on occupation, or
-			var name = locations[i][5];								// Persons name
-			var address = locations[i][6];							// Address of event or fact
-			var index = locations[i][7];							// index
-			var tab = locations[i][8];								// tab index
-			var placed = locations[i][9];							// Yes indicates multitab item
-			var name2 = locations[i][11];							// printable name for marker title
-			var point = new google.maps.LatLng(lat,lng);			// Place Latitude, Longitude
-			var media = locations[i][14];							// media item
-			var marker_icon = locations[i][20];						// Marker icon image (flag)
+			var event       = locations[i][0];					// Event or Fact
+			var lat         = locations[i][1];					// Latitude
+			var lng         = locations[i][2];					// Longitude
+			var date        = locations[i][3];					// Date of event or fact
+			var info        = locations[i][4];					// info on occupation, or
+			var name        = locations[i][5];					// Persons name
+			var address     = locations[i][6];					// Address of event or fact
+			var index       = locations[i][7];					// index
+			var tab         = locations[i][8];					// tab index
+			var placed      = locations[i][9];					// Yes indicates multitab item
+			var addr2 		= locations[i][10];
+			var name2       = locations[i][11];					// printable name for marker title
+			var point       = new google.maps.LatLng(lat,lng);	// Place Latitude, Longitude
+			var media       = locations[i][14];					// media item
+			var marker_icon = locations[i][20];					// Marker icon image (flag)
 
 			// Employ of image tab function using an information image
 			if (media == null || media == '') {
@@ -369,13 +373,12 @@ if (!defined('KT_KIWITREES')) {
 				media = media;
 			}
 
-			var addr2 = locations[i][10];
 
 			// If a fact with info or a persons name
 			var event_item ='';
-			var event_tab ='';
-			var tabcontid = '';
-			var divhead = '<h4 id="iwhead" >'+address+'<\/h4>';
+			var event_tab  ='';
+			var tabcontid  = '';
+			var divhead = '<h4 id="iwhead" >' + address + '<\/h4>';
 
 			for (var n = 0; n < locations.length; n++) {
 				if (i==npo[n][0] || i==npo[n][1] || i==npo[n][2] || i==npo[n][3] || i==npo[n][4] || i==npo[n][5] || i==npo[n][6] || i==npo[n][7] || i==npo[n][8] || i==npo[n][9] || i==npo[n][10] || i==npo[n][11] || i==npo[n][12] || i==npo[n][13] || i==npo[n][14] || i==npo[n][15] || i==npo[n][16] || i==npo[n][17] || i==npo[n][18] || i==npo[n][19] || i==npo[n][20] || i==npo[n][21] || i==npo[n][22] || i==npo[n][23] || i==npo[n][24] || i==npo[n][25]) {
@@ -414,10 +417,10 @@ if (!defined('KT_KIWITREES')) {
 			].join('');
 
 			// create the marker
-			var html = multitabs;
+			var html      = multitabs;
 			var zoomLevel = <?php echo $GOOGLEMAP_MAX_ZOOM; ?>;
-			var marker = createMarker(i, point, event, html, placed, index, tab, addr2, media, marker_icon);
-			var myLatLng = point;
+			var marker    = createMarker(i, point, event, html, placed, index, tab, addr2, media, marker_icon);
+			var myLatLng  = point;
 
 			// Correct zoom level when only one marker is present
 			if (i < 1) {
@@ -436,6 +439,8 @@ if (!defined('KT_KIWITREES')) {
 				});
 			}
 		} // end loop through location markers
+
+
 	} // end loadMap()
 
 </script>

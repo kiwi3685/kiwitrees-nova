@@ -28,15 +28,9 @@ if (!defined('KT_KIWITREES')) {
 
 require KT_ROOT . 'includes/functions/functions_edit.php';
 
-$action = KT_Filter::get('action');
-
-if (KT_Filter::get('placeid')) {
-	$placeid = KT_Filter::get('placeid');
-}
-
-if (KT_Filter::get('place_name')) {
-	$place_name = KT_Filter::get('place_name');
-}
+$action = safe_REQUEST($_REQUEST, 'action');
+if (isset($_REQUEST['placeid'])) $placeid = $_REQUEST['placeid'];
+if (isset($_REQUEST['place_name'])) $place_name = $_REQUEST['place_name'];
 
 $controller = new KT_Controller_Page();
 $controller
@@ -264,7 +258,7 @@ include_once KT_MODULES_DIR . 'googlemap/places_edit.js.php';?>
 							<?php echo KT_I18N::translate('Precision'); ?>
 						</label>
 					</div>
-					<div class="cell medium-6 precision">
+					<div class="cell medium-10 precision">
 						<?php
 							$exp = explode(".", $place_lati);
 							if (isset($exp[1])) {
@@ -341,7 +335,8 @@ include_once KT_MODULES_DIR . 'googlemap/places_edit.js.php';?>
 								type="radio"
 								id="new_prec_4"
 								name="NEW_PRECISION"
-								onchange="updateMap();"<?php if ($precision == $GOOGLEMAP_PRECISION_4) echo 'checked="checked"'; ?>
+								onchange="updateMap();"
+								<?php if ($precision == $GOOGLEMAP_PRECISION_4) echo 'checked="checked"'; ?>
 								value="<?php echo $GOOGLEMAP_PRECISION_4; ?>"
 							>
 							<label for="new_prec_4" class="middle">
@@ -353,7 +348,8 @@ include_once KT_MODULES_DIR . 'googlemap/places_edit.js.php';?>
 								type="radio"
 								id="new_prec_5"
 								name="NEW_PRECISION"
-								onchange="updateMap();"<?php if ($precision>$GOOGLEMAP_PRECISION_4) echo 'checked="checked"'; ?>
+								onchange="updateMap();"
+								<?php if ($precision>$GOOGLEMAP_PRECISION_5) echo 'checked="checked"'; ?>
 								value="<?php echo $GOOGLEMAP_PRECISION_5; ?>"
 							>
 							<label for="new_prec_5" class="middle">

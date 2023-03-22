@@ -427,9 +427,8 @@ class googlemap_KT_Module extends KT_Module implements KT_Module_Config, KT_Modu
 		<!-- end of map display -->
 
 		<!-- Start of map scripts -->
-		<?php
-		echo '<script src="' . KT_GM_SCRIPT . '&callback=loadMap()"></script>';
-		$controller->addInlineJavascript($this->pedigree_map_js());
+		<script src="<?php echo KT_GM_SCRIPT; ?>"></script>
+		<?php $controller->addInlineJavascript($this->pedigree_map_js());
 
 	}
 
