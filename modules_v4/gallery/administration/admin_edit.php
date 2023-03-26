@@ -135,8 +135,8 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 						<input class="switch-input" id="kiwitrees-radio" type="radio" <?php echo $checked; ?> name="gallery_plugin" value="kiwitrees" onclick="hide_fields();">
 						<label class="switch-paddle" for="kiwitrees-radio">
 							<span class="show-for-sr"><?php echo KT_I18N::translate('Kiwitrees family tree media folder'); ?>	</span>
-							<span class="switch-active" aria-hidden="true"><?php echo KT_I18N::translate('on'); ?></span>
-							<span class="switch-inactive" aria-hidden="true"><?php echo KT_I18N::translate('off'); ?></span>
+							<span class="switch-active" aria-hidden="true"><?php echo KT_I18N::translate('Yes'); ?></span>
+							<span class="switch-inactive" aria-hidden="true"><?php echo KT_I18N::translate('No'); ?></span>
 						</label>
 					</div>
 					<div class="cell auto">
@@ -149,8 +149,8 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 						<input class="switch-input" id="flickr-radio" type="radio" <?php echo $checked; ?> name="gallery_plugin" value="flickr" onclick="hide_fields();">
 						<label class="switch-paddle" for="flickr-radio">
 							<span class="show-for-sr"><?php echo KT_I18N::translate('Flickr album set'); ?>	</span>
-							<span class="switch-active" aria-hidden="true"><?php echo KT_I18N::translate('on'); ?></span>
-							<span class="switch-inactive" aria-hidden="true"><?php echo KT_I18N::translate('off'); ?></span>
+							<span class="switch-active" aria-hidden="true"><?php echo KT_I18N::translate('Yes'); ?></span>
+							<span class="switch-inactive" aria-hidden="true"><?php echo KT_I18N::translate('No'); ?></span>
 						</label>
 					</div>
 					<div class="cell auto">
@@ -163,8 +163,8 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 						<input class="switch-input" id="uploads-radio" type="radio" <?php echo $checked; ?> name="gallery_plugin" value="uploads" onclick="hide_fields();">
 						<label class="switch-paddle" for="uploads-radio">
 							<span class="show-for-sr"><?php echo KT_I18N::translate('Images uploaded to a kiwitrees un-regulated uploads folder'); ?>	</span>
-							<span class="switch-active" aria-hidden="true"><?php echo KT_I18N::translate('on'); ?></span>
-							<span class="switch-inactive" aria-hidden="true"><?php echo KT_I18N::translate('off'); ?></span>
+							<span class="switch-active" aria-hidden="true"><?php echo KT_I18N::translate('Yes'); ?></span>
+							<span class="switch-inactive" aria-hidden="true"><?php echo KT_I18N::translate('No'); ?></span>
 						</label>
 					</div>
 					<div class="cell auto">
