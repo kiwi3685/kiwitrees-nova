@@ -75,7 +75,9 @@ $this
 		<link rel="stylesheet" href="<?php echo KT_DATEPICKER_CSS; ?>">
 		<link rel="stylesheet" href="<?php echo KT_ICONPICKER_CSS; ?>">
 		<link rel="stylesheet" href="<?php echo KT_CHOSEN_CSS; ?>">
+		<link rel="stylesheet" href="<?php echo KT_THEME_URL; ?>css/foundation.min.css">
 		<link rel="stylesheet" href="<?php echo KT_THEME_URL; ?>css/administration.min.css">
+		<link rel="stylesheet" href="<?php echo KT_THEME_URL; ?>css/libraryfiles.min.css">
 		<?php echo $javascript; ?>
 	</head>
 
