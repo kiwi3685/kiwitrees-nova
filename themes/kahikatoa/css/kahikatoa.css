@@ -10983,16 +10983,18 @@ div[id$=-page] button[type=submit] {
 	text-align: center;
 }
 
-#pedigreemap-page #pm_map,
-#pedigreemap-page #side_bar {
+#pedigreemap-page #pm_map {
 	height: 30rem;
+	margin-bottom: 0.9375rem;
 	width: 100%;
 }
 #pedigreemap-page #side_bar {
+	height: 32.75rem;
 	font-size: 0.9rem;
 	overflow: auto;
 	overflow-x: hidden;
 	overflow-y: auto;
+	width: 100%;
 }
 #pedigreemap-page #side_bar i.icon-silhouette-M,
 #pedigreemap-page #side_bar i.icon-silhouette-F,

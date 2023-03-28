@@ -172,7 +172,7 @@ function create_map($placelevels) {
 	<div class="grid-x grid-margin-y">
 		<div class="cell medium-10 medium-offset-1 large-8 large-offset-2">
 
-			<div class="shadow" id="place_map">
+			<div class="shadow" id="map_pane">
 				<i class="icon-loading-large"></i>
 				<script src="<?php echo KT_GM_SCRIPT; ?>"></script>
 			</div>
@@ -301,8 +301,8 @@ function print_gm_markers($place2, $level, $parent, $levelm, $linklevels, $place
 			echo 'var icon_type = new google.maps.MarkerImage();';
 		} else {
 			echo 'var icon_type = new google.maps.MarkerImage();';
-			echo ' icon_type.image = "', KT_STATIC_URL, KT_MODULES_DIR, 'googlemap/', $place2['icon'], '";';
-			echo ' icon_type.shadow = "', KT_STATIC_URL, KT_MODULES_DIR, 'googlemap/images/flag_shadow.png";';
+			echo ' icon_type.image = "' . KT_STATIC_URL . KT_MODULES_DIR . 'googlemap/' . $place2['icon'] . '";';
+			echo ' icon_type.shadow = "' . KT_STATIC_URL . KT_MODULES_DIR . 'googlemap/images/flag_shadow.png";';
 			echo ' icon_type.iconSize = new google.maps.Size(25, 15);';
 			echo ' icon_type.shadowSize = new google.maps.Size(35, 45);';
 		}
@@ -318,7 +318,7 @@ function print_gm_markers($place2, $level, $parent, $levelm, $linklevels, $place
 			}
 		}
 		if (($place2['icon'] != NULL) && ($place2['icon'] != "")) {
-			echo '<img src=\"', KT_STATIC_URL, KT_MODULES_DIR, 'googlemap/', $place2['icon'], '\">&nbsp;&nbsp;';
+			echo '<img src=\"' . KT_STATIC_URL . KT_MODULES_DIR . 'googlemap/' . $place2['icon'] . '\">&nbsp;&nbsp;';
 		}
 		if ($lastlevel) {
 			$placename = substr($placelevels, 2);
@@ -359,7 +359,7 @@ function print_gm_markers($place2, $level, $parent, $levelm, $linklevels, $place
 			print_how_many_people($level+1, $parent);
 		}
 		$temp=addslashes($place2['place']);
-		$temp=str_replace(array('&lrm;', '&rlm;'), array(KT_UTF8_LRM, KT_UTF8_RLM), $temp);
+		$temp=str_replace(array('&lrm;' . '&rlm;'), array(KT_UTF8_LRM, KT_UTF8_RLM), $temp);
 		if (!$GOOGLEMAP_COORD) {
 			echo "<br><br></div>\", icon_type, \"", $temp, "\");";
 		} else {
@@ -371,8 +371,46 @@ function print_gm_markers($place2, $level, $parent, $levelm, $linklevels, $place
 function map_scripts($numfound, $level, $parent, $linklevels, $placelevels, $place_names) {
 	global $GOOGLEMAP_MAP_TYPE, $GOOGLEMAP_PH_MARKER, $plzoom, $controller;
 
-	$controller->addInlineJavascript('
-		jQuery("head").append(\'<link rel="stylesheet" type="text/css" href="' . KT_STATIC_URL . KT_MODULES_DIR . 'googlemap/css/googlemap.min.css" />\');
+	$controller->addInlineJavascript(
+		// The HomeControl returns the map to the original position and style
+		'function HomeControl(controlDiv, pm_map) {'.
+			// Set CSS styles for the DIV containing the control
+			// Setting padding to 5 px will offset the control from the edge of the map
+			'controlDiv.style.paddingTop = "5px";
+			controlDiv.style.paddingRight = "0px";'.
+			// Set CSS for the control border
+			'var controlUI = document.createElement("DIV");
+			controlUI.style.backgroundColor = "white";
+			controlUI.style.color = "black";
+			controlUI.style.borderColor = "black";
+			controlUI.style.borderColor = "black";
+			controlUI.style.borderStyle = "solid";
+			controlUI.style.borderWidth = "2px";
+			controlUI.style.cursor = "pointer";
+			controlUI.style.textAlign = "center";
+			controlUI.title = "";
+			controlDiv.appendChild(controlUI);'.
+			// Set CSS for the control interior
+			'var controlText = document.createElement("DIV");
+			controlText.style.fontFamily = "Arial,sans-serif";
+			controlText.style.fontSize = "12px";
+			controlText.style.paddingLeft = "15px";
+			controlText.style.paddingRight = "15px";
+			controlText.innerHTML = "<b>' . KT_I18N::translate('Redraw map') . '<\/b>";
+			controlUI.appendChild(controlText);'.
+			// Setup the click event listeners: simply set the map to original LatLng
+			'controlUI.addEventListener( "click", function() {
+				pm_map.setMapTypeId(google.maps.MapTypeId.TERRAIN),
+				pm_map.fitBounds(bounds),
+				pm_map.setCenter(bounds.getCenter()),
+				infowindow.close()
+				if (document.getElementById(lastlinkid) != null) {
+					document.getElementById(lastlinkid).className = "person_box:target";
+				}
+			});
+		}' . 
+
+		'jQuery("head").append(\'<link rel="stylesheet" type="text/css" href="' . KT_STATIC_URL . KT_MODULES_DIR . 'googlemap/css/googlemap.min.css" />\');
 		var numMarkers = "' . $numfound . '";
 		var mapLevel   = "' . $level . '";
 		var placezoom  = "' . $plzoom . '";
@@ -401,10 +439,10 @@ function map_scripts($numfound, $level, $parent, $linklevels, $placelevels, $pla
 				position: google.maps.ControlPosition.TOP_RIGHT, // BOTTOM, BOTTOM_LEFT, LEFT, TOP, etc
 				style: google.maps.NavigationControlStyle.SMALL  // ANDROID, DEFAULT, SMALL, ZOOM_PAN
 			},
-			streetViewControl: false, // Show Pegman or not
+			streetViewControl: true, // Show Pegman or not
 			scrollwheel: false
 		};
-		map = new google.maps.Map(document.getElementById("place_map"), mapOptions);
+		map = new google.maps.Map(document.getElementById("map_pane"), mapOptions);
 
 		// Close any infowindow when map is clicked
 		google.maps.event.addListener(map, "click", function() {
@@ -418,6 +456,12 @@ function map_scripts($numfound, $level, $parent, $linklevels, $placelevels, $pla
 			var pointZoom = 1;
 		}
 
+		// Create the Home DIV and call the HomeControl() constructor in this DIV.
+		var homeControlDiv   = document.createElement("DIV");
+		var homeControl      = new HomeControl(homeControlDiv, map);
+		homeControlDiv.index = 1;
+		map.controls[google.maps.ControlPosition.TOP_RIGHT].push(homeControlDiv);
+
 		// Creates a marker whose info window displays the given name
 		function createMarker(point, html, icon, name) {
 			// Choose icon and shadow ============
@@ -427,7 +471,7 @@ function map_scripts($numfound, $level, $parent, $linklevels, $placelevels, $pla
 					new google.maps.Size(25, 15),
 					new google.maps.Point(0,0),
 					new google.maps.Point(12, 15));
-					var iconShadow = new google.maps.MarkerImage("'.KT_STATIC_URL.KT_MODULES_DIR.'googlemap/images/flag_shadow.png",
+					var iconShadow = new google.maps.MarkerImage("' . KT_STATIC_URL . KT_MODULES_DIR . 'googlemap/images/flag_shadow.png",
 					new google.maps.Size(35, 45),
 					new google.maps.Point(0,0),
 					new google.maps.Point(12, 15));
@@ -494,6 +538,7 @@ function map_scripts($numfound, $level, $parent, $linklevels, $placelevels, $pla
 	');
 
 	global $GOOGLEMAP_MAX_ZOOM;
+
 	$levelm	= set_levelm($level, $parent);
 	if (isset($levelo[0])) $levelo[0]=0;
 	$numls	= count($parent)-1;
@@ -514,6 +559,7 @@ function map_scripts($numfound, $level, $parent, $linklevels, $placelevels, $pla
 		// echo "zoomlevel = map.getBoundsZoomLevel(bounds);\n";
 		// echo " map.setCenter(new google.maps.LatLng(0, 0), zoomlevel+18);\n";
 	}
+
 	//create markers
 
 	ob_start(); // TODO: rewrite print_gm_markers, and the functions called therein, to either return text or add JS directly.

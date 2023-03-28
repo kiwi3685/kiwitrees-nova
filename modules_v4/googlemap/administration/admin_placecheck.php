@@ -63,7 +63,7 @@ echo pageStart('gm_config', $controller->getPageTitle()); ?>
 
 	<ul class="cell tabs" id="gm_pages">
 		<li class="tabs-title medium-4 text-center">
-			<a href="module.php?mod=googlemap&amp;mod_action=admin_config">
+			<a href="module.php?mod=googlemap&amp;mod_action=admin_preferences">
 				<?php echo KT_I18N::translate('Google Maps™ preferences'); ?>
 			</a>
 		</li>

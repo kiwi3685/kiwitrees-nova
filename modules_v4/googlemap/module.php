@@ -364,29 +364,15 @@ class googlemap_KT_Module extends KT_Module implements KT_Module_Config, KT_Modu
 		        <div class="grid-x grid-margin-x grid-margin-y">
 		            <div class="cell medium-9">
 		                <div class="shadow" id="pm_map"></div>
+			            <?php if (KT_USER_IS_ADMIN) { ?>
+			            	<div class="cell medium-9">
+			            		<?php echo googlemap_links(); ?>
+			            	</div>
+			            <?php } ?>
 		            </div>
 		            <div class="cell medium-3">
 		                <div class="shadow" id="side_bar"></div>
 		            </div>
-		            <?php if (KT_USER_IS_ADMIN) { ?>
-		                <ul class="tabs cell" id="gm_pages">
-		                    <li class="tabs-title medium-4 text-center is-active">
-		                        <a href="module.php?mod=googlemap&amp;mod_action=admin_preferences">
-		                            <?php echo KT_I18N::translate('Google Maps™ preferences'); ?>
-		                        </a>
-		                    </li>
-		                    <li class="tabs-title text-center">
-		                        <a href="module.php?mod=googlemap&amp;mod_action=admin_places">
-		                            <?php echo KT_I18N::translate('Geographic data'); ?>
-		                        </a>
-		                    </li>
-		                    <li class="tabs-title text-center">
-		                        <a href="module.php?mod=googlemap&amp;mod_action=admin_placecheck">
-		                            <?php echo KT_I18N::translate('Place check'); ?>
-		                        </a>
-		                    </li>
-		                </ul>
-		            <?php } ?>
 		        </div>
 		        <?php // display info under map ?>
 		        <hr>
