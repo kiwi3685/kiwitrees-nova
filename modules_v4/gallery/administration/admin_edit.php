@@ -187,7 +187,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 							id="kiwitrees" 
 							name="gallery_folder"
 						>
-							<?php foreach (KT_Query_Media::folderList() as $key => $value) {
+							<?php foreach (KT_Query_Media::folderListAll() as $key => $value) {
 								if ($key == $item_folder) { ?>
 									<option 
 										value="<?php echo htmlspecialchars((string) $key); ?>" 
@@ -204,7 +204,11 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 						</select>
 					</div>
 					<div class="cell callout info-help">
-						<?php echo KT_I18N::translate('Select a folder from the dropdown. It must be a folder containing media files ragistered to the family tree selected for this gallery.'); ?>
+						<?php echo KT_I18N::translate('
+							Select a folder from the dropdown. The list shows ALL media folders present in the /data/media/ folder of the server.
+							The selected folder  must containing only media files registered to the family tree selected for this gallery. 
+							See Faq page for more details.
+						'); ?>
 					</div>
 				</div>
 				<div class="grid-x grid-margin-x flickrInputGroup" <?php echo $flickrStyle; ?>>

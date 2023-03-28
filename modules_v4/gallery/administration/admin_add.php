@@ -179,7 +179,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 	 					<span class="input-group-label"><?php echo KT_I18N::translate('Media folder name'); ?></span>
 						<select id="kiwitrees" name="gallery_folder">
 							<option><?php echo KT_I18N::translate('Select folder'); ?></option>
-							<?php foreach (KT_Query_Media::folderList() as $key => $value) { ?>
+							<?php foreach (KT_Query_Media::folderListAll() as $key => $value) { ?>
 								<option value="<?php echo htmlspecialchars((string) $key); ?>">
 									<?php echo htmlspecialchars((string) $value); ?>
 								</option>
@@ -187,7 +187,11 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 						</select>
 					</div>
 					<div class="cell callout info-help">
-						<?php echo KT_I18N::translate('Select a folder from the dropdown. It must be a folder containing media files ragistered to the family tree selected for this gallery. See Faq page for more details.'); ?>
+						<?php echo KT_I18N::translate('
+							Select a folder from the dropdown. The list shows ALL media folders present in the /data/media/ folder of the server.
+							The selected folder  must containing only media files registered to the family tree selected for this gallery. 
+							See Faq page for more details.
+						'); ?>
 					</div>
 				</div>
 				<div class="grid-x grid-margin-x flickrInputGroup" style="display:none;">
@@ -221,7 +225,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 						>
 					</div>
 					<div class="cell callout info-help">
-						<?php echo KT_I18N::translate('Enter the sub-folder name that contains the images, and exists in a "kiwitrees/uploads/" folder, created specifically for images not managed as part of  any family tree\'s GEDCOM data. If you have not already created the "uploads" folder it will be created automatically when you save this page.'); ?>
+						<?php echo KT_I18N::translate('Enter the sub-folder name that contains the images, and exists in a "kiwitrees/uploads/" folder, created specifically for images not managed as part of any family tree\'s GEDCOM data. If you have not already created the "uploads" folder it will be created automatically when you save this page.'); ?>
 					</div>
 				</div>
 			</div>
