@@ -196,7 +196,8 @@ class list_places_KT_Module extends KT_Module implements KT_Module_List {
 								</table>
 							</div>
 						</div>
-					<?php break;
+						<?php 
+						break;
 					case 'hierarchy':
 						$use_googlemap = array_key_exists('googlemap', KT_Module::getActiveModules()) && get_module_setting('googlemap', 'GM_PLACE_HIERARCHY');
 						if ($use_googlemap) {

@@ -231,9 +231,9 @@ function googlemap_links($parent = [], $coords = '', $gedcom = KT_GED_ID, $updat
 {
 	global $iconStyle;
 
-	$preferences_url = 'module.php?mod=googlemap&amp;mod_action=admin_preferences';
-	$placecheck_url = 'module.php?mod=googlemap&amp;mod_action=admin_placecheck&amp;gedcom_id=1&amp;matching=1';
-	$adminplaces_url = 'module.php?mod=googlemap&amp;mod_action=admin_places&amp;parent=' . $coords . '&status=all';
+	$preferences_url   = 'module.php?mod=googlemap&amp;mod_action=admin_preferences';
+	$placecheck_url    = 'module.php?mod=googlemap&amp;mod_action=admin_placecheck&amp;gedcom_id=1&amp;matching=1';
+	$adminplaces_url   = 'module.php?mod=googlemap&amp;mod_action=admin_places&amp;parent=' . $coords . '&status=all';
 	$update_places_url = 'admin_trees_places.php?ged=' . $gedcom;
 
 	$class1 = $class2 = $class3 = ' small-4';
@@ -243,20 +243,6 @@ function googlemap_links($parent = [], $coords = '', $gedcom = KT_GED_ID, $updat
 		$class3 = ' small-2 text-center';
 		$class4 = ' small-3 text-right';
 	}
-
-	/*
-		if ($parent && isset($parent[0]) ) {
-			$placecheck_url .= '&amp;country=' . $parent[0];
-			if (isset($parent[1])) {
-				$placecheck_url .= '&amp;state=' . $parent[1];
-			}
-			$update_places_url = 'admin_trees_places.php?ged=' . KT_GEDCOM . '&amp;search=' . $parent[0];
-		}
-		$adminplaces_url = 'module.php?mod=googlemap&amp;mod_action=admin_places';
-		if ($latlng && isset($latlng['pl_id'])) {
-			$adminplaces_url .= '&amp;parent='.$latlng['pl_id'];
-		}
-	*/
 
 	if ($parent && isset($parent[0])) {
 		$placecheck_url .= '&amp;country=' . $parent[0];

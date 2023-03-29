@@ -24,13 +24,13 @@
 if (!defined('KT_KIWITREES')) {
 	header('HTTP/1.0 403 Forbidden');
 	exit;
-}
+} 
 ?>
 
 <head>
 	<script src="<?php echo KT_GM_SCRIPT; ?>"></script>
-	<script src="<?php echo KT_STATIC_URL, KT_MODULES_DIR; ?>googlemap/places_edit_overlays.js.php"></script>
-	<link type="text/css" href="<?php echo KT_STATIC_URL, KT_MODULES_DIR; ?>googlemap/css/googlemap.min.css" rel="stylesheet">
+	<script src="<?php echo KT_STATIC_URL . KT_MODULES_DIR; ?>googlemap/places_edit_overlays.js.php"></script>
+	<link type="text/css" href="<?php echo KT_STATIC_URL . KT_MODULES_DIR; ?>googlemap/css/googlemap.min.css" rel="stylesheet">
 
 	<script>
 		var map;
