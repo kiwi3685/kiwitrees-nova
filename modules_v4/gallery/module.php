@@ -156,7 +156,7 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 
 		$itemList = [];
 
-		// Filter for valid lanuage and access
+		// Filter for valid language and access
 		foreach ($items as $item) {
 			$languages   = get_block_setting($item->block_id, 'languages');
 			$item_access = get_block_setting($item->block_id, 'gallery_access');

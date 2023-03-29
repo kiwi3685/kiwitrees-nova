@@ -139,6 +139,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 			</div>
 
 			<form class="cell" method="post" name="configform" action="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_config">
+				<input type="hidden" name="gedID" value="<?php echo $gedID; ?>">
 				<?php if($items) { ?>
 					<table class="cell" id="reorderTable">
 						<thead>
@@ -151,6 +152,9 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 								</th>
 								<th class="tree">
 									<?php echo KT_I18N::translate('Tree'); ?>
+								</th>
+								<th class="lang">
+									<?php echo KT_I18N::translate('Language'); ?>
 								</th>
 								<th>
 									<?php echo KT_I18N::translate('Title'); ?>
@@ -195,6 +199,26 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 									<td>
 										<?php echo ($item->gedcom_id ? $trees[$item->gedcom_id]->tree_title_html : KT_I18N::translate('All')); ?>
 									</td>
+
+									<td>
+										<?php 
+										$languages     = get_block_setting($item->block_id, 'languages');
+										$languageSet   = explode(',', $languages);
+										$languagePrint = '';
+										$printLang     = [];
+										if ($languageSet) {
+											foreach ($languageSet as $code) {
+												foreach (KT_I18N::used_languages() as $lang => $name) {
+													if ($lang == $code) {
+														$printLang[] = $name;
+													}
+												}
+											}
+											$languagePrint = implode(', ', $printLang);
+										}
+										echo ($languagePrint ? $languagePrint : KT_I18N::translate('None set')); ?>
+									</td>
+
 									<td>
 										<?php echo $item->gallery_title; ?>
 									</td>

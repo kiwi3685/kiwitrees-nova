@@ -93,8 +93,13 @@ $item_title   = get_block_setting($block_id, 'story_title');
 $item_content = get_block_setting($block_id, 'story_content');
 $item_access  = KT_I18N::translate('All');
 $xref         = is_array(get_block_setting($block_id, 'xref')) ? explode(',', get_block_setting($block_id, 'xref')) : get_block_setting($block_id, 'xref');
-$count_xref   = $xref ? count($xref) : 0;
-
+if ($xref && is_array($xref)) {
+	$count_xref = count($xref);
+} else if ($xref && !is_array($xref)) {
+	$count_xref = 1;
+} else {
+	$count_xref = 0;
+}
 $block_order  = KT_DB::prepare(
 	"SELECT block_order FROM `##block` WHERE block_id = ?"
 )->execute(array($block_id))->fetchOne();

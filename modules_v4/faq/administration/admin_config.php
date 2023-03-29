@@ -150,6 +150,9 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', ''); ?>
 								<th class="tree">
 									<?php echo KT_I18N::translate('Tree'); ?>
 								</th>
+								<th class="lang">
+									<?php echo KT_I18N::translate('Language'); ?>
+								</th>
 								<th>
 									<?php echo KT_I18N::translate('Question'); ?>
 								</th>
@@ -191,6 +194,24 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', ''); ?>
 										} else {
 											echo $trees[$item->gedcom_id]->tree_title_html;
 										} ?>
+									</td>
+									<td>
+										<?php 
+										$languages     = get_block_setting($item->block_id, 'languages');
+										$languageSet   = explode(',', $languages);
+										$languagePrint = '';
+										$printLang     = [];
+										if ($languageSet) {
+											foreach ($languageSet as $code) {
+												foreach (KT_I18N::used_languages() as $lang => $name) {
+													if ($lang == $code) {
+														$printLang[] = $name;
+													}
+												}
+											}
+											$languagePrint = implode(', ', $printLang);
+										}
+										echo ($languagePrint ? $languagePrint : KT_I18N::translate('None set')); ?>
 									</td>
 									<td>
 										<?php echo $item->faq_title; ?>

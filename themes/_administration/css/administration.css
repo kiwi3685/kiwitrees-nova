@@ -1132,7 +1132,13 @@ main #admin-content #faq-page table#reorderTable thead tr th.tree,
 main #admin-content #gallery-page table#reorderTable thead tr th.tree,
 main #admin-content #pages-page table#reorderTable thead tr th.tree,
 main #admin-content #tabi_stories-page table#reorderTable thead tr th.tree {
-	width: 20%;
+	width: 15%;
+}
+main #admin-content #faq-page table#reorderTable thead tr th.lang,
+main #admin-content #gallery-page table#reorderTable thead tr th.lang,
+main #admin-content #pages-page table#reorderTable thead tr th.lang,
+main #admin-content #tabi_stories-page table#reorderTable thead tr th.lang {
+	width: 15%;
 }
 main #admin-content #faq-page table#reorderTable thead tr th.action,
 main #admin-content #gallery-page table#reorderTable thead tr th.action,
