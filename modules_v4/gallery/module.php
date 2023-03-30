@@ -225,6 +225,7 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 	{
 		global $MEDIA_DIRECTORY, $controller;
 
+		$version    = 'ver: 1.6.1'; // CURRENT GALLERIA VEERSION
 		$item_id    = KT_Filter::get('gallery_id');
 		$items      = $this->getItemList();
 
@@ -265,7 +266,10 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 								<div class="cell gallery_content">' . 
 									KT_I18N::translate($item->gallery_content) . '
 								</div>' .
-								$this->mediaDisplay($item->gallery_folder, $item_id);
+								$this->mediaDisplay($item->gallery_folder, $item_id) . '
+								<a class="cell" id="copy" href="https://galleriajs.github.io/" target="_blank" rel="noopener noreferrer">
+									' . /* I18N: Copyright statement in gallery module */ KT_I18N::translate('Display by Galleria (%1s)', $version) . '
+								</a>';
 						}
 					}
 					if (is_null($item_gallery)) {
@@ -337,7 +341,6 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 	// Print the gallery display
 	private function mediaDisplay($sub_folder, $item_id) {
 		global $MEDIA_DIRECTORY;
-		$version     = 'ver: 1.6.1'; // CURRENT GALLERIA VEERSION
 		$images      = '';
 		$media_links = '';
 
@@ -467,9 +470,6 @@ class gallery_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_B
 
 		if ($images) {
 			$html .= $images . '
-				<a class="cell" id="copy" href="https://galleriajs.github.io/" target="_blank" rel="noopener noreferrer">
-					' . /* I18N: Copyright statement in gallery module */ KT_I18N::translate('Display by Galleria (%1s)', $version) . '
-				</a>
 				</div>
 			';
 		} else {

@@ -10820,9 +10820,11 @@ div[id$=-page] button[type=submit] {
 }
 #medialist-page .card .card-divider {
 	font-size: 0.9rem;
+	height: 5.5rem;
 	padding: 0.25rem;
 }
 #medialist-page .card .medialist_image {
+	height: 16rem;
 	padding: 1rem;
 }
 #medialist-page .card .medialist_image a.thumbnail {
@@ -10832,6 +10834,7 @@ div[id$=-page] button[type=submit] {
 	height: 10rem;
 }
 #medialist-page .card .medialist_image .medialist_title {
+	height: 2.5rem;
 	padding-top: 1rem;
 }
 #medialist-page .card .card-section {

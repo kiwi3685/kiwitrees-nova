@@ -14,6 +14,17 @@
 	margin: auto;
 	width: 93%;
 }
+#galleria.uploads .galleria-info {
+	display: none;
+}
+#galleria a#copy {
+	clear: both;
+	float: left;
+	font-size: 110px;
+	font-style: italic;
+	position: absolute;
+	z-index: 9999999;
+}
 
 .galleria-layer {
 	display: none !important;
@@ -188,6 +199,7 @@
 	margin-bottom: 7px;
 }
 .galleria-theme-kahikatoa .galleria-info .galleria-info-text .galleria-info-description {
+	display: inline-block;
 	font-size: 15px;
 	font-style: italic;
 	margin: 0;
