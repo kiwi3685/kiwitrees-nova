@@ -199,7 +199,6 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 									<td>
 										<?php echo ($item->gedcom_id ? $trees[$item->gedcom_id]->tree_title_html : KT_I18N::translate('All')); ?>
 									</td>
-
 									<td>
 										<?php 
 										$languages     = get_block_setting($item->block_id, 'languages');
@@ -218,7 +217,6 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 										}
 										echo ($languagePrint ? $languagePrint : KT_I18N::translate('None set')); ?>
 									</td>
-
 									<td>
 										<?php echo $item->gallery_title; ?>
 									</td>
