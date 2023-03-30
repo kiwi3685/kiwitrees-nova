@@ -26,7 +26,7 @@ include KT_THEME_URL . 'templates/adminData.php';
 global $iconStyle;
 
 $block_id = KT_Filter::getInteger('block_id', KT_Filter::postInteger('block_id'));;
-$gedID    = KT_Filter::get('gedID', KT_Filter::post('gedID'));
+$gedID    = KT_Filter::post('gedID') ? KT_Filter::post('gedID') : '';
 $save     = KT_Filter::post('save', '');
 
 
