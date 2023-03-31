@@ -298,18 +298,23 @@ class sitemap_KT_Module extends KT_Module implements KT_Module_Config {
 
 				<div class="cell callout info-help">
 					<?php echo KT_I18N::translate('
-						You can also use the following links to directly tell these major search engines that sitemaps are available.
+						Or you can also the following links to directly tell these major search engines that sitemaps are available.
 					'); ?>
 					<ul>
-						<!-- This list comes from http://en.wikipedia.org/wiki/Sitemaps -->
 						<li>
-							<a target="_new" href="https://www.bing.com/webmaster/ping.aspx?siteMap=<?php echo $site_map_url2; ?>">
+							<a target="_new" href="https://www.bing.com/webmasters/about">
 								Bing
+								<span>
+									&nbsp;-&nbsp;<?php echo KT_I18N::translate('Link to Bing webmaster tools. Login to submit your sitemap.'); ?>
+								</span>
 							</a>
 						</li>
 						<li>
 							<a target="_new" href="https://www.google.com/webmasters/tools/ping?sitemap=<?php echo $site_map_url2; ?>">
 								Google
+								<span>
+									&nbsp;-&nbsp;<?php echo KT_I18N::translate('Link to Google webmaster tools. Automatically submits your sitemap.'); ?>
+								</span>
 							</a>
 						</li>
 					</ul>
