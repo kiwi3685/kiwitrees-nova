@@ -115,7 +115,7 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 	}
 
 	// Return the list of FAQs
-	private function getItemList($search)
+	private function getItemList()
 	{
 		$sql = "
 			SELECT block_id, block_order,
@@ -131,7 +131,6 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 			AND bs2.setting_name = 'faq_access'
 			AND bs3.setting_name = 'faq_content'
 			AND (gedcom_id IS NULL OR gedcom_id = ?)
-			AND (bs2.setting_value LIKE '%" . $search . "%' OR bs1.setting_value LIKE '%" . $search . "%')
 			ORDER BY block_order
 		";
 
@@ -194,7 +193,7 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 
 		echo pageStart('faq', $controller->getPageTitle());
 
-			 $items = $this->getItemList($search); ?>
+			 $items = $this->getItemList(); ?>
 
 			<div class="grid-x">
 				<div class="cell">
@@ -209,18 +208,22 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 					>
 				</form>
 
-				<div class="cell accordion" data-accordion data-allow-all-closed="true" data-deep-link="true">
+				<div class="cell accordion" data-accordion data-allow-all-closed="true" data-multi-expand="true" data-deep-link="true">
 					<?php foreach ($items as $item) {
 						$item_title       = get_block_setting($item->block_id, 'faq_title');
 						$item_description = get_block_setting($item->block_id, 'faq_content');
 						$item_access      = get_block_setting($item->block_id, 'faq_access');
 						$languages        = get_block_setting($item->block_id, 'languages');
-						?>
+						if ($search != '%') {
+							$style = 'style="display: block;"';
+						} else {
+							$style = '';
+						} ?>
 						<div class="accordion-item" data-accordion-item>
 							<a href="#" class="accordion-title">
 								<span><?php echo $this->faq_search_hits($item->faq_title, $search); ?></span>
 							</a>
-							<div class="accordion-content" data-tab-content>
+							<div class="accordion-content" data-tab-content  <?php echo $style; ?>>
 								<?php echo $this->faq_search_hits(substr($item_description, 0, 1) == '<' ? $item_description : nl2br($item_description), $search); ?>
 							</div>
 						</div>
