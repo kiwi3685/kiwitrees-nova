@@ -11136,6 +11136,10 @@ div.last_change label {
 #research_links-page .check-boxes input {
 	vertical-align: middle;
 }
+#research_links-page .check-boxes label P {
+	padding-top: 0.35rem;
+	vertical-align: middle;
+}
 #research_links-page form {
 	display: inline;
 }
@@ -12634,7 +12638,7 @@ input[type=radio] {
 	font: inherit;
 	width: 1.25rem;
 	height: 1.25rem;
-	border: 0.1125rem solid #faf5e8;
+	border: 0.1125rem solid #cacaca;
 	border-radius: 0.25rem;
 	margin: 0.25rem 0.125rem 0;
 	/* center tick mark */
