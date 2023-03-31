@@ -26,7 +26,7 @@ include KT_THEME_URL . 'templates/adminData.php';
 global $iconStyle;
 
 $block_id = KT_Filter::getInteger('block_id', KT_Filter::postInteger('block_id'));
-$gedID    = KT_Filter::get('gedID', KT_Filter::post('gedID'));
+$gedID    = KT_Filter::post('gedID') ? KT_Filter::post('gedID') : '';
 $save     = KT_Filter::post('save', '');
 
 $controller = new KT_Controller_Page();
@@ -37,13 +37,12 @@ $controller
 	->addInlineJavascript('ckeditorStandard();');
 
 if ($save) {
-	$block_id      = KT_Filter::postInteger('block_id');
-	$block_order   = (int)KT_Filter::post('block_order');
-	$gedID         = KT_Filter::post('gedID');
-	$item_title   = KT_Filter::post('pages_title',  KT_REGEX_UNSAFE); // allow html
-	$item_content = KT_Filter::post('pages_content', KT_REGEX_UNSAFE); // allow html
-	$item_access   = KT_Filter::post('pages_access');
-	$languages     = array();
+	$block_id     = KT_Filter::postInteger('block_id');
+	$block_order  = KT_Filter::postInteger('block_order');
+	$item_title   = KT_Filter::post('pages_title',   KT_REGEX_UNSAFE);
+	$item_content = KT_Filter::post('pages_content', KT_REGEX_UNSAFE);
+	$item_access  = KT_Filter::post('pages_access',  KT_REGEX_UNSAFE);
+	$languages    = array();
 
 	KT_DB::prepare(
 		"UPDATE `##block` SET gedcom_id = NULLIF(?, ''), block_order = ? WHERE block_id = ?"
@@ -89,8 +88,8 @@ $block_order = KT_DB::prepare(
 	"SELECT block_order FROM `##block` WHERE block_id = ?"
 )->execute(array($block_id))->fetchOne();
 
-$gedcom_id = KT_DB::prepare(
-	"SELECT gedcom_id FROM `##block` WHERE block_id = ?"
+$gedID       = KT_DB::prepare(
+	"SELECT gedcom_id FROM `##block` WHERE block_id=?"
 )->execute(array($block_id))->fetchOne();
 
 echo relatedPages($moduleTools, $this->getConfigLink());
@@ -134,7 +133,8 @@ echo pageStart('pages_details', $controller->getPageTitle()); ?>
 			<div class="cell medium-4">
 				<?php echo edit_field_access_level('pages_access', $item_access); ?>
 			</div>
-			<div class="cell medium-6"></div>			<label class="cell medium-2">
+			<div class="cell medium-6"></div>
+			<label class="cell medium-2">
 				<?php echo KT_I18N::translate('Show this block for which languages?'); ?>
 			</label>
 			<div class="cell medium-10">

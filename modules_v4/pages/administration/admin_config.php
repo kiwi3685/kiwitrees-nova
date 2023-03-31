@@ -225,7 +225,8 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', ''); ?>
 									</a>
 								</td>
 								<td>
-									<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=show&amp;pages_id=<?php echo $item->block_id; ?>&amp;gedID=<?php echo $gedID; ?>" target="_blank">
+									<?php $tree = $item->gedcom_id ? KT_Tree::getNameFromId($item->gedcom_id) : KT_GEDCOM; ?>
+									<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=show&amp;pages_id=<?php echo $item->block_id; ?>&amp;ged=<?php echo $tree; ?>" target="_blank">
 										<?php echo KT_I18N::translate('View'); ?>
 									</a>
 								</td>

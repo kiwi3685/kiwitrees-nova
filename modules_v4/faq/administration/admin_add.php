@@ -116,7 +116,7 @@ echo pageStart('faq_details', $controller->getPageTitle()); ?>
 				<textarea name="faq_content" class="html-edit"><?php echo htmlspecialchars((string) $item_content); ?></textarea>
 			</div>
 			<label class="cell medium-2">
-				<?php echo KT_I18N::translate('Faq order'); ?>
+				<?php echo KT_I18N::translate('FAQ order'); ?>
 			</label>
 			<div class="cell medium-1">
 				<input type="number" name="block_order" value="<?php echo $block_order; ?>">

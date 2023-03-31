@@ -128,25 +128,22 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 		return get_module_setting($this->getName(), 'HEADER_DESCRIPTION', $default_description);
 	}
 
-	// Return the list of gallerys
+	// Return the list of pagess
 	private function getItemList()
 	{
 		$sql = "
 			SELECT block_id, block_order,
-			bs1.setting_value AS gallery_title,
-			bs2.setting_value AS gallery_access,
-			bs3.setting_value AS gallery_content,
-			bs4.setting_value AS gallery_folder
+			bs1.setting_value AS pages_title,
+			bs2.setting_value AS pages_access,
+			bs3.setting_value AS pages_content
 			FROM `##block` b
 			JOIN `##block_setting` bs1 USING (block_id)
 			JOIN `##block_setting` bs2 USING (block_id)
 			JOIN `##block_setting` bs3 USING (block_id)
-			JOIN `##block_setting` bs4 USING (block_id)
 			WHERE module_name = ?
-			AND bs1.setting_name = 'gallery_title'
-			AND bs2.setting_name = 'gallery_access'
-			AND bs3.setting_name = 'gallery_content'
-			AND bs4.setting_name = 'gallery_folder'
+			AND bs1.setting_name = 'pages_title'
+			AND bs2.setting_name = 'pages_access'
+			AND bs3.setting_name = 'pages_content'
 			AND (gedcom_id IS NULL OR gedcom_id = ?)
 			ORDER BY block_order
 		";
@@ -158,7 +155,7 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 		// Filter for valid lanuage and access
 		foreach ($items as $item) {
 			$languages   = get_block_setting($item->block_id, 'languages');
-			$item_access = get_block_setting($item->block_id, 'gallery_access');
+			$item_access = get_block_setting($item->block_id, 'pages_access');
 			if ((!$languages || in_array(KT_LOCALE, explode(',', $languages))) && $item_access >= KT_USER_ACCESS_LEVEL) {
 				$itemList[] = $item;
 			}
@@ -256,7 +253,6 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 		}
 
 		echo pageStart('pages', $controller->getPageTitle()); ?>
-
 			<div class="grid-x">
 				<div class="cell">
 					<?php echo $this->getSummaryDescription(); ?>
@@ -276,19 +272,27 @@ class pages_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Blo
 				<?php } ?>
 
 				<div class="cell tabs-content" data-tabs-content="pages-tabs">
-					<div class="grid-x">
-						<?php $item_pages = '';
-						foreach ($items as $item) {
-							$item_content = $item->pages_content;
-						}
-						if (!isset($item_content)) { ?>
-							<div class="cell callout warning">
-								<?php echo KT_I18N::translate('No pages have been written yet'); ?>
-							</div>
-						<?php } else {
-							echo $item_content;
-						} ?>
-					</div>
+
+					<?php foreach ($items as $item) {
+						$class = ($item_id == $item->block_id ? 'is-active' : '');
+						$item_tabContent = '
+							<div class="tabs-panel ' . $class . '" id="module.php?mod=' . $this->getName() . '&amp;mod_action=show&amp;pages_id=' . $item->block_id . '">
+						';
+							if ($item->pages_content === '') {
+								$item_tabContent .= '
+									<div class="cell callout warning">
+										' . KT_I18N::translate('No content on this page yet') . '
+									</div>
+								';
+							} else {
+								$item_tabContent .= $item->pages_content;
+							}					
+						$item_tabContent .= '</div>';
+
+						echo $item_tabContent;
+
+					} ?>
+
 				</div>
 
 			</div>

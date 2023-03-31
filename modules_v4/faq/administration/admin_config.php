@@ -79,7 +79,7 @@ uasort($items, function ($x, $y) {
 
 echo relatedPages($moduleTools, $this->getConfigLink());
 
-echo pageStart($this->getName(), $controller->getPageTitle(), '', '', ''); ?>
+echo pageStart($this->getName(), KT_I18N::translate('Frequently asked questions'), '', '', ''); ?>
 
 	<fieldset class="cell fieldset">
 		<legend class="h5"><?php echo KT_I18N::translate('Site menu and page header'); ?></legend>
@@ -119,7 +119,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', ''); ?>
 		</div>
 	</fieldset>
 	<fieldset class="cell fieldset">
-		<legend class="h5"><?php echo KT_I18N::translate('Faq list'); ?></legend>
+		<legend class="h5"><?php echo KT_I18N::translate('FAQ list'); ?></legend>
 		<div class="grid-x">
 			<div class="cell medium-2">
 				<label for="ged"><?php echo KT_I18N::translate('Family tree'); ?></label>
@@ -227,7 +227,8 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', ''); ?>
 										</a>
 									</td>
 									<td>
-										<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=show&amp;faq_id=<?php echo $item->block_id; ?>&amp;gedID=<?php echo $gedID; ?>" target="_blank">
+										<?php $tree = $item->gedcom_id ? KT_Tree::getNameFromId($item->gedcom_id) : KT_GEDCOM; ?>
+										<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=show&amp;faq_id=<?php echo $item->block_id; ?>&amp;ged=<?php echo $tree; ?>" target="_blank">
 											<?php echo KT_I18N::translate('View'); ?>
 										</a>
 									</td>

@@ -57,8 +57,8 @@ if ($save) {
 
 	set_block_setting($block_id, 'gallery_title',   $item_title);
 	set_block_setting($block_id, 'gallery_content', $item_content);
-	set_block_setting($block_id, 'gallery_folder',  $item_folder);
 	set_block_setting($block_id, 'gallery_access',  $item_access);
+	set_block_setting($block_id, 'gallery_folder',  $item_folder);
 	set_block_setting($block_id, 'gallery_plugin',  $item_plugin);
 
 	foreach (KT_I18N::used_languages() as $code=>$name) {
@@ -92,8 +92,8 @@ if ($save) {
 
 $item_title       = get_block_setting($block_id, 'gallery_title');
 $item_content     = get_block_setting($block_id, 'gallery_content');
-$item_folder      = get_block_setting($block_id, 'gallery_folder');
 $item_access      = get_block_setting($block_id, 'gallery_access');
+$item_folder      = get_block_setting($block_id, 'gallery_folder');
 $item_plugin      = get_block_setting($block_id, 'gallery_plugin');
 
 $block_order      = KT_DB::prepare(

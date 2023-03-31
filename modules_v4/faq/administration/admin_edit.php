@@ -26,7 +26,9 @@ include KT_THEME_URL . 'templates/adminData.php';
 global $iconStyle;
 
 $block_id = KT_Filter::getInteger('block_id', KT_Filter::postInteger('block_id'));;
-$gedID    = KT_Filter::get('gedID', KT_Filter::post('gedID'));
+$gedID    = KT_Filter::post('gedID') ? KT_Filter::post('gedID') : '';
+$tree     = KT_Tree::getNameFromId($gedID);
+
 $save     = KT_Filter::post('save', '');
 
 $controller = new KT_Controller_Page();
@@ -113,7 +115,7 @@ echo pageStart('faq_details', $controller->getPageTitle()); ?>
 				<textarea name="faq_content" class="html-edit"><?php echo htmlspecialchars((string) $item_content); ?></textarea>
 			</div>
 			<label class="cell medium-2">
-				<?php echo KT_I18N::translate('Faq menu order'); ?>
+				<?php echo KT_I18N::translate('FAQ menu order'); ?>
 			</label>
 			<div class="cell medium-1">
 				<input type="number" name="block_order" value="<?php echo $block_order; ?>">

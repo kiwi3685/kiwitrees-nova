@@ -30,7 +30,7 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 
 	// Extend class KT_Module
 	public function getTitle() {
-		return /* I18N: Name of a module.  Abbreviation for “Frequently Asked Questions” */ KT_I18N::translate('Frequently asked questions');
+		return /* I18N: Name of a module.  Abbreviation for “Frequently Asked Questions” */ KT_I18N::translate('FAQs');
 	}
 
 	// Extend class KT_Module
@@ -97,7 +97,7 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 	}
 
 	public function getMenuTitle() {
-		$default_title = KT_I18N::translate('Faq');
+		$default_title = KT_I18N::translate('FAQs');
 		$HEADER_TITLE = KT_I18N::translate(get_module_setting($this->getName(), 'HEADER_TITLE', $default_title));
 		return $HEADER_TITLE;
 	}
@@ -114,7 +114,7 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 		return $HEADER_DESCRIPTION;
 	}
 
-	// Return the list of gallerys
+	// Return the list of FAQs
 	private function getItemList($search)
 	{
 		$sql = "
@@ -131,11 +131,11 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 			AND bs2.setting_name = 'faq_access'
 			AND bs3.setting_name = 'faq_content'
 			AND (gedcom_id IS NULL OR gedcom_id = ?)
-			AND (bs2.setting_value LIKE '%" . $search . "%' OR bs1.setting_value LIKE '% . $search . %')
+			AND (bs2.setting_value LIKE '%" . $search . "%' OR bs1.setting_value LIKE '%" . $search . "%')
 			ORDER BY block_order
 		";
 
-		$items = KT_DB::prepare($sql)->execute([$this->getName(), KT_GED_ID])->fetchAll();
+		$items = KT_DB::prepare($sql)->execute(array($this->getName(), KT_GED_ID))->fetchAll();
 
 		$itemList = [];
 
