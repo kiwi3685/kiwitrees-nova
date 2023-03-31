@@ -195,7 +195,6 @@ class research_links_KT_Module extends KT_Module implements KT_Module_Config, KT
 									<table id="research_links_table" style="width: 100%;">
 										<thead>
 											<th> <?php echo KT_I18N::translate('Enabled'); ?></th>
-											<th>test</th>
 											<th> <?php echo KT_I18N::translate('Name'); ?></th>
 											<th> <?php echo KT_I18N::translate('Area'); ?></th>
 											<th> <?php echo KT_I18N::translate('Pay to view'); ?></th>
@@ -213,7 +212,6 @@ class research_links_KT_Module extends KT_Module implements KT_Module_Config, KT
 														<td>
 															<?php echo checkbox('NEW_RESEARCH_PLUGINS[' . $label . ']', $enabled, ' class="check"'); ?>
 														</td>
-														<td><?php echo $enabled; ?></td>
 														<td><?php echo $plugin->getName(); ?></td>
 														<td><?php echo $area; ?></td>
 														<td><?php echo $this->getCurrency($plugin); ?></td>
