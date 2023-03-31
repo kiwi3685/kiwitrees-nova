@@ -183,7 +183,16 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 		$controller = new KT_Controller_Page();
 		$controller
 			->setPageTitle($this->getTitle())
-			->pageHeader();
+			->pageHeader()
+			->addInlineJavascript('
+				// expand search result contents
+				jQuery(".accordion-content").each(function(){
+					if(jQuery(this).find("span.search_hit").length > 0) { 
+						jQuery(this).css("display","block");
+					}
+				 });
+
+			');
 
 		if (KT_Filter::post('query_faq')) {
 			$search = KT_Filter::post('query_faq');
@@ -213,17 +222,13 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 						$item_title       = get_block_setting($item->block_id, 'faq_title');
 						$item_description = get_block_setting($item->block_id, 'faq_content');
 						$item_access      = get_block_setting($item->block_id, 'faq_access');
-						$languages        = get_block_setting($item->block_id, 'languages');
-						if ($search != '%') {
-							$style = 'style="display: block;"';
-						} else {
-							$style = '';
-						} ?>
+						$languages        = get_block_setting($item->block_id, 'languages'); ?>
+
 						<div class="accordion-item" data-accordion-item>
 							<a href="#" class="accordion-title">
 								<span><?php echo $this->faq_search_hits($item->faq_title, $search); ?></span>
 							</a>
-							<div class="accordion-content" data-tab-content  <?php echo $style; ?>>
+							<div class="accordion-content" data-tab-content>
 								<?php echo $this->faq_search_hits(substr($item_description, 0, 1) == '<' ? $item_description : nl2br($item_description), $search); ?>
 							</div>
 						</div>

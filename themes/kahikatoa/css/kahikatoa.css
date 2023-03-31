@@ -9336,7 +9336,9 @@ a.faq_link {
 
 .search_hit {
 	background-color: #fff000;
-	padding: 0.1em 0.2em;
+	display: inline-block;
+	line-height: 1;
+	padding: 0 0.1em;
 }
 
 form select {
