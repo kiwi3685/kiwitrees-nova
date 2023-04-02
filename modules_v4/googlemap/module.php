@@ -145,11 +145,11 @@ class googlemap_KT_Module extends KT_Module implements KT_Module_Config, KT_Modu
 
 	// Implement KT_Module_IndiTab
 	public function getTabContent() {
-		global $controller, $iconStyle; ?>
+		global $controller, $iconStyle;
 
+		ob_start();	 ?>	
 		<div class="grid-x grid-padding-y" id="<?php echo $this->getName(); ?>_content">
 			<?php if ($this->checkMapData()) {
-				ob_start();
 				require_once KT_ROOT . KT_MODULES_DIR . 'googlemap/googlemap.php';
 				require_once KT_ROOT . KT_MODULES_DIR . 'googlemap/defaultconfig.php';
  				?>
@@ -161,7 +161,6 @@ class googlemap_KT_Module extends KT_Module implements KT_Module_Config, KT_Modu
 				<div class="cell indiFact">
 					<div class="grid-x" id="gm_mapTab">
 				    	<div id="map_pane" class="cell"></div>
-
 						<?php
 					    $famids = array();
 					    $families = $controller->record->getSpouseFamilies();
@@ -174,9 +173,7 @@ class googlemap_KT_Module extends KT_Module implements KT_Module_Config, KT_Modu
 
 					    build_indiv_map($controller->record->getIndiFacts(), $famids);
 					    ?>
-
 						<script>loadMap();</script>
-
 					</div>
 				</div>
 			<?php } else { ?>
