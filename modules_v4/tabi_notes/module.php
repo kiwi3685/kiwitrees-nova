@@ -51,8 +51,8 @@ class tabi_notes_KT_Module extends KT_Module implements KT_Module_IndiTab {
 		$controller->addInlineJavascript('
 			persistent_toggle("checkbox_note2", "div.row_note2");
 		');
-		?>
-
+		
+		ob_start(); ?>
 		<div id="tabi_notes_content" class="grid-x grid-padding-x grid-padding-y">
 			<div class="cell tabHeader">
 				<div class="grid-x">
@@ -109,7 +109,8 @@ class tabi_notes_KT_Module extends KT_Module implements KT_Module_IndiTab {
 			<?php } ?>
 
 		</div>
-		<?php
+
+		<?php return ob_get_clean();
 
 	}
 
@@ -136,10 +137,7 @@ class tabi_notes_KT_Module extends KT_Module implements KT_Module_IndiTab {
 	}
 	// Implement KT_Module_IndiTab
 	public function canLoadAjax() {
-//		global $SEARCH_SPIDER;
-
-//		return !$SEARCH_SPIDER; // Search engines cannot use AJAX
-        return false;
+        	return false;
 	}
 
 	// Implement KT_Module_IndiTab

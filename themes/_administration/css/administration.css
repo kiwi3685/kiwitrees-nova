@@ -1367,6 +1367,10 @@ main #admin-content #relations_config-page h6.accepted {
 main #admin-content #sitemap-page pre {
 	color: #34689c;
 }
+main #admin-content #fancy_treeview_ancestors-page hr {
+	border-color: #f3f3f3;
+	margin: 0 0.5rem 0.5rem;
+}
 
 footer {
 	background-color: #34689c;

@@ -262,90 +262,90 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 			}
 		}
 
-		ob_start();
-			if (KT_USER_GEDCOM_ADMIN) { // change this to KT_USER_CAN_EDIT to allow editors to create first story.?>
+		ob_start(); ?>
 
-				<div class="cell tabHeader">
-					<div class="grid-x">
-						<div class="cell shrink">
-							<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_add&amp;xref=<?php echo $controller->record->getXref(); ?>">
-								<i class="<?php echo $iconStyle; ?> fa-plus"></i>
-								<?php echo KT_I18N::translate('Add story'); ?>
-							</a>
-						</div>
-						<div class="cell auto">
-							<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_config&amp;xref=<?php echo $controller->record->getXref(); ?>">
-								<i class="<?php echo $iconStyle; ?> fa-link"></i>
-								<?php echo KT_I18N::translate('Link this individual to an existing story '); ?>
-							</a>
-						</div>
+		<?php if (KT_USER_GEDCOM_ADMIN) { ?>
+			<div class="cell tabHeader">
+				<div class="grid-x">
+					<div class="cell shrink">
+						<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_add&amp;xref=<?php echo $controller->record->getXref(); ?>">
+							<i class="<?php echo $iconStyle; ?> fa-plus"></i>
+							<?php echo KT_I18N::translate('Add story'); ?>
+						</a>
+					</div>
+					<div class="cell auto">
+						<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_config&amp;xref=<?php echo $controller->record->getXref(); ?>">
+							<i class="<?php echo $iconStyle; ?> fa-link"></i>
+							<?php echo KT_I18N::translate('Link this individual to an existing story '); ?>
+						</a>
 					</div>
 				</div>
+			</div>
+		<?php }
 
-				<?php if ($count_stories > 1) {
-					$class = 'story';
-					$controller->addInlineJavascript('
-						// Start with all stories hidden except the first
-						jQuery("#story_contents div.story").hide();
-						jQuery("#story_contents #stories_" + ' . $first_story . ').show();
+		if ($count_stories > 1) {
+			$class = 'story';
+			$controller->addInlineJavascript('
+				// Start with all stories hidden except the first
+				jQuery("#story_contents div.story").hide();
+				jQuery("#story_contents #stories_" + ' . $first_story . ').show();
 
-						// Calculate scroll value
-						var posn = jQuery("#navbar").height() - jQuery("#indi_header").height() + jQuery(".ui-tabs-nav").height() + 25;
-						if (jQuery("#navbar").css("position") == "fixed") {
-							var posn = jQuery("#indi_header").height() + jQuery(".ui-tabs-nav").height() - 20;
-						}
+				// Calculate scroll value
+				var posn = jQuery("#navbar").height() - jQuery("#indi_header").height() + jQuery(".ui-tabs-nav").height() + 25;
+				if (jQuery("#navbar").css("position") == "fixed") {
+					var posn = jQuery("#indi_header").height() + jQuery(".ui-tabs-nav").height() - 20;
+				}
 
-						// On clicking a title hide all stories except the chosen one
-						jQuery("#contents_list a").click(function(e){
-							e.preventDefault();
-							var id = jQuery(this).attr("id").split("_");
-							jQuery("#story_contents .story").hide();
-							jQuery("#story_contents #stories_" + id[1]).show();
-							jQuery("html, body").stop().animate({scrollTop: jQuery("#stories").offset().top - posn}, 2000);
-						});
-					'); ?>
+				// On clicking a title hide all stories except the chosen one
+				jQuery("#contents_list a").click(function(e){
+					e.preventDefault();
+					var id = jQuery(this).attr("id").split("_");
+					jQuery("#story_contents .story").hide();
+					jQuery("#story_contents #stories_" + id[1]).show();
+					jQuery("html, body").stop().animate({scrollTop: jQuery("#stories").offset().top - posn}, 2000);
+				});
+			'); ?>
 
-					<h4><?php echo KT_I18N::translate('List of stories'); ?></h4>
-					<ol id="contents_list">
-						<?php foreach ($block_ids as $block_id) {
-							$languages = get_block_setting($block_id, 'languages');
-							if (!$languages || in_array(KT_LOCALE, explode(',', $languages))) { ?>
-								<li style="padding:2px 8px;">
-									<a href="#" id="title_<?php echo $block_id; ?>"><?php echo get_block_setting($block_id, 'title'); ?></a>
-								</li>
-							<?php }
-							} ?>
-					</ol>
-					<hr class="stories_divider">
-				<?php } ?>
-
-				<div class="grid-x grid-margin-y" id="story_contents">
-					<?php foreach ($block_ids as $block_id) {
-						$languages = get_block_setting($block_id, 'languages');
-						if (!$languages || in_array(KT_LOCALE, explode(',', $languages))) { ?>
-							<div class="cell <?php echo $class; ?>" id="stories_<?php echo $block_id; ?>">
-								<?php if (KT_USER_CAN_EDIT) { ?>
-									<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit&amp;block_id=<?php echo $block_id; ?>">
-										<i class="<?php echo $iconStyle; ?> fa-pen-to-square"></i>
-										<?php echo KT_I18N::translate('Edit story'); ?>
-									</a>
-								<?php } ?>
-								<h3 class="text-center">
-									<?php echo get_block_setting($block_id, 'story_title'); ?>
-								</h3>
-
-								<?php echo get_block_setting($block_id, 'story_content'); ?>
-
-								<?php if ($count_stories > 1) { ?>
-									<hr class="stories_divider">
-								<?php } ?>
-							</div>
-						<?php }
+			<h4><?php echo KT_I18N::translate('List of stories'); ?></h4>
+			<ol id="contents_list">
+				<?php foreach ($block_ids as $block_id) {
+					$languages = get_block_setting($block_id, 'languages');
+					if (!$languages || in_array(KT_LOCALE, explode(',', $languages))) { ?>
+						<li style="padding:2px 8px;">
+							<a href="#" id="title_<?php echo $block_id; ?>"><?php echo get_block_setting($block_id, 'title'); ?></a>
+						</li>
+					<?php }
 					} ?>
-				</div>
-			<?php }
+			</ol>
+			<hr class="stories_divider">
+		<?php } ?>
 
-		return '<div id="stories_tab_content">' . ob_get_clean() . '</div>';
+		<div class="grid-x grid-margin-y" id="story_contents">
+			<?php foreach ($block_ids as $block_id) {
+				$languages = get_block_setting($block_id, 'languages');
+				if (!$languages || in_array(KT_LOCALE, explode(',', $languages))) { ?>
+					<div class="cell <?php echo $class; ?>" id="stories_<?php echo $block_id; ?>">
+						<?php if (KT_USER_CAN_EDIT) { ?>
+							<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit&amp;block_id=<?php echo $block_id; ?>">
+								<i class="<?php echo $iconStyle; ?> fa-pen-to-square"></i>
+								<?php echo KT_I18N::translate('Edit story'); ?>
+							</a>
+						<?php } ?>
+						<h3 class="text-center">
+							<?php echo get_block_setting($block_id, 'story_title'); ?>
+						</h3>
+
+						<?php echo get_block_setting($block_id, 'story_content'); ?>
+
+						<?php if ($count_stories > 1) { ?>
+							<hr class="stories_divider">
+						<?php } ?>
+					</div>
+				<?php }
+			} ?>
+		</div>
+
+		<?php return ob_get_clean();
 
 	}
 

@@ -30,10 +30,12 @@ if (get_gedcom_setting(KT_GED_ID, 'TAB_REL_TO_DEFAULT_INDI') > 0) {
 $controller = new KT_Controller_Individual();
 
 if ($controller->record && $controller->record->canDisplayDetails()) {
+
 	if (KT_Filter::get('action') == 'ajax') {
 		$controller->ajaxRequest();
 		exit;
 	}
+	
 	// Generate the sidebar content *before* we display the page header,
 	// as the clippings cart needs to have write access to the session.
 	$sidebar_html = $controller->getSideBarContent();
@@ -126,86 +128,79 @@ $controller->addInlineJavascript('
 ');
 
 // Check if sidebar active and set widths accordingly
-if (KT_Module::getActiveSidebars()) {
-	$class = " large-9";
-} else {
-	$class = "";
-}
+KT_Module::getActiveSidebars() ? $class = " large-9" : $class = "";
+
 // Check if hightlight image is active
-if ($highlightImage) {
-	$class2 = " medium-9 large-10";
-} else {
-	$class2 = "";
-} ?>
+$highlightImage ? $class2 = " medium-9 large-10" : $class2 = ""; ?>
 
 <!-- Start page layout  -->
 <div id="indi-page" class="grid-x grid-margin-x">
 	<?php if ($controller->record->canDisplayDetails()) { ?>
 		<div class="cell<?php echo $class; ?>">
-				<!-- Header area -->
-				<div class="grid-x indiContent">
-					<?php $globalfacts = $controller->getGlobalFacts(); ?>
-					<!-- Preferred name, age etc -->
-					<div class="cell">
-						<div class="grid-x grid-padding-x">
-							<div class="cell medium-8 large-9">
-								<h3 class="text-center medium-text-left"><?php echo $controller->record->getFullName(); ?></h3>
-							</div>
-							<div class="cell medium-4 large-3">
-								<?php
-								$bdate = $controller->record->getBirthDate();
-								$ddate = $controller->record->getDeathDate();
-								?>
-								<h4 class="text-center medium-text-right">
-									<?php foreach ($globalfacts as $key => $value) {
-									$fact = $value->getTag();
-									if ($fact == "SEX") {
-										$controller->print_sex_record($value);
-									}
-								} ?>
-									<span class="header_age">
-										<?php if ($bdate->isOK() && !$controller->record->isDead()) {
-									// If living display age
-									echo KT_Gedcom_Tag::getLabelValue('AGE', get_age_at_event(KT_Date::GetAgeGedcom($bdate), true), '', 'span');
-								} elseif ($bdate->isOK() && $ddate->isOK()) {
-									// If dead, show age at death
-									echo KT_Gedcom_Tag::getLabelValue('AGE', get_age_at_event(KT_Date::GetAgeGedcom($bdate, $ddate), false), '', 'span');
-								} ?>
-									</span>
-									<span id="dates">
-										<?php echo $controller->record->getLifeSpan(); ?>
-									</span>
-								</h4>
-							</div>
+			<!-- Header area -->
+			<div class="grid-x indiContent">
+				<?php $globalfacts = $controller->getGlobalFacts(); ?>
+				<!-- Preferred name, age etc -->
+				<div class="cell">
+					<div class="grid-x grid-padding-x">
+						<div class="cell medium-8 large-9">
+							<h3 class="text-center medium-text-left"><?php echo $controller->record->getFullName(); ?></h3>
 						</div>
-					</div>
-					<div class="cell">
-						<div class="grid-x indiHeader">
-							<?php if ($highlightImage) { ?>
-								<div class="cell medium-3 large-2 text-center medium-text-left">
-									<?php echo $controller->record->displayImage(); ?>
-								</div>
-							<?php } ?>
-							<div class="cell<?php echo $class2; ?>">
-								<!-- Name details -->
-								<div class="accordion" data-accordion data-allow-all-closed="true" data-multi-open="false" data-slide-speed="500">
-									<?php foreach ($globalfacts as $key => $value) {
-										$fact = $value->getTag();
-										if ($fact == "NAME") {
-											$controller->print_name_record($value);
-										}
-									} ?>
-								</div>
-								<?php if (
-									// Relationship to default individual
-									array_key_exists('chart_relationship', KT_Module::getActiveModules()) && KT_USER_ID && get_gedcom_setting(KT_GED_ID, 'TAB_REL_TO_DEFAULT_INDI') > 0
-									) { ?>
-										<div class="cell text-right indi_rela"><?php echo printIndiRelationship(); ?></div>
-								<?php } ?>
-							</div>
+						<div class="cell medium-4 large-3">
+							<?php
+							$bdate = $controller->record->getBirthDate();
+							$ddate = $controller->record->getDeathDate();
+							?>
+							<h4 class="text-center medium-text-right">
+								<?php foreach ($globalfacts as $key => $value) {
+								$fact = $value->getTag();
+								if ($fact == "SEX") {
+									$controller->print_sex_record($value);
+								}
+							} ?>
+								<span class="header_age">
+									<?php if ($bdate->isOK() && !$controller->record->isDead()) {
+								// If living display age
+								echo KT_Gedcom_Tag::getLabelValue('AGE', get_age_at_event(KT_Date::GetAgeGedcom($bdate), true), '', 'span');
+							} elseif ($bdate->isOK() && $ddate->isOK()) {
+								// If dead, show age at death
+								echo KT_Gedcom_Tag::getLabelValue('AGE', get_age_at_event(KT_Date::GetAgeGedcom($bdate, $ddate), false), '', 'span');
+							} ?>
+								</span>
+								<span id="dates">
+									<?php echo $controller->record->getLifeSpan(); ?>
+								</span>
+							</h4>
 						</div>
 					</div>
 				</div>
+				<div class="cell">
+					<div class="grid-x indiHeader">
+						<?php if ($highlightImage) { ?>
+							<div class="cell medium-3 large-2 text-center medium-text-left">
+								<?php echo $controller->record->displayImage(); ?>
+							</div>
+						<?php } ?>
+						<div class="cell<?php echo $class2; ?>">
+							<!-- Name details -->
+							<div class="accordion" data-accordion data-allow-all-closed="true" data-multi-open="false" data-slide-speed="500">
+								<?php foreach ($globalfacts as $key => $value) {
+									$fact = $value->getTag();
+									if ($fact == "NAME") {
+										$controller->print_name_record($value);
+									}
+								} ?>
+							</div>
+							<?php if (
+								// Relationship to default individual
+								array_key_exists('chart_relationship', KT_Module::getActiveModules()) && KT_USER_ID && get_gedcom_setting(KT_GED_ID, 'TAB_REL_TO_DEFAULT_INDI') > 0
+								) { ?>
+									<div class="cell text-right indi_rela"><?php echo printIndiRelationship(); ?></div>
+							<?php } ?>
+						</div>
+					</div>
+				</div>
+			</div>
 			<?php // =============== Individual page tabs ======================
 			foreach ($controller->tabs as $tab) {
 				echo $tab->getPreLoadContent();
@@ -219,12 +214,17 @@ if ($highlightImage) {
 					}
 					if ($tab->hasTabContent()) { ?>
 						<li class="<?php echo $tab->getName(); ?> tabs-title<?php echo $greyed_out; ?>">
-							<?php if ($tab->canLoadAjax()) { ?>
-								<!-- AJAX tabs load only when selected -->
-								<a href="<?php echo $controller->record->getHtmlUrl(); ?>&amp;action=ajax&amp;module=<?php echo $tab->getName(); ?>" title="<?php echo $tab->getDescription(); ?>" rel="nofollow">
-							<?php } else { ?>
-								<a href="#<?php echo $tab->getName(); ?>" title="<?php echo $tab->getDescription(); ?>" rel="nofollow">
-							<?php } ?>
+							<a 
+								<?php if ($tab->canLoadAjax()) { ?>
+									href="<?php echo $controller->record->getHtmlUrl(); ?>&amp;action=ajax&amp;module=<?php echo $tab->getName(); ?>" 
+									title="<?php echo $tab->getDescription(); ?>" 
+									rel="nofollow"
+								<?php } else { ?>
+									href="#<?php echo $tab->getName(); ?>" 
+									title="<?php echo $tab->getDescription(); ?>" 
+									rel="nofollow"
+								<?php } ?>
+							>
 								<span><?php echo $tab->getTitle(); ?></span>
 							</a>
 						</li>
@@ -233,13 +233,13 @@ if ($highlightImage) {
 			</ul>
 			<div class="tabs-content" data-tabs-content="indiTabs">
 				<?php foreach ($controller->tabs as $tab) {
-					if ($tab->hasTabContent()) { ?>
-						<div class="tabs-panel" id="<?php echo $tab->getName(); ?>">
-							<?php if (!$tab->canLoadAjax()) {
-								echo $tab->getTabContent();
-							} ?>
-						</div>
-					<?php }
+					if ($tab->hasTabContent()) {
+						if (!$tab->canLoadAjax()) {
+							echo '<div class="tabs-panel" id="' . $tab->getName() . '">'
+								 . $tab->getTabContent() . 
+							'</div>';
+						}
+					}
 				} ?>
 			</div>
 		</div>
@@ -250,3 +250,4 @@ if ($highlightImage) {
 			</div>
 		<?php }
 	} ?>
+</div>

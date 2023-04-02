@@ -50,6 +50,7 @@ class tabi_changes_KT_Module extends KT_Module implements KT_Module_IndiTab {
 	// Implement KT_Module_Tab
 	public function getTabContent() {
         global $controller;
+
         require_once KT_ROOT.'library/php-diff/lib/Diff.php';
         require_once KT_ROOT.'library/php-diff/lib/Diff/Renderer/Html/SideBySide.php';
 
@@ -87,6 +88,8 @@ class tabi_changes_KT_Module extends KT_Module implements KT_Module_IndiTab {
 			});
     	');
 
+        ob_start();
+
         switch (KT_SCRIPT_NAME) {
             //Note: for "family" changes see separate module tabf_changes
             case 'individual.php':
@@ -99,6 +102,7 @@ class tabi_changes_KT_Module extends KT_Module implements KT_Module_IndiTab {
                 $item  = $controller->record;
             break;
 		}
+
         $xref		= $item->getXref();
         $rows       = $this->getChangeList($xref);
 
@@ -144,6 +148,8 @@ class tabi_changes_KT_Module extends KT_Module implements KT_Module_IndiTab {
 		<?php } else { ?>
             <div> <?php echo KT_I18N::translate('No change data available'); ?></div>
         <?php }
+
+        return ob_get_clean();
 	}
 
 	// Implement KT_Module_Tab

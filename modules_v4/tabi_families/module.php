@@ -59,7 +59,7 @@ class tabi_families_KT_Module extends KT_Module implements KT_Module_IndiTab {
 
 	// Implement KT_Module_IndiTab
 	public function canLoadAjax() {
-		return false; // Search engines cannot use AJAX
+		return false;
 	}
 
 	// Implement KT_Module_IndiTab
@@ -84,90 +84,87 @@ class tabi_families_KT_Module extends KT_Module implements KT_Module_IndiTab {
 		$ABBREVIATE_CHART_LABELS = false; // Override GEDCOM configuration
 
 		ob_start();
-			$personcount	= 0;
-			$families		= $controller->record->getChildFamilies(); ?>
-			<div class="cell tabHeader">
+		$personcount	= 0;
+		$families		= $controller->record->getChildFamilies(); ?>
+		<div class="cell tabHeader">
+			<div class="grid-x">
+				<div class="cell shrink">
+					<input id="checkbox_elder" type="checkbox" checked>
+					<label for="checkbox_elder"><?php echo KT_I18N::translate('Show date differences'); ?></label>
+				</div>
+				<div class="cell shrink">
+					<input id="checkbox_rela" type="checkbox" checked>
+					<label for="checkbox_rela"><?php echo KT_I18N::translate('Show relationships'); ?></label>
+				</div>
+				<?php if (count($families) == 0 && $controller->record->canEdit()) { ?>
+					<div class="cell auto">
+						<a href="#" onclick="return addnewparent('<?php echo $controller->record->getXref(); ?>', 'HUSB');">
+							<i class="<?php echo $iconStyle; ?> fa-mars"></i>
+							<?php echo KT_I18N::translate('Add a father'); ?>
+						</a>
+						<a href="#" onclick="return addnewparent('<?php echo $controller->record->getXref(); ?>', 'WIFE');">
+							<i class="<?php echo $iconStyle; ?> fa-venus"></i>
+							<?php echo KT_I18N::translate('Add a mother'); ?>
+						</a>
+					</div>
+				<?php } ?>
+			</div>
+		</div>
+
+		<?php // parents
+		foreach ($families as $family) {
+			$people = $controller->buildFamilyList($family, "parents"); ?>
+			<div class="cell indiFact">
 				<div class="grid-x">
-					<div class="cell shrink">
-						<input id="checkbox_elder" type="checkbox" checked>
-						<label for="checkbox_elder"><?php echo KT_I18N::translate('Show date differences'); ?></label>
-					</div>
-					<div class="cell shrink">
-						<input id="checkbox_rela" type="checkbox" checked>
-						<label for="checkbox_rela"><?php echo KT_I18N::translate('Show relationships'); ?></label>
-					</div>
-					<?php if (count($families) == 0 && $controller->record->canEdit()) { ?>
-						<div class="cell auto">
-							<a href="#" onclick="return addnewparent('<?php echo $controller->record->getXref(); ?>', 'HUSB');">
-								<i class="<?php echo $iconStyle; ?> fa-mars"></i>
-								<?php echo KT_I18N::translate('Add a father'); ?>
-							</a>
-							<a href="#" onclick="return addnewparent('<?php echo $controller->record->getXref(); ?>', 'WIFE');">
-								<i class="<?php echo $iconStyle; ?> fa-venus"></i>
-								<?php echo KT_I18N::translate('Add a mother'); ?>
-							</a>
-						</div>
-					<?php } ?>
+					<?php $this->printFamilyHeader($family, 'FAMC', $controller->record->getChildFamilyLabel($family), $people); ?>
+					<?php $this->printParentsRows($family, $people, "parents"); ?>
 				</div>
 			</div>
+		<?php }
 
-			<?php // parents
-			foreach ($families as $family) {
-				$people = $controller->buildFamilyList($family, "parents"); ?>
-				<div class="cell indiFact">
-					<div class="grid-x">
-						<?php $this->printFamilyHeader($family, 'FAMC', $controller->record->getChildFamilyLabel($family), $people); ?>
-						<?php $this->printParentsRows($family, $people, "parents"); ?>
-					</div>
+		// step-parents
+		foreach ($controller->record->getChildStepFamilies() as $family) {
+			$people = $controller->buildFamilyList($family, "step-parents"); ?>
+			<div class="cell indiFact">
+				<div class="grid-x">
+					<?php $this->printFamilyHeader($family, 'FAMC', $controller->record->getStepFamilyLabel($family), $people);
+					$this->printParentsRows($family, $people, "parents");
+					$this->printChildrenRows($family, $people, "parents"); ?>
 				</div>
-			<?php }
-
-			// step-parents
-			foreach ($controller->record->getChildStepFamilies() as $family) {
-				$people = $controller->buildFamilyList($family, "step-parents"); ?>
-				<div class="cell indiFact">
-					<div class="grid-x">
-						<?php $this->printFamilyHeader($family, 'FAMC', $controller->record->getStepFamilyLabel($family), $people);
-						$this->printParentsRows($family, $people, "parents");
-						$this->printChildrenRows($family, $people, "parents"); ?>
-					</div>
-				</div>
-			<?php }
-
-			// spouses
-			$families = $controller->record->getSpouseFamilies();
-			foreach ($families as $family) {
-				$people = $controller->buildFamilyList($family, "spouse"); ?>
-				<div class="cell indiFact">
-					<div class="grid-x">
-						<?php $this->printFamilyHeader($family, 'FAMS', $controller->record->getSpouseFamilyLabel($family), $people);
-						$this->printParentsRows($family, $people, "spouse");
-						$this->printChildrenRows($family, $people, "spouse"); ?>
-					</div>
-				</div>
-			<?php }
-
-			// step-children
-			foreach ($controller->record->getSpouseStepFamilies() as $family) {
-				$people = $controller->buildFamilyList($family, "step-children"); ?>
-				<div class="cell indiFact">
-					<div class="grid-x">
-						<?php $this->printFamilyHeader($family, 'FAMS', $family->getFullName(), $people);
-						$this->printParentsRows($family, $people, "spouse");
-						$this->printChildrenRows($family, $people, "spouse"); ?>
-					</div>
-				</div>
-			<?php }
-
-			$ABBREVIATE_CHART_LABELS = $saved_ABBREVIATE_CHART_LABELS; // Restore GEDCOM configuration
-			unset($show_full);
-			if (isset($saved_show_full)) $show_full = $saved_show_full;
-
-		return '
-			<div id="' . $this->getName() . '_content" class="grid-x grid-padding-y">' .
-				ob_get_clean() . '
 			</div>
-		';
+		<?php }
+
+		// spouses
+		$families = $controller->record->getSpouseFamilies();
+		foreach ($families as $family) {
+			$people = $controller->buildFamilyList($family, "spouse"); ?>
+			<div class="cell indiFact">
+				<div class="grid-x">
+					<?php $this->printFamilyHeader($family, 'FAMS', $controller->record->getSpouseFamilyLabel($family), $people);
+					$this->printParentsRows($family, $people, "spouse");
+					$this->printChildrenRows($family, $people, "spouse"); ?>
+				</div>
+			</div>
+		<?php }
+
+		// step-children
+		foreach ($controller->record->getSpouseStepFamilies() as $family) {
+			$people = $controller->buildFamilyList($family, "step-children"); ?>
+			<div class="cell indiFact">
+				<div class="grid-x">
+					<?php $this->printFamilyHeader($family, 'FAMS', $family->getFullName(), $people);
+					$this->printParentsRows($family, $people, "spouse");
+					$this->printChildrenRows($family, $people, "spouse"); ?>
+				</div>
+			</div>
+		<?php }
+
+		$ABBREVIATE_CHART_LABELS = $saved_ABBREVIATE_CHART_LABELS; // Restore GEDCOM configuration
+		unset($show_full);
+		if (isset($saved_show_full)) $show_full = $saved_show_full;
+
+		return ob_get_clean();
+		
 	}
 
 	function printFamilyHeader(KT_Family $family, $type, $label, $people) {

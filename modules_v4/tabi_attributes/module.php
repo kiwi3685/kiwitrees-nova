@@ -72,93 +72,91 @@ class tabi_attributes_KT_Module extends KT_Module implements KT_Module_IndiTab {
 		global $controller,$SHOW_COUNTER, $SEARCH_SPIDER;
 
 		ob_start();
-			$indifacts = $controller->getIndiFacts();
+		$indifacts = $controller->getIndiFacts();
 
-			$xrefData = array(
-				'label' => KT_I18N::translate('Internal reference '),
-				'detail'=> '<span>' . $controller->record->getXref() . '</span>',
+		$xrefData = array(
+			'label' => KT_I18N::translate('Internal reference '),
+			'detail'=> '<span>' . $controller->record->getXref() . '</span>',
+		);
+		if ($SHOW_COUNTER && (empty($SEARCH_SPIDER))) {
+			require KT_ROOT . 'includes/hitcount.php';
+			$hitData = array(
+				'label' => KT_I18N::translate('Hit Count:'),
+				'detail'=> '<span>' . $hitCount . '</span>',
 			);
-			if ($SHOW_COUNTER && (empty($SEARCH_SPIDER))) {
-				require KT_ROOT . 'includes/hitcount.php';
-				$hitData = array(
-					'label' => KT_I18N::translate('Hit Count:'),
-					'detail'=> '<span>' . $hitCount . '</span>',
-				);
-			}
-			if (count($indifacts) == 0) { ?>
-				<div class="callout alert">
-					<?php echo KT_I18N::translate('There are no attributes for this individual.'); ?>
-				</div>
-			<?php } else { ?>
-				<div class="cell tabHeader"></div>
-				<div class="cell show-for-medium indiFactHeader">
-					<div class="grid-x">
-						<div class="cell medium-3 event">
-							<label><?php echo KT_I18N::translate('Attribute'); ?></label>
-						</div>
-						<div class="cell <?php echo (KT_USER_CAN_EDIT ? 'medium-8' : 'auto'); ?> detail">
-							<label><?php echo KT_I18N::translate('Details'); ?></label>
-						</div>
-						<?php if (KT_USER_CAN_EDIT) { ?>
-							<div class="cell medium-1 edit">
-								<label><?php echo KT_I18N::translate('Edit'); ?></label>
-							</div>
-						<?php } ?>
-					</div>
-				</div>
-				<!-- Xref id -->
-				<div class="cell indiFact">
-					<div class="grid-x">
-						<div class="cell small-10 medium-3 small-order-1 medium-order-1 event">
-							<span class="h6"><?php echo $xrefData['label']; ?></span>
-						</div>
-						<div class="cell <?php echo (KT_USER_CAN_EDIT ? 'small-10 medium-8' : 'auto'); ?> small-order-5 medium-order-4 detail">
-							<?php echo $xrefData['detail']; ?>
-						</div>
-					</div>
-				</div>
-				<!-- Privacy status -->
-				<div class="cell indiFact">
-					<div class="grid-x">
-						<div class="cell small-10 medium-3 small-order-1 medium-order-1 event">
-							<span class="h6"><?php echo KT_I18N::translate('Privacy status'); ?></span>
-						</div>
-						<div class="cell <?php echo (KT_USER_CAN_EDIT ? 'small-10 medium-8' : 'auto'); ?> small-order-5 medium-order-4 detail">
-							<?php echo $this->privacyStatus(); ?>
-						</div>
-					</div>
-				</div>
-				<?php
-				//- All GEDCOM attribute facts -//
-				foreach ($indifacts as $fact) {
-					if (KT_Gedcom_Tag::isTagAttribute($fact->getTag())) {
-						print_attributes($fact, $controller->record);
-					}
-				}
-				?>
-				<!-- Hit count -->
-				<div class="cell indiFact">
-					<div class="grid-x">
-						<div class="cell small-10 medium-3 small-order-1 medium-order-1 event">
-							<span class="h6"><?php echo $hitData['label']; ?></span>
-						</div>
-						<div class="cell <?php echo (KT_USER_CAN_EDIT ? 'small-10 medium-8' : 'auto'); ?> small-order-5 medium-order-4 detail">
-							<?php echo $hitData['detail']; ?>
-						</div>
-					</div>
-				</div>
-				<?php
-				//-- new fact link
-				if ($controller->record->canEdit()) {
-					print_add_new_fact($controller->record->getXref(), $indifacts, 'INDI_ATTRIB');
-				}
-			}
-			return '
-				<div id="' . $this->getName() . '_content" class="grid-x grid-padding-y">' .
-					ob_get_clean() . '
-				</div>
-			';
 		}
+		if (count($indifacts) == 0) { ?>
+			<div class="callout alert">
+				<?php echo KT_I18N::translate('There are no attributes for this individual.'); ?>
+			</div>
+		<?php } else { ?>
+			<div class="cell tabHeader"></div>
+			<div class="cell show-for-medium indiFactHeader">
+				<div class="grid-x">
+					<div class="cell medium-3 event">
+						<label><?php echo KT_I18N::translate('Attribute'); ?></label>
+					</div>
+					<div class="cell <?php echo (KT_USER_CAN_EDIT ? 'medium-8' : 'auto'); ?> detail">
+						<label><?php echo KT_I18N::translate('Details'); ?></label>
+					</div>
+					<?php if (KT_USER_CAN_EDIT) { ?>
+						<div class="cell medium-1 edit">
+							<label><?php echo KT_I18N::translate('Edit'); ?></label>
+						</div>
+					<?php } ?>
+				</div>
+			</div>
+			<!-- Xref id -->
+			<div class="cell indiFact">
+				<div class="grid-x">
+					<div class="cell small-10 medium-3 small-order-1 medium-order-1 event">
+						<span class="h6"><?php echo $xrefData['label']; ?></span>
+					</div>
+					<div class="cell <?php echo (KT_USER_CAN_EDIT ? 'small-10 medium-8' : 'auto'); ?> small-order-5 medium-order-4 detail">
+						<?php echo $xrefData['detail']; ?>
+					</div>
+				</div>
+			</div>
+			<!-- Privacy status -->
+			<div class="cell indiFact">
+				<div class="grid-x">
+					<div class="cell small-10 medium-3 small-order-1 medium-order-1 event">
+						<span class="h6"><?php echo KT_I18N::translate('Privacy status'); ?></span>
+					</div>
+					<div class="cell <?php echo (KT_USER_CAN_EDIT ? 'small-10 medium-8' : 'auto'); ?> small-order-5 medium-order-4 detail">
+						<?php echo $this->privacyStatus(); ?>
+					</div>
+				</div>
+			</div>
+			<?php
+			//- All GEDCOM attribute facts -//
+			foreach ($indifacts as $fact) {
+				if (KT_Gedcom_Tag::isTagAttribute($fact->getTag())) {
+					print_attributes($fact, $controller->record);
+				}
+			}
+			?>
+			<!-- Hit count -->
+			<div class="cell indiFact">
+				<div class="grid-x">
+					<div class="cell small-10 medium-3 small-order-1 medium-order-1 event">
+						<span class="h6"><?php echo $hitData['label']; ?></span>
+					</div>
+					<div class="cell <?php echo (KT_USER_CAN_EDIT ? 'small-10 medium-8' : 'auto'); ?> small-order-5 medium-order-4 detail">
+						<?php echo $hitData['detail']; ?>
+					</div>
+				</div>
+			</div>
+			<?php
+			//-- new fact link
+			if ($controller->record->canEdit()) {
+				print_add_new_fact($controller->record->getXref(), $indifacts, 'INDI_ATTRIB');
+			}
+		}
+
+		return ob_get_clean();
+
+	}
 
 	// Implement KT_Module_IndiTab
 	private function privacyStatus() {

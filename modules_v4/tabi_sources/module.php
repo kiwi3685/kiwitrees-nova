@@ -56,8 +56,8 @@ class tabi_sources_KT_Module extends KT_Module implements KT_Module_IndiTab {
 		$controller->addInlineJavascript('
 			persistent_toggle("checkbox_sour2", "div.row_sour2");
 		');
-		?>
 
+		ob_start(); ?>
 		<div id="tabi_sources_content" class="grid-x grid-padding-x grid-padding-y">
 			<div class="cell tabHeader">
 				<div class="grid-x">
@@ -96,7 +96,8 @@ class tabi_sources_KT_Module extends KT_Module implements KT_Module_IndiTab {
 
 			<?php } ?>
 		</div>
-		<?php
+
+		<?php return ob_get_clean();
 
 	}
 

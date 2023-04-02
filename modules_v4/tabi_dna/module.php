@@ -256,11 +256,7 @@ class tabi_dna_KT_Module extends KT_Module implements KT_Module_IndiTab {
 			echo KT_I18N::translate('No results found');
 		}
 
-		return '
-			<div id="' . $this->getName() . '_content" class="grid-x grid-padding-y">' .
-				ob_get_clean() . '
-			</div>
-		';
+		return ob_get_clean();
 
 	}
 

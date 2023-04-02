@@ -78,7 +78,7 @@ class KT_Controller_FancyTreeView {
 	 * @return type
 	 */
 	public function options($module, $k) {
-		$FTV_OPTIONS = unserialize(get_module_setting($module, 'FTV_OPTIONS'));
+		$FTV_OPTIONS = get_module_setting($module, 'FTV_OPTIONS') ? unserialize(get_module_setting($module, 'FTV_OPTIONS')) : '';
 		$key		 = strtoupper($k);
 
 		if (empty($FTV_OPTIONS[$this->tree()->getTreeId()]) || (is_array($FTV_OPTIONS[$this->tree()->getTreeId()]) && !array_key_exists($key, $FTV_OPTIONS[$this->tree()->getTreeId()]))) {
@@ -1365,8 +1365,8 @@ class KT_Controller_FancyTreeView {
 		global $SEARCH_SPIDER;
 
 		$FTV_SETTINGS		= array();
-		$FTV_SETTINGS_D		= unserialize(get_module_setting('fancy_treeview_descendants', 'FTV_SETTINGS'));
-		$FTV_SETTINGS_A		= unserialize(get_module_setting('fancy_treeview_ancestors', 'FTV_SETTINGS'));
+		$FTV_SETTINGS_D		= get_module_setting('fancy_treeview_descendants', 'FTV_SETTINGS') ? unserialize(get_module_setting('fancy_treeview_descendants', 'FTV_SETTINGS')) : '';
+		$FTV_SETTINGS_A		= get_module_setting('fancy_treeview_ancestors', 'FTV_SETTINGS') ? unserialize(get_module_setting('fancy_treeview_ancestors', 'FTV_SETTINGS')) : '';
 		$FTV_GED_SETTINGS_D = array();
 		$FTV_GED_SETTINGS_A = array();
 

@@ -81,9 +81,7 @@ class KT_Controller_Individual extends KT_Controller_GedcomRecord {
 
 		// If we can display the details, add them to the page header
 		if ($this->record && $this->record->canDisplayDetails()) {
-//			$this->setPageTitle($this->record->getShortName(30));
 			$this->setPageTitle($this->record->getShortName(30) . ' ' . $this->record->getLifespan());
-//			$this->setPageTitle($this->record->getLifespanName());
 		}
 	}
 
@@ -133,7 +131,11 @@ class KT_Controller_Individual extends KT_Controller_GedcomRecord {
 
 		Zend_Session::writeClose();
 
-		echo $module->getTabContent();
+//		echo $module->getTabContent();
+
+		echo '<div class="tabs-panel" id="' . $module->getName() . '"></div>'
+				 . $module->getTabContent() . 
+			'</div>';
 
 		if (KT_DEBUG_SQL) {
 			echo KT_DB::getQueryLog();

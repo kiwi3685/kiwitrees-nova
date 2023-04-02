@@ -79,9 +79,6 @@ class tabi_album_KT_Module extends KT_Module implements KT_Module_IndiTab, KT_Mo
 
 	// Implement KT_Module_IndiTab
 	public function canLoadAjax() {
-		global $SEARCH_SPIDER;
-
-//		return !$SEARCH_SPIDER; // Search engines cannot use AJAX
 		return false;
 	}
 
@@ -157,6 +154,9 @@ class tabi_album_KT_Module extends KT_Module implements KT_Module_IndiTab, KT_Mo
 		// Implement KT_Module_IndiTab
 	public function getTabContent() {
 		global $SHOW_RELATIVES_EVENTS, $controller, $iconStyle;
+
+		ob_start();
+
 		require_once KT_ROOT . KT_MODULES_DIR . $this->getName() . '/administration/album_print_media.php';
 
 		$media_found = false;
@@ -164,9 +164,8 @@ class tabi_album_KT_Module extends KT_Module implements KT_Module_IndiTab, KT_Mo
 		$ALBUM_GROUPS = get_module_setting($this->getName(), 'ALBUM_GROUPS');
 		if (!isset($ALBUM_GROUPS)) {
 			$ALBUM_GROUPS = 4;
-		}
-		?>
-
+		} ?>
+		
 		<div id="<?php echo $this->getName(); ?>_content" class="grid-x">
 
 			<?php if (KT_USER_CAN_EDIT) { ?>
@@ -237,9 +236,8 @@ class tabi_album_KT_Module extends KT_Module implements KT_Module_IndiTab, KT_Mo
 
 		</div>
 
-		<?php
+		<?php return ob_get_clean();
+
 	}
-
-
 
 }
