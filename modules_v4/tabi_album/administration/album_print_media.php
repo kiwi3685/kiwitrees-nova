@@ -1,4 +1,4 @@
-<?php
+*<?php
 /**
  * Kiwitrees: Web based Family History software
  * Copyright (C) 2012 to 2023 kiwitrees.net.
@@ -183,14 +183,11 @@ function album_print_media($pid, $level = 1, $related = false, $kind = 0, $noedi
 	// Begin to Layout the Album Media Rows
 	if ($numm > 0) {
 		if (0 != $ALBUM_GROUPS) { ?>
-			<div class="grid-x">
-				<h5 class="cell text-center">
-					<?php echo KT_I18N::translate($tt); ?>
-				</h5>
-		<?php } ?>
-
-				<div id="thumbcontainer<?php echo $kind; ?>" class="cell thumbGroup">
-
+			<div class="grid-x grid-padding-x grid-padding-y albumSection">
+				<div class="cell medium-2 albumGroup">
+					<label class="h5"><?php echo KT_I18N::translate($tt); ?></label>
+				</div>
+				<div id="thumbcontainer<?php echo $kind; ?>" class="cell medium-10  thumbGroup">
 					<?php // Start pulling media items into thumbcontainer div
 					foreach ($rows as $rowm) {
 						if (isset($foundObjs[$rowm['m_id']])) {
@@ -239,13 +236,8 @@ function album_print_media($pid, $level = 1, $related = false, $kind = 0, $noedi
 							$foundObjs[$rowm['m_id']] = true;
 						}
 					} ?>
-
 				</div>
-
-				<?php if (0 != $ALBUM_GROUPS) { ?>
-
 			</div>
-
 		<?php }
 	}
 }
@@ -322,16 +314,16 @@ function album_print_media_row($rtype, $rowm, $pid)
 	if ($rtype) {
 		switch ($rtype) {
 			case 'new' : ?>
-				<div class="album_new text-center">
+				<div class="album_new text-center shadow">
 				<?php break;
 			case 'old' : ?>
-				<div class="album_old text-center">
+				<div class="album_old text-center shadow">
 				<?php break;
 			default : ?>
-				<div class="album_norm text-center">
+				<div class="album_norm text-center shadow">
 		<?php }
 	} else { ?>
-		<div class="album_norm text-center">
+		<div class="album_norm text-center shadow">
 	<?php }
 
 		if ($noteItem || $sourceItems) {
@@ -415,7 +407,6 @@ function album_print_media_row($rtype, $rowm, $pid)
 
 		<ul class="album vertical menu dropdown align-center" data-dropdown-menu>
 			<?php echo $menu->getFoundationDropdownMenu(); ?>
-			<?php //echo $menu->getMenuAsList(); ?>
 		</ul>
 
 	</div>

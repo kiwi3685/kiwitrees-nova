@@ -10116,9 +10116,13 @@ div[id$=-page] button[type=submit] {
 #indi-page .tabs-panel #tabi_attributes_content .button-group .button {
 	margin: 0;
 }
-#indi-page .tabs-panel #tabi_album_content [id^=thumbcontainer] {
+#indi-page .tabs-panel #tabi_album_content .albumSection {
 	border-bottom: 0.125rem solid #ab3334;
-	margin-bottom: 0.9rem;
+}
+#indi-page .tabs-panel #tabi_album_content .albumGroup {
+	display: flex;
+	justify-content: left;
+	align-items: center;
 }
 #indi-page .tabs-panel #tabi_album_content [id^=thumbcontainer] div[class^=album_] {
 	background-color: #fffff4;

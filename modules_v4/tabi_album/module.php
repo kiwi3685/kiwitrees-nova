@@ -155,8 +155,6 @@ class tabi_album_KT_Module extends KT_Module implements KT_Module_IndiTab, KT_Mo
 	public function getTabContent() {
 		global $SHOW_RELATIVES_EVENTS, $controller, $iconStyle;
 
-		ob_start();
-
 		require_once KT_ROOT . KT_MODULES_DIR . $this->getName() . '/administration/album_print_media.php';
 
 		$media_found = false;
@@ -164,10 +162,10 @@ class tabi_album_KT_Module extends KT_Module implements KT_Module_IndiTab, KT_Mo
 		$ALBUM_GROUPS = get_module_setting($this->getName(), 'ALBUM_GROUPS');
 		if (!isset($ALBUM_GROUPS)) {
 			$ALBUM_GROUPS = 4;
-		} ?>
-		
-		<div id="<?php echo $this->getName(); ?>_content" class="grid-x">
+		}
 
+		ob_start();	 ?>	
+		<div id="<?php echo $this->getName(); ?>_content" class="grid-x">
 			<?php if (KT_USER_CAN_EDIT) { ?>
 				<div class="cell tabHeader">
 					<?php if (get_gedcom_setting(KT_GED_ID, 'MEDIA_UPLOAD') >= KT_USER_ACCESS_LEVEL) { ?>
@@ -208,14 +206,11 @@ class tabi_album_KT_Module extends KT_Module implements KT_Module_IndiTab, KT_Mo
 								</div>
 							<?php } ?>
 
-
 						</div>
 					<?php } ?>
 				</div>
 			<?php } ?>
-
 			<div class="cell">
-
 				<?php if ($ALBUM_GROUPS == 0) {
 					album_print_media($controller->record->getXref(), 0, true);
 				} else {
@@ -231,9 +226,7 @@ class tabi_album_KT_Module extends KT_Module implements KT_Module_IndiTab, KT_Mo
 						}
 					}
 				} ?>
-
 			</div>
-
 		</div>
 
 		<?php return ob_get_clean();
