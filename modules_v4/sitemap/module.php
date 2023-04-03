@@ -310,10 +310,10 @@ class sitemap_KT_Module extends KT_Module implements KT_Module_Config {
 							</a>
 						</li>
 						<li>
-							<a target="_new" href="https://www.google.com/webmasters/tools/ping?sitemap=<?php echo $site_map_url2; ?>">
+							<a target="_new" href="https://search.google.com/search-console">
 								Google
 								<span>
-									&nbsp;-&nbsp;<?php echo KT_I18N::translate('Link to Google webmaster tools. Automatically submits your sitemap.'); ?>
+									&nbsp;-&nbsp;<?php echo KT_I18N::translate('Link to Google Search concole. Either login with existing account or create an account.'); ?>
 								</span>
 							</a>
 						</li>

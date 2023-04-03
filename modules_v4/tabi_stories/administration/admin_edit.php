@@ -67,10 +67,10 @@ if ($save) {
 		$block_id
 	));
 
-	set_block_setting($block_id, 'xref',rtrim(implode(',', $xref), ","));
+	set_block_setting($block_id, 'xref', rtrim(implode(',', $xref), ","));
 	set_block_setting($block_id, 'story_title',   $item_title);
 	set_block_setting($block_id, 'story_content', $item_content); 
-	set_block_setting($block_id, 'story_access',  $item_access);
+	set_block_setting($block_id, 'story_access',  $item_access); 
 	set_block_setting($block_id, 'languages', rtrim(implode(',', $languages), ","));
 
 	switch ($save) {
@@ -92,14 +92,10 @@ if ($save) {
 $item_title   = get_block_setting($block_id, 'story_title');
 $item_content = get_block_setting($block_id, 'story_content');
 $item_access  = KT_I18N::translate('All');
-$xref         = is_array(get_block_setting($block_id, 'xref')) ? explode(',', get_block_setting($block_id, 'xref')) : get_block_setting($block_id, 'xref');
-if ($xref && is_array($xref)) {
-	$count_xref = count($xref);
-} else if ($xref && !is_array($xref)) {
-	$count_xref = 1;
-} else {
-	$count_xref = 0;
-}
+$xref         = explode(',', get_block_setting($block_id, 'xref'));
+
+$xref ? $count_xref = count($xref) : $count_xref = 0;
+
 $block_order  = KT_DB::prepare(
 	"SELECT block_order FROM `##block` WHERE block_id = ?"
 )->execute(array($block_id))->fetchOne();
@@ -149,7 +145,7 @@ echo pageStart($this->getName(), $controller->getPageTitle()); ?>
 						if ($xref && $x < $count_xref) { ?>
 								<?php $person = KT_Person::getInstance($xref[$x]);
 								if ($person) { ?>
-									<div class="cell medium-5">
+									<div class="cell medium-4">
 										<?php echo $person->getLifespanName(); ?>
 										<input type="hidden" name="xref[]" id="selectedValue-xref<?php echo $x; ?>" value="<?php echo $xref[$x]; ?>">
 									</div>
@@ -159,7 +155,7 @@ echo pageStart($this->getName(), $controller->getPageTitle()); ?>
 											<?php echo KT_I18N::translate('Remove'); ?>
 										</a>
 									</div>
-									<div class="cell medium-5"></div>
+									<div class="cell medium-6"></div>
 								<?php }
 						} else {
 							if( $x == $count_xref) { ?>

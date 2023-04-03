@@ -35,7 +35,7 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 
 	// Extend class KT_Module
 	public function getDescription() {
-		return /* I18N: Description of the “faq” module */ KT_I18N::translate('A list of frequently asked questions and answers.');
+		return /* I18N: Description of the “FAQ” module */ KT_I18N::translate('A list of frequently asked questions and answers.');
 	}
 
 	// Implement KT_Module_Menu
@@ -171,7 +171,7 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 		$menu->addClass('', '', $this->getMenuIcon());
 
 		if (KT_USER_IS_ADMIN) {
-			$submenu = new KT_Menu(KT_I18N::translate('Edit faq items'), $this->getConfigLink(), 'menu-faq-edit');
+			$submenu = new KT_Menu(KT_I18N::translate('Edit FAQ items'), $this->getConfigLink(), 'menu-faq-edit');
 			$menu->addSubmenu($submenu);
 		}
 
@@ -213,7 +213,7 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 						type="search"
 						name="query_faq"
 						value="<?php echo ($search == '%' ? '' : $search); ?>"
-						placeholder="<?php echo KT_I18N::translate('Search faq'); ?>"
+						placeholder="<?php echo KT_I18N::translate('Search FAQs'); ?>"
 					>
 				</form>
 
