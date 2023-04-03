@@ -10151,9 +10151,22 @@ div[id$=-page] button[type=submit] {
 	text-align: right;
 	width: 100%;
 }
-#indi-page .tabs-panel #tabi_album_content [id^=thumbcontainer] div[class^=album_] span.info svg.svg-inline--fa.fa-circle-info {
+#indi-page .tabs-panel #tabi_album_content [id^=thumbcontainer] div[class^=album_] span.info svg.svg-inline--fa {
 	cursor: pointer;
-	position: relative;
+}
+#indi-page .tabs-panel #tabi_album_content [id^=thumbcontainer] div[class^=album_] span.info svg.svg-inline--fa.fa-circle {
+	color: #ab3334;
+	width: 1.25rem;
+	height: 1.25rem;
+	left: 0.5rem;
+	top: 0.125rem;
+}
+#indi-page .tabs-panel #tabi_album_content [id^=thumbcontainer] div[class^=album_] span.info svg.svg-inline--fa.fa-info {
+	color: #fffff4;
+	top: 0.3rem;
+	left: 0.75rem;
+	height: 0.75rem;
+	width: 0.75rem;
 }
 #indi-page .tabs-panel #tabi_album_content [id^=thumbcontainer] div[class^=album_] div.dropdown-pane {
 	border: none;
@@ -10194,8 +10207,8 @@ div[id$=-page] button[type=submit] {
 }
 #indi-page .tabs-panel #tabi_album_content [id^=thumbcontainer] div[class^=album_] ul.album.vertical.menu.dropdown li a {
 	background: #fffff4;
-	font-size: 0.9rem;
-	padding: 0;
+	font-size: 0.75rem;
+	padding: 0.125rem;
 	text-align: center;
 }
 #indi-page .tabs-panel #tabi_album_content [id^=thumbcontainer] div[class^=album_] ul.album.vertical.menu.dropdown li ul.is-dropdown-submenu {
@@ -10207,9 +10220,12 @@ div[id$=-page] button[type=submit] {
 	top: 2.9rem;
 	width: 100%;
 }
-#indi-page .tabs-panel #tabi_album_content [id^=thumbcontainer] div[class^=album_] ul.album.vertical.menu.dropdown li ul.is-dropdown-submenu li a {
+#indi-page .tabs-panel #tabi_album_content [id^=thumbcontainer] div[class^=album_] ul.album.vertical.menu.dropdown li ul.is-dropdown-submenu a {
 	font-size: 0.9rem;
 	padding: 0.125rem;
+}
+#indi-page .tabs-panel #tabi_album_content [id^=thumbcontainer] div[class^=album_] ul.album.vertical.menu.dropdown li ul.is-dropdown-submenu svg.svg-inline--fa {
+	display: none;
 }
 #indi-page .tabs-panel #tabi_dna_content hr {
 	border: solid 0.025rem #faf5e8;

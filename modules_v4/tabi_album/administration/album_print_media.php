@@ -1,4 +1,4 @@
-*<?php
+<?php
 /**
  * Kiwitrees: Web based Family History software
  * Copyright (C) 2012 to 2023 kiwitrees.net.
@@ -333,8 +333,12 @@ function album_print_media_row($rtype, $rowm, $pid)
 				class="info" 
 				data-toggle="<?php echo $dropdownID; ?>"
 			>
-					<i class ="<?php echo $iconStyle; ?> fa-circle-info"></i>
-			</span>
+				<span class="fa-stack">
+					<i class="<?php echo $iconStyle; ?> fa-circle fa-stack-2x"></i>
+					<i class="<?php echo $iconStyle; ?> fa-info fa-stack-1x"></i> 
+				 </span>
+			</span>  
+
 			<div 
 				class="dropdown-pane shadow" 
 				id="<?php echo $dropdownID; ?>"
