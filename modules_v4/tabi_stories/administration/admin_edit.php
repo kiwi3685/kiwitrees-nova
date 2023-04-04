@@ -108,20 +108,7 @@ echo relatedPages($moduleTools, $this->getConfigLink());
 
 echo pageStart($this->getName(), $controller->getPageTitle()); ?>
 
-	<!-- Family tree -->
-	<div class="cell medium-2">
-		<label for="gedID"><?php echo KT_I18N::translate('Active family tree'); ?></label>
-	</div>
-	<div class="cell medium-4">
-		<form id="tree" method="post" action="#" name="tree">
-			<?php echo select_ged_control('gedID', KT_Tree::getIdList(), null, $tree, ' onchange="tree.submit();"'); ?>
-		</form>
-	</div>
-	<div class="cell medium-6">
-		<div class="cell callout info-help medium-6">
-			<?php echo KT_I18N::translate('Ensure this is the tree you want to select "Linked individuals" from'); ?>
-		</div>
-	</div>	<form class="cell" name="story" method="post" action="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit">
+	<form class="cell" name="story" method="post" action="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit">
 		<input type="hidden" name="block_id" value="<?php echo $block_id; ?>">
 		<div class="grid-x grid-margin-y">
 			<label class="cell medium-2">
@@ -135,6 +122,20 @@ echo pageStart($this->getName(), $controller->getPageTitle()); ?>
 			</label>
 			<div class="cell medium-10">
 				<textarea name="story_content" class="html-edit"><?php echo htmlspecialchars((string) $item_content); ?></textarea>
+			</div>
+
+
+			<div class="cell medium-2">
+				<label for="gedID"><?php echo KT_I18N::translate('Active family tree'); ?></label>
+			</div>
+			<div class="cell medium-3 strong">
+				<?php echo get_gedcom_setting($gedcom_id, 'title'); ?>
+			</div>
+			<div class="cell callout info-help medium-7">
+				<?php echo KT_I18N::translate('
+					To avoid confusion between the tree and the linked individuals it is not possible to edit the active tree.
+					If you need to associated this story with a different tree, it must be re-entered as a new story.
+				'); ?>
 			</div>
 			<label class="cell medium-2">
 				<?php echo KT_I18N::translate('Linked individuals'); ?>
