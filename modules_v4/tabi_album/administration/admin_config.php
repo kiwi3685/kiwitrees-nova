@@ -50,7 +50,7 @@ if (KT_Filter::postBool('save')) {
 		$success = $success + 1;
 	}
 
-	$success = 3 ? AddToLog($this->getTitle() . ' set to new values', 'config') : AddToLog($this->getTitle() . ' FAILED to set new values', 'config');
+	$success = 2 ? AddToLog($this->getTitle() . ' set to new values', 'config') : AddToLog($this->getTitle() . ' FAILED to set new values', 'config');
 }
 
 $SHOW_FIND     = KT_Filter::post('show');
@@ -96,7 +96,8 @@ $default_groups = [
 if (empty($ALBUM_OPTIONS)) {
 	$ALBUM_OPTIONS = array_combine(array_keys(KT_Gedcom_Tag::getFileFormTypes()), $default_groups);
 }
-
+//$ALBUM_OPTIONS = KT_Gedcom_Tag::getFileFormTypes()
+;
 echo relatedPages($moduleTools, $this->getConfigLink());
 
 echo pageStart(
@@ -108,7 +109,7 @@ echo pageStart(
 );
 
 	// check for empty groups
-	$error = 0;
+	$error      = 0;
 	foreach ($ALBUM_TITLES as $value) {
 		if (!in_array($value, $ALBUM_OPTIONS)) {
 			$error ++;
@@ -116,7 +117,7 @@ echo pageStart(
 	}
 	if ($error > 0) { ?>
 		<div class="cell callout alert">
-			<?php echo KT_I18N::translate('You can not have any empty group.'); ?>"")
+			<?php echo KT_I18N::translate('You cannot have any empty group columns.'); ?>
 		</div>
 	<?php } ?>
 
@@ -143,48 +144,53 @@ echo pageStart(
 					null,
 					$ALBUM_GROUPS
 				); ?>
+
 			</div>
+
 			<fieldset class="cell fieldset">
 				<legend><?php echo KT_I18N::translate('Match groups to types'); ?></legend>
 				<div class="grid-x table-scroll">
 					<table class="cell" id="album-config">
 						<thead>
 							<tr>
-								<th colspan="2" rowspan="2"></th>
+								<th rowspan="2">
+									<?php echo KT_I18N::translate('Types'); ?>
+								</th>
 								<th colspan="<?php echo $ALBUM_GROUPS; ?>">
-									<?php echo KT_I18N::translate('Groups (These must always be English titles)'); ?>
+									<?php echo KT_I18N::translate('Groups (these must always be English titles)'); ?>
 								</th>
 							</tr>
 							<tr>
-								<?php for ($i = 0; $i < $ALBUM_GROUPS; $i++) { ?>
+								<?php for ($i = 0; $i < $ALBUM_GROUPS; $i ++) { ?>
 									<th class="albumGroup">
-										<input type="input" name="NEW_ALBUM_TITLES[]" value="<?php echo ($ALBUM_TITLES[$i] ?? ''); ?>">
+										<input type="input" name="NEW_ALBUM_TITLES[]" value="<?php echo isset($ALBUM_TITLES[$i]) ? $ALBUM_TITLES[$i] : ''; ?>">
 									</th>
 								<?php } ?>
 							</tr>
 						</thead>
-						<tbody>
-							<tr>
-								<th rowspan="19">
-									<span class="rotate">
-										<?php echo KT_I18N::translate('Types'); ?>
-									</span>
-								</th>
-							</tr>
-							<?php  foreach ($ALBUM_OPTIONS as $key => $value) {
-								$translated_type = KT_Gedcom_Tag::getFileFormTypeValue($key); ?>
-								<tr>
+						<tbody>		
+							<?php foreach ($ALBUM_OPTIONS as $key => $value) { ?>	
+								<tr>					
 									<td>
-										<?php echo $translated_type; ?>
-									</td>
-									<?php for ($i = 0; $i < $ALBUM_GROUPS; $i++) {
+										<?php  echo KT_Gedcom_Tag::getFileFormTypeValue($key); ?>
+									</td>								
+									<?php for ($i = 0; $i < $ALBUM_GROUPS; $i ++) {
 										if (isset($ALBUM_TITLES[$i]) && $value == $ALBUM_TITLES[$i]) { ?>
 											<td>
-												<input type="radio" name="NEW_ALBUM_OPTIONS[<?php echo $key ; ?>]" value="<?php echo ($ALBUM_TITLES[$i] ?? ''); ?>" checked="checked">
+												<input 
+													type="radio" 
+													name="NEW_ALBUM_OPTIONS[<?php echo $key ; ?>]" 
+													value="<?php echo isset($ALBUM_TITLES[$i]) ? $ALBUM_TITLES[$i] : ''; ?>" 
+													checked="checked"
+												>
 											</td>
 										<?php } else { ?>
 											<td>
-												<input type="radio" name="NEW_ALBUM_OPTIONS[<?php echo $key ; ?>]" value="<?php echo ($ALBUM_TITLES[$i] ?? ''); ?>">
+												<input 
+													type="radio" 
+													name="NEW_ALBUM_OPTIONS[<?php echo $key ; ?>]" 
+													value="<?php echo isset($ALBUM_TITLES[$i]) ? $ALBUM_TITLES[$i] : ''; ?>"
+												>
 											</td>
 										<?php }
 									} ?>
