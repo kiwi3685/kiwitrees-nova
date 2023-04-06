@@ -104,7 +104,7 @@ class KT_Menu {
 	function getMenuAsList() {
 		global $iconStyle;
 
-		if ($iconStyle) {
+		if ($this->iconclass) {
 			$icon = '<i class="' . $iconStyle . ' ' . $this->iconclass . ' fa-fw"></i>';
 		} else {
 			$icon = '';

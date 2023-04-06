@@ -10212,16 +10212,18 @@ div[id$=-page] button[type=submit] {
 	display: block;
 	margin: 0 auto;
 }
+#indi-page .tabs-panel #tabi_album_content [id^=thumbcontainer] div[class^=album_] ul.album.vertical.menu.dropdown .dropdown.menu > li > a {
+	background: #fffff4;
+}
 #indi-page .tabs-panel #tabi_album_content [id^=thumbcontainer] div[class^=album_] ul.album.vertical.menu.dropdown li {
 	display: block;
 }
 #indi-page .tabs-panel #tabi_album_content [id^=thumbcontainer] div[class^=album_] ul.album.vertical.menu.dropdown li a {
-	background: #fffff4;
 	font-size: 0.75rem;
 	padding: 0.125rem;
 	text-align: center;
 }
-#indi-page .tabs-panel #tabi_album_content [id^=thumbcontainer] div[class^=album_] ul.album.vertical.menu.dropdown li ul.is-dropdown-submenu {
+#indi-page .tabs-panel #tabi_album_content [id^=thumbcontainer] div[class^=album_] ul.album.vertical.menu.dropdown li ul.is-dropdown-submenu li.is-dropdown-submenu-item {
 	left: 0;
 	border: none;
 	box-shadow: 0 0.5rem 0.375rem -0.375rem #331919;
@@ -10230,11 +10232,13 @@ div[id$=-page] button[type=submit] {
 	top: 2.9rem;
 	width: 100%;
 }
-#indi-page .tabs-panel #tabi_album_content [id^=thumbcontainer] div[class^=album_] ul.album.vertical.menu.dropdown li ul.is-dropdown-submenu a {
+#indi-page .tabs-panel #tabi_album_content [id^=thumbcontainer] div[class^=album_] ul.album.vertical.menu.dropdown li ul.is-dropdown-submenu li.is-dropdown-submenu-item a {
 	font-size: 0.9rem;
 	padding: 0.125rem;
+	text-align: center;
+	width: 100%;
 }
-#indi-page .tabs-panel #tabi_album_content [id^=thumbcontainer] div[class^=album_] ul.album.vertical.menu.dropdown li ul.is-dropdown-submenu svg.svg-inline--fa {
+#indi-page .tabs-panel #tabi_album_content [id^=thumbcontainer] div[class^=album_] ul.album.vertical.menu.dropdown li ul.is-dropdown-submenu li.is-dropdown-submenu-item svg.svg-inline--fa {
 	display: none;
 }
 #indi-page .tabs-panel #tabi_dna_content hr {
@@ -12703,4 +12707,213 @@ input[type=radio]::before {
 input[type=checkbox]:checked::before,
 input[type=radio]:checked::before {
 	transform: scale(1);
+}
+
+[class^=icon-mime-], [class*=" icon-mime-"] {
+	font-family: "FontAwesome";
+	font-style: normal;
+	font-size: 3em;
+	background: none;
+	margin: 5px;
+}
+
+[class^=icon-mime-application-], [class*=" icon-mime-application-"] {
+	font-family: "FontAwesome";
+	font-style: normal;
+	font-size: 3em;
+	background: none;
+	margin: 5px;
+}
+
+[class^=icon-mime-audio-], [class*=" icon-mime-audio-"] {
+	font-family: "FontAwesome";
+	font-style: normal;
+	font-size: 3em;
+	background: none;
+	margin: 5px;
+}
+
+[class^=icon-mime-image-], [class*=" icon-mime-image-"] {
+	font-family: "FontAwesome";
+	font-style: normal;
+	font-size: 3em;
+	background: none;
+	margin: 5px;
+}
+
+[class^=icon-mime-text-], [class*=" icon-mime-text-"] {
+	font-family: "FontAwesome";
+	font-style: normal;
+	font-size: 3em;
+	background: none;
+	margin: 5px;
+}
+
+[class^=icon-mime-video-], [class*=" icon-mime-video-"] {
+	font-family: "FontAwesome";
+	font-style: normal;
+	font-size: 3em;
+	background: none;
+	margin: 5px;
+}
+
+.icon-mime-application-pdf {
+	font-family: "Font Awesome 6 Free";
+	font: var(--fa-font-solid);
+	content: "\f1c1";
+	font-size: 3em;
+	width: 3rem;
+	height: 3rem;
+}
+
+.icon-mime-application-vnd-ms-excel {
+	font-family: "FontAwesome";
+	font-style: normal;
+	font-size: 3em;
+	background: none;
+	margin: 5px;
+}
+
+.icon-mime-application-x-rar-compressed {
+	font-family: "FontAwesome";
+	font-style: normal;
+	font-size: 3em;
+	background: none;
+	margin: 5px;
+}
+
+.icon-mime-application-zip {
+	font-family: "FontAwesome";
+	font-style: normal;
+	font-size: 3em;
+	background: none;
+	margin: 5px;
+}
+
+.icon-mime-application-x-shockwave-flash {
+	font-family: "FontAwesome";
+	font-style: normal;
+	font-size: 3em;
+	background: none;
+	margin: 5px;
+}
+
+.icon-mime-audio-mp3 {
+	font-family: "FontAwesome";
+	font-style: normal;
+	font-size: 3em;
+	background: none;
+	margin: 5px;
+}
+
+.icon-mime-audio-mpeg {
+	font-family: "FontAwesome";
+	font-style: normal;
+	font-size: 3em;
+	background: none;
+	margin: 5px;
+}
+
+.icon-mime-audio-x-ms-wma {
+	font-family: "FontAwesome";
+	font-style: normal;
+	font-size: 3em;
+	background: none;
+	margin: 5px;
+}
+
+.icon-mime-audio-wav {
+	font-family: "FontAwesome";
+	font-style: normal;
+	font-size: 3em;
+	background: none;
+	margin: 5px;
+}
+
+.icon-mime-text-html {
+	font-family: "FontAwesome";
+	font-style: normal;
+	font-size: 3em;
+	background: none;
+	margin: 5px;
+}
+
+.icon-mime-text-x-gedcom {
+	font-family: "FontAwesome";
+	font-style: normal;
+	font-size: 3em;
+	background: none;
+	margin: 5px;
+}
+
+.icon-mime-image-bmp {
+	font-family: "FontAwesome";
+	font-style: normal;
+	font-size: 3em;
+	background: none;
+	margin: 5px;
+}
+
+.icon-mime-image-gif {
+	font-family: "FontAwesome";
+	font-style: normal;
+	font-size: 3em;
+	background: none;
+	margin: 5px;
+}
+
+.icon-mime-image-jpeg {
+	font-family: "FontAwesome";
+	font-style: normal;
+	font-size: 3em;
+	background: none;
+	margin: 5px;
+}
+
+.icon-mime-image-png {
+	font-family: "FontAwesome";
+	font-style: normal;
+	font-size: 3em;
+	background: none;
+	margin: 5px;
+}
+
+.icon-mime-image-svg {
+	font-family: "FontAwesome";
+	font-style: normal;
+	font-size: 3em;
+	background: none;
+	margin: 5px;
+}
+
+.icon-mime-image-tiff {
+	font-family: "FontAwesome";
+	font-style: normal;
+	font-size: 3em;
+	background: none;
+	margin: 5px;
+}
+
+.icon-mime-video-quicktime {
+	font-family: "FontAwesome";
+	font-style: normal;
+	font-size: 3em;
+	background: none;
+	margin: 5px;
+}
+
+.icon-mime-video-avi {
+	font-family: "FontAwesome";
+	font-style: normal;
+	font-size: 3em;
+	background: none;
+	margin: 5px;
+}
+
+.icon-mime-video-x-ms-wmv {
+	font-family: "FontAwesome";
+	font-style: normal;
+	font-size: 3em;
+	background: none;
+	margin: 5px;
 }

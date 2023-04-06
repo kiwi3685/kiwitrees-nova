@@ -376,7 +376,8 @@ function album_print_media_row($rtype, $rowm, $pid)
 				$menu->addClass('', 'submenu');
 
 				// View Details
-				$submenu = new KT_Menu(KT_I18N::translate('View Details'), KT_SERVER_NAME . KT_SCRIPT_PATH . 'mediaviewer.php?mid=' . $rowm['m_id'] . '&amp;ged=' . KT_GEDURL, 'right');
+				$submenu = new KT_Menu(KT_I18N::translate('View Details'), KT_SERVER_NAME . KT_SCRIPT_PATH . 'mediaviewer.php?mid=' . $rowm['m_id'] . '&amp;ged=' . KT_GEDURL, '');
+				$submenu->addTarget('_blank');
 				$submenu->addClass('submenuitem');
 				$menu->addSubMenu($submenu);
 

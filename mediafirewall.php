@@ -186,9 +186,9 @@ function embedText($im, $text, $maxsize, $color, $font, $vpos, $hpos) {
 	// Don’t use an ‘else’ here since imagettftextErrorHandler may have changed the value of $useTTF from true to false
 	if (!$useTTF) {
 		if ($rotation !== 90) {
-			imagestring($im, 5, $pos_x, $pos_y, $text, $textcolor);
+			imagestring($im, 5, (int)$pos_x, (int)$pos_y, $text, $textcolor);
 		} else {
-			imagestringup($im, 5, $pos_x, $pos_y, $text, $textcolor);
+			imagestringup($im, 5, (int)$pos_x, (int)$pos_y, $text, $textcolor);
 		}
 	}
 }
