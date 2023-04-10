@@ -1028,7 +1028,7 @@ class KT_Gedcom_Tag {
 
 	// A list of all possible values for 1 FILE/2 FORM/3 TYPE
 	public static function getFileFormTypes() {
-		$values=array();
+		$values = array();
 		foreach (self::$OBJE_FILE_FORM_TYPE as $type) {
 			$values[$type]=self::getFileFormTypeValue($type);
 		}

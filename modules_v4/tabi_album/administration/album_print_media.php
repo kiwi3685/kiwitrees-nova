@@ -40,8 +40,8 @@ function album_print_media($pid, $level = 1, $related = false, $kind = 0, $noedi
 {
 	global $GEDCOM;
 
-	$ALBUM_GROUPS  = get_module_setting('tabi_album', 'ALBUM_GROUPS') ? get_module_setting('tabi_album', 'ALBUM_GROUPS') : '';
-	$ALBUM_TITLES  = get_module_setting('tabi_album', 'ALBUM_TITLES') ? unserialize(get_module_setting('tabi_album', 'ALBUM_TITLES')) : [];
+	$ALBUM_GROUPS = get_module_setting('tabi_album', 'ALBUM_GROUPS') ? get_module_setting('tabi_album', 'ALBUM_GROUPS') : '';
+	$ALBUM_TITLES = get_module_setting('tabi_album', 'ALBUM_TITLES') ? unserialize(get_module_setting('tabi_album', 'ALBUM_TITLES')) : [];
 	$ALBUM_OPTIONS = get_module_setting('tabi_album', 'ALBUM_OPTIONS') ? unserialize(get_module_setting('tabi_album', 'ALBUM_OPTIONS')) : [];
 
 	if (!isset($ALBUM_GROUPS)) {
@@ -160,7 +160,7 @@ function album_print_media($pid, $level = 1, $related = false, $kind = 0, $noedi
 				$sqlmm .= ' AND (';
 				foreach ($ALBUM_OPTIONS as $key => $value) {
 					if ($value == $tt) {
-						$sqlmm .= "m_gedcom LIKE '%TYPE " . strtolower($key) . "%' OR ";
+						$sqlmm .= "m_gedcom LIKE '%TYPE " . mb_strtolower($key) . "%' OR ";
 					}
 					if ($tt == KT_I18N::translate('Other')) {
 						$sqlmm .= "m_gedcom NOT LIKE '%TYPE %' OR ";
@@ -176,8 +176,8 @@ function album_print_media($pid, $level = 1, $related = false, $kind = 0, $noedi
 		$sqlmm .= $orderbylist;
 	}
 
-	$rows      = KT_DB::prepare($sqlmm)->execute($vars)->fetchAll(PDO::FETCH_ASSOC);
-	$numm      = count($rows);
+	$rows = KT_DB::prepare($sqlmm)->execute($vars)->fetchAll(PDO::FETCH_ASSOC);
+	$numm = count($rows);
 	$foundObjs = [];
 
 	// Begin to Layout the Album Media Rows
@@ -274,26 +274,26 @@ function album_print_media_row($rtype, $rowm, $pid)
 
 	// Get media item Notes
 	$noteTitle = '';
-	$noteItem  = '';
-	if (strpos($rowm['m_gedcom'], "\n1 NOTE")) {
-		$haystack  = $rowm['m_gedcom'];
-		$needle    = '1 NOTE';
-		$before    = substr($haystack, 0, strpos($haystack, $needle));
-		$after     = substr(strstr($haystack, $needle), strlen($needle));
-		$final     = $before . $needle . $after;
+	$noteItem = '';
+	if (mb_strpos($rowm['m_gedcom'], "\n1 NOTE")) {
+		$haystack = $rowm['m_gedcom'];
+		$needle = '1 NOTE';
+		$before = mb_substr($haystack, 0, mb_strpos($haystack, $needle));
+		$after = mb_substr(mb_strstr($haystack, $needle), mb_strlen($needle));
+		$final = $before . $needle . $after;
 		$noteTitle = KT_I18N::translate('Note');
-		$noteItem  = '<dd>' . htmlspecialchars(addslashes(print_fact_notes($final, 1, true, true)), ENT_QUOTES) . '</dd>';
+		$noteItem = '<dd>' . htmlspecialchars(addslashes(print_fact_notes($final, 1, true, true)), ENT_QUOTES) . '</dd>';
 	}
 
 	// Get media item Sources
-	$sourceTitle  = '';
-	$sourceItems  = '';
+	$sourceTitle = '';
+	$sourceItems = '';
 	$countSources = 0;
 	if ($media->getAllFactsByType('SOUR')) {
 		foreach ($media->getAllFactsByType('SOUR') as $source_fact) {
 			$source = KT_Source::getInstance(trim($source_fact->detail, '@'));
 			if ($source && $source->canDisplayDetails()) {
-				if (!$sourceItems || $countSources == 1) {
+				if (!$sourceItems || 1 == $countSources) {
 					$sourceTitle = KT_I18N::translate('Source');
 				} else {
 					$sourceTitle = KT_I18N::translate('Sources');
@@ -301,25 +301,25 @@ function album_print_media_row($rtype, $rowm, $pid)
 
 				$sourceItems .= '<dd><a class="" href="' . $source->getHtmlUrl() . '">' . $source->getFullName() . '</a></dd>';
 
-				$countSources ++;
+				$countSources++;
 			}
 		}
 		$sourceItems .= '</dd>';
 	}
 
-
-
 	// Highlight Album Thumbnails - Changed=new (blue), Changed=old (red), Changed=no (none)
 
 	if ($rtype) {
 		switch ($rtype) {
-			case 'new' : ?>
+			case 'new': ?>
 				<div class="album_new text-center shadow">
 				<?php break;
-			case 'old' : ?>
+
+			case 'old': ?>
 				<div class="album_old text-center shadow">
 				<?php break;
-			default : ?>
+
+			default: ?>
 				<div class="album_norm text-center shadow">
 		<?php }
 	} else { ?>
@@ -352,8 +352,8 @@ function album_print_media_row($rtype, $rowm, $pid)
 					<?php if ($noteItem) { ?>
 				  		<dt><?php echo $noteTitle; ?></dt>
 				  		<?php echo $noteItem;
-				  	}
-				  	if ($sourceItems) { ?>
+					}
+					if ($sourceItems) { ?>
 					  <dt><?php echo $sourceTitle; ?></dt>
 					  <?php echo $sourceItems;
 					 } ?>
@@ -364,9 +364,9 @@ function album_print_media_row($rtype, $rowm, $pid)
 		<div class="pic">
 
 			<?php // Prepare Below Thumbnail  menu ----------------------------------------------------
-			$menuID    = 'menu' . (int) (microtime(true) * 1000000);
+			$menuID = 'menu' . (int) (microtime(true) * 1000000);
 			$menuTitle = '<a href="#" class="album_media_title" data-toggle="' . $menuID . '">' . $mediaTitle . '</a>';
-			$menu      = new KT_Menu();
+			$menu = new KT_Menu();
 			$menu->addLabel($menuTitle);
 
 			if ('old' == $rtype) {
@@ -380,7 +380,6 @@ function album_print_media_row($rtype, $rowm, $pid)
 				$submenu->addTarget('_blank');
 				$submenu->addClass('submenuitem');
 				$menu->addSubMenu($submenu);
-
 
 				if (KT_USER_CAN_EDIT) {
 					// Edit Media
