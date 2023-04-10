@@ -1,7 +1,7 @@
 <?php
 /**
  * Kiwitrees: Web based Family History software
- * Copyright (C) 2012 to 2023 kiwitrees.net
+ * Copyright (C) 2012 to 2023 kiwitrees.net.
  *
  * Derived from webtrees (www.webtrees.net)
  * Copyright (C) 2010 to 2012 webtrees development team
@@ -21,6 +21,7 @@
  * along with Kiwitrees. If not, see <http://www.gnu.org/licenses/>
  */
 require KT_ROOT . 'includes/functions/functions_edit.php';
+
 include KT_THEME_URL . 'templates/adminData.php';
 global $iconStyle;
 
@@ -34,8 +35,8 @@ $controller
 $success = 0;
 
 if (KT_Filter::postBool('save')) {
-	$ALBUM_GROUPS  = KT_Filter::post('NEW_ALBUM_GROUPS');
-	$ALBUM_TITLES  = KT_Filter::postArray('NEW_ALBUM_TITLES');
+	$ALBUM_GROUPS = KT_Filter::post('NEW_ALBUM_GROUPS');
+	$ALBUM_TITLES = KT_Filter::postArray('NEW_ALBUM_TITLES');
 	$ALBUM_OPTIONS = KT_Filter::postArray('NEW_ALBUM_OPTIONS');
 	if (isset($ALBUM_GROUPS)) {
 		set_module_setting($this->getName(), 'ALBUM_GROUPS', $ALBUM_GROUPS);
@@ -53,10 +54,10 @@ if (KT_Filter::postBool('save')) {
 	$success = 2 ? AddToLog($this->getTitle() . ' set to new values', 'config') : AddToLog($this->getTitle() . ' FAILED to set new values', 'config');
 }
 
-$SHOW_FIND     = KT_Filter::post('show');
-$HIDE_FIND     = KT_Filter::post('hide');
-$ALBUM_GROUPS  = get_module_setting($this->getName(), 'ALBUM_GROUPS');
-$ALBUM_TITLES  = get_module_setting($this->getName(), 'ALBUM_TITLES') ? unserialize(get_module_setting($this->getName(), 'ALBUM_TITLES')) : '';
+$SHOW_FIND = KT_Filter::post('show');
+$HIDE_FIND = KT_Filter::post('hide');
+$ALBUM_GROUPS = get_module_setting($this->getName(), 'ALBUM_GROUPS');
+$ALBUM_TITLES = get_module_setting($this->getName(), 'ALBUM_TITLES') ? unserialize(get_module_setting($this->getName(), 'ALBUM_TITLES')) : '';
 $ALBUM_OPTIONS = get_module_setting($this->getName(), 'ALBUM_OPTIONS') ? unserialize(get_module_setting($this->getName(), 'ALBUM_OPTIONS')) : '';
 
 if (!isset($ALBUM_GROUPS)) {
@@ -96,26 +97,26 @@ $default_groups = [
 if (empty($ALBUM_OPTIONS)) {
 	$ALBUM_OPTIONS = array_combine(array_keys(KT_Gedcom_Tag::getFileFormTypes()), $default_groups);
 }
-//$ALBUM_OPTIONS = KT_Gedcom_Tag::getFileFormTypes()
-;
+// $ALBUM_OPTIONS = KT_Gedcom_Tag::getFileFormTypes()
+
 echo relatedPages($moduleTools, $this->getConfigLink());
 
 echo pageStart(
-	$this->getName(), 
-	$controller->getPageTitle(), 
-	'', 
-	KT_I18N::translate('Configure display of grouped media items using GEDCOM media tag TYPE.'), 
+	$this->getName(),
+	$controller->getPageTitle(),
+	'',
+	KT_I18N::translate('Configure display of grouped media items using GEDCOM media tag TYPE.'),
 	'faqs/modules/album/'
 );
 
-	// check for empty groups
-	$error      = 0;
-	foreach ($ALBUM_TITLES as $value) {
-		if (!in_array($value, $ALBUM_OPTIONS)) {
-			$error ++;
-		}
+// check for empty groups
+$error = 0;
+foreach ($ALBUM_TITLES as $value) {
+	if (!in_array($value, $ALBUM_OPTIONS)) {
+		$error++;
 	}
-	if ($error > 0) { ?>
+}
+if ($error > 0) { ?>
 		<div class="cell callout alert">
 			<?php echo KT_I18N::translate('You cannot have any empty group columns.'); ?>
 		</div>
@@ -130,20 +131,20 @@ echo pageStart(
 				</label>
 			<div class="cell medium-1">
 				<?php echo select_edit_control(
-					'NEW_ALBUM_GROUPS',
-					[
-						0 => KT_I18N::number(0),
-						1 => KT_I18N::number(1),
-						2 => KT_I18N::number(2),
-						3 => KT_I18N::number(3),
-						4 => KT_I18N::number(4),
-						5 => KT_I18N::number(5),
-						6 => KT_I18N::number(6),
-						7 => KT_I18N::number(7),
-					],
-					null,
-					$ALBUM_GROUPS
-				); ?>
+	'NEW_ALBUM_GROUPS',
+	[
+		0 => KT_I18N::number(0),
+		1 => KT_I18N::number(1),
+		2 => KT_I18N::number(2),
+		3 => KT_I18N::number(3),
+		4 => KT_I18N::number(4),
+		5 => KT_I18N::number(5),
+		6 => KT_I18N::number(6),
+		7 => KT_I18N::number(7),
+	],
+	null,
+	$ALBUM_GROUPS
+); ?>
 
 			</div>
 
@@ -161,9 +162,9 @@ echo pageStart(
 								</th>
 							</tr>
 							<tr>
-								<?php for ($i = 0; $i < $ALBUM_GROUPS; $i ++) { ?>
+								<?php for ($i = 0; $i < $ALBUM_GROUPS; $i++) { ?>
 									<th class="albumGroup">
-										<input type="input" name="NEW_ALBUM_TITLES[]" value="<?php echo isset($ALBUM_TITLES[$i]) ? $ALBUM_TITLES[$i] : ''; ?>">
+										<input type="input" name="NEW_ALBUM_TITLES[]" value="<?php echo $ALBUM_TITLES[$i] ?? ''; ?>">
 									</th>
 								<?php } ?>
 							</tr>
@@ -172,15 +173,15 @@ echo pageStart(
 							<?php foreach ($ALBUM_OPTIONS as $key => $value) { ?>	
 								<tr>					
 									<td>
-										<?php  echo KT_Gedcom_Tag::getFileFormTypeValue($key); ?>
+										<?php echo KT_Gedcom_Tag::getFileFormTypeValue($key); ?>
 									</td>								
-									<?php for ($i = 0; $i < $ALBUM_GROUPS; $i ++) {
+									<?php for ($i = 0; $i < $ALBUM_GROUPS; $i++) {
 										if (isset($ALBUM_TITLES[$i]) && $value == $ALBUM_TITLES[$i]) { ?>
 											<td>
 												<input 
 													type="radio" 
-													name="NEW_ALBUM_OPTIONS[<?php echo $key ; ?>]" 
-													value="<?php echo isset($ALBUM_TITLES[$i]) ? $ALBUM_TITLES[$i] : ''; ?>" 
+													name="NEW_ALBUM_OPTIONS[<?php echo $key; ?>]" 
+													value="<?php echo $ALBUM_TITLES[$i] ?? ''; ?>" 
 													checked="checked"
 												>
 											</td>
@@ -188,12 +189,12 @@ echo pageStart(
 											<td>
 												<input 
 													type="radio" 
-													name="NEW_ALBUM_OPTIONS[<?php echo $key ; ?>]" 
-													value="<?php echo isset($ALBUM_TITLES[$i]) ? $ALBUM_TITLES[$i] : ''; ?>"
+													name="NEW_ALBUM_OPTIONS[<?php echo $key; ?>]" 
+													value="<?php echo $ALBUM_TITLES[$i] ?? ''; ?>"
 												>
 											</td>
 										<?php }
-									} ?>
+										} ?>
 								</tr>
 							<?php } ?>
 						</tbody>
