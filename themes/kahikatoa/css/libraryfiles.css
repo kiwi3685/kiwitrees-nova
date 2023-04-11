@@ -1,0 +1,505 @@
+@charset "UTF-8";
+/* color variables */
+.lead {
+	font-weight: 600;
+	margin-top: 0.25rem;
+}
+
+.sortme {
+	cursor: move;
+}
+
+.ui-sortable-handle {
+	-ms-touch-action: none;
+	touch-action: none;
+}
+
+.input-group.autocomplete_container {
+	position: relative;
+	margin: 0;
+	padding: 0;
+}
+.input-group.autocomplete_container .ui-autocomplete-input {
+	background-color: #eee8aa;
+	padding-right: 2rem;
+}
+.input-group.autocomplete_container .input-group-label {
+	height: 2.4rem;
+}
+.input-group.autocomplete_container .input-group-label .svg-inline--fa {
+	cursor: pointer;
+	margin: 0;
+}
+.input-group.autocomplete_container .input-group-label .svg-inline--fa:hover {
+	color: #ab3334;
+}
+.input-group.autocomplete_container .ui-autocomplete-loading {
+	background: none;
+}
+.input-group.autocomplete_container button.autocomplete_icon {
+	min-width: auto;
+}
+
+.ui-autocomplete {
+	background-color: #fffff4 !important;
+	cursor: default;
+	font-size: 0.9rem;
+	left: 0;
+	list-style: none;
+	list-style-position: outside;
+	max-height: 400px;
+	overflow-y: auto;
+	padding: 0.125rem 0.875rem;
+	position: absolute;
+	top: 0;
+	z-index: 999;
+}
+.ui-autocomplete .autocomplete-highlight {
+	color: #331919;
+}
+
+.ui-helper-hidden-accessible {
+	border: 0;
+	clip: rect(0 0 0 0);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
+}
+
+.ck .ck-content .ck-placeholder {
+	opacity: 50%;
+}
+
+div.dataTables_wrapper {
+	font-size: 0.95rem;
+	width: 100%;
+}
+div.dataTables_wrapper div div.clear {
+	clear: both;
+}
+div.dataTables_wrapper div div.dataTables_info,
+div.dataTables_wrapper div div.dataTables_paginate {
+	float: left;
+}
+div.dataTables_wrapper div div.dataTables_filter,
+div.dataTables_wrapper div div.dataTables_length,
+div.dataTables_wrapper div div.dt-buttons {
+	float: right;
+}
+div.dataTables_wrapper div div.dataTables_info {
+	margin: 0 0.5rem;
+}
+div.dataTables_wrapper div div.dataTables_length label,
+div.dataTables_wrapper div div.dataTables_filter label {
+	display: inline-block;
+	padding: 0;
+}
+div.dataTables_wrapper div div.dataTables_length label select,
+div.dataTables_wrapper div div.dataTables_filter label select {
+	margin: 0;
+	width: 5rem;
+}
+div.dataTables_wrapper div div.dataTables_length label input,
+div.dataTables_wrapper div div.dataTables_filter label input {
+	display: inline;
+	margin: 0 0.5rem;
+	width: 15rem;
+}
+div.dataTables_wrapper div div.dt-buttons button {
+	background-color: #ab3334;
+	color: #fffff4;
+	padding: 0.7rem 1rem;
+}
+div.dataTables_wrapper table.dataTable {
+	border-collapse: separate;
+}
+div.dataTables_wrapper table.dataTable.surname-list {
+	margin: 0 auto !important;
+	width: auto;
+}
+div.dataTables_wrapper table.dataTable .ui-state-active {
+	background-color: #331919;
+}
+div.dataTables_wrapper table.dataTable thead tr {
+	white-space: nowrap;
+}
+div.dataTables_wrapper table.dataTable thead tr.first-row-header {
+	height: 1rem;
+}
+div.dataTables_wrapper table.dataTable thead tr th {
+	background-image: none !important;
+	font-weight: 600;
+	padding: 0.5rem;
+	position: relative;
+}
+div.dataTables_wrapper table.dataTable thead tr th .button-group {
+	margin-bottom: 0;
+}
+div.dataTables_wrapper table.dataTable thead tr th .button {
+	margin: 0.5rem 0;
+}
+div.dataTables_wrapper table.dataTable thead tr th.has-tip {
+	display: table-cell;
+}
+div.dataTables_wrapper table.dataTable thead tr th.sorting_asc::after, div.dataTables_wrapper table.dataTable thead tr th.sorting_desc::after, div.dataTables_wrapper table.dataTable thead tr th.sorting::after {
+	font: var(--fa-font-solid);
+	content: "\f0dc";
+	display: none;
+	font-family: "Font Awesome 6 Free";
+	font-weight: 900;
+}
+div.dataTables_wrapper table.dataTable thead tr th.sorting_asc::after {
+	font: var(--fa-font-solid);
+	content: "\f0de";
+}
+div.dataTables_wrapper table.dataTable thead tr th.sorting_desc::after {
+	font: var(--fa-font-solid);
+	content: "\f0dd";
+}
+div.dataTables_wrapper table.dataTable thead tr th.sorting_disabled::after {
+	content: "";
+}
+div.dataTables_wrapper table.dataTable thead tr th svg {
+	position: absolute;
+	right: 0.125rem;
+	top: 0.75rem;
+}
+div.dataTables_wrapper table#installed_table thead tr th svg.fa-gears {
+	left: 0.75rem;
+	right: initial;
+}
+
+#textarea {
+	background-color: #fffff4;
+	margin-bottom: 0.5rem;
+	max-height: 40rem;
+	min-height: 20rem;
+	overflow-x: scroll;
+}
+#textarea.code {
+	border: 0.125rem solid #ab3334;
+}
+#textarea .CodeMirror {
+	height: auto;
+}
+#textarea .CodeMirror-activeline-background {
+	background: #cacaca;
+}
+
+.jconfirm.jconfirm-kiwitrees {
+	background-color: #fff3d9;
+	color: #331919;
+	height: auto;
+	left: 30%;
+	position: fixed;
+	top: 20%;
+	width: 40%;
+}
+.jconfirm.jconfirm-kiwitrees .jconfirm-holder {
+	padding: 0 !important;
+}
+.jconfirm.jconfirm-kiwitrees .jconfirm-box {
+	border: 0.125rem solid #cacaca;
+	border-left: 0.35rem solid #ffae00;
+	border-right: 0.35rem solid #ffae00;
+	outline: none;
+}
+.jconfirm.jconfirm-kiwitrees div.jconfirm-closeIcon {
+	display: block;
+	height: 1rem;
+	width: 1rem;
+	position: absolute;
+	top: 0.625rem;
+	right: 0.625rempx;
+	cursor: pointer;
+	opacity: 0.6;
+	text-align: center;
+	font-size: 1.2rem !important;
+	line-height: 1 !important;
+}
+.jconfirm.jconfirm-kiwitrees div.jconfirm-title-c {
+	font-size: 1rem;
+	font-weight: 600;
+	padding: 0.125rem 1rem;
+}
+.jconfirm.jconfirm-kiwitrees div.jconfirm-title-c .jconfirm-icon-c .svg-inline--fa {
+	margin: 0.25rem 0.5rem 0 0;
+}
+.jconfirm.jconfirm-kiwitrees div.jconfirm-content-pane {
+	padding: 0.5rem;
+}
+.jconfirm.jconfirm-kiwitrees .jconfirm-buttons {
+	display: inline-block;
+	height: auto;
+}
+.jconfirm.jconfirm-kiwitrees .jconfirm-buttons button {
+	margin: 0.5rem;
+	min-width: 3rem;
+}
+.iconpicker-popover.popover {
+	background-color: #e0e0e0;
+	border: 0.125rem solid #e0e0e0;
+	border-radius: 0.75rem;
+	box-shadow: 0.25rem 0.25rem 0.5rem 0 #8a8a8a;
+	width: 20rem;
+}
+.iconpicker-popover.popover.bottomRight {
+	margin-top: -0.5rem;
+}
+.iconpicker-popover.popover .popover-title {
+	display: none;
+}
+.iconpicker-popover.popover .iconpicker-items {
+	background-color: #e0e0e0;
+}
+.iconpicker-popover.popover .iconpicker-items .iconpicker-item {
+	background-color: #fffff4;
+	height: 1.5rem;
+	width: 1.5rem;
+}
+.iconpicker-popover.popover .iconpicker-items .iconpicker-item .svg-inline--fa {
+	height: 1.375em;
+}
+
+/* Hide standard checkbox */
+input[type=checkbox],
+input[type=radio] {
+	/* Add if not using autoprefixer */
+	-webkit-appearance: none;
+	appearance: none;
+	/* For iOS < 15 to remove gradient background */
+	background-color: transparent;
+	/* Not removed via appearance */
+	margin: 0;
+}
+
+/* Create standard unchecked box */
+/* From ModernCSS.dev © 2022 ThinkDoBeCreate - Stephanie Eckles
+		https://moderncss.dev/pure-css-custom-styled-radio-buttons/
+	https://moderncss.dev/pure-css-custom-checkbox-style/
+*/
+input[type=checkbox],
+input[type=radio] {
+	appearance: none;
+	background-color: #fffff4;
+	cursor: pointer;
+	font: inherit;
+	width: 1.25rem;
+	height: 1.25rem;
+	border: 0.1125rem solid #faf5e8;
+	border-radius: 0.25rem;
+	margin: 0.25rem 0.125rem 0;
+	/* center tick mark */
+	display: inline-grid;
+	place-content: center;
+}
+
+input[type=radio] {
+	border-radius: 50%;
+}
+
+input[type=checkbox]::before,
+input[type=radio]::before {
+	content: "";
+	width: 1.25rem;
+	height: 1.25rem;
+	transform: scale(0);
+	transition: 120ms transform ease-in-out;
+	box-shadow: inset 1.25rem 1.25rem #ab3334;
+}
+
+/* add tick mark */
+input[type=checkbox]::before {
+	transform-origin: bottom left;
+	clip-path: polygon(28% 38%, 41% 53%, 75% 24%, 86% 38%, 40% 78%, 15% 50%);
+}
+
+input[type=radio]::before {
+	border-radius: 50%;
+}
+
+input[type=checkbox]:checked::before,
+input[type=radio]:checked::before {
+	transform: scale(1);
+}
+
+/*
+	Colorbox Core Style:
+	The following CSS is consistent between example themes and should not be altered.
+*/
+#colorbox, #cboxOverlay, #cboxWrapper {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 9999;
+	overflow: hidden;
+	-webkit-transform: translate3d(0, 0, 0);
+}
+
+#cboxWrapper {
+	max-width: none;
+}
+
+#cboxOverlay {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+}
+
+#cboxMiddleLeft, #cboxBottomLeft {
+	clear: left;
+}
+
+#cboxContent {
+	position: relative;
+}
+
+#cboxLoadedContent {
+	overflow: auto;
+	-webkit-overflow-scrolling: touch;
+}
+
+#cboxTitle {
+	margin: 0;
+}
+
+#cboxLoadingOverlay, #cboxLoadingGraphic {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+#cboxPrevious, #cboxNext, #cboxClose, #cboxSlideshow {
+	cursor: pointer;
+}
+
+.cboxPhoto {
+	float: left;
+	margin: auto;
+	border: 0;
+	display: block;
+	max-width: none;
+	-ms-interpolation-mode: bicubic;
+}
+
+.cboxIframe {
+	width: 100%;
+	height: 100%;
+	display: block;
+	border: 0;
+	padding: 0;
+	margin: 0;
+}
+
+#colorbox, #cboxContent, #cboxLoadedContent {
+	box-sizing: content-box;
+	-moz-box-sizing: content-box;
+	-webkit-box-sizing: content-box;
+}
+
+/*
+	User Style:
+	Change the following styles to modify the appearance of Colorbox.  They are
+	ordered & tabbed in a way that represents the nesting of the generated HTML.
+*/
+#cboxOverlay {
+	background: #e0e0e0;
+	opacity: 0.85;
+}
+
+#colorbox {
+	font-family: "Font Awesome 6 Free";
+	outline: 0;
+}
+#colorbox #cboxContent {
+	background: #fffff4;
+	box-shadow: 0.25rem 0.25rem 0.5rem 0 #8a8a8a;
+	margin: 2rem;
+	padding: 2rem 1rem;
+	/* these elements are buttons, and may need to have additional styles reset to avoid unwanted base styles */
+	/* avoid outlines on : active (mouseclick), but preserve outlines on : focus (tabbed navigating) */
+}
+#colorbox #cboxContent .cboxIframe {
+	background: #fffff4;
+}
+#colorbox #cboxContent #cboxError {
+	padding: 50px;
+	border: 1px solid #ccc;
+}
+#colorbox #cboxContent #cboxLoadedContent {
+	margin: 0.5rem 0;
+}
+#colorbox #cboxContent #cboxTitle {
+	background: #fffff4;
+	color: #ab3334;
+	left: 0;
+	overflow-y: auto;
+	padding-left: 1rem;
+	padding-right: 1rem;
+	position: absolute;
+	text-align: center;
+	top: 8px;
+	width: 80%;
+}
+#colorbox #cboxContent #cboxPrevious,
+#colorbox #cboxContent #cboxNext,
+#colorbox #cboxContent #cboxSlideshow,
+#colorbox #cboxContent #cboxClose {
+	border: 0;
+	padding: 0;
+	margin: 0;
+	overflow: visible;
+	width: auto;
+	background: none;
+}
+#colorbox #cboxContent #cboxPrevious:active,
+#colorbox #cboxContent #cboxNext:active,
+#colorbox #cboxContent #cboxSlideshow:active,
+#colorbox #cboxContent #cboxClose:active {
+	outline: 0;
+}
+#colorbox #cboxContent #cboxSlideshow {
+	bottom: 10px;
+	font-weight: 700;
+	color: #ab3334;
+	position: absolute;
+	right: 50%;
+}
+#colorbox #cboxContent #cboxSlideshow:hover {
+	color: #3adb76;
+}
+#colorbox #cboxContent #cboxPrevious {
+	position: absolute;
+	bottom: 6px;
+	color: #ab3334;
+	font-size: 1.5rem;
+	left: 16px;
+}
+#colorbox #cboxContent #cboxPrevious .svg-inline--fa:hover {
+	color: #3adb76;
+}
+#colorbox #cboxContent #cboxNext {
+	bottom: 6px;
+	color: #ab3334;
+	font-size: 1.5rem;
+	position: absolute;
+	right: 10px;
+}
+#colorbox #cboxContent #cboxNext .svg-inline--fa:hover {
+	color: #3adb76;
+}
+#colorbox #cboxContent #cboxClose {
+	color: #ab3334;
+	font-size: 1.5rem;
+	position: absolute;
+	right: 0;
+	top: 8px;
+}
+#colorbox #cboxContent #cboxClose .svg-inline--fa:hover {
+	color: #3adb76;
+}

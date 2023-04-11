@@ -1,0 +1,248 @@
+/* color variables */
+.lead {
+	font-weight: 600;
+	margin-top: 0.25rem;
+}
+
+@media print, screen and (max-width: 48.06125em) {
+	#setup-body button.button {
+		width: 100% !important;
+	}
+}
+
+@media print, screen and (max-width: 48.06125em) {
+	.no-js .top-bar {
+		display: none;
+	}
+}
+@media screen and (min-width: 48.0625em) {
+	.no-js .title-bar {
+		display: none;
+	}
+}
+
+/* sizes are 48 - 48.0625 - 64 - 64.0625 em */
+@media print, screen and (max-width: 64.0625em) {
+	.info-help:not(.summary) {
+		display: none;
+	}
+
+	#admin-head {
+		padding-bottom: 0.5rem;
+	}
+	#admin-head .first-top-bar .top-bar-right ul li {
+		margin: auto;
+	}
+
+	#admin-container #admin-menu {
+		padding: 0;
+	}
+	#admin-container .callout {
+		font-size: 0.75rem;
+	}
+}
+@media screen and (min-width: 48.0625em) {
+	#medialist-page .card .card-divider img {
+		height: 3rem;
+	}
+
+	#calendar_utilities-page .card-section {
+		height: 24rem;
+	}
+}
+@media print, screen and (max-width: 64em) {
+	.noprint {
+		display: none;
+	}
+
+	nav .top-bar.first-top-bar ul.menu a {
+		padding: 0.5rem 0.25rem;
+	}
+	nav .top-bar.first-top-bar ul.menu a:before {
+		display: none;
+	}
+	nav .top-bar.first-top-bar .top-bar-right ul li {
+		margin: auto;
+		width: auto;
+	}
+	nav .top-bar.first-top-bar .top-bar-right ul li .input-group-field {
+		max-width: 100%;
+	}
+	nav .top-bar.second-top-bar {
+		position: relative;
+		top: 3.7rem;
+	}
+	nav .top-bar.second-top-bar .main-menu {
+		padding-top: 0;
+	}
+	nav .top-bar.second-top-bar .main-menu ul.menu a {
+		color: #faf5e8;
+	}
+	nav .top-bar.second-top-bar .main-menu .menu.align-right.vertical.menu > li {
+		justify-content: flex-start;
+		text-align: initial;
+	}
+	nav .top-bar.second-top-bar .main-menu .menu.align-right.vertical.menu > li a::before {
+		display: none !important;
+	}
+	nav .top-bar.second-top-bar .main-menu .menu.align-right.vertical.menu > li .submenu li {
+		text-align: left;
+		text-indent: 2rem;
+	}
+	nav .top-bar.second-top-bar .main-menu .menu.align-right.vertical.menu > li .submenu li a {
+		color: #331919;
+	}
+
+	.treetitle {
+		font-size: 1.25rem;
+	}
+}
+@media screen and (min-width: 64.0625em) {
+	.treetitle {
+		font-size: 2.5rem;
+	}
+	.treetitle .subtitle {
+		font-size: 1.2rem;
+		font-style: italic;
+	}
+
+	footer .kiwitrees_logo {
+		background-position-x: right;
+	}
+
+	#medialist-page .card .card-divider img {
+		height: 4rem;
+	}
+}
+/* PRINT layout adjustments */
+@media all {
+	.page-break {
+		display: none;
+	}
+}
+@media print {
+	html {
+		background-color: #fff;
+	}
+
+	#header,
+#footer,
+#topMenu,
+#navbar,
+#sidebar,
+svg {
+		display: none !important;
+	}
+
+	#content {
+		top: 0;
+	}
+
+	form,
+button,
+input {
+		display: none !important;
+	}
+
+	/* buttons and input are used out of forms in sortable tables*/
+	/* print settings for datatables */
+	#indiTable thead tr:first-child,
+#indiTable tfoot,
+#famTable thead tr:first-child,
+#famTable tfoot,
+.alpha_index,
+.marr_names,
+.dataTables_wrapper .top,
+.dataTables_wrapper .bottom {
+		display: none !important;
+	}
+
+	table.dataTable,
+table.dataTable th,
+table.dataTable td {
+		border: 1px solid #331919 !important;
+		border-collapse: collapse;
+	}
+
+	table.dataTable td {
+		font-size: 0.9rem;
+	}
+
+	/* end print settings for datatables */
+	/* Family tree view print & pagination */
+	#fancy_treeview_descendants-page {
+		width: 100%;
+	}
+
+	#fancy_treeview_descendants .generation-block {
+		page-break-before: always;
+	}
+
+	#fancy_treeview_descendants,
+#fancy_treeview_descendants .generation-block:last {
+		page-break-before: avoid;
+	}
+
+	/* Report pages print & pagination */
+	div[id^=report_][id$=-page] + div {
+		margin-left: 0.875rem;
+	}
+
+	#page.individual_report .facts_events,
+#page.individual_report .indi_mainimage,
+#page.families_report .facts_events,
+#page.families_report .indi_mainimage,
+#page.family_report .indi_mainimage,
+#page.family_report .facts_events {
+		border: none;
+		display: block;
+		font-size: 90%;
+		margin: 0;
+		page-break-before: auto;
+	}
+
+	#page.family_report p.report_fact,
+#page.families_report p.report_fact {
+		border-bottom: 1px solid #ccc;
+	}
+
+	#page.family_report #accordion h3,
+#page.family_report #accordion h3 a,
+#page.families_report #accordion h3,
+#page.families_report #accordion h3 a {
+		color: #555;
+		margin: 0;
+		padding: 0;
+	}
+
+	#page.family_report #accordion h3.ui-accordion-header,
+#page.families_report #accordion h3.ui-accordion-header {
+		border: none;
+	}
+
+	#page.family_report #accordion h3.ui-accordion-header span.ui-accordion-header-icon,
+#page.families_report #accordion h3.ui-accordion-header span.ui-accordion-header-icon {
+		display: none;
+	}
+
+	#page.family_report #accordion h3.ui-active,
+#page.families_report #accordion h3.ui-active {
+		background-color: none;
+	}
+
+	#page.family_report #accordion h3 + div,
+#page.families_report #accordion h3 + div {
+		border: none;
+		display: block !important;
+		page-break-before: always;
+	}
+
+	#page.family_report .indi_mainimage a img,
+#page.families_report .indi_mainimage a img {
+		max-height: 80px;
+	}
+
+	#page.fact_report table td {
+		white-space: normal;
+	}
+}

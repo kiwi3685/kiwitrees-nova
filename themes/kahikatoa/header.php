@@ -92,7 +92,10 @@
 		<?php if ($view !='simple') { ?>
 			<link rel="stylesheet" href="<?php echo KT_DATATABLES_CSS; ?>">
 			<link rel="stylesheet" href="<?php echo KT_DATEPICKER_CSS; ?>">
-			<link rel="stylesheet" href="<?php echo KT_THEME_URL; ?>css/kahikatoa.min.css">
+		<link rel="stylesheet" href="<?php echo KT_THEME_URL; ?>css/foundation.min.css">
+		<link rel="stylesheet" href="<?php echo KT_THEME_URL; ?>css/kahikatoa.min.css">
+		<link rel="stylesheet" href="<?php echo KT_THEME_URL; ?>css/libraryfiles.min.css">
+		<link rel="stylesheet" href="<?php echo KT_THEME_URL; ?>css/responsive.min.css">
 			<?php if (file_exists(KT_THEME_URL . 'mystyle.css')) { ?>
 				<link rel="stylesheet" href="<?php echo KT_THEME_URL; ?>mystyle.css" type="text/css">
 			<?php }
