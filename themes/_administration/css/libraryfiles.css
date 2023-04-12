@@ -166,44 +166,6 @@ div.dataTables_wrapper table#installed_table thead tr th svg.fa-gears {
 	right: initial;
 }
 
-/* Fix title-bar fuc */
-@media print, screen and (max-width: 48.06125em) {
-	.no-js .top-bar {
-		display: none;
-	}
-}
-@media print, screen and (min-width: 48.0625em) {
-	.no-js .title-bar {
-		display: none;
-	}
-}
-
-@media print, screen and (max-width: 48.06125em) {
-	#setup-body button.button {
-		width: 100% !important;
-	}
-}
-
-/* sizes are 48 - 48.0625 - 64 - 64.0625 em */
-@media print, screen and (max-width: 64.0625em) {
-	.info-help:not(.summary) {
-		display: none;
-	}
-
-	#admin-head {
-		padding-bottom: 0.5rem;
-	}
-	#admin-head .first-top-bar .top-bar-right ul li {
-		margin: auto;
-	}
-
-	#admin-container #admin-menu {
-		padding: 0;
-	}
-	#admin-container .callout {
-		font-size: 0.75rem;
-	}
-}
 #textarea {
 	background-color: #fefefe;
 	margin-bottom: 0.5rem;
