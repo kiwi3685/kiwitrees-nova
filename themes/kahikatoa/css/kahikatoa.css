@@ -946,9 +946,19 @@ div[id$=-page] button[type=submit] {
 	display: block;
 }
 #indi-page .tabs-panel #tabi_album_content [id^=thumbcontainer] div[class^=album_] ul.album.vertical.menu.dropdown li a {
+	background-color: #fffff4;
 	font-size: 0.75rem;
 	padding: 0.125rem;
 	text-align: center;
+}
+#indi-page .tabs-panel #tabi_album_content [id^=thumbcontainer] div[class^=album_] ul.album.vertical.menu.dropdown li ul.is-dropdown-submenu {
+	border: none;
+	color: #ab3334;
+	font-size: 0.9rem;
+	left: 0;
+	min-width: 8.875rem;
+	top: 3.25rem;
+	width: 8.875rem;
 }
 #indi-page .tabs-panel #tabi_album_content [id^=thumbcontainer] div[class^=album_] ul.album.vertical.menu.dropdown li ul.is-dropdown-submenu li.is-dropdown-submenu-item {
 	left: 0;
