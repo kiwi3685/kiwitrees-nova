@@ -609,12 +609,12 @@ switch ($action) {
 		if ($TEXT_DIRECTION == "rtl") {
 			$mail1_body .= "</a>";
 		}
-		$mail1_body.=
+		$mail1_body .=
 			"\r\n\r\n".
 			"=--------------------------------------=\r\n" .
-			"IP ADDRESS: " . $REQUEST->getClientIp() . "\r\n" .
-			"DNS LOOKUP: " . gethostbyaddr($REQUEST->getClientIp()) . "\r\n" .
-			"LANGUAGE:   " . KT_LOCALE."\r\n";
+			"IP ADDRESS: " . $KT_REQUEST->getClientIp() . "\r\n" .
+			"DNS LOOKUP: " . gethostbyaddr($KT_REQUEST->getClientIp()) . "\r\n" .
+			"LANGUAGE:   " . KT_LOCALE . "\r\n";
 
 		$mail1_to 		= $KIWITREES_EMAIL;
 		$mail1_from 	= getUserEmail($user_id);
@@ -640,7 +640,7 @@ switch ($action) {
 						kiwiMail($mail1_to, $mail1_from, $mail1_subject, $mail1_body);
 						if ($mail1_method != 'messaging3' && $mail1_method != 'mailto' && $mail1_method != 'none') {
 							KT_DB::prepare("INSERT INTO `##message` (sender, ip_address, user_id, subject, body) VALUES (? ,? ,? ,? ,?)")
-								->execute(array($user_name, $REQUEST->getClientIp(), $webmaster_user_id, $mail1_subject, $mail1_body));
+								->execute(array($user_name, $KT_REQUEST->getClientIp(), $webmaster_user_id, $mail1_subject, $mail1_body));
 						}
 
 						set_user_setting($user_id, 'verified', 1);

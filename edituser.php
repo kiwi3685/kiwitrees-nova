@@ -26,14 +26,15 @@ require './includes/session.php';
 require_once KT_ROOT . 'includes/functions/functions_print_lists.php';
 require KT_ROOT . 'includes/functions/functions_edit.php';
 
+
 // Extract form variables
 $form_action         = KT_Filter::post('form_action');
 $form_username       = KT_Filter::post('form_username', KT_REGEX_USERNAME);
 $form_realname       = KT_Filter::post('form_realname' );
-$password          = KT_Filter::post('password', KT_REGEX_PASSWORD);
+$password            = KT_Filter::post('password', KT_REGEX_PASSWORD);
 $form_email          = KT_Filter::post('form_email', KT_REGEX_EMAIL, 'email@example.com');
-$form_rootid         = KT_Filter::post('form_rootid', KT_REGEX_XREF, KT_USER_ROOT_ID   );
-$form_language       = KT_Filter::post('form_language', array_keys(KT_I18N::used_languages()), KT_LOCALE );
+$form_rootid         = KT_Filter::post('form_rootid', KT_REGEX_XREF, KT_USER_ROOT_ID);
+$form_language       = KT_Filter::post('form_language', implode(", ", array_keys(KT_I18N::used_languages())), KT_LOCALE);
 $form_contact_method = KT_Filter::post('form_contact_method');
 $form_visible_online = KT_Filter::postBool('form_visible_online');
 
