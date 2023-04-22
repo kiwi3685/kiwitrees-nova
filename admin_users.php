@@ -311,7 +311,7 @@ switch (KT_Filter::get('action')) {
 			$controller->setPageTitle(KT_I18N::translate('Edit user') . ' - ' . $realname);
 		}
 
-		$url		= KT_SCRIPT_NAME . '?action=' . KT_Filter::post('page') . '&amp;user_id=' . $user_id;
+		$url = KT_SCRIPT_NAME . '?action=' . KT_Filter::post('page') . '&amp;user_id=' . $user_id;
 
 		$controller
 			->pageHeader()
@@ -402,14 +402,13 @@ switch (KT_Filter::get('action')) {
 		echo relatedPages($users);
 
 		echo pageStart('user_details', $controller->getPageTitle()); ?>
-
 			<form class="cell" name="newform" method="post" role="form" autocomplete="off">
 				<?php echo KT_Filter::getCsrf(); ?>
 				<input type="hidden" name="action" value="save">
 				<input type="hidden" name="user_id" value="<?php echo $user_id; ?>">
 				<input type="hidden" name="page" value="edit">
-				<div class="grid-x grid-margin-x">
 
+				<div class="grid-x grid-margin-x">
 					<!-- REAL NAME -->
 					<div class="cell large-3">
 						<label for="real_name">
@@ -418,7 +417,7 @@ switch (KT_Filter::get('action')) {
 					</div>
 					<div class="cell large-9">
 						<div class="input_group">
-							<input type="text" id="real_name" name="real_name" required maxlength="64" value="<?php echo KT_Filter::escapeHtml($realname); ?>" dir="auto">
+							<input type="text" id="real_name" name="real_name" required maxlength="64" value="<?php echo KT_Filter::escapeHtml($realname); ?>" dir="auto" autocomplete="off">
 							<div class="callout info-help">
 								<?php echo KT_I18N::translate('This is your real name, as you would like it displayed on screen.'); ?>
 							</div>
@@ -433,7 +432,7 @@ switch (KT_Filter::get('action')) {
 					</div>
 					<div class="cell large-9">
 						<div class="input_group">
-							<input type="text" id="username" name="username" required maxlength="32" value="<?php echo KT_Filter::escapeHtml($username); ?>" dir="auto">
+							<input type="text" id="username" name="username" required maxlength="32" value="<?php echo KT_Filter::escapeHtml($username); ?>" dir="auto" autocomplete="off">
 							<div class="callout info-help">
 								<?php echo KT_I18N::translate('Usernames are case-insensitive and ignore accented letters, so that “chloe”, “chloë”, and “Chloe” are considered to be the same.'); ?>
 							</div>
@@ -457,6 +456,7 @@ switch (KT_Filter::get('action')) {
 									placeholder="<?php echo KT_I18N::translate('Leave password blank if you want to keep the current password.'); ?>"
 								<?php } ?>
 								<?php echo $user_id ? '' : 'required'; ?>
+								autocomplete="off"
 							>
 							<span class="input-group-label unmask" title="<?php echo KT_I18N::translate('Show/Hide password to check content'); ?>">
 								<i class="close-eye <?php echo $iconStyle; ?> fa-eye"></i>
