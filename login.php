@@ -125,40 +125,45 @@ switch ($action) {
 
 		$controller
 			->setPageTitle(KT_I18N::translate('Login'))
-			->pageHeader(true); ?>
+			->pageHeader(true);
 
-		<div id="login-page" class="grid-x grid-margin-x grid-margin-y">
-			<div id="login-text" class="cell medium-10 medium-offset-1 large-4 large-offset-4">
+		echo pageStart('login', $controller->getPageTitle()) ?>
+
+		<div class="grid-x grid-margin-x grid-margin-y">
+			<div id="login-text" class="cell medium-10 medium-offset-1 large-6 large-offset-3 text-justify">
+
 				<?php switch (KT_Site::preference('WELCOME_TEXT_AUTH_MODE')) {
-				case 1:
-					echo KT_I18N::translate('
-						<h4 class="text-center">Welcome to this Genealogy website</h4>
-						<p>Access to this site is permitted to every visitor who has a user account.</p>
-						<p>If you have a user account, you can login on this page. If you don\'t have a user account, you can apply for one by clicking on the appropriate link below.</p>
-						<p>After verifying your application, the site administrator will activate your account. You will receive an email when your application has been approved.</p>
-					');
-					break;
-				case 2:
-					echo KT_I18N::translate('
-						<h4 class="text-center">Welcome to this Genealogy website</h4>
-						<p>Access to this site is permitted to <u>authorized</u> users only.</p>
-						<p>If you have a user account you can login on this page. If you don\'t have a user account, you can apply for one by clicking on the appropriate link below.</p>
-						<p>After verifying your information, the administrator will either approve or decline your account application. You will receive an email message when your application has been approved.</p>
-					');
-					break;
-				case 3:
-					echo KT_I18N::translate('
-						<h4 class="text-center">Welcome to this Genealogy website</h4>
-						<p>Access to this site is permitted to <u>family members only</u>.</p>
-						<p>If you have a user account you can login on this page. If you don\'t have a user account, you can apply for one by clicking on the appropriate link below.</p>
-						<p>After verifying the information you provide, the administrator will either approve or decline your request for an account. You will receive an email when your request is approved.</p>
-					');
-					break;
-				case 4:
-					echo '<div style="white-space: pre-wrap;">' . KT_Site::preference('WELCOME_TEXT_AUTH_MODE_', KT_LOCALE) . '</div';
-					break;
-				} ?>
-				<form id="login-form"
+					case 1:
+						echo KT_I18N::translate('
+							<h4>Welcome to this Genealogy website</h4>
+							<p>Access to this site is permitted to every visitor who has a user account.</p>
+							<p>If you have a user account, you can login on this page. If you don\'t have a user account, you can apply for one by clicking on the appropriate link below.</p>
+							<p>After verifying your application, the site administrator will activate your account. You will receive an email when your application has been approved.</p>
+						');
+						break;
+					case 2:
+						echo KT_I18N::translate('
+							<h4 class="text-center">Welcome to this Genealogy website</h4>
+							<p>Access to this site is permitted to <u>authorized</u> users only.</p>
+							<p>If you have a user account you can login on this page. If you don\'t have a user account, you can apply for one by clicking on the appropriate link below.</p>
+							<p>After verifying your information, the administrator will either approve or decline your account application. You will receive an email message when your application has been approved.</p>
+						');
+						break;
+					case 3:
+						echo KT_I18N::translate('
+							<h4 class="text-center">Welcome to this Genealogy website</h4>
+							<p>Access to this site is permitted to <u>family members only</u>.</p>
+							<p>If you have a user account you can login on this page. If you don\'t have a user account, you can apply for one by clicking on the appropriate link below.</p>
+							<p>After verifying the information you provide, the administrator will either approve or decline your request for an account. You will receive an email when your request is approved.</p>
+						');
+						break;
+					case 4:
+						echo '<div style="white-space: pre-wrap;">' . KT_Site::preference('WELCOME_TEXT_AUTH_MODE_', KT_LOCALE) . '</div';
+						break;
+					} ?>
+
+				<form class="cell"
+					id="login-form"
 					name="login-form"
 					method="post"
 					action="<?php echo KT_LOGIN_URL; ?>"
@@ -167,42 +172,49 @@ switch ($action) {
 					<input type="hidden" name="action" value="login">
 					<input type="hidden" name="url" value="<?php echo htmlspecialchars((string) $url); ?>">
 					<input type="hidden" name="usertime" value="">
+
 					<?php if (!empty($message)) { ?>
 						<div class="callout alert">
 							<h6><?php echo $message; ?></h6>
 						</div>
 					<?php } ?>
 					<div class="grid-x grid-margin-x">
-						<div class="cell medium-8 medium-offset-2">
-							<label for="user_name" class="h6"><?php echo KT_I18N::translate('User name'); ?>
-								<input type="text" id="user_name" name="username" required value="<?php echo htmlspecialchars((string) $username); ?>" autofocus>
-							</label>
+						<label class="cell medium-2 middle h6" for="user_name" class="h6">
+							<?php echo KT_I18N::translate('User name'); ?>
+						</label>
+						<div class="cell medium-10">
+							<input type="text" id="user_name" name="username" required value="<?php echo htmlspecialchars((string) $username); ?>" placeholder="<?php echo KT_I18N::translate('User name'); ?>" autofocus>
 						</div>
-						<div class="cell medium-8 medium-offset-2">
-							<label for="pass_word" class="h6"><?php echo KT_I18N::translate('Password'); ?></label>
-							<div class="input-group">
-								<input class="input-group-field" type="password" id="pass_word" name="password" placeholder="<?php echo KT_I18N::translate('Password'); ?>" required>
-								<span class="input-group-label unmask" title="<?php echo KT_I18N::translate('Show/Hide password to check content'); ?>">
-									<i class="<?php echo $iconStyle; ?> fa-eye"></i>
-								</span>
-							</div>
+						<label class="cell medium-2 middle h6" for="pass_word" class="h6">
+							<?php echo KT_I18N::translate('Password'); ?>
+						</label>
+						<div class="cell medium-10 input-group">
+							<input class="input-group-field" type="password" id="pass_word" name="password" placeholder="<?php echo KT_I18N::translate('Password'); ?>" required>
+							<span class="input-group-label unmask" title="<?php echo KT_I18N::translate('Show/Hide password to check content'); ?>">
+								<i class="<?php echo $iconStyle; ?> fa-eye"></i>
+							</span>
 						</div>
-						<div class="cell medium-8 medium-offset-2">
+
+						<div class="cell medium-6 medium-offset-3">
 							<button class="button expanded h6" type="submit" >
 								<i class="<?php echo $iconStyle; ?> fa-sign-in-alt"></i>
 								<?php echo KT_I18N::translate('Login'); ?>
 							</button>
 						</div>
-						<div class="cell medium-8 medium-offset-2 text-center h6">
+
+						<div class="cell text-center h6">
 							<a href="<?php echo KT_LOGIN_URL; ?>?action=requestpw"><?php echo KT_I18N::translate('Request new password'); ?></a>
 						</div>
+
 						<?php if (KT_Site::preference('USE_REGISTRATION_MODULE')) { ?>
-							<div class="cell medium-8 medium-offset-2 text-center h6">
+							<div class="cell text-center h6">
 								<a href="<?php echo KT_LOGIN_URL; ?>?action=register"><?php echo KT_I18N::translate('Request new user account'); ?></a>
 							</div>
+
 						<?php } ?>
-					</form>
-				</div>
+
+					</div>
+				</form>
 			</div>
 		</div>
 		<?php
@@ -211,12 +223,12 @@ switch ($action) {
 	case 'requestpw':
 		$controller
 			->setPageTitle(KT_I18N::translate('Request new password'))
-			->pageHeader(); ?>
+			->pageHeader();
 
+		echo pageStart('login-password', $controller->getPageTitle()) ?>
 
-		<div id="login-passwd-page" class="grid-x grid-margin-x grid-margin-y">
-			<div id="login-text" class="cell medium-10 medium-offset-1 large-4 large-offset-4">
-				<h4 class="text-center"><?php echo $controller->getPageTitle(); ?></h4>
+		<div class="grid-x grid-margin-x grid-margin-y">
+			<div id="login-text" class="cell medium-10 medium-offset-1 large-6 large-offset-3 text-justify">
 
 				<?php $user_name = KT_Filter::post('new_passwd_username', KT_REGEX_USERNAME);
 				if ($user_name) { ?>
@@ -261,16 +273,17 @@ switch ($action) {
 						</div>
 					<?php }
 				} else { ?>
-					<div class="callout helpcontent secondary">
+					<div class="callout primary">
 						<?php echo /* I18N: Help text for the "Request new password" page. */ KT_I18N::translate('Enter <u>either</u> your user name <u>or</u> the email address that you use for this site, in the field below, then click "Send".'); ?>
 					</div>
-					<form class="new_passwd_form" name="new_passwd_form" action="<?php echo KT_LOGIN_URL; ?>" method="post">
+					<form class="cell new_passwd_form" name="new_passwd_form" action="<?php echo KT_LOGIN_URL; ?>" method="post">
 						<input type="hidden" name="action" value="requestpw">
 						<div class="grid-x grid-margin-x grid-margin-y">
-							<div class="cell medium-8 medium-offset-2">
-								<label for="new_password" class="h6"><?php echo KT_I18N::translate('Username or email address'); ?>
-									<input type="text" id="new_password" name="new_passwd_username" value="" autofocus>
-								</label>
+							<label class="cell medium-4 middle h6" for="new_password" class="h5">
+								<?php echo KT_I18N::translate('Username or email address'); ?>								
+							</label>
+							<div class="cell medium-8">
+								<input type="text" id="new_password" name="new_passwd_username" value="" autofocus>
 							</div>
 							<div class="cell medium-8 medium-offset-2">
 								<button class="button expanded h6" type="submit" >
@@ -386,9 +399,13 @@ switch ($action) {
 					KT_I18N::init(KT_LOCALE);
 				} else {
 					AddToLog('Robot registration caught by checkbox (user name: ' . $user_name . ' real name: ' . $user_realname . ' email: ' . $user_email . ')', 'spam');
-				} ?>
+				}
 
-				<div id="login-register-page">
+				echo pageStart('llogin-register', $controller->getPageTitle()) ?>
+
+				<div class="grid-x grid-margin-x grid-margin-y">
+					<div id="login-text" class="cell medium-10 medium-offset-1 large-6 large-offset-3 text-justify">
+
 					<?php
 					if ($termsConditions == '0') {
 						// Generate an email in the userâ€™s language
@@ -554,114 +571,130 @@ switch ($action) {
 
 		$controller->setPageTitle(KT_I18N::translate('User verification'));
 		$controller->pageHeader();
-		?>
 
-		<div id="login-register-page" class="row align-center">
-			<form id="verify-form" name="verify-form" method="post" action="<?php echo KT_LOGIN_URL; ?>">
-				<input type="hidden" name="action" value="verify_hash">
-				<h4><?php echo KT_I18N::translate('User verification'); ?></h4>
-				<div>
-					<label for="username"><?php echo KT_I18N::translate('Username'); ?></label>
-					<input type="text" id="username" name="user_name" value="<?php echo $user_name; ?>">
-				</div>
-				<div>
-				<label for="user_password"><?php echo KT_I18N::translate('Password'); ?></label>
-				<input type="password" id="user_password" name="user_password" value="" autofocus>
-				</div>
-				<div>
-				<label for="user_hashcode"><?php echo KT_I18N::translate('Verification code:'); ?></label>
-				<input type="text" id="user_hashcode" name="user_hashcode" value="<?php echo $user_hashcode; ?>">
-				</div>
-				<div>
-					<input type="submit" value="<?php echo KT_I18N::translate('Send'); ?>">
-				</div>
-			</form>
-		</div>
-		<?php
-	break;
+		echo pageStart('login-verify', $controller->getPageTitle()); ?>
 
-	case 'verify_hash':
-		if (!KT_Site::preference('USE_REGISTRATION_MODULE')) {
-			header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH);
-			exit;
-		}
-		AddToLog('User attempted to verify hashcode: ', $user_name, 'auth');
+	        <div class="grid-x">
+				<form class="cell" id="verify-form" name="verify-form" method="post" action="<?php echo KT_LOGIN_URL; ?>">
+					<input type="hidden" name="action" value="verify_hash">
 
-		// switch language to webmaster settings
-		$webmaster_user_id = get_gedcom_setting(KT_GED_ID, 'WEBMASTER_USER_ID');
-		KT_I18N::init(get_user_setting($webmaster_user_id, 'language'));
+					<div class="grid-x grid-margin-x grid-margin-y">
+ 
+						<label class="cell medium-2 middle h6" for="username">
+							<?php echo KT_I18N::translate('Username'); ?>								
+						</label>
+						<div>
+							<input type="text" id="username" name="user_name" value="<?php echo $user_name; ?>">
+						</div>
 
-		$user_id = get_user_id($user_name);
-		$mail1_body =
-			KT_I18N::translate('Hello Administrator ...') . "\r\n\r\n".
-			/* I18N: %1$s is a real-name, %2$s is a username, %3$s is an email address */
-			KT_I18N::translate('A new user (%1$s) has requested an account (%2$s) and verified an email address (%3$s).', getUserFullName($user_id), $user_name, getUserEmail($user_id))."\r\n\r\n";
-		if (!get_user_setting($user_id, 'verified_by_admin')) {
-			$mail1_body .= KT_I18N::translate('You now need to review the account details, and set the “approved” status to “yes”.') . "\r\n";
-		} else {
-			$mail1_body .= KT_I18N::translate('You do not have to take any action; the user can now login.') . "\r\n";
-		}
-		if ($TEXT_DIRECTION == 'rtl') {
-			$mail1_body .= "<a href=\"";
-			$mail1_body .= KT_SERVER_NAME . KT_SCRIPT_PATH . "admin_users.php?filter=" . rawurlencode((string) $user_name) . "\">";
-		}
-		$mail1_body .= KT_SERVER_NAME . KT_SCRIPT_PATH . "admin_users.php?filter=" . rawurlencode((string) $user_name);
-		if ($TEXT_DIRECTION == "rtl") {
-			$mail1_body .= "</a>";
-		}
-		$mail1_body .=
-			"\r\n\r\n".
-			"=--------------------------------------=\r\n" .
-			"IP ADDRESS: " . $KT_REQUEST->getClientIp() . "\r\n" .
-			"DNS LOOKUP: " . gethostbyaddr($KT_REQUEST->getClientIp()) . "\r\n" .
-			"LANGUAGE:   " . KT_LOCALE . "\r\n";
+						<label class="cell medium-2 middle h6" for="user_password">
+							<?php echo KT_I18N::translate('Password'); ?>
+						</label>
+						<div>
+							<input type="password" id="user_password" name="user_password" value="" autofocus>
+						</div>
 
-		$mail1_to 		= $KIWITREES_EMAIL;
-		$mail1_from 	= getUserEmail($user_id);
-		$mail1_subject 	= /* I18N: %s is a server name/URL */ KT_I18N::translate('New user at %s', KT_SERVER_NAME . KT_SCRIPT_PATH . ' ' . strip_tags(KT_TREE_TITLE));
-		$mail1_method 	= get_user_setting($webmaster_user_id, 'CONTACT_METHOD');
+						<label class="cell medium-2 middle h6" for="user_hashcode">
+							<?php echo KT_I18N::translate('Verification code:'); ?>
+						</label>
+						<div>
+							<input type="text" id="user_hashcode" name="user_hashcode" value="<?php echo $user_hashcode; ?>">
+						</div>
 
-		// Change to the new user’s language
-		KT_I18N::init(get_user_setting($user_id, 'language'));
+						<?php echo singleButton('fa-paper-plane', 'Send'); ?>
 
-		$controller->setPageTitle(KT_I18N::translate('User verification'));
-		$controller->pageHeader();
-		?>
-
-		<div id="login-register-page" class="row align-center">
-			<h4 class="text-center"><?php echo KT_I18N::translate('User verification'); ?></h4>
-			<div id="user-verify">
-				<?php echo KT_I18N::translate('The data for the user <b>%s</b> was checked.', $user_name);
-				if ($user_id) {
-					$pw_ok = check_user_password($user_id, $user_password);
-					$hc_ok = get_user_setting($user_id, 'reg_hashcode') == $user_hashcode;
-					if ($pw_ok && $hc_ok) {
-						require_once KT_ROOT.'includes/functions/functions_mail.php';
-						kiwiMail($mail1_to, $mail1_from, $mail1_subject, $mail1_body);
-						if ($mail1_method != 'messaging3' && $mail1_method != 'mailto' && $mail1_method != 'none') {
-							KT_DB::prepare("INSERT INTO `##message` (sender, ip_address, user_id, subject, body) VALUES (? ,? ,? ,? ,?)")
-								->execute(array($user_name, $KT_REQUEST->getClientIp(), $webmaster_user_id, $mail1_subject, $mail1_body));
-						}
-
-						set_user_setting($user_id, 'verified', 1);
-						set_user_setting($user_id, 'pwrequested', null);
-						set_user_setting($user_id, 'reg_timestamp', date("U"));
-						set_user_setting($user_id, 'reg_hashcode', null);
-						AddToLog('User verified: '.$user_name, 'auth');
-						?>
-
-						<p><?php echo KT_I18N::translate('You have confirmed your request to become a registered user.'); ?></p>
-						<?php if (!get_user_setting($user_id, 'verified_by_admin')) {
-							echo KT_I18N::translate('The Administrator has been informed. As soon as he gives you permission to login, you can login with your user name and password.');
-						}
-					} else { ?>
-						<p><span class="warning"><?php echo KT_I18N::translate('Data was not correct, please try again'); ?></span></p>
-					<?php }
-				} else { ?>
-					<p><span class="warning"><?php echo KT_I18N::translate('Could not verify the information you entered. Please try again or contact the site administrator for more information.'); ?></p>
-				<?php } ?>
+				</form>
 			</div>
-		</div>
-		<?php
-	break;
+
+		<?php echo pageClose();
+
+		break;
+
+    case 'verify_hash':
+        if (!KT_Site::preference('USE_REGISTRATION_MODULE')) {
+            header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH);
+            exit;
+        }
+        AddToLog('User unsuccesfully attempted to verify hashcode: ' . $user_name, 'auth');
+
+        // switch language to webmaster settings
+        $webmaster_user_id = get_gedcom_setting(KT_GED_ID, 'WEBMASTER_USER_ID') ? get_gedcom_setting(KT_GED_ID, 'WEBMASTER_USER_ID') : get_gedcom_setting(KT_GED_ID, 'CONTACT_USER_ID');
+        if (!$webmaster_user_id) {
+            $webmaster_user_id = get_admin_id(KT_GED_ID);
+        }
+        KT_I18N::init(get_user_setting($webmaster_user_id, 'language'));
+
+        $user_id       = get_user_id($user_name);
+        $edit_user_url = KT_SERVER_NAME . '/admin_users.php?action=edit&amp;user_id=' . $user_id;
+ 
+        $mail1_body    = KT_I18N::translate('Hello administrator…') . KT_Mail::EOL . KT_Mail::EOL .
+            /* I18N: %1$s is a real-name, %2$s is a username, %3$s is an email address */ 
+            KT_I18N::translate(
+                'A new user (%1$s) has requested an account (%2$s) and verified an email address (%3$s).',
+                getUserFullName($user_id),
+                $user_name,
+                getUserEmail($user_id)
+            ) . KT_Mail::EOL . KT_Mail::EOL .
+ 
+            KT_I18N::translate('You need to review the account details.') . KT_Mail::EOL . KT_Mail::EOL .
+ 
+            '<a href="' . $edit_user_url . '">' . $edit_user_url . '</a>' . KT_Mail::EOL . KT_Mail::EOL .
+            /* I18N: You need to: */ KT_I18N::translate('Set the status to “approved”.') . KT_Mail::EOL .
+            /* I18N: You need to: */ KT_I18N::translate('Set the access level for each tree.') . KT_Mail::EOL .
+            /* I18N: You need to: */ KT_I18N::translate('Set a role for this user.') . KT_Mail::EOL .
+            /* I18N: You need to: */ KT_I18N::translate('Link the user account to an individual.');
+
+        $mail1_subject = /* I18N: %s is a server name/URL */ KT_I18N::translate('New user at %s', strip_tags(KT_TREE_TITLE));
+
+        // Change to the new user’s language
+        KT_I18N::init(get_user_setting($user_id, 'language'));
+
+        $controller->setPageTitle(KT_I18N::translate('User verification'));
+        $controller->pageHeader();
+
+		echo pageStart('login-verify-confirm', $controller->getPageTitle()); ?>
+
+	        <div class="grid-x">
+
+	            <?php if ($user_id && check_user_password($user_id, $user_password) && get_user_setting($user_id, 'reg_hashcode') === $user_hashcode) {
+	                KT_Mail::send(
+	                // “From:” header
+	                    $KT_TREE,
+	                    // “To:” header
+	                    getUserEmail($webmaster_user_id),
+	                    getUserFullName($webmaster_user_id),
+	                    // “Reply-To:” header
+	                    $KIWITREES_EMAIL,
+	                    $KIWITREES_EMAIL,
+	                    // Message body
+	                    $mail1_subject,
+	                    $mail1_body
+	                );
+
+	                set_user_setting($user_id, 'verified', 1);
+	                set_user_setting($user_id, 'reg_timestamp', date("U"));
+	                set_user_setting($user_id, 'reg_hashcode', null);
+	                AddToLog('User ' . $user_name . ' verified their email address' , 'auth'); ?>
+
+	                <div class="cell medium-6 medium-offset-3 callout success">
+	                    <p><?php echo KT_I18N::translate('You have confirmed your request to become a registered user.'); ?></p>
+	                    <p><?php echo KT_I18N::translate('The administrator has been informed. As soon as they give you permission you can login with your user name and password.'); ?></p>
+	                </div>
+
+	            <?php } else { ?>
+
+	                <div class="cell medium-6 medium-offset-3 callout alert">
+	                    <p>
+	                        <?php echo KT_I18N::translate('Could not verify the information you entered. Please try again or contact the site administrator for more information.'); ?>
+	                    </p>
+	                </div>
+
+	            <?php } ?>
+
+	        </div>
+
+        <?php echo pageClose(); 
+
+    	break;
+
 }

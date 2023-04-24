@@ -1597,6 +1597,21 @@ div[id$=-page] button[type=submit] {
 	margin-bottom: 0;
 }
 
+#login-page button .svg-inline--fa,
+#login-register-page button .svg-inline--fa,
+#login-password-page button .svg-inline--fa,
+#login-verify-page button .svg-inline--fa,
+#login-verify-confirm-page button .svg-inline--fa {
+	color: #faf5e8;
+}
+#login-page input,
+#login-register-page input,
+#login-password-page input,
+#login-verify-page input,
+#login-verify-confirm-page input {
+	height: initial;
+}
+
 #medialist-page input#filter {
 	background-color: #fffff4;
 	padding: 0.2rem;

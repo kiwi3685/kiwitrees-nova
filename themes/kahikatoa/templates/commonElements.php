@@ -61,6 +61,10 @@ function pageStart($title, $pageTitle = '', $includeTitle = 'y', $subTitle = '')
  */
 function pageClose()
 {
+	?>
+		</div>
+	</div>
+	<?php 
 }
 
 /**
