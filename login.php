@@ -615,7 +615,7 @@ switch ($action) {
             header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH);
             exit;
         }
-        AddToLog('User unsuccesfully attempted to verify hashcode: ' . $user_name, 'auth');
+        AddToLog('User attempted to verify hashcode: ' . $user_name, 'auth');
 
         // switch language to webmaster settings
         $webmaster_user_id = get_gedcom_setting(KT_GED_ID, 'WEBMASTER_USER_ID') ? get_gedcom_setting(KT_GED_ID, 'WEBMASTER_USER_ID') : get_gedcom_setting(KT_GED_ID, 'CONTACT_USER_ID');
