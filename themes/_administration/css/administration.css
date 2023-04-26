@@ -409,9 +409,6 @@ main #admin-content .accordion .accordion-item .accordion-title .fa-layers {
 	border: none;
 	margin: 0 1.5rem;
 }
-main #admin-content .accordion .accordion-item .accordion-title .fa-layers.warning {
-	color: #ff0000;
-}
 main #admin-content .accordion .accordion-item .accordion-title .fa-layers-counter {
 	transform: scale(var(--fa-counter-scale, 0.35));
 }
