@@ -98,12 +98,29 @@ function messageForm ($to, $from_name, $from_email, $subject, $body, $url, $to_n
 		$to_user_fullname_2 = KT_I18N::translate('Genealogy help');
 	}
 
+	$sendTo = '';
+	if (in_array($to, ['all', 'never_logged', 'last_6mo']) && KT_USER_IS_ADMIN) {
+		$userGroup = $to;
+		switch ($userGroup) {
+			case 'all':
+				$sendTo = KT_I18N::translate('To all users');
+				break;
+			case 'never_logged':
+				$sendTo = KT_I18N::translate('To users who have never logged in');
+				break;
+			case 'last_6mo':
+				$sendTo = KT_I18N::translate('To users who have not logged in for 6 months');
+				break;
+		}
+	}
+
 	if (KT_Site::preference('USE_RECAPTCHA') && !KT_USER_ID) { ?>
 		<script src="https://www.google.com/recaptcha/api.js" async defer ></script>
 	<?php } ?>
 
 	<form name="messageform" method="post">
 		<input type="hidden" name="url" value="<?php echo KT_Filter::escapeHtml($url); ?>">
+
 		<div class="grid-x grid-margin-x" id="contact_header">
 			<?php if (!KT_USER_ID) { ?>
 				<div class="cell medium-10 medium-offset-1">
@@ -111,18 +128,22 @@ function messageForm ($to, $from_name, $from_email, $subject, $body, $url, $to_n
 						<?php echo KT_I18N::translate('<b>Please Note:</b> Private information of living individuals will only be given to family relatives and close friends. You will be asked to verify your relationship before you will receive any private data. Sometimes information of dead persons may also be private. If this is the case, it is because there is not enough information known about the person to determine whether they are alive or not and we probably do not have more information on this person.<br /><br />Before asking a question, please verify that you are inquiring about the correct person by checking dates, places, and close relatives. If you are submitting changes to the genealogical data, please include the sources where you obtained the data.'); ?>
 					</div>
 				</div>
-				<div class="cell medium-10 medium-offset-1">
+				<div class="cell medium-6 medium-offset-3">
 					<div class="grid-x">
-						<div class="cell medium-6 medium-offset-3">
+						<div class="cell medium-2">
 							<label for="from_name" class="h6"><?php echo KT_I18N::translate('Your name'); ?></label>
+						</div>
+						<div class="cell medium-10">
 							<input type="text" name="from_name" id="from_name" value="<?php echo KT_Filter::escapeHtml($from_name); ?>" required>
 						</div>
-						<div class="cell medium-6 medium-offset-3">
+						<div class="cell medium-2">
 							<label for="from_email" class="h6"><?php echo KT_I18N::translate('Your email address'); ?></label>
+						</div>
+						<div class="cell medium-10">
 							<input type="email" name="from_email" id="from_email" value="<?php echo $from_email; ?>" required >
-							<div class="cell help-text">
-								<span><?php echo KT_I18N::translate('Please provide your email address so that we may contact you in response to this message. If you do not provide your email address we will not be able to respond to your inquiry. Your email address will not be used in any other way besides responding to this inquiry.'); ?></span>
-							</div>
+						</div>
+						<div class="callout help-text">
+							<span><?php echo KT_I18N::translate('Please provide your email address so that we may contact you in response to this message. If you do not provide your email address we will not be able to respond to your inquiry. Your email address will not be used in any other way besides responding to this inquiry.'); ?></span>
 						</div>
 					</div>
 					<hr>
@@ -137,36 +158,62 @@ function messageForm ($to, $from_name, $from_email, $subject, $body, $url, $to_n
 					<hr>
 				</div>
 			<?php } ?>
+		</div>
 
+		<div class="grid-x grid-margin-x grid-margin-y" id="contact_body">
 			<?php for ($i = 1; $i <= 2; $i++) { ?>
+				<?php echo ${'form_title_' . $i}; ?>
+
 				<div class="cell <?php echo $spacing; ?>">
-					<?php echo ${'form_title_' . $i}; ?>
-					<div class="cell">
-						<label for="to_name" class="h6"><?php echo KT_I18N::translate('To'); ?></label>
-						<input type="text" name="to_name" id="to_name" value="<?php echo ${'to_user_fullname_' . $i}; ?>">
-						<input type="hidden" name="to" value="<?php echo KT_Filter::escapeHtml(${'to_user_name_' . $i}); ?>">
-					</div>
-					<div class="cell">
-						<label for="subject" class="h6"><?php echo KT_I18N::translate('Subject'); ?></label>
-						<input type="text" name="subject" id="subject" value="<?php echo KT_Filter::escapeHtml($subject); ?>">
-					</div>
-					<div class="cell">
-						<label for="body" class="h6"><?php echo KT_I18N::translate('Body'); ?></label>
-						<textarea class="html-edit" name="body" id="body"><?php echo KT_Filter::escapeHtml($body); ?></textarea>
-					</div>
-					<?php echo honeypot(); ?>
-					<?php echo recaptcha(); ?>
-					<div class="cell">
-						<button class="button primary" type="submit">
-							<i class="<?php echo $iconStyle; ?> fa-envelope"></i>
-							<?php echo KT_I18N::translate('Send'); ?>
-						</button>
-						<button class="button secondary" type="button" onclick="window.location='<?php echo $url; ?>';">
-							<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
-							<?php echo KT_I18N::translate('Cancel'); ?>
-						</button>
+					<div class="grid-x grid-margin-x grid-margin-y">
+						<div class="cell medium-2 middle">
+							<label for="to_name" class="h6"><?php echo KT_I18N::translate('To'); ?></label>
+						</div>
+						<div class="cell medium-10">
+							<input type="text" name="to_name" id="to_name" value="<?php echo $sendTo ? $sendTo : ${'to_user_fullname_' . $i}; ?>">
+							<input type="hidden" name="to" value="<?php echo KT_Filter::escapeHtml(${'to_user_name_' . $i}); ?>">
+						</div>
+						<div class="cell medium-2 middle">
+							<label for="subject" class="h6"><?php echo KT_I18N::translate('Subject'); ?></label>
+						</div>
+						<div class="cell medium-10">
+							<input type="text" name="subject" id="subject" value="<?php echo KT_Filter::escapeHtml($subject); ?>">
+						</div>
+						<div class="cell medium-2 middle">
+							<label for="body" class="h6"><?php echo KT_I18N::translate('Body'); ?></label>
+						</div>
+						<div class="cell medium-10">
+							<textarea class="html-edit" name="body" id="body"><?php echo KT_Filter::escapeHtml($body); ?></textarea>
+						</div>
+
+						<?php echo honeypot(); ?>
+						<?php echo recaptcha(); ?>
+
+						<div class="cell">
+							<button class="button primary" type="submit">
+								<i class="<?php echo $iconStyle; ?> fa-envelope"></i>
+								<?php echo KT_I18N::translate('Send'); ?>
+							</button>
+							<button class="button secondary" type="button" onclick="window.location='<?php echo $url; ?>';">
+								<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
+								<?php echo KT_I18N::translate('Cancel'); ?>
+							</button>
+						</div>
+						<?php if (in_array($to, ['all', 'never_logged', 'last_6mo']) && KT_USER_IS_ADMIN) { ?>
+							<div class="cell userList">
+								<h6><?php echo KT_I18N::translate('This message will be sent to the following users'); ?></h6>
+									<?php if (recipients($to)) {
+										foreach (recipients($to) as $user_id => $user_name) { ?>
+											<span><?php echo getUserFullName($user_id); ?></span>
+										<?php } 
+									} else { ?>
+										<span><?php echo KT_I18N::translate('No users'); ?></span>
+									<?php } ?>
+							</div>
+						<?php } ?>
 					</div>
 				</div>
+
 				<?php if ($style <= 1) {
 					exit;
 				}
@@ -181,6 +228,7 @@ function messageForm ($to, $from_name, $from_email, $subject, $body, $url, $to_n
 			<?php } ?>
 
 		</div>
+
 	</form>
 
 <?php }

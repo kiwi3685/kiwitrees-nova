@@ -663,6 +663,10 @@ div[id$=-page] button[type=submit] {
 	min-width: 6rem;
 }
 
+#contact-page div.userList span:not(:last-child)::after {
+	content: ", ";
+}
+
 #indi-page h3 {
 	margin: 0;
 	padding: 0;
