@@ -697,7 +697,7 @@ switch (KT_Filter::get('action')) {
 						<div class="cell large-9">
 							<div class="grid-x">
 								<div class="small-6 medium-3 auto">
-									<label for"notify_clipping" class="cell medium-10 offset">
+									<label for="notify_clipping" class="cell medium-10 offset">
 										<?php echo KT_I18N::translate('Clippings cart'); ?>
 										<?php echo simple_switch(
 											'notify_clipping',
@@ -1131,21 +1131,21 @@ switch (KT_Filter::get('action')) {
 			<div class="cell">
 				<div class="grid-x grid-margin-y">
 					<div class="cell">
-						<a href="message.php?to=all&amp;method=messaging" target="_blank" class="button">
+						<a href="admin_message.php?to=all&amp;method=messaging" class="button">
 							<i class="<?php echo $iconStyle; ?> fa-paper-plane"></i>
 							&nbsp;&nbsp;
 							<?php echo KT_I18N::translate('To all users'); ?>
 						</a>
 					</div>
 					<div class="cell">
-						<a href="message.php?to=never_logged&amp;method=messaging" target="_blank" class="button">
+						<a href="admin_message.php?to=never_logged&amp;method=messaging" target="_blank" class="button">
 							<i class="<?php echo $iconStyle; ?> fa-paper-plane"></i>
 							&nbsp;&nbsp;
 							<?php echo KT_I18N::translate('To users who have never logged in'); ?>
 						</a>
 					</div>
 					<div class="cell">
-						<a href="message.php?to=last_6mo&amp;method=messaging" target="_blank" class="button">
+						<a href="admin_message.php?to=last_6mo&amp;method=messaging" target="_blank" class="button">
 							<i class="<?php echo $iconStyle; ?> fa-paper-plane"></i>
 							&nbsp;&nbsp;
 							<?php echo KT_I18N::translate('To users who have not logged in for 6 months'); ?>

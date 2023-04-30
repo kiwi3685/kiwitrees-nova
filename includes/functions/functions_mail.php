@@ -166,21 +166,21 @@ function messageForm ($to, $from_name, $from_email, $subject, $body, $url, $to_n
 
 				<div class="cell <?php echo $spacing; ?>">
 					<div class="grid-x grid-margin-x grid-margin-y">
-						<div class="cell medium-2 middle">
-							<label for="to_name" class="h6"><?php echo KT_I18N::translate('To'); ?></label>
+						<div class="cell medium-2">
+							<label for="to_name" class="h6 middle"><?php echo KT_I18N::translate('To'); ?></label>
 						</div>
 						<div class="cell medium-10">
 							<input type="text" name="to_name" id="to_name" value="<?php echo $sendTo ? $sendTo : ${'to_user_fullname_' . $i}; ?>">
 							<input type="hidden" name="to" value="<?php echo KT_Filter::escapeHtml(${'to_user_name_' . $i}); ?>">
 						</div>
-						<div class="cell medium-2 middle">
-							<label for="subject" class="h6"><?php echo KT_I18N::translate('Subject'); ?></label>
+						<div class="cell medium-2">
+							<label for="subject" class="h6 middle"><?php echo KT_I18N::translate('Subject'); ?></label>
 						</div>
 						<div class="cell medium-10">
 							<input type="text" name="subject" id="subject" value="<?php echo KT_Filter::escapeHtml($subject); ?>">
 						</div>
-						<div class="cell medium-2 middle">
-							<label for="body" class="h6"><?php echo KT_I18N::translate('Body'); ?></label>
+						<div class="cell medium-2">
+							<label for="body" class="h6 middle"><?php echo KT_I18N::translate('Body'); ?></label>
 						</div>
 						<div class="cell medium-10">
 							<textarea class="html-edit" name="body" id="body"><?php echo KT_Filter::escapeHtml($body); ?></textarea>
@@ -234,7 +234,7 @@ function messageForm ($to, $from_name, $from_email, $subject, $body, $url, $to_n
 <?php }
 
 function honeypot() {
-	if (KT_Site::preference('USE_HONEYPOT')) {
+	if (KT_Site::preference('USE_HONEYPOT') && !KT_USER_ID) {
 		return '<div class="cell">
 			<label for="termsConditions">' .
 				/* I18N: for security protection only */ KT_I18N::translate('Confirm your agreement to our <a href="https://www.pandadoc.com/website-standard-terms-and-conditions-template/" >Terms and Conditions.') . '</a>
@@ -245,7 +245,7 @@ function honeypot() {
 }
 
 function recaptcha() {
-	if (KT_Site::preference('USE_RECAPTCHA')) {
+	if (KT_Site::preference('USE_RECAPTCHA') && !KT_USER_ID) {
 		return '<div class="cell">
 			<label>
 				<div class="g-recaptcha" data-sitekey="' . KT_Site::preference('RECAPTCHA_SITE_KEY') . '" data-callback="recaptcha_callback"></div>

@@ -830,6 +830,9 @@ main #admin-content #user_details-page #password-checker .progress #password-str
 main #admin-content #user_details-page #password-checker .progress #password-strength.progress-bar.progress-bar-success {
 	background-color: #5da423;
 }
+main #admin-content #contact-page div.userList span:not(:last-child)::after {
+	content: ", ";
+}
 main #admin-content #site_logs-page h5 {
 	font-weight: 500;
 }

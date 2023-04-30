@@ -44,11 +44,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	$url				= KT_Filter::postUrl('url', KT_Filter::getUrl('url'));
 	$termsConditions	= KT_Filter::post('termsConditions', '1', '0');
 
-	// Only an administration can use the distribution lists.
-	$controller->restrictAccess(!in_array($to, ['all', 'never_logged', 'last_6mo']) || KT_USER_IS_ADMIN);
-
-	$recipients = recipients($to);
-
 	// Different validation for admin/user/visitor.
 	$errors		= false;
 	$urlRegex	= '/(?!' . preg_quote(KT_SERVER_NAME, '/') . ')((?:ftp|http|https|www|\:|\/\/)?(?>[a-z\-0-9]{1,}\.){1,}[a-z]{2,8})/m';
@@ -69,8 +64,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	} elseif (preg_match($urlRegex, $subject . $body, $match)) {
 		KT_FlashMessages::addMessage(KT_I18N::translate('You are not allowed to send messages that contain external links.'));
 		AddToLog('Attempt to include external links (' . mb_strimwidth($match[1], 0, 100, "...") . ') by: ' . $from_email, 'spam');
-		$errors = true;
-	} elseif (empty($recipients)) {
 		$errors = true;
 	}
 
@@ -147,8 +140,6 @@ $body		= KT_Filter::post('body');
 $url		= KT_Filter::postUrl('url', KT_Filter::getUrl('url'));
 
 
-// Only an administrator can use the distribution lists.
-$controller->restrictAccess(!in_array($to, ['all', 'never_logged', 'last_6mo']) || KT_USER_IS_ADMIN);
 $controller->pageHeader();
 
 $to_names = implode(KT_I18N::$list_separator, array_map(function($user) { return getUserFullName($user); }, recipients($to))); ?>
