@@ -139,7 +139,6 @@ $subject	= KT_Filter::post('subject', null, KT_Filter::get('subject'));
 $body		= KT_Filter::post('body');
 $url		= KT_Filter::postUrl('url', KT_Filter::getUrl('url'));
 
-
 $controller->pageHeader();
 
 $to_names = implode(KT_I18N::$list_separator, array_map(function($user) { return getUserFullName($user); }, recipients($to))); ?>
