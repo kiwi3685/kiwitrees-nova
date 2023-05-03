@@ -1116,6 +1116,29 @@ main #admin-content #merge_records-page dl.cell dd.cell {
 main #admin-content #merge_records-page button.returnToStart {
 	margin-top: 0.9375rem;
 }
+main #admin-content #find-unlinked-records-page input[type=checkbox] {
+	margin-top: 0.75rem;
+}
+main #admin-content #find-unlinked-records-page div.selectType label.middle {
+	display: inline-block;
+	margin: -0.75rem 1rem 0 0;
+	vertical-align: middle;
+}
+main #admin-content #find-unlinked-records-page div.accordion-content a {
+	display: block;
+}
+main #admin-content #find-unlinked-records-page div.accordion-content a:before {
+	font-family: "Font Awesome 6 Free";
+	font: var(--fa-font-solid);
+	content: "\f054";
+	display: none;
+}
+main #admin-content #find-unlinked-records-page div.accordion-content a .svg-inline--fa {
+	font-size: 0.75rem;
+}
+main #admin-content #find-unlinked-records-page div.accordion-content span {
+	margin: 0 0.5rem;
+}
 main #admin-content #faq-page table#reorderTable thead tr th.order,
 main #admin-content #gallery-page table#reorderTable thead tr th.order,
 main #admin-content #pages-page table#reorderTable thead tr th.order,

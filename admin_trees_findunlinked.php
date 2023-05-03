@@ -102,19 +102,23 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 		<div class="cell">
 			<h4><?php echo $controller->getPageTitle(); ?></h4>
 			<div class="cell callout info-help ">
-				<?php echo /* I18N: Help text for the Find unlinked records tool. */ KT_I18N::translate('List records that are not linked to any other records. It does not include Families as a family record cannot exist without at least one family member.<br>
-				The definition of unlinked for each type of record is:
-				<ul><li>Individuals: a person who is not linked to any family, as a child or a spouse.</li>
-				<li>Sources: a source record that is not used as a source for any record, fact, or event in the family tree.</li>
-				<li>Repositories: a repository record that is not used as a repository for any source in the family tree.</li>
-				<li>Notes: a shared note record that is not used as a note to any record, fact, or event in the family tree.</li>
-				<li>Media: a media object that is registered in the family tree but not attached to any record, fact, or event.</li><ul>'); ?>
+				<?php echo /* I18N: Help text for the Find unlinked records tool. */ KT_I18N::translate('
+					List records that are not linked to any other records. It does not include Families as a family record cannot exist without at least one family member.<br>
+					The definition of unlinked for each type of record is:
+					<ul><li>Individuals: a person who is not linked to any family, as a child or a spouse.</li>
+					<li>Sources: a source record that is not used as a source for any record, fact, or event in the family tree.</li>
+					<li>Repositories: a repository record that is not used as a repository for any source in the family tree.</li>
+					<li>Notes: a shared note record that is not used as a note to any record, fact, or event in the family tree.</li>
+					<li>Media: a media object that is registered in the family tree but not attached to any record, fact, or event.</li><ul>
+				'); ?>
 			</div>
-			<form method="post" name="unlinked_form" action="<?php echo KT_SCRIPT_NAME; ?>">
+			<form class="cell" method="post" name="unlinked_form" action="<?php echo KT_SCRIPT_NAME; ?>">
 				<input type="hidden" name="action" value="view">
 				<div class="grid-x grid-margin-x">
-					<div class="cell">
-						<h5 class="bold"><?php echo KT_I18N::translate('Family tree'); ?></h5>
+					<div class="cell medium-2">
+						<label class="middle"><?php echo KT_I18N::translate('Family tree'); ?></label>
+					</div>
+					<div class="cell medium-4">
 						<select name="ged">
 							<?php foreach (KT_Tree::getAll() as $tree) { ?>
 								<option value="<?php echo $tree->tree_name_html; ?>"
@@ -125,131 +129,180 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 							<?php } ?>
 						</select>
 					</div>
-					<div class="cell">
-						<h5>
-							<?php echo KT_I18N::translate('Select all'); ?>
-							<input type="checkbox" onclick="toggle_select(this)"  checked="checked">
-						</h5>
+					<div class="cell medium-6"></div>
+					<div class="cell medium-2">
+						<label class="middle"><?php echo KT_I18N::translate('Select / de-select all'); ?></label>
+					</div>
+					<div class="cell medium-1">
+						<input type="checkbox" onclick="toggle_select(this)"  checked="checked">
+					</div>
+					<div class="cell medium-9"></div>
+					<div class="cell medium-2"></div>
+					<div class="cell medium-10 selectType">
 						<?php
 						foreach ($list as $selected) { ?>
-							<span>
-								<input class="check" type="checkbox" name="records[]" id="record_<?php echo $selected; ?>"
-									<?php if (($records && in_array($selected, $records)) || !$records) {
-										echo ' checked="checked" ';
-									} ?>
-								value="<?php echo $selected; ?>">
-								<label for="record_'<?php echo $selected; ?>"><?php echo KT_I18N::translate($selected); ?></label>
-							</span>
+							<input class="check" type="checkbox" name="records[]" id="record_<?php echo $selected; ?>"
+								<?php if (($records && in_array($selected, $records)) || !$records) {
+									echo ' checked="checked" ';
+								} ?>
+							value="<?php echo $selected; ?>">
+							<label class="middle" for="record_'<?php echo $selected; ?>">
+								<?php echo KT_I18N::translate($selected); ?>
+							</label>
 						<?php }	?>
 					</div>
+					
+					<?php singleButton('Show'); ?>
+
 				</div>
-				<button type="submit" class="button">
-	                <i class="<?php echo $iconStyle; ?> fa-eye"></i>
-					<?php echo KT_I18N::translate('View'); ?>
-				</button>
 			</form>
 		</div>
 		<hr>
 		<?php
 		// START OUTPUT
 		if ($action == 'view') { ?>
-			<div id="unlinked_accordion" style="visibility:hidden">
+			<hr class="cell">
+			<ul class="accordion" data-accordion data-multi-expand="true" data-allow-all-closed="true">
 				<?php
 				if ($records) {
 					// -- Individuals --
 					if (in_array('Individuals', $records)) {
 						$rows_INDI	= KT_DB::prepare($sql_INDI)->fetchAll(PDO::FETCH_ASSOC);
 						if ($rows_INDI) { ?>
-							<h3 class="drop"><?php echo KT_I18N::plural('%s unlinked individual', '%s unlinked individuals', count($rows_INDI), count($rows_INDI)); ?></h3>
-							<div>
-								<?php foreach ($rows_INDI as $row) {
-									$id = $row['i_id'];
-									$record = KT_Person::getInstance($id);
-									$fullname =  $record->getLifespanName(); ?>
-									<a href="<?php echo $record->getHtmlUrl(); ?>" target="_blank" rel="noopener noreferrer"><?php echo $fullname; ?><span class="id">(<?php echo $id; ?>)</span></a>
-								<?php } ?>
-							</div>
+							<li class="accordion-item" data-accordion-item>
+							    <a href="#" class="accordion-title">
+							    	<?php echo KT_I18N::plural('%s unlinked individual', '%s unlinked individuals', count($rows_INDI), count($rows_INDI)); ?>
+						    	</a>
+								<div class="accordion-content" data-tab-content>
+									<?php foreach ($rows_INDI as $row) {
+										$id = $row['i_id'];
+										$record = KT_Person::getInstance($id);
+										$fullname =  $record->getLifespanName(); ?>
+										<a href="<?php echo $record->getHtmlUrl(); ?>" target="_blank" rel="noopener noreferrer">
+											<?php echo $fullname; ?>
+											<span class="id">(<?php echo $id; ?>)</span>
+										</a>
+									<?php } ?>
+								</div>
+							</li>
 						<?php } else { ?>
-							<h3 class="empty"><?php echo KT_I18N::translate('No unlinked individuals'); ?></h3>
+							<li class="accordion-item" data-accordion-item><?php echo KT_I18N::translate('No unlinked individuals'); ?></li>
 						<?php }
 					}
 					// -- Sources --
 					if (in_array('Sources', $records)) {
 						$rows_SOUR	= KT_DB::prepare($sql_SOUR)->fetchAll(PDO::FETCH_ASSOC);
 						if ($rows_SOUR) { ?>
-							<h3 class="drop"><?php echo KT_I18N::plural('%s unlinked source', '%s unlinked sources', count($rows_SOUR), count($rows_SOUR)); ?></h3>
-							<div>
-								<?php foreach ($rows_SOUR as $row) {
-									$id = $row['s_id'];
-									$record = KT_Source::getInstance($id);
-									$fullname =  $record->getFullName(); ?>
-									<a href="<?php echo $record->getHtmlUrl(); ?>" target="_blank" rel="noopener noreferrer"><?php echo $fullname; ?><span class="id">(<?php echo $id; ?>)</span></a>
+							<li class="accordion-item" data-accordion-item>
+							    <a href="#" class="accordion-title">
+							    	<?php echo KT_I18N::plural('%s unlinked source', '%s unlinked sources', count($rows_SOUR), count($rows_SOUR)); ?>
+						    	</a>
+								<div class="accordion-content" data-tab-content>
+									<?php foreach ($rows_SOUR as $row) {
+										$id = $row['s_id'];
+										$record = KT_Source::getInstance($id);
+										$fullname =  $record->getFullName(); ?>
+										<a href="<?php echo $record->getHtmlUrl(); ?>" target="_blank" rel="noopener noreferrer">
+											<?php echo $fullname; ?>
+											<span class="id">(<?php echo $id; ?>)</span>
+										</a>
 									<?php } ?>
-							</div>
+								</div>
+							</li>
 						<?php } else { ?>
-							<h3 class="empty"><?php echo KT_I18N::translate('No unlinked sources'); ?></h3>
+							<li class="accordion-item" data-accordion-item><?php echo KT_I18N::translate('No unlinked sources'); ?></li>
 						<?php }
 					}
 					// -- Notes --
 					if (in_array('Notes', $records)) {
 						$rows_NOTE	= KT_DB::prepare($sql_NOTE)->fetchAll(PDO::FETCH_ASSOC);
 						if ($rows_NOTE) { ?>
-							<h3 class="drop"><?php echo KT_I18N::plural('%s unlinked note', '%s unlinked notes', count($rows_NOTE), count($rows_NOTE)); ?></h3>
-							<div>
-								<?php foreach ($rows_NOTE as $row) {
-									$id = $row['o_id'];
-									$record = KT_Note::getInstance($id);
-									$fullname =  $record->getFullName(); ?>
-									<a href="<?php echo $record->getHtmlUrl(); ?>" target="_blank" rel="noopener noreferrer"><?php echo $fullname; ?><span class="id">(<?php echo $id; ?>)</span></a>
+							<li class="accordion-item" data-accordion-item>
+							    <a href="#" class="accordion-title">
+							    	<?php echo KT_I18N::plural('%s unlinked note', '%s unlinked notes', count($rows_NOTE), count($rows_NOTE)); ?>
+						    	</a>
+								<div class="accordion-content" data-tab-content>
+									<?php foreach ($rows_NOTE as $row) {
+										$id = $row['o_id'];
+										$record = KT_Note::getInstance($id);
+										$fullname =  $record->getFullName(); ?>
+										<a href="<?php echo $record->getHtmlUrl(); ?>" target="_blank" rel="noopener noreferrer">
+											<?php echo $fullname; ?>
+											<span class="id">(<?php echo $id; ?>)</span>
+										</a>
 									<?php } ?>
-							</div>
+								</div>
+							</li>
 						<?php } else { ?>
-							<h3 class="empty"><?php echo KT_I18N::translate('No unlinked notes'); ?></h3>
+							<li class="accordion-item" data-accordion-item><?php echo KT_I18N::translate('No unlinked notes'); ?></li>
 						<?php }
 					}
 					// -- Repositories --
 					if (in_array('Repositories', $records)) {
 						$rows_REPO	= KT_DB::prepare($sql_REPO)->fetchAll(PDO::FETCH_ASSOC);
 						if ($rows_REPO) { ?>
-							<h3 class="drop"><?php echo KT_I18N::plural('%s unlinked repository', '%s unlinked repositories', count($rows_REPO), count($rows_REPO)); ?></h3>
-							<div>
-								<?php foreach ($rows_REPO as $row) {
-									$id = $row['o_id'];
-									$record = KT_Repository::getInstance($id);
-									$fullname =  $record->getFullName(); ?>
-									<a href="<?php echo $record->getHtmlUrl(); ?>" target="_blank" rel="noopener noreferrer"><?php echo $fullname; ?><span class="id">(<?php echo $id; ?>)</span></a>
+							<li class="accordion-item" data-accordion-item>
+							    <a href="#" class="accordion-title">
+							    	<?php echo KT_I18N::plural('%s unlinked repository', '%s unlinked repositories', count($rows_REPO), count($rows_REPO)); ?>
+						    	</a>
+								<div class="accordion-content" data-tab-content>
+									<?php foreach ($rows_REPO as $row) {
+										$id = $row['o_id'];
+										$record = KT_Repository::getInstance($id);
+										$fullname =  $record->getFullName(); ?>
+										<a href="<?php echo $record->getHtmlUrl(); ?>" target="_blank" rel="noopener noreferrer">
+											<?php echo $fullname; ?>
+											<span class="id">(<?php echo $id; ?>)</span>
+										</a>
 									<?php } ?>
-							</div>
+								</div>
+							</li>
 						<?php } else { ?>
-							<h3 class="empty"><?php echo KT_I18N::translate('No unlinked repositories'); ?></h3>
+							<li class="accordion-item" data-accordion-item>
+								<a href="#" class="accordion-title">
+									<?php echo KT_I18N::translate('No unlinked repositories'); ?>
+								</a>
+								<div class="accordion-content" data-tab-content></div>
+							</li>
 						<?php }
 					}
 					// -- Media --
 					if (in_array('Media', $records)) {
 						$rows_MEDIA	= KT_DB::prepare($sql_MEDIA)->fetchAll(PDO::FETCH_ASSOC);
 						if ($rows_MEDIA) { ?>
-							<h3 class="drop"><?php echo KT_I18N::plural('%s unlinked media object', '%s unlinked media objects', count($rows_MEDIA), count($rows_MEDIA)); ?></h3>
-							<div>
-								<?php foreach ($rows_MEDIA as $row) {
-									$id = $row['m_id'];
-									$folder = $row['m_filename'];
-									$record = KT_Media::getInstance($id);
-									$title =  $record->getTitle(); ?>
-									<a href="<?php echo $record->getHtmlUrl(); ?>" target="_blank" rel="noopener noreferrer">
-										<?php echo $folder; ?>
-										<span class="id">&nbsp;(<?php echo $id; ?>)&nbsp;</span>
-										<?php echo $title !== $folder ? $title : ''; ?>
-									</a>
+							<li class="accordion-item" data-accordion-item>
+							    <a href="#" class="accordion-title">
+							    	<?php echo KT_I18N::plural('%s unlinked media object', '%s unlinked media objects', count($rows_MEDIA), count($rows_MEDIA)); ?>
+						    	</a>
+								<div class="accordion-content" data-tab-content>
+									<?php foreach ($rows_MEDIA as $row) {
+										$id = $row['m_id'];
+										$folder = $row['m_filename'];
+										$record = KT_Media::getInstance($id);
+										$title =  $record->getTitle(); ?>
+										<a href="<?php echo $record->getHtmlUrl(); ?>" target="_blank" rel="noopener noreferrer">
+											<?php echo $folder; ?>
+											<span class="id">&nbsp;(<?php echo $id; ?>)&nbsp;</span>
+											<?php echo $title !== $folder ? $title : ''; ?>
+										</a>
 									<?php } ?>
-							</div>
+								</div>
+							</li>
 						<?php } else { ?>
-							<h3 class="empty"><?php echo KT_I18N::translate('No unlinked media objects'); ?></h3>
+							<li class="accordion-item" data-accordion-item>
+								<a href="#" class="accordion-title">
+									<?php echo KT_I18N::translate('No unlinked media objects'); ?>
+								</a>
+								<div class="accordion-content" data-tab-content></div>
+							</li>
 						<?php }
 					}
 				} else { ?>
-					<h3 class="empty"><?php echo KT_I18N::translate('You must select at least one record type'); ?></h3>
+					<div class="callout warning">
+						<?php echo KT_I18N::translate('You must select at least one record type'); ?>
+					</div>
 				<?php } ?>
-			</div>
+			</ul>
 		<?php } ?>
 	</div>
 </div>

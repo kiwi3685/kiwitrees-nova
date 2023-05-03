@@ -467,7 +467,7 @@ function relatedPages($links, $self = '')
  * @param string $image		// an image used in place of the descr (description)
  * @param int	 $x			// unique number applied to images used as description for cliable link
  */
-function AdminSummaryCard($link, $title, $user, $tooltip, $descr, $image = false, $x = 0)
+function AdminSummaryCard($link, $title, $user, $tooltip, $descr, $image = '', $x = 0)
 {
 	global $iconStyle;
 
@@ -519,6 +519,7 @@ function AdminSummaryCard($link, $title, $user, $tooltip, $descr, $image = false
 		</div>
 	<?php } ?>
 
+	<!-- hidden drop down - description on small devices -->
 	<div class="dropdown-pane" id="<?php echo $dropdownID; ?>" data-dropdown data-close-on-click=true>
 		<?php echo $descr; ?>
 	</div>

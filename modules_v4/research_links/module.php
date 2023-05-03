@@ -180,7 +180,7 @@ class research_links_KT_Module extends KT_Module implements KT_Module_Config, KT
 									<div class="grid-x">
 										<div class="cell small-3 large-2">
 											<label for="checkbox1">
-												<?php echo KT_I18N::translate('Select/de-select All'); ?>
+												<?php echo KT_I18N::translate('Select / de-select all'); ?>
 											</label>
 										</div>
 										<div class="cell auto">

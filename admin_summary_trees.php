@@ -160,7 +160,7 @@ echo pageStart('tree_admin', $controller->getPageTitle()); ?>
 			<div class="cell">
 				<h4><?php echo KT_I18N::translate('Family tree tools'); ?></h4>
 			</div>
-			<?php foreach ($ft_tools as $title => $file) {
+			<?php foreach ($ft_tools as $link => $file) {
 				if (($file[3] == 'alert' && KT_USER_IS_ADMIN) || ($file[3] != 'alert' && KT_USER_GEDCOM_ADMIN)) {
 					$title   = $file[0];
 					$descr   = $file[1];
