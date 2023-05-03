@@ -239,16 +239,16 @@ echo pageStart('admin', KT_I18N::translate('Dashboard')); ?>
 								// Kiwitrees version check
 								if ($latest_version) {
 									if (version_compare(KT_VERSION, $latest_version) < 0) { ?>
-										<div class="cell callout alert auto">
+										<div class="cell callout alert">
 											<?php echo /* I18N: %s is a URL/link to the project website */ KT_I18N::translate('Version %s of kiwitrees is now available at %s.', $latest_version, ' <a class="current" href="' . KT_KIWITREES_URL . '/services/downloads/">kiwitrees.net downloads</a>'); ?>
 										</div>
 									<?php } else { ?>
-										<div class="cell callout success auto">
+										<div class="cell callout success">
 											<?php echo /* I18N: %s is a URL/link to the project website */ KT_I18N::translate('Your version of kiwitrees is the latest available.'); ?>
 										</div>
 									<?php }
 								} else { ?>
-									<div class="cell callout warning auto">
+									<div class="cell callout warning">
 										<?php echo /* I18N: %s is a URL/link to the project website */ KT_I18N::translate('No kiwitrees upgrade information is available.'); ?>
 									</div>
 								<?php }
