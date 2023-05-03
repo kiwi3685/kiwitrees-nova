@@ -41,7 +41,6 @@ if (!$searchTerm && isset($_COOKIE["adminSearch"])){
 } 
 
 $this
-	->addExternalJavascript(KT_KIWITREES_ADMIN_JS_URL)
 	->addExternalJavascript(KT_JQUERY_COLORBOX_URL)
 	->addExternalJavascript(KT_JQUERY_WHEELZOOM_URL)
 	->addExternalJavascript(KT_JQUERY_AUTOSIZE)
