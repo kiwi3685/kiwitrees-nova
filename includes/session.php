@@ -514,11 +514,6 @@ if ($KT_TREE) {
 	define('KT_USER_ACCESS_LEVEL', KT_PRIV_PUBLIC);
 }
 
-// Define theme specific js file
-if (KT_GED_ID && get_gedcom_setting(KT_GED_ID, 'THEME_DIR')) {
-	define('KT_THEME_JS', KT_STATIC_URL . 'themes/' . get_gedcom_setting(KT_GED_ID, 'THEME_DIR') . '/js/theme.min.js');
-}
-
 $GEDCOM = KT_GEDCOM;
 
 // With no parameters, init() looks to the environment to choose a language

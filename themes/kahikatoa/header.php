@@ -33,7 +33,6 @@
 	->addExternalJavascript (KT_JQUERY_COLORBOX_URL)
 	->addExternalJavascript (KT_JQUERY_WHEELZOOM_URL)
 	->addExternalJavascript (KT_JQUERY_AUTOSIZE)
-	->addExternalJavascript (KT_THEME_JS)
 	->addInlineJavascript ('
 		activate_colorbox();
 		jQuery.extend(jQuery.colorbox.settings, {
@@ -100,6 +99,7 @@
 				<link rel="stylesheet" href="<?php echo KT_THEME_URL; ?>mystyle.css" type="text/css">
 			<?php }
 		}?>
+		<?php echo $javascript; ?>
 	</head>
 	<body>
 		<?php if ($view !='simple') { ?>
@@ -140,7 +140,6 @@
 
 			<?php echo KT_FlashMessages::getHtmlMessages(), // Feedback from asynchronous actions
 
-			$javascript;
 		} ?>
 
 		<main class="grid-x grid-padding-x">
