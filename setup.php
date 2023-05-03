@@ -93,10 +93,11 @@ header('Content-Type: text/html; charset=UTF-8'); ?>
 		<meta http-equiv="x-ua-compatible" content="ie=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="icon" href="themes/_administration/images/kt.png" type="image/png">
+		<link rel="stylesheet" href="themes/_administration/css/foundation.min.css">
 		<link rel="stylesheet" href="themes/_administration/css/administration.min.css">
+		<link rel="stylesheet" href="themes/_administration/css/libraryfiles.min.css">
 		<title><?php echo KT_I18N::translate('Kiwitrees-nova setup wizard'); ?></title>
 		<script src="library/jquery/jquery.min.js"></script>
-<!--		<script src="library/foundation/node_modules/what-input/dist/what-input.min.js"></script> -->
 		<script src="library/foundation/dist/js/foundation.min.js"></script>
 		<script>
 			jQuery(document).foundation();
