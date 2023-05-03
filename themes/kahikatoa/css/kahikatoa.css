@@ -778,69 +778,43 @@ div[id$=-page] button[type=submit] {
 	padding: 0;
 	text-align: left;
 }
-#indi-page .tabs-panel #tabi_events_content .indiFactHeader,
-#indi-page .tabs-panel #tabi_attributes_content .indiFactHeader,
-#indi-page .tabs-panel #tabi_notes_content .indiFactHeader {
-	background: #e0e0e0;
+#indi-page .tabs-panel#tabi_events .indiFactHeader, #indi-page .tabs-panel#tabi_attributes .indiFactHeader, #indi-page .tabs-panel#tabi_notes .indiFactHeader {
+	background-color: #faf5e8;
 	border-bottom: 0.0125rem solid #ab3334;
 	padding: 0 0.5rem;
 }
-#indi-page .tabs-panel #tabi_events_content .indiFactHeader .event, #indi-page .tabs-panel #tabi_events_content .indiFactHeader .place, #indi-page .tabs-panel #tabi_events_content .indiFactHeader .detail, #indi-page .tabs-panel #tabi_events_content .indiFactHeader .edit,
-#indi-page .tabs-panel #tabi_attributes_content .indiFactHeader .event,
-#indi-page .tabs-panel #tabi_attributes_content .indiFactHeader .place,
-#indi-page .tabs-panel #tabi_attributes_content .indiFactHeader .detail,
-#indi-page .tabs-panel #tabi_attributes_content .indiFactHeader .edit,
-#indi-page .tabs-panel #tabi_notes_content .indiFactHeader .event,
-#indi-page .tabs-panel #tabi_notes_content .indiFactHeader .place,
-#indi-page .tabs-panel #tabi_notes_content .indiFactHeader .detail,
-#indi-page .tabs-panel #tabi_notes_content .indiFactHeader .edit {
+#indi-page .tabs-panel#tabi_events .indiFactHeader .event, #indi-page .tabs-panel#tabi_events .indiFactHeader .place, #indi-page .tabs-panel#tabi_events .indiFactHeader .detail, #indi-page .tabs-panel#tabi_events .indiFactHeader .edit, #indi-page .tabs-panel#tabi_attributes .indiFactHeader .event, #indi-page .tabs-panel#tabi_attributes .indiFactHeader .place, #indi-page .tabs-panel#tabi_attributes .indiFactHeader .detail, #indi-page .tabs-panel#tabi_attributes .indiFactHeader .edit, #indi-page .tabs-panel#tabi_notes .indiFactHeader .event, #indi-page .tabs-panel#tabi_notes .indiFactHeader .place, #indi-page .tabs-panel#tabi_notes .indiFactHeader .detail, #indi-page .tabs-panel#tabi_notes .indiFactHeader .edit {
 	padding: 0;
 }
-#indi-page .tabs-panel #tabi_events_content .indiFact div.overflow-y,
-#indi-page .tabs-panel #tabi_attributes_content .indiFact div.overflow-y,
-#indi-page .tabs-panel #tabi_notes_content .indiFact div.overflow-y {
+#indi-page .tabs-panel#tabi_events .indiFact div.overflow-y, #indi-page .tabs-panel#tabi_attributes .indiFact div.overflow-y, #indi-page .tabs-panel#tabi_notes .indiFact div.overflow-y {
 	overflow-y: auto;
 }
-#indi-page .tabs-panel #tabi_events_content .indiFact .cell.edit,
-#indi-page .tabs-panel #tabi_attributes_content .indiFact .cell.edit,
-#indi-page .tabs-panel #tabi_notes_content .indiFact .cell.edit {
+#indi-page .tabs-panel#tabi_events .indiFact .cell.edit, #indi-page .tabs-panel#tabi_attributes .indiFact .cell.edit, #indi-page .tabs-panel#tabi_notes .indiFact .cell.edit {
 	margin: 0;
 	padding: 0;
 }
-#indi-page .tabs-panel #tabi_events_content .indiFact .cell.event span.h6,
-#indi-page .tabs-panel #tabi_attributes_content .indiFact .cell.event span.h6,
-#indi-page .tabs-panel #tabi_notes_content .indiFact .cell.event span.h6 {
+#indi-page .tabs-panel#tabi_events .indiFact .cell.event span.h6, #indi-page .tabs-panel#tabi_attributes .indiFact .cell.event span.h6, #indi-page .tabs-panel#tabi_notes .indiFact .cell.event span.h6 {
 	line-height: 1;
 }
-#indi-page .tabs-panel #tabi_events_content .indiFact .media-display,
-#indi-page .tabs-panel #tabi_attributes_content .indiFact .media-display,
-#indi-page .tabs-panel #tabi_notes_content .indiFact .media-display {
+#indi-page .tabs-panel#tabi_events .indiFact .media-display, #indi-page .tabs-panel#tabi_attributes .indiFact .media-display, #indi-page .tabs-panel#tabi_notes .indiFact .media-display {
 	display: inline-block;
 	float: left;
 	padding: 0 1rem;
 	max-width: 12rem;
 	width: auto;
 }
-#indi-page .tabs-panel #tabi_events_content .indiFact .media-display .media-display-image,
-#indi-page .tabs-panel #tabi_attributes_content .indiFact .media-display .media-display-image,
-#indi-page .tabs-panel #tabi_notes_content .indiFact .media-display .media-display-image {
+#indi-page .tabs-panel#tabi_events .indiFact .media-display .media-display-image, #indi-page .tabs-panel#tabi_attributes .indiFact .media-display .media-display-image, #indi-page .tabs-panel#tabi_notes .indiFact .media-display .media-display-image {
 	line-height: 10rem;
 }
-#indi-page .tabs-panel #tabi_events_content .indiFact .media-display .media-display-image.single,
-#indi-page .tabs-panel #tabi_attributes_content .indiFact .media-display .media-display-image.single,
-#indi-page .tabs-panel #tabi_notes_content .indiFact .media-display .media-display-image.single {
+#indi-page .tabs-panel#tabi_events .indiFact .media-display .media-display-image.single, #indi-page .tabs-panel#tabi_attributes .indiFact .media-display .media-display-image.single, #indi-page .tabs-panel#tabi_notes .indiFact .media-display .media-display-image.single {
 	line-height: 0;
 }
-#indi-page .tabs-panel #tabi_events_content .indiFact .media-display .media-display-image a,
-#indi-page .tabs-panel #tabi_attributes_content .indiFact .media-display .media-display-image a,
-#indi-page .tabs-panel #tabi_notes_content .indiFact .media-display .media-display-image a {
+#indi-page .tabs-panel#tabi_events .indiFact .media-display .media-display-image a, #indi-page .tabs-panel#tabi_attributes .indiFact .media-display .media-display-image a, #indi-page .tabs-panel#tabi_notes .indiFact .media-display .media-display-image a {
 	display: block;
 	margin: auto;
 	max-width: 6.5rem;
 }
-#indi-page .tabs-panel #tabi_events_content .indiFact .media-display .media-display-title,
-#indi-page .tabs-panel #tabi_attributes_content .indiFact .media-display .media-display-title,
-#indi-page .tabs-panel #tabi_notes_content .indiFact .media-display .media-display-title {
+#indi-page .tabs-panel#tabi_events .indiFact .media-display .media-display-title, #indi-page .tabs-panel#tabi_attributes .indiFact .media-display .media-display-title, #indi-page .tabs-panel#tabi_notes .indiFact .media-display .media-display-title {
 	font-size: 90%;
 	text-align: justify;
 }
@@ -2451,7 +2425,7 @@ button:focus {
 }
 
 .age span {
-	font-size: 0.575rem;
+	font-size: 0.875rem;
 	vertical-align: super;
 }
 
