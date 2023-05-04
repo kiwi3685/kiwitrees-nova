@@ -35,7 +35,6 @@ global $iconStyle;
 $searchTerm = KT_Filter::post('admin_query') ? KT_Filter::post('admin_query') : '';
 $class      = '';
 
-
 if (!$searchTerm && isset($_COOKIE["adminSearch"])){
    $searchTerm = $_COOKIE["adminSearch"];
 } 
@@ -309,6 +308,6 @@ $this
 				</ul>
 			</aside>
 			<div id="admin-content" class="cell large-10">
-				<?php echo KT_FlashMessages::getHtmlMessages(); // Feedback from asynchronous actions
+				<?php echo KT_FlashMessages::getHtmlMessages() . // Feedback from asynchronous actions
 			
 				$javascript;

@@ -39,19 +39,6 @@
  }
 
 /**
- * Clear autocomplete input field.
- * 
-*/
- jQuery(".adminClearAutocomplete").click(function() {
-	var clickElement = jQuery(this).attr("id");
-
-	jQuery("input[id=selectedValue-" + clickElement + "]").val("");
-	jQuery("input[id=autocompleteInput-" + clickElement + "]").val("").focus();
-
-	return false;
-});
-
-/**
  * Hide / show and disable inputs for add & edit gallery plugin options
  * 
 */

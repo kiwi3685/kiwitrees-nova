@@ -159,7 +159,7 @@ function autocompleteHtml($suffix, $type, $tree, $valueInput, $placeHolder, $inp
 	}
 	$html .= '>
 			<span class="input-group-label">
-				<button id="' . $suffix . '" type="button" class="adminClearAutocomplete autocomplete_icon">
+				<button id="' . $suffix . '" type="button" class="clearAutocomplete autocomplete_icon">
 					<i class="' . $iconStyle . ' fa-xmark"></i>
 				</button>
 			</span>
