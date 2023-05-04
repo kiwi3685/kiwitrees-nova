@@ -80,7 +80,7 @@ function familyTree($gedID, $other = ' onchange="tree.submit();"')
 {
 	return '
 		<div class="cell medium-2">
-			<label for="ged">' . KT_I18N::translate('Family tree') . '</label>
+			<label for="gedID">' . KT_I18N::translate('Family tree') . '</label>
 		</div>
 		<div class="cell medium-4">
 			<form method="post" action="#" name="tree">

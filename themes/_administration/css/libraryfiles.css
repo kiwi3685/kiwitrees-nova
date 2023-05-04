@@ -1,4 +1,8 @@
 @charset "UTF-8";
+.caution {
+	color: #34689c;
+}
+
 .sortme {
 	cursor: move;
 }

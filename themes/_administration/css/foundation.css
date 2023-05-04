@@ -1,4 +1,8 @@
 @charset "UTF-8";
+.caution {
+	color: #34689c;
+}
+
 div[id^=moduleImage] button.close-button {
 	min-width: initial;
 	font-size: 1.5rem;

@@ -1,3 +1,7 @@
+.caution {
+	color: #34689c;
+}
+
 .lang-active {
 	color: #5da423 !important;
 	font-weight: 600;
@@ -945,6 +949,12 @@ main #admin-content #sanity_check-page div#sanityList .accordion .accordion-item
 }
 main #admin-content #sanity_check-page div#sanityList .accordion .accordion-content table td p {
 	margin-bottom: 0;
+}
+main #admin-content #check_for_errors-page div.callout p {
+	margin: 0 0 0.25rem 0;
+}
+main #admin-content #check_for_errors-page div.results p {
+	margin: 0;
 }
 main #admin-content #unlinked-records-page {
 	margin-bottom: 0.9375rem;

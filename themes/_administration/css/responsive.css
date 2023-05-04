@@ -1,3 +1,7 @@
+.caution {
+	color: #34689c;
+}
+
 @media print, screen and (max-width: 48.06125em) {
 	#setup-body button.button {
 		width: 100% !important;
