@@ -26,14 +26,6 @@ if (!defined('KT_KIWITREES')) {
 	exit;
 }
 
-// Update database for version 1.5
-try {
-	KT_DB::updateSchema(KT_ROOT.KT_MODULES_DIR.'fancy_treeview_descendants/db_schema/', 'FTV_SCHEMA_VERSION', 8);
-} catch (PDOException $ex) {
-	// The schema update scripts should never fail.  If they do, there is no clean recovery.
-	die($ex);
-}
-
 class fancy_treeview_descendants_KT_Module extends KT_Module implements KT_Module_Config, KT_Module_Menu, KT_Module_Report {
 
 	// Extend KT_Module
@@ -291,6 +283,16 @@ class fancy_treeview_descendants_KT_Module extends KT_Module implements KT_Modul
 		}
 
 		return $menu;
+	}
+
+	protected static function updateSchema() {
+		// Update database for version 1.5
+		try {
+			KT_DB::updateSchema(KT_ROOT . KT_MODULES_DIR . 'fancy_treeview_descendants/db_schema/', 'FTV_SCHEMA_VERSION', 8);
+		} catch (PDOException $ex) {
+			// The schema update scripts should never fail.  If they do, there is no clean recovery.
+			die($ex);
+		}
 	}
 
 }
