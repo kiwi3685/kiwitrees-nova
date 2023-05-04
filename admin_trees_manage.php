@@ -248,12 +248,12 @@ switch (KT_Filter::get('action')) {
 							<?php echo KT_I18N::translate('If you have created media objects in kiwitrees, <span class="alert strong">and edited your gedcom off-line using a program that deletes media objects</span>, then check this box to merge the current media objects with the new GEDCOM.  <a class="strong" href="https://www.kiwitrees.net/kb/faq/keep-media-object/" target="_blank" rel="noopener noreferrer">See this FAQ for more information.</a>'); ?>
 						</div>
 					</div>
+					<hr class="cell">
+
+					<?php echo singleButton('Back'); ?>
+					<?php echo singleButton('Import'); ?>
+
 				</div>
-				<hr class="cell">
-
-				<?php echo singleButton('Back'); ?>
-				<?php echo singleButton('Import'); ?>
-
 			</form>
 		
 		<?php echo pageClose();
