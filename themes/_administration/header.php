@@ -76,7 +76,6 @@ $this
 		<link rel="stylesheet" href="<?php echo KT_THEME_URL; ?>css/foundation.min.css">
 		<link rel="stylesheet" href="<?php echo KT_THEME_URL; ?>css/administration.min.css">
 		<link rel="stylesheet" href="<?php echo KT_THEME_URL; ?>css/libraryfiles.min.css">
-		<?php echo $javascript; ?>
 	</head>
 
 	<body id="body">
@@ -310,4 +309,6 @@ $this
 				</ul>
 			</aside>
 			<div id="admin-content" class="cell large-10">
-				<?php echo KT_FlashMessages::getHtmlMessages(); // Feedback from asynchronous actions ?>
+				<?php echo KT_FlashMessages::getHtmlMessages(); // Feedback from asynchronous actions
+			
+				$javascript;

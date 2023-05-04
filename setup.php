@@ -981,8 +981,9 @@ try {
 		"('SMTP_SSL',                        'none')," .
 		"('SMTP_HELO',                       ?)," .
 		"('SMTP_FROM_NAME',                  ?)," .
-		"('BLOCKED_EMAIL_ADDRESS_LIST',      'youremail@gmail.com')" .
-		"('LANGUAGES',      				 'ar,en_AU,en_GB,ca,zh,cs,da,nl,fi,fr,ka,de,he,hu,is,it,lt,nb,nn,pl,pt,pt_BR,ru,sk,es,sv,tr,en_US,uk,vi')"	)->execute(
+		"('BLOCKED_EMAIL_ADDRESS_LIST',      'youremail@gmail.com')," .
+		"('LANGUAGES',      				 'ar,en_AU,en_GB,ca,zh,cs,da,nl,fi,fr,ka,de,he,hu,is,it,lt,nb,nn,pl,pt,pt_BR,ru,sk,es,sv,tr,en_US,uk,vi')"
+	)->execute(
 		[$_SERVER['SERVER_NAME'], $_SERVER['SERVER_NAME']]
 	);
 
