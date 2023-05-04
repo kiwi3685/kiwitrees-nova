@@ -97,7 +97,6 @@
 				<link rel="stylesheet" href="<?php echo KT_THEME_URL; ?>mystyle.css" type="text/css">
 			<?php }
 		}?>
-		<?php echo $javascript; ?>
 	</head>
 	<body>
 		<?php if ($view !='simple') { ?>
@@ -175,7 +174,8 @@
 				</div>
 			</nav>
 
-			<?php echo KT_FlashMessages::getHtmlMessages(), // Feedback from asynchronous actions
+			<?php echo KT_FlashMessages::getHtmlMessages() . // Feedback from asynchronous actions
+			$javascript;
 
 		} ?>
 		<main class="grid-x grid-padding-x">
