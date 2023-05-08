@@ -162,7 +162,7 @@ echo relatedPages($trees, KT_SCRIPT_NAME);?>
 		// START OUTPUT
 		if ($action == 'view') { ?>
 			<hr class="cell">
-			<ul class="accordion" data-accordion data-multi-expand="true" data-allow-all-closed="true">
+			<ul class="cell accordion" data-accordion data-multi-expand="true" data-allow-all-closed="true">
 				<?php
 				if ($records) {
 					// -- Individuals --
