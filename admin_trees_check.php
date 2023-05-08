@@ -36,12 +36,12 @@ $gedID 	= KT_Filter::post('gedID') ? KT_Filter::post('gedID') : KT_GED_ID;
 
 echo relatedPages($trees, KT_SCRIPT_NAME);
 
-echo pageStart('check_for_errors', $controller->getPageTitle(), 'y', '', '/faqs/modules-faqs/check-for-errors/'); ?>
+echo pageStart('check_for_errors', $controller->getPageTitle(), 'y', '', 'kb/user-guide/check-for-errors/'); ?>
 
 	<div class="cell callout info-help ">
+		<p class="h6"><?php echo KT_I18N::translate('Types of error'); ?></p>
 		<p class="alert"><?php echo KT_I18N::translate('These items may cause a problem for kiwitrees.'); ?></p>
 		<p class="warning"><?php echo KT_I18N::translate('These items may cause a problem for other applications.'); ?></p>
-		<p class="caution"><?php echo KT_I18N::translate('These items may be mistakes in your data.'); ?></p>
 	</div>
 
 	<form class="cell" method="get" action="<?php echo KT_SCRIPT_NAME; ?>">
