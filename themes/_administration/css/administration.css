@@ -932,8 +932,8 @@ main #admin-content #sanity_check-page fieldset.fieldset .input-group span.input
 main #admin-content #sanity_check-page fieldset.fieldset .input-group span.input-group-label .svg-inline--fa {
 	margin: 0 0.5rem;
 }
-main #admin-content #sanity_check-page form[name=rela_form] {
-	margin-top: -3.5rem;
+main #admin-content #sanity_check-page form[name=rela_form] button {
+	margin-top: -4.375rem;
 }
 main #admin-content #sanity_check-page div#sanityList .accordion .accordion-item.is-active a.accordion-title {
 	background-color: #e1f5d1;
@@ -950,11 +950,27 @@ main #admin-content #sanity_check-page div#sanityList .accordion .accordion-item
 main #admin-content #sanity_check-page div#sanityList .accordion .accordion-content table td p {
 	margin-bottom: 0;
 }
+main #admin-content #check_for_errors-page p.alert,
+main #admin-content #check_for_errors-page p.warning {
+	margin: 0.375rem 0;
+}
+main #admin-content #check_for_errors-page p.alert span,
+main #admin-content #check_for_errors-page p.warning span {
+	color: #1b1212;
+	padding: 0.25rem;
+}
+main #admin-content #check_for_errors-page p.alert span a,
+main #admin-content #check_for_errors-page p.warning span a {
+	font-weight: 900;
+}
+main #admin-content #check_for_errors-page p.alert span {
+	background-color: #ff9999;
+}
+main #admin-content #check_for_errors-page p.warning span {
+	background-color: #ffdf99;
+}
 main #admin-content #check_for_errors-page div.callout p {
 	margin: 0 0 0.25rem 0;
-}
-main #admin-content #check_for_errors-page div.results p {
-	margin: 0;
 }
 main #admin-content #unlinked-records-page {
 	margin-bottom: 0.9375rem;
