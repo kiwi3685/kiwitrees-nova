@@ -66,7 +66,7 @@ if (!empty($pid)) {
             $edit = $tmp->canDisplayDetails() && $tmp->canEdit();
         }
         // Don't allow edits if the record has changed since the edit-link was created
-        checkChangeTime($pid, $gedrec, safe_GET('accesstime', KT_REGEX_INTEGER));
+        checkChangeTime($pid, $gedrec, KT_TIMESTAMP);
     } else {
         $edit = true;
     }
@@ -80,7 +80,7 @@ if (!empty($pid)) {
             $edit = $tmp->canDisplayDetails() && $tmp->canEdit();
         }
         // Don't allow edits if the record has changed since the edit-link was created
-        checkChangeTime($famid, $gedrec, safe_GET('accesstime', KT_REGEX_INTEGER));
+        checkChangeTime($famid, $gedrec, KT_TIMESTAMP);
     }
 } else {
     $edit = true;
@@ -172,7 +172,7 @@ switch ($actionA) {
                         </ul>
 					</div>
 				<?php } ?>
-                <?php echo submitButtons(); ?>
+                <?php echo submitButtons('window.close();'); ?>
 			</form>
 
 		<?php echo pageClose();
@@ -180,9 +180,9 @@ switch ($actionA) {
 
     ////////////////////////////////////////////////////////////////////////////////
     case 'addchild':
-        $gender = safe_GET('gender', '[MF]', 'U');
-        $famid  = safe_GET('famid', KT_REGEX_XREF);
-        $pid    = safe_GET('pid', KT_REGEX_XREF); // print_indi_form() uses this
+        $gender = KT_Filter::get('gender', '[MF]', 'U');
+        $famid  = KT_Filter::get('famid', KT_REGEX_XREF);
+        $pid    = KT_Filter::get('pid', KT_REGEX_XREF); // print_indi_form() uses this
         $family = KT_Family::getInstance($famid);
 
         if ($family) {
@@ -273,9 +273,9 @@ switch ($actionA) {
 
     ////////////////////////////////////////////////////////////////////////////////
     case 'addnewparent':
-        $famtag = safe_GET('famtag', '(HUSB|WIFE)');
-        $famid  = safe_GET('famid', KT_REGEX_XREF);
-        $pid    = safe_GET('pid', KT_REGEX_XREF); // print_indi_form() uses this
+        $famtag = KT_Filter::get('famtag', '(HUSB|WIFE)');
+        $famid  = KT_Filter::get('famid', KT_REGEX_XREF);
+        $pid    = KT_Filter::get('pid', KT_REGEX_XREF); // print_indi_form() uses this
         $person = KT_Person::getInstance($pid);
 
         if ($person) {
@@ -681,8 +681,8 @@ switch ($actionA) {
 
     ////////////////////////////////////////////////////////////////////////////////
     case 'addopfchild':
-        $pid    = safe_GET('pid', KT_REGEX_XREF);
-        $famid  = safe_GET('famid', KT_REGEX_XREF);
+        $pid    = KT_Filter::get('pid', KT_REGEX_XREF);
+        $famid  = KT_Filter::get('famid', KT_REGEX_XREF);
         $person = KT_Person::getInstance($pid);
 
         $controller
@@ -699,8 +699,8 @@ switch ($actionA) {
 
     ////////////////////////////////////////////////////////////////////////////////
     case 'addspouse':
-        $famtag = safe_GET('famtag', '(HUSB|WIFE)');
-        $famid  = safe_GET('famid', KT_REGEX_XREF);
+        $famtag = KT_Filter::get('famtag', '(HUSB|WIFE)');
+        $famid  = KT_Filter::get('famid', KT_REGEX_XREF);
 
         if ($famtag == 'WIFE') {
             $controller->setPageTitle(KT_I18N::translate('Add a wife'));
@@ -1050,7 +1050,7 @@ switch ($actionA) {
 
     ////////////////////////////////////////////////////////////////////////////////
     case 'editname':
-        $pid    = safe_GET('pid', KT_REGEX_XREF); // print_indi_form() needs this global
+        $pid    = KT_Filter::get('pid', KT_REGEX_XREF); // print_indi_form() needs this global
         $person = KT_Person::getInstance($pid);
 
         $controller
@@ -1080,7 +1080,7 @@ switch ($actionA) {
 
     ////////////////////////////////////////////////////////////////////////////////
     case 'editnote':
-        $pid  = safe_GET('pid', KT_REGEX_XREF);
+        $pid  = KT_Filter::get('pid', KT_REGEX_XREF);
         $note = KT_Note::getInstance($pid);
 
         // Hide the private data
@@ -1185,7 +1185,7 @@ switch ($actionA) {
 
     ////////////////////////////////////////////////////////////////////////////////
     case 'editsource':
-        $pid    = safe_GET('pid', KT_REGEX_XREF);
+        $pid    = KT_Filter::get('pid', KT_REGEX_XREF);
         $source = KT_Source::getInstance($pid);
 
         // Hide the private data
@@ -2494,7 +2494,7 @@ switch ($actionB) {
          * -----------------------------------------------------------------------------
          */
 
-        $cens_pids = explode(',', KT_Filter::post('pid_array'));
+        KT_Filter::post('pid_array') ? $cens_pids = explode(',', KT_Filter::post('pid_array')) : $cens_pids = '';
         $pid       = KT_Filter::post('pid');
 
         if ($cens_pids && count($cens_pids) > 1) {

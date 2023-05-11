@@ -101,7 +101,7 @@ function select_edit_control($name, $values, $empty, $selected = '', $extra = ''
 // An inline-editing version of select_edit_control()
 function select_edit_control_inline($name, $values, $empty, $selected, $controller = null)
 {
-	if (!is_null($empty)) {
+	if (isset($empty)) {
 		// Push ''=>$empty onto the front of the array, maintaining keys
 		$tmp = ['' => htmlspecialchars((string) $empty)];
 		foreach ($values as $key => $value) {
@@ -481,9 +481,11 @@ function edit_field_rela($name, $selected = '', $extra = '')
  * @param mixed  $gedrec
  * @param mixed  $lastTime
  */
+
 function checkChangeTime($pid, $gedrec, $lastTime)
 {
 	$lastTime = Carbon::createFromTimestamp($lastTime)->toDateTimeString();
+
 	$change = KT_DB::prepare("
 		SELECT UNIX_TIMESTAMP(change_time) AS change_time, user_name
 		FROM `##change`
@@ -491,7 +493,7 @@ function checkChangeTime($pid, $gedrec, $lastTime)
 		WHERE status<>'rejected' AND gedcom_id=? AND xref=? AND change_time>?
 		ORDER BY change_id DESC
 		LIMIT 1
-	")->execute([KT_GED_ID, $pid, $lastTime])->fetchOneRow();
+	")->execute(array(KT_GED_ID, $pid, $lastTime))->fetchOneRow();
 
 	if ($change) {
 		$changeTime = $change->change_time;
@@ -500,7 +502,8 @@ function checkChangeTime($pid, $gedrec, $lastTime)
 		$changeTime = 0;
 		$changeUser = '';
 	}
-	if (isset($_REQUEST['linenum']) && 0 != $changeTime && $lastTime && $changeTime > $lastTime) {
+
+	if (isset($_REQUEST['linenum']) && $changeTime != 0 && $lastTime && $changeTime > $lastTime) {
 		global $controller;
 		$controller->pageHeader();
 		echo '<p class="error">', KT_I18N::translate('The record with id %s was changed by another user since you last accessed it.', $pid) . '</p>';
@@ -508,8 +511,7 @@ function checkChangeTime($pid, $gedrec, $lastTime)
 			echo '<p>' . KT_I18N::translate('This record was last changed by <i>%s</i> at %s', $changeUser, $changeTime), '</p>';
 			echo '<p>' . KT_I18N::translate('Current time is %s', $lastTime) . '</p>';
 		}
-		echo '<p>' . KT_I18N::translate('Please reload the previous page to make sure you are working with the most recent record.') . '</p>';
-
+		echo '<p>' . KT_I18N::translate('Please reload the previous page to make sure you are working with the most recent record.') . "</p>";
 		exit;
 	}
 }
@@ -705,7 +707,7 @@ function remove_subline($oldrecord, $linenum)
 	$gedlines = explode("\n", $oldrecord);
 
 	for ($i = 0; $i < $linenum; $i++) {
-		if ('' != trim($gedlines[$i])) {
+		if (trim($gedlines[$i]) != '') {
 			$newrec .= $gedlines[$i] . "\n";
 		}
 	}
@@ -719,7 +721,7 @@ function remove_subline($oldrecord, $linenum)
 				$i++;
 			}
 			while ($i < count($gedlines)) {
-				if ('' != trim($gedlines[$i])) {
+				if (trim($gedlines[$i]) != '') {
 					$newrec .= $gedlines[$i] . "\n";
 				}
 				$i++;
@@ -1072,7 +1074,7 @@ function print_indi_form($nextaction, $famid, $linenum = '', $namerec = '', $fam
 	}
 
 	// Handle any other NAME subfields that aren't included above (SOUR, NOTE, _CUSTOM, etc)
-	if ('' != $namerec && 'NEW' != $namerec) {
+	if ($namerec != '' && 'NEW' != $namerec) {
 		$gedlines = explode("\n", $namerec); // -- find the number of lines in the record
 		$fields = explode(' ', $gedlines[0]);
 		$glevel = $fields[0];
@@ -1810,7 +1812,7 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 					</select>
 				<?php } elseif (('NAME' == $fact && 'REPO' != $upperlevel && 'UNKNOWN' !== $upperlevel) || '_MARNM' == $fact) { ?>
 					<!-- Populated in javascript from sub-tags -->
-					<input type="hidden" id="<?php echo $element_id; ?>" name="<?php echo $element_name; ?>" onchange="updateTextName(\'<?php echo $element_id; ?>\'); ?>" value="<?php echo htmlspecialchars((string) $value); ?>" class="<?php echo $fact; ?>">
+					<input type="hidden" id="<?php echo $element_id; ?>" class="<?php echo $fact; ?>" name="<?php echo $element_name; ?>" onchange="updateTextName('<?php echo $element_id; ?>'); ?>" value="<?php echo htmlspecialchars((string) $value); ?>">
 					<span id="<?php echo $element_id; ?>_display">
 						<?php echo htmlspecialchars((string) $value); ?>
 					</span>
@@ -1947,13 +1949,13 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 							</div>
 							<input type="hidden" id="selectedValue" name="<?php echo $element_name; ?>">
 						<?php } elseif ('DATE' == $fact) { ?>
-							<div class="date fdatepicker" id="<?php echo $element_id; ?>" data-date-format="dd M yy">
+							<div class="date fdatepicker" id="<?php echo $element_id; ?>" data-date-format="dd M yyyy">
 								<div class="input-group">
 									<input
 										type="text"
 										id="<?php echo $element_id; ?>"
 										value="<?php echo htmlspecialchars((string) $value); ?>"
-										class="<?php echo $fact; ?> fdatepicker>"
+										class="input-group-field <?php echo $fact; ?> fdatepicker>"
 										<?php echo $extra_markup; ?>
 									>
 									<span class="postfix input-group-label">
@@ -1981,7 +1983,7 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 					<script>
 						document.getElementById("<?php echo $element_id; ?>'").style.display="none"
 					</script>
-					<select id="<?php echo $element_id; ?>'_sel" onchange="document.getElementById('<?php echo $element_id; ?>'\').value=this.value;" >
+					<select id="<?php echo $element_id; ?>'_sel" onchange="document.getElementById('<?php echo $element_id; ?>').value=this.value;" >
 						<?php
 			foreach (['Unknown', 'Civil', 'Religious', 'Partners', 'Common'] as $indexval => $key) {
 				if ('Unknown' == $key) {
@@ -2045,13 +2047,18 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 					// pastable values
 					if ('FORM' === $fact && 'OBJE' === $upperlevel) {
 						print_autopaste_link($element_id, $FILE_FORM_accept);
-					}
-	?>
+					} ?>
 				</div><!-- close id = $element_id . '_description -->
 
 				<?php echo $extra; ?>
 			</div>
 			<div class="cell small-2 popup_links">
+				<!-- Special characters -->
+				<?php $tmp_array = ['TYPE', 'TIME', 'SHARED_NOTE', 'SOUR', 'REPO', 'OBJE', 'ASSO', '_ASSO', 'AGE'];
+				if (!in_array($fact, $tmp_array) && !in_array($fact, $emptyfacts) && ('' !== $value || 'Y' !== $value || 'y' !== $value)) {
+				echo print_specialchar_link($element_id);
+				} ?>
+
 				<!-- split PLAC -->
 				<?php if ('PLAC' == $fact) {
 					echo '
@@ -2061,13 +2068,7 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 					';
 				} ?>
 
-				<?php $tmp_array = ['TYPE', 'TIME', 'SHARED_NOTE', 'SOUR', 'REPO', 'OBJE', 'ASSO', '_ASSO', 'AGE'];
-	if (!in_array($fact, $tmp_array) && !in_array($fact, $emptyfacts) && ('' !== $value || 'Y' !== $value || 'y' !== $value)) {
-		echo print_specialchar_link($element_id);
-	} ?>
-
-
-				<!-- popup links -->
+				<!-- Other popup links -->
 				<?php if ($fact) {
 					switch ($fact) {
 						case 'FAMC':
@@ -2784,51 +2785,44 @@ function updateRest($inputRec, $levelOverride = 'no')
  *
  * @return string The updated gedcom record
  */
-function handle_updates($newged, $levelOverride = 'no')
+function handle_updates($newged, $levelOverride = "no")
 {
-	global $glevels, $islink, $tag, $uploaded_files, $text, $NOTE, $WORD_WRAPPED_NOTES;
+	global $glevels, $islink, $tag, $uploaded_files, $text;
 
-	if ('no' == $levelOverride || 0 == count($glevels)) {
-		$levelAdjust = 0;
-	} else {
-		$levelAdjust = $levelOverride - $glevels[0];
-	}
+	if ($levelOverride == "no" || count($glevels) == 0) {
+        $levelAdjust = 0;
+    } else {
+        $levelAdjust = $levelOverride - $glevels[0];
+    }
 
-	for ($j = 0; $j < count($glevels); $j++) {
+    // Assume all arrays are the same size.
+    $count = count($glevels);
+
+	for ($j = 0; $j < $count; $j++) {
 		// Look for empty SOUR reference with non-empty sub-records.
 		// This can happen when the SOUR entry is deleted but its sub-records
 		// were incorrectly left intact.
 		// The sub-records should be deleted.
-		if ('SOUR' == $tag[$j] && ('@@' == $text[$j] || '' == $text[$j])) {
+		if ($tag[$j] == "SOUR" && $text[$j] == "@@" || $text[$j] == '') {
 			$text[$j] = '';
-			$k = $j + 1;
-			while (($k < count($glevels)) && ($glevels[$k] > $glevels[$j])) {
+			$k        = $j + 1;
+			while ($k < $count && $glevels[$k] > $glevels[$j]) {
 				$text[$k] = '';
 				$k++;
 			}
 		}
 
-		if ('' != trim($text[$j])) {
+		if (null !== trim($text[$j])) {
 			$pass = true;
 		} else {
-			// -- for facts with empty values they must have sub records
-			// -- this section checks if they have subrecords
-			$k = $j + 1;
+			//-- for facts with empty values they must have sub records
+			//-- this section checks if they have subrecords
+			$k    = $j + 1;
 			$pass = false;
-			while (($k < count($glevels)) && ($glevels[$k] > $glevels[$j])) {
-				if ('' != $text[$k]) {
-					if (('OBJE' != $tag[$j]) || ('FILE' == $tag[$k])) {
+			while ($k < $count && $glevels[$k] > $glevels[$j]) {
+				if (isset($text[$k])) {
+					if (($tag[$j] != "OBJE") || ($tag[$k] == "FILE")) {
 						$pass = true;
-
-						break;
-					}
-				}
-				if (('FILE' == $tag[$k]) && (count($uploaded_files) > 0)) {
-					$filename = array_shift($uploaded_files);
-					if (!empty($filename)) {
-						$text[$k] = $filename;
-						$pass = true;
-
 						break;
 					}
 				}
@@ -2836,28 +2830,25 @@ function handle_updates($newged, $levelOverride = 'no')
 			}
 		}
 
-		// -- if the value is not empty or it has sub lines
-		// --- then write the line to the gedcom record
-		// if ((($text[trim($j)]!='')||($pass == true)) && (strlen($text[$j]) > 0)) {
-		// -- we have to let some emtpy text lines pass through... (DEAT, BIRT, etc)
-		if (true == $pass) {
+		//-- if the value is not empty or it has sub lines
+		//--- then write the line to the gedcom record
+		//-- we have to let some empty text lines pass through... (DEAT, BIRT, etc)
+		if ($pass) {
 			$newline = $glevels[$j] + $levelAdjust . ' ' . $tag[$j];
-			// -- check and translate the incoming dates
-			if ('DATE' == $tag[$j] && '' != $text[$j]) {
-			}
-			// echo $newline;
-			if ('' != $text[$j]) {
+			if (null !== $text[$j]) {
 				if ($islink[$j]) {
-					$newline .= ' @' . $text[$j] . '@';
-				} else {
-					$newline .= ' ' . $text[$j];
-				}
-			}
-			$newged .= "\n" . breakConts($newline);
+                    $newline .= ' @' . $text[$j] . '@';
+                } else {
+                    $newline .= ' ' . $text[$j];
+			    }
+            }
+            $newged .= "\n" . str_replace("\n", "\n" . (1 + substr($newline, 0, 1)) . ' CONT ', $newline);
+
 		}
 	}
 
 	return $newged;
+
 }
 
 /**
