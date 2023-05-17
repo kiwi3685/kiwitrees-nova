@@ -24,6 +24,7 @@
 define('KT_SCRIPT_NAME', 'edit_interface.php');
 require './includes/session.php';
 require KT_ROOT . 'includes/functions/functions_edit.php';
+require KT_ROOT . 'includes/functions/functions_gedcom_edit.php';
 
 $controller = new KT_Controller_Page();
 $controller
