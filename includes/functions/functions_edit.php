@@ -26,11 +26,7 @@ if (!defined('KT_KIWITREES')) {
 	exit;
 }
 
-require_once KT_ROOT . 'includes/functions/functions_import.php';
-
-// Invoke the Carbon Autoloader, to make any Carbon date class available
-require KT_ROOT . 'library/Carbon/autoload.php';
-use Carbon\Carbon;
+//require_once KT_ROOT . 'includes/functions/functions_import.php';
 
 // Create an edit control for inline editing using jeditable
 function edit_field_inline($name, $value, $controller = null)

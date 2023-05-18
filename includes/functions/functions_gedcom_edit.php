@@ -556,7 +556,7 @@ function print_indi_form($nextaction, $famid, $linenum = '', $namerec = '', $fam
 						if ('WIFE' == $famtag && preg_match('/\/(.*)\//', $indi_name, $match)) {
 							if ('polish' == $SURNAME_TRADITION) {
 								$match[1] = preg_replace(['/ski$/', '/cki$/', '/dzki$/', '/żki$/'], ['ska', 'cka', 'dzka', 'żka'], $match[1]);
-							} elseif ('lithuanian' == $SURNAME_TRADITION) {
+							} else if ('lithuanian' == $SURNAME_TRADITION) {
 								$match[1] = preg_replace(['/as$/', '/is$/', '/ys$/', '/us$/'], ['ienė', 'ienė', 'ienė', 'ienė'], $match[1]);
 							}
 							$new_marnm = $match[1];
@@ -569,7 +569,7 @@ function print_indi_form($nextaction, $famid, $linenum = '', $namerec = '', $fam
 							$name_fields['SURN'] = $match[2];
 							if ('polish' == $SURNAME_TRADITION && 'F' == $sextag) {
 								$match[2] = preg_replace(['/ski$/', '/cki$/', '/dzki$/', '/żki$/'], ['ska', 'cka', 'dzka', 'żka'], $match[2]);
-							} elseif ('lithuanian' == $SURNAME_TRADITION && 'F' == $sextag) {
+							} else if ('lithuanian' == $SURNAME_TRADITION && 'F' == $sextag) {
 								$match[2] = preg_replace(['/as$/', '/a$/', '/is$/', '/ys$/', '/ius$/', '/us$/'], ['aitė', 'aitė', 'ytė', 'ytė', 'iūtė', 'utė'], $match[2]);
 							}
 							$name_fields['SPFX'] = trim($match[1]);
@@ -582,7 +582,7 @@ function print_indi_form($nextaction, $famid, $linenum = '', $namerec = '', $fam
 						if ('HUSB' == $famtag && preg_match('/\/((?:[a-z]{2,3} )*)(.*)\//i', $indi_name, $match)) {
 							if ('polish' == $SURNAME_TRADITION && 'M' == $sextag) {
 								$match[2] = preg_replace(['/ska$/', '/cka$/', '/dzka$/', '/żka$/'], ['ski', 'cki', 'dzki', 'żki'], $match[2]);
-							} elseif ('lithuanian' == $SURNAME_TRADITION) {
+							} else if ('lithuanian' == $SURNAME_TRADITION) {
 								// not a complete list as the rules are somewhat complicated but will do 95% correctly
 								$match[2] = preg_replace(['/aitė$/', '/ytė$/', '/iūtė$/', '/utė$/'], ['as', 'is', 'ius', 'us'], $match[2]);
 							}
@@ -606,16 +606,17 @@ function print_indi_form($nextaction, $famid, $linenum = '', $namerec = '', $fam
 	}
 
 	// Make sure there are two slashes in the name
-	if (!preg_match('/\//', $name_fields['NAME'])) {
+	if ($name_fields['NAME'] && !preg_match('/\//', $name_fields['NAME'])) {
 		$name_fields['NAME'] .= ' /';
 	}
-	if (!preg_match('/\/.*\//', $name_fields['NAME'])) {
+
+	if ($name_fields['NAME'] && !preg_match('/\/.*\//', $name_fields['NAME'])) {
 		$name_fields['NAME'] .= '/';
 	}
 
 	// Populate any missing 2 XXXX fields from the 1 NAME field
 	$npfx_accept = implode('|', $NPFX_accept);
-	if (preg_match("/((({$npfx_accept})\\.? +)*)([^\n\\/\"]*)(\"(.*)\")? *\\/(([a-z]{2,3} +)*)(.*)\\/ *(.*)/i", $name_fields['NAME'], $name_bits)) {
+	if ($name_fields['NAME'] && preg_match("/((({$npfx_accept})\\.? +)*)([^\n\\/\"]*)(\"(.*)\")? *\\/(([a-z]{2,3} +)*)(.*)\\/ *(.*)/i", $name_fields['NAME'], $name_bits)) {
 		if (empty($name_fields['NPFX'])) {
 			$name_fields['NPFX'] = $name_bits[1];
 		}
@@ -737,7 +738,7 @@ function print_indi_form($nextaction, $famid, $linenum = '', $namerec = '', $fam
 				<?php // 1 SEX
 		if ('HUSB' == $famtag || 'M' == $sextag) {
 			add_simple_tag('0 SEX M');
-		} elseif ('WIFE' == $famtag || 'F' == $sextag) {
+		} else if ('WIFE' == $famtag || 'F' == $sextag) {
 			add_simple_tag('0 SEX F');
 		} else {
 			add_simple_tag('0 SEX');
@@ -797,12 +798,12 @@ function print_indi_form($nextaction, $famid, $linenum = '', $namerec = '', $fam
 				</button>
 			<?php } ?>
 			<?php if ('no' === $UNLINKED) { ?>
-				<button class="button hollow" type="button"  onclick="window.close();">
+				<button class="button secondary" type="button"  onclick="window.close();">
 					<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 					<?php echo KT_I18N::translate('Cancel'); ?>
 				</button>
 			<?php } else { ?>
-				<button class="button hollow" type="button" data-toggle="<?php echo $UNLINKED; ?>">
+				<button class="button secondary" type="button" data-toggle="<?php echo $UNLINKED; ?>">
 					<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
 					<?php echo KT_I18N::translate('Cancel'); ?>
 				</button>
@@ -1009,11 +1010,26 @@ function print_indi_form($nextaction, $famid, $linenum = '', $namerec = '', $fam
 function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $rowDisplay = true) {
 	global $MEDIA_DIRECTORY, $tags, $emptyfacts, $main_fact, $TEXT_DIRECTION;
 	global $NPFX_accept, $SPFX_accept, $NSFX_accept, $FILE_FORM_accept, $upload_count;
-	global $pid, $gender, $linkToID, $bdm, $action, $event_add;
+	global $pid, $gender, $linkToID, $bdm, $action, $event_add, $iconStyle;
 	global $QUICK_REQUIRED_FACTS, $QUICK_REQUIRED_FAMFACTS, $PREFER_LEVEL2_SOURCES;
 
 	// Keep track of SOUR fields, so we can reference them in subsequent PAGE fields.
 	static $source_element_id;
+
+	$subnamefacts = array('NPFX', 'GIVN', 'SPFX', 'SURN', 'NSFX', '_MARNM_SURN');
+    $subsourfacts = array('TEXT', 'PAGE', 'OBJE', 'QUAY', 'DATE', 'NOTE');
+    $linkfacts    = array('REPO', 'SOUR', 'OBJE', 'FAMC');
+	$specialchar  = array('TYPE', 'TIME', 'NOTE', 'SOUR', 'REPO', 'OBJE', 'ASSO', '_ASSO', 'AGE');
+    $mapfacts     = array('DATA', 'MAP', 'LATI', 'LONG');
+    $labelIndent  = '';
+    $class        = '';
+    $style        = '';
+    $other        = '';
+
+	preg_match('/^(?:(\d+) (' . KT_REGEX_TAG . ') ?(.*))/', $tag, $match);
+	if ($match) {
+		[, $level, $fact, $value] = $match;
+	}
 
 	if (substr($tag, 0, strpos($tag, "CENS"))) {
 		$event_add = "census_add";
@@ -1050,14 +1066,8 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 		<?php
 	}
 
-	if (empty($linkToID)) $linkToID = $pid;
-
-	$subnamefacts = array('NPFX', 'GIVN', 'SPFX', 'SURN', 'NSFX', '_MARNM_SURN');
-    $subsourfacts = array('TEXT', 'PAGE', 'OBJE', 'QUAY', 'DATE', 'NOTE');
-
-	preg_match('/^(?:(\d+) (' . KT_REGEX_TAG . ') ?(.*))/', $tag, $match);
-	if ($match) {
-		[, $level, $fact, $value] = $match;
+	if (empty($linkToID)){
+		$linkToID = $pid;
 	}
 
 	// element name : used to POST data
@@ -1082,38 +1092,43 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 	} else {
 		$value = trim(substr($tag, strlen($fact)+3));
 	}
-	if ($fact == 'REPO' || $fact == 'SOUR' || $fact == 'OBJE' || $fact == 'FAMC')
+
+	if ($fact == 'REPO' || $fact == 'SOUR' || $fact == 'OBJE' || $fact == 'FAMC'){
 		$islink = true;
+	}
 
-	if ($fact === 'SHARED_NOTE_EDIT' || $fact === 'SHARED_NOTE') {$islink = 1; $fact = "NOTE";}
+	if ($fact === 'SHARED_NOTE_EDIT' || $fact === 'SHARED_NOTE') {
+		$islink = 1;
+		$fact = "NOTE";
+	}
 
-	// label
-	echo '<div id="' . $element_id . '_factdiv"  class="cell"';
-    	if ($fact === 'DATA' || $fact === 'MAP' || ($fact === 'LATI' || $fact === 'LONG') && $value === '') {
-    		echo ' style="display:none;"';
-    	}
-        if ($fact === 'SOUR' || ($source_element_id && $level > 2 && in_array($fact, $subsourfacts))) {
-            echo ' class="sour_facts"';
-    	}
-	echo ' >';
-		echo '<div class="grid-x">';
-			// label
-			echo '<div class="cell small-12 medium-3">';
+    if ($fact === 'SOUR' || ($source_element_id && $level > 2 && in_array($fact, $subsourfacts))) {
+        $class = ' class="sour_facts"';
+	}
 
-				if (in_array($fact, $subnamefacts) || $fact == "LATI" || $fact == "LONG") {
-					echo '<label class="h5 1">';
-				} else {
-					echo '<label class="h5">';
-				}
+	if (in_array($fact, $mapfacts) && $value === '') {
+		$style = ' style="display:none;"';
+	}
 
-					if (KT_DEBUG) {
+	if (in_array($fact, ['LATI', 'LONG', 'ADDR'])) {
+		$labelIndent = ' style="text-indent:3rem;"';
+	} ?>
+
+	<div id="<?php echo $element_id; ?>_factdiv" class="cell <?php echo $class; ?>" <?php echo $style; ?>>
+		<div class="grid-x">
+
+			<!-- label -->
+			<div class="cell small-12 medium-3">
+				<label class="middle" <?php echo $labelIndent; ?>>
+
+					<?php if (KT_DEBUG) {
 						echo $element_name . '<br>';
 					}
 
 					// tag name
 					if ($label) {
 						echo $label;
-					} elseif ($upperlevel) {
+					} else if ($upperlevel) {
 						echo KT_Gedcom_Tag::getLabel($upperlevel . ':' . $fact);
 					} else {
 						echo KT_Gedcom_Tag::getLabel($fact);
@@ -1121,19 +1136,17 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 
 					// tag level
 					if ($level > 0) {
-						if ($fact == "TEXT" && $level>1) {
-							echo "<input type=\"hidden\" name=\"glevels[]\" value=\"", $level-1, "\">";
-							echo "<input type=\"hidden\" name=\"islink[]\" value=\"0\">";
-							echo "<input type=\"hidden\" name=\"tag[]\" value=\"DATA\">";
-							//-- leave data text[] value empty because the following TEXT line will
-							//--- cause the DATA to be added
-							echo "<input type=\"hidden\" name=\"text[]\" value=\"\">";
-						}
-						echo "<input type=\"hidden\" name=\"glevels[]\" value=\"", $level, "\">";
-						echo "<input type=\"hidden\" name=\"islink[]\" value=\"", $islink, "\">";
-						echo "<input type=\"hidden\" name=\"tag[]\" value=\"", $fact, "\">";
-					}
-
+						if ('TEXT' == $fact && $level > 1) { ?>
+							<input type="hidden" name="glevels[]" value="<?php echo $level - 1; ?>">
+							<input type="hidden" name="islink[]" value="0">
+							<input type="hidden" name="tag[]" value="DATA">
+							<!-- leave data text[] value empty because the following TEXT line will cause the DATA to be added -->
+							<input type="hidden" name="text[]" value="">
+						<?php } ?>
+						<input type="hidden" name="glevels[]" value="<?php echo $level; ?>">
+						<input type="hidden" name="islink[]" value="<?php echo $islink; ?>">
+						<input type="hidden" name="tag[]" value="<?php echo $fact; ?>">
+					<?php }
 					// help text
 					if ($action == "addnewnote_assisted") {
 						// Do not print on census_assistant window
@@ -1183,15 +1196,15 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 								echo help_link($fact);
 								break;
 						}
-					}
+					} ?>
 
-				echo '</label>
-			</div>';
+				</label>
+			</div>
 
+			<!-- input fileds -->
+			<div class="cell small-10 medium-7 input">
 
-			// value
-			echo '<div class="cell small-10 medium-7 input">';
-				if (KT_DEBUG) {
+				<?php if (KT_DEBUG) {
 					echo $tag, "<br>";
 				}
 
@@ -1223,7 +1236,7 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 							echo ' checked="checked"';
 						}
 						echo " onclick=\"if (this.checked) ", $element_id, ".value='Y'; else ", $element_id, ".value=''; \">";
-						echo KT_I18N::translate('yes');
+						echo '<span class="yes">' . KT_I18N::translate('yes') . '</span>';
 					}
 
 					if ($fact === 'CENS' && $value === 'Y') {
@@ -1295,140 +1308,147 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 						echo '>', $typeValue, '</option>';
 					}
 					echo '</select>';
-				} else if (($fact == 'NAME' && $upperlevel!='REPO' && $upperlevel !== 'UNKNOWN') || $fact == '_MARNM') {
-					// Populated in javascript from sub-tags
-					echo "<input type=\"hidden\" id=\"", $element_id, "\" name=\"", $element_name, "\" onchange=\"updateTextName('", $element_id, "');\" value=\"", htmlspecialchars((string) $value), "\" class=\"", $fact, "\">";
-					echo '<span id="', $element_id, '_display" dir="auto">', htmlspecialchars((string) $value), '</span>';
-					echo ' <a href="#edit_name" onclick="convertHidden(\'', $element_id, '\'); return false;" class="icon-edit_indi" title="'.KT_I18N::translate('Edit name').'"></a>';
-				} else {
+				} else if (($fact == 'NAME' && $upperlevel!='REPO' && $upperlevel !== 'UNKNOWN') || $fact == '_MARNM') { ?>
+						<!-- Populated in javascript from sub-tags -->
+						<input 
+							type="hidden" 
+							id="<?php echo $element_id; ?>" 
+							class="<?php echo $fact; ?>" 
+							name="<?php echo $element_name; ?>" 
+							onchange="updateTextName('<?php echo $element_id; ?>'); ?>" 
+							value="<?php echo htmlspecialchars((string) $value); ?>"
+						>
+						<span id="<?php echo $element_id; ?>_display">
+							//
+						</span>
+						<a 
+							href="#edit_name" 
+							onclick="convertHidden('<?php echo $element_id; ?>'); return false;" 
+							title="<?php echo KT_I18N::translate('Edit name'); ?>"
+						>
+							<i class="<?php echo $iconStyle; ?> fa-user-pen"></i>
+						</a>
+				<?php } else {
 					// textarea
-					if ($fact == 'TEXT' || $fact == 'ADDR' || ($fact == 'NOTE' && !$islink)) {
-						echo "<textarea id=\"", $element_id, "\" name=\"", $element_name, "\" dir=\"auto\">", htmlspecialchars((string) $value), "</textarea>";
-					} else {
-						// text
-						// If using census_assistant window
-						if ($action == "addnewnote_assisted") {
-							echo "<input type=\"text\" id=\"", $element_id, "\" name=\"", $element_name, "\" value=\"", htmlspecialchars((string) $value), "\" style=\"width:4.1em;\" dir=\"ltr\"";
-						} else {
-							echo "<input type=\"text\" id=\"", $element_id, "\" name=\"", $element_name, "\" value=\"", htmlspecialchars((string) $value), "\" dir=\"ltr\"";
+					if ($fact == 'TEXT' || $fact == 'ADDR' || ($fact == 'NOTE' && !$islink)) { ?>
+						<textarea id="<?php echo $element_id; ?>" name="<?php echo $element_name; ?>"><?php echo htmlspecialchars((string) $value); ?></textarea>
+					<?php } else {
+	
+						// Extra markup for specific fact types
+						$extra_markup = '';
+
+						switch ($fact) {
+							case 'ALIA':
+							case 'ASSO':
+							case '_ASSO':
+								$extra_markup = ' data-autocomplete-type="ASSO" data-autocomplete-extra="input.DATE"';
+								break;
+							case 'CAUS':
+								$extra_markup = ' data-autocomplete-type="CAUS"';
+								break;
+							case 'DATE':
+								$extra_markup = ' onblur="valid_date(this);" onmouseout="valid_date(this);"';
+								break;
+							case 'GIVN':
+								$extra_markup = ' autofocus data-autocomplete-type="GIVN"';
+								break;
+							case 'LATI':
+								$extra_markup = ' onblur="valid_lati_long(this, "N", "S");" onmouseout="valid_lati_long(this, "N", "S");"';
+								break;
+							case 'LONG':
+								$extra_markup = ' onblur="valid_lati_long(this, "E", "W");" onmouseout="valid_lati_long(this, "E", "W");"';
+								break;
+							case 'SHARED_NOTE':
+								// Shared notes.  Inline notes are handled elsewhere.
+								$extra_markup = ' data-autocomplete-type="NOTE"';
+								break;
+							case 'OBJE':
+								$extra_markup = ' data-autocomplete-type="OBJE"';
+								break;
+							case 'OCCU':
+								$extra_markup = ' data-autocomplete-type="OCCU"';
+								break;
+							case 'PAGE':
+								$extra_markup = ' data-autocomplete-type="SOUR_PAGE" data-autocomplete-extra="' . $source_element_id . '"';
+								break;
+							case 'PLAC':
+								$extra_markup = ' data-autocomplete-type="PLAC"';
+								break;
+							case 'REPO':
+								$extra_markup = ' data-autocomplete-type="REPO"';
+								break;
+							case 'SOUR':
+								$source_element_id = $element_id;
+								$extra_markup = ' data-autocomplete-type="SOUR"';
+								break;
+							case 'SURN':
+							case '_MARNM_SURN':
+								$extra_markup = ' data-autocomplete-type="SURN"';
+								break;
+							case 'TYPE':
+								if (2 == $level && 'EVEN' == $tags[0]) {
+									$extra_markup = ' data-autocomplete-type="EVEN_TYPE"';
+								} elseif (2 == $level && 'FACT' == $tags[0]) {
+									$extra_markup = ' data-autocomplete-type="FACT_TYPE"';
+								}
+								break;
+							case 'NPFX':
+								$extra_markup = ' data-autocomplete-type="NPFX"';
+								break;
+							case 'NSFX':
+								$extra_markup = ' data-autocomplete-type="NSFX"';
+								break;
+							case 'SPFX':
+								$extra_markup = ' data-autocomplete-type="SPFX"';
+								break;
 						}
-							echo " class=\"{$fact}\"";
+
+						if (strpos($extra_markup, 'data-autocomplete-type')) {
+							$autoType = str_replace(' data-autocomplete-type=', '', $extra_markup);
+							$autoType = str_replace('"', '', $autoType);
 							if (in_array($fact, $subnamefacts)) {
-								echo " onblur=\"updatewholename();\" onkeyup=\"updatewholename();\"";
+								$other = ' onblur="updatewholename(); " onkeyup="updatewholename();"';
 							}
-
-							// Extra markup for specific fact types
-							switch ($fact) {
-								case 'ALIA':
-								case 'ASSO':
-								case '_ASSO':
-									echo ' data-autocomplete-type="ASSO" data-autocomplete-extra="input.DATE"';
-				                    $source_element_id = '';
-									break;
-								case 'CAUS':
-									echo ' data-autocomplete-type="CAUS"';
-									break;
-								case 'DATE':
-									echo " onblur=\"valid_date(this);\" onmouseout=\"valid_date(this);\"";
-									break;
-								case 'GIVN':
-									echo ' autofocus data-autocomplete-type="GIVN"';
-									break;
-								case 'LATI':
-									echo " onblur=\"valid_lati_long(this, 'N', 'S');\" onmouseout=\"valid_lati_long(this, 'N', 'S');\"";
-									break;
-								case 'LONG':
-									echo " onblur=\"valid_lati_long(this, 'E', 'W');\" onmouseout=\"valid_lati_long(this, 'E', 'W');\"";
-									break;
-								case 'NOTE':
-									// Shared notes.  Inline notes are handled elsewhere.
-									echo ' data-autocomplete-type="NOTE"';
-									break;
-								case 'OBJE':
-									echo ' data-autocomplete-type="OBJE"';
-									break;
-								case 'OCCU':
-									echo ' data-autocomplete-type="OCCU"';
-									break;
-								case 'PAGE':
-									echo ' data-autocomplete-type="SOUR_PAGE" data-autocomplete-extra="' . $source_element_id . '"';
-									break;
-								case 'PLAC':
-									echo ' data-autocomplete-type="PLAC"';
-									break;
-								case 'REPO':
-									echo ' data-autocomplete-type="REPO"';
-									break;
-								case 'SOUR':
-									$source_element_id = $element_id;
-									echo ' data-autocomplete-type="SOUR"';
-									break;
-								case 'SURN':
-								case '_MARNM_SURN':
-									echo ' data-autocomplete-type="SURN"';
-									break;
-								case 'TYPE':
-									if ($level == 2 && $tags[0] == 'EVEN') {
-										echo ' data-autocomplete-type="EVEN_TYPE"';
-									} elseif ($level == 2 && $tags[0] == 'FACT') {
-										echo ' data-autocomplete-type="FACT_TYPE"';
-									}
-									break;
-								case 'NPFX':
-									echo ' data-autocomplete-type="NPFX"';
-									break;
-								case 'NSFX':
-									echo ' data-autocomplete-type="NSFX"';
-									break;
-								case 'SPFX':
-									echo ' data-autocomplete-type="SPFX"';
-									break;
-							}
-						echo '>';
+							echo autocompleteHtml(
+								$element_id, // id
+								$autoType, // TYPE
+								'', // autocomplete-ged
+								htmlspecialchars((string) $value), // input value
+								'', // placeholder
+								'', // hidden input name
+								'', // hidden input value
+								'', // required
+								$other
+							);
+						} else if ('DATE' == $fact) { ?>
+							<div class="date fdatepicker" id="<?php echo $element_id; ?>" data-date-format="dd M yyyy">
+								<div class="input-group">
+									<input
+										type="text"
+										id="<?php echo $element_id; ?>"
+										value="<?php echo htmlspecialchars((string) $value); ?>"
+										class="input-group-field <?php echo $fact; ?> fdatepicker>"
+										<?php echo $extra_markup; ?>
+									>
+									<span class="postfix input-group-label">
+										<i class="<?php echo $iconStyle; ?> fa-calendar-days"></i>
+									</span>
+								</div>
+							</div>
+						<?php } else { ?>
+							<input
+								type="text"
+								id="<?php echo $element_id; ?>"
+								value="<?php echo htmlspecialchars((string) $value); ?>"
+								class="<?php echo $fact; ?>"
+								<?php if (in_array($fact, $subnamefacts)) { ?>
+									onblur="updatewholename();"
+									onkeyup="updatewholename();"
+								<?php }
+								echo $extra_markup; ?>
+							>
+						<?php }
 					}
-				}
-
-				// current value / description
-				echo '<div id="' . $element_id . '_description">';
-					// current value
-					if ($fact == 'DATE') {
-						$date = new KT_Date($value);
-						echo $date->Display();
-					}
-					if (($fact == 'ASSO' || $fact == '_ASSO' || $fact == 'SOUR' || $fact == 'OBJE' || ($fact == 'NOTE' && $islink)) && $value) {
-						$record = KT_GedcomRecord::getInstance($value);
-						if ($record) {
-							echo ' ', $record->getFullName();
-						} elseif ($value != 'new') {
-							echo ' ', $value;
-						}
-					}
-					// pastable values
-					if ($fact === 'FORM' && $upperlevel === 'OBJE') {
-						print_autopaste_link($element_id, $FILE_FORM_accept);
-					}
-				echo '</div>'; // id = $element_id . '_description
-
-			echo '</div>';
-
-			// pop-up links
-			echo '<div class="cell small-2 popup_links">';
-
-				$tmp_array = array('TYPE','TIME','NOTE','SOUR','REPO','OBJE','ASSO','_ASSO','AGE');
-
-				// split PLAC
-				if ($fact == "PLAC") {
-					echo '
-						<div id="' . $element_id . '_pop" style="display: inline;">
-							<div class="input-group-addon">' . print_specialchar_link($element_id) .  '</div>
-							<div class="input-group-addon">' . print_findplace_link($element_id) . '</div>
-							<div class="input-group-addon">
-								<span  onclick="jQuery(\'div[id^=', $upperlevel, '_LATI],div[id^=', $upperlevel, '_LONG],div[id^=INDI_LATI],div[id^=INDI_LONG],div[id^=LATI],div[id^=LONG]\').toggle(\'fast\'); return false;" class="icon-target" title="', KT_Gedcom_Tag::getLabel('LATI'), ' / ', KT_Gedcom_Tag::getLabel('LONG'), '"></span>
-						 	</div>
-						</div>
-					';
-				} elseif (!in_array($fact, $tmp_array)) {
-					echo print_specialchar_link($element_id);
 				}
 
 				// MARRiage TYPE : hide text field and show a selection list
@@ -1473,8 +1493,30 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 							document.getElementById("' . $element_id . '").style.display="none";
 						</script>
 					';
-				}
+				} ?>
 
+			</div>
+
+			<!-- pop-up links -->
+			<div class="cell small-2 medium-2 popup_links">
+
+				<!-- split PLAC -->
+				<?php if ($fact == "PLAC") {
+					echo '
+						<div id="' . $element_id . '_pop" style="display: inline;">' . 
+							print_specialchar_link($element_id) .  
+							print_findplace_link($element_id) . '
+							<span 
+								onclick="jQuery(\'div[id^=', $upperlevel, '_LATI],div[id^=', $upperlevel, '_LONG],div[id^=INDI_LATI],div[id^=INDI_LONG],div[id^=LATI],div[id^=LONG]\').toggle(\'fast\'); return false;" 
+								title="', KT_Gedcom_Tag::getLabel('LATI'), ' / ', KT_Gedcom_Tag::getLabel('LONG'), '"
+							>
+								<i class="' . $iconStyle . ' fa-location-dot"></i>
+							</span>
+						</div>
+					';
+				} else if (!in_array($fact, $specialchar) && !in_array($fact, $emptyfacts) && ('' !== $value || 'Y' !== $value || 'y' !== $value)) {
+					echo print_specialchar_link($element_id);
+				}
 
 				// popup links
 				if ($fact) {
@@ -1534,16 +1576,39 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 							}
 							break;
 					}
+				} ?>
+			</div>
+				
+			<!-- current value / description -->
+			<div id="'<?php echo $element_id; ?>_description">
+				<?php if ($fact == 'DATE') {
+					$date = new KT_Date($value);
+					echo $date->Display();
 				}
-			echo '</div>';
+				if (($fact == 'ASSO' || $fact == '_ASSO' || $fact == 'SOUR' || $fact == 'OBJE' || ($fact == 'NOTE' && $islink)) && $value) {
+					$record = KT_GedcomRecord::getInstance($value);
+					if ($record) {
+						echo ' ', $record->getFullName();
+					} else if ($value != 'new') {
+						echo ' ', $value;
+					}
+				}
+				// pastable values
+				if ($fact === 'FORM' && $upperlevel === 'OBJE') {
+					print_autopaste_link($element_id, $FILE_FORM_accept);
+				} ?>
+			</div>
 
-		echo $extra . '</div>';
+			<?php echo $extra; ?>
 
-		//-- checkboxes to apply '1 SOUR' to BIRT/MARR/DEAT as '2 SOUR'
-		if ($fact == 'SOUR' && $level == 1) {
-			echo '<div class="source_links">
-				<h4>', KT_I18N::translate('Link this source to these records'), '</h4>';
-				if ($PREFER_LEVEL2_SOURCES === '0') {
+		</div>
+
+		<?php //-- checkboxes to apply '1 SOUR' to BIRT/MARR/DEAT as '2 SOUR'
+		if ($fact == 'SOUR' && $level == 1) { ?>
+			<div class="source_links">
+				<h4><?php echo KT_I18N::translate('Link this source to these records'); ?></h4>
+
+				<?php if ($PREFER_LEVEL2_SOURCES === '0') {
 					$level1_checked = '';
 					$level2_checked = '';
 				} else if ($PREFER_LEVEL2_SOURCES === '1' || $PREFER_LEVEL2_SOURCES === true) {
@@ -1600,13 +1665,14 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 								'</p>';
 						}
 					}
-				}
-			echo '</div>';
-		}
+				} ?>
+			</div>
+		<?php } ?>
 
-	echo '</div>';
+	</div>
 
-	return $element_id;
+	<?php return $element_id;
+
 }
 
 /**
@@ -2220,7 +2286,7 @@ function create_edit_form($gedrec, $linenum, $level0type)
 		if ('SOUR' == $type) {
 			$inSource = true;
 			$levelSource = $level;
-		} elseif ($levelSource >= $level) {
+		} else if ($levelSource >= $level) {
 			$inSource = false;
 		}
 
@@ -2231,15 +2297,15 @@ function create_edit_form($gedrec, $linenum, $level0type)
 
 			if ($inSource && 'DATE' === $type) {
 				add_simple_tag($subrecord, '', KT_Gedcom_Tag::getLabel($label, $person));
-			} elseif (!$inSource && 'DATE' === $type) {
+			} else if (!$inSource && 'DATE' === $type) {
 				add_simple_tag($subrecord, $level1type, KT_Gedcom_Tag::getLabel($label, $person));
 				if ('2' === $level) {
 					// We already have a date - no need to add one.
 					$add_date = false;
 				}
-			} elseif ('STAT' == $type) {
+			} else if ('STAT' == $type) {
 				add_simple_tag($subrecord, $level1type, KT_Gedcom_Tag::getLabel($label, $person));
-			} elseif ('REPO' == $level0type) {
+			} else if ('REPO' == $level0type) {
 				$repo = KT_Repository::getInstance($pid);
 				add_simple_tag($subrecord, $level0type, KT_Gedcom_Tag::getLabel($label, $repo));
 			} else {
@@ -2328,15 +2394,15 @@ function insert_missing_subtags($level1tag, $add_date = false)
 		if (in_array($level1tag, $value) && !in_array($key, $tags)) {
 			if ('TYPE' == $key) {
 				add_simple_tag('2 TYPE ' . $type_val, $level1tag);
-			} elseif ('_TODO' === $level1tag && 'DATE' === $key) {
+			} else if ('_TODO' === $level1tag && 'DATE' === $key) {
 				add_simple_tag('2 ' . $key . ' ' . strtoupper(date('d M Y')), $level1tag);
-			} elseif ('_TODO' === $level1tag && '_KT_USER' === $key) {
+			} else if ('_TODO' === $level1tag && '_KT_USER' === $key) {
 				add_simple_tag('2 ' . $key . ' ' . KT_USER_NAME, $level1tag);
-			} elseif ('TITL' === $level1tag && false !== strstr($ADVANCED_NAME_FACTS, $key)) {
+			} else if ('TITL' === $level1tag && false !== strstr($ADVANCED_NAME_FACTS, $key)) {
 				add_simple_tag('2 ' . $key, $level1tag);
-			} elseif ('NAME' === $level1tag && false !== strstr($ADVANCED_NAME_FACTS, $key)) {
+			} else if ('NAME' === $level1tag && false !== strstr($ADVANCED_NAME_FACTS, $key)) {
 				add_simple_tag('2 ' . $key, $level1tag);
-			} elseif ('NAME' !== $level1tag) {
+			} else if ('NAME' !== $level1tag) {
 				add_simple_tag('2 ' . $key, $level1tag);
 			}
 
@@ -2391,7 +2457,7 @@ function insert_missing_subtags($level1tag, $add_date = false)
 
 					break;
 			}
-		} elseif ('DATE' == $key && $add_date) {
+		} else if ('DATE' == $key && $add_date) {
 			add_simple_tag('2 DATE', $level1tag, KT_Gedcom_Tag::getLabel("{$level1tag}:DATE"));
 		}
 	}

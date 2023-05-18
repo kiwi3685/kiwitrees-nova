@@ -1473,8 +1473,8 @@ div[id$=-page] button[type=submit] {
 	margin-bottom: 1rem;
 }
 #edit_interface-page label {
-	font-weight: 700;
-	padding-top: 0.5rem;
+	font-size: 1.125rem;
+	font-weight: 500;
 }
 #edit_interface-page label.radio_inline {
 	display: inline-block !important;
@@ -1482,8 +1482,15 @@ div[id$=-page] button[type=submit] {
 	padding-left: 1.25rem;
 }
 #edit_interface-page div.last_change label {
+	font-size: 0.9rem;
 	padding-top: 0;
 	margin-bottom: 1rem;
+}
+#edit_interface-page span.yes {
+	margin: 0 0.9375rem;
+}
+#edit_interface-page .svg-inline--fa.fa-user-pen {
+	font-size: 1.25rem;
 }
 
 #fanchart-page svg {

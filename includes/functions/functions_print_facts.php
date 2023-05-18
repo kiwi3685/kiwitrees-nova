@@ -584,14 +584,14 @@ function print_timeline(KT_Event $fact, KT_GedcomRecord $record) {
 				echo format_fact_date($fact, $record, true, true); ?>
 			</div>
 			<!-- Event name -->
-			<div class="cell small-10 medium-2 small-order-1 medium-order-2 event">
+			<div class="cell small-10 medium-1 small-order-1 medium-order-2 event">
 				<?php if ($SHOW_FACT_ICONS) {
 					// 	echo $fact->Icon() . '&nbsp;';
 				}
 				echo  '<span class="h6">' . $label . '</span>'; ?>
 			</div>
 			<!-- Place -->
-			<div class="cell small-10 medium-2 small-order-4 medium-order-3 place">
+			<div class="cell small-10 medium-4 small-order-4 medium-order-3 place">
 				<!-- Print the place of this fact/event -->
 				<div class="place">
 					<?php echo format_fact_place($fact, true, true, true); ?>
@@ -599,7 +599,7 @@ function print_timeline(KT_Event $fact, KT_GedcomRecord $record) {
 				<?php echo print_address_structure($fact->getGedcomRecord(), 2); ?>
 			</div>
 			<!-- Details -->
-			<div class="cell <?php echo (KT_USER_CAN_EDIT ? 'small-10 medium-5' : 'auto'); ?> small-order-5 medium-order-4 detail">
+			<div class="cell <?php echo (KT_USER_CAN_EDIT ? 'small-10 medium-4' : 'auto'); ?> small-order-5 medium-order-4 detail">
 				<?php switch ($fact->getTag()) {
 					case '_BIRT_CHIL':
 						echo '<br>', KT_I18N::translate('#%d', ++$n_chil);

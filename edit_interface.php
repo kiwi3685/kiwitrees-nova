@@ -187,13 +187,13 @@ switch ($actionA) {
         $family = KT_Family::getInstance($famid);
 
         if ($family) {
-            $controller->setPageTitle($family->getFullName() . ' - ' . KT_I18N::translate('Add a child'));
+            $controller->setPageTitle($family->getFullName());
             $controller->pageHeader();
         } else {
             $controller->setPageTitle(KT_I18N::translate('Add an unlinked person'));
         }
 
-        echo pageStart('edit_interface', $controller->getPageTitle()); ?>
+        echo pageStart('edit_interface', $controller->getPageTitle(), 'y', KT_I18N::translate('Add a child')); ?>
 
     		<?php echo print_indi_form('addchildaction', $famid, '', '', 'CHIL', $gender); ?>
 
@@ -281,7 +281,7 @@ switch ($actionA) {
 
         if ($person) {
             // Adding a parent to an individual
-            $name = $person->getLifespanName() . '- ';
+            $name = $person->getLifespanName();
         } else {
             // Adding a spouse to a family
             $name = '';
@@ -304,11 +304,13 @@ switch ($actionA) {
 
     ////////////////////////////////////////////////////////////////////////////////
     case 'addname':
+        $person = KT_Person::getInstance($pid);
+        
         $controller
-            ->setPageTitle(KT_I18N::translate('Add new Name'))
+            ->setPageTitle($person->getLifespanName())
             ->pageHeader();
 
-        echo pageStart('edit_interface', $controller->getPageTitle());
+        echo pageStart('edit_interface', $controller->getPageTitle(), 'y', KT_I18N::translate('Add new Name'));
 
             $person = KT_Person::getInstance($pid);
             print_indi_form('update', '', 'new', 'NEW', '', $person->getSex());
@@ -687,10 +689,10 @@ switch ($actionA) {
         $person = KT_Person::getInstance($pid);
 
         $controller
-            ->setPageTitle($person->getLifespanName() . ' - ' . KT_I18N::translate('Add a child to create a one-parent family'))
+            ->setPageTitle($person->getLifespanName())
             ->pageHeader(); ?>
 
-        <?php echo pageStart('edit_interface', $controller->getPageTitle());
+        <?php echo pageStart('edit_interface', $controller->getPageTitle(), 'y', KT_I18N::translate('Add a child to create a one-parent family'));
 
 			echo print_indi_form('addopfchildaction', $famid, '', '', 'CHIL');
 
@@ -702,15 +704,18 @@ switch ($actionA) {
     case 'addspouse':
         $famtag = KT_Filter::get('famtag', '(HUSB|WIFE)');
         $famid  = KT_Filter::get('famid', KT_REGEX_XREF);
+        $person = KT_Person::getInstance($pid);
 
         if ($famtag == 'WIFE') {
-            $controller->setPageTitle(KT_I18N::translate('Add a wife'));
+            $subtitle = KT_I18N::translate('Add a wife');
         } else {
-            $controller->setPageTitle(KT_I18N::translate('Add a husband'));
+            $subtitle = KT_I18N::translate('Add a husband');
         }
-        $controller->pageHeader();
+        $controller
+            ->setPageTitle($person->getLifespanName())
+            ->pageHeader();
 
-        echo pageStart('edit_interface', $controller->getPageTitle());
+        echo pageStart('edit_interface', $controller->getPageTitle(), 'y', $subtitle);
 
 			echo print_indi_form('addspouseaction', $famid, '', '', $famtag);
 
