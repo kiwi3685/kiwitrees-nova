@@ -78,6 +78,8 @@ class report_changes_KT_Module extends KT_Module implements KT_Module_Report {
       ->setPageTitle($this->getTitle())
       ->pageHeader();
 
+    init_calendar_popup();
+
     //Configuration settings ===== //
     $action     = KT_Filter::post('action');
     $set_days   = KT_Filter::post('set_days');

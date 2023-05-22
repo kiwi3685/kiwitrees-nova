@@ -53,7 +53,7 @@ class tabf_changes_KT_Module extends KT_Module implements KT_Module_FamTab {
         require_once KT_ROOT.'library/php-diff/lib/Diff.php';
         require_once KT_ROOT.'library/php-diff/lib/Diff/Renderer/Html/SideBySide.php';
 
-//		ob_start();
+		ob_start();
 
         $controller
 			->addExternalJavascript(KT_DATATABLES_JS)
@@ -78,6 +78,7 @@ class tabf_changes_KT_Module extends KT_Module implements KT_Module_FamTab {
                 retrieve: true,
 				displayLength: 10,
                 pagingType: "full_numbers",
+                sorting: [[ 0, "desc" ]],
                 stateSave: true,
                 stateDuration: -1,
                 columns: [
@@ -192,15 +193,8 @@ class tabf_changes_KT_Module extends KT_Module implements KT_Module_FamTab {
 			</div>
 		</div>
 
-		<?php
+        <?php return ob_get_clean();
 
-//		return '
-//			<div class="grid-x grid-margin-y">
-//				<div class="cell">' .
-//					ob_get_clean() . '
-//				</div>
-//			</div>
-//		';
 	}
 
 	// Implement KT_Module_Tab

@@ -77,6 +77,7 @@ class tabi_changes_KT_Module extends KT_Module implements KT_Module_IndiTab {
                 retrieve: true,
 				displayLength: 10,
                 pagingType: "full_numbers",
+                sorting: [[ 0, "desc" ]],
                 stateSave: true,
                 stateDuration: -1,
                 columns: [
