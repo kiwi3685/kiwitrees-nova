@@ -127,7 +127,7 @@ function autocompleteHtml($suffix, $type, $tree, $valueInput, $placeHolder, $inp
 	}
 	$html .= '>
  			<span class="input-group-label">
- 				<button id="' . $suffix . '" class="clearAutocomplete autocomplete_icon">
+ 				<button id="' . $suffix . '" class="clearAutocomplete autocomplete_icon" title="' . KT_I18N::translate('Delete autocomplete entry') .'" data-tooltip data-position="top" data-alignment="center">
  					<i class="' . $iconStyle . ' fa-xmark"></i>
  				</button>
  			</span>
@@ -181,7 +181,7 @@ function submitButtons($onClick = '')
  				<i class="' . $iconStyle . ' fa-save"></i>'
 				 . KT_I18N::translate('Save') .
 			'</button>
-			<button class="button hollow" type="button" ' . $onClickHtml . '>
+			<button class="button secondary" type="button" ' . $onClickHtml . '>
  				<i class="' . $iconStyle . ' fa-xmark"></i>'
 				 . KT_I18N::translate('Cancel') .
 			'</button>

@@ -75,8 +75,8 @@ a.faq_link {
 }
 
 form select {
-	background-position: none;
-	background-image: none !important;
+	background-position: right 0.5rem center;
+	background-size: 0.75rem;
 }
 
 .lang-active {
@@ -107,6 +107,10 @@ form select {
 }
 .popup_links a .svg-inline--fa:hover {
 	color: #ab3334;
+}
+
+textarea {
+	min-height: 2.625rem;
 }
 
 body {
@@ -652,10 +656,10 @@ button.widget .svg-inline--fa {
 	font-weight: 700;
 }
 
-div[id$=-page]:not(#indi-page, #edit-interface-page) h3 {
+div[id$=-page]:not(#indi-page, #edit_interface-page) h3 {
 	text-align: center;
 }
-div[id$=-page]:not(#indi-page, #edit-interface-page) h3 svg {
+div[id$=-page]:not(#indi-page, #edit_interface-page) h3 svg {
 	font-size: 1.5rem;
 }
 
@@ -1434,20 +1438,54 @@ div[id$=-page] button[type=submit] {
 	max-width: 5rem;
 }
 
-#edit_interface-page .add_layer {
-	border-bottom: 0.0125rem solid #ab3334;
-	margin-bottom: 0.25rem;
+#edit_interface-page .input-group input,
+#edit_interface-page .input-group textarea,
+#edit_interface-page .input-group.autocomplete_container input,
+#edit_interface-page .input-group.autocomplete_container textarea {
+	margin: 0;
+}
+#edit_interface-page .input-group input.readonly,
+#edit_interface-page .input-group textarea.readonly,
+#edit_interface-page .input-group.autocomplete_container input.readonly,
+#edit_interface-page .input-group.autocomplete_container textarea.readonly {
+	background-color: #e0e0e0;
+}
+#edit_interface-page .input-group .input-group-label,
+#edit_interface-page .input-group.autocomplete_container .input-group-label {
+	display: flex;
+	max-height: 2.625rem;
+	padding: 0;
+	width: 2.625remrem;
+}
+#edit_interface-page .input-group .input-group-label button.autocomplete_icon,
+#edit_interface-page .input-group.autocomplete_container .input-group-label button.autocomplete_icon {
+	max-height: 2.625remrem;
+	padding: 0;
+	width: 2.625remrem;
+}
+#edit_interface-page .input-group .input-group-label .svg-inline--fa,
+#edit_interface-page .input-group.autocomplete_container .input-group-label .svg-inline--fa {
+	margin: 0.25rem 0.5rem 0;
+}
+#edit_interface-page .input-group .input-group-label.addnew .svg-inline--fa,
+#edit_interface-page .input-group.autocomplete_container .input-group-label.addnew .svg-inline--fa {
+	color: #3adb76;
+	font-size: 1.375rem;
 }
 #edit_interface-page .fdatepicker .input-group {
 	height: 2.4rem;
-	margin-bottom: 0;
 }
 #edit_interface-page .fdatepicker .input-group-label .svg-inline--fa {
 	cursor: pointer;
-	margin: 0;
+	margin: auto;
+	width: 2.4375rem;
 }
 #edit_interface-page .fdatepicker .input-group-label .svg-inline--fa:hover {
 	color: #ab3334;
+}
+#edit_interface-page .add_layer {
+	border-bottom: 0.0125rem solid #ab3334;
+	margin-bottom: 0.25rem;
 }
 #edit_interface-page .dropdown-pane.is-open :not(.help-text) {
 	background-color: #fffff4;
@@ -1481,16 +1519,22 @@ div[id$=-page] button[type=submit] {
 	font-weight: 400;
 	padding-left: 1.25rem;
 }
-#edit_interface-page div.last_change label {
+#edit_interface-page label.switch-paddle {
 	font-size: 0.9rem;
-	padding-top: 0;
+}
+#edit_interface-page div.last_change label {
 	margin-bottom: 1rem;
+	padding-top: 0;
 }
 #edit_interface-page span.yes {
 	margin: 0 0.9375rem;
+	vertical-align: bottom;
 }
 #edit_interface-page .svg-inline--fa.fa-user-pen {
 	font-size: 1.25rem;
+}
+#edit_interface-page select.census-assistant-selector {
+	margin-top: 1rem;
 }
 
 #fanchart-page svg {
@@ -2523,6 +2567,8 @@ input[type=search] {
 }
 
 .reveal.help-text {
+	font-size: 1rem;
+	font-style: normal;
 	max-width: 700px;
 	padding-top: 0;
 }
@@ -2532,8 +2578,8 @@ input[type=search] {
 	margin: 0.5rem 0;
 }
 .reveal.help-text .help_content {
-	max-height: 400px;
-	min-height: 100px;
+	max-height: 50rem;
+	min-height: 5rem;
 	overflow-y: auto;
 	padding: 0 0.5rem;
 	width: auto;

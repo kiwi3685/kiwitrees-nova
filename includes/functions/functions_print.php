@@ -822,12 +822,6 @@ function help_link($help_topic, $module = '')
 	return '<span class="icon-help" onclick="helpDialog(\'' . $help_topic . '\',\'' . $module . '\'); return false;">&nbsp;</span>';
 }
 
-// Print help as on-page text
-function help_text($help_topic)
-{
-	return '<iframe class="help_text_frame" src = "help_text.php?help=' . $help_topic . '"></iframe>';
-}
-
 // Print help as a foundation dropdown
 function helpDropdown($help_topic, $module = false)
 {
@@ -843,15 +837,25 @@ function helpDropdown($help_topic, $module = false)
 	}
 
 	return '
-		<span class="show-for-medium" data-open="' . $help_topic . '" title="' . KT_I18N::translate('Help') . '">
+		<span class="show-for-medium" data-open="' . $help_topic . '" title="' . KT_I18N::translate('Help') . '"  data-tooltip data-position="top" data-alignment="center">
 			<i class="' . $iconStyle . ' fa-question-circle alert"></i>
 		</span>
-		<div class="help-text reveal" id="' . $help_topic . '" data-reveal>
+		<div class="help-text reveal" id="' . $help_topic . '" data-reveal data-overlay="false">
 			<button class="close-button" data-close aria-label="Close modal" type="button">
 				<span aria-hidden="true"><i class="' . $iconStyle . ' fa-xmark alert"></i></span>
 			</button>
 			<div id="help-' . $help_topic . '"></div>
 		</div>
+	';
+}
+
+// Help dropdown in an input group
+function helpInputLabel($help_topic, $module = false)
+{
+	return '
+		<span class="input-group-label">' . 
+			helpDropdown($help_topic, $module) . '
+		</span>
 	';
 }
 
@@ -1537,9 +1541,37 @@ function print_specialchar_link($element_id)
 	global $iconStyle;
 
 	return '
-		<span onclick="findSpecialChar(document.getElementById(\'' . $element_id . '\')); if (window.updatewholename) { updatewholename(); } return false;" title="' . KT_I18N::translate('Find a special character') . '">
+		<span onclick="findSpecialChar(document.getElementById(\'' . $element_id . '\')); if (window.updatewholename) { updatewholename(); } return false;" title="' . KT_I18N::translate('Find a special character') . '" data-tooltip data-position="top" data-alignment="center">
 			<i class="' . $iconStyle . ' fa-keyboard fa-fw"></i>
-		</span>';
+		</span>
+	';
+
+}
+
+function print_specialcharacters($element_id)
+{
+	global $iconStyle;
+
+	$revealID = 'specChar-' . $element_id;
+	$appendTo = 'appendTo-' . $element_id; ?>
+
+		<span class="input-group-label" data-open="<?php echo $revealID; ?>" id="<?php echo $appendTo; ?>" title="<?php echo KT_I18N::translate('Find a special character'); ?> '" style="cursor:pointer;">
+				<i class="<?php echo $iconStyle; ?> fa-keyboard"></i>
+		</span>
+
+		<div class="tiny reveal" id="<?php echo $revealID; ?>" data-reveal data-overlay="false" data-v-offset=0>
+
+			<?php include KT_ROOT . 'includes/reveal/specialcharacters.php'; ?>
+
+			<button class="close-button" data-close aria-label="<?php echo KT_I18N::translate('Close'); ?>" type="button">
+				<span aria-hidden="true">
+					<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
+				</span>
+			</button>
+		</div>
+
+	<?php
+
 }
 
 function print_autopaste_link($element_id, $choices)

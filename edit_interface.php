@@ -24,7 +24,8 @@
 define('KT_SCRIPT_NAME', 'edit_interface.php');
 require './includes/session.php';
 require KT_ROOT . 'includes/functions/functions_edit.php';
-require KT_ROOT . 'includes/functions/functions_gedcom_edit.php';
+require KT_ROOT . 'includes/functions/functions_edit_gedcom.php';
+//require KT_ROOT . 'includes/functions/functions_edit_AddSimpleTags.php';
 
 $controller = new KT_Controller_Page();
 $controller
@@ -95,7 +96,7 @@ if (!KT_USER_CAN_EDIT || !$edit) {
 }
 
 $level0type = $type;
-$actionA = $actionB = '';
+$actionA    = $actionB = '';
 $actionPage = array(
     'add',
     'addchild',
@@ -147,7 +148,6 @@ switch ($actionA) {
 				<div id="add_facts">
 					<?php
                     echo create_add_form($fact);
-                    echo no_update_chan($record);
                     ?>
 				</div>
 				<?php // Genealogical facts (e.g. for INDI and FAM records) can have 2 SOUR/NOTE/OBJE/ASSO/RESN ...
@@ -172,8 +172,13 @@ switch ($actionA) {
                             } ?>
                         </ul>
 					</div>
-				<?php } ?>
-                <?php echo submitButtons('window.close();'); ?>
+				<?php }
+                
+                echo no_update_chan($record);
+
+                echo submitButtons();
+                
+                ?>
 			</form>
 
 		<?php echo pageClose();

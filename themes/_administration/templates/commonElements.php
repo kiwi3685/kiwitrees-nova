@@ -159,7 +159,7 @@ function autocompleteHtml($suffix, $type, $tree, $valueInput, $placeHolder, $inp
 	}
 	$html .= '>
 			<span class="input-group-label">
-				<button id="' . $suffix . '" type="button" class="clearAutocomplete autocomplete_icon">
+				<button id="' . $suffix . '" type="button" class="clearAutocomplete autocomplete_icon" title="' . KT_I18N::translate('Delete autocomplete entry') .'" data-tooltip data-position="top" data-alignment="center">
 					<i class="' . $iconStyle . ' fa-xmark"></i>
 				</button>
 			</span>

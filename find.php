@@ -67,6 +67,7 @@ if ($chooseType != "media" && $chooseType!="0file") {
 // End variables for find media
 
 switch ($type) {
+/*
 case "indi":
 	$controller->setPageTitle(KT_I18N::translate('Find an individual'));
 	break;
@@ -88,6 +89,7 @@ case "note":
 case "source":
 	$controller->setPageTitle(KT_I18N::translate('Find a source'));
 	break;
+*/
 case "specialchar":
 	$controller->setPageTitle(KT_I18N::translate('Find a special character'));
 	$language_filter = KT_Filter::get('language_filter');
@@ -102,6 +104,7 @@ case "specialchar":
 	require KT_ROOT . 'includes/specialchars.php';
 	$action = "filter";
 	break;
+
 case "facts":
 	$controller
 		->setPageTitle(KT_I18N::translate('Find a fact or event'))
@@ -548,8 +551,8 @@ $options["form"][]		= "formspecialchar";
 	<?php }
 
 	if ($action == "filter") {
-		$filter			= trim($filter);
-		$filter_array	= explode(' ', preg_replace('/ {2,}/', ' ', $filter));
+		$filter ? $filter = trim($filter) : $filter = '';
+		$filter ? $filter_array	= explode(' ', preg_replace('/ {2,}/', ' ', $filter)) : $filter_array = [];
 
 		// Output Individual
 		if ($type == "indi") {

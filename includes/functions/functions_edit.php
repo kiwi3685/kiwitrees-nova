@@ -419,11 +419,8 @@ function print_addnewmedia_link($element_id)
 	global $iconStyle;
 
 	return '
-		<a href="#" onclick="pastefield=document.getElementById(\'' . $element_id . '\'); window.open(\'addmedia.php?action=showmediaform&type=event\', \'_blank\', \'\'); return false;" title="' . KT_I18N::translate('Add a media object') . '">
-			<span class="fa-layers fa-fw">
-				<i class="' . $iconStyle . ' fa-camera-retro"></i>
-				<i class="' . $iconStyle . ' fa-plus" data-fa-transform="shrink-2 up-8 right-8"></i>
-			</span>
+		<a href="#" onclick="pastefield=document.getElementById(\'' . $element_id . '\'); window.open(\'addmedia.php?action=showmediaform&type=event\', \'_blank\', \'\'); return false;" title="' . KT_I18N::translate('Add a media object') . '" data-tooltip data-position="top" data-alignment="center">
+			<i class="' . $iconStyle . ' fa-square-plus"></i>
 		</a>';
 }
 
@@ -432,8 +429,8 @@ function print_addnewrepository_link($element_id)
 	global $iconStyle;
 
 	return '
-		<a href="#" onclick="addnewrepository(document.getElementById(\'' . $element_id . '\')); return false;" title="' . KT_I18N::translate('Create Repository') . '">
-			<i class="' . $iconStyle . ' fa-building-columns"></i>
+		<a href="#" onclick="addnewrepository(document.getElementById(\'' . $element_id . '\')); return false;" title="' . KT_I18N::translate('Create Repository') . '" data-tooltip data-position="top" data-alignment="center">
+			<i class="' . $iconStyle . ' fa-square-plus"></i>
 		</a>';
 }
 
@@ -442,11 +439,9 @@ function print_addnewnote_link($element_id)
 	global $iconStyle;
 
 	return '
-		<a href="edit_interface.php?action=addnewnote&amp;noteid=newnote&amp;' . KT_TIMESTAMP . '&ged=' . KT_GEDCOM . '" target="_blank" title="' . KT_I18N::translate('Create a new Shared Note') . '">
-			<span class="fa-layers fa-fw">
-				<i class="' . $iconStyle . ' fa-file-alt"></i>
-				<i class="' . $iconStyle . ' fa-plus" data-fa-transform="shrink-2 up-8 right-8"></i>
-			</span>
+		<a href="edit_interface.php?action=addnewnote&amp;noteid=newnote&amp;' . KT_TIMESTAMP . '&ged=' . KT_GEDCOM . '" target="_blank" title="' . KT_I18N::translate('Create a new Shared Note') . '" data-tooltip data-position="top" data-alignment="center">
+			<i class="' . $iconStyle . ' fa-square-plus"></i>
+
 		</a>
 	';
 }
@@ -467,8 +462,8 @@ function print_addnewsource_link($element_id)
 	global $iconStyle;
 
 	return '
-		<a href="#" onclick="addnewsource(document.getElementById(\'' . $element_id . '\')); return false;" title="' . KT_I18N::translate('Create a new source') . '">
-			<i class="' . $iconStyle . ' fa-book"></i>
+		<a href="#" onclick="addnewsource(document.getElementById(\'' . $element_id . '\')); return false;" title="' . KT_I18N::translate('Create a new source') . '" data-tooltip data-position="top" data-alignment="center">
+			<i class="' . $iconStyle . ' fa-square-plus"></i>
 		</a>';
 }
 
@@ -554,7 +549,7 @@ function censusDateSelector($locale, $xref)
 			}
 		');
 
-	$options = '<option value="">' . KT_I18N::translate('Census date') . '</option>';
+	$options = '<option value="">' . KT_I18N::translate('Select a census country and date') . '</option>';
 
 	foreach ($census_places as $census_place) {
 		$options .= '<optgroup label="' . $census_place->censusPlace() . '">';
@@ -617,9 +612,7 @@ function no_update_chan(KT_GedcomRecord $record = null)
 			<div class="grid-x">
 				<div class="cell medium-3">
 					<label>
-						<span class="h5">
-							<?php echo KT_Gedcom_Tag::getLabel('CHAN'); ?>
-						</span>
+						<?php echo KT_Gedcom_Tag::getLabel('CHAN'); ?>
 						<?php if ($record) { ?>
 							<h6 class="subheader"><?php echo KT_Gedcom_Tag::getLabelValue('DATE', $record->LastChangeTimestamp()); ?></h6>
 							<h6 class="subheader"><?php echo KT_Gedcom_Tag::getLabelValue('_KT_USER', $record->LastChangeUser()); ?></h6>
