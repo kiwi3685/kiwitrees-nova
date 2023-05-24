@@ -70,7 +70,7 @@ define('KT_FONTAWESOME_JS',					KT_STATIC_URL . 'library/fontawesome/js/all.min.
 define('KT_JQUERY_COLORBOX_URL',			KT_STATIC_URL . 'library/colorbox/jquery.colorbox-min.js');	// 1.6.4	Updated 11-05-2016
 define('KT_JQUERY_JEDITABLE_URL',			KT_STATIC_URL . 'js/jquery.jeditable.js'); // 1.7.3 (used only in site access rules table)
 define('KT_JQUERY_WHEELZOOM_URL',			KT_STATIC_URL . 'js/jquery.wheelzoom.js'); // 2.0.0
-define('KT_JQUERY_AUTOSIZE',				KT_STATIC_URL . 'js/jquery.autosize.min.js'); // 1.18.18	Updated 18-06-2015
+define('KT_AUTOSIZE',						KT_STATIC_URL . 'library/autosize/dist/autosize.min.js'); // 6.0.1	Updated 24-05-2023
 define('KT_JQUERYUI_TOUCH_PUNCH',			KT_STATIC_URL . 'js/jquery.ui.touch-punch.min.js');
 define('KT_JQUERY_SHORTEN',					KT_STATIC_URL . 'js/jquery.shorten.js');
 define('KT_PASSWORDSCHECK',					KT_STATIC_URL . 'js/passwordscheck.js'); // Installed 09-11-2016

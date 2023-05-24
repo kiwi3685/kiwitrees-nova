@@ -42,9 +42,9 @@ if (!$searchTerm && isset($_COOKIE["adminSearch"])){
 $this
 	->addExternalJavascript(KT_JQUERY_COLORBOX_URL)
 	->addExternalJavascript(KT_JQUERY_WHEELZOOM_URL)
-	->addExternalJavascript(KT_JQUERY_AUTOSIZE)
+	->addExternalJavascript(KT_AUTOSIZE)
 	->addInlineJavascript('
-		jQuery("textarea").autosize();
+		autosize(jQuery("textarea"));
 
 		// Manage cookies for admin search
 		function save_data() {
