@@ -1467,7 +1467,7 @@ function create_add_form($fact)
 	<!-- end heading -->
 	<?php
 
-	// handle  MARRiage TYPE
+	// handle MARRiage TYPE
 	if ('MARR_' == substr($fact, 0, 5)) {
 		$tags[0] = 'MARR';
 		add_simple_tag('1 MARR');
