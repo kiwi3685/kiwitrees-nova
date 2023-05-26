@@ -215,7 +215,7 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
                                 $source_element_id = '';
                             } ?>
  
-                    <?php } else if ($fact === 'DATE' || $fact === 'TIME') { ?>
+                    <?php } else if ($fact === 'DATE') { ?>
                         <div class="input-group date">
 
                             <?php // Print link to add new record ?>
@@ -242,7 +242,7 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
      
                     </div>
 
-                     <?php // Current value / description used to go here ?>
+                     <?php currentValue($fact, $islink, $value, $upperlevel, $element_id) ?>
 
             </div>
 
@@ -320,7 +320,6 @@ function tagLevel($level, $islink, $fact)
 }
 
 /**
- * NOT IN USE 
  * Disply current value / description under input field
  *
  * @param string $upperlevel optional upper level tag (eg BIRT)
@@ -334,10 +333,12 @@ function currentValue($fact, $islink, $value, $upperlevel, $element_id)
     <div id="<?php echo $element_id; ?>_description">
 
         <?php // current value
-        if ($fact == 'DATE') {
+        if ($fact === 'DATE' && $value) {
             $date = new KT_Date($value);
-            echo $date->Display();
+            echo KT_I18N::translate('(Displayed as: %s)', $date->Display());
         }
+
+/*
         if ((in_array($fact, $currentValue) || ($fact == 'NOTE' && $islink)) && $value) {
             $record = KT_GedcomRecord::getInstance($value);
             if ($record) {
@@ -349,8 +350,9 @@ function currentValue($fact, $islink, $value, $upperlevel, $element_id)
         // pastable values
         if ($fact === 'FORM' && $upperlevel === 'OBJE') {
             print_autopaste_link($element_id, $FILE_FORM_accept);
-        } ?>
-
+        } 
+*/
+ ?>
     </div>
     <?php
 
@@ -570,6 +572,7 @@ function createInput($fact, $emptyfacts, $value, $element_id, $element_name, $so
             onchange="updateTextName('<?php echo $element_id; ?>'); ?>" 
             value="//<?php //echo htmlspecialchars((string) $value); ?>" 
             readonly
+            <?php echo placeholder($fact); ?>
         >
     <?php } else { ?>
  
@@ -590,7 +593,7 @@ function createInput($fact, $emptyfacts, $value, $element_id, $element_name, $so
                 id="<?php echo $element_id; ?>" 
                 name="<?php echo $element_name; ?>" 
                 value="<?php echo htmlspecialchars((string) $value); ?>" 
-                dir="ltr"
+                dir="ltr" 
                 <?php echo placeholder($fact); ?>
             >
         <?php }
@@ -723,7 +726,7 @@ function autocompleteInputs($fact, $element_id, $element_name, $value, $namefact
 function newRecordLinks($fact, $element_id, $value, $islink, $action, $pid, $event_add)
 {
 
-    if ($fact) { ?>
+    if ($fact && $islink && !$value) { ?>
         <span class="input-group-label addnew">
             <?php switch ($fact) {
                 case 'SOUR':
@@ -732,27 +735,24 @@ function newRecordLinks($fact, $element_id, $value, $islink, $action, $pid, $eve
                 case 'REPO':
                     echo print_addnewrepository_link($element_id);
                     break;
-                case 'NOTE':
-                    // Shared Notes Icons ========================================
-                    if ($islink) {
-                        // Print regular Shared Note icons ---------------------------
-                        echo print_addnewnote_link($element_id);
+                case 'NOTE':        
+                    // Print regular Shared Note icons ---------------------------
+                    echo print_addnewnote_link($element_id);
 
-                        // If census_assistant module exists && we are on the INDI page and the action is a census assistant addition.
-                        // Then show the add Shared note assisted icon, if not  ... show regular Shared note icons.
-                        if (($action == 'add' || $action == 'edit') && $pid && array_key_exists('census_assistant', KT_Module::getActiveModules())) {
-                            // Check if a CENS event ---------------------------
-                            if ($event_add == 'census_add') {
-                                $type_pid = KT_GedcomRecord::getInstance($pid);
-                                if ($type_pid->getType() == 'INDI' ) {
-                                    echo '
-                                        <div>
-                                            <a href="#" style="display: none;" id="assistant-link" onclick="return activateCensusAssistant();">' .
-                                                KT_I18N::translate('Create a shared note using the census assistant') . '
-                                            </a>
-                                        </div>
-                                    ';
-                                }
+                    // If census_assistant module exists && we are on the INDI page and the action is a census assistant addition.
+                    // Then show the add Shared note assisted icon, if not  ... show regular Shared note icons.
+                    if (($action == 'add' || $action == 'edit') && $pid && array_key_exists('census_assistant', KT_Module::getActiveModules())) {
+                        // Check if a CENS event ---------------------------
+                        if ($event_add == 'census_add') {
+                            $type_pid = KT_GedcomRecord::getInstance($pid);
+                            if ($type_pid->getType() == 'INDI' ) {
+                                echo '
+                                    <div>
+                                        <a href="#" style="display: none;" id="assistant-link" onclick="return activateCensusAssistant();">' .
+                                            KT_I18N::translate('Create a shared note using the census assistant') . '
+                                        </a>
+                                    </div>
+                                ';
                             }
                         }
                     }
@@ -938,8 +938,8 @@ function placeholder($fact)
         case 'AGE':
             return 'placeholder="33y 5m 2d"';
             break;
-        
-        default:
-            break;
+        case 'TIME':
+            return 'placeholder="15:45"';
+            break;   
     }
 }

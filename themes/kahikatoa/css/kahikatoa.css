@@ -1455,13 +1455,13 @@ div[id$=-page] button[type=submit] {
 	display: flex;
 	max-height: 2.625rem;
 	padding: 0;
-	width: 2.625remrem;
+	width: 2.625rem;
 }
 #edit_interface-page .input-group .input-group-label button.autocomplete_icon,
 #edit_interface-page .input-group.autocomplete_container .input-group-label button.autocomplete_icon {
-	max-height: 2.625remrem;
+	max-height: 2.625rem;
 	padding: 0;
-	width: 2.625remrem;
+	width: 2.625rem;
 }
 #edit_interface-page .input-group .input-group-label .svg-inline--fa,
 #edit_interface-page .input-group.autocomplete_container .input-group-label .svg-inline--fa {
@@ -1472,16 +1472,10 @@ div[id$=-page] button[type=submit] {
 	color: #3adb76;
 	font-size: 1.375rem;
 }
-#edit_interface-page .fdatepicker .input-group {
-	height: 2.4rem;
-}
-#edit_interface-page .fdatepicker .input-group-label .svg-inline--fa {
-	cursor: pointer;
-	margin: auto;
-	width: 2.4375rem;
-}
-#edit_interface-page .fdatepicker .input-group-label .svg-inline--fa:hover {
-	color: #ab3334;
+#edit_interface-page div[id$=_description] {
+	color: #8a8a8a;
+	margin-bottom: 1rem;
+	margin-top: -1rem;
 }
 #edit_interface-page .add_layer {
 	border-bottom: 0.0125rem solid #ab3334;
