@@ -402,17 +402,6 @@ function edit_field_username($name, $selected = '', $extra = '')
 	return select_edit_control($name, $all_users, '-', $selected, $extra);
 }
 
-// generates javascript code for calendar popup in user's language
-function print_calendar_popup()
-{
-	global $iconStyle;
-
-	return '
-		<span>
-			<i class="' . $iconStyle . ' fa-calendar-days"></i>
-		</span>
-	';
-}
 
 function print_addnewmedia_link($element_id)
 {

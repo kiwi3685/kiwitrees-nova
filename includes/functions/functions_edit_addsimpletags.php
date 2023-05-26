@@ -150,7 +150,7 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
     }
 
     if ($fact === 'SHARED_NOTE_EDIT' || $fact === 'SHARED_NOTE') {
-        $islink = 1;
+        $islink = true;
         $fact = "NOTE";
     }
 
@@ -162,7 +162,11 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
         $style = ' style="display:none;"';
     }
 
-    if (in_array($fact, ['LATI', 'LONG', 'ADDR', 'PAGE', 'DATA', 'TEXT', 'NPFX', 'SPFX', 'NSFX']) || ($fact === 'OBJE' && $level = 2)) {
+    if (
+        in_array($fact, ['LATI', 'LONG', 'PAGE', 'DATA', 'TEXT', 'NPFX', 'SPFX', 'NSFX']) || 
+        (in_array($fact, ['OBJE', 'NOTE']) && $level >= 2) || 
+        (in_array($fact, ['ADDR']) && $upperlevel === 'PLAC')
+    ) {
         $labelIndent = ' style="text-indent: 3rem;"';
     } ?>
 
@@ -206,18 +210,18 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
                             <?php // Print link to add new record ?>
                             <?php echo newRecordLinks($fact, $element_id, $value, $islink, $action, $pid, $event_add); ?>
 
-                            <?php echo autocompleteInputs($fact, $element_id, $element_name, $value, $namefacts, $level, $tags, $records); ?>
+                            <?php echo autocompleteInputs($fact, $element_id, $element_name, $value, $namefacts, $level, $tags, $records, $islink); ?>
                             <?php if (in_array($fact, ['ALIA', 'ASSO', '_ASSO'])) {
                                 $source_element_id = '';
                             } ?>
  
-                    <?php } else if ($fact === 'DATE' || $fact === 'TIME') {
-                        $fact === 'DATE' ? $format = 'data-date-format="dd M yyyy"' : $format = 'data-date-format="hh:mm" data-start-view="hour" data-min-view="time" '; ?>
-                        <div class="input-group date fdatepicker" <?php echo $format; ?>>       
+                    <?php } else if ($fact === 'DATE' || $fact === 'TIME') { ?>
+                        <div class="input-group date">
 
                             <?php // Print link to add new record ?>
                             <?php echo newRecordLinks($fact, $element_id, $value, $islink, $action, $pid, $event_add); ?>
 
+                            <?php //echo dateSelection($fact, $element_id, $element_name, $value); ?>
                             <?php echo dateSelection($element_id, $element_name, $value); ?>
 
                     <?php } else { ?>
@@ -412,7 +416,7 @@ function helpText($label, $upperlevel, $fact, $level, $action)
         // Not all facts have help text.
         switch ($fact) {
             case 'NAME':
-                if ($upperlevel!='REPO' && $upperlevel !== 'UNKNOWN') {
+                if ($upperlevel !== 'REPO' && $upperlevel !== 'UNKNOWN') {
                     echo helpInputLabel($fact);
                 }
                 break;
@@ -595,7 +599,7 @@ function createInput($fact, $emptyfacts, $value, $element_id, $element_name, $so
 }
 
 /**
- * Date selector input group
+ * Generates javascript code for calendar popup in user's language
  *
  * @param string $fact
  * @param string $value
@@ -605,19 +609,24 @@ function dateSelection($element_id, $element_name, $value)
 {
     global $iconStyle; ?>
 
-    <span class="prefix input-group-label">
+    <a 
+        class="input-group-label"
+        href="#"
+        onclick="cal_toggleDate('caldiv<?php echo $element_id; ?>', '<?php echo $element_id; ?>'); return false;" 
+    >
         <i class="<?php echo $iconStyle; ?> fa-calendar-days"></i>
-    </span>
-    <input
-        type="text"
-        id="<?php echo $element_id; ?>"
-        name="<?php echo $element_name; ?>"
-        value="<?php echo htmlspecialchars((string) $value); ?>"
-        onblur="valid_date(this);"
+    </a>
+    <input 
+        type="text" 
+        name="<?php echo $element_name; ?>" 
+        id="<?php echo $element_id; ?>" 
+        value="<?php echo htmlspecialchars((string) $value); ?>" 
+        onblur="valid_date(this);" 
         onmouseout="valid_date(this);"
     >
-
-    <?php 
+    <?php // Holder for calendar ?>
+    <div id="caldiv<?php echo $element_id; ?>" style="visibility: hidden;"></div>
+    <?php
 
 }
 
@@ -628,7 +637,7 @@ function dateSelection($element_id, $element_name, $value)
  * @param string $value
  * 
 **/
-function autocompleteInputs($fact, $element_id, $element_name, $value, $namefacts, $level, $tags, $records)
+function autocompleteInputs($fact, $element_id, $element_name, $value, $namefacts, $level, $tags, $records, $islink)
 {
     global $iconStyle;
 
@@ -673,8 +682,10 @@ function autocompleteInputs($fact, $element_id, $element_name, $value, $namefact
                 $title = strip_tags($id->getTitle());
                 break;
             case 'NOTE':
-                $id    = KT_NOTE::getInstance($value);
-                $title = strip_tags($id->getFullName());
+                if ($islink) {
+                    $id    = KT_NOTE::getInstance($value);
+                    $title = strip_tags($id->getFullName());
+                }
                 break;
             case 'REPO':
                 $id    = KT_Repository::getInstance($value);

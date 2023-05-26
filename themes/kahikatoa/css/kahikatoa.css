@@ -3178,3 +3178,37 @@ div.dataTables_paginate ul.pagination li.paginate_button.current {
 	background: none;
 	margin: 5px;
 }
+
+div[id^=caldiv] {
+	box-shadow: rgba(0, 0, 0, 0.16) 0px 5px 18px 0px, rgba(0, 0, 0, 0.1) 0px 0px 0px 1px;
+	font-size: 0.9rem;
+	margin-top: 2.45rem;
+	position: absolute;
+	z-index: 1000;
+}
+div[id^=caldiv] table {
+	margin-bottom: 0;
+}
+div[id^=caldiv] table th {
+	background-color: #e0e0e0;
+	padding: 0.375rem;
+}
+div[id^=caldiv] table th input {
+	height: 2rem;
+	text-align: center;
+}
+div[id^=caldiv] table th select {
+	height: 2rem;
+	margin: 0;
+}
+div[id^=caldiv] table td {
+	background-color: #fffff4;
+	padding: 0.375rem;
+}
+div[id^=caldiv] table td a {
+	opacity: 50%;
+}
+div[id^=caldiv] table td.thisMth a {
+	font-weight: 900;
+	opacity: 100%;
+}
