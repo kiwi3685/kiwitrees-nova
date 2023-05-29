@@ -610,7 +610,7 @@ function no_update_chan(KT_GedcomRecord $record = null)
 				</div>
 				<div class="cell medium-9 input">
 					<div class="checkbox-label">
-						<?php echo KT_I18N::translate('Prevent updates to the “last change” record'); ?>
+						<?php echo KT_I18N::translate('Keep the existing ‘last change’ information'); ?>
 					</div>
 					<?php echo simple_switch(
 		'preserve_last_changed',

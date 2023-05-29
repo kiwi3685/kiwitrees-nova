@@ -36,18 +36,7 @@ switch ($type) {
 	case 'ASSO': // Associates of an individuals, whose name contains the search terms
 		$data = array();
 
-		// Fetch all data, regardless of privacy
-		if (strlen($term) >= 3) {
-			$rows =
-				KT_DB::prepare("
-					SELECT 'INDI' AS type, i_id AS xref, i_file AS ged_id, i_gedcom AS gedrec, n_full
-					 FROM `##individuals`
-					 JOIN `##name` ON (i_id=n_id AND i_file=n_file)
-					 WHERE (n_full LIKE CONCAT('%', REPLACE(?, ' ', '%'), '%') OR n_surn LIKE CONCAT('%', REPLACE(?, ' ', '%'), '%')) AND i_file=? ORDER BY n_full COLLATE '" . KT_I18N::$collation . "'
-				")
-				->execute(array($term, $term, KT_GED_ID))
-				->fetchAll(PDO::FETCH_ASSOC);
-		}
+		$rows = get_INDI_rows($term);
 
 		// Filter for privacy - and whether they could be alive at the right time
 		$event_date = KT_Filter::get('extra');
@@ -156,7 +145,8 @@ switch ($type) {
 			KT_DB::prepare("
 				SELECT 'INDI' AS type, i_id AS xref, i_file AS ged_id, i_gedcom AS gedrec
 				 FROM `##individuals`
-				 WHERE i_gedcom REGEXP '(.*)\n1 EVEN.*\n2 TYPE ([^\n]*)" . $term . "*[^\n]*' AND i_file=?
+				 WHERE i_gedcom REGEXP '(.*)\n1 EVEN.*\n2 TYPE ([^\n]*)'" . $term . "'*[^\n]*' 
+				 AND i_file=?
 				 ORDER BY SUBSTRING_INDEX(i_gedcom, '\n2 TYPE ', -1) COLLATE '" . KT_I18N::$collation . "'
 			")
 			->execute(array(KT_GED_ID))
@@ -185,7 +175,8 @@ switch ($type) {
 			KT_DB::prepare("
 				SELECT 'INDI' AS type, i_id AS xref, i_file AS ged_id, i_gedcom AS gedrec
 				 FROM `##individuals`
-				 WHERE i_gedcom REGEXP '(.*)\n1 FACT.*\n2 TYPE ([^\n]*)" . $term . "*[^\n]*' AND i_file=?
+				 WHERE i_gedcom REGEXP '(.*)\n1 FACT.*\n2 TYPE ([^\n]*)'" . $term . "'*[^\n]*' 
+				 AND i_file=?
 				 ORDER BY SUBSTRING_INDEX(i_gedcom, '\n2 TYPE ', -1) COLLATE '" . KT_I18N::$collation . "'
 			")
 			->execute(array(KT_GED_ID))
@@ -214,7 +205,8 @@ switch ($type) {
 			KT_DB::prepare("
 				SELECT 'INDI' AS type, i_id AS xref, i_file AS ged_id, i_gedcom AS gedrec
 				 FROM `##individuals`
-				 WHERE i_gedcom REGEXP '(.*)\n1 [EVEN FACT].*\n2 TYPE ([^\n]*)" . $term . "*[^\n]*' AND i_file=?
+				 WHERE i_gedcom REGEXP '(.*)\n1 [EVEN FACT].*\n2 TYPE ([^\n]*)'" . $term . "'*[^\n]*' 
+				 AND i_file=?
 				 ORDER BY SUBSTRING_INDEX(i_gedcom, '\n2 TYPE ', -1) COLLATE '" . KT_I18N::$collation . "'
 			")
 			->execute(array(KT_GED_ID))
@@ -354,17 +346,22 @@ switch ($type) {
 
 	exit;
 
-	case 'NOTE': // Notes which contain the search terms
+	case 'SHARED_NOTE': // Notes which contain the search terms
 		$data = array();
 
 		$rows = get_NOTE_rows($term);
 
 		// Filter for privacy
 		foreach ($rows as $row) {
-			$note = KT_Note::getInstance($row);
+			$note = KT_Note::getInstance($row['xref'], $row['ged_id']);
 			if ($note->canDisplayName()) {
+				if (preg_match('/^0 @' . KT_REGEX_XREF . '.*@ NOTE .*'.preg_quote($term, '/') . '.*$\n/mi', $row['gedrec'], $match)) {
+					if ($match && !in_array($match[1], $data)) {
+						$data[] = $match[1];
+					}
+				}
 				$data[] = array(
-					'value' => $row['xref'],
+					'value' => $note->getXref(),
 					'label' => $note->getFullName()
 				);
 			}
@@ -987,26 +984,24 @@ function get_REPO_rows($term) {
 	if (strlen($term) >= 2 && substr($term,0,1) === $REPO_ID_PREFIX && is_numeric(substr($term,1,1))) {
 		// Search for Xref only
 		return KT_DB::prepare("
-			SELECT o_type AS type, o_id AS xref, o_file AS ged_id, o_gedcom AS gedrec, n_full
+			SELECT o_id AS xref
 			FROM `##other`
 			JOIN `##name` ON (o_id=n_id AND o_file=n_file)
 			WHERE o_id LIKE ?
 			AND o_type='REPO'
 			AND o_file = ?
-			ORDER BY n_full COLLATE '" . KT_I18N::$collation . "'
 		")
 		->execute(array($term, KT_GED_ID))
 		->fetchAll(PDO::FETCH_ASSOC);
 
 	} elseif (strlen($term) >= 3) {
 		return KT_DB::prepare("
-			SELECT o_type AS type, o_id AS xref, o_file AS ged_id, o_gedcom AS gedrec, n_full
+			SELECT o_id AS xref
 			FROM `##other`
 			JOIN `##name` ON (o_id=n_id AND o_file=n_file)
 			WHERE n_full LIKE CONCAT('%', REPLACE(?, ' ', '%'), '%')
 			AND o_file = ?
 			AND o_type LIKE 'REPO'
-			ORDER BY n_full COLLATE '" . KT_I18N::$collation . "'
 		")
 		->execute(array($term, KT_GED_ID))
 		->fetchAll(PDO::FETCH_ASSOC);
@@ -1016,32 +1011,29 @@ function get_REPO_rows($term) {
 
 function get_NOTE_rows($term) {
 	global $NOTE_ID_PREFIX;
+//	$term = '"' . $term . '"';
 
 	// Fetch all data, regardless of privacy
 	// Don't search until a minimum number of characters are entered or search uses an id number
 	if (strlen($term) >= 2 && substr($term,0,1) === $NOTE_ID_PREFIX && is_numeric(substr($term,1,1))) {
 		// Search for Xref only
 		return KT_DB::prepare("
-			SELECT o_type AS type, o_id AS xref, o_file AS ged_id, o_gedcom AS gedrec, n_full
+			SELECT o_id AS xref, o_file AS ged_id, o_gedcom AS gedrec
 			FROM `##other`
-			JOIN `##name` ON (o_id=n_id AND o_file=n_file)
 			WHERE o_id LIKE ?
 			AND o_type = 'NOTE'
 			AND o_file = ?
-			ORDER BY n_full COLLATE '" . KT_I18N::$collation . "'
 		")
 		->execute(array($term, KT_GED_ID))
 		->fetchAll(PDO::FETCH_ASSOC);
 
 	} elseif (strlen($term) >= 3) {
 		return KT_DB::prepare("
-			SELECT o_type AS type, o_id AS xref, o_file AS ged_id, o_gedcom AS gedrec, n_full
-			 FROM `##other`
-			 JOIN `##name` ON (o_id=n_id AND o_file=n_file)
-			 WHERE o_gedcom LIKE CONCAT('%', REPLACE(?, ' ', '%'), '%')
-			 AND o_file = ?
-			 AND o_type LIKE 'NOTE'
-			 ORDER BY n_full COLLATE '" . KT_I18N::$collation . "'
+			SELECT o_type AS type, o_id AS xref, o_file AS ged_id, o_gedcom AS gedrec
+			FROM `##other`
+			WHERE o_gedcom LIKE CONCAT('%', REPLACE(?, ' ', '%'), '%')
+			AND o_file = ?
+			AND o_type LIKE 'NOTE'
 		")
 		->execute(array($term, KT_GED_ID))
 		->fetchAll(PDO::FETCH_ASSOC);

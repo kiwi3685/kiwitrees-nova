@@ -58,11 +58,11 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 
     $namefacts          = ['GIVN', 'SURN', 'NPFX', 'SPFX','NSFX', '_MARNM_SURN'];
     $records            = ['INDI', 'FAM', 'OBJE', 'NOTE', 'REPO', 'SOUR'];
-    $subsourfacts       = ['TEXT', 'PAGE', 'OBJE', 'QUAY', 'DATE', 'NOTE'];
-    $linkfacts          = ['REPO', 'SOUR', 'OBJE', 'FAMC'];
+    $subsourfacts       = ['TEXT', 'PAGE', 'OBJE', 'QUAY', 'DATE', 'SHARED_NOTE'];
+    $linkfacts          = ['REPO', 'SOUR', 'OBJE', 'FAMC', 'SHARED_NOTE'];
     $specialchar        = ['TYPE', 'TIME', 'NOTE', 'SOUR', 'REPO', 'OBJE', 'ASSO', '_ASSO', 'AGE', 'DATE'];
     $mapfacts           = ['DATA', 'MAP', 'LATI', 'LONG'];
-    $autocompleteTags   = ['ALIA', 'ASSO', '_ASSO', 'CAUS', 'GIVN', 'NPFX', 'NPFX', 'SPFX', 'SURN', 'NOTE', 'OBJE', 'OCCU', 'PAGE', 'PLAC', 'REPO', 'SOUR', '_MARNM_SURN'];
+    $autocompleteTags   = ['ALIA', 'ASSO', '_ASSO', 'CAUS', 'GIVN', 'NPFX', 'NPFX', 'SPFX', 'SURN', 'SHARED_NOTE', 'OBJE', 'OCCU', 'PAGE', 'PLAC', 'REPO', 'SOUR', '_MARNM_SURN'];
     $labelIndent        = '';
     $class              = '';
     $style              = '';
@@ -151,7 +151,11 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 
     if ($fact === 'SHARED_NOTE_EDIT' || $fact === 'SHARED_NOTE') {
         $islink = true;
-        $fact = "NOTE";
+        $fact = "SHARED_NOTE";
+    }
+
+    if($fact === 'NOTE') {
+        $label = KT_I18N::translate('Inline note');
     }
 
     if ($fact === 'SOUR' || ($source_element_id && $level > 2 && in_array($fact, $subsourfacts))) {
@@ -164,8 +168,8 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 
     if (
         in_array($fact, ['LATI', 'LONG', 'PAGE', 'DATA', 'TEXT', 'NPFX', 'SPFX', 'NSFX']) || 
-        (in_array($fact, ['OBJE', 'NOTE']) && $level >= 2) || 
-        (in_array($fact, ['ADDR']) && $upperlevel === 'PLAC')
+        (in_array($fact, ['OBJE', 'NOTE', 'SHARED_NOTE']) && $level >= 2) || 
+        (in_array($fact, ['ADDR']) && $upperlevel === 'PLAC') 
     ) {
         $labelIndent = ' style="text-indent: 3rem;"';
     } ?>
@@ -210,7 +214,7 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
                             <?php // Print link to add new record ?>
                             <?php echo newRecordLinks($fact, $element_id, $value, $islink, $action, $pid, $event_add); ?>
 
-                            <?php echo autocompleteInputs($fact, $element_id, $element_name, $value, $namefacts, $level, $tags, $records, $islink); ?>
+                           <?php echo autocompleteInputs($fact, $element_id, $element_name, $value, $namefacts, $level, $tags, $records, $islink); ?>
                             <?php if (in_array($fact, ['ALIA', 'ASSO', '_ASSO'])) {
                                 $source_element_id = '';
                             } ?>
@@ -646,10 +650,10 @@ function autocompleteInputs($fact, $element_id, $element_name, $value, $namefact
 
     $autocomplete = $fact; ?>
 
-     <?php // Special cases ?>
+    <?php // Special cases ?>
     <?php 
     if (in_array($fact, ['ALIA', 'ASSO', '_ASSO'])) {
-        $autocomplete = $fact . ' data-autocomplete-extra="input.DATE"';
+        $other = ' data-autocomplete-extra="input.DATE"';
     }
 
     if ($fact === '_MARNM_SURN') {
@@ -684,11 +688,9 @@ function autocompleteInputs($fact, $element_id, $element_name, $value, $namefact
                 $id    = KT_Media::getInstance($value);
                 $title = strip_tags($id->getTitle());
                 break;
-            case 'NOTE':
-                if ($islink) {
-                    $id    = KT_NOTE::getInstance($value);
-                    $title = strip_tags($id->getFullName());
-                }
+            case 'SHARED_NOTE':
+                $id    = KT_NOTE::getInstance($value);
+                $title = strip_tags($id->getFullName());
                 break;
             case 'REPO':
                 $id    = KT_Repository::getInstance($value);
@@ -700,19 +702,33 @@ function autocompleteInputs($fact, $element_id, $element_name, $value, $namefact
                 break;
         }
 
-    }
+    } ?>
 
-    echo autocompleteHtml(
-        $element_id, 
-        $autocomplete, 
-        '', 
-        $title, 
-        '', 
-        $element_name, 
-        $value, 
-        '', 
-        $other
-    );
+    <input
+        id="autocompleteInput-<?php echo $element_id; ?>"
+        data-autocomplete-type="<?php echo $autocomplete; ?>"
+        type="text"
+        value="<?php echo $title; ?>"
+        <?php if ($other) {
+            echo $other;
+        } ?>
+    >
+    <input
+        type="hidden"
+        name="<?php echo $element_name; ?>"
+        id="selectedValue-<?php echo $element_id; ?>"
+    >
+    <span class="input-group-label">
+        <button 
+            id="<?php echo $element_id; ?>" 
+            class="clearAutocomplete autocomplete_icon" 
+            data-position="top" 
+            data-alignment="center"
+        >
+            <i class="<?php echo $iconStyle; ?> fa-xmark"></i>
+        </button>
+    </span>
+    <?php
 
 }
 
@@ -726,16 +742,19 @@ function autocompleteInputs($fact, $element_id, $element_name, $value, $namefact
 function newRecordLinks($fact, $element_id, $value, $islink, $action, $pid, $event_add)
 {
 
-    if ($fact && $islink && !$value) { ?>
+    if ($fact && $islink && !$value && !in_array($fact, ['ALIA', 'ASSO', '_ASSO'])) { ?>
         <span class="input-group-label addnew">
             <?php switch ($fact) {
+                case 'OBJE':
+                    echo print_addnewmedia_link($element_id);
+                    break;
                 case 'SOUR':
                     echo print_addnewsource_link($element_id);
                     break;
                 case 'REPO':
                     echo print_addnewrepository_link($element_id);
                     break;
-                case 'NOTE':        
+                case 'SHARED_NOTE':        
                     // Print regular Shared Note icons ---------------------------
                     echo print_addnewnote_link($element_id);
 
@@ -755,12 +774,6 @@ function newRecordLinks($fact, $element_id, $value, $islink, $action, $pid, $eve
                                 ';
                             }
                         }
-                    }
-                    break;
-                case 'OBJE':
-                    if (!$value) {
-                        echo print_addnewmedia_link($element_id);
-                        $value = 'new';
                     }
                     break;
             } ?>

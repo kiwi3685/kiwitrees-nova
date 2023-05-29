@@ -1439,14 +1439,18 @@ div[id$=-page] button[type=submit] {
 }
 
 #edit_interface-page .input-group input,
+#edit_interface-page .input-group select,
 #edit_interface-page .input-group textarea,
 #edit_interface-page .input-group.autocomplete_container input,
+#edit_interface-page .input-group.autocomplete_container select,
 #edit_interface-page .input-group.autocomplete_container textarea {
 	margin: 0;
 }
 #edit_interface-page .input-group input.readonly,
+#edit_interface-page .input-group select.readonly,
 #edit_interface-page .input-group textarea.readonly,
 #edit_interface-page .input-group.autocomplete_container input.readonly,
+#edit_interface-page .input-group.autocomplete_container select.readonly,
 #edit_interface-page .input-group.autocomplete_container textarea.readonly {
 	background-color: #e0e0e0;
 }

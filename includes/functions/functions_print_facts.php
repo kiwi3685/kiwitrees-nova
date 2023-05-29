@@ -591,7 +591,7 @@ function print_timeline(KT_Event $fact, KT_GedcomRecord $record) {
 				echo  '<span class="h6">' . $label . '</span>'; ?>
 			</div>
 			<!-- Place -->
-			<div class="cell small-10 medium-4 small-order-4 medium-order-3 place">
+			<div class="cell small-10 medium-3 small-order-3 medium-order-3 place">
 				<!-- Print the place of this fact/event -->
 				<div class="place">
 					<?php echo format_fact_place($fact, true, true, true); ?>
@@ -599,7 +599,7 @@ function print_timeline(KT_Event $fact, KT_GedcomRecord $record) {
 				<?php echo print_address_structure($fact->getGedcomRecord(), 2); ?>
 			</div>
 			<!-- Details -->
-			<div class="cell <?php echo (KT_USER_CAN_EDIT ? 'small-10 medium-4' : 'auto'); ?> small-order-5 medium-order-4 detail">
+			<div class="cell <?php echo (KT_USER_CAN_EDIT ? 'small-10 medium-5' : 'auto'); ?> small-order-5 medium-order-4 detail">
 				<?php switch ($fact->getTag()) {
 					case '_BIRT_CHIL':
 						echo '<br>', KT_I18N::translate('#%d', ++$n_chil);
@@ -1292,7 +1292,7 @@ function print_repository_record($xref) {
  * @param boolean $return whether to return the data or print the data
  */
 function print_fact_sources($factrec, $level, $return=false) {
-	global $EXPAND_SOURCES;
+	global $EXPAND_SOURCES, $iconStyle;
 
 	$data = '';
 	$nlevel = $level+1;
@@ -1327,25 +1327,43 @@ function print_fact_sources($factrec, $level, $return=false) {
 				$lt = preg_match_all("/$nlevel \w+/", $srec, $matches);
 				$data .= '<div class="fact_SOUR">';
 				$data .= '<span>';
+
 				$elementID = $sid."-".(int)(microtime(true)*1000000);
 				$src_media = trim((string) get_gedcom_value('OBJE', '1', $source->getGedcomRecord()), '@');
 				$data .= KT_I18N::translate('Source').':</span> <span class="field">';
 				$data .= '<a href="'.$source->getHtmlUrl().'">'.$source->getFullName().'</a>';
-				if ($EXPAND_SOURCES) {
-					$plusminus='icon-minus';
+				if ($EXPAND_SOURCES === 1) {
+					$plusminus    = ' fa-minimize';
+					$expandStyle  = ' display:block';
 				} else {
-					$plusminus='icon-plus';
+					$plusminus 	  = ' fa-maximize';
+					$expandStyle  = ' display:none';
 				}
-				if ($lt>0 || $src_media) {
-					$data .= '<a href="#" onclick="return expand_layer(\''.$elementID.'\');"><i id="'.$elementID.'_img" class="'.$plusminus.'"></i></a> ';
+				if ($lt > 0 || $src_media) {
+					$data .= '
+						<a 
+							data-open="' . $elementID . '"
+//							onclick="return expand_layer(\'' . $elementID . '\');"
+						>
+							<i id="' . $elementID . '_img" class="' . $iconStyle . $plusminus . '"></i>
+						</a>
+					';
 				}
+
 				$data .= '</span>';
 				$data .= '</div>';
-				$data .= "<div id=\"$elementID\"";
-				if ($EXPAND_SOURCES) {
-					$data .= ' style="display:block"';
-				}
-				$data .= ' class="source_citations">';
+				$data .= '<div id="' . $elementID . '"';
+				$data .= ' class="reveal source_citations"';
+//				$data .= ' style="' . $expandStyle . '"';
+				$data .= ' data-reveal >';
+				$data .= '
+					<button class="close-button" data-close data-animation-in="slide-in fast" data-animation-out="fade" aria-label="' . KT_I18N::translate('Close') . '" type="button">
+						<span aria-hidden="true">
+							<i class="' . $iconStyle . ' fa-xmark"></i>
+						</span>
+					</button>
+				';
+
 				// OBJE
 				if (!empty($src_media) && $nlevel > 2) {
 					$data .= print_source_media($src_media);

@@ -1076,7 +1076,7 @@ function print_add_layer($tag, $level = 2)
 	if ('NOTE' == $tag) { ?>
 		<?php $text = ''; ?>
 		<li class="accordion-item" data-accordion-item>
-			<a href="#" class="accordion-title"><?php echo KT_I18N::translate('Add note'); ?></a>
+			<a href="#" class="accordion-title"><?php echo KT_I18N::translate('Add inline note'); ?></a>
 			<div id="newnote" class="accordion-content" data-tab-content>
 				<div class="grid-x">
 					<div class="cell">

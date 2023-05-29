@@ -327,11 +327,9 @@ switch ($actionA) {
     ////////////////////////////////////////////////////////////////////////////////
     case 'addnewnote':
 
-        if (KT_Filter::get('pid')) {
-            $controller->pageHeader();
-        }
-
-        $controller->setPageTitle(KT_I18N::translate('Create a new Shared Note'));
+        $controller
+            ->setPageTitle(KT_I18N::translate('Create a new Shared Note'))
+            ->pageHeader();
 
         echo pageStart('edit_interface', $controller->getPageTitle()); ?>
 
@@ -356,7 +354,7 @@ switch ($actionA) {
     							<?php echo print_specialchar_link('NOTE'); ?>
     						</div>
     					</div>
-                        <?php echo no_update_chan($record); ?>
+                        <?php echo no_update_chan(); ?>
     				</div>
 
     				<p id="save-cancel">

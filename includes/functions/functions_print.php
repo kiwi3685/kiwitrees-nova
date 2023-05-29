@@ -1446,16 +1446,16 @@ function print_add_new_fact($id, $usedfacts, $type)
 				<form method="get" name="newfactform" action="" onsubmit="return false;">
 					<div class="input-group">
 						<div class="input-group-button">
-							<input type="button" class="button" value="<?php echo KT_I18N::translate('Add'); ?>" onclick="add_record('<?php echo $id; ?>', 'newfact<?php echo '-' . (int) (microtime(true) * 1000000); ?>');">
+							<input type="button" class="button" value="<?php echo KT_I18N::translate('Add'); ?>" onclick="add_record('<?php echo $id; ?>', 'newfact');">
 						</div>
-						<select id="newfact<?php echo '-' . (int) (microtime(true) * 1000000); ?>" class="input-group-field" name="newfact">
+						<select id="newfact" class="input-group-field" name="newfact">
 							<option value="" disabled selected><?php echo KT_I18N::translate('Select'); ?></option>
 							<?php foreach ($translated_addfacts as $fact => $fact_name) {
 								if ('EVEN' !== $fact && 'FACT' !== $fact) { ?>
 									<option value="<?php echo $fact; ?>"><?php echo $fact_name; ?></option>
 								<?php }
 								}
-					if ('INDI' == $type || 'FAM' == $type) { ?>
+							if ('INDI' == $type || 'FAM' == $type) { ?>
 								<option value="EVEN"><?php echo KT_I18N::translate('Custom event'); ?></option>
 								<option value="FACT"><?php echo KT_I18N::translate('Custom Fact'); ?></option>
 							<?php } ?>

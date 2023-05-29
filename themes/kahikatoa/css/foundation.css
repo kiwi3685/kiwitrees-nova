@@ -5776,7 +5776,7 @@ html.is-reveal-open body {
 	left: 0;
 	z-index: 1005;
 	display: none;
-	background-color: rgba(224, 224, 224, 0.85);
+	background-color: rgba(224, 224, 224, 0.45);
 	overflow-y: auto;
 	-webkit-overflow-scrolling: touch;
 }
