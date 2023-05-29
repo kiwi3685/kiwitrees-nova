@@ -213,7 +213,7 @@ switch (KT_Filter::post('action')) {
 		set_gedcom_setting($gedID, 'SHOW_MEDIA_DOWNLOAD',			KT_Filter::postBool('NEW_SHOW_MEDIA_DOWNLOAD'));
 		set_gedcom_setting($gedID, 'SHOW_NO_WATERMARK',				KT_Filter::post('NEW_SHOW_NO_WATERMARK'));
 		set_gedcom_setting($gedID, 'THUMBNAIL_WIDTH',				KT_Filter::post('NEW_THUMBNAIL_WIDTH'));
-		set_gedcom_setting($gedID, 'USE_SILHOUETTE',					KT_Filter::postBool('NEW_USE_SILHOUETTE'));
+		set_gedcom_setting($gedID, 'USE_SILHOUETTE',				KT_Filter::postBool('NEW_USE_SILHOUETTE'));
 		set_gedcom_setting($gedID, 'WATERMARK_THUMB',				KT_Filter::postBool('NEW_WATERMARK_THUMB'));
 		// Reload the page, so that the settings take effect immediately.
 		Zend_Session::writeClose();
@@ -224,9 +224,9 @@ switch (KT_Filter::post('action')) {
 			break;
 		}
 		set_gedcom_setting($gedID, 'ALL_CAPS',						KT_Filter::postBool('NEW_ALL_CAPS'));
-		set_gedcom_setting($gedID, 'COMMON_NAMES_ADD',				str_replace(' ', '', KT_Filter::post('NEW_COMMON_NAMES_ADD')));
-		set_gedcom_setting($gedID, 'COMMON_NAMES_REMOVE',			str_replace(' ', '', KT_Filter::post('NEW_COMMON_NAMES_REMOVE')));
-		set_gedcom_setting($gedID, 'COMMON_NAMES_THRESHOLD',			KT_Filter::post('NEW_COMMON_NAMES_THRESHOLD', KT_REGEX_INTEGER, 40));
+		set_gedcom_setting($gedID, 'COMMON_NAMES_ADD',				KT_Filter::post('NEW_COMMON_NAMES_ADD') ? str_replace(' ', '', KT_Filter::post('NEW_COMMON_NAMES_ADD')) : '');
+		set_gedcom_setting($gedID, 'COMMON_NAMES_REMOVE',			KT_Filter::post('NEW_COMMON_NAMES_REMOVE') ? str_replace(' ', '', KT_Filter::post('NEW_COMMON_NAMES_REMOVE')) : '');
+		set_gedcom_setting($gedID, 'COMMON_NAMES_THRESHOLD',		KT_Filter::post('NEW_COMMON_NAMES_THRESHOLD', KT_REGEX_INTEGER, 40));
 		set_gedcom_setting($gedID, 'DEFAULT_PEDIGREE_GENERATIONS',	KT_Filter::post('NEW_DEFAULT_PEDIGREE_GENERATIONS'));
 		set_gedcom_setting($gedID, 'MAX_DESCENDANCY_GENERATIONS',	KT_Filter::post('NEW_MAX_DESCENDANCY_GENERATIONS'));
 		set_gedcom_setting($gedID, 'MAX_PEDIGREE_GENERATIONS',		KT_Filter::post('NEW_MAX_PEDIGREE_GENERATIONS'));
@@ -237,7 +237,7 @@ switch (KT_Filter::post('action')) {
 		set_gedcom_setting($gedID, 'SHOW_PEDIGREE_PLACES_SUFFIX',	KT_Filter::postBool('NEW_SHOW_PEDIGREE_PLACES_SUFFIX'));
 		set_gedcom_setting($gedID, 'SHOW_RELATIVES_EVENTS',			KT_Filter::post('NEW_SHOW_RELATIVES_EVENTS'));
 		set_gedcom_setting($gedID, 'SUBLIST_TRIGGER_I',				KT_Filter::post('NEW_SUBLIST_TRIGGER_I', KT_REGEX_INTEGER, 200));
-		set_gedcom_setting($gedID, 'SURNAME_LIST_STYLE',				KT_Filter::post('NEW_SURNAME_LIST_STYLE'));
+		set_gedcom_setting($gedID, 'SURNAME_LIST_STYLE',			KT_Filter::post('NEW_SURNAME_LIST_STYLE'));
 		// Reload the page, so that the settings take effect immediately.
 		Zend_Session::writeClose();
 		header('Location: ' . KT_SERVER_NAME . KT_SCRIPT_PATH . KT_SCRIPT_NAME . '#layout');
@@ -248,17 +248,17 @@ switch (KT_Filter::post('action')) {
 		}
 
 		set_gedcom_setting($gedID, 'ABBREVIATE_CHART_LABELS',		KT_Filter::postBool('NEW_ABBREVIATE_CHART_LABELS'));
-		set_gedcom_setting($gedID, 'CHART_BOX_TAGS',					implode(",", KT_Filter::post('NEW_CHART_BOX_TAGS')));
+		set_gedcom_setting($gedID, 'CHART_BOX_TAGS',				KT_Filter::post('NEW_CHART_BOX_TAGS') ? implode(",", KT_Filter::post('NEW_CHART_BOX_TAGS')) : '');
 		set_gedcom_setting($gedID, 'EXPAND_NOTES',					KT_Filter::postBool('NEW_EXPAND_NOTES'));
-		set_gedcom_setting($gedID, 'EXPAND_SOURCES',					KT_Filter::postBool('NEW_EXPAND_SOURCES'));
-		set_gedcom_setting($gedID, 'HIDE_GEDCOM_ERRORS',				KT_Filter::postBool('NEW_HIDE_GEDCOM_ERRORS'));
+		set_gedcom_setting($gedID, 'EXPAND_SOURCES',				KT_Filter::postBool('NEW_EXPAND_SOURCES'));
+		set_gedcom_setting($gedID, 'HIDE_GEDCOM_ERRORS',			KT_Filter::postBool('NEW_HIDE_GEDCOM_ERRORS'));
 		set_gedcom_setting($gedID, 'PEDIGREE_FULL_DETAILS',			KT_Filter::postBool('NEW_PEDIGREE_FULL_DETAILS'));
 		set_gedcom_setting($gedID, 'PEDIGREE_SHOW_GENDER',			KT_Filter::postBool('NEW_PEDIGREE_SHOW_GENDER'));
 		set_gedcom_setting($gedID, 'SHOW_COUNTER',					KT_Filter::postBool('NEW_SHOW_COUNTER'));
 		set_gedcom_setting($gedID, 'SHOW_FACT_ICONS',				KT_Filter::postBool('NEW_SHOW_FACT_ICONS'));
-		set_gedcom_setting($gedID, 'SHOW_GEDCOM_RECORD',				KT_Filter::postBool('NEW_SHOW_GEDCOM_RECORD'));
+		set_gedcom_setting($gedID, 'SHOW_GEDCOM_RECORD',			KT_Filter::postBool('NEW_SHOW_GEDCOM_RECORD'));
 		set_gedcom_setting($gedID, 'SHOW_PARENTS_AGE',				KT_Filter::postBool('NEW_SHOW_PARENTS_AGE'));
-		set_gedcom_setting($gedID, 'SHOW_LDS_AT_GLANCE',				KT_Filter::postBool('NEW_SHOW_LDS_AT_GLANCE'));
+		set_gedcom_setting($gedID, 'SHOW_LDS_AT_GLANCE',			KT_Filter::postBool('NEW_SHOW_LDS_AT_GLANCE'));
 
 		// Reload the page, so that the settings take effect immediately.
 		Zend_Session::writeClose();
@@ -268,7 +268,7 @@ switch (KT_Filter::post('action')) {
 		if (!KT_Filter::checkCsrf()) {
 			break;
 		}
-		set_gedcom_setting($gedID, 'INDI_FACTS_ADD',					implode(",", KT_Filter::post('NEW_INDI_FACTS_ADD')));
+		set_gedcom_setting($gedID, 'INDI_FACTS_ADD',				KT_Filter::post('NEW_INDI_FACTS_ADD') ? implode(",", KT_Filter::post('NEW_INDI_FACTS_ADD')) : '');
 
 
 		// Reload the page, so that the settings take effect immediately.
