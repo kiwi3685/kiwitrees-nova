@@ -355,15 +355,17 @@ switch ($type) {
 		foreach ($rows as $row) {
 			$note = KT_Note::getInstance($row['xref'], $row['ged_id']);
 			if ($note->canDisplayName()) {
-				if (preg_match('/^0 @' . KT_REGEX_XREF . '.*@ NOTE .*'.preg_quote($term, '/') . '.*$\n/mi', $row['gedrec'], $match)) {
-					if ($match && !in_array($match[1], $data)) {
-						$data[] = $match[1];
-					}
+				if (strlen($term) >= 2 && substr($term,0,1) === $NOTE_ID_PREFIX && is_numeric(substr($term,1,1))) {
+					$data[] = array(
+						'value' => $note->getXref(),
+						'label' => $note->getFullName()
+					);
+				} else if (preg_match('/0 @' . KT_REGEX_XREF . '.*@ NOTE .*'.preg_quote($term, '/') . '.*/i', $row['gedrec'], $match)) {
+					$data[] = array(
+						'value' => $note->getXref(),
+						'label' => $note->getFullName()
+					);
 				}
-				$data[] = array(
-					'value' => $note->getXref(),
-					'label' => $note->getFullName()
-				);
 			}
 		}
 
@@ -1011,14 +1013,13 @@ function get_REPO_rows($term) {
 
 function get_NOTE_rows($term) {
 	global $NOTE_ID_PREFIX;
-//	$term = '"' . $term . '"';
 
 	// Fetch all data, regardless of privacy
 	// Don't search until a minimum number of characters are entered or search uses an id number
 	if (strlen($term) >= 2 && substr($term,0,1) === $NOTE_ID_PREFIX && is_numeric(substr($term,1,1))) {
 		// Search for Xref only
 		return KT_DB::prepare("
-			SELECT o_id AS xref, o_file AS ged_id, o_gedcom AS gedrec
+			SELECT o_type AS type, o_id AS xref, o_file AS ged_id, o_gedcom AS gedrec
 			FROM `##other`
 			WHERE o_id LIKE ?
 			AND o_type = 'NOTE'
