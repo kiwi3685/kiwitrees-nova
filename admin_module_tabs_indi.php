@@ -43,7 +43,7 @@ $controller
 		});
 	');
 
-$modules    = KT_Module::getActiveFamTabs(KT_GED_ID, KT_PRIV_HIDE);
+$modules    = KT_Module::getActiveIndiTabs(KT_GED_ID, KT_PRIV_HIDE);
 $component  = 'tabi';
 $infoHelp   = KT_I18N::translate('"Drag & drop" each module, or manually adjust the order numbers, to change the order these modules will be displayed in.') . '<br>' . KT_I18N::translate('The "Access level" setting "Hide from everyone" means exactly that, including Administrators.');
 $pageTitle  = $controller->getPageTitle();
