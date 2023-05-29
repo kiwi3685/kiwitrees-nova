@@ -102,32 +102,37 @@ function autocompleteHtml($suffix, $type, $tree, $valueInput, $placeHolder, $inp
  			<input
  				id="autocompleteInput-' . $suffix . '"
  				data-autocomplete-type="' . $type . '"';
-	if ($tree) {
-		$html .= 'data-autocomplete-ged="' . $tree . '"';
-	}
-	$html .= '
- 				type="text"
- 				value="' . $valueInput . '"';
-	if ($placeHolder) {
-		$html .= 'placeholder="' . $placeHolder . '"';
-	}
-	if ($required) {
-		$html .= ' required ';
-	}
-	if ($other) {
-		$html .= $other;
-	}
-	$html .= '>
+				if ($tree) {
+					$html .= 'data-autocomplete-ged="' . $tree . '"';
+				}
+				$html .= '
+					type="text"
+					value="' . $valueInput . '"';
+				if ($placeHolder) {
+					$html .= 'placeholder="' . $placeHolder . '"';
+				}
+				if ($required) {
+					$html .= ' required ';
+				}
+				if ($other) {
+					$html .= $other;
+				}
+			$html .= '>
  			<input
  				type="hidden"
  				name="' . $inputName . '"
  				id="selectedValue-' . $suffix . '"';
-	if ($valueHidden) {
-		$html .= 'value="' . $valueHidden . '"';
-	}
-	$html .= '>
+				if ($valueHidden) {
+					$html .= 'value="' . $valueHidden . '"';
+				}
+			$html .= '>
  			<span class="input-group-label">
- 				<button id="' . $suffix . '" class="clearAutocomplete autocomplete_icon" title="' . KT_I18N::translate('Delete autocomplete entry') .'" data-tooltip data-position="top" data-alignment="center">
+ 				<button 
+ 					id="' . $suffix . '" 
+ 					class="clearAutocomplete autocomplete_icon" 
+ 					data-position="top" 
+ 					data-alignment="center"
+ 				>
  					<i class="' . $iconStyle . ' fa-xmark"></i>
  				</button>
  			</span>
