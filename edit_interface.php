@@ -1177,9 +1177,9 @@ switch ($actionA) {
 			<span id="edit_edit_raw" class="help_text"></span>
 
 			<form method="post" action="edit_interface.php">
-				<input type="hidden" name="action" value="update">
+				<input type="hidden" name="action" value="updateraw">
 				<input type="hidden" name="pid" value="<?php echo $pid; ?>">
-					<textarea name="newgedrec1" id="newgedrec1" dir="ltr" readonly="readonly"><?php echo htmlspecialchars((string) $gedrec1); ?></textarea>
+				<textarea name="newgedrec1" id="newgedrec1" dir="ltr" readonly="readonly"><?php echo htmlspecialchars((string) $gedrec1); ?></textarea>
 				<textarea name="newgedrec2" id="newgedrec2" dir="ltr"><?php echo htmlspecialchars((string) $gedrec2); ?></textarea>
 
 				<?php echo no_update_chan($record); ?>
@@ -2837,5 +2837,26 @@ switch ($actionB) {
         }
         break;
 
+    ////////////////////////////////////////////////////////////////////////////////
+    case 'updateraw':
+    $controller
+        ->setPageTitle(KT_I18N::translate('Edit raw GEDCOM record'))
+        ->pageHeader();
+
+    $pid    = safe_POST('pid', KT_REGEX_XREF);
+    $record = KT_GedcomRecord::getInstance($pid);
+
+    // Retrieve the private data
+    [, $private_gedrec] = $record->privatizeGedcom(KT_USER_ACCESS_LEVEL);
+
+    $newgedrec  = $_POST['newgedrec1'] . "\n" . $_POST['newgedrec2'] . $private_gedrec;
+    $success    = replace_gedrec($pid, KT_GED_ID, $newgedrec, !safe_POST_bool('preserve_last_changed'));
+
+    if ($success && !KT_DEBUG) {
+        $controller->addInlineJavascript('closePopupAndReloadParent();');
+    }
+    break;
+
+    ////////////////////////////////////////////////////////////////////////////////
 
 }
