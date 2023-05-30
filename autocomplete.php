@@ -596,7 +596,9 @@ switch ($type) {
 			KT_DB::prepare("
 				SELECT 'INDI' AS type, i_id AS xref, i_file AS ged_id, i_gedcom AS gedrec
 				 FROM `##individuals`
-				 WHERE i_gedcom LIKE CONCAT('%\n_ SOUR @', ?, '@%', REPLACE(?, ' ', '%'), '%') AND i_file=?
+				 WHERE i_gedcom LIKE CONCAT('%\n_ SOUR @', ?, '@%', REPLACE(?, ' ', '%'), '%') 
+				 AND i_file=?
+				 LIMIT 100
 			")
 			->execute(array($sid, $term, KT_GED_ID))
 			->fetchAll(PDO::FETCH_ASSOC);
@@ -619,7 +621,9 @@ switch ($type) {
 			KT_DB::prepare("
 				SELECT 'FAM' AS type, f_id AS xref, f_file AS ged_id, f_gedcom AS gedrec
 				 FROM `##families`
-				 WHERE f_gedcom LIKE CONCAT('%\n_ SOUR @', ?, '@%', REPLACE(?, ' ', '%'), '%') AND f_file=?
+				 WHERE f_gedcom LIKE CONCAT('%\n_ SOUR @', ?, '@%', REPLACE(?, ' ', '%'), '%') 
+				 AND f_file=?
+				 LIMIT 100
 			")
 			->execute(array($sid, $term, KT_GED_ID))
 			->fetchAll(PDO::FETCH_ASSOC);
@@ -642,7 +646,9 @@ switch ($type) {
 			KT_DB::prepare("
 				SELECT 'OBJE' AS type, m_id AS xref, m_file AS ged_id, m_gedcom AS gedrec
 				 FROM `##media`
-				 WHERE m_gedcom LIKE CONCAT('%\n_ SOUR @', ?, '@%', REPLACE(?, ' ', '%'), '%') AND m_file=?
+				 WHERE m_gedcom LIKE CONCAT('%\n_ SOUR @', ?, '@%', REPLACE(?, ' ', '%'), '%') 
+				 AND m_file=?
+				 LIMIT 100
 			")
 			->execute(array($sid, $term, KT_GED_ID))
 			->fetchAll(PDO::FETCH_ASSOC);

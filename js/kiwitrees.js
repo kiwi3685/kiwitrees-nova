@@ -1440,7 +1440,7 @@ function autocomplete(selector) {
 				// Some autocomplete fields require the current value of an earlier field
 				var extra  = null;
 				if (self.data("autocomplete-extra")) {
-					extra = jQuery("#" + self.data("autocomplete-extra")).val();
+					extra = jQuery("#selectedValue-" + self.data("autocomplete-extra")).val();
 				}
 
 				jQuery.getJSON("autocomplete.php", {

@@ -136,6 +136,10 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
         $element_id = $upperlevel . "_" . $fact . (int)(microtime(true)*1000000); // ex: BIRT_DATE56402 | DEAT_DATE56402 ...
     }
 
+    if ($fact === 'SOUR') {
+        $source_element_id = $element_id;
+    }
+
     // field value
     $islink = (substr($value, 0, 1) == "@" && substr($value, 0, 2) != "@#");
 
@@ -214,7 +218,7 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
                             <?php // Print link to add new record ?>
                             <?php echo newRecordLinks($fact, $element_id, $value, $islink, $action, $pid, $event_add); ?>
 
-                           <?php echo autocompleteInputs($fact, $element_id, $element_name, $value, $namefacts, $level, $tags, $records, $islink); ?>
+                           <?php echo autocompleteInputs($fact, $element_id, $element_name, $value, $namefacts, $level, $tags, $records, $islink, $source_element_id ); ?>
                             <?php if (in_array($fact, ['ALIA', 'ASSO', '_ASSO'])) {
                                 $source_element_id = '';
                             } ?>
@@ -644,16 +648,22 @@ function dateSelection($element_id, $element_name, $value)
  * @param string $value
  * 
 **/
-function autocompleteInputs($fact, $element_id, $element_name, $value, $namefacts, $level, $tags, $records, $islink)
+function autocompleteInputs($fact, $element_id, $element_name, $value, $namefacts, $level, $tags, $records, $islink, $source_element_id)
 {
     global $iconStyle;
 
-    $autocomplete = $fact; ?>
+    $autocomplete  = $fact;
+    $other         = ''; ?>
 
     <?php // Special cases ?>
     <?php 
     if (in_array($fact, ['ALIA', 'ASSO', '_ASSO'])) {
         $other = ' data-autocomplete-extra="input.DATE"';
+    }
+
+     if (in_array($fact, ['PAGE'])) {
+        $autocomplete = 'SOUR_PAGE';
+        $other = ' data-autocomplete-extra="' . $source_element_id . '"';
     }
 
     if ($fact === '_MARNM_SURN') {
@@ -668,7 +678,9 @@ function autocompleteInputs($fact, $element_id, $element_name, $value, $namefact
         }
     }
 
-    in_array($fact, $namefacts) ? $other = 'onblur="updatewholename();" onkeyup="updatewholename();"' : $other = '';
+    if (in_array($fact, $namefacts)) {
+        $other = 'onblur="updatewholename();" onkeyup="updatewholename();"';
+    }
 
     $value ? $title = $value : $title = '';
 
@@ -709,9 +721,7 @@ function autocompleteInputs($fact, $element_id, $element_name, $value, $namefact
         data-autocomplete-type="<?php echo $autocomplete; ?>"
         type="text"
         value="<?php echo $title; ?>"
-        <?php if ($other) {
-            echo $other;
-        } ?>
+        <?php echo $other; ?>
     >
     <input
         type="hidden"
