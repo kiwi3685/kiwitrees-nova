@@ -333,11 +333,11 @@ function MobileTopBarMenu($menuID = 'MainMenu')
 						<input type="hidden" name="action" value="general">
 						<input type="hidden" name="topsearch" value="yes">
 						<ul class="search">
-							<a href="#" data-toggle="searchInpput">
+							<a href="#" data-toggle="searchInput">
 								<i class="<?php echo $iconStyle; ?> fa-magnifying-glass"></i>
 							</a>
 							<li>
-								<input id="searchInpput" class="dropdown-pane" data-position="left" data-alignment="top" type="search" name="query" placeholder="<?php echo KT_I18N::translate('Search family tree'); ?>" data-dropdown data-auto-focus="true">
+								<input id="searchInput" class="dropdown-pane" data-position="left" data-alignment="top" type="search" name="query" placeholder="<?php echo KT_I18N::translate('Search family tree'); ?>" data-dropdown data-auto-focus="true">
 							</li>
 						</ul>
 					</form>
