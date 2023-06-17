@@ -56,13 +56,13 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 
     init_calendar_popup();
 
-    $namefacts          = ['GIVN', 'SURN', 'NPFX', 'SPFX','NSFX', '_MARNM_SURN'];
+    $namefacts          = ['GIVN', 'SURN', 'NPFX', 'SPFX','NSFX', '_MARNM', '_MARNM_SURN'];
     $records            = ['INDI', 'FAM', 'OBJE', 'NOTE', 'REPO', 'SOUR'];
     $subsourfacts       = ['TEXT', 'PAGE', 'OBJE', 'QUAY', 'DATE', 'SHARED_NOTE'];
     $linkfacts          = ['REPO', 'SOUR', 'OBJE', 'FAMC', 'SHARED_NOTE'];
     $specialchar        = ['TYPE', 'TIME', 'NOTE', 'SOUR', 'REPO', 'OBJE', 'ASSO', '_ASSO', 'AGE', 'DATE'];
     $mapfacts           = ['DATA', 'MAP', 'LATI', 'LONG'];
-    $autocompleteTags   = ['ALIA', 'ASSO', '_ASSO', 'CAUS', 'GIVN', 'NPFX', 'NPFX', 'SPFX', 'SURN', 'SHARED_NOTE', 'OBJE', 'OCCU', 'PAGE', 'PLAC', 'REPO', 'SOUR', '_MARNM_SURN'];
+    $autocompleteTags   = ['ALIA', 'ASSO', '_ASSO', 'CAUS', 'GIVN', 'NPFX', 'NSFX', 'SPFX', 'SURN', 'SHARED_NOTE', 'OBJE', 'OCCU', 'PAGE', 'PLAC', 'REPO', 'SOUR', '_MARNM_SURN'];
     $labelIndent        = '';
     $class              = '';
     $style              = '';
@@ -489,7 +489,7 @@ function createInput($fact, $emptyfacts, $value, $element_id, $element_name, $so
         <?php if ($level <= 1) { ?>
             <?php echo '<input type="checkbox" ';
                 if ($value) {
-                    echo ' checked="checked"';
+                    echo ' checked';
                 }
                 echo ' onclick="if (this.checked) ' . $element_id . '.value="Y"; else ' . $element_id . '.value=""';
             echo '">'; ?>
@@ -524,71 +524,91 @@ function createInput($fact, $emptyfacts, $value, $element_id, $element_name, $so
         }
     } else if ($fact == 'STAT') {
         echo select_edit_control($element_name, KT_Gedcom_Code_Stat::statusNames($upperlevel), '', $value);
+
     } else if ($fact == 'RELA') {
         echo edit_field_rela($element_name, strtolower($value));
+
     } else if ($fact == 'QUAY') {
         echo select_edit_control($element_name, KT_Gedcom_Code_Quay::getValues(), '', $value);
+
     } else if ($fact == '_KT_USER') {
         echo edit_field_username($element_name, $value);
+
     } else if ($fact == 'RESN') {
         echo edit_field_resn($element_name, $value);
-    } else if ($fact == '_PRIM') {
-        echo '<select id="', $element_id, '" name="', $element_name, '" >';
-        echo '<option value="N"';
-        if ($value == 'N') echo ' selected="selected"';
-        echo '>', KT_I18N::translate('no'), '</option>';
-        echo '<option value="Y"';
-        if ($value == 'Y') echo ' selected="selected"';
-        echo '>', KT_I18N::translate('yes'), '</option>';
-        echo '</select>';
-    } else if ($fact == 'SEX') {
-        echo '<select id="', $element_id, '" name="', $element_name, '"><option value="M"';
-        if ($value == 'M') echo ' selected="selected"';
-        echo '>', KT_I18N::translate('Male'), '</option><option value="F"';
-        if ($value == 'F') echo ' selected="selected"';
-        echo '>', KT_I18N::translate('Female'), '</option><option value="U"';
-        if ($value == 'U' || empty($value)) echo ' selected="selected"';
-        echo '>', KT_I18N::translate_c('unknown gender', 'Unknown'), '</option></select>';
-    } else if ($fact == 'TYPE' && $level == '3') {
-        //-- Build the selector for the Media 'TYPE' Fact
-        echo '<select name="text[]"><option selected="selected" value="" ></option>';
-        $selectedValue = strtolower($value);
-        if (!array_key_exists($selectedValue, KT_Gedcom_Tag::getFileFormTypes())) {
-            echo '<option selected="selected" value="', htmlspecialchars((string) $value), '" >', htmlspecialchars((string) $value), '</option>';
-        }
-        foreach (KT_Gedcom_Tag::getFileFormTypes() as $typeName => $typeValue) {
-            echo '<option value="', $typeName, '"';
-            if ($selectedValue == $typeName) {
-                echo ' selected="selected"';
-            }
-            echo '>', $typeValue, '</option>';
-        }
-        echo '</select>';
-    } else if (($fact == 'NAME' && $upperlevel != 'REPO' && $upperlevel !== 'UNKNOWN') || $fact == '_MARNM') { ?>
-         <?php // Populated in javascript from sub-tags ?>
-        <span class="input-group-label"
-            onclick="convertHidden('<?php echo $element_id; ?>'); return false;" 
-            title="<?php echo KT_I18N::translate('Edit name'); ?>"
-        >
-            <i class="<?php echo $iconStyle; ?> fa-user-pen"></i>
+
+    } else if ($fact == '_PRIM') { ?>
+        <select id="<?php echo $element_id; ?>" name="<?php $element_name; ?>" >
+            <option value="N" <?php echo $value == 'N' ? 'selected' : ''; ?> >
+                <?php echo KT_I18N::translate('No'); ?>
+            </option>
+            <option value="Y" <?php echo $value == 'Y' ? 'selected' : ''; ?> >
+                <?php echo KT_I18N::translate('Yes'); ?>
+            </option>
+        </select>
+
+    <?php } else if ($fact == 'SEX') { ?>
+        <select id="<?php echo $element_id; ?>" name="<?php $element_name; ?>" >
+            <option value="M" <?php echo $value == 'M' ? 'selected' : ''; ?> >
+                <?php echo KT_I18N::translate('Male'); ?>
+            </option>
+            <option value="F" <?php echo $value == 'F' ? 'selected' : ''; ?> >
+                <?php echo KT_I18N::translate('Female'); ?>
+            </option>
+            <option value="U" <?php echo $value == 'U' ? 'selected' : ''; ?> >
+                <?php echo KT_I18N::translate_c('unknown gender', 'Unknown'); ?>
+            </option>
+        </select>
+
+    <?php } else if ($fact == 'TYPE' && $level == '3') {
+        // Build the selector for the Media 'TYPE' Fact ?>
+        <select name="text[]">
+            <option selected value=""></option>
+            <?php $selectedValue = strtolower($value);
+            if (!array_key_exists($selectedValue, KT_Gedcom_Tag::getFileFormTypes())) { ?>
+                <option selected value="<?php echo htmlspecialchars((string) $value); ?>">
+                    <?php echo htmlspecialchars((string) $value); ?>
+                </option>
+            <?php }
+            foreach (KT_Gedcom_Tag::getFileFormTypes() as $typeName => $typeValue) { ?>
+                <option value="<?php echo $typeName; ?>"
+                    <?php if ($selectedValue == $typeName) { ?>
+                        selected
+                    <?php } ?>
+                >
+                    <?php echo $typeValue; ?>
+                </option>
+            <?php } ?>
+        </select>
+
+    <?php } else if (($fact == 'NAME' && $upperlevel != 'REPO' && $upperlevel !== 'UNKNOWN') || $fact == '_MARNM') {
+        $value ? $showValue = htmlspecialchars((string) $value) : $showValue = '//';
+        // Populated in javascript from sub-tags ?>
+        <span class="input-group-label">
+            <a 
+                href="#edit_name" 
+                onclick="convertReadOnly('<?php echo $element_id; ?>'); return false;"  
+                title="<?php echo KT_I18N::translate('Edit name'); ?>"
+            >
+                <i class="<?php echo $iconStyle; ?> fa-user-pen"></i>
+            </a>
         </span>
         <input 
             type="text" 
             id="<?php echo $element_id; ?>" 
             class="<?php echo $fact; ?> readonly" 
             name="<?php echo $element_name; ?>" 
-            onchange="updateTextName('<?php echo $element_id; ?>'); ?>" 
-            value="//<?php //echo htmlspecialchars((string) $value); ?>" 
-            readonly
+            onchange="updateTextName('<?php echo $element_id; ?>')" 
+            value="<?php echo $showValue; ?>" 
             <?php echo placeholder($fact); ?>
+            readonly
         >
-    <?php } else { ?>
  
-         <?php // Text and Textarea input fields ?>
+    <?php } else {
+        // Text and Textarea input fields ?>
         <?php if ($fact == 'TEXT' || $fact == 'ADDR' || ($fact == 'NOTE' && !$islink)) { ?>
             <textarea id="<?php echo $element_id; ?>" name="<?php echo $element_name; ?>" dir="auto"  rows='1'><?php echo htmlspecialchars((string) $value); ?></textarea>
         <?php } else { ?>
-             <?php // If using census_assistant window ?>
             <?php if (in_array($fact, $namefacts)) {
                $extra_markup = ' 
                     onblur="updatewholename();" 
@@ -653,10 +673,10 @@ function autocompleteInputs($fact, $element_id, $element_name, $value, $namefact
     global $iconStyle;
 
     $autocomplete  = $fact;
-    $other         = ''; ?>
+    $other         = '';
+    $hiddenOther   = '';
 
-    <?php // Special cases ?>
-    <?php 
+    // Special cases
     if (in_array($fact, ['ALIA', 'ASSO', '_ASSO'])) {
         $other = ' data-autocomplete-extra="input.DATE"';
     }
@@ -664,10 +684,6 @@ function autocompleteInputs($fact, $element_id, $element_name, $value, $namefact
      if (in_array($fact, ['PAGE'])) {
         $autocomplete = 'SOUR_PAGE';
         $other = ' data-autocomplete-extra="' . $source_element_id . '"';
-    }
-
-    if ($fact === '_MARNM_SURN') {
-        $autocomplete = 'SURN';
     }
 
     if ($fact === 'TYPE') {
@@ -678,8 +694,16 @@ function autocompleteInputs($fact, $element_id, $element_name, $value, $namefact
         }
     }
 
-    if (in_array($fact, $namefacts)) {
+    if ($fact === '_MARNM_SURN') {
+        $autocomplete = 'SURN';
+    }
+
+   if (in_array($fact, $namefacts)) {
         $other = 'onblur="updatewholename();" onkeyup="updatewholename();"';
+    }
+
+    if (in_array($fact, $namefacts) && $fact !== 'NAME') {
+        $hiddenOther = 'onchange="updatewholename()"';
     }
 
     $value ? $title = $value : $title = '';
@@ -727,6 +751,8 @@ function autocompleteInputs($fact, $element_id, $element_name, $value, $namefact
         type="hidden"
         name="<?php echo $element_name; ?>"
         id="selectedValue-<?php echo $element_id; ?>"
+        value="<?php echo htmlspecialchars((string) $value); ?>" 
+        <?php echo $hiddenOther; ?>
     >
     <span class="input-group-label">
         <button 
@@ -842,7 +868,7 @@ function otherInputs($fact, $level, $element_id, $upperlevel, $tags, $pid, $elem
                     $a = strtolower($key);
                     $b = strtolower($value);
                     if (@strpos($a, $b) !== false || @strpos($b, $a) !== false) {
-                        echo ' selected="selected"';
+                        echo ' selected';
                     }
                     $tmp = "MARR_" . strtoupper($key);
                 echo '>' .
@@ -888,9 +914,9 @@ function sourceLinks($bdm)
         $level2_checked = '';
     } else if ($PREFER_LEVEL2_SOURCES === '1' || $PREFER_LEVEL2_SOURCES === true) {
         $level1_checked = '';
-        $level2_checked = ' checked="checked"';
+        $level2_checked = ' checked';
     } else {
-        $level1_checked = ' checked="checked"';
+        $level1_checked = ' checked';
         $level2_checked = '';
 
     }

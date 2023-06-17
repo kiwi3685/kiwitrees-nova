@@ -868,11 +868,6 @@ function print_indi_form($nextaction, $famid, $linenum = '', $namerec = '', $fam
 			} else {
 				// Default format: GIVN /SURN/
 				return trim(npfx+" "+givn.replace(/ *, */g, " ")+" /"+trim(spfx+" "+surn).replace(/ *, */g, " ")+"/ "+nsfx);
-
-
-				return trim(npfx+" "+givn.replace(/ *, */g, " ")+" /"+trim(spfx+" "+surn).replace(/ *, */g, " ")+"/ "+nsfx);
-
-				return trim(npfx+" "+givn.replace(/ *, */g, " ")+" /"+trim(spfx+" "+surn).replace(/ *, */g, " ")+"/ "+nsfx);
 			}
 		}
 
@@ -890,10 +885,11 @@ function print_indi_form($nextaction, $famid, $linenum = '', $namerec = '', $fam
 			var nsfx = jQuery("#autocompleteInput-NSFX").val();
 			var name = generate_name();
 			jQuery("#NAME").val(name);
-			jQuery("#NAME_display").text(name);
+
 			// Married names inherit some NSFX values, but not these
 			nsfx = nsfx.replace(/^(I|II|III|IV|V|VI|Junior|Jr\.?|Senior|Sr\.?)$/i, "");
-			// Update _MARNM field from _MARNM_SURN field and display it
+
+			// Update _MARNM field from autocompleteInput-_MARNM_SURN field and display it
 			// Be careful of mixing latin/hebrew/etc. character sets.
 			var ip = document.getElementsByTagName("input");
 			var marnm_id = "";
@@ -901,29 +897,30 @@ function print_indi_form($nextaction, $famid, $linenum = '', $namerec = '', $fam
 			var heb = "";
 			for (var i = 0; i < ip.length; i++) {
 				var val = trim(ip[i].value);
-				if (ip[i].id.indexOf("_HEB") === 0)
+				if (ip[i].id.indexOf("_HEB") === 0) {
 					heb = val;
-				if (ip[i].id.indexOf("ROMN") === 0)
-					romn = val;
-				if (ip[i].id.indexOf("_MARNM") === 0) {
-					if (ip[i].id.indexOf("_MARNM_SURN") === 0) {
-						var msurn = "";
-						if (val !== "") {
-							var lc = lang_class(document.getElementById(ip[i].id).value);
-							if (lang_class(name) === lc)
-								msurn = trim(npfx + " " + givn + " /" + val + "/ " + nsfx);
-							else if (lc === "hebrew")
-								msurn = heb.replace(/\/.*\//, "/" + val + "/");
-							else if (lang_class(romn) === lc)
-								msurn = romn.replace(/\/.*\//, "/" + val + "/");
-						}
-						document.getElementById(marnm_id).value = msurn;
-						document.getElementById(marnm_id+"_display").innerHTML = msurn;
-					} else {
-						marnm_id = ip[i].id;
-					}
 				}
-			}
+				if (ip[i].id.indexOf("ROMN") === 0) {
+					romn = val;
+				}
+				if (ip[i].id.indexOf("autocompleteInput-_MARNM_SURN") === 0) {
+					var msurn = "";
+					if (val !== "") {
+						var lc = lang_class(document.getElementById(ip[i].id).value);
+						if (lang_class(name) === lc)
+							msurn = trim(npfx + " " + givn + " /" + val + "/ " + nsfx);
+						else if (lc === "hebrew")
+							msurn = heb.replace(/\/.*\//, "/" + val + "/");
+						else if (lang_class(romn) === lc)
+							msurn = romn.replace(/\/.*\//, "/" + val + "/");
+					}
+                    document.getElementById(marnm_id).value = msurn;
+                    document.getElementById("_MARNM").innerHTML = msurn;
+                } else {
+                    marnm_id = ip[i].id;
+				}
+			}	
+
 		}
 
 		// Toggle the name editor fields between to add or remove readonly attribute
@@ -931,7 +928,7 @@ function print_indi_form($nextaction, $famid, $linenum = '', $namerec = '', $fam
 		var oldName = "";
 		var manualChange = false;
 
-		function convertHidden(eid) {
+		function convertReadOnly(eid) {
 			if(jQuery("input#" + eid).prop("readonly")){
 				jQuery("input#" + eid).prop("readonly",false);
 				jQuery("input#" + eid).removeClass("readonly");
@@ -944,16 +941,14 @@ function print_indi_form($nextaction, $famid, $linenum = '', $namerec = '', $fam
 		/**
 		* if the user manually changed the NAME field, then update the textual
 		* HTML representation of it
-		* If the value changed set manualChange to true so that changing
+		* If the value changed, set manualChange to true so that changing
 		* the other fields doesn’t change the NAME line
 		*/
 		function updateTextName(eid) {
 			var element = document.getElementById(eid);
 			if (element) {
-				if (element.value!=oldName) manualChange = true;
-				var delement = document.getElementById(eid+"_display");
-				if (delement) {
-					delement.innerHTML = element.value;
+				if (element.value != oldName) {
+					manualChange = true;
 				}
 			}
 		}
@@ -965,9 +960,11 @@ function print_indi_form($nextaction, $famid, $linenum = '', $namerec = '', $fam
 				if (ip[i].id.indexOf("_AKA") == 0 || ip[i].id.indexOf("_HEB") == 0 || ip[i].id.indexOf("ROMN") == 0)
 					if (ip[i].value.indexOf("/")<0 && ip[i].value!="")
 						ip[i].value=ip[i].value.replace(/([^\s]+)\s*$/, "/$1/");
+
 				// Blank out temporary _MARNM_SURN
 				if (ip[i].id.indexOf("_MARNM_SURN") == 0)
 						ip[i].value="";
+
 				// Convert "xxx yyy" and "xxx y yyy" surnames to "xxx,yyy"
 				if ((SURNAME_TRADITION == "spanish" || "SURNAME_TRADITION" == "portuguese") && ip[i].id.indexOf("SURN") == 0) {
 					ip[i].value=document.forms[0].SURN.value.replace(/^\s*([^\s,]{2,})\s+([iIyY] +)?([^\s,]{2,})\s*$/, "$1,$3");
@@ -978,7 +975,7 @@ function print_indi_form($nextaction, $famid, $linenum = '', $namerec = '', $fam
 		// If the name isn’t initially formed from the components in a standard way,
 		// then don’t automatically update it.
 		if (document.getElementById("NAME").value!=generate_name() && document.getElementById("NAME").value!="//") {
-			convertHidden("NAME");
+			convertReadOnly("NAME");
 		}
 
 		// optional check for possible duplicate person
