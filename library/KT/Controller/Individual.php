@@ -190,17 +190,17 @@ class KT_Controller_Individual extends KT_Controller_GedcomRecord {
 				</div>
 			</a>
 			<div class="accordion-content" data-tab-content>
-				<div class="grid-x grid-padding-x">
-					<div class="cell medium-9">
-						<div class="grid-x">
+				<div class="grid-x ">
+					<div class="cell small-10 medium-9">
+						<div class="grid-x grid-margin-x">
 							<?php $ct = preg_match_all('/\n2 (\w+) (.*)/', $factrec, $nmatch, PREG_SET_ORDER);
 							for ($i = 0; $i < $ct; $i ++) { ?>
 								<?php $fact = $nmatch[$i][1];
 								if ($fact != 'SOUR' && $fact != 'NOTE' && $fact != 'SPFX') { ?>
-									<div class="cell medium-2">
+									<div class="cell small-5 medium-2">
 										<label><?php echo KT_Gedcom_Tag::getLabel($fact, $this->record); ?></label>
 									</div>
-									<div class="cell medium-10">
+									<div class="cell small-7 medium-10">
 										<?php if (isset($nmatch[$i][2])) {
 											$name = htmlspecialchars((string) $nmatch[$i][2]);
 											$name = str_replace('/', '', $name);
@@ -235,10 +235,10 @@ class KT_Controller_Individual extends KT_Controller_GedcomRecord {
 								$user_id = get_user_from_gedcom_xref(KT_GED_ID, $this->record->getXref());
 								if ($user_id) {
 									$user_name = get_user_name($user_id); ?>
-									<div class="cell medium-2">
+									<div class="cell small-5 medium-2">
 										<label><?php echo KT_I18N::translate('User ID'); ?></label>
 									</div>
-									<div class="cell medium-10">
+									<div class="cell small-7 medium-10">
 										<a href="admin_users.php?filter=<?php echo $user_name; ?>"><?php echo $user_name; ?></a>
 									</div>
 								<?php }
@@ -246,17 +246,17 @@ class KT_Controller_Individual extends KT_Controller_GedcomRecord {
 
 						</div>
 					</div>
-					<div class="cell medium-3 text-right">
+					<div class="cell small-2 medium-3 text-right">
 						<?php if ($this->record->canEdit() && !$event->getIsOld()) { ?>
 							<div class="editlink">
 								<a href="edit_interface.php?action=editname&amp;pid=<?php echo $this->record->getXref(); ?>&amp;linenum=<?php echo $linenum; ?>&amp;accesstime=<?php echo KT_TIMESTAMP; ?>&amp;ged=<?php echo KT_GEDCOM; ?>" target="_blank" title="<?php echo KT_I18N::translate('Edit name'); ?>">
-									<span class="link_text"><?php echo KT_I18N::translate('Edit name'); ?></span>
+									<span class="link_text show-for-medium"><?php echo KT_I18N::translate('Edit name'); ?></span>
 									<i class="<?php echo $iconStyle; ?> fa-pen-to-square"></i>
 								</a>
 							</div>
 							<div class="deletelink">
 								<a href="#" onclick="return delete_fact('<?php echo $this->record->getXref(); ?>', '', <?php echo $linenum; ?>, '<?php echo KT_I18N::translate('Are you sure you want to delete this fact?'); ?>');" title="<?php echo KT_I18N::translate('Remove name'); ?>">
-									<span class="link_text"><?php echo KT_I18N::translate('Remove name'); ?></span>
+									<span class="link_text show-for-medium"><?php echo KT_I18N::translate('Remove name'); ?></span>
 									<i class="<?php echo $iconStyle; ?> fa-trash-can"></i>
 								</a>
 							</div>
