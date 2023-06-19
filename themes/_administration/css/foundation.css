@@ -4372,7 +4372,7 @@ table.hover:not(.unstriped) tr:nth-of-type(even):hover {
 
 .accordion {
 	margin-left: 0;
-	background: #34689c;
+	background: transparent;
 	list-style-type: none;
 }
 .accordion[disabled] .accordion-title {
@@ -4394,7 +4394,7 @@ table.hover:not(.unstriped) tr:nth-of-type(even):hover {
 	border-bottom: 0;
 	font-size: 1.125rem;
 	line-height: 1;
-	color: #fefefe;
+	color: #34689c;
 }
 :last-child:not(.is-active) > .accordion-title {
 	border-bottom: 1px solid #e6e6e6;

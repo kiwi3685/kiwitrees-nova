@@ -383,7 +383,6 @@ main #admin-content .accordion .accordion-item.is-active > .accordion-title:befo
 	content: "\f151";
 }
 main #admin-content .accordion .accordion-item .accordion-title {
-	color: #fefefe;
 	font-weight: 600;
 }
 main #admin-content .accordion .accordion-item .accordion-title .subheader {
