@@ -75,10 +75,11 @@ define('KT_JQUERYUI_TOUCH_PUNCH',			KT_STATIC_URL . 'js/jquery.ui.touch-punch.mi
 define('KT_JQUERY_SHORTEN',					KT_STATIC_URL . 'js/jquery.shorten.js');
 define('KT_PASSWORDSCHECK',					KT_STATIC_URL . 'js/passwordscheck.js'); // Installed 09-11-2016
 define('KT_D3_JS',							KT_STATIC_URL . 'js/d3.min.js'); // Installed from https://d3js.org/ v.4
-define('KT_CHOSEN_JS',						KT_STATIC_URL . 'library/chosen/chosen.jquery.min.js'); // chosen-package-1.87 from https://github.com/harvesthq/chosen
 define('KT_CONFIRM_JS',						KT_STATIC_URL . 'library/jquery-confirm/dist/jquery-confirm.min.js'); // Ver 3.3.4 from https://craftpip.github.io/jquery-confirm/
 define('KT_ICON_PICKER_JS',					KT_STATIC_URL . 'library/fontawesome-iconpicker/dist/js/fontawesome-iconpicker.min.js'); // ver 3.2.1 from https://github.com/itsjavi/fontawesome-iconpicker
 define('KT_PROGRESS_JS',					KT_STATIC_URL . 'js/progress.min.js');
+define('KT_TOM_SELECT_JS',					KT_STATIC_URL . 'library/tom-select/dist/js/tom-select.complete.min.js');  // tom-select dist files ver.2.2.2 from https://www.jsdelivr.com/?query=author%3A%20orchidjs
+
 
 // kiwitrees own javascript libraries
 define('KT_KIWITREES_JS_URL',				KT_STATIC_URL . 'js/kiwitrees.min.js'); // used system wide, via Pages KT class
@@ -89,9 +90,9 @@ define('KT_INTERACTIVETREE_JS_URL',			KT_STATIC_URL . 'js/interactivetree.js'); 
 
 // external css libraries
 define('KT_DATEPICKER_CSS',					KT_STATIC_URL . 'library/foundation-datepicker/css/foundation-datepicker.min.css');
-define('KT_CHOSEN_CSS',						KT_STATIC_URL . 'library/chosen/chosen.min.css'); // chosen-package-1.87 from https://github.com/harvesthq/chosen
 define('KT_CONFIRM_CSS',					KT_STATIC_URL . 'library/jquery-confirm/dist/jquery-confirm.min.css'); // Ver 3.3.4 from https://craftpip.github.io/jquery-confirm/
 define('KT_ICONPICKER_CSS',					KT_STATIC_URL . 'library/fontawesome-iconpicker/dist/css/fontawesome-iconpicker.min.css'); // ver 3.2.1 from https://github.com/itsjavi/fontawesome-iconpicker
+define('KT_TOM_SELECT_CSS',					KT_STATIC_URL . 'library/tom-select/dist/css/tom-select.min.css'); // tom-select dist files ver.2.2.2 from https://www.jsdelivr.com/?query=author%3A%20orchidjs
 
 // Location of our modules and themes.  These are used as URLs and folder paths.
 define('KT_MODULES_DIR', 'modules_v4/'); // Update setup.php when this changes
