@@ -120,7 +120,7 @@ function select_edit_control_inline($name, $values, $empty, $selected, $controll
 }
 
 /**
- * Create an on-off switch for a form.
+ * Create an on-off or yes/no switch for a form.
  *
  * @param string $name         - the name and ID for the form element
  * @param array  $values       - array of value=>display items
@@ -554,39 +554,6 @@ function censusDateSelector($locale, $xref)
 	return
 		'<input type="hidden" id="pid_array" name="pid_array" value="">' .
 		'<select class="census-assistant-selector" onchange="selectCensus(this);">' . $options . '</select>';
-}
-
-/**
- * A list of known surname traditions, with their descriptions.
- *
- * @return string[]
- */
-function surnameDescriptions()
-{
-	return [
-		'paternal' => KT_I18N::translate_c('Surname tradition', 'paternal') .
-			' - ' . /* I18N: In the paternal surname tradition, ... */ KT_I18N::translate('Children take their father’s surname.') .
-			' ' . /* I18N: In the paternal surname tradition, ... */ KT_I18N::translate('Wives take their husband’s surname.'),
-		/* I18N: A system where children take their father’s surname */ 'patrilineal' => KT_I18N::translate('patrilineal') .
-			' - ' . /* I18N: In the patrilineal surname tradition, ... */ KT_I18N::translate('Children take their father’s surname.'),
-		/* I18N: A system where children take their mother’s surname */ 'matrilineal' => KT_I18N::translate('matrilineal') .
-			' - ' . /* I18N: In the matrilineal surname tradition, ... */ KT_I18N::translate('Children take their mother’s surname.'),
-		'spanish' => KT_I18N::translate_c('Surname tradition', 'Spanish') .
-			' - ' . /* I18N: In the Spanish surname tradition, ... */ KT_I18N::translate('Children take one surname from the father and one surname from the mother.'),
-		'portuguese' => KT_I18N::translate_c('Surname tradition', 'Portuguese') .
-			' - ' . /* I18N: In the Portuguese surname tradition, ... */ KT_I18N::translate('Children take one surname from the mother and one surname from the father.'),
-		'icelandic' => KT_I18N::translate_c('Surname tradition', 'Icelandic') .
-			' - ' . /* I18N: In the Icelandic surname tradition, ... */ KT_I18N::translate('Children take a patronym instead of a surname.'),
-		'polish' => KT_I18N::translate_c('Surname tradition', 'Polish') .
-			' - ' . /* I18N: In the Polish surname tradition, ... */ KT_I18N::translate('Children take their father’s surname.') .
-			' ' . /* I18N: In the Polish surname tradition, ... */ KT_I18N::translate('Wives take their husband’s surname.') .
-			' ' . /* I18N: In the Polish surname tradition, ... */ KT_I18N::translate('Surnames are inflected to indicate an individual’s gender.'),
-		'lithuanian' => KT_I18N::translate_c('Surname tradition', 'Lithuanian') .
-			' - ' . /* I18N: In the Lithuanian surname tradition, ... */ KT_I18N::translate('Children take their father’s surname.') .
-			' ' . /* I18N: In the Lithuanian surname tradition, ... */ KT_I18N::translate('Wives take their husband’s surname.') .
-			' ' . /* I18N: In the Lithuanian surname tradition, ... */ KT_I18N::translate('Surnames are inflected to indicate an individual’s gender and marital status.'),
-		'none' => KT_I18N::translate_c('Surname tradition', 'none'),
-	];
 }
 
 // Keep the existing CHAN record when editing

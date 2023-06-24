@@ -37,7 +37,7 @@ $class      = '';
 
 if (!$searchTerm && isset($_COOKIE["adminSearch"])){
    $searchTerm = $_COOKIE["adminSearch"];
-} 
+}
 
 $this
 	->addExternalJavascript(KT_JQUERY_COLORBOX_URL)
@@ -71,7 +71,7 @@ $this
 		<link rel="stylesheet" href="<?php echo KT_DATATABLES_CSS; ?>">
 		<link rel="stylesheet" href="<?php echo KT_DATEPICKER_CSS; ?>">
 		<link rel="stylesheet" href="<?php echo KT_ICONPICKER_CSS; ?>">
-		<link rel="stylesheet" href="<?php echo KT_CHOSEN_CSS; ?>">
+		<link rel="stylesheet" href="<?php echo KT_TOM_SELECT_CSS; ?>">
 		<link rel="stylesheet" href="<?php echo KT_THEME_URL; ?>css/foundation.min.css">
 		<link rel="stylesheet" href="<?php echo KT_THEME_URL; ?>css/administration.min.css">
 		<link rel="stylesheet" href="<?php echo KT_THEME_URL; ?>css/libraryfiles.min.css">
@@ -91,7 +91,7 @@ $this
 								</a>
 							</li>
 
-							<?php 
+							<?php
 							echo KT_MenuBar::getGedcomMenu()->getMobileMenu();
 
 							if (KT_USER_GEDCOM_ID) { ?>
@@ -256,7 +256,7 @@ $this
 								</form>
 								<?php if ($searchTerm) {
 									$result = adminSearch($searchTerm);
-									if ($result) { ?>								
+									if ($result) { ?>
 										<div id="adminQueryResult" class="callout info-help" data-closable>
 											<h6><?php echo KT_I18N::translate('The term <span>%s</span> can be found on these pages: ', $searchTerm); ?></h6>
 											<button class="close-button" type="button" data-close>
@@ -309,5 +309,5 @@ $this
 			</aside>
 			<div id="admin-content" class="cell large-10">
 				<?php echo KT_FlashMessages::getHtmlMessages() . // Feedback from asynchronous actions
-			
+
 				$javascript;

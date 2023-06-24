@@ -29,7 +29,7 @@ if (!defined('KT_KIWITREES')) {
 /**
  * print start of all pages.
  *
- * @param string $title        name of page
+ * @param string $title (name of page)
  * @param mixed  $pageTitle
  * @param mixed  $includeTitle
  * @param mixed  $subTitle
@@ -187,7 +187,7 @@ function singleButton($title = '', $note = '')
 		switch ($note) {
 			case '1':
 				$noteText = KT_I18n::translate('
-					Note: This save button only records changes to the visisble modules above. 
+					Note: This save button only records changes to the visisble modules above.
 					Modules on other pages of the table are not saved.
 				');
 
@@ -259,7 +259,7 @@ function singleButton($title = '', $note = '')
 				<?php echo $noteText; ?>
 			</div>
 	   <?php } ?>
-	
+
 
    <?php
 }
@@ -478,18 +478,18 @@ function AdminSummaryCard($link, $title, $user, $tooltip, $descr, $image = '', $
 			<a href="<?php echo $link; ?>">
 				<?php echo $title; ?>
 			</a>
-			<span 
-				class="show-for-small-only info" 
-				data-position="top" 
-				data-alignment="right" 
+			<span
+				class="show-for-small-only info"
+				data-position="top"
+				data-alignment="right"
 				data-toggle="<?php echo $dropdownID; ?>"
 			>
 					<i class ="<?php echo $iconStyle; ?> fa-circle-info"></i>
 			</span>
-			<span 
-				class="show-for-medium <?php echo $user; ?>" 
-				data-tooltip title="<?php echo $tooltip; ?>" 
-				data-position="top" 
+			<span
+				class="show-for-medium <?php echo $user; ?>"
+				data-tooltip title="<?php echo $tooltip; ?>"
+				data-position="top"
 				data-alignment="right"
 			>
 					<i class ="<?php echo $iconStyle; ?> fa-user"></i>
@@ -524,5 +524,100 @@ function AdminSummaryCard($link, $title, $user, $tooltip, $descr, $image = '', $
 		<?php echo $descr; ?>
 	</div>
 	<?php
+
+}
+
+/**
+ * Multi select input
+
+ * @param var $new New stored value
+ * @param var $old Old stored value, if it exists
+ * @param var $gedID The index of the relevant gedcom file
+ *
+ */
+ function multiSelect($title, $help, $new, $old, $gedID, $tags) {
+ 	?>
+
+	<a href="#" class="accordion-title"><?php echo $title; ?></a>
+	<div class="cell callout info-help">
+		<?php echo $help; ?>
+	</div>
+	<div class="accordion-content" data-tab-content>
+		<div class="cell">
+	 		<select id="<?php echo $new; ?>" placeholder="<?php echo KT_I18N::translate('Click here to edit selection ...'); ?>" multiple class="tom-select" name="<?php echo $new; ?>[]">
+				<?php $allIndiTags = explode(',', get_gedcom_setting($gedID, $old));
+				foreach (KT_Gedcom_Tag::getPicklistFacts($tags) as $factId => $factName) {
+			 		$selected = in_array($factId, $allIndiTags) ? ' selected=selected ' : ' ';
+			 		echo '<option' . $selected . 'value="' . $factId . '">' . $factName . '&nbsp;(' . $factId . ')&nbsp;</option>';
+				} ?>
+	 		</select>
+		</div>
+	</div>
+	 <?php
+
+ }
+
+ /**
+  * A list of known surname traditions, with their descriptions.
+  *
+  * @return string[]
+  */
+ function surnameDescriptions()
+ {
+	 return [
+		 'paternal' => KT_I18N::translate_c('Surname tradition', 'Paternal') .
+			 ' - ' . /* I18N: In the paternal surname tradition, ... */ KT_I18N::translate('Children take their father’s surname.') .
+			 ' ' . /* I18N: In the paternal surname tradition, ... */ KT_I18N::translate('Wives take their husband’s surname.'),
+		 /* I18N: A system where children take their father’s surname */ 'Patrilineal' => KT_I18N::translate('Patrilineal') .
+			 ' - ' . /* I18N: In the patrilineal surname tradition, ... */ KT_I18N::translate('Children take their father’s surname.'),
+		 /* I18N: A system where children take their mother’s surname */ 'Matrilineal' => KT_I18N::translate('Matrilineal') .
+			 ' - ' . /* I18N: In the matrilineal surname tradition, ... */ KT_I18N::translate('Children take their mother’s surname.'),
+		 'spanish' => KT_I18N::translate_c('Surname tradition', 'Spanish') .
+			 ' - ' . /* I18N: In the Spanish surname tradition, ... */ KT_I18N::translate('Children take one surname from the father and one surname from the mother.'),
+		 'portuguese' => KT_I18N::translate_c('Surname tradition', 'Portuguese') .
+			 ' - ' . /* I18N: In the Portuguese surname tradition, ... */ KT_I18N::translate('Children take one surname from the mother and one surname from the father.'),
+		 'icelandic' => KT_I18N::translate_c('Surname tradition', 'Icelandic') .
+			 ' - ' . /* I18N: In the Icelandic surname tradition, ... */ KT_I18N::translate('Children take a patronym instead of a surname.'),
+		 'polish' => KT_I18N::translate_c('Surname tradition', 'Polish') .
+			 ' - ' . /* I18N: In the Polish surname tradition, ... */ KT_I18N::translate('Children take their father’s surname.') .
+			 ' ' . /* I18N: In the Polish surname tradition, ... */ KT_I18N::translate('Wives take their husband’s surname.') .
+			 ' ' . /* I18N: In the Polish surname tradition, ... */ KT_I18N::translate('Surnames are inflected to indicate an individual’s gender.'),
+		 'lithuanian' => KT_I18N::translate_c('Surname tradition', 'Lithuanian') .
+			 ' - ' . /* I18N: In the Lithuanian surname tradition, ... */ KT_I18N::translate('Children take their father’s surname.') .
+			 ' ' . /* I18N: In the Lithuanian surname tradition, ... */ KT_I18N::translate('Wives take their husband’s surname.') .
+			 ' ' . /* I18N: In the Lithuanian surname tradition, ... */ KT_I18N::translate('Surnames are inflected to indicate an individual’s gender and marital status.'),
+		 'none' => KT_I18N::translate_c('Surname tradition', 'None'),
+	 ];
+ }
+
+function verticalRadioSwitch ($name, $values, $selected, $extra = '', $activeText = 'Yes', $inactiveText = 'No', $size = '') {
+	$html = '<div class="grid-x">';
+
+		foreach ($values as $key => $value) {
+			$uniqueID = $name . (int) (microtime(true) * 1000000);
+			$html .= '
+				<div class="switch ' . $size . ' cell medium-1">
+					<input class="switch-input" id="' . $uniqueID . '" type="radio" name="' . $name . '" value="' . htmlspecialchars((string) $key) . '" ';
+						if ((string) $key === (string) $selected) {
+							$html .= ' checked';
+						}
+						if ($extra) {
+							$html .= ' ' . $extra;
+						}
+					$html .= '>' . '
+					<label class="switch-paddle" for="' . $uniqueID . '">
+						<span class="show-for-sr">' . $value . '</span>
+						<span class="switch-active" aria-hidden="true">' . KT_I18N::translate($activeText) . '</span>
+						<span class="switch-inactive" aria-hidden="true">' . KT_I18N::translate($inactiveText) . '</span>
+					</label>
+				</div>
+				<div class="cell medium-11">
+					<label class="middle">' . $value . '</label>
+				</div>
+			';
+		}
+	$html .= '</div>';
+
+	return $html;
 
 }

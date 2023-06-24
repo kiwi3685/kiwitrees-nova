@@ -469,22 +469,32 @@ main #admin-content .tabs-content .theme_box .card-divider .select {
 main #admin-content .tabs-content .theme_box img {
 	width: 100%;
 }
-main #admin-content .tabs-content .chosen-choices {
-	padding: 0.5rem;
+main #admin-content .tabs-content .ts-wrapper {
+	margin-bottom: 0.9375rem;
 }
-main #admin-content .tabs-content .chosen-drop ul.chosen-results {
-	max-height: 20rem;
+main #admin-content .tabs-content .ts-wrapper.multi .ts-control div.item {
+	background: #e8f0f7;
+	border-radius: 0.625rem;
+	margin: 0.375rem;
 }
-main #admin-content .tabs-content .chosen-drop ul.chosen-results li {
-	float: left;
-	width: 20rem;
+main #admin-content .tabs-content .ts-wrapper.multi .ts-control div.clear-button {
+	color: #ff0000;
+	font-size: 2rem;
+	right: 0;
+	top: 0.375rem;
 }
 main #admin-content .tabs-content .accordion .accordion-content {
 	background-color: #e6e6e6;
-	margin: 0 2rem;
+	margin: 0;
 }
 main #admin-content .tabs-content .accordion .accordion-content #tree_places {
 	line-height: 3;
+}
+main #admin-content .tabs-content .accordion .accordion-content .switch.tiny {
+	margin-bottom: 0.375rem;
+}
+main #admin-content .tabs-content .accordion .accordion-content label.middle {
+	padding: 0;
 }
 main #admin-content .tabs-content .accordion .accordion-title {
 	background: none;
@@ -492,7 +502,7 @@ main #admin-content .tabs-content .accordion .accordion-title {
 	font-weight: normal;
 	font-size: 0.9375rem;
 	padding: 0 2rem;
-	width: 20rem;
+	margin: 0;
 }
 main #admin-content .tabs-content .accordion .accordion-title svg {
 	position: absolute;
@@ -508,6 +518,18 @@ main #admin-content .tabs-content .accordion .accordion-title:before {
 main #admin-content .tabs-content .accordion.is-active > .accordion-title:before {
 	font: var(--fa-font-solid);
 	content: "\f151";
+}
+main #admin-content .tabs-content .accordion div.callout.info-help {
+	margin-bottom: 0;
+}
+main #admin-content .tabs-content .accordion h6 {
+	border-top: 0.125rem solid;
+	font-weight: 900;
+	margin: 1rem 0 0 0;
+}
+main #admin-content .tabs-content .accordion h6:first-of-type {
+	border: none;
+	margin: 0;
 }
 main #admin-content .faq_link {
 	float: right;
@@ -757,7 +779,8 @@ main #admin-content .php-info .center table {
 	margin: 1em auto;
 	text-align: left;
 }
-main #admin-content .php-info .center table td, main #admin-content .php-info .center table th {
+main #admin-content .php-info .center table td,
+main #admin-content .php-info .center table th {
 	border: 0.025rem solid #878787;
 	vertical-align: baseline;
 	padding: 0.3125rem;
@@ -874,21 +897,28 @@ main #admin-content #change_list table.DifferencesSideBySide tbody td {
 	white-space: pre-wrap;
 	word-wrap: break-word;
 }
-main #admin-content #change_list table.DifferencesSideBySide tbody td.Left, main #admin-content #change_list table.DifferencesSideBySide tbody td.Right {
+main #admin-content #change_list table.DifferencesSideBySide tbody td.Left,
+main #admin-content #change_list table.DifferencesSideBySide tbody td.Right {
 	width: 45%;
 }
 main #admin-content #change_list table.DifferencesSideBySide tbody th {
 	background-color: #c9c9c9;
 	font-weight: normal;
 }
-main #admin-content #change_list table.DifferencesSideBySide tbody.ChangeReplace, main #admin-content #change_list table.DifferencesSideBySide tbody.ChangeInsert, main #admin-content #change_list table.DifferencesSideBySide tbody.ChangeDelete {
+main #admin-content #change_list table.DifferencesSideBySide tbody.ChangeReplace,
+main #admin-content #change_list table.DifferencesSideBySide tbody.ChangeInsert,
+main #admin-content #change_list table.DifferencesSideBySide tbody.ChangeDelete {
 	background-color: yellow;
 }
-main #admin-content #change_list table.DifferencesSideBySide tbody.ChangeReplace ins, main #admin-content #change_list table.DifferencesSideBySide tbody.ChangeInsert ins, main #admin-content #change_list table.DifferencesSideBySide tbody.ChangeDelete ins {
+main #admin-content #change_list table.DifferencesSideBySide tbody.ChangeReplace ins,
+main #admin-content #change_list table.DifferencesSideBySide tbody.ChangeInsert ins,
+main #admin-content #change_list table.DifferencesSideBySide tbody.ChangeDelete ins {
 	color: red;
 	text-decoration: initial;
 }
-main #admin-content #change_list table.DifferencesSideBySide tbody.ChangeReplace del, main #admin-content #change_list table.DifferencesSideBySide tbody.ChangeInsert del, main #admin-content #change_list table.DifferencesSideBySide tbody.ChangeDelete del {
+main #admin-content #change_list table.DifferencesSideBySide tbody.ChangeReplace del,
+main #admin-content #change_list table.DifferencesSideBySide tbody.ChangeInsert del,
+main #admin-content #change_list table.DifferencesSideBySide tbody.ChangeDelete del {
 	color: blue;
 	text-decoration: initial;
 }
@@ -1234,7 +1264,8 @@ main #admin-content #tabi_stories-page table#reorderTable tfoot {
 	background: none;
 	color: inherit;
 }
-main #admin-content #tabi_stories-page table#reorderTable tfoot td, main #admin-content #tabi_stories-page table#reorderTable tfoot th {
+main #admin-content #tabi_stories-page table#reorderTable tfoot td,
+main #admin-content #tabi_stories-page table#reorderTable tfoot th {
 	font-weight: normal;
 }
 main #admin-content #tabi_stories-page .linkedIndis {
