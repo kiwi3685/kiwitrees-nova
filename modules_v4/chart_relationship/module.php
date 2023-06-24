@@ -218,14 +218,14 @@ class chart_relationship_KT_Module extends KT_Module implements KT_Module_Chart,
 
 				<form class="cell" method="post" name="rela_form" action="<?php echo $this->getConfigLink(); ?>">
 					<input type="hidden" name="save" value="1">
-					
+
 					<fieldset class="fieldset" id="config-chart">
 						<legend class="h5">
 							<?php echo /* I18N: Configuration option */ KT_I18N::translate('Chart settings'); ?>
 						</legend>
 						<div class="grid-x grid-margin-x">
 							<div class="cell callout info-help">
-								<?php echo /* I18N: Configuration option */ KT_I18N::translate('Options related to the the relationship chart'); ?>								
+								<?php echo /* I18N: Configuration option */ KT_I18N::translate('Options related to the the relationship chart'); ?>
 							</div>
 							<div class="cell medium-4">
 								<label>
@@ -319,7 +319,12 @@ class chart_relationship_KT_Module extends KT_Module implements KT_Module_Chart,
 							</div>
 							<div class="cell medium-8">
 								<div class="input_group">
-									<?php echo radio_buttons('NEW_RELATIONSHIP_RECURSION', $recursionOptions, $rec_options, 'class="radio_inline"'); ?>
+									<?php echo radio_buttons(
+										'NEW_RELATIONSHIP_RECURSION',
+										$recursionOptions,
+										$rec_options,
+										'class="radio_inline"'
+									); ?>
 									<div class="cell callout info-help">
 										<?php echo /* I18N: Configuration option for relationship chart */ KT_I18N::translate('Searching for all possible relationships can take a lot of time in complex trees, This option can help limit the extent of relationships included in the relationship chart.'); ?>
 									</div>
