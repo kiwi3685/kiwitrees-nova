@@ -220,7 +220,7 @@ switch (KT_Filter::get('action')) {
 				<hr class="cell">
 				<div class="grid-x grid-margin-x grid-margin-y">
 					<div class="cell h4"><?php echo KT_I18N::translate('Import options'); ?></div>
-					<label class="cell medium-3"><?php echo /* I18N: A media path (e.g. c:\aaa\bbb\ccc\ddd.jpeg) in a GEDCOM file */ KT_I18N::translate('Remove the GEDCOM media path from filenames'); ?></label>
+					<label class="cell medium-3"><?php echo /* I18N: A media path (e.g. c:\aaa\bbb\ccc\ddd.jpeg) in a GEDCOM file */ KT_I18N::translate('Remove this GEDCOM media path from filenames'); ?></label>
 					<div class="cell medium-9">
 						<input type="text" name="NEW_GEDCOM_MEDIA_PATH" value="<?php echo $GEDCOM_MEDIA_PATH; ?>" maxlength="255">
 						<div class="callout info-help">
@@ -231,14 +231,14 @@ switch (KT_Filter::get('action')) {
 							KT_I18N::translate('For example, if the GEDCOM file contains %1$s and kiwitrees expects to find %2$s in the media folder, then the GEDCOM media path would be %3$s.', '<code class="alert">/home/familytree/documents/family/photo.jpeg</code>', '<code class="alert">family/photo.jpeg</code>', '<code class="alert">/home/familytree/documents/</code>').
 							KT_I18N::translate('This setting is only used when you read or write GEDCOM files.'); ?>
 						</div>
-					</div>							
+					</div>
 					<label class="cell medium-3"><?php echo KT_I18N::translate('Add spaces where notes were wrapped'); ?></label>
 					<div class="cell medium-9">
 						<?php echo simple_switch('NEW_WORD_WRAPPED_NOTES', 1, get_gedcom_setting(KT_GED_ID, 'WORD_WRAPPED_NOTES')); ?>
 						<div class="callout info-help">
 							<?php echo KT_I18N::translate('Some genealogy programs wrap notes at word boundaries while others wrap notes anywhere.  This can cause kiwitrees to run words together.  Setting this to <b>Yes</b> will add a space between words where they are wrapped in the original GEDCOM during the import process. If you have already imported the file you will need to re-import it.'); ?>
 						</div>
-					</div>							
+					</div>
 					<label class="cell medium-3">
 						<?php echo KT_I18N::translate('Keep media objects'); ?>
 					</label>
@@ -255,7 +255,7 @@ switch (KT_Filter::get('action')) {
 
 				</div>
 			</form>
-		
+
 		<?php echo pageClose();
 
 	return;
