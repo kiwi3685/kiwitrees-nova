@@ -1403,6 +1403,8 @@ function old_paths() {
 		KT_ROOT . 'adminSearch.php', // removed temporary development solution
 		KT_ROOT . 'modules_v4/ckeditor', // feature removed
 		KT_ROOT . 'modules_v4/gallery/galleria/themes/simpl_galleria', // local theme removed
+		KT_ROOT . 'library/chosen', // library replaced by 'tom-select'
+		KT_ROOT . 'includes/functions/functions_gedcom_edit.php', // temporary file not required
 
 	);
 }
