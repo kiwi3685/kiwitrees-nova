@@ -1392,6 +1392,9 @@ function old_paths() {
 		KT_ROOT . 'modules_v4/pages/help_text.php',
 		KT_ROOT . 'modules_v4/googlemap/admin_places.php',
 		KT_ROOT . 'modules_v4/googlemap/admin_places_edit.php',
+		KT_ROOT . 'modules_v4/gallery/help_text.php', // remove not needed help text file
+		KT_ROOT . 'modules_v4/faq/help_text.php', // remove not needed help text file
+		KT_ROOT . 'modules_v4/extra_menus/help_text.php', // remove not needed help text file
 		KT_ROOT . 'modules_v4/chart_lifespan', // feature removed
 		KT_ROOT . 'modules_v4/database_backup', // feature renamed
 		KT_ROOT . 'lifespan.php', // feature removed
