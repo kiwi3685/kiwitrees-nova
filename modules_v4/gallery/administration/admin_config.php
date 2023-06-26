@@ -55,12 +55,12 @@ if ($action == 'update') {
 
 $items = KT_DB::prepare("
 	SELECT block_id, block_order, gedcom_id, bs1.setting_value AS gallery_title, bs2.setting_value AS gallery_content
-	FROM `##block` b 
-	JOIN `##block_setting` bs1 USING (block_id) 
-	JOIN `##block_setting` bs2 USING (block_id) 
-	WHERE module_name = ? 
-	AND bs1.setting_name='gallery_title' 
-	AND bs2.setting_name='gallery_content' 
+	FROM `##block` b
+	JOIN `##block_setting` bs1 USING (block_id)
+	JOIN `##block_setting` bs2 USING (block_id)
+	WHERE module_name = ?
+	AND bs1.setting_name='gallery_title'
+	AND bs2.setting_name='gallery_content'
 	ORDER BY block_order
 ")->execute(array($this->getName()))->fetchAll();
 
@@ -131,13 +131,6 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 					<?php echo select_edit_control('gedID', KT_Tree::getIdList(), KT_I18N::translate('All'), $gedID, ' onchange="tree.submit();"'); ?>
 				</form>
 			</div>
-			<div class="cell medium-offset-1 auto text-right">
-				<button class="button primary" type="submit" onclick="location.href='module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_add&amp;gedID=<?php echo $gedID; ?>'">
-					<i class="<?php echo $iconStyle; ?> fa-plus"></i>
-					<?php echo KT_I18N::translate('Add a gallery'); ?>
-				</button>
-			</div>
-
 			<form class="cell" method="post" name="configform" action="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_config">
 				<input type="hidden" name="gedID" value="<?php echo $gedID; ?>">
 				<?php if($items) { ?>
@@ -165,7 +158,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 							</tr>
 						</thead>
 						<tbody>
-							<?php 
+							<?php
 							$trees = KT_Tree::getAll();
 
 							if (!$gedID) {
@@ -179,7 +172,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 								$items = $galleryItems;
 							}
 
-							foreach ($items as $item) { 
+							foreach ($items as $item) {
 
 								// Check the "uploads" directory exists if it is needed
 								if (get_block_setting($item->block_id, 'gallery_plugin') == 'uploads') {
@@ -200,7 +193,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 										<?php echo ($item->gedcom_id ? $trees[$item->gedcom_id]->tree_title_html : KT_I18N::translate('All')); ?>
 									</td>
 									<td>
-										<?php 
+										<?php
 										$languages     = get_block_setting($item->block_id, 'languages');
 										$languageSet   = explode(',', $languages);
 										$languagePrint = '';
@@ -246,7 +239,11 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 					</div>
 				<?php } ?>
 
-				<?php echo singleButton('Save new order'); ?>
+				<div class="grid-x">
+					<?php echo singleButton('Save new order'); ?>
+					<?php echo singleButton('Add another item', '', $gedID, $this->getName()); ?>
+				</div>
+
 			</form>
 
 		</div>

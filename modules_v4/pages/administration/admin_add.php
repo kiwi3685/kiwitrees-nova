@@ -54,8 +54,8 @@ if ($save) {
 	$block_id = KT_DB::getInstance()->lastInsertId();
 
 	set_block_setting($block_id, 'pages_title',   $item_title);
-	set_block_setting($block_id, 'pages_content', $item_content); 
-	set_block_setting($block_id, 'pages_access',  $item_access); 
+	set_block_setting($block_id, 'pages_content', $item_content);
+	set_block_setting($block_id, 'pages_access',  $item_access);
 
 	foreach (KT_I18N::used_languages() as $code=>$name) {
 		if (KT_Filter::postBool('lang_' . $code)) {
@@ -68,7 +68,7 @@ if ($save) {
 		case 1:
 			// save and re-edit
 			?><script>
-				window.location='module.php?mod=<?php echo $this->getName(); ?>&mod_action=admin_edit&block_id=<?php echo $block_id; ?>&gedID=<?php echo $gedID; ?>
+				window.location='module.php?mod=<?php echo $this->getName(); ?>&mod_action=admin_edit&block_id=<?php echo $block_id; ?>&gedID=<?php echo $gedID; ?>'
 			</script><?php
 		break;
 		case 2:
@@ -104,7 +104,7 @@ echo pageStart('pages_details', $controller->getPageTitle()); ?>
 		<input type="hidden" name="block_id" value="<?php echo $block_id; ?>">
 		<div class="grid-x grid-margin-y">
 			<label class="cell medium-2">
-				<?php echo KT_I18N::translate('Title'); ?>				
+				<?php echo KT_I18N::translate('Title'); ?>
 			</label>
 			<div class="cell medium-10">
 				<input type="text" name="pages_title" value="<?php echo htmlspecialchars((string) $item_title); ?>">
@@ -145,7 +145,7 @@ echo pageStart('pages_details', $controller->getPageTitle()); ?>
 			</div>
 			<div class="cell align-left button-group">
 				<button class="button primary" type="submit" name="save" value="1">
-					<i class="<?php echo $iconStyle; ?> fa-save"></i> 
+					<i class="<?php echo $iconStyle; ?> fa-save"></i>
 					<?php echo KT_I18N::translate('Save and re-edit'); ?>
 				</button>
 				<button class="button primary" type="submit" name="save" value="2">

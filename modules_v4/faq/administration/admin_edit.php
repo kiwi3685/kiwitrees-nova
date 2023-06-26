@@ -25,8 +25,8 @@ require_once KT_ROOT . 'includes/functions/functions_edit.php';
 include KT_THEME_URL . 'templates/adminData.php';
 global $iconStyle;
 
-$block_id = KT_Filter::getInteger('block_id', KT_Filter::postInteger('block_id'));;
-$gedID    = KT_Filter::post('gedID') ? KT_Filter::post('gedID') : '';
+$block_id = KT_Filter::getInteger('block_id', KT_Filter::postInteger('block_id'));
+$gedID    = KT_Filter::post('gedID') ? KT_Filter::post('gedID') : KT_GED_ID;
 $tree     = KT_Tree::getNameFromId($gedID);
 
 $save     = KT_Filter::post('save', '');
@@ -55,7 +55,7 @@ if ($save) {
 	));
 
 	set_block_setting($block_id, 'faq_title', $item_title);
-	set_block_setting($block_id, 'faq_content', $item_content); 
+	set_block_setting($block_id, 'faq_content', $item_content);
 	set_block_setting($block_id, 'faq_access', $item_access);
 
 	foreach (KT_I18N::used_languages() as $code=>$name) {
@@ -103,7 +103,7 @@ echo pageStart('faq_details', $controller->getPageTitle()); ?>
 		<div class="grid-x grid-margin-y">
 
 			<label class="cell medium-2">
-				<?php echo KT_I18N::translate('Question'); ?>				
+				<?php echo KT_I18N::translate('Question'); ?>
 			</label>
 			<div class="cell medium-10">
 				<input type="text" name="faq_title" value="<?php echo htmlspecialchars((string) $item_title); ?>">
@@ -144,7 +144,7 @@ echo pageStart('faq_details', $controller->getPageTitle()); ?>
 			</div>
 			<div class="cell align-left button-group">
 				<button class="button primary" type="submit" name="save" value="1">
-					<i class="<?php echo $iconStyle; ?> fa-save"></i> 
+					<i class="<?php echo $iconStyle; ?> fa-save"></i>
 					<?php echo KT_I18N::translate('Save and re-edit'); ?>
 				</button>
 				<button class="button primary" type="submit" name="save" value="2">

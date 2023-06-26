@@ -25,8 +25,8 @@ require_once KT_ROOT . 'includes/functions/functions_edit.php';
 include KT_THEME_URL . 'templates/adminData.php';
 global $iconStyle;
 
-$block_id = KT_Filter::getInteger('block_id', KT_Filter::postInteger('block_id'));;
-$gedID    = KT_Filter::post('gedID') ? KT_Filter::post('gedID') : '';
+$block_id = KT_Filter::getInteger('block_id', KT_Filter::postInteger('block_id'));
+$gedID    = KT_Filter::post('gedID') ? KT_Filter::post('gedID') : KT_GED_ID;
 $save     = KT_Filter::post('save', '');
 
 
@@ -114,7 +114,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 		<div class="grid-x grid-margin-y">
 
 			<label class="cell medium-2">
-				<?php echo KT_I18N::translate('Title'); ?>				
+				<?php echo KT_I18N::translate('Title'); ?>
 			</label>
 			<div class="cell medium-10">
 				<input type="text" name="gallery_title" value="<?php echo htmlspecialchars((string) $item_title); ?>">
@@ -140,7 +140,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 						</label>
 					</div>
 					<div class="cell auto">
-						<?php echo KT_I18N::translate('Kiwitrees family tree media folder'); ?>						
+						<?php echo KT_I18N::translate('Kiwitrees family tree media folder'); ?>
 					</div>
 				</div>
 				<div class="grid-x">
@@ -154,7 +154,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 						</label>
 					</div>
 					<div class="cell auto">
-						<?php echo KT_I18N::translate('Flickr album set'); ?>						
+						<?php echo KT_I18N::translate('Flickr album set'); ?>
 					</div>
 				</div>
 				<div class="grid-x">
@@ -168,7 +168,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 						</label>
 					</div>
 					<div class="cell auto">
-						<?php echo KT_I18N::translate('Kiwitrees un-regulated uploads folder'); ?>	
+						<?php echo KT_I18N::translate('Kiwitrees un-regulated uploads folder'); ?>
 					</div>
 				</div>
 			</div>
@@ -183,14 +183,14 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 				<div class="grid-x grid-margin-x kiwitreesInputGroup" <?php echo $kiwitreesStyle; ?>>
 					<div class="input-group cell medium-6">
 	 					<span class="input-group-label"><?php echo KT_I18N::translate('Media folder name'); ?></span>
-						<select 
-							id="kiwitrees" 
+						<select
+							id="kiwitrees"
 							name="gallery_folder"
 						>
 							<?php foreach (KT_Query_Media::folderListAll() as $key => $value) {
 								if ($key == $item_folder) { ?>
-									<option 
-										value="<?php echo htmlspecialchars((string) $key); ?>" 
+									<option
+										value="<?php echo htmlspecialchars((string) $key); ?>"
 										selected="selected"
 									>
 										<?php echo htmlspecialchars((string) $value); ?>
@@ -206,7 +206,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 					<div class="cell callout info-help">
 						<?php echo KT_I18N::translate('
 							Select a folder from the dropdown. The list shows ALL media folders present in the /data/media/ folder of the server.
-							The selected folder  must containing only media files registered to the family tree selected for this gallery. 
+							The selected folder  must containing only media files registered to the family tree selected for this gallery.
 							See Faq page for more details.
 						'); ?>
 					</div>
@@ -215,10 +215,10 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 					<div class="input-group cell medium-6">
 						<span class="input-group-label"><?php echo KT_I18N::translate('Flickr set number'); ?></span>
 						<input
-						 	class="input-group-field" 
-							id="flickr" 
-							type="text" 
-							name="gallery_folder" 
+						 	class="input-group-field"
+							id="flickr"
+							type="text"
+							name="gallery_folder"
 							value="<?php echo ($item_plugin == 'flickr' ? htmlspecialchars((string) $item_folder) : ''); ?>"
 							placeholder="123456789123456789"
 							<?php if ($item_plugin != 'flickr') {echo 'disabled';} ?>
@@ -232,10 +232,10 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 					<div class="input-group cell medium-6">
 						<span class="input-group-label"><?php echo KT_I18N::translate('Uploads sub-folder'); ?></span>
 						<input
-						 	class="input-group-field" 
-							id="uploads" 
-							type="text" 
-							name="gallery_folder" 
+						 	class="input-group-field"
+							id="uploads"
+							type="text"
+							name="gallery_folder"
 							value="<?php echo ($item_plugin == 'uploads' ? htmlspecialchars((string) $item_folder) : ''); ?>"
 							placeholder="<?php echo KT_I18N::translate('my folder name'); ?>"
 							<?php if($item_plugin != 'uploads') {echo 'disabled';} ?>
@@ -276,7 +276,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', '/kb/user-
 			</div>
 			<div class="cell align-left button-group">
 				<button class="button primary" type="submit" name="save" value="1">
-					<i class="<?php echo $iconStyle; ?> fa-save"></i> 
+					<i class="<?php echo $iconStyle; ?> fa-save"></i>
 					<?php echo KT_I18N::translate('Save and re-edit'); ?>
 				</button>
 				<button class="button primary" type="submit" name="save" value="2">

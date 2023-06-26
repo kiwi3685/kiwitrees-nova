@@ -138,7 +138,7 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 
 		$itemList = [];
 
-		// Filter for valid lanuage and access
+		// Filter for valid language and access
 		foreach ($items as $item) {
 			$languages   = get_block_setting($item->block_id, 'languages');
 			$item_access = get_block_setting($item->block_id, 'faq_access');
@@ -167,7 +167,7 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 			return null;
 		}
 
-		$menu = new KT_Menu('<span>' . $this->getMenuTitle() . '</span>', 'module.php?mod=faq&amp;mod_action=show', 'menu-help');
+		$menu = new KT_Menu('<span>' . $this->getMenuTitle() . '</span>', 'module.php?mod=faq&amp;mod_action=show', 'menu-my_faqs');
 		$menu->addClass('', '', $this->getMenuIcon());
 
 		if (KT_USER_IS_ADMIN) {
@@ -187,7 +187,7 @@ class faq_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Block
 			->addInlineJavascript('
 				// expand search result contents
 				jQuery(".accordion-content").each(function(){
-					if(jQuery(this).find("span.search_hit").length > 0) { 
+					if(jQuery(this).find("span.search_hit").length > 0) {
 						jQuery(this).css("display","block");
 					}
 				 });

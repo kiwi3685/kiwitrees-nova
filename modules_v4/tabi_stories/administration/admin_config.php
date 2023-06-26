@@ -142,14 +142,8 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', ''); ?>
 					<?php echo select_edit_control('gedID', KT_Tree::getIdList(), KT_I18N::translate('All'), $gedID, ' onchange="tree.submit();"'); ?>
 				</form>
 			</div>
-			<div class="cell medium-offset-1 auto text-right">
-				<button class="button primary" type="submit" onclick="location.href='module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_add&amp;gedID=<?php echo $gedID; ?>'">
-					<i class="<?php echo $iconStyle; ?> fa-plus"></i>
-					<?php echo KT_I18N::translate('Add a story'); ?>
-				</button>
-			</div>
-
 			<form class="cell" method="post" name="configform" action="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_config">
+				<?php if($items) { ?>
 					<table class="cell" id="reorderTable">
 						<thead>
 							<tr>
@@ -184,8 +178,8 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', ''); ?>
 							$trees      = KT_Tree::getAll();
 							$countItems = 0;
 
-							foreach ($items as $item) {						
-								if ($item->gedcom_id == $gedID || $gedID == '') {								
+							foreach ($items as $item) {
+								if ($item->gedcom_id == $gedID || $gedID == '') {
 									$xref       = explode(',', get_block_setting($item->block_id, 'xref'));
 									$count_xref = count($xref); ?>
 
@@ -194,7 +188,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', ''); ?>
 											<i class="<?php echo $iconStyle; ?> fa-bars"></i>
 										</td>
 										<td>
-											<input type="text" value="<?php echo($item->block_order); ?>" name="taborder-<?php echo($item->block_id); ?>">										
+											<input type="text" value="<?php echo($item->block_order); ?>" name="taborder-<?php echo($item->block_id); ?>">
 										</td>
 										<td>
 											<?php echo($item->block_id); ?>
@@ -208,7 +202,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', ''); ?>
 											} ?>
 										</td>
 										<td>
-											<?php 
+											<?php
 											$languages     = get_block_setting($item->block_id, 'languages');
 											$languageSet   = explode(',', $languages);
 											$languagePrint = '';
@@ -234,9 +228,9 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', ''); ?>
 												$sql    = "SELECT * FROM `##individuals` WHERE i_file LIKE " . $item->gedcom_id . " AND i_id = '" . $indiRef . "'";
 												$row    = KT_DB::prepare($sql)->execute()->fetchOneRow();
 												$person = $person = KT_Person::getInstance(array(
-													'xref'   =>$row->i_id, 
-													'ged_id' =>$row->i_file,  
-													'type'   =>'INDI', 
+													'xref'   =>$row->i_id,
+													'ged_id' =>$row->i_file,
+													'type'   =>'INDI',
 													'gedrec' =>$row->i_gedcom)
 												);
 
@@ -275,10 +269,10 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', ''); ?>
 									++$order;
 									++$countItems;
 								} else {
-									
+
 								}
  							} ?>
-						</tbody>					
+						</tbody>
 						<?php if($countItems == 0 && !is_null($gedID)) {
 							$new_xref ? $columns = 8 : $columns = 7; ?>
 							<tfoot><tr><td colspan="<?php echo $columns; ?>" >
@@ -296,8 +290,16 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', ''); ?>
 						<tfoot><tr><td>
 					<?php } ?>
 				</table>
-				
-				<?php echo singleButton(); ?>
+				<?php } else { ?>
+					<div class="cell callout warning">
+						<?php echo KT_I18N::translate('The item list is empty.'); ?>
+					</div>
+				<?php } ?>
+
+				<div class="grid-x">
+					<?php echo singleButton('Save new order'); ?>
+					<?php echo singleButton('Add another item', '', $gedID, $this->getName()); ?>
+				</div>
 
 			</form>
 		</div>

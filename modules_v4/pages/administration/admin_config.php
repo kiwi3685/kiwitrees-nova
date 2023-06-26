@@ -129,116 +129,117 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', ''); ?>
 					<?php echo select_edit_control('gedID', KT_Tree::getIdList(), KT_I18N::translate('All'), $gedID, ' onchange="tree.submit();"'); ?>
 				</form>
 			</div>
-			<div class="cell medium-offset-1 auto text-right">
-				<button class="button primary" type="submit" onclick="location.href='module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_add&amp;gedID=<?php echo $gedID; ?>'">
-					<i class="<?php echo $iconStyle; ?> fa-plus"></i>
-					<?php echo KT_I18N::translate('Add a page'); ?>
-				</button>
-			</div>
+			<form class="cell" method="post" name="configform" action="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_config">
+				<?php if($items) { ?>
+					<table class="cell" id="reorderTable">
+						<thead>
+							<tr>
+								<th class="order" colspan=2>
+									<?php echo KT_I18N::translate('Order'); ?>
+								</th>
+								<th class="id">
+									<?php echo KT_I18N::translate('ID'); ?>
+								</th>
+								<th class="tree">
+									<?php echo KT_I18N::translate('Tree'); ?>
+								</th>
+								<th class="lang">
+									<?php echo KT_I18N::translate('Language'); ?>
+								</th>
+								<th>
+									<?php echo KT_I18N::translate('Title'); ?>
+								</th>
+								<th class="action" colspan="4">
+									<?php echo KT_I18N::translate('Actions'); ?>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php
+							$trees = KT_Tree::getAll();
 
-			<?php if($items) { ?>
-				<table class="cell" id="reorderTable">
-					<thead>
-						<tr>
-							<th class="order" colspan=2>
-								<?php echo KT_I18N::translate('Order'); ?>
-							</th>
-							<th class="id">
-								<?php echo KT_I18N::translate('ID'); ?>
-							</th>
-							<th class="tree">
-								<?php echo KT_I18N::translate('Tree'); ?>
-							</th>
-							<th class="lang">
-								<?php echo KT_I18N::translate('Language'); ?>
-							</th>
-							<th>
-								<?php echo KT_I18N::translate('Title'); ?>
-							</th>
-							<th class="action" colspan="4">
-								<?php echo KT_I18N::translate('Actions'); ?>
-							</th>
-						</tr>
-					</thead>
-					<tbody>
-						<?php 
-						$trees = KT_Tree::getAll();
-
-						if (!$gedID) {
-							$items = $items;
-						} else {
-							foreach ($items as $page) {
-								if ($page->gedcom_id == $gedID || is_null($page->gedcom_id)) {
-									$pageItems[] = $page;
+							if (!$gedID) {
+								$items = $items;
+							} else {
+								foreach ($items as $page) {
+									if ($page->gedcom_id == $gedID || is_null($page->gedcom_id)) {
+										$pageItems[] = $page;
+									}
 								}
+								$items = $pageItems;
 							}
-							$items = $pageItems;
-						}
-						foreach ($items as $item) { ?>
-							<tr class="sortme">
-								<td>
-									<i class="<?php echo $iconStyle; ?> fa-bars"></i>
-								</td>
-								<td>
-									<input type="text" value="<?php echo($item->block_order); ?>" name="taborder-<?php echo($item->block_id); ?>">
-								</td>
-								<td>
-									<?php echo($item->block_id); ?>
-								</td>
-								<td>
-									<?php
-									if ($item->gedcom_id == null) {
-										echo KT_I18N::translate('All');
-									} else {
-										echo $trees[$item->gedcom_id]->tree_title_html;
-									} ?>
-								</td>
-								<td>
-									<?php 
-									$languages     = get_block_setting($item->block_id, 'languages');
-									$languageSet   = explode(',', $languages);
-									$languagePrint = '';
-									$printLang     = [];
-									if ($languageSet) {
-										foreach ($languageSet as $code) {
-											foreach (KT_I18N::used_languages() as $lang => $name) {
-												if ($lang == $code) {
-													$printLang[] = $name;
+							foreach ($items as $item) { ?>
+								<tr class="sortme">
+									<td>
+										<i class="<?php echo $iconStyle; ?> fa-bars"></i>
+									</td>
+									<td>
+										<input type="text" value="<?php echo($item->block_order); ?>" name="taborder-<?php echo($item->block_id); ?>">
+									</td>
+									<td>
+										<?php echo($item->block_id); ?>
+									</td>
+									<td>
+										<?php
+										if ($item->gedcom_id == null) {
+											echo KT_I18N::translate('All');
+										} else {
+											echo $trees[$item->gedcom_id]->tree_title_html;
+										} ?>
+									</td>
+									<td>
+										<?php
+										$languages     = get_block_setting($item->block_id, 'languages');
+										$languageSet   = explode(',', $languages);
+										$languagePrint = '';
+										$printLang     = [];
+										if ($languageSet) {
+											foreach ($languageSet as $code) {
+												foreach (KT_I18N::used_languages() as $lang => $name) {
+													if ($lang == $code) {
+														$printLang[] = $name;
+													}
 												}
 											}
+											$languagePrint = implode(', ', $printLang);
 										}
-										$languagePrint = implode(', ', $printLang);
-									}
-									echo ($languagePrint ? $languagePrint : KT_I18N::translate('None set')); ?>
-								</td>
-								<td>
-									<?php echo $item->pages_title; ?>
-								</td>
-								<td>
-									<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit&amp;block_id=<?php echo $item->block_id; ?>&amp;gedID=<?php echo $gedID; ?>">
-										<?php echo KT_I18N::translate('Edit'); ?>
-									</a>
-								</td>
-								<td>
-									<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_delete&amp;block_id=<?php echo $item->block_id; ?>" onclick="return confirm('<?php echo KT_I18N::translate('Are you sure you want to delete this page?'); ?>');">
-										<?php echo KT_I18N::translate('Delete'); ?>
-									</a>
-								</td>
-								<td>
-									<?php $tree = $item->gedcom_id ? KT_Tree::getNameFromId($item->gedcom_id) : KT_GEDCOM; ?>
-									<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=show&amp;pages_id=<?php echo $item->block_id; ?>&amp;ged=<?php echo $tree; ?>" target="_blank">
-										<?php echo KT_I18N::translate('View'); ?>
-									</a>
-								</td>
-							</tr>
-						<?php } ?>
-					</tbody>
-				</table>
-			<?php } else { ?>
-				<div class="cell callout warning">
-					<?php echo KT_I18N::translate('The item list is empty.'); ?>
+										echo ($languagePrint ? $languagePrint : KT_I18N::translate('None set')); ?>
+									</td>
+									<td>
+										<?php echo $item->pages_title; ?>
+									</td>
+									<td>
+										<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit&amp;block_id=<?php echo $item->block_id; ?>&amp;gedID=<?php echo $gedID; ?>">
+											<?php echo KT_I18N::translate('Edit'); ?>
+										</a>
+									</td>
+									<td>
+										<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_delete&amp;block_id=<?php echo $item->block_id; ?>" onclick="return confirm('<?php echo KT_I18N::translate('Are you sure you want to delete this page?'); ?>');">
+											<?php echo KT_I18N::translate('Delete'); ?>
+										</a>
+									</td>
+									<td>
+										<?php $tree = $item->gedcom_id ? KT_Tree::getNameFromId($item->gedcom_id) : KT_GEDCOM; ?>
+										<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=show&amp;pages_id=<?php echo $item->block_id; ?>&amp;ged=<?php echo $tree; ?>" target="_blank">
+											<?php echo KT_I18N::translate('View'); ?>
+										</a>
+									</td>
+								</tr>
+							<?php } ?>
+						</tbody>
+					</table>
+				<?php } else { ?>
+					<div class="cell callout warning">
+						<?php echo KT_I18N::translate('The item list is empty.'); ?>
+					</div>
+				<?php } ?>
+
+				<div class="grid-x">
+					<?php echo singleButton('Save new order'); ?>
+					<?php echo singleButton('Add another item', '', $gedID, $this->getName()); ?>
 				</div>
-			<?php } ?>
+
+			</form>
 		</div>
 	</fieldset>
 

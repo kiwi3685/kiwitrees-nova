@@ -129,13 +129,6 @@ echo pageStart($this->getName(), KT_I18N::translate('Frequently asked questions'
 					<?php echo select_edit_control('gedID', KT_Tree::getIdList(), KT_I18N::translate('All'), $gedID, ' onchange="tree.submit();"'); ?>
 				</form>
 			</div>
-			<div class="cell medium-offset-1 auto text-right">
-				<button class="button primary" type="submit" onclick="location.href='module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_add&amp;gedID=<?php echo $gedID; ?>'">
-					<i class="<?php echo $iconStyle; ?> fa-plus"></i>
-					<?php echo KT_I18N::translate('Add an faq item'); ?>
-				</button>
-			</div>
-
 			<form class="cell" method="post" name="configform" action="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_config">
 				<?php if($items) { ?>
 					<table class="cell" id="reorderTable">
@@ -162,7 +155,7 @@ echo pageStart($this->getName(), KT_I18N::translate('Frequently asked questions'
 							</tr>
 						</thead>
 						<tbody>
-							<?php 
+							<?php
 							$trees = KT_Tree::getAll();
 
 							if (!$gedID) {
@@ -196,7 +189,7 @@ echo pageStart($this->getName(), KT_I18N::translate('Frequently asked questions'
 										} ?>
 									</td>
 									<td>
-										<?php 
+										<?php
 										$languages     = get_block_setting($item->block_id, 'languages');
 										$languageSet   = explode(',', $languages);
 										$languagePrint = '';
@@ -240,9 +233,12 @@ echo pageStart($this->getName(), KT_I18N::translate('Frequently asked questions'
 					<div class="cell callout warning">
 						<?php echo KT_I18N::translate('The faq list is empty.'); ?>
 					</div>
-				<?php }
+				<?php } ?>
 
-				echo singleButton('Save new order'); ?>
+				<div class="grid-x">
+					<?php echo singleButton('Save new order'); ?>
+					<?php echo singleButton('Add another item', '', $gedID, $this->getName()); ?>
+				</div>
 
 			</form>
 
