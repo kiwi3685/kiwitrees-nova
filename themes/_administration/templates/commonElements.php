@@ -179,8 +179,7 @@ function autocompleteHtml($suffix, $type, $tree, $valueInput, $placeHolder, $inp
  *
  * @return string[]
  */
-function singleButton($title = '', $note = '')
-{
+function singleButton($title = '', $note = '', $gedID = '', $moduleName = '') {
 	global $iconStyle;
 
 	if ($note) {
@@ -195,73 +194,89 @@ function singleButton($title = '', $note = '')
 		}
 	} ?>
 
-		<div class="cell medium-2">
-
-			<?php switch ($title) {
-				case 'Save':
-				default:
-					$title = 'Save';
-					echo '
-						<button class="button primary" type="submit">
-							<i class="' . $iconStyle . ' fa-save"></i>' .
-						KT_I18N::translate($title);
-
-					break;
-
-				case 'Show':
-					echo '
-						<button class="button primary" type="submit">
-							<i class="' . $iconStyle . ' fa-eye"></i>' .
-						KT_I18N::translate($title);
-
-					break;
-
-				case 'Continue':
-					echo '
-						<button class="button" type="submit">
-							<i class="' . $iconStyle . ' fa-play"></i>' .
-						KT_I18N::translate($title);
-
-					break;
-
-				case 'Back':
-					echo '
-						<button class="button primary" type="button" onclick="history.back()">
-							<i class="' . $iconStyle . ' fa-arrow-left"></i>' .
-						KT_I18N::translate($title);
-
-					break;
-
-				case 'Next':
-				case 'Import':
-				case 'Merge':
-					echo '
-					   <button class="button primary" type="submit">' .
+	<?php switch ($title) {
+		case 'Save':
+		default:
+			$title = 'Save';
+			echo '
+				<div class="cell medium-2">
+					<button class="button primary" type="submit">
+						<i class="' . $iconStyle . ' fa-save"></i>' .
 						KT_I18N::translate($title) . '
-							<i class="' . $iconStyle . ' fa-arrow-right"></i>';
+					</button>
+				</div>
+			';
+			break;
+		case 'Show':
+			echo '
+				<div class="cell medium-2">
+					<button class="button primary" type="submit">
+						<i class="' . $iconStyle . ' fa-eye"></i>' .
+						KT_I18N::translate($title) . '
+					</button>
+				</div>
+			';
+			break;
+		case 'Continue':
+			echo '
+				<div class="cell medium-2">
+					<button class="button" type="submit">
+						<i class="' . $iconStyle . ' fa-play"></i>' .
+						KT_I18N::translate($title) . '
+					</button>
+				</div>
+			';
+			break;
+		case 'Back':
+			echo '
+				<div class="cell medium-2">
+					<button class="button primary" type="button" onclick="history.back()">
+						<i class="' . $iconStyle . ' fa-arrow-left"></i>' .
+						KT_I18N::translate($title) . '
+					</button>
+				</div>
+			';
+			break;
+		case 'Next':
+		case 'Import':
+		case 'Merge':
+			echo '
+				<div class="cell medium-2">
+					<button class="button primary" type="submit">' .
+						KT_I18N::translate($title) . '
+						<i class="' . $iconStyle . ' fa-arrow-right"></i>
+					</button>
+				</div>
+			';
+			break;
+		case 'Save new order':
+			echo '
+				<div class="cell small-6 medium-2">
+					<button class="button primary" type="submit">
+						<i class="' . $iconStyle . ' fa-bars"></i>' .
+						KT_I18N::translate($title) . '
+					</button>
+				</div>
+			';
+			break;
+		case 'Add another item':
+			echo '
+				<div class="cell small-6 medium-2">
+					<a class="button primary" href="module.php?mod=' . $moduleName . '&amp;mod_action=admin_add&amp;gedID=' . $gedID . '">
+						<i class="' . $iconStyle . ' fa-plus"></i>' .
+						KT_I18N::translate($title) . '
+					</a>
+				</div>
+			';
+			break;
+	} ?>
 
-					break;
-
-				case 'Save new order':
-					echo '
-					   <button class="button primary" type="submit">
-							<i class="' . $iconStyle . ' fa-bars"></i>' .
-						KT_I18N::translate($title);
-
-					break;
-			} ?>
-
-			</button>
+   <?php if ($note) { ?>
+		<div class="cell medium-9 callout warning">
+			<?php echo $noteText; ?>
 		</div>
+   <?php }
 
-	   <?php if ($note) { ?>
-			<div class="cell medium-9 callout warning">
-				<?php echo $noteText; ?>
-			</div>
-	   <?php } ?>
-
-
-   <?php
 }
 
 /**

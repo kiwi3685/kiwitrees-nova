@@ -1194,30 +1194,35 @@ main #admin-content #find-unlinked-records-page div.accordion-content a .svg-inl
 main #admin-content #find-unlinked-records-page div.accordion-content span {
 	margin: 0 0.5rem;
 }
+main #admin-content #extra_menus-page table#reorderTable thead tr th.order,
 main #admin-content #faq-page table#reorderTable thead tr th.order,
 main #admin-content #gallery-page table#reorderTable thead tr th.order,
 main #admin-content #pages-page table#reorderTable thead tr th.order,
 main #admin-content #tabi_stories-page table#reorderTable thead tr th.order {
 	width: 8%;
 }
+main #admin-content #extra_menus-page table#reorderTable thead tr th.id,
 main #admin-content #faq-page table#reorderTable thead tr th.id,
 main #admin-content #gallery-page table#reorderTable thead tr th.id,
 main #admin-content #pages-page table#reorderTable thead tr th.id,
 main #admin-content #tabi_stories-page table#reorderTable thead tr th.id {
 	width: 5%;
 }
+main #admin-content #extra_menus-page table#reorderTable thead tr th.tree,
 main #admin-content #faq-page table#reorderTable thead tr th.tree,
 main #admin-content #gallery-page table#reorderTable thead tr th.tree,
 main #admin-content #pages-page table#reorderTable thead tr th.tree,
 main #admin-content #tabi_stories-page table#reorderTable thead tr th.tree {
 	width: 15%;
 }
+main #admin-content #extra_menus-page table#reorderTable thead tr th.lang,
 main #admin-content #faq-page table#reorderTable thead tr th.lang,
 main #admin-content #gallery-page table#reorderTable thead tr th.lang,
 main #admin-content #pages-page table#reorderTable thead tr th.lang,
 main #admin-content #tabi_stories-page table#reorderTable thead tr th.lang {
 	width: 15%;
 }
+main #admin-content #extra_menus-page table#reorderTable thead tr th.action,
 main #admin-content #faq-page table#reorderTable thead tr th.action,
 main #admin-content #gallery-page table#reorderTable thead tr th.action,
 main #admin-content #pages-page table#reorderTable thead tr th.action,
@@ -1225,12 +1230,14 @@ main #admin-content #tabi_stories-page table#reorderTable thead tr th.action {
 	text-align: center;
 	width: 15%;
 }
+main #admin-content #extra_menus-page table#reorderTable tbody,
 main #admin-content #faq-page table#reorderTable tbody,
 main #admin-content #gallery-page table#reorderTable tbody,
 main #admin-content #pages-page table#reorderTable tbody,
 main #admin-content #tabi_stories-page table#reorderTable tbody {
 	font-size: 0.95rem;
 }
+main #admin-content #extra_menus-page table#reorderTable tbody tr.sortme td input,
 main #admin-content #faq-page table#reorderTable tbody tr.sortme td input,
 main #admin-content #gallery-page table#reorderTable tbody tr.sortme td input,
 main #admin-content #pages-page table#reorderTable tbody tr.sortme td input,
