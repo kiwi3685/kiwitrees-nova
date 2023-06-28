@@ -44,7 +44,8 @@ button.primary .svg-inline--fa {
 	color: #fffff4;
 }
 
-.button:hover svg, a:hover svg {
+.button:hover svg,
+a:hover svg {
 	color: #331919;
 }
 
@@ -197,7 +198,8 @@ nav .top-bar.second-top-bar {
 	padding: 0 0.5rem;
 	width: 100%;
 }
-nav .top-bar.second-top-bar .treetitle, nav .top-bar.second-top-bar .subtitle {
+nav .top-bar.second-top-bar .treetitle,
+nav .top-bar.second-top-bar .subtitle {
 	text-shadow: 0.2rem 0.2rem 0.2rem #331919;
 }
 nav .top-bar.second-top-bar .treetitle {
@@ -382,7 +384,8 @@ footer .card .card-divider p {
 footer .card .card-divider a.configure {
 	color: #faf5e8;
 }
-footer .card .card-section p, footer .card .card-section a {
+footer .card .card-section p,
+footer .card .card-section a {
 	color: #faf5e8;
 	font-size: 0.9rem;
 }
@@ -397,7 +400,8 @@ footer .card .card-section .contact_links {
 	max-height: 30rem;
 	overflow-y: auto;
 }
-.small-block td, .small-block th {
+.small-block td,
+.small-block th {
 	padding: 0.25rem;
 }
 
@@ -410,7 +414,8 @@ footer .card .card-section .contact_links {
 	margin: 0 0 1.5rem;
 	padding: 1.5rem;
 }
-.block-edit h3, .block-edit h4 {
+.block-edit h3,
+.block-edit h4 {
 	color: #331919;
 }
 .block-edit form {
@@ -493,7 +498,11 @@ footer .card .card-section .contact_links {
 .block .blockcontent.block_charts {
 	/* interactive tree background */
 }
-.block .blockcontent.block_charts table, .block .blockcontent.block_charts thead, .block .blockcontent.block_charts tbody, .block .blockcontent.block_charts tfoot, .block .blockcontent.block_charts td {
+.block .blockcontent.block_charts table,
+.block .blockcontent.block_charts thead,
+.block .blockcontent.block_charts tbody,
+.block .blockcontent.block_charts tfoot,
+.block .blockcontent.block_charts td {
 	background-color: transparent;
 	border: none;
 	padding: 0;
@@ -787,7 +796,16 @@ div[id$=-page] button[type=submit] {
 	border-bottom: 0.0125rem solid #ab3334;
 	padding: 0 0.5rem;
 }
-#indi-page .tabs-panel#tabi_events .indiFactHeader .event, #indi-page .tabs-panel#tabi_events .indiFactHeader .place, #indi-page .tabs-panel#tabi_events .indiFactHeader .detail, #indi-page .tabs-panel#tabi_events .indiFactHeader .edit, #indi-page .tabs-panel#tabi_attributes .indiFactHeader .event, #indi-page .tabs-panel#tabi_attributes .indiFactHeader .place, #indi-page .tabs-panel#tabi_attributes .indiFactHeader .detail, #indi-page .tabs-panel#tabi_attributes .indiFactHeader .edit, #indi-page .tabs-panel#tabi_notes .indiFactHeader .event, #indi-page .tabs-panel#tabi_notes .indiFactHeader .place, #indi-page .tabs-panel#tabi_notes .indiFactHeader .detail, #indi-page .tabs-panel#tabi_notes .indiFactHeader .edit {
+#indi-page .tabs-panel#tabi_events .indiFactHeader .event,
+#indi-page .tabs-panel#tabi_events .indiFactHeader .place,
+#indi-page .tabs-panel#tabi_events .indiFactHeader .detail,
+#indi-page .tabs-panel#tabi_events .indiFactHeader .edit, #indi-page .tabs-panel#tabi_attributes .indiFactHeader .event,
+#indi-page .tabs-panel#tabi_attributes .indiFactHeader .place,
+#indi-page .tabs-panel#tabi_attributes .indiFactHeader .detail,
+#indi-page .tabs-panel#tabi_attributes .indiFactHeader .edit, #indi-page .tabs-panel#tabi_notes .indiFactHeader .event,
+#indi-page .tabs-panel#tabi_notes .indiFactHeader .place,
+#indi-page .tabs-panel#tabi_notes .indiFactHeader .detail,
+#indi-page .tabs-panel#tabi_notes .indiFactHeader .edit {
 	padding: 0;
 }
 #indi-page .tabs-panel#tabi_events .indiFact div.overflow-y, #indi-page .tabs-panel#tabi_attributes .indiFact div.overflow-y, #indi-page .tabs-panel#tabi_notes .indiFact div.overflow-y {
@@ -1035,7 +1053,8 @@ div[id$=-page] button[type=submit] {
 	white-space: pre-wrap;
 	word-wrap: break-word;
 }
-#indi-page .tabs-panel #tabi_changes_content #change_list table.DifferencesSideBySide tbody td.Left, #indi-page .tabs-panel #tabi_changes_content #change_list table.DifferencesSideBySide tbody td.Right {
+#indi-page .tabs-panel #tabi_changes_content #change_list table.DifferencesSideBySide tbody td.Left,
+#indi-page .tabs-panel #tabi_changes_content #change_list table.DifferencesSideBySide tbody td.Right {
 	width: 48%;
 }
 #indi-page .tabs-panel #tabi_changes_content #change_list table.DifferencesSideBySide tbody th {
@@ -1043,14 +1062,20 @@ div[id$=-page] button[type=submit] {
 	font-weight: normal;
 	padding: initial;
 }
-#indi-page .tabs-panel #tabi_changes_content #change_list table.DifferencesSideBySide tbody.ChangeReplace, #indi-page .tabs-panel #tabi_changes_content #change_list table.DifferencesSideBySide tbody.ChangeInsert, #indi-page .tabs-panel #tabi_changes_content #change_list table.DifferencesSideBySide tbody.ChangeDelete {
+#indi-page .tabs-panel #tabi_changes_content #change_list table.DifferencesSideBySide tbody.ChangeReplace,
+#indi-page .tabs-panel #tabi_changes_content #change_list table.DifferencesSideBySide tbody.ChangeInsert,
+#indi-page .tabs-panel #tabi_changes_content #change_list table.DifferencesSideBySide tbody.ChangeDelete {
 	background-color: yellow;
 }
-#indi-page .tabs-panel #tabi_changes_content #change_list table.DifferencesSideBySide tbody.ChangeReplace ins, #indi-page .tabs-panel #tabi_changes_content #change_list table.DifferencesSideBySide tbody.ChangeInsert ins, #indi-page .tabs-panel #tabi_changes_content #change_list table.DifferencesSideBySide tbody.ChangeDelete ins {
+#indi-page .tabs-panel #tabi_changes_content #change_list table.DifferencesSideBySide tbody.ChangeReplace ins,
+#indi-page .tabs-panel #tabi_changes_content #change_list table.DifferencesSideBySide tbody.ChangeInsert ins,
+#indi-page .tabs-panel #tabi_changes_content #change_list table.DifferencesSideBySide tbody.ChangeDelete ins {
 	color: red;
 	text-decoration: initial;
 }
-#indi-page .tabs-panel #tabi_changes_content #change_list table.DifferencesSideBySide tbody.ChangeReplace del, #indi-page .tabs-panel #tabi_changes_content #change_list table.DifferencesSideBySide tbody.ChangeInsert del, #indi-page .tabs-panel #tabi_changes_content #change_list table.DifferencesSideBySide tbody.ChangeDelete del {
+#indi-page .tabs-panel #tabi_changes_content #change_list table.DifferencesSideBySide tbody.ChangeReplace del,
+#indi-page .tabs-panel #tabi_changes_content #change_list table.DifferencesSideBySide tbody.ChangeInsert del,
+#indi-page .tabs-panel #tabi_changes_content #change_list table.DifferencesSideBySide tbody.ChangeDelete del {
 	color: blue;
 	text-decoration: initial;
 }
@@ -2968,7 +2993,8 @@ div.dataTables_paginate ul.pagination li.paginate_button.current {
 		font-size: 0.9rem;
 	}
 }
-[class^=icon-mime-], [class*=" icon-mime-"] {
+[class^=icon-mime-],
+[class*=" icon-mime-"] {
 	font-family: "FontAwesome";
 	font-style: normal;
 	font-size: 3em;
@@ -2976,7 +3002,8 @@ div.dataTables_paginate ul.pagination li.paginate_button.current {
 	margin: 5px;
 }
 
-[class^=icon-mime-application-], [class*=" icon-mime-application-"] {
+[class^=icon-mime-application-],
+[class*=" icon-mime-application-"] {
 	font-family: "FontAwesome";
 	font-style: normal;
 	font-size: 3em;
@@ -2984,7 +3011,8 @@ div.dataTables_paginate ul.pagination li.paginate_button.current {
 	margin: 5px;
 }
 
-[class^=icon-mime-audio-], [class*=" icon-mime-audio-"] {
+[class^=icon-mime-audio-],
+[class*=" icon-mime-audio-"] {
 	font-family: "FontAwesome";
 	font-style: normal;
 	font-size: 3em;
@@ -2992,7 +3020,8 @@ div.dataTables_paginate ul.pagination li.paginate_button.current {
 	margin: 5px;
 }
 
-[class^=icon-mime-image-], [class*=" icon-mime-image-"] {
+[class^=icon-mime-image-],
+[class*=" icon-mime-image-"] {
 	font-family: "FontAwesome";
 	font-style: normal;
 	font-size: 3em;
@@ -3000,7 +3029,8 @@ div.dataTables_paginate ul.pagination li.paginate_button.current {
 	margin: 5px;
 }
 
-[class^=icon-mime-text-], [class*=" icon-mime-text-"] {
+[class^=icon-mime-text-],
+[class*=" icon-mime-text-"] {
 	font-family: "FontAwesome";
 	font-style: normal;
 	font-size: 3em;
@@ -3008,7 +3038,8 @@ div.dataTables_paginate ul.pagination li.paginate_button.current {
 	margin: 5px;
 }
 
-[class^=icon-mime-video-], [class*=" icon-mime-video-"] {
+[class^=icon-mime-video-],
+[class*=" icon-mime-video-"] {
 	font-family: "FontAwesome";
 	font-style: normal;
 	font-size: 3em;

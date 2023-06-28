@@ -561,7 +561,7 @@ function no_update_chan(KT_GedcomRecord $record = null)
 {
 	global $NO_UPDATE_CHAN;
 
-	$checked = $NO_UPDATE_CHAN ? ' checked="checked"' : '';
+	$checked = $NO_UPDATE_CHAN === 1 ? ' checked' : '';
 
 	if (KT_USER_IS_ADMIN && KT_SCRIPT_NAME !== 'admin_trees_addunlinked.php') { ?>
 		<div class="cell last_change">
@@ -580,14 +580,14 @@ function no_update_chan(KT_GedcomRecord $record = null)
 						<?php echo KT_I18N::translate('Keep the existing ‘last change’ information'); ?>
 					</div>
 					<?php echo simple_switch(
-		'preserve_last_changed',
-		'',
-		$checked,
-		'',
-		KT_I18N::translate('Yes'),
-		KT_I18N::translate('No'),
-		'tiny',
-	); ?>
+						'preserve_last_changed',
+						'',
+						$checked,
+						'',
+						KT_I18N::translate('Yes'),
+						KT_I18N::translate('No'),
+						'tiny',
+					); ?>
 					<div class="cell callout info-help  show-for-medium">
 						<?php echo KT_I18N::translate('
 							Administrators sometimes need to clean up and correct the data submitted by users.

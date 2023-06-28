@@ -296,8 +296,6 @@ function load_gedcom_settings($ged_id = KT_GED_ID)
 	$PEDIGREE_LAYOUT = get_gedcom_setting($ged_id, 'PEDIGREE_LAYOUT');
 	global $PEDIGREE_SHOW_GENDER;
 	$PEDIGREE_SHOW_GENDER = get_gedcom_setting($ged_id, 'PEDIGREE_SHOW_GENDER');
-	global $PREFER_LEVEL2_SOURCES;
-	$PREFER_LEVEL2_SOURCES = get_gedcom_setting($ged_id, 'PREFER_LEVEL2_SOURCES');
 	global $QUICK_REQUIRED_FACTS;
 	$QUICK_REQUIRED_FACTS = get_gedcom_setting($ged_id, 'QUICK_REQUIRED_FACTS');
 	global $QUICK_REQUIRED_FAMFACTS;

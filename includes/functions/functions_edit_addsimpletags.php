@@ -48,7 +48,10 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
     global $MEDIA_DIRECTORY, $tags, $emptyfacts, $main_fact, $TEXT_DIRECTION;
     global $NPFX_accept, $SPFX_accept, $NSFX_accept, $FILE_FORM_accept, $upload_count;
     global $pid, $gender, $linkToID, $bdm, $action, $event_add, $iconStyle;
-    global $QUICK_REQUIRED_FACTS, $QUICK_REQUIRED_FAMFACTS, $PREFER_LEVEL2_SOURCES;
+
+	$PREFER_LEVEL2_SOURCES   = get_gedcom_setting(KT_GED_ID, 'PREFER_LEVEL2_SOURCES');
+	$QUICK_REQUIRED_FACTS    = get_gedcom_setting(KT_GED_ID, 'QUICK_REQUIRED_FACTS');
+	$QUICK_REQUIRED_FAMFACTS = get_gedcom_setting(KT_GED_ID, 'QUICK_REQUIRED_FAMFACTS');
 
     require_once KT_ROOT.'includes/functions/functions_print.php';
     // Keep track of SOUR fields, so we can reference them in subsequent PAGE fields.
@@ -171,9 +174,9 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
     }
 
     if (
-        in_array($fact, ['LATI', 'LONG', 'PAGE', 'DATA', 'TEXT', 'NPFX', 'SPFX', 'NSFX']) || 
-        (in_array($fact, ['OBJE', 'NOTE', 'SHARED_NOTE']) && $level >= 2) || 
-        (in_array($fact, ['ADDR']) && $upperlevel === 'PLAC') 
+        in_array($fact, ['DATE', 'PLAC', 'LATI', 'LONG', 'PAGE', 'DATA', 'TEXT', 'NPFX', 'SPFX', 'NSFX']) ||
+        (in_array($fact, ['OBJE', 'NOTE', 'SHARED_NOTE']) && $level >= 2) ||
+        (in_array($fact, ['ADDR']) && $upperlevel === 'PLAC')
     ) {
         $labelIndent = ' style="text-indent: 3rem;"';
     } ?>
@@ -222,7 +225,7 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
                             <?php if (in_array($fact, ['ALIA', 'ASSO', '_ASSO'])) {
                                 $source_element_id = '';
                             } ?>
- 
+
                     <?php } else if ($fact === 'DATE') { ?>
                         <div class="input-group date">
 
@@ -239,7 +242,7 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
                             <?php echo newRecordLinks($fact, $element_id, $value, $islink, $action, $pid, $event_add); ?>
 
                             <?php echo createInput($fact, $emptyfacts, $value, $element_id, $element_name, $source_element_id, $pid, $gender, $upperlevel, $action, $namefacts, $level, $tags, $islink); ?>
-       
+
                     <?php } ?>
 
                          <?php // Specialised input types:  ?>
@@ -247,21 +250,21 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 
                          <?php // Help links ?>
                         <?php helpText($label, $upperlevel, $fact, $level, $action); ?>
-     
+
                     </div>
 
                      <?php currentValue($fact, $islink, $value, $upperlevel, $element_id) ?>
 
             </div>
 
-             <?php // Icon sets ?>           
+             <?php // Icon sets ?>
             <div class="cell small-2 popup_links">
 
                 <?php // echo popupLinks($fact, $element_id, $upperlevel, $level, $tags, $element_name, $value, $action, $event_add, $islink, $pid); ?>
-  
+
             </div>
 
-             <?php // Optional text to display after the input field (so that additional text can be printed in the box) ?> 
+             <?php // Optional text to display after the input field (so that additional text can be printed in the box) ?>
             <?php echo $extra; ?>
 
         </div>
@@ -288,7 +291,7 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
  *
  * @param string $upperlevel optional upper level tag (eg BIRT)
  * @param string $label An optional label to echo instead of the default
- * 
+ *
 **/
 function label($label, $upperlevel, $fact)
 {
@@ -305,9 +308,9 @@ function label($label, $upperlevel, $fact)
 }
 
 /**
- * 
- * 
- * 
+ *
+ *
+ *
 **/
 function tagLevel($level, $islink, $fact)
 {
@@ -332,7 +335,7 @@ function tagLevel($level, $islink, $fact)
  *
  * @param string $upperlevel optional upper level tag (eg BIRT)
  * @param string $label An optional label to echo instead of the default
- * 
+ *
 **/
 function currentValue($fact, $islink, $value, $upperlevel, $element_id)
 {
@@ -358,7 +361,7 @@ function currentValue($fact, $islink, $value, $upperlevel, $element_id)
         // pastable values
         if ($fact === 'FORM' && $upperlevel === 'OBJE') {
             print_autopaste_link($element_id, $FILE_FORM_accept);
-        } 
+        }
 */
  ?>
     </div>
@@ -372,7 +375,7 @@ function currentValue($fact, $islink, $value, $upperlevel, $element_id)
  * @param string $fact
  * @param string $islink
  * @param string $value
- * 
+ *
 **/
 function retrieveNote($fact, $islink, $value)
 {
@@ -393,7 +396,7 @@ function retrieveNote($fact, $islink, $value)
  * @param string $fact
  * @param string $islink
  * @param string $value
- * 
+ *
 **/
 function displaySpouses($pid, $fact)
 {
@@ -415,7 +418,7 @@ function displaySpouses($pid, $fact)
  * @param string $fact
  * @param string $islink
  * @param string $value
- * 
+ *
 **/
 function helpText($label, $upperlevel, $fact, $level, $action)
 {
@@ -477,7 +480,7 @@ function helpText($label, $upperlevel, $fact, $level, $action)
  *
  * @param string $fact
  * @param string $value
- * 
+ *
 **/
 function createInput($fact, $emptyfacts, $value, $element_id, $element_name, $source_element_id, $pid, $gender, $upperlevel, $action, $namefacts, $level, $tags, $islink)
 {
@@ -485,7 +488,7 @@ function createInput($fact, $emptyfacts, $value, $element_id, $element_name, $so
 
     if (in_array($fact, $emptyfacts) && ($value === '' || $value === 'Y' || $value === 'y')) { ?>
         <input type="hidden" id="<?php echo $element_id; ?>" name="<?php echo $element_name; ?>" value="<?php echo htmlspecialchars((string) $value); ?>" <?php echo placeholder($fact); ?> >
- 
+
         <?php if ($level <= 1) { ?>
             <?php echo '<input type="checkbox" ';
                 if ($value) {
@@ -585,43 +588,43 @@ function createInput($fact, $emptyfacts, $value, $element_id, $element_name, $so
         $value ? $showValue = htmlspecialchars((string) $value) : $showValue = '//';
         // Populated in javascript from sub-tags ?>
         <span class="input-group-label">
-            <a 
-                href="#edit_name" 
-                onclick="convertReadOnly('<?php echo $element_id; ?>'); return false;"  
+            <a
+                href="#edit_name"
+                onclick="convertReadOnly('<?php echo $element_id; ?>'); return false;"
                 title="<?php echo KT_I18N::translate('Edit name'); ?>"
             >
                 <i class="<?php echo $iconStyle; ?> fa-user-pen"></i>
             </a>
         </span>
-        <input 
-            type="text" 
-            id="<?php echo $element_id; ?>" 
-            class="<?php echo $fact; ?> readonly" 
-            name="<?php echo $element_name; ?>" 
-            onchange="updateTextName('<?php echo $element_id; ?>')" 
-            value="<?php echo $showValue; ?>" 
+        <input
+            type="text"
+            id="<?php echo $element_id; ?>"
+            class="<?php echo $fact; ?> readonly"
+            name="<?php echo $element_name; ?>"
+            onchange="updateTextName('<?php echo $element_id; ?>')"
+            value="<?php echo $showValue; ?>"
             <?php echo placeholder($fact); ?>
             readonly
         >
- 
+
     <?php } else {
         // Text and Textarea input fields ?>
         <?php if ($fact == 'TEXT' || $fact == 'ADDR' || ($fact == 'NOTE' && !$islink)) { ?>
             <textarea id="<?php echo $element_id; ?>" name="<?php echo $element_name; ?>" dir="auto"  rows='1'><?php echo htmlspecialchars((string) $value); ?></textarea>
         <?php } else { ?>
             <?php if (in_array($fact, $namefacts)) {
-               $extra_markup = ' 
-                    onblur="updatewholename();" 
-                    onkeyup="updatewholename();" 
+               $extra_markup = '
+                    onblur="updatewholename();"
+                    onkeyup="updatewholename();"
                 ';
             } ?>
-            <input 
-                class="<?php echo $fact; ?>" 
-                type="text" 
-                id="<?php echo $element_id; ?>" 
-                name="<?php echo $element_name; ?>" 
-                value="<?php echo htmlspecialchars((string) $value); ?>" 
-                dir="ltr" 
+            <input
+                class="<?php echo $fact; ?>"
+                type="text"
+                id="<?php echo $element_id; ?>"
+                name="<?php echo $element_name; ?>"
+                value="<?php echo htmlspecialchars((string) $value); ?>"
+                dir="ltr"
                 <?php echo placeholder($fact); ?>
             >
         <?php }
@@ -634,25 +637,25 @@ function createInput($fact, $emptyfacts, $value, $element_id, $element_name, $so
  *
  * @param string $fact
  * @param string $value
- * 
+ *
 **/
 function dateSelection($element_id, $element_name, $value)
 {
     global $iconStyle; ?>
 
-    <a 
+    <a
         class="input-group-label"
         href="#"
-        onclick="cal_toggleDate('caldiv<?php echo $element_id; ?>', '<?php echo $element_id; ?>'); return false;" 
+        onclick="cal_toggleDate('caldiv<?php echo $element_id; ?>', '<?php echo $element_id; ?>'); return false;"
     >
         <i class="<?php echo $iconStyle; ?> fa-calendar-days"></i>
     </a>
-    <input 
-        type="text" 
-        name="<?php echo $element_name; ?>" 
-        id="<?php echo $element_id; ?>" 
-        value="<?php echo htmlspecialchars((string) $value); ?>" 
-        onblur="valid_date(this);" 
+    <input
+        type="text"
+        name="<?php echo $element_name; ?>"
+        id="<?php echo $element_id; ?>"
+        value="<?php echo htmlspecialchars((string) $value); ?>"
+        onblur="valid_date(this);"
         onmouseout="valid_date(this);"
     >
     <?php // Holder for calendar ?>
@@ -666,7 +669,7 @@ function dateSelection($element_id, $element_name, $value)
  *
  * @param string $fact
  * @param string $value
- * 
+ *
 **/
 function autocompleteInputs($fact, $element_id, $element_name, $value, $namefacts, $level, $tags, $records, $islink, $source_element_id)
 {
@@ -751,14 +754,14 @@ function autocompleteInputs($fact, $element_id, $element_name, $value, $namefact
         type="hidden"
         name="<?php echo $element_name; ?>"
         id="selectedValue-<?php echo $element_id; ?>"
-        value="<?php echo htmlspecialchars((string) $value); ?>" 
+        value="<?php echo htmlspecialchars((string) $value); ?>"
         <?php echo $hiddenOther; ?>
     >
     <span class="input-group-label">
-        <button 
-            id="<?php echo $element_id; ?>" 
-            class="clearAutocomplete autocomplete_icon" 
-            data-position="top" 
+        <button
+            id="<?php echo $element_id; ?>"
+            class="clearAutocomplete autocomplete_icon"
+            data-position="top"
             data-alignment="center"
         >
             <i class="<?php echo $iconStyle; ?> fa-xmark"></i>
@@ -773,7 +776,7 @@ function autocompleteInputs($fact, $element_id, $element_name, $value, $namefact
  *
  * @param string $fact
  * @param string $value
- * 
+ *
 **/
 function newRecordLinks($fact, $element_id, $value, $islink, $action, $pid, $event_add)
 {
@@ -790,7 +793,7 @@ function newRecordLinks($fact, $element_id, $value, $islink, $action, $pid, $eve
                 case 'REPO':
                     echo print_addnewrepository_link($element_id);
                     break;
-                case 'SHARED_NOTE':        
+                case 'SHARED_NOTE':
                     // Print regular Shared Note icons ---------------------------
                     echo print_addnewnote_link($element_id);
 
@@ -824,7 +827,7 @@ function newRecordLinks($fact, $element_id, $value, $islink, $action, $pid, $eve
  *
  * @param string $fact
  * @param string $value
- * 
+ *
 **/
 function otherInputs($fact, $level, $element_id, $upperlevel, $tags, $pid, $element_name, $value, $specialchar, $emptyfacts)
 {
@@ -836,12 +839,12 @@ function otherInputs($fact, $level, $element_id, $upperlevel, $tags, $pid, $elem
         <span class="input-group-label">
             <?php echo print_specialchar_link($element_id); ?>
         </span>
-        <span 
-            class="input-group-label" 
-            onclick="jQuery('div[id^=<?php echo $upperlevel; ?>_LATI], div[id^=<?php echo $upperlevel; ?>_LONG], div[id^=INDI_LATI], div[id^=INDI_LONG], div[id^=LATI], div[id^=LONG]').toggle('fast'); return false;" 
-            title="<?php echo KT_Gedcom_Tag::getLabel('LATI'); ?> / <?php echo KT_Gedcom_Tag::getLabel('LONG'); ?>" 
-            data-tooltip 
-            data-position="top" 
+        <span
+            class="input-group-label"
+            onclick="jQuery('div[id^=<?php echo $upperlevel; ?>_LATI], div[id^=<?php echo $upperlevel; ?>_LONG], div[id^=INDI_LATI], div[id^=INDI_LONG], div[id^=LATI], div[id^=LONG]').toggle('fast'); return false;"
+            title="<?php echo KT_Gedcom_Tag::getLabel('LATI'); ?> / <?php echo KT_Gedcom_Tag::getLabel('LONG'); ?>"
+            data-tooltip
+            data-position="top"
             data-alignment="center"
         >
             <i class="<?php echo $iconStyle; ?> fa-location-dot"></i>
@@ -904,7 +907,7 @@ function otherInputs($fact, $level, $element_id, $upperlevel, $tags, $pid, $elem
  *
  * @param string $fact
  * @param string $value
- * 
+ *
 **/
 function sourceLinks($bdm)
 {
@@ -978,10 +981,10 @@ function sourceLinks($bdm)
  *
  * @param string $fact
  * @param string $value
- * 
+ *
 **/
 function placeholder($fact)
-{  
+{
 
     switch ($fact) {
         case 'AGE':
@@ -989,6 +992,6 @@ function placeholder($fact)
             break;
         case 'TIME':
             return 'placeholder="15:45"';
-            break;   
+            break;
     }
 }

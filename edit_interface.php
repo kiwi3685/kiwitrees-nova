@@ -173,11 +173,11 @@ switch ($actionA) {
                         </ul>
 					</div>
 				<?php }
-                
+
                 echo no_update_chan($record);
 
                 echo submitButtons();
-                
+
                 ?>
 			</form>
 
@@ -210,67 +210,85 @@ switch ($actionA) {
     case 'addfamlink':
         $person = KT_Person::getInstance($pid);
 
+		$controller
+			->pageHeader()
+			->setPageTitle($person->getLifespanName());
+
         if ($famtag == 'CHIL') {
-            $controller->setPageTitle($person->getLifespanName() . ' - ' . KT_I18N::translate('Link this person to an existing family as a child'));
+		   $subTitle = KT_I18N::translate('Link this person to an existing family as a child');
         } elseif ($person->getSex() == 'F') {
-            $controller->setPageTitle($person->getLifespanName() . ' - ' . KT_I18N::translate('Link this person to an existing family as a wife'));
+            $subTitle = KT_I18N::translate('Link this person to an existing family as a wife');
         } else {
-            $controller->setPageTitle($person->getLifespanName() . ' - ' . KT_I18N::translate('Link this person to an existing family as a husband'));
+            $subTitle = KT_I18N::translate('Link this person to an existing family as a husband');
         }
 
-        $controller->pageHeader();
+        echo pageStart('edit_interface', $controller->getPageTitle(), 'y', $subTitle); ?>
 
-        echo pageStart('edit_interface', $controller->getPageTitle()); ?>
-
-			<form method="post" name="addchildform" action="edit_interface.php">
+			<form class="cell" method="post" name="addchildform" action="edit_interface.php">
 				<input type="hidden" name="action" value="linkfamaction">
 				<input type="hidden" name="pid" value="<?php echo $pid; ?>">
 				<input type="hidden" name="famtag" value="<?php echo $famtag; ?>">
-				<div id="add_facts">
-					<div id="LINKFAM1_factdiv">
-						<label><?php echo KT_I18N::translate('Family'); ?></label>
-						<div class="input">
-							<div class="input-group">
-								<input data-autocomplete-type="FAM" type="text" id="famid" name="famid" size="8">
-								<?php echo print_specialchar_link('famid'); ?>
+				<div id="LINKFAM1_factdiv" class="cell">
+						<div class="grid-x">
+							<div class="cell small-12 medium-3">
+								<label class="middle">
+									<?php echo KT_I18N::translate('Family'); ?>
+								</label>
+							</div>
+							<div class="cell small-10 medium-7">
+								<div class="input-group autocomplete_container">
+									<?php echo autocompleteHtml(
+										'famid',
+										'FAM',
+										'',
+										'',
+										'Family name',
+										'famid',
+										'',
+									); ?>
+									<span class="input-group-label">
+										<?php echo print_specialchar_link('famid'); ?>
+									</span>
+								</div>
 							</div>
 						</div>
 					</div>
-					<div id="LINKFAM2_factdiv">
-						<?php if ($famtag == 'CHIL') { ?>
-							<label><?php echo KT_Gedcom_Tag::getLabel('PEDI'); ?></label>
-							<div class="input">
-								<div class="input-group">
-									<?php
-                                    switch ($person->getSex()) {
-                                        case 'M':
-                                            echo edit_field_pedi_m('PEDI');
-                                        break;
-                                        case 'F':
-                                            echo edit_field_pedi_f('PEDI');
-                                        break;
-                                        case 'U':
-                                            echo edit_field_pedi_u('PEDI');
-                                        break;
-                                    }
-                                    echo help_link('PEDI');
-                                    ?>
+					<?php if ($famtag == 'CHIL') { ?>
+						<div id="LINKFAM2_factdiv" class="cell">
+							<div class="grid-x">
+								<div class="cell small-12 medium-3">
+									<label class="middle">
+										<?php echo KT_Gedcom_Tag::getLabel('PEDI'); ?>
+									</label>
 								</div>
-							</div>
-						<?php } ?>
-					</div>
+								<div class="cell small-10 medium-7">
+								<div class="input">
+									<div class="input-group">
+										<?php
+                                		switch ($person->getSex()) {
+                                    		case 'M':
+                                        		echo edit_field_pedi_m('PEDI');
+                                    		break;
+                                    		case 'F':
+                                        		echo edit_field_pedi_f('PEDI');
+                                    		break;
+                                    		case 'U':
+                                        		echo edit_field_pedi_u('PEDI');
+                                    		break;
+                                		} ?>
+									</div>
+									<div class="cell callout info-help show-for-medium">
+										<?php echo KT_I18N::translate('A child may have more than one set of parents. The relationship between the child and the parents can be biological, legal, or based on local culture and tradition. If no pedigree is specified, then a biological relationship will be assumed. For this reason it is common to not add any selection here.'); ?>
+									</div>
+								</div>
+						</div>
+					<?php } ?>
+					<?php echo $NO_UPDATE_CHAN; ?>
 					<?php echo no_update_chan($person); ?>
 				</div>
-				<p id="save-cancel">
-					<button class="btn btn-primary" type="submit">
-						<i class="fa fa-save"></i>
-						<?php echo KT_I18N::translate('Save'); ?>
-					</button>
-					<button class="btn btn-primary" type="button"  onclick="window.close();">
-						<i class="fa fa-xmark"></i>
-						<?php echo KT_I18N::translate('close'); ?>
-					</button>
-				</p>
+
+				<?php echo submitButtons(); ?>
+
 			</form>
 
         <?php echo pageClose();
@@ -310,7 +328,7 @@ switch ($actionA) {
     ////////////////////////////////////////////////////////////////////////////////
     case 'addname':
         $person = KT_Person::getInstance($pid);
-        
+
         $controller
             ->setPageTitle($person->getLifespanName())
             ->pageHeader();
