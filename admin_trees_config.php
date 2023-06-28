@@ -1911,7 +1911,7 @@ echo pageStart('family_tree_config', $controller->getPageTitle(), 'y', '', 'admi
 							</div>
 						</li>
 						<li class="accordion-item" data-accordion-item>
-							<a href="#" class="accordion-title"><?php echo KT_I18N::translate('Do not update the “last change” record'); ?></a>
+							<a href="#" class="accordion-title"><?php echo KT_I18N::translate('Keep the existing ‘last change’ information'); ?></a>
 							<div class="cell callout info-help">
 								<?php echo KT_I18N::translate('Administrators sometimes need to clean up and correct the data submitted by users.<br>When Administrators make such corrections information about the original change is replaced.<br>When this option is selected kiwitrees will retain the original change information instead of replacing it.'); ?>
 							</div>
