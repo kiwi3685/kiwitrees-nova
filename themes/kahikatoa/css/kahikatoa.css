@@ -20,6 +20,14 @@
 	color: #0193b7;
 }
 
+hr.vertical {
+	background-color: #ab3334;
+	display: inline-block;
+	height: 100%;
+	margin: 0 1rem;
+	width: 2px;
+}
+
 /*-------------*/
 .radius {
 	border-radius: 0.1875rem;
@@ -811,12 +819,33 @@ div[id$=-page] button[type=submit] {
 #indi-page .tabs-panel#tabi_events .indiFact div.overflow-y, #indi-page .tabs-panel#tabi_attributes .indiFact div.overflow-y, #indi-page .tabs-panel#tabi_notes .indiFact div.overflow-y {
 	overflow-y: auto;
 }
-#indi-page .tabs-panel#tabi_events .indiFact .cell.edit, #indi-page .tabs-panel#tabi_attributes .indiFact .cell.edit, #indi-page .tabs-panel#tabi_notes .indiFact .cell.edit {
+#indi-page .tabs-panel#tabi_events .indiFact div.lifespan span button, #indi-page .tabs-panel#tabi_attributes .indiFact div.lifespan span button, #indi-page .tabs-panel#tabi_notes .indiFact div.lifespan span button {
+	border-radius: 1rem;
+	font-size: 0.75rem;
+	margin: 1rem 0 0 -2.625rem;
+	padding: 0.125rem;
+	vertical-align: top;
+	width: 2.5rem;
+}
+#indi-page .tabs-panel#tabi_events .indiFact div.event span, #indi-page .tabs-panel#tabi_attributes .indiFact div.event span, #indi-page .tabs-panel#tabi_notes .indiFact div.event span {
+	display: block;
+}
+#indi-page .tabs-panel#tabi_events .indiFact div.event span.h6, #indi-page .tabs-panel#tabi_attributes .indiFact div.event span.h6, #indi-page .tabs-panel#tabi_notes .indiFact div.event span.h6 {
+	line-height: initial;
+	margin: 0;
+}
+#indi-page .tabs-panel#tabi_events .indiFact div.event span.age span, #indi-page .tabs-panel#tabi_attributes .indiFact div.event span.age span, #indi-page .tabs-panel#tabi_notes .indiFact div.event span.age span {
+	display: inline-block;
+}
+#indi-page .tabs-panel#tabi_events .indiFact div.event span.age span.female .svg-inline--fa, #indi-page .tabs-panel#tabi_attributes .indiFact div.event span.age span.female .svg-inline--fa, #indi-page .tabs-panel#tabi_notes .indiFact div.event span.age span.female .svg-inline--fa {
+	color: #e09798;
+}
+#indi-page .tabs-panel#tabi_events .indiFact div.event span.age span.male svg.svg-inline--fa, #indi-page .tabs-panel#tabi_attributes .indiFact div.event span.age span.male svg.svg-inline--fa, #indi-page .tabs-panel#tabi_notes .indiFact div.event span.age span.male svg.svg-inline--fa {
+	color: #0193b7;
+}
+#indi-page .tabs-panel#tabi_events .indiFact div.edit, #indi-page .tabs-panel#tabi_attributes .indiFact div.edit, #indi-page .tabs-panel#tabi_notes .indiFact div.edit {
 	margin: 0;
 	padding: 0;
-}
-#indi-page .tabs-panel#tabi_events .indiFact .cell.event span.h6, #indi-page .tabs-panel#tabi_attributes .indiFact .cell.event span.h6, #indi-page .tabs-panel#tabi_notes .indiFact .cell.event span.h6 {
-	line-height: 1;
 }
 #indi-page .tabs-panel#tabi_events .indiFact .media-display, #indi-page .tabs-panel#tabi_attributes .indiFact .media-display, #indi-page .tabs-panel#tabi_notes .indiFact .media-display {
 	display: inline-block;
@@ -2496,11 +2525,6 @@ button:focus {
 
 .list_item {
 	font-weight: 600;
-}
-
-.age span {
-	font-size: 0.875rem;
-	vertical-align: super;
 }
 
 .details_label {

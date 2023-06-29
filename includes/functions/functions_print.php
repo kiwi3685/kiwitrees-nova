@@ -444,21 +444,21 @@ function logout_link($icon = true, $mobile = false)
 	if ($mobile == 'mobile') {
 		return '
 			<li>
-				<a href="index.php?logout=1">' . 
+				<a href="index.php?logout=1">' .
 					$icon . '
 				</a>
 			</li>
 		';
 	} else {
 		return '
-			<a href="index.php?logout=1">' . 
+			<a href="index.php?logout=1">' .
 				$icon . KT_I18N::translate('Logout') . '
 			</a>
 		';
 	}
 
 
-	
+
 }
 
 // generate Who is online list
@@ -853,7 +853,7 @@ function helpDropdown($help_topic, $module = false)
 function helpInputLabel($help_topic, $module = false)
 {
 	return '
-		<span class="input-group-label">' . 
+		<span class="input-group-label">' .
 			helpDropdown($help_topic, $module) . '
 		</span>
 	';
@@ -1019,7 +1019,7 @@ function format_parents_age($pid, $birth_date = null)
 							if ($deatdate->isOK() && $deatdate->MinJD() < $birth_date->MinJD() + 90) {
 								$html .= ' <span title="' . KT_Gedcom_Tag::getLabel('_DEAT_PARE', $parent) . '" class="parentdeath">' . $sex . $age . '</span>';
 							} else {
-								$html .= ' <span title="' . KT_I18N::translate('Mother\'s age') . '">' . $sex . $age . '</span>';
+								$html .= ' <span title="' . KT_I18N::translate('Mother\'s age') . '" class="female">' . $sex . $age . '</span>';
 							}
 
 							break;
@@ -1029,7 +1029,7 @@ function format_parents_age($pid, $birth_date = null)
 							if ($deatdate->isOK() && $deatdate->MinJD() < $birth_date->MinJD()) {
 								$html .= ' <span title="' . KT_Gedcom_Tag::getLabel('_DEAT_PARE', $parent) . '" class="parentdeath">' . $sex . $age . '</span>';
 							} else {
-								$html .= ' <span title="' . KT_I18N::translate('Father\'s age') . '">' . $sex . $age . '</span>';
+								$html .= ' <span title="' . KT_I18N::translate('Father\'s age') . '" class="male">' . $sex . $age . '</span>';
 							}
 
 							break;
@@ -1148,7 +1148,7 @@ function format_fact_date(KT_Event $event, KT_GedcomRecord $record, $anchor = fa
 					}
 				}
 				if ($ageText && $show_age) {
-					$html .= ' <span class="age">' . $ageText . '</span>';
+					$html .= ' <span class="age" title="' . KT_I18N::translate('Calculated age') . '">' . $ageText . '</span>';
 				}
 			}
 		} elseif ($record instanceof KT_Family) {
@@ -1188,7 +1188,7 @@ function format_fact_date(KT_Event $event, KT_GedcomRecord $record, $anchor = fa
 	// print gedcom ages
 	foreach ([KT_Gedcom_Tag::getLabel('AGE') => $fact_age, KT_Gedcom_Tag::getLabel('HUSB') => $husb_age, KT_Gedcom_Tag::getLabel('WIFE') => $wife_age] as $label => $age) {
 		if ('' != $age && $show_age) {
-			$html .= ' <span>' . $label . ': <span class="age">' . get_age_at_event($age, false) . '</span></span>';
+			$html .= ' <span class="age"><span>' . $label . ':  '. get_age_at_event($age, false) . '</span></span>';
 		}
 	}
 

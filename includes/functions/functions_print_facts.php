@@ -578,28 +578,38 @@ function print_timeline(KT_Event $fact, KT_GedcomRecord $record) {
 
 	<div class="cell indiFact <?php echo $styleadd; ?>">
 		<div class="grid-x">
-			<!-- Date -->
-			<div class="cell small-10 medium-2 small-order-3 medium-order-1 date">
+			<?php // Date ?>
+			<div class="cell small-10 medium-1 small-order-3 medium-order-1 show-for-medium lifespan">
+				<?php // Show vertical timeline with years
+				$date = $fact->getDate();
+				$date ? $year = $date->minimumDate()->format('%Y') : $year = '';
+				?>
+				<span>
+					<hr class="vertical">
+					<button class="button tiny primary">
+						<?php echo $year; ?>
+					</button>
+				</span>
+			</div>
+			<?php // Event name --> ?>
+			<div class="cell small-10 medium-3 small-order-1 medium-order-2 event">
+				<?php if ($SHOW_FACT_ICONS) {
+					echo $fact->Icon() . '&nbsp;';
+				}
+				echo  '<span class="h6">' . $label . '</span>'; ?>
 				<?php // Print the date of this fact/event
 				echo format_fact_date($fact, $record, true, true); ?>
 			</div>
-			<!-- Event name -->
-			<div class="cell small-10 medium-1 small-order-1 medium-order-2 event">
-				<?php if ($SHOW_FACT_ICONS) {
-					// 	echo $fact->Icon() . '&nbsp;';
-				}
-				echo  '<span class="h6">' . $label . '</span>'; ?>
-			</div>
-			<!-- Place -->
+			<?php // Place ?>
 			<div class="cell small-10 medium-3 small-order-3 medium-order-3 place">
-				<!-- Print the place of this fact/event -->
+				<?php // Print the place of this fact/event --> ?>
 				<div class="place">
 					<?php echo format_fact_place($fact, true, true, true); ?>
 				</div>
 				<?php echo print_address_structure($fact->getGedcomRecord(), 2); ?>
 			</div>
-			<!-- Details -->
-			<div class="cell <?php echo (KT_USER_CAN_EDIT ? 'small-10 medium-5' : 'auto'); ?> small-order-5 medium-order-4 detail">
+			<?php // Details ?>
+			<div class="cell <?php echo (KT_USER_CAN_EDIT ? 'small-10 medium-4' : 'auto'); ?> small-order-5 medium-order-4 detail">
 				<?php switch ($fact->getTag()) {
 					case '_BIRT_CHIL':
 						echo '<br>', KT_I18N::translate('#%d', ++$n_chil);
@@ -1341,7 +1351,7 @@ function print_fact_sources($factrec, $level, $return=false) {
 				}
 				if ($lt > 0 || $src_media) {
 					$data .= '
-						<a 
+						<a
 							data-open="' . $elementID . '"
 //							onclick="return expand_layer(\'' . $elementID . '\');"
 						>
