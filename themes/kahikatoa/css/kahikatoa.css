@@ -847,6 +847,9 @@ div[id$=-page] button[type=submit] {
 	margin: 0;
 	padding: 0;
 }
+#indi-page .tabs-panel#tabi_events .indiFact div.edit .button-group.KT-stacked a.button, #indi-page .tabs-panel#tabi_attributes .indiFact div.edit .button-group.KT-stacked a.button, #indi-page .tabs-panel#tabi_notes .indiFact div.edit .button-group.KT-stacked a.button {
+	margin-bottom: 0;
+}
 #indi-page .tabs-panel#tabi_events .indiFact .media-display, #indi-page .tabs-panel#tabi_attributes .indiFact .media-display, #indi-page .tabs-panel#tabi_notes .indiFact .media-display {
 	display: inline-block;
 	float: left;

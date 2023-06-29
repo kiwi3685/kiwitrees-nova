@@ -33,7 +33,8 @@ if (!defined('KT_KIWITREES')) {
 // we can show the death of X on the page of Y, or the marriage
 // of X+Y on the page of Z.  We need to know both records to
 // calculate ages, relationships, etc.
-function print_fact(KT_Event $fact, KT_GedcomRecord $record) {
+function print_fact(KT_Event $fact, KT_GedcomRecord $record)
+{
 	global $HIDE_GEDCOM_ERRORS, $SHOW_FACT_ICONS, $iconStyle ;
 	static $n_chil = 0, $n_gchi = 0;
 
@@ -83,27 +84,39 @@ function print_fact(KT_Event $fact, KT_GedcomRecord $record) {
 	if ($fact->getSpouse()) {
 		// Event of close relative
 		$label_person = $fact->getSpouse();
-	} else if (preg_match('/2 _WTS @('.KT_REGEX_XREF.')@/', $fact->getGedcomRecord(), $match)) {
+	} elseif (preg_match('/2 _WTS @('.KT_REGEX_XREF.')@/', $fact->getGedcomRecord(), $match)) {
 		// Event of close relative
 		$label_person = KT_Person::getInstance($match[1]);
-	} else if ($fact->getParentObject() instanceof KT_Family) {
+	} elseif ($fact->getParentObject() instanceof KT_Family) {
 		// Family event
 		$husb = $fact->getParentObject()->getHusband();
 		$wife = $fact->getParentObject()->getWife();
-		if (empty($wife) && !empty($husb)) $label_person = $husb;
-		else if (empty($husb) && !empty($wife)) $label_person = $wife;
-		else $label_person = $fact->getParentObject();
+		if (empty($wife) && !empty($husb)) {
+			$label_person = $husb;
+		} elseif (empty($husb) && !empty($wife)) {
+			$label_person = $wife;
+		} else {
+			$label_person = $fact->getParentObject();
+		}
 	} else {
 		// The actual person
 		$label_person = $fact->getParentObject();
 	}
 
 	$styleadd = "";
-	if ($fact->getIsNew()) $styleadd = "change_new";
-	if ($fact->getIsOld()) $styleadd = "change_old";
+	if ($fact->getIsNew()) {
+		$styleadd = "change_new";
+	}
+	if ($fact->getIsOld()) {
+		$styleadd = "change_old";
+	}
 
-	if ($fact->getLineNumber() < 1) $styleadd ='rela'; // not editable
-	if ($fact->getLineNumber() == -1) $styleadd ='histo'; // historical facts
+	if ($fact->getLineNumber() < 1) {
+		$styleadd ='rela';
+	} // not editable
+	if ($fact->getLineNumber() == -1) {
+		$styleadd ='histo';
+	} // historical facts
 
 	// Does this fact have a type?
 	if (preg_match('/\n2 TYPE (.+)/', $fact->getGedcomRecord(), $match)) {
@@ -149,9 +162,9 @@ function print_fact(KT_Event $fact, KT_GedcomRecord $record) {
 			<div class="cell medium-3 fact-title">
 				<label>
 					<?php if ($SHOW_FACT_ICONS) {
-						echo $fact->Icon() . '&nbsp;';
-					}
-					echo  $label; ?>
+		echo $fact->Icon() . '&nbsp;';
+	}
+	echo  $label; ?>
 				</label>
 
 				<?php if (KT_USER_CAN_EDIT && $styleadd != 'change_old' && $fact->getLineNumber() > 0 && $fact->canEdit()) { ?>
@@ -177,7 +190,7 @@ function print_fact(KT_Event $fact, KT_GedcomRecord $record) {
 					</div>
 				<?php }
 
-				switch ($fact->getTag()) {
+	switch ($fact->getTag()) {
 					case '_BIRT_CHIL':
 						echo '<br>', KT_I18N::translate('#%d', ++$n_chil);
 						break;
@@ -193,22 +206,24 @@ function print_fact(KT_Event $fact, KT_GedcomRecord $record) {
 
 				<?php // Print the spouse and family of this fact/event
 				if ($fact->getSpouse()) {
-					// The significant spouse is set on family events of close relatives ?>
+					// The significant spouse is set on family events of close relatives?>
 					<a href="<?php echo $fact->getSpouse()->getHtmlUrl(); ?>">
 						<?php echo $fact->getSpouse()->getFullName(); ?>
 					</a>
 					&nbsp;-&nbsp;
-				<?php }
-				if ($fact->getParentObject() instanceof KT_Family && $record instanceof KT_Person) {
-					// Family events on an individual page ?>
+				<?php
+				}
+	if ($fact->getParentObject() instanceof KT_Family && $record instanceof KT_Person) {
+		// Family events on an individual page?>
 					<a href="<?php echo $fact->getParentObject()->getHtmlUrl(); ?>">
 						<?php echo KT_USER_CAN_EDIT ? KT_I18N::translate('Edit family') : KT_I18N::translate('View family'); ?>
 					</a>
 					<br>
-				<?php }
+				<?php
+	}
 
-				// Print the value of this fact/event
-				switch ($fact->getTag()) {
+	// Print the value of this fact/event
+	switch ($fact->getTag()) {
 					case 'ADDR':
 						echo print_address_structure($fact->getGedcomRecord(), 1);
 					break;
@@ -298,24 +313,24 @@ function print_fact(KT_Event $fact, KT_GedcomRecord $record) {
 					break;
 				}
 
-				// Print the type of this fact/event
-				if ($type) {
-					$utype = strtoupper($type);
-					// Events of close relatives, e.g. _MARR_CHIL
-					if (substr($fact->getTag(), 0, 6) == '_MARR_' && ($utype == 'CIVIL' || $utype == 'PARTNERS' || $utype == 'RELIGIOUS')) {
-						// Translate MARR/TYPE using the code that supports MARR_CIVIL, etc. tags
-						$type = KT_Gedcom_Tag::getLabel('MARR_'.$utype);
-					} else {
-						// Allow (custom) translations for other types
-						$type = KT_I18N::translate($type);
-					}
-					echo KT_Gedcom_Tag::getLabelValue('TYPE', KT_Filter::escapeHtml($type));
-				}
+	// Print the type of this fact/event
+	if ($type) {
+		$utype = strtoupper($type);
+		// Events of close relatives, e.g. _MARR_CHIL
+		if (substr($fact->getTag(), 0, 6) == '_MARR_' && ($utype == 'CIVIL' || $utype == 'PARTNERS' || $utype == 'RELIGIOUS')) {
+			// Translate MARR/TYPE using the code that supports MARR_CIVIL, etc. tags
+			$type = KT_Gedcom_Tag::getLabel('MARR_'.$utype);
+		} else {
+			// Allow (custom) translations for other types
+			$type = KT_I18N::translate($type);
+		}
+		echo KT_Gedcom_Tag::getLabelValue('TYPE', KT_Filter::escapeHtml($type));
+	}
 
-				// Print the date of this fact/event
-				echo format_fact_date($fact, $record, true, true);
+	// Print the date of this fact/event
+	echo format_fact_date($fact, $record, true, true);
 
-				// Print the place of this fact/event ?>
+	// Print the place of this fact/event?>
 				<div class="place">
 					<?php echo format_fact_place($fact, true, true, true); ?>
 				</div>
@@ -326,8 +341,8 @@ function print_fact(KT_Event $fact, KT_GedcomRecord $record) {
 
 				<?php // Print any other "2 XXXX" attributes, in the order in which they appear.
 				preg_match_all('/\n2 ('.KT_REGEX_TAG.') (.+)/', $fact->getGedcomRecord(), $matches, PREG_SET_ORDER);
-				foreach ($matches as $match) {
-					switch ($match[1]) {
+	foreach ($matches as $match) {
+		switch ($match[1]) {
 						case 'DATE':
 						case 'TIME':
 						case 'AGE':
@@ -363,8 +378,11 @@ function print_fact(KT_Event $fact, KT_GedcomRecord $record) {
 							foreach (preg_split('/ *, */', $match[2]) as $event) {
 								$events[] = KT_Gedcom_Tag::getLabel($event);
 							}
-							if (count($events) == 1) echo KT_Gedcom_Tag::getLabelValue('EVEN', $event);
-							else echo KT_Gedcom_Tag::getLabelValue('EVEN', implode(KT_I18N::$list_separator, $events));
+							if (count($events) == 1) {
+								echo KT_Gedcom_Tag::getLabelValue('EVEN', $event);
+							} else {
+								echo KT_Gedcom_Tag::getLabelValue('EVEN', implode(KT_I18N::$list_separator, $events));
+							}
 							if (preg_match('/\n3 DATE (.+)/', $fact->getGedcomRecord(), $date_match)) {
 								$date=new KT_Date($date_match[1]);
 								echo KT_Gedcom_Tag::getLabelValue('DATE', $date->Display());
@@ -393,8 +411,8 @@ function print_fact(KT_Event $fact, KT_GedcomRecord $record) {
 							}
 						break;
 						case 'PEDI':
-				             echo KT_Gedcom_Tag::getLabelValue('PEDI', KT_Gedcom_Code_Pedi::getValue($match[2]));
-				        break;
+							 echo KT_Gedcom_Tag::getLabelValue('PEDI', KT_Gedcom_Code_Pedi::getValue($match[2]));
+						break;
 						case 'RESN':
 							switch ($match[2]) {
 								case 'none':
@@ -449,14 +467,13 @@ function print_fact(KT_Event $fact, KT_GedcomRecord $record) {
 							}
 						break;
 					}
-				}
-				// -- find source for each fact
-				print_fact_sources($fact->getGedcomRecord(), 2);
-				// -- find notes for each fact
-				echo print_fact_notes($fact->getGedcomRecord(), 2);
-				//-- find media objects
-				print_media_links($fact->getGedcomRecord(), 2, $pid);
-				?>
+	}
+	// -- find source for each fact
+	print_fact_sources($fact->getGedcomRecord(), 2);
+	// -- find notes for each fact
+	echo print_fact_notes($fact->getGedcomRecord(), 2);
+	//-- find media objects
+	print_media_links($fact->getGedcomRecord(), 2, $pid); ?>
 			</div>
 		</div>
 	</div>
@@ -465,7 +482,8 @@ function print_fact(KT_Event $fact, KT_GedcomRecord $record) {
 //------------------- end print fact function
 
 
-function print_timeline(KT_Event $fact, KT_GedcomRecord $record) {
+function print_timeline(KT_Event $fact, KT_GedcomRecord $record)
+{
 	global $HIDE_GEDCOM_ERRORS, $SHOW_FACT_ICONS, $iconStyle ;
 	static $n_chil = 0, $n_gchi = 0;
 
@@ -515,27 +533,39 @@ function print_timeline(KT_Event $fact, KT_GedcomRecord $record) {
 	if ($fact->getSpouse()) {
 		// Event of close relative
 		$label_person = $fact->getSpouse();
-	} else if (preg_match('/2 _WTS @('.KT_REGEX_XREF.')@/', $fact->getGedcomRecord(), $match)) {
+	} elseif (preg_match('/2 _WTS @('.KT_REGEX_XREF.')@/', $fact->getGedcomRecord(), $match)) {
 		// Event of close relative
 		$label_person = KT_Person::getInstance($match[1]);
-	} else if ($fact->getParentObject() instanceof KT_Family) {
+	} elseif ($fact->getParentObject() instanceof KT_Family) {
 		// Family event
 		$husb = $fact->getParentObject()->getHusband();
 		$wife = $fact->getParentObject()->getWife();
-		if (empty($wife) && !empty($husb)) $label_person = $husb;
-		else if (empty($husb) && !empty($wife)) $label_person = $wife;
-		else $label_person = $fact->getParentObject();
+		if (empty($wife) && !empty($husb)) {
+			$label_person = $husb;
+		} elseif (empty($husb) && !empty($wife)) {
+			$label_person = $wife;
+		} else {
+			$label_person = $fact->getParentObject();
+		}
 	} else {
 		// The actual person
 		$label_person = $fact->getParentObject();
 	}
 
 	$styleadd = "";
-	if ($fact->getIsNew()) $styleadd = "change_new";
-	if ($fact->getIsOld()) $styleadd = "change_old";
+	if ($fact->getIsNew()) {
+		$styleadd = "change_new";
+	}
+	if ($fact->getIsOld()) {
+		$styleadd = "change_old";
+	}
 
-	if ($fact->getLineNumber() < 1) $styleadd ='rela'; // not editable
-	if ($fact->getLineNumber() == -1) $styleadd ='histo'; // historical facts
+	if ($fact->getLineNumber() < 1) {
+		$styleadd ='rela';
+	} // not editable
+	if ($fact->getLineNumber() == -1) {
+		$styleadd ='histo';
+	} // historical facts
 
 	// Does this fact have a type?
 	if (preg_match('/\n2 TYPE (.+)/', $fact->getGedcomRecord(), $match)) {
@@ -578,12 +608,11 @@ function print_timeline(KT_Event $fact, KT_GedcomRecord $record) {
 
 	<div class="cell indiFact <?php echo $styleadd; ?>">
 		<div class="grid-x">
-			<?php // Date ?>
-			<div class="cell small-10 medium-1 small-order-3 medium-order-1 show-for-medium lifespan">
+			<?php // Date?>
+			<div class="cell medium-1 medium-order-1 show-for-medium lifespan">
 				<?php // Show vertical timeline with years
 				$date = $fact->getDate();
-				$date ? $year = $date->minimumDate()->format('%Y') : $year = '';
-				?>
+				$date ? $year = $date->minimumDate()->format('%Y') : $year = ''; ?>
 				<span>
 					<hr class="vertical">
 					<button class="button tiny primary">
@@ -591,25 +620,24 @@ function print_timeline(KT_Event $fact, KT_GedcomRecord $record) {
 					</button>
 				</span>
 			</div>
-			<?php // Event name --> ?>
-			<div class="cell small-10 medium-3 small-order-1 medium-order-2 event">
+			<?php // Event name -->?>
+			<div class="cell small-12 medium-3 small-order-1 medium-order-2 event">
 				<?php if ($SHOW_FACT_ICONS) {
 					echo $fact->Icon() . '&nbsp;';
-				}
-				echo  '<span class="h6">' . $label . '</span>'; ?>
-				<?php // Print the date of this fact/event
-				echo format_fact_date($fact, $record, true, true); ?>
+				} ?>
+				<span class="h6"><?php echo $label; ?></span>
+				<?php echo format_fact_date($fact, $record, true, true); ?>
 			</div>
-			<?php // Place ?>
-			<div class="cell small-10 medium-3 small-order-3 medium-order-3 place">
-				<?php // Print the place of this fact/event --> ?>
+			<?php // Place?>
+			<div class="cell small-12 medium-3 small-order-3 medium-order-3 place">
+				<?php // Print the place of this fact/event -->?>
 				<div class="place">
 					<?php echo format_fact_place($fact, true, true, true); ?>
 				</div>
 				<?php echo print_address_structure($fact->getGedcomRecord(), 2); ?>
 			</div>
-			<?php // Details ?>
-			<div class="cell <?php echo (KT_USER_CAN_EDIT ? 'small-10 medium-4' : 'auto'); ?> small-order-5 medium-order-4 detail">
+			<?php // Details?>
+			<div class="cell <?php echo(KT_USER_CAN_EDIT ? 'small-12 medium-4' : 'auto'); ?> small-order-4 medium-order-4 detail">
 				<?php switch ($fact->getTag()) {
 					case '_BIRT_CHIL':
 						echo '<br>', KT_I18N::translate('#%d', ++$n_chil);
@@ -623,7 +651,7 @@ function print_timeline(KT_Event $fact, KT_GedcomRecord $record) {
 
 				// Print the spouse and family of this fact/event
 				if ($fact->getSpouse()) {
-					// The significant spouse is set on family events of close relatives ?>
+					// The significant spouse is set on family events of close relatives?>
 					<a href="<?php echo $fact->getSpouse()->getHtmlUrl(); ?>">
 						<?php echo $fact->getSpouse()->getFullName(); ?>
 					</a>
@@ -730,16 +758,16 @@ function print_timeline(KT_Event $fact, KT_GedcomRecord $record) {
 
 				// Print the type of this fact/event
 				if ($type) {
-					$utype = strtoupper($type);
-					// Events of close relatives, e.g. _MARR_CHIL
-					if (substr($fact->getTag(), 0, 6) == '_MARR_' && ($utype == 'CIVIL' || $utype == 'PARTNERS' || $utype == 'RELIGIOUS')) {
-						// Translate MARR/TYPE using the code that supports MARR_CIVIL, etc. tags
-						$type = KT_Gedcom_Tag::getLabel('MARR_'.$utype);
-					} else {
-						// Allow (custom) translations for other types
-						$type = KT_I18N::translate($type);
-					}
-					echo KT_Gedcom_Tag::getLabelValue('TYPE', KT_Filter::escapeHtml($type));
+				$utype = strtoupper($type);
+				// Events of close relatives, e.g. _MARR_CHIL
+				if (substr($fact->getTag(), 0, 6) == '_MARR_' && ($utype == 'CIVIL' || $utype == 'PARTNERS' || $utype == 'RELIGIOUS')) {
+					// Translate MARR/TYPE using the code that supports MARR_CIVIL, etc. tags
+					$type = KT_Gedcom_Tag::getLabel('MARR_'.$utype);
+				} else {
+					// Allow (custom) translations for other types
+					$type = KT_I18N::translate($type);
+				}
+				echo KT_Gedcom_Tag::getLabelValue('TYPE', KT_Filter::escapeHtml($type));
 				}
 
 				// Print the associates of this fact/event
@@ -784,8 +812,11 @@ function print_timeline(KT_Event $fact, KT_GedcomRecord $record) {
 							foreach (preg_split('/ *, */', $match[2]) as $event) {
 								$events[] = KT_Gedcom_Tag::getLabel($event);
 							}
-							if (count($events) == 1) echo KT_Gedcom_Tag::getLabelValue('EVEN', $event);
-							else echo KT_Gedcom_Tag::getLabelValue('EVEN', implode(KT_I18N::$list_separator, $events));
+							if (count($events) == 1) {
+								echo KT_Gedcom_Tag::getLabelValue('EVEN', $event);
+							} else {
+								echo KT_Gedcom_Tag::getLabelValue('EVEN', implode(KT_I18N::$list_separator, $events));
+							}
 							if (preg_match('/\n3 DATE (.+)/', $fact->getGedcomRecord(), $date_match)) {
 								$date=new KT_Date($date_match[1]);
 								echo KT_Gedcom_Tag::getLabelValue('DATE', $date->Display());
@@ -873,14 +904,13 @@ function print_timeline(KT_Event $fact, KT_GedcomRecord $record) {
 				// -- find notes for each fact
 				echo print_fact_notes($fact->getGedcomRecord(), 2);
 				//-- find media objects
-				print_media_links($fact->getGedcomRecord(), 2, $pid);
-				?>
+				print_media_links($fact->getGedcomRecord(), 2, $pid); ?>
 
 			</div>
 			<?php if (KT_USER_CAN_EDIT) { ?>
-				<div class="cell small-2 medium-1 medium-order-5 edit">
+				<div class="cell small-12 medium-1 small-order-2 medium-order-5 edit">
 					<?php if (KT_USER_CAN_EDIT && $styleadd != 'change_old' && $fact->getLineNumber() > 0 && $fact->canEdit()) { ?>
-						<div class="editfacts button-group stacked">
+						<div class="editfacts button-group KT-stacked">
 							<a class="button clear" onclick="return edit_record('<?php echo $pid; ?>', <?php echo $fact->getLineNumber(); ?>);">
 								<i class="<?php echo $iconStyle; ?> fa-pen-to-square"></i>
 								<span class="link_text show-for-large" tabindex="1" title="<?php echo KT_I18N::translate('Edit'); ?>">
@@ -909,7 +939,8 @@ function print_timeline(KT_Event $fact, KT_GedcomRecord $record) {
 }
 //------------------- end print timeline function
 
-function print_attributes(KT_Event $fact, KT_GedcomRecord $record) {
+function print_attributes(KT_Event $fact, KT_GedcomRecord $record)
+{
 	global $HIDE_GEDCOM_ERRORS, $SHOW_FACT_ICONS, $iconStyle ;
 
 	if (!$fact->canShow()) {
@@ -926,24 +957,32 @@ function print_attributes(KT_Event $fact, KT_GedcomRecord $record) {
 	if ($fact->getSpouse()) {
 		// Event of close relative
 		$label_person = $fact->getSpouse();
-	} else if (preg_match('/2 _WTS @('.KT_REGEX_XREF.')@/', $fact->getGedcomRecord(), $match)) {
+	} elseif (preg_match('/2 _WTS @('.KT_REGEX_XREF.')@/', $fact->getGedcomRecord(), $match)) {
 		// Event of close relative
 		$label_person = KT_Person::getInstance($match[1]);
-	} else if ($fact->getParentObject() instanceof KT_Family) {
+	} elseif ($fact->getParentObject() instanceof KT_Family) {
 		// Family event
 		$husb = $fact->getParentObject()->getHusband();
 		$wife = $fact->getParentObject()->getWife();
-		if (empty($wife) && !empty($husb)) $label_person = $husb;
-		else if (empty($husb) && !empty($wife)) $label_person = $wife;
-		else $label_person = $fact->getParentObject();
+		if (empty($wife) && !empty($husb)) {
+			$label_person = $husb;
+		} elseif (empty($husb) && !empty($wife)) {
+			$label_person = $wife;
+		} else {
+			$label_person = $fact->getParentObject();
+		}
 	} else {
 		// The actual person
 		$label_person = $fact->getParentObject();
 	}
 
 	$styleadd = "";
-	if ($fact->getIsNew()) $styleadd = "change_new";
-	if ($fact->getIsOld()) $styleadd = "change_old";
+	if ($fact->getIsNew()) {
+		$styleadd = "change_new";
+	}
+	if ($fact->getIsOld()) {
+		$styleadd = "change_old";
+	}
 
 	// Does this fact have a type?
 	if (preg_match('/\n2 TYPE (.+)/', $fact->getGedcomRecord(), $match)) {
@@ -978,11 +1017,11 @@ function print_attributes(KT_Event $fact, KT_GedcomRecord $record) {
 		<div class="grid-x">
 			<div class="cell small-10 medium-3 small-order-1 medium-order-1 event">
 				<?php if ($SHOW_FACT_ICONS) {
-					// 	echo $fact->Icon() . '&nbsp;';
-				}
-				echo  '<span class="h6">' . $label . '</span>'; ?>
+		// 	echo $fact->Icon() . '&nbsp;';
+	}
+	echo  '<span class="h6">' . $label . '</span>'; ?>
 			</div>
-			<div class="cell <?php echo (KT_USER_CAN_EDIT ? 'small-10 medium-8' : 'auto'); ?> small-order-5 medium-order-4 detail">
+			<div class="cell <?php echo(KT_USER_CAN_EDIT ? 'small-10 medium-8' : 'auto'); ?> small-order-5 medium-order-4 detail">
 				<?php switch ($fact->getTag()) {
 					case 'CHAN':
 						echo htmlspecialchars((string) $fact->getDetail());
@@ -1077,10 +1116,10 @@ function print_attributes(KT_Event $fact, KT_GedcomRecord $record) {
 					break;
 				}
 
-				// Print any other "2 XXXX" attributes, in the order in which they appear.
-				preg_match_all('/\n2 ('.KT_REGEX_TAG.') (.+)/', $fact->getGedcomRecord(), $matches, PREG_SET_ORDER);
-				foreach ($matches as $match) {
-					switch ($match[1]) {
+	// Print any other "2 XXXX" attributes, in the order in which they appear.
+	preg_match_all('/\n2 ('.KT_REGEX_TAG.') (.+)/', $fact->getGedcomRecord(), $matches, PREG_SET_ORDER);
+	foreach ($matches as $match) {
+		switch ($match[1]) {
 						case 'DATE':
 						case 'TIME':
 						case 'AGE':
@@ -1116,8 +1155,11 @@ function print_attributes(KT_Event $fact, KT_GedcomRecord $record) {
 							foreach (preg_split('/ *, */', $match[2]) as $event) {
 								$events[] = KT_Gedcom_Tag::getLabel($event);
 							}
-							if (count($events) == 1) echo KT_Gedcom_Tag::getLabelValue('EVEN', $event);
-							else echo KT_Gedcom_Tag::getLabelValue('EVEN', implode(KT_I18N::$list_separator, $events));
+							if (count($events) == 1) {
+								echo KT_Gedcom_Tag::getLabelValue('EVEN', $event);
+							} else {
+								echo KT_Gedcom_Tag::getLabelValue('EVEN', implode(KT_I18N::$list_separator, $events));
+							}
 							if (preg_match('/\n3 DATE (.+)/', $fact->getGedcomRecord(), $date_match)) {
 								$date=new KT_Date($date_match[1]);
 								echo KT_Gedcom_Tag::getLabelValue('DATE', $date->Display());
@@ -1146,8 +1188,8 @@ function print_attributes(KT_Event $fact, KT_GedcomRecord $record) {
 							}
 						break;
 						case 'PEDI':
-				             echo KT_Gedcom_Tag::getLabelValue('PEDI', KT_Gedcom_Code_Pedi::getValue($match[2]));
-				        break;
+							 echo KT_Gedcom_Tag::getLabelValue('PEDI', KT_Gedcom_Code_Pedi::getValue($match[2]));
+						break;
 						case 'RESN':
 							switch ($match[2]) {
 								case 'none':
@@ -1202,15 +1244,14 @@ function print_attributes(KT_Event $fact, KT_GedcomRecord $record) {
 							}
 						break;
 					}
-				}
+	}
 
-				// -- find source for each fact
-				echo print_fact_sources($fact->getGedcomRecord(), 2);
-				// -- find notes for each fact
-				echo print_fact_notes($fact->getGedcomRecord(), 2);
-				//-- find media objects
-				echo print_media_links($fact->getGedcomRecord(), 2, $pid);
-				?>
+	// -- find source for each fact
+	echo print_fact_sources($fact->getGedcomRecord(), 2);
+	// -- find notes for each fact
+	echo print_fact_notes($fact->getGedcomRecord(), 2);
+	//-- find media objects
+	echo print_media_links($fact->getGedcomRecord(), 2, $pid); ?>
 
 			</div>
 			<?php if (KT_USER_CAN_EDIT) { ?>
@@ -1242,11 +1283,11 @@ function print_attributes(KT_Event $fact, KT_GedcomRecord $record) {
 		</div>
 	</div>
 	<?php
-
 }
 //------------------- end print attributes function
 
-function print_edit_icons() {
+function print_edit_icons()
+{
 	if (KT_USER_CAN_EDIT) { ?>
 		<div class="cell small-2 medium-1 medium-order-5 edit">
 			<?php if (KT_USER_CAN_EDIT && $styleadd != 'change_old' && $fact->getLineNumber() > 0 && $fact->canEdit()) { ?>
@@ -1282,7 +1323,8 @@ function print_edit_icons() {
  * find and print repository information attached to a source
  * @param string $sid  the Gedcom Xref ID of the repository to print
  */
-function print_repository_record($xref) {
+function print_repository_record($xref)
+{
 	$repository=KT_Repository::getInstance($xref);
 	if ($repository && $repository->canDisplayDetails()) {
 		echo '<a class="field" href="', $repository->getHtmlUrl(), '">', $repository->getFullName(), '</a><br>';
@@ -1301,7 +1343,8 @@ function print_repository_record($xref) {
  * @param int $level The level to look for sources at
  * @param boolean $return whether to return the data or print the data
  */
-function print_fact_sources($factrec, $level, $return=false) {
+function print_fact_sources($factrec, $level, $return=false)
+{
 	global $EXPAND_SOURCES, $iconStyle;
 
 	$data = '';
@@ -1343,7 +1386,7 @@ function print_fact_sources($factrec, $level, $return=false) {
 				$data .= KT_I18N::translate('Source').':</span> <span class="field">';
 				$data .= '<a href="'.$source->getHtmlUrl().'">'.$source->getFullName().'</a>';
 				if ($EXPAND_SOURCES === 1) {
-					$plusminus    = ' fa-minimize';
+					$plusminus	= ' fa-minimize';
 					$expandStyle  = ' display:block';
 				} else {
 					$plusminus 	  = ' fa-maximize';
@@ -1364,7 +1407,7 @@ function print_fact_sources($factrec, $level, $return=false) {
 				$data .= '</div>';
 				$data .= '<div id="' . $elementID . '"';
 				$data .= ' class="reveal source_citations"';
-//				$data .= ' style="' . $expandStyle . '"';
+				//				$data .= ' style="' . $expandStyle . '"';
 				$data .= ' data-reveal >';
 				$data .= '
 					<button class="close-button" data-close data-animation-in="slide-in fast" data-animation-out="fade" aria-label="' . KT_I18N::translate('Close') . '" type="button">
@@ -1410,7 +1453,8 @@ function print_fact_sources($factrec, $level, $return=false) {
 }
 
 //-- Print the links to media objects
-function print_media_links($factrec, $level, $pid='') {
+function print_media_links($factrec, $level, $pid='')
+{
 	global $TEXT_DIRECTION;
 	global $SEARCH_SPIDER;
 	global $THUMBNAIL_WIDTH;
@@ -1419,22 +1463,24 @@ function print_media_links($factrec, $level, $pid='') {
 	$ged_id = get_id_from_gedcom($GEDCOM);
 	$nlevel = $level+1;
 
- 	if ($level == 1) {
+	if ($level == 1) {
 		$size = 50;
 	} else {
 		$size = 25;
 	}
 
- 	if (preg_match_all("/$level OBJE @(.*)@/", $factrec, $omatch, PREG_SET_ORDER) == 0) return;
+	if (preg_match_all("/$level OBJE @(.*)@/", $factrec, $omatch, PREG_SET_ORDER) == 0) {
+		return;
+	}
 
- 	$objectNum  = 0;
- 	$mediaWidth = 'width: auto';
+	$objectNum  = 0;
+	$mediaWidth = 'width: auto';
 
- 	if (count($omatch) > 1) {
- 		$mediaWidth = ' width: ' . 90 / min(count($omatch), 4) . '%;';
-         if (count($omatch) > 4) {
-            $mediaWidth .= ' min-height: 210px;';
-        }
+	if (count($omatch) > 1) {
+		$mediaWidth = ' width: ' . 90 / min(count($omatch), 4) . '%;';
+		if (count($omatch) > 4) {
+			$mediaWidth .= ' min-height: 210px;';
+		}
 	}
 
 	while ($objectNum < count($omatch)) {
@@ -1444,51 +1490,53 @@ function print_media_links($factrec, $level, $pid='') {
 			if ($media->canDisplayDetails()) {
 				echo '<div class="media-display">
 					<div class="media-display-image' . $mediaWidth . '">';
-						echo $media->displayImage();
-					echo '</div>'; // close div "media-display-image"
-					echo '<div class="media-display-title">';
-						if ($SEARCH_SPIDER) {
-							echo $media->getFullName();
-						} else {
-							echo '<a href="mediaviewer.php?mid=', $media->getXref(), '&amp;ged=', KT_GEDURL, '">', $media->getFullName(), '</a>';
-						}
-						// echo the notes of the media
-						echo '<p>';
-							echo print_fact_notes($media->getGedcomRecord(), 1);
-							if (preg_match('/2 DATE (.+)/', get_sub_record('FILE', 1, $media->getGedcomRecord()), $match)) {
-								$media_date=new KT_Date($match[1]);
-								$md = $media_date->Display(true);
-								echo '<p>', KT_Gedcom_Tag::getLabel('DATE'), ': </p> ', $md;
-							}
-							$ttype = preg_match("/".($nlevel+1)." TYPE (.*)/", $media->getGedcomRecord(), $match);
-							if ($ttype>0) {
-								$mediaType = KT_Gedcom_Tag::getFileFormTypeValue($match[1]);
-								echo '<p>', KT_I18N::translate('Type'), ': </span> <span class="field">', $mediaType, '</p>';
-							}
-						echo '</p>';
-						//-- print spouse name for marriage events
-						$ct = preg_match("/KT_SPOUSE: (.*)/", $factrec, $match);
+				echo $media->displayImage();
+				echo '</div>'; // close div "media-display-image"
+				echo '<div class="media-display-title">';
+				if ($SEARCH_SPIDER) {
+					echo $media->getFullName();
+				} else {
+					echo '<a href="mediaviewer.php?mid=', $media->getXref(), '&amp;ged=', KT_GEDURL, '">', $media->getFullName(), '</a>';
+				}
+				// echo the notes of the media
+				echo '<p>';
+				echo print_fact_notes($media->getGedcomRecord(), 1);
+				if (preg_match('/2 DATE (.+)/', get_sub_record('FILE', 1, $media->getGedcomRecord()), $match)) {
+					$media_date=new KT_Date($match[1]);
+					$md = $media_date->Display(true);
+					echo '<p>', KT_Gedcom_Tag::getLabel('DATE'), ': </p> ', $md;
+				}
+				$ttype = preg_match("/".($nlevel+1)." TYPE (.*)/", $media->getGedcomRecord(), $match);
+				if ($ttype>0) {
+					$mediaType = KT_Gedcom_Tag::getFileFormTypeValue($match[1]);
+					echo '<p>', KT_I18N::translate('Type'), ': </span> <span class="field">', $mediaType, '</p>';
+				}
+				echo '</p>';
+				//-- print spouse name for marriage events
+				$ct = preg_match("/KT_SPOUSE: (.*)/", $factrec, $match);
+				if ($ct>0) {
+					$spouse=KT_Person::getInstance($match[1]);
+					if ($spouse) {
+						echo '<a href="', $spouse->getHtmlUrl(), '">';
+						echo $spouse->getFullName();
+						echo '</a>';
+					}
+					if (empty($SEARCH_SPIDER)) {
+						$ct = preg_match("/KT_FAMILY_ID: (.*)/", $factrec, $match);
 						if ($ct>0) {
-							$spouse=KT_Person::getInstance($match[1]);
-							if ($spouse) {
-								echo '<a href="', $spouse->getHtmlUrl(), '">';
-								echo $spouse->getFullName();
-								echo '</a>';
-							}
-							if (empty($SEARCH_SPIDER)) {
-								$ct = preg_match("/KT_FAMILY_ID: (.*)/", $factrec, $match);
-								if ($ct>0) {
-									$famid = trim($match[1]);
-									$family = KT_Family::getInstance($famid);
-									if ($family) {
-										if ($spouse) echo " - ";
-										echo '<a href="', $family->getHtmlUrl(), '">', KT_USER_CAN_EDIT ? KT_I18N::translate('Edit family') : KT_I18N::translate('View family'), '</a>';
-									}
+							$famid = trim($match[1]);
+							$family = KT_Family::getInstance($famid);
+							if ($family) {
+								if ($spouse) {
+									echo " - ";
 								}
+								echo '<a href="', $family->getHtmlUrl(), '">', KT_USER_CAN_EDIT ? KT_I18N::translate('Edit family') : KT_I18N::translate('View family'), '</a>';
 							}
 						}
-						print_fact_notes($media->getGedcomRecord(), $nlevel);
-						print_fact_sources($media->getGedcomRecord(), $nlevel);
+					}
+				}
+				print_fact_notes($media->getGedcomRecord(), $nlevel);
+				print_fact_sources($media->getGedcomRecord(), $nlevel);
 				echo '</div>';//close div "media-display-title"
 				echo '</div>';//close div "media-display"
 			}
@@ -1506,7 +1554,8 @@ function print_media_links($factrec, $level, $pid='') {
  * @param int $level The gedcom line level of the main ADDR record
  * @param str $format 'inline' produces simple one line display
  */
-function print_address_structure($factrec, $level, $format='') {
+function print_address_structure($factrec, $level, $format='')
+{
 	if (preg_match("/$level ADDR (.*)/", $factrec, $omatch)) {
 		$arec		= get_sub_record($level, "$level ADDR", $factrec, 1);
 		$cont		= str_replace("\n", "<br>", get_cont($level + 1, $arec));
@@ -1514,27 +1563,27 @@ function print_address_structure($factrec, $level, $format='') {
 		$resultText = $omatch[1] . $cont;
 		if ($level > 1) {
 			switch ($format) {
-				case 'inline' :
+				case 'inline':
 					$resultText = str_replace("<br>", "", $resultText);
 					$resultText;
 				break;
-				case 'simple' :
+				case 'simple':
 					$resultText = str_replace("<br>", "", $resultText);
 					$resultText = '<span class="address">'.KT_Gedcom_Tag::getLabel('ADDR').': </span><span>' . $resultText . '</span>';
 				break;
-				default :
+				default:
 				$resultText = '<span class="address">'.KT_Gedcom_Tag::getLabel('ADDR').': </span><br><div class="indent">' . $resultText . '</div>';
 				break;
 			}
 		}
 
 		return $resultText;
-
 	}
 }
 
 // Print a row for the sources tab on the individual page
-function print_main_sources(KT_Event $fact, $level) {
+function print_main_sources(KT_Event $fact, $level)
+{
 	global $SHOW_FACT_ICONS, $iconStyle;
 
 	$factrec = $fact->getGedcomRecord();
@@ -1570,17 +1619,18 @@ function print_main_sources(KT_Event $fact, $level) {
 					<label>
 						<?php
 						$sid 	= trim($match[$j][2], '@');
-						$spos1 	= strpos($factrec, $match[$j][1], $spos2);
-						$spos2 	= strpos($factrec, "\n$level", $spos1);
-						if (!$spos2) $spos2 = strlen($factrec);
-						$srec 	= substr($factrec, $spos1, $spos2-$spos1);
-						$source	= KT_Source::getInstance($sid);
+		$spos1 	= strpos($factrec, $match[$j][1], $spos2);
+		$spos2 	= strpos($factrec, "\n$level", $spos1);
+		if (!$spos2) {
+			$spos2 = strlen($factrec);
+		}
+		$srec 	= substr($factrec, $spos1, $spos2-$spos1);
+		$source	= KT_Source::getInstance($sid);
 
-						// Allow access to "1 SOUR @non_existent_source@", so it can be corrected/deleted
-						if (!$source || $source->canDisplayDetails()) {
-
-							$temp = preg_match("/^\d (\w*)/", $factrec, $factname);
-							$factlines = explode("\n", $factrec); // 1 BIRT Y\n2 SOUR ...
+		// Allow access to "1 SOUR @non_existent_source@", so it can be corrected/deleted
+		if (!$source || $source->canDisplayDetails()) {
+			$temp = preg_match("/^\d (\w*)/", $factrec, $factname);
+			$factlines = explode("\n", $factrec); // 1 BIRT Y\n2 SOUR ...
 							$factwords = explode(" ", $factlines[0]); // 1 BIRT Y
 							$factname = $factwords[1]; // BIRT
 							if ($factname == 'EVEN' || $factname=='FACT') {
@@ -1602,9 +1652,9 @@ function print_main_sources(KT_Event $fact, $level) {
 
 								<div class="editfacts button-group">
 									<?php if (preg_match('/^@.+@$/', $match[$j][2])) {
-											// Inline sources can't be edited.  Attempting to save one will convert it
-											// into a link, and delete it.
-											// e.g. "1 SOUR my source" becomes "1 SOUR @my source@" which does not exist. ?>
+									// Inline sources can't be edited.  Attempting to save one will convert it
+									// into a link, and delete it.
+									// e.g. "1 SOUR my source" becomes "1 SOUR @my source@" which does not exist.?>
 										<a class="button clear" onclick="return edit_record('<?php echo $pid; ?>', <?php echo $fact->getLineNumber(); ?>);">
 											<i class="<?php echo $iconStyle; ?> fa-pen-to-square"></i>
 											<span class="link_text" tabindex="1" title="<?php echo KT_I18N::translate('Edit'); ?>">
@@ -1617,7 +1667,8 @@ function print_main_sources(KT_Event $fact, $level) {
 												<?php echo KT_I18N::translate('Copy'); ?>
 											</span>
 										</a>
-									<?php } ?>
+									<?php
+								} ?>
 									<a class="button clear" onclick="return delete_fact('<?php echo $pid; ?>', <?php echo $fact->getLineNumber(); ?>, '', '<?php echo KT_I18N::translate('Are you sure you want to delete this fact?'); ?>');">
 										<i class="<?php echo $iconStyle; ?> fa-trash-can"></i>
 										<span class="link_text" tabindex="3" title="<?php echo KT_I18N::translate('Delete'); ?>">
@@ -1625,31 +1676,32 @@ function print_main_sources(KT_Event $fact, $level) {
 										</span>
 									</a>
 								</div>
-							<?php } else {
+							<?php
+							} else {
 								echo KT_Gedcom_Tag::getLabel($factname, $parent);
 							}
-						} ?>
+		} ?>
 					</label>
 				</div>
 				<div class="cell medium-9 overflow-y">
 					<?php if ($source) {
-						echo '<a href="', $source->getHtmlUrl(), '">', $source->getFullName(), '</a>';
-						// OBJE
-						$src_media = trim((string) get_gedcom_value('OBJE', '1', $source->getGedcomRecord()), '@');
-						if (!empty($src_media) && $nlevel > 2) {
-							echo print_source_media($src_media);
-						}
-						// PUBL
-						$text = get_gedcom_value('PUBL', '1', $source->getGedcomRecord());
-						if (!empty($text)) {
-							echo '<br><span class="label">', KT_Gedcom_Tag::getLabel('PUBL'), ': </span>';
-							echo $text;
-						}
-						// 2 RESN tags.  Note, there can be more than one, such as "privacy" and "locked"
-						if (preg_match_all("/\n2 RESN (.+)/", (string) $factrec, $rmatches)) {
-							foreach ($rmatches[1] as $rmatch) {
-								echo '<br><span class="label">', KT_Gedcom_Tag::getLabel('RESN'), ':</span> <span class="field">';
-								switch ($rmatch) {
+			echo '<a href="', $source->getHtmlUrl(), '">', $source->getFullName(), '</a>';
+			// OBJE
+			$src_media = trim((string) get_gedcom_value('OBJE', '1', $source->getGedcomRecord()), '@');
+			if (!empty($src_media) && $nlevel > 2) {
+				echo print_source_media($src_media);
+			}
+			// PUBL
+			$text = get_gedcom_value('PUBL', '1', $source->getGedcomRecord());
+			if (!empty($text)) {
+				echo '<br><span class="label">', KT_Gedcom_Tag::getLabel('PUBL'), ': </span>';
+				echo $text;
+			}
+			// 2 RESN tags.  Note, there can be more than one, such as "privacy" and "locked"
+			if (preg_match_all("/\n2 RESN (.+)/", (string) $factrec, $rmatches)) {
+				foreach ($rmatches[1] as $rmatch) {
+					echo '<br><span class="label">', KT_Gedcom_Tag::getLabel('RESN'), ':</span> <span class="field">';
+					switch ($rmatch) {
 								case 'none':
 									// Note: "2 RESN none" is not valid gedcom, and the GUI will not let you add it.
 									// However, kiwitrees privacy rules will interpret it as "show an otherwise private fact to public".
@@ -1668,33 +1720,36 @@ function print_main_sources(KT_Event $fact, $level) {
 									echo $rmatch;
 									break;
 								}
-								echo '</span>';
-							}
-						}
-						$cs = preg_match("/$nlevel EVEN (.*)/", $srec, $cmatch);
-						if ($cs>0) {
-							echo '<br><span class="label">', KT_Gedcom_Tag::getLabel('EVEN'), ' </span><span class="field">', $cmatch[1], '</span>';
-							$cs = preg_match("/".($nlevel+1)." ROLE (.*)/", $srec, $cmatch);
-							if ($cs>0) echo '<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="label">', KT_Gedcom_Tag::getLabel('ROLE'), ' </span><span class="field">', $cmatch[1], '</span>';
-						}
-						echo printSourceStructure(getSourceStructure($srec));
-						echo '<div class="indent">';
-						print_media_links($srec, $nlevel);
-						if ($nlevel==2) {
-							print_media_links($source->getGedcomRecord(), 1);
-						}
-						print_fact_notes($srec, $nlevel);
-						if ($nlevel == 2) {
-							print_fact_notes($source->getGedcomRecord(), 1);
-						}
-						echo '</div>';
-					} else {
-						echo $sid;
-					} ?>
+					echo '</span>';
+				}
+			}
+			$cs = preg_match("/$nlevel EVEN (.*)/", $srec, $cmatch);
+			if ($cs>0) {
+				echo '<br><span class="label">', KT_Gedcom_Tag::getLabel('EVEN'), ' </span><span class="field">', $cmatch[1], '</span>';
+				$cs = preg_match("/".($nlevel+1)." ROLE (.*)/", $srec, $cmatch);
+				if ($cs>0) {
+					echo '<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="label">', KT_Gedcom_Tag::getLabel('ROLE'), ' </span><span class="field">', $cmatch[1], '</span>';
+				}
+			}
+			echo printSourceStructure(getSourceStructure($srec));
+			echo '<div class="indent">';
+			print_media_links($srec, $nlevel);
+			if ($nlevel==2) {
+				print_media_links($source->getGedcomRecord(), 1);
+			}
+			print_fact_notes($srec, $nlevel);
+			if ($nlevel == 2) {
+				print_fact_notes($source->getGedcomRecord(), 1);
+			}
+			echo '</div>';
+		} else {
+			echo $sid;
+		} ?>
 				</div>
 			</div>
 		</div>
-	<?php }
+	<?php
+	}
 }
 
 /**
@@ -1703,7 +1758,8 @@ function print_main_sources(KT_Event $fact, $level) {
  *  This function prints the input array of SOUR sub-records built by the
  *  getSourceStructure() function.
  */
-function printSourceStructure($textSOUR) {
+function printSourceStructure($textSOUR)
+{
 	$html='';
 
 	if ($textSOUR['PAGE']) {
@@ -1746,7 +1802,8 @@ function printSourceStructure($textSOUR) {
  *  $textSOUR['TEXT'] = (array) Text from source
  *  $textSOUR['QUAY'] = Certainty assessment
  */
-function getSourceStructure($srec) {
+function getSourceStructure($srec)
+{
 	// Set up the output array
 	$textSOUR=array(
 		'PAGE'=>'',
@@ -1771,7 +1828,9 @@ function getSourceStructure($srec) {
 					$i--;
 					break;
 				}
-				if ($nextTag=='CONT') $text .= '<br>';
+				if ($nextTag=='CONT') {
+					$text .= '<br>';
+				}
 				$text .= rtrim(substr($subrecords[$i], 7));
 			}
 			if ($tag=='TEXT') {
@@ -1786,7 +1845,8 @@ function getSourceStructure($srec) {
 }
 
 // Print a row for the notes tab on the individual page
-function print_main_notes(KT_Event $fact, $level) {
+function print_main_notes(KT_Event $fact, $level)
+{
 	global $GEDCOM, $SHOW_FACT_ICONS, $TEXT_DIRECTION, $iconStyle;
 
 	$factrec = $fact->getGedcomRecord();
@@ -1809,25 +1869,25 @@ function print_main_notes(KT_Event $fact, $level) {
 
 	<?php for ($j = 0; $j < $ct; $j ++) { ?>
 		<?php if ($level >= 2) {
-			$class = 'row_note2';
-		} else {
-			$class = '';
-		} ?>
+		$class = 'row_note2';
+	} else {
+		$class = '';
+	} ?>
 		<div class="cell indiFact <?php echo $class; ?>">
 			<div class="grid-x grid-padding-x grid-padding-y">
 				<div class="cell medium-3">
 					<label>
 						<?php if ($can_edit) {
-							if ($level < 2) {
-								if ($SHOW_FACT_ICONS) { ?>
+		if ($level < 2) {
+			if ($SHOW_FACT_ICONS) { ?>
 									<i class="<?php echo $iconStyle; ?> fa-note-sticky"></i>
 								<?php }
-								if (strstr($factrec, "1 NOTE @" )) {
-									echo KT_Gedcom_Tag::getLabel('SHARED_NOTE');
-								} else {
-									echo KT_Gedcom_Tag::getLabel('NOTE');
-								}
-							} ?>
+			if (strstr($factrec, "1 NOTE @")) {
+				echo KT_Gedcom_Tag::getLabel('SHARED_NOTE');
+			} else {
+				echo KT_Gedcom_Tag::getLabel('NOTE');
+			}
+		} ?>
 							<div class="editfacts button-group">
 								<a class="button clear" onclick="return edit_record('<?php echo $pid; ?>', <?php echo $fact->getLineNumber(); ?>);">
 									<i class="<?php echo $iconStyle; ?> fa-pen-to-square"></i>
@@ -1848,35 +1908,36 @@ function print_main_notes(KT_Event $fact, $level) {
 									</span>
 								</a>
 							</div>
-						<?php } else {
-							if ($level < 2) {
-								if ($SHOW_FACT_ICONS) { ?>
+						<?php
+	} else {
+		if ($level < 2) {
+			if ($SHOW_FACT_ICONS) { ?>
 									<i class="<?php echo $iconStyle; ?> fa-note-sticky"></i>
 								<?php }
-								if (strstr($factrec, "1 NOTE @" )) {
-									echo KT_Gedcom_Tag::getLabel('SHARED_NOTE');
-								} else {
-									echo KT_Gedcom_Tag::getLabel('NOTE');
-								}
-							}
-							$factlines	= explode("\n", $factrec); // 1 BIRT Y\n2 NOTE ...
+			if (strstr($factrec, "1 NOTE @")) {
+				echo KT_Gedcom_Tag::getLabel('SHARED_NOTE');
+			} else {
+				echo KT_Gedcom_Tag::getLabel('NOTE');
+			}
+		}
+		$factlines	= explode("\n", $factrec); // 1 BIRT Y\n2 NOTE ...
 							$factwords	= explode(" ", $factlines[0]); // 1 BIRT Y
 							$factname	= $factwords[1]; // BIRT
 							$parent		= KT_GedcomRecord::getInstance($pid);
-							if ($factname == 'EVEN' || $factname=='FACT') {
-								// Add ' EVEN' to provide sensible output for an event with an empty TYPE record
-								$ct = preg_match("/2 TYPE (.*)/", $factrec, $ematch);
-								if ($ct>0) {
-									$factname = trim($ematch[1]);
-									echo $factname;
-								} else {
-									echo KT_Gedcom_Tag::getLabel($factname, $parent);
-								}
-							} elseif ($factname != 'NOTE') {
-								// Note is already printed
-								echo KT_Gedcom_Tag::getLabel($factname, $parent);
-							}
-						} ?>
+		if ($factname == 'EVEN' || $factname=='FACT') {
+			// Add ' EVEN' to provide sensible output for an event with an empty TYPE record
+			$ct = preg_match("/2 TYPE (.*)/", $factrec, $ematch);
+			if ($ct>0) {
+				$factname = trim($ematch[1]);
+				echo $factname;
+			} else {
+				echo KT_Gedcom_Tag::getLabel($factname, $parent);
+			}
+		} elseif ($factname != 'NOTE') {
+			// Note is already printed
+			echo KT_Gedcom_Tag::getLabel($factname, $parent);
+		}
+	} ?>
 					</label>
 				</div>
 				<?php
@@ -1946,8 +2007,6 @@ function print_main_notes(KT_Event $fact, $level) {
 			</div>
 		</div>
 	<?php }
-
-
 }
 
 /**
@@ -1956,7 +2015,8 @@ function print_main_notes(KT_Event $fact, $level) {
  * @param int $level The level of media object to find
  * @param boolean $related Whether or not to grab media from related records
  */
-function print_main_media($pid, $level=1, $related=false) {
+function print_main_media($pid, $level=1, $related=false)
+{
 	global $GEDCOM;
 	$ged_id=get_id_from_gedcom($GEDCOM);
 	$person = KT_GedcomRecord::getInstance($pid);
@@ -2016,7 +2076,9 @@ function print_main_media($pid, $level=1, $related=false) {
 	$i=0;
 	$vars=array(KT_GED_ID);
 	foreach ($ids as $media_id) {
-		if ($i>0) $sqlmm .= ", ";
+		if ($i>0) {
+			$sqlmm .= ", ";
+		}
 		$sqlmm .= "?";
 		$vars[]=$media_id;
 		$i++;
@@ -2052,11 +2114,15 @@ function print_main_media($pid, $level=1, $related=false) {
 			$row['m_file']=$rowm["m_file"];
 			$row['m_filename'] = get_gedcom_value("FILE", 1, $newrec);
 			$row['m_titl'] = get_gedcom_value("TITL", 1, $newrec);
-			if (empty($row['m_titl'])) $row['m_titl'] = get_gedcom_value("FILE:TITL", 1, $newrec);
+			if (empty($row['m_titl'])) {
+				$row['m_titl'] = get_gedcom_value("FILE:TITL", 1, $newrec);
+			}
 			$row['m_gedcom'] = $newrec;
 			$et = preg_match("/(\.\w+)$/", $row['m_file'], $ematch);
 			$ext = "";
-			if ($et>0) $ext = substr(trim($ematch[1]), 1);
+			if ($et>0) {
+				$ext = substr(trim($ematch[1]), 1);
+			}
 			$row['m_ext'] = $ext;
 			$row['pid'] = $pid;
 			$rows['new'] = $row;
@@ -2093,11 +2159,15 @@ function print_main_media($pid, $level=1, $related=false) {
 			$row['m_file']=$ged_id;
 			$row['m_filename'] = get_gedcom_value("FILE", 1, $newrec);
 			$row['m_titl'] = get_gedcom_value("TITL", 1, $newrec);
-			if (empty($row['m_titl'])) $row['m_titl'] = get_gedcom_value("FILE:TITL", 1, $newrec);
+			if (empty($row['m_titl'])) {
+				$row['m_titl'] = get_gedcom_value("FILE:TITL", 1, $newrec);
+			}
 			$row['m_gedcom'] = $newrec;
 			$et = preg_match("/(\.\w+)$/", $row['m_file'], $ematch);
 			$ext = "";
-			if ($et>0) $ext = substr(trim($ematch[1]), 1);
+			if ($et>0) {
+				$ext = substr(trim($ematch[1]), 1);
+			}
 			$row['m_ext'] = $ext;
 			$row['pid'] = $pid;
 			$res = print_main_media_row('new', $row, $pid);
@@ -2114,7 +2184,8 @@ function print_main_media($pid, $level=1, $related=false) {
  * @param array $rowm An array with the details about this media item
  * @param string $pid The record id this media item was attached to
  */
-function print_main_media_row($rtype, $rowm, $pid) {
+function print_main_media_row($rtype, $rowm, $pid)
+{
 	global $SHOW_FACT_ICONS, $SEARCH_SPIDER;
 	$mediaobject = new KT_Media($rowm['m_gedcom']);
 	if (!$mediaobject || !$mediaobject->canDisplayDetails()) {
@@ -2153,7 +2224,9 @@ function print_main_media_row($rtype, $rowm, $pid) {
 	}
 	echo '<em>';
 	foreach ($mediaobject->getAllNames() as $name) {
-		if ($name['type']!='TITL') echo '<br>';
+		if ($name['type']!='TITL') {
+			echo '<br>';
+		}
 		echo $name['full'];
 	}
 	echo '</em>';
@@ -2167,7 +2240,7 @@ function print_main_media_row($rtype, $rowm, $pid) {
 		echo KT_Gedcom_Tag::getLabelValue('__IMAGE_SIZE__', $imgsize['WxH']);
 	}
 	if ($mediaobject->getFilesizeraw()>0) {
-		echo KT_Gedcom_Tag::getLabelValue('__FILE_SIZE__',  $mediaobject->getFilesize());
+		echo KT_Gedcom_Tag::getLabelValue('__FILE_SIZE__', $mediaobject->getFilesize());
 	}
 	$mediatype=$mediaobject->getMediaType();
 	if ($mediatype) {
@@ -2207,7 +2280,8 @@ function print_main_media_row($rtype, $rowm, $pid) {
  * print media attached to SOUR record on INDI tabs (Facts & Events, Sources)
  * @param string $src_media the media object.
  */
-function print_source_media($src_media) {
+function print_source_media($src_media)
+{
 	global $SEARCH_SPIDER;
 
 	$media=KT_Media::getInstance($src_media);
@@ -2219,12 +2293,12 @@ function print_source_media($src_media) {
 					$media->displayImage().'
 				</div>
 				<div class="media-display-title">';
-					if ($SEARCH_SPIDER) {
-						echo $media->getFullName();
-					} else {
-						$html .= '<a href="mediaviewer.php?mid='. $media->getXref(). '&amp;ged='. KT_GEDURL. '">'. $media->getFullName(). '</a>';
-					}
-				$html .= '</div>
+			if ($SEARCH_SPIDER) {
+				echo $media->getFullName();
+			} else {
+				$html .= '<a href="mediaviewer.php?mid='. $media->getXref(). '&amp;ged='. KT_GEDURL. '">'. $media->getFullName(). '</a>';
+			}
+			$html .= '</div>
 			</div>';
 		}
 	}
