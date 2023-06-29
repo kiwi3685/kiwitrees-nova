@@ -1,7 +1,7 @@
 <?php
 /**
  * Kiwitrees: Web based Family History software
- * Copyright (C) 2012 to 2023 kiwitrees.net
+ * Copyright (C) 2012 to 2023 kiwitrees.net.
  *
  * Derived from webtrees (www.webtrees.net)
  * Copyright (C) 2010 to 2012 webtrees development team
@@ -20,55 +20,65 @@
  * You should have received a copy of the GNU General Public License
  * along with Kiwitrees. If not, see <http://www.gnu.org/licenses/>
  */
-
 if (!defined('KT_KIWITREES')) {
 	header('HTTP/1.0 403 Forbidden');
+
 	exit;
 }
 
-class tabi_events_KT_Module extends KT_Module implements KT_Module_IndiTab {
+class tabi_events_KT_Module extends KT_Module implements KT_Module_IndiTab
+{
 	// Extend KT_Module
-	public function getTitle() {
+	public function getTitle()
+	{
 		return /* I18N: Name of a module/tab on the individual page. */ KT_I18N::translate('Events');
 	}
 
 	// Extend KT_Module
-	public function getDescription() {
+	public function getDescription()
+	{
 		return /* I18N: Description of the “Facts and events” module */ KT_I18N::translate('A tab showing all events in an individuals life in date order');
 	}
 
 	// Extend class KT_Module_IndiTab
-	public function defaultAccessLevel() {
+	public function defaultAccessLevel()
+	{
 		return false;
 	}
 
 	// Implement KT_Module_IndiTab
-	public function defaultTabOrder() {
+	public function defaultTabOrder()
+	{
 		return 10;
 	}
 
 	// Implement KT_Module_IndiTab
-	public function isGrayedOut() {
+	public function isGrayedOut()
+	{
 		return false;
 	}
 
 	// Implement KT_Module_IndiTab
-	public function hasTabContent() {
+	public function hasTabContent()
+	{
 		return true;
 	}
 
 	// Implement KT_Module_IndiTab
-	public function canLoadAjax() {
+	public function canLoadAjax()
+	{
 		return false;
 	}
 
 	// Implement KT_Module_IndiTab
-	public function getPreLoadContent() {
+	public function getPreLoadContent()
+	{
 		return '';
 	}
 
 	// Implement KT_Module_IndiTab
-	public function getTabContent() {
+	public function getTabContent()
+	{
 		global $SHOW_RELATIVES_EVENTS, $controller;
 
 		if ($SHOW_RELATIVES_EVENTS) {
@@ -82,7 +92,7 @@ class tabi_events_KT_Module extends KT_Module implements KT_Module_IndiTab {
 
 		ob_start();
 		$eventFacts = $controller->getIndiFacts();
-		if (count($eventFacts) == 0) { ?>
+		if (0 == count($eventFacts)) { ?>
 			<div class="callout alert">
 				<?php echo KT_I18N::translate('There are no events for this individual.'); ?>
 			</div>
@@ -113,7 +123,7 @@ class tabi_events_KT_Module extends KT_Module implements KT_Module_IndiTab {
 					<div class="cell medium-3 place">
 						<label><?php echo KT_I18N::translate('Place'); ?></label>
 					</div>
-					<div class="cell <?php echo (KT_USER_CAN_EDIT ? 'medium-4' : 'auto'); ?> detail">
+					<div class="cell <?php echo KT_USER_CAN_EDIT ? 'medium-4' : 'auto'; ?> detail">
 						<label><?php echo KT_I18N::translate('Details'); ?></label>
 					</div>
 					<?php if (KT_USER_CAN_EDIT) { ?>
