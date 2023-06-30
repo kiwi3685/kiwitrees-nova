@@ -283,7 +283,6 @@ switch ($actionA) {
 								</div>
 						</div>
 					<?php } ?>
-					<?php echo $NO_UPDATE_CHAN; ?>
 					<?php echo no_update_chan($person); ?>
 				</div>
 
