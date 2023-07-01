@@ -955,7 +955,7 @@ class KT_Gedcom_Tag {
 
 		switch ($type) {
 			case 'ALL-INDI' :
-				$tags = array(
+				$tags = [
 					'_BRTM',
 					'_COML',
 					'_DEG',
@@ -1054,10 +1054,10 @@ class KT_Gedcom_Tag {
 					'TITL',
 					'WILL',
 					'WWW',
-				);
+				];
 				break;
 			case 'ATTRIB' :
-				$tags = array(
+				$tags = [
 					'_HAIR',
 					'_HEIG',
 					'_UID',
@@ -1070,10 +1070,10 @@ class KT_Gedcom_Tag {
 					'RFN',
 					'RIN',
 					'SSN',
-				);
+				];
 				break;
 			case 'EVEN' :
-				$tags = array(
+				$tags = [
 					'ADOP',
 					'_TODO',
 					'ANUL',
@@ -1121,10 +1121,10 @@ class KT_Gedcom_Tag {
 					'SLGS',
 					'TITL',
 					'WILL',
-				);
+				];
 				break;
 			case 'ALL-FAM' :
-				$tags = array(
+				$tags = [
 					'_NMAR',
 					'_NMR',
 					'_PRMN',
@@ -1147,10 +1147,10 @@ class KT_Gedcom_Tag {
 					'RESI',
 					'RIN',
 					'SUBM',
-				);
+				];
 				break;
 			case 'SOUR' :
-				$tags = array(
+				$tags = [
 					'ABBR',
 					'AUTH',
 					'DATA',
@@ -1166,10 +1166,10 @@ class KT_Gedcom_Tag {
 					'TEXT',
 					'TITL',
 					'WWW',
-				);
+				];
 				break;
 			case 'REPO' :
-				$tags = array(
+				$tags = [
 					'ADDR',
 					'EMAIL',
 					'FAX',
@@ -1181,27 +1181,44 @@ class KT_Gedcom_Tag {
 					'RIN',
 					'SHARED_NOTE',
 					'WWW',
-				);
+				];
 				break;
 			case 'NAMES' :
-				$tags = array(
+				$tags = [
 					'_AKA',
 					'_HEB',
 					'FONE',
 					'NICK',
 					'ROMN',
-				);
+				];
 				break;
 			case 'PLACES' :
-				$tags = array(
+				$tags = [
 					'_HEB',
 					'FONE',
 					'ROMN',
-				);
+				];
 				break;
+			case 'RELA_EVENTS':
+				$tags = [
+					'_BIRT_GCHI',
+					'_MARR_GCHI',
+					'_DEAT_GCHI',
+					'_BIRT_CHIL',
+					'_MARR_CHIL',
+					'_DEAT_CHIL',
+					'_BIRT_SIBL',
+					'_MARR_SIBL',
+					'_DEAT_SIBL',
+					'_DEAT_SPOU',
+					'_MARR_PARE',
+					'_DEAT_PARE',
+					'_DEAT_GPAR',
+				];
+
 
 		}
-		$facts = array();
+		$facts = [];
 		foreach ($tags as $tag) {
 			$facts[$tag]=self::getLabel($tag, null);
 		}

@@ -661,12 +661,6 @@ main #admin-content #site_config-page label.middle {
 	margin: 0;
 	padding: 0 0 0.9375rem;
 }
-main #admin-content #family_tree_config-page #media .padding-bottom {
-	margin-bottom: 0.9375rem;
-}
-main #admin-content #family_tree_config-page #media .padding-left {
-	margin-left: 0 0.9375rem;
-}
 main #admin-content #family_tree_config-page ul.accordion {
 	margin: 0.9375rem;
 }
@@ -675,6 +669,12 @@ main #admin-content #family_tree_config-page button.privacyOptions {
 }
 main #admin-content #family_tree_config-page tr.vertAlign {
 	vertical-align: top;
+}
+main #admin-content #family_tree_config-page #media .padding-bottom {
+	margin-bottom: 0.9375rem;
+}
+main #admin-content #family_tree_config-page #media .padding-left {
+	margin-left: 0 0.9375rem;
 }
 main #admin-content #family_tree_config-page #restriction div.dataTables_wrapper table.dataTable thead tr th {
 	padding: 0rem 0.5rem;
@@ -685,6 +685,12 @@ main #admin-content #family_tree_config-page #restriction div.dataTables_wrapper
 }
 main #admin-content #family_tree_config-page #restriction .callout.help_content {
 	font-size: 0.95rem !important;
+}
+main #admin-content #family_tree_config-page #layout input[type=text] {
+	margin-bottom: 0;
+}
+main #admin-content #family_tree_config-page #layout input[type=text] + div.callout {
+	margin-bottom: 0.9375rem;
 }
 main #admin-content #admin_media-page .media-folders {
 	height: 3rem;

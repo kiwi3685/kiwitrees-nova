@@ -161,13 +161,13 @@ function simple_switch($name, $value, $selected, $disabled = '', $activeText = '
  * @param string $selected - the currently selected item (if any)
  * @param mixed  $extra
  */
-function radio_switch_group($name, $values, $selected, $extra = '')
+function radio_switch_group($name, $values, $selected, $extra = '', $activeText = 'Yes', $inactiveText = 'No', $size = 'small')
 {
 	$html = '<div class="grid-x grid-margin-y">';
 	foreach ($values as $key => $value) {
 		$uniqueID = $name . (int) (microtime(true) * 1000000);
 		$html .= '
-				<div class="switch cell small-8 medium-4 large-2">
+				<div class="switch ' . $size . ' cell small-8 medium-4 large-2">
 					<label>' . $value . '</label>
 					<input class="switch-input" id="' . $uniqueID . '" type="radio" name="' . $name . '" value="' . htmlspecialchars((string) $key) . '"';
 		if ((string) $key === (string) $selected) {
@@ -179,6 +179,8 @@ function radio_switch_group($name, $values, $selected, $extra = '')
 		$html .= '>' . '
 					<label class="switch-paddle" for="' . $uniqueID . '">
 						<span class="show-for-sr">' . $value . '</span>
+						<span class="switch-active" aria-hidden="true">' . KT_I18N::translate($activeText) . '</span>
+						<span class="switch-inactive" aria-hidden="true">' . KT_I18N::translate($inactiveText) . '</span>
 					</label>
 				</div>
 			';

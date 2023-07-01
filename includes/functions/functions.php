@@ -1171,7 +1171,7 @@ function getCloseRelationshipName(KT_Person $individual1, KT_Person $individual2
 	$family ? $include_pedi = true : $include_pedi = false;
 
 	if ($individual1->getXref() === $individual2->getXref()) {
-		$label = '<i class="'.$iconStyle.' fa-check success"></i>'.reflexivePronoun($individual1);
+		$label = '<span class="success strong">' . reflexivePronoun($individual1) . '</span>';
 	} else {
 		$label = get_relationship_name(get_relationship($individual1, $individual2));
 	}
