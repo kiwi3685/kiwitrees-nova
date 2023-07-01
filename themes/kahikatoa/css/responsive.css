@@ -97,6 +97,9 @@
 		font-size: 1.25rem;
 	}
 
+	#tabi_events .indiFact div.edit span {
+		display: block;
+	}
 	#tabi_events .indiFact div.edit .button-group.KT-stacked a.button {
 		margin-bottom: 0;
 		width: auto;

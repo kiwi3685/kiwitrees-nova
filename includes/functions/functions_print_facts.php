@@ -607,14 +607,13 @@ function print_timeline(KT_Event $fact, KT_GedcomRecord $record)
 	} ?>
 
 	<div class="cell indiFact <?php echo $styleadd; ?>">
-		<div class="grid-x">
+		<div class="grid-x grid-padding-x">
 			<?php // Date?>
 			<div class="cell medium-1 medium-order-1 show-for-medium lifespan">
 				<?php // Show vertical timeline with years
 				$date = $fact->getDate();
 				$date ? $year = $date->minimumDate()->format('%Y') : $year = ''; ?>
 				<span>
-					<hr class="vertical">
 					<button class="button tiny primary">
 						<?php echo $year; ?>
 					</button>

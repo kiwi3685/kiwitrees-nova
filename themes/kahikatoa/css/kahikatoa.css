@@ -20,14 +20,6 @@
 	color: #0193b7;
 }
 
-hr.vertical {
-	background-color: #ab3334;
-	display: inline-block;
-	height: 100%;
-	margin: 0 1rem;
-	width: 2px;
-}
-
 /*-------------*/
 .radius {
 	border-radius: 0.1875rem;
@@ -752,13 +744,14 @@ div[id$=-page] button[type=submit] {
 	padding: 0;
 }
 #indi-page .indiFact {
+	background-color: #faf5e8;
 	border-bottom: 0.0125rem solid #ab3334;
 }
 #indi-page .indiFact:last-child {
 	border-bottom: none;
 }
 #indi-page .indiFact .fact-title {
-	padding: 0 0.5rem;
+	padding: 0 1rem;
 }
 #indi-page .indiFact div.date span.date,
 #indi-page .indiFact td.date span.date {
@@ -825,12 +818,19 @@ div[id$=-page] button[type=submit] {
 #indi-page .tabs-panel#tabi_events .indiFact div.overflow-y, #indi-page .tabs-panel#tabi_attributes .indiFact div.overflow-y, #indi-page .tabs-panel#tabi_notes .indiFact div.overflow-y {
 	overflow-y: auto;
 }
+#indi-page .tabs-panel#tabi_events .indiFact div.lifespan span, #indi-page .tabs-panel#tabi_attributes .indiFact div.lifespan span, #indi-page .tabs-panel#tabi_notes .indiFact div.lifespan span {
+	border-left: 0.125rem solid #ab3334;
+	display: block;
+	height: 100%;
+	margin-left: 3rem;
+}
 #indi-page .tabs-panel#tabi_events .indiFact div.lifespan span button, #indi-page .tabs-panel#tabi_attributes .indiFact div.lifespan span button, #indi-page .tabs-panel#tabi_notes .indiFact div.lifespan span button {
 	border-radius: 1rem;
-	font-size: 0.75rem;
-	margin: 1rem 0 0 -2.625rem;
+	font-size: 0.8rem;
+	font-weight: 900;
+	margin-left: -1.3rem;
+	margin-top: 1rem;
 	padding: 0.125rem;
-	vertical-align: top;
 	width: 2.5rem;
 }
 #indi-page .tabs-panel#tabi_events .indiFact div.event span, #indi-page .tabs-panel#tabi_attributes .indiFact div.event span, #indi-page .tabs-panel#tabi_notes .indiFact div.event span {
@@ -1939,7 +1939,7 @@ div[id$=-page] button[type=submit] {
 }
 #repo-details-page .indiFact .fact-title,
 #source-details-page .indiFact .fact-title {
-	padding: 0 0.5rem;
+	padding: 0 1rem;
 }
 
 #search-page .fieldset {
