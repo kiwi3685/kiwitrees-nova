@@ -164,7 +164,7 @@ class tabi_families_KT_Module extends KT_Module implements KT_Module_IndiTab {
 		if (isset($saved_show_full)) $show_full = $saved_show_full;
 
 		return ob_get_clean();
-		
+
 	}
 
 	function printFamilyHeader(KT_Family $family, $type, $label, $people) {
@@ -205,7 +205,7 @@ class tabi_families_KT_Module extends KT_Module implements KT_Module_IndiTab {
 			?>
 			<div class="cell">
 				<div class="grid-x">
-					<div class="cell medium-2 facts_labelblue">
+					<div class="cell medium-2 facts_label">
 						<?php echo $people["newhusb"]->getLabel(); ?>
 					</div>
 					<div class="cell medium-9 <?php echo $controller->getPersonStyle($people["newhusb"]); ?>">
@@ -223,14 +223,19 @@ class tabi_families_KT_Module extends KT_Module implements KT_Module_IndiTab {
 					<div class="cell medium-2 facts_label<?php echo $styleadd; ?>">
 						<?php echo $people["husb"]->getLabel();
 						if ($controller->record->equals($people["husb"])) { ?>
-							<i class="<?php echo $iconStyle; ?> fa-check"></i>
-							<?php echo reflexivePronoun($controller->record);
-						} else {
-							echo get_relationship_name(get_relationship($controller->record, $people["husb"], true, 3));
-						} ?>
+							<span class="success strong">
+								<?php echo reflexivePronoun($controller->record); ?>
+							</span>
+						<?php } else { ?>
+							<span>
+								<?php echo get_relationship_name(get_relationship($controller->record, $people["husb"], true, 3)); ?>
+							</span>
+						<?php } ?>
 					</div>
 					<div class="cell medium-9 <?php echo $controller->getPersonStyle($people["husb"]); ?>">
-						<?php print_pedigree_person($people["husb"], 2, 0, $personcount++); ?>
+						<span>
+							<?php print_pedigree_person($people["husb"], 2, 0, $personcount++); ?>
+						</span>
 					</div>
 				</div>
 			</div>
@@ -278,7 +283,7 @@ class tabi_families_KT_Module extends KT_Module implements KT_Module_IndiTab {
 			?>
 			<div class="cell">
 				<div class="grid-x">
-					<div class="cell medium-2 facts_labelblue">
+					<div class="cell medium-2 facts_label">
 						<?php echo $people["newwife"]->getLabel($elderdate); ?>
 					</div>
 					<div class="cell medium-9 <?php echo $controller->getPersonStyle($people["newwife"]); ?>">
@@ -293,14 +298,17 @@ class tabi_families_KT_Module extends KT_Module implements KT_Module_IndiTab {
 			?>
 			<div class="cell">
 				<div class="grid-x">
-					<div class="cell medium-2<?php echo $styleadd; ?>">
+					<div class="cell medium-2 facts_label <?php echo $styleadd; ?>">
 						<?php echo $people["wife"]->getLabel($elderdate);
 						if ($controller->record->equals($people["wife"])) { ?>
-							<i class="<?php echo $iconStyle; ?> fa-check"></i>
-							<?php echo reflexivePronoun($controller->record);
-						} else {
-							echo get_relationship_name(get_relationship($controller->record, $people["wife"], true, 3));
-						} ?>
+							<span class="success strong">
+								<?php echo reflexivePronoun($controller->record); ?>
+							</span>
+						<?php } else { ?>
+							<span>
+								<?php echo get_relationship_name(get_relationship($controller->record, $people["wife"], true, 3)); ?>
+							</span>
+						<?php } ?>
 					</div>
 					<div class="cell medium-9 <?php echo $controller->getPersonStyle($people["wife"]); ?>">
 						<?php print_pedigree_person($people["wife"], 2, 0, $personcount++); ?>
@@ -417,11 +425,14 @@ class tabi_families_KT_Module extends KT_Module implements KT_Module_IndiTab {
 							echo $child->getLabel($elderdate, $key+1);
 						}
 						if ($controller->record->equals($child)) { ?>
-							<i class="<?php echo $iconStyle; ?> fa-check"></i>
-							<?php echo reflexivePronoun($controller->record);
-						} else {
-							echo get_relationship_name(get_relationship($controller->record, $child, true, 3));
-						} ?>
+							<span class="success strong">
+								<?php echo reflexivePronoun($controller->record); ?>
+							</span>
+						<?php } else { ?>
+							<span>
+								<?php echo get_relationship_name(get_relationship($controller->record, $child, true, 3)); ?>
+							</span>
+						<?php } ?>
 					</div>
 					<div class="cell medium-9 <?php echo $controller->getPersonStyle($child); ?>">
 						<?php print_pedigree_person($child, 2, 0, $personcount++); ?>

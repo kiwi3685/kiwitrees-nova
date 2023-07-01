@@ -113,7 +113,6 @@ class tabi_factsandevents_KT_Module extends KT_Module implements KT_Module_IndiT
 				if (!array_key_exists('extra_info', KT_Module::getActiveSidebars()) || !extra_info_KT_Module::showFact($fact)) {
 					print_fact($fact, $controller->record);
 				}
-
 			}
 		}
 		//-- new fact link
@@ -122,6 +121,6 @@ class tabi_factsandevents_KT_Module extends KT_Module implements KT_Module_IndiT
 		}
 
 		return ob_get_clean();
-		
+
 	}
 }

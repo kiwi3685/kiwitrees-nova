@@ -669,6 +669,12 @@ button.widget .svg-inline--fa {
 #sidebarAccordion .accordion-content #sb_family_nav_content .nav_content .submenu span.NAME:hover {
 	opacity: 0.4;
 }
+#sidebarAccordion .accordion-content #sb_family_nav_content .nav_content td.facts_label div a {
+	display: block;
+}
+#sidebarAccordion .accordion-content #sb_family_nav_content .nav_content td.facts_label div a:first-letter {
+	text-transform: capitalize;
+}
 #sidebarAccordion .accordion-content #sb_content_research_links .currency {
 	font-weight: 700;
 }
@@ -871,6 +877,12 @@ div[id$=-page] button[type=submit] {
 #indi-page .tabs-panel#tabi_events .indiFact .media-display .media-display-title, #indi-page .tabs-panel#tabi_attributes .indiFact .media-display .media-display-title, #indi-page .tabs-panel#tabi_notes .indiFact .media-display .media-display-title {
 	font-size: 90%;
 	text-align: justify;
+}
+#indi-page .tabs-panel#tabi_families div.facts_label span {
+	display: block;
+}
+#indi-page .tabs-panel#tabi_families div.facts_label span:first-letter {
+	text-transform: capitalize;
 }
 #indi-page .tabs-panel #tabi_attributes_content .button-group .button {
 	margin: 0;

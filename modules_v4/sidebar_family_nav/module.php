@@ -172,7 +172,7 @@ class sidebar_family_nav_KT_Module extends KT_Module implements KT_Module_Sideba
 	}
 
 	/**
-	 * Forat the parents of an individual.
+	 * Format the parents of an individual.
 	 *
 	 * @param KT_Person $person
 	 *
