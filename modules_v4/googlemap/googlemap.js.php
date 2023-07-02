@@ -212,12 +212,12 @@ if (!defined('KT_KIWITREES')) {
 
 	function loadMap() {
 		<?php
-			global 
-				$GOOGLEMAP_MAP_TYPE, 
-				$PEDIGREE_GENERATIONS, 
-				$MAX_PEDIGREE_GENERATIONS, 
-				$SHOW_HIGHLIGHT_IMAGES, 
-				$GOOGLEMAP_MIN_ZOOM, 
+			global
+				$GOOGLEMAP_MAP_TYPE,
+				$PEDIGREE_GENERATIONS,
+				$MAX_PEDIGREE_GENERATIONS,
+				$SHOW_HIGHLIGHT_IMAGES,
+				$GOOGLEMAP_MIN_ZOOM,
 				$GOOGLEMAP_MAX_ZOOM
 			;
 		?>
@@ -297,7 +297,7 @@ if (!defined('KT_KIWITREES')) {
 			?>
 				[
 					// Elements 0-9. Basic parameters
-					"<?php echo $gmark['fact_label'].''; ?>",
+					"<?php echo addslashes($gmark['fact_label']) . ''; ?>",
 					"<?php echo $gmark['lati']; ?>",
 					"<?php echo $gmark['lng']; ?>",
 					"<?php if (!empty($gmark['date'])) { $date=new KT_Date($gmark['date']); echo addslashes($date->Display(true)); } else { echo KT_I18N::translate('Date not known'); } ?>",
