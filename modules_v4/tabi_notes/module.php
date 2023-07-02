@@ -51,7 +51,7 @@ class tabi_notes_KT_Module extends KT_Module implements KT_Module_IndiTab {
 		$controller->addInlineJavascript('
 			persistent_toggle("checkbox_note2", "div.row_note2");
 		');
-		
+
 		ob_start(); ?>
 		<div id="tabi_notes_content" class="grid-x grid-padding-x grid-padding-y">
 			<div class="cell tabHeader">
@@ -63,14 +63,18 @@ class tabi_notes_KT_Module extends KT_Module implements KT_Module_IndiTab {
 					<?php if ($controller->record->canEdit()) { ?>
 						<div class="cell shrink">
 							<a href="#" onclick="add_new_record('<?php echo $controller->record->getXref(); ?>','NOTE'); return false;">
-								<i class="<?php echo $iconStyle; ?> fa-note-sticky"></i>
-								<?php echo KT_I18N::translate('Add a note'); ?>
+								<i class="<?php echo $iconStyle; ?> fa-square-plus"></i>
+								<label>
+									<?php echo KT_I18N::translate('Add a note'); ?>
+								</label>
 							</a>
 						</div>
 						<div class="cell shrink">
 							<a href="#" onclick="add_new_record('<?php echo $controller->record->getXref(); ?>','SHARED_NOTE'); return false;">
-								<i class="<?php echo $iconStyle; ?> fa-notes-medical"></i>
-								<?php echo KT_I18N::translate('Add a shared note'); ?>
+								<i class="<?php echo $iconStyle; ?> fa-square-plus"></i>
+								<label>
+									<?php echo KT_I18N::translate('Add a shared note'); ?>
+								</label>
 							</a>
 						</div>
 					<?php } ?>

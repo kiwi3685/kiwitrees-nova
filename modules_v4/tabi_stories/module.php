@@ -320,7 +320,7 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 			<hr class="stories_divider">
 		<?php } ?>
 
-		<div class="grid-x grid-margin-y" id="story_contents">
+		<div class="grid-x grid-margin-y tabs-content" id="story_contents">
 			<?php foreach ($block_ids as $block_id) {
 				$languages = get_block_setting($block_id, 'languages');
 				if (!$languages || in_array(KT_LOCALE, explode(',', $languages))) { ?>
@@ -398,7 +398,7 @@ class tabi_stories_KT_Module extends KT_Module implements KT_Module_Block, KT_Mo
 				<?php if(!is_null($this->getSummaryDescription())) { ?>
 					<div class="cell">
 						<?php echo $this->getSummaryDescription(); ?>
-					</div>				
+					</div>
 				<?php } ?>
 				<?php if (count($items) > 0) { ?>
 					<table id="story_table" class="width100">

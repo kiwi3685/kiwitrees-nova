@@ -76,9 +76,6 @@ div.reveal.media {
 	box-shadow: 0.25rem 0.25rem 0.5rem 0 #8a8a8a;
 }
 
-.tabs-title {
-	border-right: 0.125rem groove #faf5e8;
-}
 .tabs-title.is-active {
 	background: #8a8a8a !important;
 }
@@ -4476,14 +4473,14 @@ table.hover:not(.unstriped) tr:nth-of-type(even):hover {
 	position: relative;
 	display: block;
 	padding: 1.25rem 1rem;
-	border: 1px solid #e0e0e0;
+	border: none;
 	border-bottom: 0;
 	font-size: 1rem;
 	line-height: 1;
 	color: #ab3334;
 }
 :last-child:not(.is-active) > .accordion-title {
-	border-bottom: 1px solid #e0e0e0;
+	border-bottom: none;
 	border-radius: 0 0 0 0;
 }
 .accordion-title:hover, .accordion-title:focus {
@@ -4502,14 +4499,14 @@ table.hover:not(.unstriped) tr:nth-of-type(even):hover {
 
 .accordion-content {
 	display: none;
-	padding: 1rem;
-	border: 1px solid #e0e0e0;
+	padding: 0;
+	border: none;
 	border-bottom: 0;
-	background-color: #fffff4;
+	background-color: #faf5e8;
 	color: #331919;
 }
 :last-child > .accordion-content:last-child {
-	border-bottom: 1px solid #e0e0e0;
+	border-bottom: none;
 }
 
 .media-object {
@@ -4670,7 +4667,7 @@ table.hover:not(.unstriped) tr:nth-of-type(even):hover {
 
 .tabs {
 	margin: 0;
-	border: 1px solid #cacaca;
+	border: 1px solid none;
 	background: #e0e0e0;
 	list-style-type: none;
 }
@@ -4730,15 +4727,15 @@ table.hover:not(.unstriped) tr:nth-of-type(even):hover {
 }
 
 .tabs-content {
-	border: 1px solid #cacaca;
+	border: 1px solid none;
 	border-top: 0;
-	background: #cacaca;
+	background: #faf5e8;
 	color: #331919;
 	transition: all 0.5s ease;
 }
 
 .tabs-content.vertical {
-	border: 1px solid #cacaca;
+	border: 1px solid none;
 	border-left: 0;
 }
 

@@ -35,7 +35,7 @@ if ($controller->record && $controller->record->canDisplayDetails()) {
 		$controller->ajaxRequest();
 		exit;
 	}
-	
+
 	// Generate the sidebar content *before* we display the page header,
 	// as the clippings cart needs to have write access to the session.
 	$sidebar_html = $controller->getSideBarContent();
@@ -214,14 +214,14 @@ $highlightImage ? $class2 = " medium-9 large-10" : $class2 = ""; ?>
 					}
 					if ($tab->hasTabContent()) { ?>
 						<li class="<?php echo $tab->getName(); ?> tabs-title<?php echo $greyed_out; ?>">
-							<a 
+							<a
 								<?php if ($tab->canLoadAjax()) { ?>
-									href="<?php echo $controller->record->getHtmlUrl(); ?>&amp;action=ajax&amp;module=<?php echo $tab->getName(); ?>" 
-									title="<?php echo $tab->getDescription(); ?>" 
+									href="<?php echo $controller->record->getHtmlUrl(); ?>&amp;action=ajax&amp;module=<?php echo $tab->getName(); ?>"
+									title="<?php echo $tab->getDescription(); ?>"
 									rel="nofollow"
 								<?php } else { ?>
-									href="#<?php echo $tab->getName(); ?>" 
-									title="<?php echo $tab->getDescription(); ?>" 
+									href="#<?php echo $tab->getName(); ?>"
+									title="<?php echo $tab->getDescription(); ?>"
 									rel="nofollow"
 								<?php } ?>
 							>
@@ -236,7 +236,7 @@ $highlightImage ? $class2 = " medium-9 large-10" : $class2 = ""; ?>
 					if ($tab->hasTabContent()) {
 						if (!$tab->canLoadAjax()) {
 							echo '<div class="tabs-panel" id="' . $tab->getName() . '">'
-								 . $tab->getTabContent() . 
+								 . $tab->getTabContent() .
 							'</div>';
 						}
 					}

@@ -129,15 +129,13 @@ class KT_Controller_Individual extends KT_Controller_GedcomRecord {
 		header("Content-Type: text/html; charset=UTF-8"); // AJAX calls do not have the meta tag headers and need this set
 		header("X-Robots-Tag: noindex,follow"); // AJAX pages should not show up in search results, any links can be followed though
 
-		Zend_Session::writeClose();
+		Zend_Session::writeClose(); ?>
 
-//		echo $module->getTabContent();
+		<div class="tabs-panel" id="<?php echo $module->getName(); ?>"></div>
+			<?php echo $module->getTabContent(); ?>
+		</div>
 
-		echo '<div class="tabs-panel" id="' . $module->getName() . '"></div>'
-				 . $module->getTabContent() . 
-			'</div>';
-
-		if (KT_DEBUG_SQL) {
+		<?php if (KT_DEBUG_SQL) {
 			echo KT_DB::getQueryLog();
 		}
 
@@ -485,7 +483,7 @@ class KT_Controller_Individual extends KT_Controller_GedcomRecord {
 	}
 
 	/**
-	* get the individual facts shown on tab 1
+	* get the individual facts shown on the attributes tab
 	* @return array
 	*/
 	function getAttributeFacts() {
@@ -495,7 +493,7 @@ class KT_Controller_Individual extends KT_Controller_GedcomRecord {
 	}
 
 	/**
-	* get the individual facts shown on tab 1
+	* get the individual facts shown on the events tab
 	* @return array
 	*/
 	function getEventFacts() {
@@ -505,7 +503,7 @@ class KT_Controller_Individual extends KT_Controller_GedcomRecord {
 	}
 
 	/**
-	* get the individual facts shown on tab 1
+	* get the individual facts shown on the facts & events tab
 	* @return array
 	*/
 	function getIndiFacts() {
@@ -868,7 +866,7 @@ class KT_Controller_Individual extends KT_Controller_GedcomRecord {
 		}
 
 		return '
-			<ul id="sidebarAccordion" class="accordion" data-accordion data-allow-all-closed="true">' .
+			<ul id="sidebarAccordion" class="accordion shadow" data-accordion data-allow-all-closed="true">' .
 				$html . '
 			</ul>
 		';

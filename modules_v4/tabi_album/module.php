@@ -119,7 +119,7 @@ class tabi_album_KT_Module extends KT_Module implements KT_Module_IndiTab, KT_Mo
 			$ALBUM_GROUPS = 4;
 		}
 
-		ob_start(); ?>	
+		ob_start(); ?>
 		<div id="<?php echo $this->getName(); ?>_content" class="grid-x">
 			<?php if (KT_USER_CAN_EDIT) { ?>
 				<div class="cell tabHeader">
@@ -127,9 +127,9 @@ class tabi_album_KT_Module extends KT_Module implements KT_Module_IndiTab, KT_Mo
 						<div class="grid-x">
 							<?php if ($SHOW_RELATIVES_EVENTS) { ?>
 								<div class="cell shrink">
-									<a 
-										href="addmedia.php?action=showmediaform&amp;linktoid=<?php echo $controller->record->getXref(); ?>" 
-										target="_blank" 
+									<a
+										href="addmedia.php?action=showmediaform&amp;linktoid=<?php echo $controller->record->getXref(); ?>"
+										target="_blank"
 										rel="noopener noreferrer"
 									>
 										<i class="<?php echo $iconStyle; ?> fa fa-camera-retro"></i>
@@ -139,8 +139,8 @@ class tabi_album_KT_Module extends KT_Module implements KT_Module_IndiTab, KT_Mo
 							<?php }
 							if (file_exists(KT_Site::preference('INDEX_DIRECTORY') . 'histo.' . KT_LOCALE . '.php')) { ?>
 								<div class="cell shrink">
-									<a 
-										href="inverselink.php?linktoid=<?php echo $controller->record->getXref(); ?>&amp;linkto=person" 
+									<a
+										href="inverselink.php?linktoid=<?php echo $controller->record->getXref(); ?>&amp;linkto=person"
 										target="_blank"
 									>
 										<i class="<?php echo $iconStyle; ?> fa fa-link"></i>
@@ -151,8 +151,8 @@ class tabi_album_KT_Module extends KT_Module implements KT_Module_IndiTab, KT_Mo
 
 							if (KT_USER_GEDCOM_ADMIN && $this->get_media_count() > 1) { ?>
 								<div class="cell auto">
-									<a 
-										href="#" onclick="reorder_media('<?php echo $controller->record->getXref(); ?>')" 
+									<a
+										href="#" onclick="reorder_media('<?php echo $controller->record->getXref(); ?>')"
 										target="_blank"
 									>
 										<i class="<?php echo $iconStyle; ?> fa fa-shuffle"></i>
@@ -165,7 +165,7 @@ class tabi_album_KT_Module extends KT_Module implements KT_Module_IndiTab, KT_Mo
 					<?php } ?>
 				</div>
 			<?php } ?>
-			<div class="cell">
+			<div class="cell tabs-content">
 				<?php if (0 == $ALBUM_GROUPS) {
 					album_print_media($controller->record->getXref(), 0, true);
 				} else {

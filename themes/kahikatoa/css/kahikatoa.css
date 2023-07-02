@@ -20,7 +20,6 @@
 	color: #0193b7;
 }
 
-/*-------------*/
 .radius {
 	border-radius: 0.1875rem;
 }
@@ -53,6 +52,16 @@ a:hover svg {
 	margin: 0;
 	padding: 0;
 	vertical-align: initial;
+}
+
+.fact_ASSO a {
+	display: inline-block;
+}
+.fact_ASSO a span.rela_name {
+	display: block;
+}
+.fact_ASSO a span.rela_name:first-letter {
+	text-transform: capitalize;
 }
 
 .first-line {
@@ -783,20 +792,26 @@ div[id$=-page] button[type=submit] {
 #indi-page .tabs-panel .tabHeader a {
 	color: #ab3334;
 	display: inline;
-	font-size: 0.925rem;
 	font-weight: normal;
 	line-height: 1.75;
 	margin: auto 1rem 0 0;
 	padding: 0;
 	vertical-align: middle;
 }
+#indi-page .tabs-panel .tabHeader label label,
+#indi-page .tabs-panel .tabHeader a label {
+	vertical-align: top;
+}
 #indi-page .tabs-panel .tabHeader .svg-inline--fa {
-	margin: auto 0 0 0;
+	font-size: 1.25rem;
 }
 #indi-page .tabs-panel .tabHeader button.clear {
 	margin: 0;
 	padding: 0;
 	text-align: left;
+}
+#indi-page .tabs-panel .tabHeader input[type=checkbox] {
+	margin-top: 0;
 }
 #indi-page .tabs-panel#tabi_events .indiFactHeader, #indi-page .tabs-panel#tabi_attributes .indiFactHeader, #indi-page .tabs-panel#tabi_notes .indiFactHeader {
 	background-color: #faf5e8;
@@ -888,6 +903,7 @@ div[id$=-page] button[type=submit] {
 	margin: 0;
 }
 #indi-page .tabs-panel #tabi_album_content .albumSection {
+	background-color: #faf5e8;
 	border-bottom: 0.125rem solid #ab3334;
 }
 #indi-page .tabs-panel #tabi_album_content .albumGroup {
@@ -1060,11 +1076,11 @@ div[id$=-page] button[type=submit] {
 	padding: 0.5rem;
 }
 #indi-page .tabs-panel .rela {
-	background-color: #faf5e8;
+	background-color: #e0e0e0;
 	opacity: 0.65;
 }
 #indi-page .tabs-panel .histo {
-	background-color: #faf5e8;
+	background-color: #e0e0e0;
 	color: #0193b7;
 }
 #indi-page .tabs-panel .census_text table {

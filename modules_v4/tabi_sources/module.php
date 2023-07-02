@@ -68,8 +68,10 @@ class tabi_sources_KT_Module extends KT_Module implements KT_Module_IndiTab {
 					<?php if ($controller->record->canEdit()) { ?>
 						<div class="cell shrink">
 							<a href="#" onclick="add_new_record('<?php echo $controller->record->getXref(); ?>','SOUR'); return false;">
-								<i class="<?php echo $iconStyle; ?> fa-book-medical"></i>
-								<?php echo KT_I18N::translate('Add a source citation'); ?>
+								<i class="<?php echo $iconStyle; ?> fa-square-plus "></i>
+								<label>
+									<?php echo KT_I18N::translate('Add a source citation'); ?>
+								</label>
 							</a>
 						</div>
 					<?php } ?>
