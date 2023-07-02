@@ -42,6 +42,10 @@ class KT_Gedcom_Tag {
   		'DSCR', 'EDUC', 'EMIG', 'ENDL', 'ENGA', 'EVEN', 'FCOM', 'GRAD', 'IMMI',
   		'MARB', 'MARC', 'MARL', 'MARR', 'MARR:DATE', 'MARR:PLAC', 'MARS', 'NATU', 'OCCU', 'ORDN', 'PROB',
   		'PROP', 'RELI', 'RESI', 'RETI', 'SLGC', 'SLGS', 'TITL', 'WILL', '_TODO',
+		'_BIRT_GCHI', '_MARR_GCHI', '_DEAT_GCHI', '_BIRT_CHIL', '_MARR_CHIL', '_DEAT_CHIL',
+		'_BIRT_SIBL', '_MARR_SIBL', '_DEAT_SIBL', '_DEAT_SPOU', '_MARR_PARE', '_DEAT_PARE',
+		'_DEAT_GPAR',
+
 	);
 
 	// All non-attribute or event tags that kiwitrees knows how to translate - including special/internal tags
