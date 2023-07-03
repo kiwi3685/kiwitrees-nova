@@ -344,7 +344,7 @@ class KT_MenuBar
 	{
 		$menus = [];
 		foreach (KT_Module::getActiveMenus() as $module) {
-			if ('main' == $module->MenuType() || !$module->MenuType()) {
+			if ('main' == $module->MenuType()) {
 				$menu = $module->getMenu();
 				if ($menu) {
 					$menus[] = $menu;
