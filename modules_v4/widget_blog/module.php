@@ -97,12 +97,12 @@ class widget_blog_KT_Module extends KT_Module implements KT_Module_Widget {
 		return false;
 	}
 
-	// Implement KT_Module_Sidebar
+	// Implement KT_Module_Widget
 	public function defaultWidgetOrder() {
 		return 90;
 	}
 
-	// Implement KT_Module_Menu
+	// Implement KT_Module_Widget
 	public function defaultAccessLevel() {
 		return KT_PRIV_USER;
 	}
