@@ -528,11 +528,10 @@ abstract class KT_Module {
 			'menu_favorites'		=> array('enabled', NULL, 14, NULL, NULL, NULL, NULL),
 			'menu_languages'		=> array('enabled', NULL, 15, NULL, NULL, NULL, NULL),
 			// sidebar
-			'sidebar_extra_info'	=> array('enabled', NULL, NULL, 1, NULL, NULL, NULL),
-			'sidebar_family_nav'	=> array('enabled', NULL, NULL, 2, NULL, NULL, NULL),
-			'sidebar_descendancy'	=> array('enabled', NULL, NULL, 3, NULL, NULL, NULL),
-			'sidebar_individuals'	=> array('enabled', NULL, NULL, 4, NULL, NULL, NULL),
-			'sidebar_families'		=> array('enabled', NULL, NULL, 5, NULL, NULL, NULL),
+			'sidebar_family_nav'	=> array('enabled', NULL, NULL, 1, NULL, NULL, NULL),
+			'sidebar_descendancy'	=> array('enabled', NULL, NULL, 2, NULL, NULL, NULL),
+			'sidebar_individuals'	=> array('enabled', NULL, NULL, 3, NULL, NULL, NULL),
+			'sidebar_families'		=> array('enabled', NULL, NULL, 4, NULL, NULL, NULL),
 			// widgets
 			'widget_quicklinks'		=> array('enabled', NULL, NULL, NULL, 10, NULL, NULL),
 			'widget_todays_events'	=> array('enabled', NULL, NULL, NULL, 20, NULL, NULL),
