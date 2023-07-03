@@ -180,4 +180,10 @@ class sidebar_privacy_KT_Module extends KT_Module implements KT_Module_Sidebar {
 		}
 		return KT_I18N::translate('There are no records to suggest this person is dead, so they are displayed as living.');
 	}
+
+	// Implement KT_Module_Menu
+	public function MenuType() {
+		return 'none';
+	}
+
 }

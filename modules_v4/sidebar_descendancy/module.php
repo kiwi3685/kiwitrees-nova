@@ -230,4 +230,10 @@ class sidebar_descendancy_KT_Module extends KT_Module implements KT_Module_Sideb
 			return '';
 		}
 	}
+
+	// Implement KT_Module_Menu
+	public function MenuType() {
+		return 'none';
+	}
+
 }

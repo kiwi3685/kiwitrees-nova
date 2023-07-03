@@ -235,4 +235,10 @@ class sidebar_individuals_KT_Module extends KT_Module implements KT_Module_Sideb
         $out .= '</ul>';
         return $out;
     }
+
+	// Implement KT_Module_Menu
+	public function MenuType() {
+		return 'none';
+	}
+
 }

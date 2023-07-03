@@ -162,7 +162,7 @@ class research_links_KT_Module extends KT_Module implements KT_Module_Config, KT
 										<span class="switch-inactive" aria-hidden="true"><?php echo KT_I18N::translate('No'); ?></span>
 									</label>
 									<label class="areaList"><?php echo $area; ?></label>
-								</div>							
+								</div>
 
 							<?php } ?>
 						</div>
@@ -230,7 +230,7 @@ class research_links_KT_Module extends KT_Module implements KT_Module_Config, KT
 							</div>
 						</form>
 					</fieldset>
-			
+
 
 		<?php pageClose();
 	}
@@ -752,6 +752,12 @@ class research_links_KT_Module extends KT_Module implements KT_Module_Config, KT
 		return $js;
 
 	}
+
+	// Implement KT_Module_Menu
+	public function MenuType() {
+		return 'none';
+	}
+
 }
 
 // Each plugin should extend the base_plugin class, and implement any functions included here

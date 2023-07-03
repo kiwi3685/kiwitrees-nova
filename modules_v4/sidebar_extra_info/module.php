@@ -111,4 +111,9 @@ class sidebar_extra_info_KT_Module extends KT_Module implements KT_Module_Sideba
 		}
 	}
 
+	// Implement KT_Module_Menu
+	public function MenuType() {
+		return 'none';
+	}
+
 }
