@@ -644,6 +644,23 @@ button.widget .svg-inline--fa {
 #sidebarAccordion .accordion-content {
 	font-size: 0.9rem;
 }
+#sidebarAccordion .accordion-content #sb_content_sidebar_attributes {
+	padding: 0.9375rem;
+}
+#sidebarAccordion .accordion-content #sb_content_sidebar_attributes div.attribute {
+	border-bottom: 0.0125rem solid #ab3334;
+}
+#sidebarAccordion .accordion-content #sb_content_sidebar_attributes div.attribute label {
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+#sidebarAccordion .accordion-content #sb_content_sidebar_attributes div.edit {
+	margin: 0;
+	padding: 0;
+}
+#sidebarAccordion .accordion-content #sb_content_sidebar_attributes div.edit .button-group.KT-stacked a.button {
+	margin-bottom: 0;
+}
 #sidebarAccordion .accordion-content #sb_content_sidebar_family_nav {
 	display: none;
 }

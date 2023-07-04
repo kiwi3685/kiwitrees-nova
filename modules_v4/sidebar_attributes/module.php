@@ -55,7 +55,7 @@ class sidebar_attributes_KT_Module extends KT_Module implements KT_Module_Sideba
 	// Implement KT_Module_Sidebar
 	public function getSidebarContent() {
 		global $SHOW_COUNTER, $controller;
-		require KT_ROOT . 'includes/functions/functions_attributes.php';
+		require_once(KT_ROOT . 'includes/functions/functions_attributes.php');
 
 		$indifacts = array();
 		// The individual’s own facts
@@ -65,15 +65,11 @@ class sidebar_attributes_KT_Module extends KT_Module implements KT_Module_Sideba
 		ob_start();
 		$indifacts = $controller->getIndiFacts();
 
-		$xrefData = array(
-			'label' => KT_I18N::translate('Internal reference '),
-			'detail'=> '<span>' . $controller->record->getXref() . '</span>',
-		);
 		if ($SHOW_COUNTER && (empty($SEARCH_SPIDER))) {
 			require KT_ROOT . 'includes/hitcount.php';
 			$hitData = array(
 				'label' => KT_I18N::translate('Hit Count:'),
-				'detail'=> '<span>' . $hitCount . '</span>',
+				'detail'=> $hitCount,
 			);
 		}
 		if (count($indifacts) == 0) { ?>
@@ -81,69 +77,69 @@ class sidebar_attributes_KT_Module extends KT_Module implements KT_Module_Sideba
 				<?php echo KT_I18N::translate('There are no attributes for this individual.'); ?>
 			</div>
 		<?php } else { ?>
-			<div class="cell tabHeader"></div>
-			<div class="cell show-for-medium indiFactHeader">
-				<div class="grid-x">
-					<div class="cell medium-3 event">
-						<label><?php echo KT_I18N::translate('Attribute'); ?></label>
-					</div>
-					<div class="cell <?php echo (KT_USER_CAN_EDIT ? 'medium-8' : 'auto'); ?> detail">
-						<label><?php echo KT_I18N::translate('Details'); ?></label>
-					</div>
-					<?php if (KT_USER_CAN_EDIT) { ?>
-						<div class="cell medium-1 edit">
-							<label><?php echo KT_I18N::translate('Edit'); ?></label>
-						</div>
-					<?php } ?>
-				</div>
-			</div>
-			<!-- Xref id -->
-			<div class="cell indiFact">
-				<div class="grid-x">
-					<div class="cell small-10 medium-3 small-order-1 medium-order-1 event">
-						<span class="h6"><?php echo $xrefData['label']; ?></span>
-					</div>
-					<div class="cell <?php echo (KT_USER_CAN_EDIT ? 'small-10 medium-8' : 'auto'); ?> small-order-5 medium-order-4 detail">
-						<?php echo $xrefData['detail']; ?>
+
+			<div class="cell" id="sb_content_sidebar_attributes">
+				<!-- Xref id -->
+				<div class="grid-x attribute">
+					<label class="cell small-6 middle">
+						<?php echo KT_I18N::translate('Internal reference '); ?>
+					</label>
+					<div class="cell small-6">
+						<?php echo $controller->record->getXref(); ?>
 					</div>
 				</div>
-			</div>
-			<!-- Privacy status -->
-			<div class="cell indiFact">
-				<div class="grid-x">
-					<div class="cell small-10 medium-3 small-order-1 medium-order-1 event">
-						<span class="h6"><?php echo KT_I18N::translate('Privacy status'); ?></span>
-					</div>
-					<div class="cell <?php echo (KT_USER_CAN_EDIT ? 'small-10 medium-8' : 'auto'); ?> small-order-5 medium-order-4 detail">
+
+				<!-- Privacy status -->
+				<div class="grid-x attribute">
+					<label class="cell small-6 middle">
+						<?php echo KT_I18N::translate('Privacy status'); ?>
+					</label>
+					<div class="cell small-6">
 						<?php echo privacyStatus($this->getName()); ?>
 					</div>
 				</div>
-			</div>
-			<?php
-			//- All GEDCOM attribute facts -//
-			foreach ($indifacts as $fact) {
-				if (KT_Gedcom_Tag::isTagAttribute($fact->getTag())) {
-					print_attributes($fact, $controller->record);
-				}
-			}
-			?>
-			<!-- Hit count -->
-			<div class="cell indiFact">
-				<div class="grid-x">
-					<div class="cell small-10 medium-3 small-order-1 medium-order-1 event">
-						<span class="h6"><?php echo $hitData['label']; ?></span>
-					</div>
-					<div class="cell <?php echo (KT_USER_CAN_EDIT ? 'small-10 medium-8' : 'auto'); ?> small-order-5 medium-order-4 detail">
+
+				<!-- All GEDCOM attribute facts -->
+				<?php foreach ($indifacts as $fact) {
+					if (KT_Gedcom_Tag::isTagAttribute($fact->getTag())) {
+						$styleadd = "";
+						if ($fact->getIsNew()) {
+							$styleadd = "change_new";
+						}
+						if ($fact->getIsOld()) {
+							$styleadd = "change_old";
+						} ?>
+						<div class="grid-x attribute <?php echo $styleadd; ?>">
+							<label class="cell small-6 order-1 event">
+								<?php print_attributes_label($fact, $controller->record); ?>
+							</label>
+							<div class="cell small-6 order-2 edit">
+								<?php print_attributes_edit($fact, $controller->record, '', 'sidebar'); ?>
+							</div>
+							<div class="cell order-3 detail">
+								<?php print_attributes_detail($fact, $controller->record); ?>
+							</div>
+						</div>
+					<?php }
+				} ?>
+
+				<!-- Hit count -->
+				<div class="grid-x attribute">
+					<label class="cell small-6 middle">
+						<?php echo $hitData['label']; ?>
+					</label>
+					<div class="cell small-6">
 						<?php echo $hitData['detail']; ?>
 					</div>
 				</div>
-			</div>
 			<?php
 			//-- new fact link
 			if ($controller->record->canEdit()) {
-				print_add_new_fact($controller->record->getXref(), $indifacts, 'INDI_ATTRIB');
-			}
-		}
+				print_add_new_fact($controller->record->getXref(), $indifacts, 'SB_ATTRIB');
+			} ?>
+		</div>
+
+		<?php }
 
 		return ob_get_clean();
 	}

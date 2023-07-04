@@ -1328,23 +1328,43 @@ function CheckFactUnique($uniquefacts, $recfacts, $type)
  * @param string $id        the id of the person, family, source etc the fact will be added to
  * @param array  $usedfacts an array of facts already used in this record
  * @param string $type      the type of record INDI, FAM, SOUR etc
+ *
  */
 function print_add_new_fact($id, $usedfacts, $type)
 {
-	global $KT_SESSION; ?>
+	global $KT_SESSION;
+
+	switch ($type) {
+		case 'SB_ATTRIB':
+			$classes1 = 'cell fact-title';
+			$classes2 = 'cell fact-detail';
+			$label = KT_I18N::translate('Add attribute');
+			break;
+		case 'INDI_ATTRIB':
+			$classes1 = 'cell medium-3 fact-title';
+			$classes2 = 'cell medium-7 fact-detail';
+			$label = KT_I18N::translate('Add attribute');
+			break;
+		default:
+			$classes1 = 'cell medium-3 fact-title';
+			$classes2 = 'cell medium-7 fact-detail';
+			$label = KT_I18N::translate('Add event');
+			break;
+	} ?>
 
 	<div class="cell indiFact famFact">
 		<div class="grid-x grid-padding-x grid-padding-y">
-			<?php if ($KT_SESSION->clipboard) { // -- Add from clipboard
+			<!-- Add from clipboard -->
+			<?php if ($KT_SESSION->clipboard) {
 				$newRow = true;
 				foreach (array_reverse($KT_SESSION->clipboard, true) as $key => $fact) {
 					if ($fact['type'] == $type || 'all' == $fact['type']) {
 						if ($newRow) {
 							$newRow = false; ?>
-							<div class="cell medium-3 fact-title">
+							<div class="<?php echo $classes1; ?>">
 								<label><?php echo KT_I18N::translate('Add from clipboard'); ?></label>
 							</div>
-							<div class="cell medium-7 fact-detail">
+							<div class="<?php echo $classes2; ?>">
 								<form method="get" name="newFromClipboard" action="" onsubmit="return false;">
 									<div class="input-group">
 										<div class="input-group-button">
@@ -1352,29 +1372,29 @@ function print_add_new_fact($id, $usedfacts, $type)
 										</div>
 										<select class="input-group-field" id="newClipboardFact" name="newClipboardFact">
 						<?php }
-						$fact_type = KT_Gedcom_Tag::getLabel($fact['fact']); ?>
-						<option value="clipboard_<?php echo $key; ?>">
-							<?php echo $fact_type;
-						if (preg_match('/^2 DATE (.+)/m', $fact['factrec'], $match)) {
-							$tmp = new KT_Date($match[1]);
-							echo '; ' . $tmp->minDate()->Format('%Y');
-						}
-						if (preg_match('/^2 PLAC ([^,\n]+)/m', $fact['factrec'], $match)) {
-							echo '; ' . $match[1];
-						} ?>
-						</option>
+											$fact_type = KT_Gedcom_Tag::getLabel($fact['fact']); ?>
+											<option value="clipboard_<?php echo $key; ?>">
+												<?php echo $fact_type;
+												if (preg_match('/^2 DATE (.+)/m', $fact['factrec'], $match)) {
+													$tmp = new KT_Date($match[1]);
+													echo '; ' . $tmp->minDate()->Format('%Y');
+												}
+												if (preg_match('/^2 PLAC ([^,\n]+)/m', $fact['factrec'], $match)) {
+													echo '; ' . $match[1];
+												} ?>
+											</option>
 					<?php }
-					}
+				}
 				if (!$newRow) { ?>
 					</select>
 					</div>
 					</form>
 					</div>
 				<?php }
-				}
+			} ?>
 
-			// -- Add from pick list
-			switch ($type) {
+			<!-- Add from pick list -->
+			<?php switch ($type) {
 				case 'INDI':
 					$addfacts = preg_split('/[, ;:]+/', get_gedcom_setting(KT_GED_ID, 'INDI_FACTS_ADD'), -1, PREG_SPLIT_NO_EMPTY);
 					$uniquefacts = preg_split('/[, ;:]+/', get_gedcom_setting(KT_GED_ID, 'INDI_FACTS_UNIQUE'), -1, PREG_SPLIT_NO_EMPTY);
@@ -1431,18 +1451,12 @@ function print_add_new_fact($id, $usedfacts, $type)
 			foreach ($addfacts as $addfact) {
 				$translated_addfacts[$addfact] = KT_Gedcom_Tag::getLabel($addfact);
 			}
-			uasort($translated_addfacts, 'factsort');
+			uasort($translated_addfacts, 'factsort'); ?>
 
-			if ($type == 'INDI_ATTRIB') {
-				$label = KT_I18N::translate('Add attribute');
-			} else {
-				$label = KT_I18N::translate('Add event');
-			} ?>
-
-			<div class="cell medium-3 fact-title">
+			<div class="<?php echo $classes1; ?>">
 				<label class="h6"><?php echo $label; ?></label>
 			</div>
-			<div class="cell medium-8 fact-detail">
+			<div class="<?php echo $classes2; ?>">
 				<form method="get" name="newfactform" action="" onsubmit="return false;">
 					<div class="input-group">
 						<div class="input-group-button">
