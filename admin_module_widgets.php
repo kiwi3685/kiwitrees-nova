@@ -45,7 +45,15 @@ $controller
 
 $modules    = KT_Module::getActiveWidgets(KT_GED_ID, KT_PRIV_HIDE);
 $component  = 'widgets';
-$infoHelp   = KT_I18N::translate('"Drag & drop" each module, or manually adjust the order numbers, to change the order these modules will be displayed in.') . '<br>' . KT_I18N::translate('The "Access level" setting "Hide from everyone" means exactly that, including Administrators.');
+$infoHelp   = KT_I18N::translate('
+		"Drag & drop" each module, or manually adjust the order numbers,
+		to change the order these modules will be displayed in.
+	') . '
+	<br>' .
+	KT_I18N::translate('
+		The "Access level" setting "Hide from everyone" means exactly that,
+		including Administrators.
+	');
 $pageTitle  = $controller->getPageTitle();
 $col1Header = KT_I18N::translate('Widgets');
 $sortAble   = true;

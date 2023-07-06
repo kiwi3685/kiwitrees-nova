@@ -33,7 +33,16 @@ $controller
 
 $modules    = KT_Module::getActiveBlocks(KT_GED_ID, KT_PRIV_HIDE);
 $component  = 'block';
-$infoHelp   = KT_I18N::translate('To change the order of these blocks go to the Home page, and select "Change the Home page blocks" from the options under your user name at the top of the page,') . '<br>' . KT_I18N::translate('The "Access level" setting "Hide from everyone" means exactly that, including Administrators.');
+$infoHelp   = KT_I18N::translate('
+		To change the order of these blocks go to the Home page,
+		and select "Change the Home page blocks" from the options
+		under your user name at the top of the page.
+	') . '
+	<br>' .
+	KT_I18N::translate('
+		The "Access level" setting "Hide from everyone" means exactly that,
+		including Administrators.
+	');
 $pageTitle  = $controller->getPageTitle();
 $col1Header = KT_I18N::translate('Block');
 

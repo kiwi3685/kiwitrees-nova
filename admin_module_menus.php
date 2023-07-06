@@ -45,7 +45,15 @@ $controller
 
 $modules	= KT_Module::getActiveMenus(KT_GED_ID, KT_PRIV_HIDE);
 $component = 'menu';
-$infoHelp  = KT_I18N::translate('"Drag & drop" each module, or manually adjust the order numbers, to change the order these modules will be displayed in.') . '<br>' . KT_I18N::translate('The "Access level" setting "Hide from everyone" means exactly that, including Administrators.');
+$infoHelp  = KT_I18N::translate('
+		"Drag & drop" each module, or manually adjust the order numbers,
+		to change the order these modules will be displayed in.
+	') . '
+	<br>' .
+	KT_I18N::translate('
+		The "Access level" setting "Hide from everyone" means exactly that,
+		including Administrators.
+	');
 $pageTitle = $controller->getPageTitle();
 $col1Header = KT_I18N::translate('Menu');
 $sortAble  = true;

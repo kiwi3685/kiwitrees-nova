@@ -36,45 +36,45 @@ $modules = KT_Module::getInstalledModules('disabled');
 $module_status = KT_DB::prepare("SELECT module_name, status FROM `##module`")->fetchAssoc();
 
 switch (KT_Filter::post('action')) {
-case 'update_mods':
-	if (KT_Filter::checkCsrf()) {
-		foreach ($modules as $module_name=>$status) {
-			$new_status = KT_Filter::post("status-{$module_name}", '[01]');
-			if ($new_status !== null) {
-				$new_status = $new_status ? 'enabled' : 'disabled';
-				if ($new_status != $status) {
-					KT_DB::prepare("UPDATE `##module` SET status=? WHERE module_name=?")->execute(array($new_status, $module_name));
-					$module_status[$module_name] = $new_status;
+	case 'update_mods':
+		if (KT_Filter::checkCsrf()) {
+			foreach ($modules as $module_name=>$status) {
+				$new_status = KT_Filter::post("status-{$module_name}", '[01]');
+				if ($new_status !== null) {
+					$new_status = $new_status ? 'enabled' : 'disabled';
+					if ($new_status != $status) {
+						KT_DB::prepare("UPDATE `##module` SET status=? WHERE module_name=?")->execute(array($new_status, $module_name));
+						$module_status[$module_name] = $new_status;
+					}
 				}
 			}
 		}
-	}
-	header('Location: admin_modules.php');
+		header('Location: admin_modules.php');
 	break;
 }
 
 switch (KT_Filter::get('action')) {
-case 'delete_module':
-	$module_name = KT_Filter::get('module_name');
-	KT_DB::prepare(
-		"DELETE `##block_setting`".
-		" FROM `##block_setting`".
-		" JOIN `##block` USING (block_id)".
-		" JOIN `##module` USING (module_name)".
-		" WHERE module_name=?"
-	)->execute(array($module_name));
-	KT_DB::prepare(
-		"DELETE `##block`".
-		" FROM `##block`".
-		" JOIN `##module` USING (module_name)".
-		" WHERE module_name=?"
-	)->execute(array($module_name));
-	KT_DB::prepare("DELETE FROM `##module_setting` WHERE module_name=?")->execute(array($module_name));
-	KT_DB::prepare("DELETE FROM `##module_privacy` WHERE module_name=?")->execute(array($module_name));
-	KT_DB::prepare("DELETE FROM `##module`         WHERE module_name=?")->execute(array($module_name));
-	unset($modules[$module_name]);
-	unset($module_status[$module_name]);
-	break;
+	case 'delete_module':
+		$module_name = KT_Filter::get('module_name');
+		KT_DB::prepare(
+			"DELETE `##block_setting`".
+			" FROM `##block_setting`".
+			" JOIN `##block` USING (block_id)".
+			" JOIN `##module` USING (module_name)".
+			" WHERE module_name=?"
+		)->execute(array($module_name));
+		KT_DB::prepare(
+			"DELETE `##block`".
+			" FROM `##block`".
+			" JOIN `##module` USING (module_name)".
+			" WHERE module_name=?"
+		)->execute(array($module_name));
+		KT_DB::prepare("DELETE FROM `##module_setting` WHERE module_name=?")->execute(array($module_name));
+		KT_DB::prepare("DELETE FROM `##module_privacy` WHERE module_name=?")->execute(array($module_name));
+		KT_DB::prepare("DELETE FROM `##module`         WHERE module_name=?")->execute(array($module_name));
+		unset($modules[$module_name]);
+		unset($module_status[$module_name]);
+		break;
 }
 
 $controller
