@@ -712,6 +712,23 @@ div[id$=-page] button[type=submit] {
 	content: ", ";
 }
 
+#floating_contact {
+	background-color: #faf5e8;
+	border-radius: 50%;
+	border-style: none;
+	height: 5rem;
+	margin: 2rem;
+	padding: 0.5rem 0.25rem;
+	position: fixed;
+	right: 0;
+	width: 5rem;
+	z-index: 9999;
+	bottom: 0;
+}
+#floating_contact a svg {
+	font-size: 3.625rem;
+}
+
 #indi-page h3 {
 	margin: 0;
 	padding: 0;

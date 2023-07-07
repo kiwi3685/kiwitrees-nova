@@ -137,7 +137,12 @@
 				</div>
 			</nav>
 
-			<?php echo KT_FlashMessages::getHtmlMessages() . // Feedback from asynchronous actions
+			<?php
+			// add floating contact link if it is configured
+			if (array_key_exists('float_contacts', KT_Module::getActiveModules())) {
+				float_contacts_KT_Module::show();
+			}
+			echo KT_FlashMessages::getHtmlMessages() . // Feedback from asynchronous actions
 			$javascript;
 
 		} ?>
