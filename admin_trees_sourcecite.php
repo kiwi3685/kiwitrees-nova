@@ -117,9 +117,9 @@ echo pageStart('source_review', $controller->getPageTitle()); ?>
 			$data		 = citations($sid);
 			$no_citation = count_sources($sid) - count($data);
 			?>
-			<h3>
+			<h4>
 				<span><?php echo KT_I18N::translate('Source'); ?><span>: <a href="<?php echo $source->getHtmlUrl(); ?>"><?php echo $source->getFullName(); ?></a>
-			</h3>
+			</h4>
 			<?php if ($no_citation > 0) { ?>
 				<h5>
 				<?php echo KT_I18N::plural(
