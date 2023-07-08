@@ -287,37 +287,40 @@ echo pageStart('sanity_check', $controller->getPageTitle(), 'y', KT_I18N::transl
 		<input type="hidden" name="gedID" value="<?php echo $gedID; ?>">
 		<div class="grid-x grid-margin-x">
 			<!-- Checking option categories -->
-			<?php for ($i = 1; $i < count($checkGroups) + 1; $i ++) { ?>
-				<fieldset class="fieldset cell medium-6">
+			<?php for ($i = 1; $i < count($checkGroups) + 1; $i ++) {
+				$i & 1 ? $width = 4 : $width = 8; ?>
+				<fieldset class="fieldset cell medium-<?php echo $width; ?> order-<?php echo $i; ?>">
 					<legend><?php echo $checkGroups[$i-1]; ?></legend>
-					<?php for ($row = 0; $row < count($checks); $row ++) {
-						if ($checks[$row][0] == $i) { ?>
-							<div class="input-group">
-								<?php echo simple_switch($checks[$row][1], $checks[$row][1], KT_Filter::post($checks[$row][1]), '', KT_I18N::translate('Yes'), KT_I18N::translate('No'), $size = 'tiny'); ?>
-								<span class="input-group-label">
-									<?php echo $checks[$row][2]; ?>
-								</span>
-								<?php if (isset($checks[$row][3])) {
-									if ($checks[$row][3] == $birthOptions) { ?>
-										<?php echo simple_switch($birthOptions[0], "1", $birthOptions[1], '', KT_I18N::translate('Yes'), KT_I18N::translate('No'), $size = 'tiny'); ?><span class="switches"><?php echo KT_I18N::translate('Date'); ?></span>
-										<?php echo simple_switch($birthOptions[2], "1", $birthOptions[3], '', KT_I18N::translate('Yes'), KT_I18N::translate('No'), $size = 'tiny'); ?><span class="switches"><?php echo KT_I18N::translate('Place'); ?></span>
-										<?php echo simple_switch($birthOptions[4], "1", $birthOptions[5], '', KT_I18N::translate('Yes'), KT_I18N::translate('No'), $size = 'tiny'); ?><span class="switches"><?php echo KT_I18N::translate('Source'); ?></span>
-									<?php } elseif ($checks[$row][3] == $deathOptions) { ?>
-										<?php echo simple_switch($deathOptions[0], "1", $deathOptions[1], '', KT_I18N::translate('Yes'), KT_I18N::translate('No'), $size = 'tiny'); ?><span class="switches"><?php echo KT_I18N::translate('Date'); ?></span>
-										<?php echo simple_switch($deathOptions[2], "1", $deathOptions[3], '', KT_I18N::translate('Yes'), KT_I18N::translate('No'), $size = 'tiny'); ?><span class="switches"><?php echo KT_I18N::translate('Place'); ?></span>
-										<?php echo simple_switch($deathOptions[4], "1", $deathOptions[5], '', KT_I18N::translate('Yes'), KT_I18N::translate('No'), $size = 'tiny'); ?><span class="switches"><?php echo KT_I18N::translate('Source'); ?></span>
-                                    <?php } elseif ($checks[$row][3] == $mediaOptions) { ?>
-										<?php echo simple_switch($mediaOptions[0], "1", $mediaOptions[1], '', KT_I18N::translate('Yes'), KT_I18N::translate('No'), $size = 'tiny'); ?><span class="switches"><?php echo KT_I18N::translate('Main'); ?></span>
-										<?php echo simple_switch($mediaOptions[2], "1", $mediaOptions[3], '', KT_I18N::translate('Yes'), KT_I18N::translate('No'), $size = 'tiny'); ?><span class="switches"><?php echo KT_I18N::translate('Thumb'); ?></span>
-										<?php echo simple_switch($mediaOptions[4], "1", $mediaOptions[5], '', KT_I18N::translate('Yes'), KT_I18N::translate('No'), $size = 'tiny'); ?><span class="switches"><?php echo KT_I18N::translate('Zero'); ?></span>
-										<?php echo simple_switch($mediaOptions[6], "1", $mediaOptions[7], '', KT_I18N::translate('Yes'), KT_I18N::translate('No'), $size = 'tiny'); ?><span class="switches"><?php echo KT_I18N::translate('Link'); ?></span>
-									<?php } else { ?>
-										<input class="input-group-field" type="text" name="<?php echo $checks[$row][3]; ?>" id="<?php echo $checks[$row][4]; ?>" value="<?php echo $checks[$row][5]; ?>" >
-									<?php }
-								} ?>
-						 	</div>
-						<?php }
-					} ?>
+ 				   	<div style="width: 80%; overflow:scroll;">
+						<?php for ($row = 0; $row < count($checks); $row ++) {
+							if ($checks[$row][0] == $i) { ?>
+								<div class="input-group">
+									<?php echo simple_switch($checks[$row][1], $checks[$row][1], KT_Filter::post($checks[$row][1]), '', KT_I18N::translate('Yes'), KT_I18N::translate('No'), $size = 'tiny'); ?>
+									<span class="input-group-label">
+										<?php echo $checks[$row][2]; ?>
+									</span>
+									<?php if (isset($checks[$row][3])) {
+										if ($checks[$row][3] == $birthOptions) { ?>
+											<?php echo simple_switch($birthOptions[0], "1", $birthOptions[1], '', KT_I18N::translate('Yes'), KT_I18N::translate('No'), $size = 'tiny'); ?><span class="switches"><?php echo KT_I18N::translate('Date'); ?></span>
+											<?php echo simple_switch($birthOptions[2], "1", $birthOptions[3], '', KT_I18N::translate('Yes'), KT_I18N::translate('No'), $size = 'tiny'); ?><span class="switches"><?php echo KT_I18N::translate('Place'); ?></span>
+											<?php echo simple_switch($birthOptions[4], "1", $birthOptions[5], '', KT_I18N::translate('Yes'), KT_I18N::translate('No'), $size = 'tiny'); ?><span class="switches"><?php echo KT_I18N::translate('Source'); ?></span>
+										<?php } elseif ($checks[$row][3] == $deathOptions) { ?>
+											<?php echo simple_switch($deathOptions[0], "1", $deathOptions[1], '', KT_I18N::translate('Yes'), KT_I18N::translate('No'), $size = 'tiny'); ?><span class="switches"><?php echo KT_I18N::translate('Date'); ?></span>
+											<?php echo simple_switch($deathOptions[2], "1", $deathOptions[3], '', KT_I18N::translate('Yes'), KT_I18N::translate('No'), $size = 'tiny'); ?><span class="switches"><?php echo KT_I18N::translate('Place'); ?></span>
+											<?php echo simple_switch($deathOptions[4], "1", $deathOptions[5], '', KT_I18N::translate('Yes'), KT_I18N::translate('No'), $size = 'tiny'); ?><span class="switches"><?php echo KT_I18N::translate('Source'); ?></span>
+                                    	<?php } elseif ($checks[$row][3] == $mediaOptions) { ?>
+											<?php echo simple_switch($mediaOptions[0], "1", $mediaOptions[1], '', KT_I18N::translate('Yes'), KT_I18N::translate('No'), $size = 'tiny'); ?><span class="switches"><?php echo KT_I18N::translate('Main'); ?></span>
+											<?php echo simple_switch($mediaOptions[2], "1", $mediaOptions[3], '', KT_I18N::translate('Yes'), KT_I18N::translate('No'), $size = 'tiny'); ?><span class="switches"><?php echo KT_I18N::translate('Thumb'); ?></span>
+											<?php echo simple_switch($mediaOptions[4], "1", $mediaOptions[5], '', KT_I18N::translate('Yes'), KT_I18N::translate('No'), $size = 'tiny'); ?><span class="switches"><?php echo KT_I18N::translate('Zero'); ?></span>
+											<?php echo simple_switch($mediaOptions[6], "1", $mediaOptions[7], '', KT_I18N::translate('Yes'), KT_I18N::translate('No'), $size = 'tiny'); ?><span class="switches"><?php echo KT_I18N::translate('Link'); ?></span>
+										<?php } else { ?>
+											<input class="input-group-field" type="text" name="<?php echo $checks[$row][3]; ?>" id="<?php echo $checks[$row][4]; ?>" value="<?php echo $checks[$row][5]; ?>" >
+										<?php }
+									} ?>
+						 		</div>
+							<?php }
+						} ?>
+ 					</div>
 				</fieldset>
 			<?php } ?>
 		</div>
@@ -953,8 +956,9 @@ echo pageStart('sanity_check', $controller->getPageTitle(), 'y', KT_I18N::transl
 								<table class="accordionDataTable shadow">
 									<thead>
 										<tr>
-											<th><?php echo KT_I18N::translate('Family name'); ?></th>
+											<th><?php echo KT_I18N::translate('Media xref'); ?></th>
 											<th><?php echo KT_I18N::translate('Edit link'); ?></th>
+											<th><?php echo KT_I18N::translate('Error type'); ?></th>
 										</tr>
 									</thead>
 									<tbody>
