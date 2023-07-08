@@ -201,11 +201,11 @@ function messageForm ($to, $from_name, $from_email, $subject, $body, $url, $to_n
 						</div>
 						<?php if (in_array($to, ['all', 'never_logged', 'last_6mo']) && KT_USER_IS_ADMIN) { ?>
 							<div class="cell userList">
-								<h6><?php echo KT_I18N::translate('This message will be sent to the following users'); ?></h6>
+								<div class="callout warning"><?php echo KT_I18N::translate('This message will be sent to the following users'); ?></div>
 									<?php if (recipients($to)) {
 										foreach (recipients($to) as $user_id => $user_name) { ?>
 											<span><?php echo getUserFullName($user_id); ?></span>
-										<?php } 
+										<?php }
 									} else { ?>
 										<span><?php echo KT_I18N::translate('No users'); ?></span>
 									<?php } ?>

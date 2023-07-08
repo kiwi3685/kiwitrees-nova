@@ -25,6 +25,7 @@ define('KT_SCRIPT_NAME', 'admin_message.php');
 require './includes/session.php';
 require_once KT_ROOT . 'includes/functions/functions_mail.php';
 require KT_ROOT . 'includes/functions/functions_edit.php';
+include KT_THEME_URL . 'templates/adminData.php';
 
 $controller = new KT_Controller_Page();
 $controller->setPageTitle(KT_I18N::translate('Broadcast message'));
@@ -90,8 +91,8 @@ $controller->pageHeader();
 $to_names = implode(KT_I18N::$list_separator, array_map(function($user) { return getUserFullName($user); }, recipients($to))); ?>
 
 <!-- Start page layout  -->
-<?php echo pageStart('contact', $controller->getPageTitle()); ?>
-	<?php echo messageForm ($to, $from_name, $from_email, $subject, $body, $url, $to_names); ?>
-</div>
-
 <?php
+	echo relatedPages($users);
+	echo pageStart('contact', $controller->getPageTitle());
+	echo messageForm ($to, $from_name, $from_email, $subject, $body, $url, $to_names);
+
