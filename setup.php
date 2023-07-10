@@ -49,8 +49,8 @@ require 'includes/authentication.php'; // for AddToLog()
 require 'includes/functions/functions_db.php'; // for get/setSiteSetting()
 define('KT_DATA_DIR', 'data/');
 define('KT_DEBUG_SQL', false);
-define('KT_REQUIRED_MYSQL_VERSION', '5.0.13'); // For: prepared statements within stored procedures
-define('KT_REQUIRED_MARIADB_VERSION', '10.1.21'); // For: prepared statements within stored procedures
+//define('KT_REQUIRED_MYSQL_VERSION', '5.0.13'); // For: prepared statements within stored procedures
+//define('KT_REQUIRED_MARIADB_VERSION', '10.1.21'); // For: prepared statements within stored procedures
 define('KT_MODULES_DIR', 'modules_v4/');
 define('KT_ROOT', '');
 define('KT_GED_ID', null);
@@ -310,21 +310,47 @@ try {
 	KT_DB::createInstance(
 		$_POST['dbhost'],
 		$_POST['dbport'],
-		'',               // No DBNAME - we will connect to it explicitly
+		'', // No DBNAME - we will connect to it explicitly
 		$_POST['dbuser'],
 		$_POST['dbpass']
 	);
 
 	KT_DB::exec("SET NAMES 'utf8'");
-	$row = KT_DB::prepare("SHOW VARIABLES LIKE 'VERSION'")->fetchOneRow();
 
-	if ($row->value < '10' && version_compare($row->value, KT_REQUIRED_MYSQL_VERSION, '>')) {
-		echo '<p class="callout alert">' . KT_I18N::translate('This database is only running MySQL version %s.  You cannot install kiwitrees here.', $row->value) . '</p>';
-	} elseif ($row->value > '10' && version_compare($row->value, KT_REQUIRED_MARIADB_VERSION, '>')) {
-		echo '<p class="callout alert">' . KT_I18N::translate('This database is only running MariaDB version %s.  You cannot install Kiwitrees-nova here.', $row->value) . '</p>';
+	//Check SQL server version
+	$versionNumber	= KT_DB::prepare("select version()")->fetchColumn();
+	$versionNo		= substr($versionNumber, 0, strpos($versionNumber, '.', ));
+	if ($versionNo < '10') {
+		$type           = 'MySQL';
+		$version        = $type . ' ' . $versionNumber;
+		$minVersion     = KT_REQUIRED_MYSQL_VERSION;
+		$versionNo      = substr($versionNumber, 0, strpos($versionNumber, '-', ));
+		$versiomCompare = version_compare($versionNo, $minVersion, '>=');
 	} else {
+		$type           = 'MariaDB';
+		$version        = $type . ' ' . $versionNumber;
+		$minVersion     = KT_REQUIRED_MARIADB_VERSION;
+		$versionNo      = substr($versionNumber, 0, strpos($versionNumber, '-', ));
+		$versiomCompare = version_compare($versionNo, $minVersion, '>=');
+	}
+	if ($versionCompare < 0) {
+		echo '<p class="callout alert">' .
+			KT_I18N::translate('
+				Your database is using %s1.
+				This version of kiwitrees requires a minumum of %s2.',
+				$version, $minVersion
+			) .
+		'</p>';
+	} else {
+		echo '<p class="callout success">' .
+			KT_I18N::translate('
+				This database is running using %s1 which is ok.',
+				$version
+			) .
+		'</p>';
 		$db_version_ok = true;
 	}
+
 } catch (PDOException $ex) {
 	KT_DB::disconnect();
 	if ($_POST['dbuser']) {

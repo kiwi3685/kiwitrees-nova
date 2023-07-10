@@ -33,30 +33,63 @@ $controller
 	->setPageTitle(KT_I18N::translate('Administration'))
 	->pageHeader();
 
+// Prepare statistic variables
+$stats      = new KT_Stats(KT_GEDCOM);
+$totusers   = 0;       // Total number of users
+$warnusers  = 0;       // Users with warning
+$applusers  = 0;       // Users who have not verified themselves
+$nverusers  = 0;       // Users not verified by admin but verified themselves
+$adminusers = 0;       // Administrators
+$userlang   = array(); // Array for user languages
+$gedadmin   = array(); // Array for managers
+
 //Check for kiwitrees-nova updates
 $latest_version = fetch_latest_version();
 
-//Check SQL server version
-$versionNumber	= KT_DB::prepare("select version()")->fetchColumn();
-$versionNo		= substr($versionNumber, 0, strpos($versionNumber, '.'));
-if ($versionNo < '10') {
-    $version = 'MySQL ' . $versionNumber;
-} else {
-	$version = 'MariaDB ' . $versionNumber;
-}
-
-// Prepare statistic variables
-$stats = new KT_Stats(KT_GEDCOM);
-	$totusers	= 0;       // Total number of users
-	$warnusers	= 0;       // Users with warning
-	$applusers	= 0;       // Users who have not verified themselves
-	$nverusers	= 0;       // Users not verified by admin but verified themselves
-	$adminusers	= 0;       // Administrators
-	$userlang	= array(); // Array for user languages
-	$gedadmin	= array(); // Array for managers
-
 // Server warnings
 $server_warnings = array();
+$SqlAlertClass  = '';
+
+//Check SQL server version
+$versionNumber  	= KT_DB::prepare("select version()")->fetchColumn();
+$versionType    	= substr($versionNumber, 0, strpos($versionNumber, '.', ));
+if ($versionType < '10') {
+	$type           = 'MySQL';
+	$version        = $type . ' ' . $versionNumber;
+	$minVersion     = KT_REQUIRED_MYSQL_VERSION;
+	$versionNo      = $versionNumber;
+	$versionCompare = version_compare($versionNo, KT_REQUIRED_MYSQL_VERSION, '>=');
+	if ($versionCompare < 0) {
+		$SqlAlertClass     = 'class="alert"';
+		$server_warnings[] = '
+			<span class="warning">' .
+				KT_I18N::translate('
+					Your web server is using %s1.
+					This version of kiwitrees requires a minumum of %s2.',
+					$version, $minVersion) .
+			'<span>';
+	}
+} else {
+	$type           = 'MariaDB';
+	$version        = $type . ' ' . $versionNumber;
+	$minVersion     = KT_REQUIRED_MARIADB_VERSION;
+	$versionNo      = substr($versionNumber, 0, strpos($versionNumber, '-'));
+	$versionCompare = version_compare($versionNo, KT_REQUIRED_MARIADB_VERSION, '>=');
+	if ($versionCompare < 0) {
+		$SqlAlertClass     = 'class="alert"';
+		$server_warnings[] = '
+		<span class="warning">' .
+			KT_I18N::translate('
+				Your database is using %s1.
+				This version of kiwitrees requires a minumum of %s2.',
+				$version, $minVersion
+			) .
+		'<span>';
+	}
+}
+
+//Check SQL server version
+$PhpAlertClass = '';
 if (
     // security
 	PHP_VERSION_ID < 70000 ||
@@ -67,9 +100,14 @@ if (
 ) {
 	$server_warnings[] = '
 		<span class="warning">' .
-			KT_I18N::translate('Your web server is using PHP version %s, which is no longer receiving security updates.  You should insist your web service provider upgrades to a later version as soon as possible.', PHP_VERSION) . '
+			KT_I18N::translate('
+				Your web server is using PHP version %s, which is no longer receiving security updates.
+				You should insist your web service provider upgrades to a later version as soon as possible.',
+				PHP_VERSION
+			) . '
 			<a href="https://www.php.net/supported-versions.php" target="_blank" rel="noopener noreferrer"><i class="icon-php"></i></a>
 		<span>';
+	$PhpAlertClass = 'class="alert"';
 } elseif (
     // active support
 	PHP_VERSION_ID < 70400 ||
@@ -78,9 +116,14 @@ if (
 	PHP_VERSION_ID < 80200 && date('Y-m-d') >= '2023-12-26'
 ) {
 	$server_warnings[] = '
-		<span class="accepted">' . KT_I18N::translate('Your web server is using PHP version %s, which is no longer maintained.  You should should ask your web service provider to upgrade to a later version.', PHP_VERSION) . '
+		<span class="accepted">' .
+			KT_I18N::translate('Your web server is using PHP version %s, which is no longer maintained.
+			You should should ask your web service provider to upgrade to a later version.',
+			PHP_VERSION
+		) . '
 		<a href="https://www.php.net/supported-versions.php" target="_blank" rel="noopener noreferrer"><i class="icon-php"></i></a>
 		<span>';
+	$PhpAlertClass = 'class="alert"';
 }
 
 // Total number of users
@@ -161,7 +204,6 @@ echo pageStart('admin', KT_I18N::translate('Dashboard')); ?>
 	<?php // Server warnings
 	if ($server_warnings) { ?>
 		<div class="cell callout warning">
-			<h5 class=""><?php echo KT_I18N::translate('Server information'); ?></h5>
 			<?php foreach ($server_warnings as $server_warning): ?>
 				<?php echo $server_warning; ?>
 			<?php endforeach; ?>
@@ -229,8 +271,15 @@ echo pageStart('admin', KT_I18N::translate('Dashboard')); ?>
 								<label class="h6"><?php echo KT_I18N::translate('Software'); ?></label>
 							</div>
 							<div class="cell medium-10 large-11">
-								<p><?php echo KT_I18N::translate('PHP Version'); ?>: <span><?php echo phpversion(); ?></span></p>
-								<p><?php echo KT_I18N::translate('SQL Version'); ?>: <span><?php echo $version; ?></span></p>
+								<p <?php echo $PhpAlertClass; ?> >
+									<?php echo KT_I18N::translate('PHP Version'); ?>:
+									<span><?php echo phpversion(); ?></span>
+								</p>
+								<p <?php echo $SqlAlertClass; ?> >
+									<?php echo KT_I18N::translate('SQL Version'); ?>:
+									<span><?php echo $version; ?></span>
+									<span class="font-italic"><?php echo KT_I18N::translate('(Minimum required = %s)', $minVersion); ?></span>
+								</p>
 								<p><?php echo KT_I18N::translate('Kiwitrees-nova'); ?>: <span><?php echo KT_VERSION; ?></span></p>
 								<p><?php echo KT_I18N::translate('Latest update schema'); ?>: <span><?php echo (int) KT_Site::preference('KT_SCHEMA_VERSION'); ?></span></p>
 							</div>

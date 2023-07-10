@@ -1,23 +1,21 @@
 <?php
 /**
- * Kiwitrees: Web based Family History software
- * Copyright (C) 2012 to 2023 kiwitrees.net
+ * Kiwitrees: Web based Family History software Copyright (C) 2012 to 2023
+ * kiwitrees.net
  *
- * Derived from webtrees (www.webtrees.net)
- * Copyright (C) 2010 to 2012 webtrees development team
+ * Derived from webtrees (www.webtrees.net) Copyright (C) 2010 to 2012 webtrees
+ * development team
  *
- * Derived from PhpGedView (phpgedview.sourceforge.net)
- * Copyright (C) 2002 to 2010 PGV Development Team
+ * Derived from PhpGedView (phpgedview.sourceforge.net) Copyright (C) 2002 to
+ * 2010 PGV Development Team
  *
- * Kiwitrees is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- * You should have received a copy of the GNU General Public License
+ * Kiwitrees is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version. This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details. You should have received a copy of the GNU General Public License
  * along with Kiwitrees. If not, see <http://www.gnu.org/licenses/>
  */
 
@@ -26,10 +24,18 @@ if (!defined('KT_KIWITREES')) {
 	exit;
 }
 
-// authenticate a username and password
-//
-// On success, store the user-id in the session and return it
-// On failure, return an error code
+/**
+ * These two used in setup.php and admin.php
+ */
+define('KT_REQUIRED_MYSQL_VERSION', '5.0.13');
+define('KT_REQUIRED_MARIADB_VERSION', '10.1.21');
+
+/**
+ * Authenticate a username and password
+ *
+ * On success, store the user-id in the session and return it
+ * On failure, return an error code
+ */
 function authenticateUser($user_name, $password) {
 	global $KT_SESSION;
 
@@ -67,6 +73,7 @@ function authenticateUser($user_name, $password) {
 
 /**
  * logs a user out of the system
+ *
  * @param string $user_id logout a specific user
  */
 function userLogout($user_id) {
@@ -82,10 +89,10 @@ function userLogout($user_id) {
  *
  * Returns 0 and NULL if we are not logged in.
  *
- * If you want to embed kiwitrees within a content management system, you would probably
- * rewrite these functions to extract the data from the parent system, and then
- * populate kiwitrees' user/user_setting/user_gedcom_setting tables as appropriate.
- *
+ * If you want to embed kiwitrees within a content management system, you would
+ * probably rewrite these functions to extract the data from the parent system,
+ * and then populate kiwitrees' user/user_setting/user_gedcom_setting tables as
+ * appropriate.
  */
 
 function getUserId() {
@@ -215,11 +222,12 @@ function AddToSearchLog($log_message, $geds) {
 /**
  * Adds a news item to the database
  *
- * This function adds a news item represented by the $news array to the database.
- * If the $news array has an ['id'] field then the function assumes that it is
- * as update of an older news item.
+ * This function adds a news item represented by the $news array to the
+ * database. If the $news array has an ['id'] field then the function assumes
+ * that it is as update of an older news item.
  *
  * @author John Finlay
+ *
  * @param array $news a news item array
  */
 function addNews($news) {
