@@ -278,7 +278,6 @@ echo pageStart('admin', KT_I18N::translate('Dashboard')); ?>
 								<p <?php echo $SqlAlertClass; ?> >
 									<?php echo KT_I18N::translate('SQL Version'); ?>:
 									<span><?php echo $version; ?></span>
-									<span class="font-italic"><?php echo KT_I18N::translate('(Minimum required = %s)', $minVersion); ?></span>
 								</p>
 								<p><?php echo KT_I18N::translate('Kiwitrees-nova'); ?>: <span><?php echo KT_VERSION; ?></span></p>
 								<p><?php echo KT_I18N::translate('Latest update schema'); ?>: <span><?php echo (int) KT_Site::preference('KT_SCHEMA_VERSION'); ?></span></p>
