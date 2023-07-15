@@ -152,9 +152,9 @@ function messageForm ($to, $from_name, $from_email, $subject, $body, $url, $to_n
 
 			if ($style == 2) { ?>
 				<div class="cell medium-8 medium-offset-2">
-					<h5 class="subheader">
+					<div class="cell callout info-help">
 						<?php echo KT_I18N::translate('Please use the appropriate form from the two below. That way your query will reach the best person to reply.'); ?>
-					</h5>
+					</div>
 					<hr>
 				</div>
 			<?php } ?>
@@ -162,9 +162,8 @@ function messageForm ($to, $from_name, $from_email, $subject, $body, $url, $to_n
 
 		<div class="grid-x grid-margin-x grid-margin-y" id="contact_body">
 			<?php for ($i = 1; $i <= 2; $i++) { ?>
-				<?php echo ${'form_title_' . $i}; ?>
-
 				<div class="cell <?php echo $spacing; ?>">
+					<?php echo ${'form_title_' . $i}; ?>
 					<div class="grid-x grid-margin-x grid-margin-y">
 						<div class="cell medium-2">
 							<label for="to_name" class="h6 middle"><?php echo KT_I18N::translate('To'); ?></label>
@@ -220,8 +219,8 @@ function messageForm ($to, $from_name, $from_email, $subject, $body, $url, $to_n
 			}
 
 			if (KT_USER_ID && get_user_setting(KT_USER_ID, 'contactmethod') === 'messaging') { ?>
-				<div class="cell medium-6 medium-offset-3">
-					<div class="callout small warning">
+				<div class="cell medium-8 medium-offset-2">
+					<div class="cell callout warning">
 						<?php echo KT_I18N::translate('When you send this message you will receive a copy sent via email to the address you provided.'); ?>
 					</div>
 				</div>
