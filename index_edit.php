@@ -91,7 +91,7 @@ if ($action == 'update') {
 		} else {
 			$new_blocks = $right;
 		}
-		foreach ($new_blocks as $order=>$block_name) {
+		foreach ($new_blocks as $order => $block_name) {
 			if (is_numeric($block_name)) {
 				// existing block
 				KT_DB::prepare("UPDATE `##block` SET block_order=? WHERE block_id=?")->execute(array($order, $block_name));
@@ -329,7 +329,7 @@ $controller
 						<!-- NOTE: Row 2 column 6: Right block list -->
 						<td>
 							<select multiple="multiple" id="right_select" name="right[]" size="10" onchange="show_description('right_select');">
-								<?php foreach ($blocks['side'] as $block_id=>$block_name) { ?>
+								<?php foreach ($blocks['side'] as $block_id => $block_name) { ?>
 									<option value="<?php echo $block_id; ?>"><?php echo $all_blocks[$block_name]->getTitle() . ' (id ' . $block_id . ')'; ?></option>
 								<?php } ?>
 							</select>
