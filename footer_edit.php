@@ -68,12 +68,11 @@ if($TEXT_DIRECTION == 'ltr') {
 }
 
 $all_blocks = array();
-foreach (KT_Module::getActiveFooters() as $name => $block) {
+foreach (KT_Module::getActiveFooters(KT_GED_ID, KT_PRIV_HIDE) as $blockname => $block) {
 	if ($gedcom_id) {
-		$all_blocks[$name] = $block;
+		$all_blocks[$blockname] = $block;
 	}
 }
-
 $blocks = get_gedcom_blocks($gedcom_id);
 
 if ($action == 'update') {
@@ -82,7 +81,7 @@ if ($action == 'update') {
 			if ($location == 'footer') {
 				$new_blocks = $footer;
 			}
-			foreach ($new_blocks as $order=>$block_name) {
+			foreach ($new_blocks as $order => $block_name) {
 				if (is_numeric($block_name)) {
 					// existing block
 					KT_DB::prepare("UPDATE `##block` SET block_order=? WHERE block_id=?")->execute(array($order, $block_name));
@@ -177,12 +176,6 @@ $controller
 		* This function selects all the options in the multiple select lists
 		*/
 		function select_options() {
-			section_select = document.getElementById("main_select");
-			if (section_select) {
-				for (i=0; i<section_select.length; i++) {
-					section_select.options[i].selected=true;
-				}
-			}
 			section_select = document.getElementById("right_select");
 			if (section_select) {
 				for (i=0; i<section_select.length; i++) {
@@ -205,20 +198,13 @@ $controller
 			} else {
 				instruct.innerHTML = block_descr["advice1"];
 			}
-			list1 = document.getElementById("main_select");
-			list2 = document.getElementById("available_select");
-			list3 = document.getElementById("right_select");
-			if (list_name=="main_select") {
-				list2.selectedIndex = -1;
-				list3.selectedIndex = -1;
-			}
+			list1 = document.getElementById("available_select");
+			list2 = document.getElementById("right_select");
 			if (list_name=="available_select") {
-				list1.selectedIndex = -1;
-				list3.selectedIndex = -1;
+				list2.selectedIndex = -1;
 			}
 			if (list_name=="right_select") {
 				list1.selectedIndex = -1;
-				list2.selectedIndex = -1;
 			}
 		}
 		var block_descr = new Array();
@@ -258,8 +244,8 @@ $controller
 						<!-- NOTE: Row 2 column 1: Middle (Available) block list -->
 						<td>
 							<select id="available_select" name="available[]" size="10" onchange="show_description('available_select');">
-								<?php foreach ($all_blocks as $block_name=>$block) { ?>
-									<option value="<?php echo $block_name; ?>"><?php echo $block->getTitle(); ?></option>
+								<?php foreach ($all_blocks as $blockname => $block) { ?>
+									<option value="<?php echo $blockname; ?>"><?php echo $all_blocks[$blockname]->getTitle(); ?></option>
 								<?php } ?>
 							</select>
 						</td>
@@ -271,8 +257,8 @@ $controller
 						</td>
 						<!-- NOTE: Row 2 column 3: Right block list -->
 						<td>
-							<select multiple="multiple" id="right_select" name="right[]" size="10" onchange="show_description('right_select');">
-								<?php foreach ($blocks['footer'] as $block_id=>$block_name) { ?>
+							<select multiple="multiple" id="right_select" name="footer[]" size="10" onchange="show_description('right_select');">
+								<?php foreach ($blocks['footer'] as $block_id => $block_name) { ?>
 									<option value="<?php echo $block_id; ?>"><?php echo $all_blocks[$block_name]->getTitle() . ' (id ' . $block_id . ')'; ?></option>
 								<?php } ?>
 							</select>

@@ -35,134 +35,27 @@ if (KT_USER_ID && KT_SCRIPT_NAME != 'index.php') {
    $show_widgetbar = false;
 }
 
-//get the widgets list
-$footer_blocks		= KT_Module::getActiveFooters();
- // no more than 5 footer blocks can be permitted, minimum of 1 required.
-count($footer_blocks) ? $ct_footer_blocks = min(count($footer_blocks), 5) : $ct_footer_blocks = '1';
-$layouts			= array(
-						'1' => array('12'),
-						'2' => array('6','6'),
-						'3' => array('2','8','2'),
-						'4' => array('3','3','3','3'),
-						'5' => array('2','2','4','2','2')
-					);
-$footer_layout		= $layouts[$ct_footer_blocks];
-$cells				= '1';
-?>
+$blocks			= get_gedcom_footers(KT_GED_ID);
+$active_blocks	= KT_Module::getActiveFooters();
 
-</div></div></main><!-- close the main div -->
-<?php if ($view != 'simple') { ?>
-	<footer class="grid-x grid-padding-x hide-for-print">
-		<?php if ($ct_footer_blocks > 0) {
-			foreach ($footer_blocks as $module_name => $module) {
-				switch ($ct_footer_blocks) {
-					case '1': ?>
-						<div class="cell footer-center">
-							<div class="card text-center">
-						<?php
-					break;
-					case '2':
-						switch ($cells) {
-							case 1: ?>
-								<div class="cell medium-6">
-									<div class="card text-center medium-text-left">
-							<?php
-							break;
-							case 2: ?>
-								<div class="cell medium-6">
-									<div class="card text-center medium-text-right">
-							<?php
-							break;
-						}
-					break;
-					case '3':
-						switch ($cells) {
-							case 1: ?>
-								<div class="cell medium-2">
-									<div class="card text-center medium-text-left">
-							<?php
-							break;
-							case 2: ?>
-								<div class="cell medium-8 footer-center">
-									<div class="card text-center">
-							<?php
-							break;
-							case 3: ?>
-								<div class="cell medium-2">
-									<div class="card text-center medium-text-right">
-							<?php
-							break;
-						}
-					break;
-					case '4':
-						switch ($cells) {
-							case 1: ?>
-								<div class="cell medium-3">
-									<div class="card text-center medium-text-left">
-							<?php
-							break;
-							case 2: ?>
-								<div class="cell medium-3 footer-center">
-									<div class="card text-center">
-							<?php
-							break;
-							case 3: ?>
-								<div class="cell medium-3 footer-center">
-									<div class="card text-center">
-							<?php
-							break;
-							case 4: ?>
-								<div class="cell medium-3">
-									<div class="card text-center medium-text-right">
-							<?php
-							break;
-						}
-					break;
-					case '5':
-						switch ($cells) {
-							case 1: ?>
-								<div class="cell medium-2">
-									<div class="card text-center medium-text-left">
-							<?php
-							break;
-							case 2: ?>
-								<div class="cell medium-2">
-									<div class="card text-center medium-text-left">
-							<?php
-							break;
-							case 3: ?>
-								<div class="cell medium-4 footer-center">
-									<div class="card text-center">
-							<?php
-							break;
-							case 4: ?>
-								<div class="cell medium-2">
-									<div class="card text-center medium-text-right">
-							<?php
-							break;
-							case 5: ?>
-								<div class="cell medium-2">
-									<div class="card text-center medium-text-right">
-							<?php
-							break;
-						}
-					break;
-				}
-						$class_name = $module_name . '_KT_Module';
-						$module = new $class_name;
-						$footer = KT_DB::prepare(
-							"SELECT * FROM `##block` WHERE module_name = ? AND gedcom_id > 0"
-						)->execute(array($module_name))->fetchOneRow();
-							if ($footer) {
-								echo $module->getFooter($footer->block_id);
-							}
-						$cells ++; ?>
-					</div>
-				</div>
-			<?php }
-		} ?>
-	</footer>
-	<?php if ($show_widgetbar) { ?>
-		</div>
-	<?php } ?>
-<?php }
+// Remove empty blocks_pending
+if (!exists_pending_change()) {
+	foreach($blocks as $key => $value) {
+		if($value == 'block_pending') {
+			unset($blocks[$key]);
+		}
+	}
+}
+
+if (KT_DEBUG_SQL) {
+echo KT_DB::getQueryLog();
+}
+
+count($active_blocks) ? $ct_footer_blocks = min(count($active_blocks), 5) : $ct_footer_blocks = '1';
+
+// use the footer layout or customised version of it for the currently active theme
+if (file_exists(KT_THEME_URL . 'myfooter_template.php')) {
+	include KT_THEME_DIR . 'myfooter_template.php';
+} else {
+	include KT_THEME_DIR . 'templates/footer_template.php';
+}

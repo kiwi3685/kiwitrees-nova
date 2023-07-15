@@ -120,5 +120,7 @@ developer_aids.txt
 myheader.php
 mystyle.css
 mytheme.php
-myfooter.php
+myfooter_template.php
+myhome_page_template.php
+
 /.nova

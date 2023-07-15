@@ -1774,8 +1774,7 @@ function get_admin_id($gedcom_id)
 function get_gedcom_blocks($gedcom_id)
 {
 	$blocks = ['main' => [], 'side' => [], 'footer' => []];
-	$rows = KT_DB::prepare(
-		"
+	$rows = KT_DB::prepare("
 		SELECT location, block_id, module_name
 		 FROM  `##block`
 		 JOIN  `##module` USING (module_name)
@@ -1783,8 +1782,8 @@ function get_gedcom_blocks($gedcom_id)
 		 WHERE gedcom_id=?
 		 AND   status='enabled'
 		 AND   access_level>=?
-		 ORDER BY location, block_order"
-	)->execute([$gedcom_id, KT_USER_ACCESS_LEVEL])->fetchAll();
+		 ORDER BY location, block_order
+	")->execute([$gedcom_id, KT_USER_ACCESS_LEVEL])->fetchAll();
 	foreach ($rows as $row) {
 		$blocks[$row->location][$row->block_id] = $row->module_name;
 	}
@@ -1830,6 +1829,31 @@ function set_block_setting($block_id, $setting_name, $setting_value)
 		;
 	}
 }
+
+// NOTE - this function is only correct when $gedcom_id==KT_GED_ID
+// since the privacy depends on KT_USER_ACCESS_LEVEL, which depends
+// on KT_GED_ID
+function get_gedcom_footers($gedcom_id)
+{
+	$blocks = [];
+	$rows = KT_DB::prepare("
+		SELECT location, block_id, module_name
+		 FROM  `##block`
+		 JOIN  `##module` USING (module_name)
+		 JOIN  `##module_privacy` USING (module_name, gedcom_id)
+		 WHERE gedcom_id=?
+		 AND   status='enabled'
+		 AND   access_level>=?
+		 AND   location='footer'
+		 ORDER BY block_order
+	")->execute([$gedcom_id, KT_USER_ACCESS_LEVEL])->fetchAll();
+	foreach ($rows as $row) {
+		$blocks[$row->block_id] = $row->module_name;
+	}
+
+	return $blocks;
+}
+
 
 // //////////////////////////////////////////////////////////////////////////////
 // Functions to access the ##MODULE and ##MODULE_SETTING tables

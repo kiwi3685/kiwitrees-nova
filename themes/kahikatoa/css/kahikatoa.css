@@ -440,6 +440,7 @@ footer .card .card-section .contact_links {
 }
 
 #change_blocks td select {
+	background-image: none;
 	height: 100%;
 }
 #change_blocks td label {

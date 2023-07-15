@@ -210,5 +210,19 @@ foreach (KT_Module::getActiveModules(true) as $module) {
 };
 asort($moduleTools);
 
+// List custom theme files that might exist
+/*
+ * Array of theme template files thatcan be customised
+ * in admin_custom_theme.php
+ *
+ */
+$customFiles = array(
+		'mystyle.css',
+		'mytheme.php',
+		'myheader.php',
+		'myfooter_template.php',
+		'myhome_page_template.php'
+	);
+
 
 

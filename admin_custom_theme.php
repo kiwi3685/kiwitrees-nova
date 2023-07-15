@@ -104,6 +104,7 @@ if ($editfile && $action != 'save') {
 			}
 			break;
 		case 'myhome_page_template.php':
+		case 'myfooter_template.php':
 			$filename = KT_THEMES_DIR . $theme . '/' . $editfile;
 
 			if (file_exists($filename)) {
@@ -117,7 +118,6 @@ if ($editfile && $action != 'save') {
 			}
 			break;
 		case 'myheader.php':
-		case 'myfooter.php':
 			$filename = KT_THEMES_DIR . $theme . '/' . $editfile;
 
 			if (file_exists($filename)) {
