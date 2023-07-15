@@ -36,7 +36,7 @@ $block		= KT_DB::prepare(
 					"SELECT * FROM `##block` WHERE block_id=?"
 				)->execute(array($block_id))->fetchOneRow();
 
-// Select either footer blocks or homep page blocks
+// Select either footer blocks or home page blocks
 if (strpos($block->module_name, 'footer') !== false) {
 	$blocks = KT_Module::getActiveFooters(KT_GED_ID);
 } else {
