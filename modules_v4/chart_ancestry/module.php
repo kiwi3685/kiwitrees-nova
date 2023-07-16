@@ -94,11 +94,8 @@ class chart_ancestry_KT_Module extends KT_Module implements KT_Module_Chart {
 			<form name="people" id="people" method="get" action="?">
 				<input type="hidden" name="mod" value="<?php echo $this->getName(); ?>">
 				<input type="hidden" name="mod_action" value="show">
-
-<?php echo KT_SCRIPT_NAME; ?>
-
 				<div class="grid-x grid-margin-x">
-					<label class="h5 cell medium-6 large-4" for="autocompleteInput-chartAncestry"><?php echo KT_I18N::translate('Individual'); ?>
+					<label class="cell medium-6 large-4" for="autocompleteInput-chartAncestry"><?php echo KT_I18N::translate('Individual'); ?>
 						<?php echo autocompleteHtml(
 							'chartAncestry', // id
 							'INDI', // TYPE
@@ -109,7 +106,7 @@ class chart_ancestry_KT_Module extends KT_Module implements KT_Module_Chart {
 							$controller->rootid // hidden input value
 						); ?>
 					</label>
-					<label class="h5 cell medium-6 large-4" for="generations"><?php echo KT_I18N::translate('Generations'); ?>
+					<label class="cell medium-6 large-4" for="generations"><?php echo KT_I18N::translate('Generations'); ?>
 						<div class="grid-x grid-padding-x">
 							<div class="cell small-9">
 							  <div class="slider" data-slider data-start="2" data-step="1" data-end="<?php echo $MAX_PEDIGREE_GENERATIONS; ?>" data-initial-start="<?php echo $controller->generations; ?>">
@@ -124,7 +121,7 @@ class chart_ancestry_KT_Module extends KT_Module implements KT_Module_Chart {
 					</label>
 					<div class="cell medium-6 large-4">
 						<div class="grid-x grid-padding-x">
-							<label class="h5 cell small-8 medium-4 large-3"><?php echo KT_I18N::translate('Chart'); ?>
+							<label class="cell small-8 medium-4 large-3"><?php echo KT_I18N::translate('Chart'); ?>
 								<div class="switch">
 									<input class="switch-input" type="radio" id="list" name="chart_style" value="0" onclick="statusDisable('show_cousins');" <?php echo $controller->chart_style == 0 ? 'checked' : ''; ?>>
 									<label class="switch-paddle" for="list">
@@ -134,7 +131,7 @@ class chart_ancestry_KT_Module extends KT_Module implements KT_Module_Chart {
 									</label>
 								</div>
 							</label>
-							<label class="h5 cell small-8 medium-4 large-5"><?php echo KT_I18N::translate('Individual list'); ?>
+							<label class="cell small-8 medium-4 large-5"><?php echo KT_I18N::translate('Individual list'); ?>
 								<div class="switch">
 									<input class="switch-input" type="radio" id="individual" name="chart_style" value="1" onclick="statusDisable('show_cousins');" <?php echo $controller->chart_style == 1 ? 'checked' : ''; ?>>
 									<label class="switch-paddle" for="individual">
@@ -144,7 +141,7 @@ class chart_ancestry_KT_Module extends KT_Module implements KT_Module_Chart {
 									</label>
 								</div>
 							</label>
-							<label class="h5 cell small-8 medium-4 large-4"><?php echo KT_I18N::translate('Family list'); ?>
+							<label class="cell small-8 medium-4 large-4"><?php echo KT_I18N::translate('Family list'); ?>
 								<div class="switch">
 									<input class="switch-input" type="radio" id="family" name="chart_style" value="2" onclick="statusDisable('show_cousins');" <?php echo $controller->chart_style == 2 ? 'checked' : ''; ?>>
 									<label class="switch-paddle" for="family">
@@ -157,10 +154,7 @@ class chart_ancestry_KT_Module extends KT_Module implements KT_Module_Chart {
 						</div>
 					</div>
 				</div>
-				<button class="button" type="submit">
-					<i class="<?php echo $iconStyle; ?> fa-eye"></i>
-					<?php echo KT_I18N::translate('Show'); ?>
-				</button>
+				<?php echo singleButton('fa-eye', 'Show'); ?>
 			</form>
 			<hr>
 			<?php
