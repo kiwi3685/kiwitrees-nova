@@ -238,10 +238,10 @@ switch ($action) {
 					if ($user_id) {
 						$passchars = 'abcdefghijklmnopqrstuvqxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 						$user_new_pw = '';
-						$max = strlen($passchars)-1;
-						for ($i=0; $i<8; $i++) {
-							$index = rand(0,$max);
-							$user_new_pw .= $passchars($index);
+						$max = strlen($passchars) - 1;
+						for ($i = 0; $i < KT_MINIMUM_PASSWORD_LENGTH + 2; $i++) {
+							$index = rand(0, $max);
+							$user_new_pw .= $passchars[rand(0, $max - 1)];
 						}
 
 						set_user_password($user_id, $user_new_pw);
@@ -280,7 +280,7 @@ switch ($action) {
 						<input type="hidden" name="action" value="requestpw">
 						<div class="grid-x grid-margin-x grid-margin-y">
 							<label class="cell medium-4 middle h6" for="new_password" class="h5">
-								<?php echo KT_I18N::translate('Username or email address'); ?>								
+								<?php echo KT_I18N::translate('Username or email address'); ?>
 							</label>
 							<div class="cell medium-8">
 								<input type="text" id="new_password" name="new_passwd_username" value="" autofocus>
@@ -579,9 +579,9 @@ switch ($action) {
 					<input type="hidden" name="action" value="verify_hash">
 
 					<div class="grid-x grid-margin-x grid-margin-y">
- 
+
 						<label class="cell medium-2 middle h6" for="username">
-							<?php echo KT_I18N::translate('Username'); ?>								
+							<?php echo KT_I18N::translate('Username'); ?>
 						</label>
 						<div>
 							<input type="text" id="username" name="user_name" value="<?php echo $user_name; ?>">
@@ -626,18 +626,18 @@ switch ($action) {
 
         $user_id       = get_user_id($user_name);
         $edit_user_url = KT_SERVER_NAME . '/admin_users.php?action=edit&amp;user_id=' . $user_id;
- 
+
         $mail1_body    = KT_I18N::translate('Hello administrator…') . KT_Mail::EOL . KT_Mail::EOL .
-            /* I18N: %1$s is a real-name, %2$s is a username, %3$s is an email address */ 
+            /* I18N: %1$s is a real-name, %2$s is a username, %3$s is an email address */
             KT_I18N::translate(
                 'A new user (%1$s) has requested an account (%2$s) and verified an email address (%3$s).',
                 getUserFullName($user_id),
                 $user_name,
                 getUserEmail($user_id)
             ) . KT_Mail::EOL . KT_Mail::EOL .
- 
+
             KT_I18N::translate('You need to review the account details.') . KT_Mail::EOL . KT_Mail::EOL .
- 
+
             '<a href="' . $edit_user_url . '">' . $edit_user_url . '</a>' . KT_Mail::EOL . KT_Mail::EOL .
             /* I18N: You need to: */ KT_I18N::translate('Set the status to “approved”.') . KT_Mail::EOL .
             /* I18N: You need to: */ KT_I18N::translate('Set the access level for each tree.') . KT_Mail::EOL .
@@ -693,7 +693,7 @@ switch ($action) {
 
 	        </div>
 
-        <?php echo pageClose(); 
+        <?php echo pageClose();
 
     	break;
 
