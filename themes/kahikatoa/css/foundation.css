@@ -35,6 +35,16 @@ span.form-error {
 	font-size: 1rem;
 }
 
+button.primary .svg-inline--fa {
+	color: #faf5e8;
+}
+button.secondary .svg-inline--fa {
+	color: #ab3334;
+}
+button .svg-inline--fa {
+	margin: 0 0.5rem -0.1rem 0;
+}
+
 .callout.primary {
 	border-left: 0.25rem solid #ab3334;
 	border-right: 0.25rem solid #ab3334;
@@ -473,7 +483,7 @@ label > [type=radio] {
 label {
 	display: block;
 	margin: 0;
-	font-size: 0.875rem;
+	font-size: 1rem;
 	font-weight: 900;
 	line-height: 1.8;
 	color: #331919;
@@ -3706,7 +3716,7 @@ a.button:hover, a.button:focus {
 	display: inline-block;
 	padding: 0.33333rem 0.5rem;
 	border-radius: 0;
-	font-size: 0.8rem;
+	font-size: 1rem;
 	line-height: 1;
 	white-space: nowrap;
 	cursor: default;

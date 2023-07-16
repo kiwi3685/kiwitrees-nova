@@ -37,10 +37,8 @@
 }
 
 button .svg-inline--fa {
+	color: #faf5e8;
 	margin: 0 0.5rem -0.1rem 0;
-}
-button.primary .svg-inline--fa {
-	color: #fffff4;
 }
 
 .button:hover svg,
@@ -711,6 +709,13 @@ div[id$=-page] button[type=submit] {
 
 #contact-page div.userList span:not(:last-child)::after {
 	content: ", ";
+}
+
+#edituser-page span.age {
+	display: none;
+}
+#edituser-page button.delete {
+	margin-top: -3rem;
 }
 
 #floating_contact {

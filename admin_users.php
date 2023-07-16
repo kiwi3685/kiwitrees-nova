@@ -668,7 +668,7 @@ switch (KT_Filter::get('action')) {
 								<?php echo /* I18N: Help text for the “Preferred contact method” configuration setting */
 								KT_I18N::translate('
 									Site members can send each other messages.
-									YUse this setting to choose how these messages are sent to this user,
+									Use this setting to choose how these messages are sent to this user,
 									or not sent to them at all.
 								'); ?>
 							</div>

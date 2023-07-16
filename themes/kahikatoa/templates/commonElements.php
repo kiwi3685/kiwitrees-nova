@@ -64,7 +64,7 @@ function pageClose()
 	?>
 		</div>
 	</div>
-	<?php 
+	<?php
 }
 
 /**
@@ -127,10 +127,10 @@ function autocompleteHtml($suffix, $type, $tree, $valueInput, $placeHolder, $inp
 				}
 			$html .= '>
  			<span class="input-group-label">
- 				<button 
- 					id="' . $suffix . '" 
- 					class="clearAutocomplete autocomplete_icon" 
- 					data-position="top" 
+ 				<button
+ 					id="' . $suffix . '"
+ 					class="clearAutocomplete autocomplete_icon"
+ 					data-position="top"
  					data-alignment="center"
  				>
  					<i class="' . $iconStyle . ' fa-xmark"></i>
@@ -143,28 +143,27 @@ function autocompleteHtml($suffix, $type, $tree, $valueInput, $placeHolder, $inp
 }
 
 /**
- * A basic "Show" single submit buttons.
+ * A basic single submit button, using primary style.
  *
  * @param mixed $icon
  * @param mixed $title
  *
  * @return string[]
  */
-function singleButton($icon = 'fa-save', $title = 'Save')
+function singleButton($icon = 'fa-floppy-disk', $title = 'Save')
 {
 	global $iconStyle; ?>
 
-	<div class="cell align-left button-group">
-		<button class="button primary" type="submit">
-			<i class="<?php echo $iconStyle; ?>&nbsp;<?php echo $icon; ?>"></i>
-			<?php echo KT_I18N::translate($title); ?>
-		</button>
-	</div>
+	<button class="button primary" type="submit">
+		<i class="<?php echo $iconStyle; ?> <?php echo $icon; ?>"></i>
+		<?php echo KT_I18N::translate($title); ?>
+	</button>
+
 	<?php
 }
 
 /**
- * A stadard "Save / Cancel" pair of buttons, used on many pages.
+ * A standard "Save / Cancel" pair of buttons, used on many pages.
  *
  * @param mixed $onClick
  *
@@ -327,7 +326,7 @@ function MobileTopBarMenu($menuID = 'MainMenu')
 						echo $menu->getMobileMenu();
 					}
 				} ?>
-	
+
 				<li class="is-dropdown-submenu-parent">
 					<form class="header-search" action="search.php" method="post">
 						<input type="hidden" name="action" value="general">
@@ -351,7 +350,7 @@ function MobileTopBarMenu($menuID = 'MainMenu')
 
 /**
  * Standard device menu
- * 
+ *
  * @param bool $show_widgetbar
  */
 function TopBarMenu($show_widgetbar)
