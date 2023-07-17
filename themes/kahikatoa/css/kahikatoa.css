@@ -473,6 +473,7 @@ footer .card .card-section .contact_links {
 	/* block_today */
 	/* block_charts */
 	/* block_login */
+	/* block_media */
 	/* block_favorites */
 	/* block_welcome */
 }
@@ -531,6 +532,9 @@ footer .card .card-section .contact_links {
 }
 .block .blockcontent.block_login form.login-form button {
 	margin-bottom: 1rem;
+}
+.block .blockcontent.block_media div[class*=block_media_controls] a {
+	font-size: 1.125rem;
 }
 .block .blockcontent.block_favorites .dropdown-pane button.close-button {
 	bottom: 1.75rem;

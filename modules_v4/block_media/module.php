@@ -128,33 +128,48 @@ class block_media_KT_Module extends KT_Module implements KT_Module_Block {
 						} else {
 							$icon_class = 'fa-play';
 						}
-						$content .= '<script>
+						$content .= '
+						<script>
 							var play = false;
 							function togglePlay() {
-								if (play) {
+								if (play == true) {
 									play = false;
-									jQuery("#play_stop").removeClass("fa-pause").addClass("fa-play");
+									jQuery("#play_stop svg").removeClass("fa-pause").addClass("fa-play");
 								} else {
 									play = true;
 									playSlideShow();
-									jQuery("#play_stop").removeClass("fa-play").addClass("fa-pause");
+									jQuery("#play_stop svg").removeClass("fa-play").addClass("fa-pause");
 								}
 							};
 							function playSlideShow() {
-								if (play) {
-									window.setTimeout("reload_image()", 5000);
+								if (play == true) {
+									window.setTimeout("reload_image()", 3000);
 								}
 							};
 							function reload_image() {
-								if (play) {
+								if (play == true) {
 									jQuery("#' . $id .'").load("index.php?action=ajax&block_id=' . $block_id . '&start=1");
 								}
 							};
 						</script>
 
-						<div id="cell block_media_controls' . $block_id . '">
-							<a href="#" onclick="togglePlay(); return false;" id="play_stop" class="' . $iconStyle  . ' ' . $icon_class . '" title="' . KT_I18N::translate('Play') . '/' . KT_I18N::translate('Stop') . '"></a>
-							<a href="#" onclick="jQuery(\'#'. $id . '\').load(\'index.php?action=ajax&amp;block_id=' . $block_id . '\');return false;" title="' . KT_I18N::translate('Next image') . '" class="' . $iconStyle  . ' fa-angle-double-right"></a>
+						<div class="cell block_media_controls' . $block_id . '">
+							<a
+								href="#"
+								onclick="togglePlay(); return false;"
+								id="play_stop"
+								title="' . KT_I18N::translate('Play') . '/' . KT_I18N::translate('Stop') . '"
+							>
+								<i class="' . $iconStyle  . ' ' . $icon_class . '"></i>
+							</a>
+							<a
+								href="#"
+								onclick="jQuery(\'#'. $id . '\').load(\'index.php?action=ajax&amp;block_id=' . $block_id . '\');return false;"
+								id="next_image"
+								title="' . KT_I18N::translate('Next image') . '"
+							>
+								<i class="' . $iconStyle  . ' fa-angle-double-right"></i>
+							</a>
 						</div>';
 
 						if ($start) {
