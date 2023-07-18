@@ -404,3 +404,26 @@ function TopBarMenu($show_widgetbar)
 
 	<?php
 }
+
+/**
+ * Set of addional fact inputs
+ * in an accordion list
+ *
+ * @param an array of strings
+ */
+function additionalFacts ($facts = array())
+{
+//	require KT_ROOT . 'includes/functions/functions_edit_gedcom.php'; ?>
+
+	<div id="additional_facts">
+		<ul class="accordion" data-accordion data-multi-expand="true" data-allow-all-closed="true">
+			<?php
+				foreach ($facts as $fact) {
+					print_add_layer($fact);
+				}
+			?>
+		</ul>
+	</div>
+
+	<?php
+}

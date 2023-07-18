@@ -253,24 +253,19 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
 
                     </div>
 
-                     <?php currentValue($fact, $islink, $value, $upperlevel, $element_id) ?>
+                     <?php if ($element_id) {
+						 currentValue($fact, $islink, $value, $upperlevel, $element_id);
+					 } ?>
 
             </div>
 
-             <?php // Icon sets ?>
-            <div class="cell small-2 popup_links">
-
-                <?php // echo popupLinks($fact, $element_id, $upperlevel, $level, $tags, $element_name, $value, $action, $event_add, $islink, $pid); ?>
-
-            </div>
-
-             <?php // Optional text to display after the input field (so that additional text can be printed in the box) ?>
-            <?php echo $extra; ?>
+            <?php // Optional text to display after the input field (so that additional text can be printed in the box)
+            echo $extra; ?>
 
         </div>
 
-         <?php // Checkboxes to apply '1 SOUR' to BIRT/MARR/DEAT as '2 SOUR' ?>
-        <?php if ($fact == 'SOUR' && $level == 1) { ?>
+         <?php // Checkboxes to apply '1 SOUR' to BIRT/MARR/DEAT as '2 SOUR'
+        if ($fact == 'SOUR' && $level == 1) { ?>
             <div class="source_links">
                 <h4><?php echo KT_I18N::translate('Link this source to these records'); ?></h4>
 
@@ -422,11 +417,10 @@ function displaySpouses($pid, $fact)
 **/
 function helpText($label, $upperlevel, $fact, $level, $action)
 {
-    // help text
+
     if ($action == "addnewnote_assisted") {
         // Do not print on census_assistant window
-    } else {
-        // Not all facts have help text.
+	} else {
         switch ($fact) {
             case 'NAME':
                 if ($upperlevel !== 'REPO' && $upperlevel !== 'UNKNOWN') {

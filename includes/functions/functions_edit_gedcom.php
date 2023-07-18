@@ -919,7 +919,7 @@ function print_indi_form($nextaction, $famid, $linenum = '', $namerec = '', $fam
                 } else {
                     marnm_id = ip[i].id;
 				}
-			}	
+			}
 
 		}
 
@@ -1016,25 +1016,25 @@ function print_add_layer($tag, $level = 2)
 						<?php
 						// 2 SOUR
 						$source = 'SOUR @';
-		add_simple_tag("{$level} {$source}");
-		// 3 PAGE
-		$page = 'PAGE';
-		add_simple_tag(($level + 1) . " {$page}");
-		// 3 DATA
-		// 4 TEXT
-		$text = 'TEXT';
-		add_simple_tag(($level + 2) . " {$text}");
-		if ($FULL_SOURCES) {
-			// 4 DATE
-			add_simple_tag(($level + 2) . ' DATE', '', KT_Gedcom_Tag::getLabel('DATA:DATE'));
-			// 3 QUAY
-			add_simple_tag(($level + 1) . ' QUAY');
-		}
-		// 3 OBJE
-		add_simple_tag(($level + 1) . ' OBJE');
-		// 3 SHARED_NOTE
-		add_simple_tag(($level + 1) . ' SHARED_NOTE');
-		?>
+						add_simple_tag("{$level} {$source}");
+						// 3 PAGE
+						$page = 'PAGE';
+						add_simple_tag(($level + 1) . " {$page}");
+						// 3 DATA
+						// 4 TEXT
+						$text = 'TEXT';
+						add_simple_tag(($level + 2) . " {$text}");
+						if ($FULL_SOURCES) {
+							// 4 DATE
+							add_simple_tag(($level + 2) . ' DATE', '', KT_Gedcom_Tag::getLabel('DATA:DATE'));
+							// 3 QUAY
+							add_simple_tag(($level + 1) . ' QUAY');
+						}
+						// 3 OBJE
+						add_simple_tag(($level + 1) . ' OBJE');
+						// 3 SHARED_NOTE
+						add_simple_tag(($level + 1) . ' SHARED_NOTE');
+						?>
 					</div>
 				</div>
 			</div>
@@ -1268,7 +1268,7 @@ function addNewFact($fact)
  *
  * @return string The updated gedcom record
  */
-function handle_updates($newged, $levelOverride = "no") 
+function handle_updates($newged, $levelOverride = "no")
 {
 	global $glevels, $islink, $tag, $uploaded_files, $text;
 

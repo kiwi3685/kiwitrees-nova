@@ -25,7 +25,6 @@ define('KT_SCRIPT_NAME', 'edit_interface.php');
 require './includes/session.php';
 require KT_ROOT . 'includes/functions/functions_edit.php';
 require KT_ROOT . 'includes/functions/functions_edit_gedcom.php';
-//require KT_ROOT . 'includes/functions/functions_edit_AddSimpleTags.php';
 
 $controller = new KT_Controller_Page();
 $controller
@@ -146,39 +145,31 @@ switch ($actionA) {
 				<input type="hidden" name="linenum" value="new">
 				<input type="hidden" name="pid" value="<?php echo $pid; ?>">
 				<div id="add_facts">
-					<?php
-                    echo create_add_form($fact);
-                    ?>
+					<?php echo create_add_form($fact); ?>
 				</div>
-				<?php // Genealogical facts (e.g. for INDI and FAM records) can have 2 SOUR/NOTE/OBJE/ASSO/RESN ...
-                if ($level0type === 'INDI' || $level0type === 'FAM') { ?>
-					<div id="additional_facts">
-                        <ul class="accordion" data-accordion data-allow-all-closed="true" data-multi-expand="true">
-    						<?php // ... but not facts which are simply links to other records
-                            if ($fact !== 'OBJE' && $fact !== 'NOTE' && $fact !== 'SHARED_NOTE' && $fact !== 'REPO' && $fact !== 'SOUR' && $fact !== 'ASSO' && $fact !== 'ALIA') {
-                                print_add_layer('SOUR');
-                                print_add_layer('OBJE');
-                                // Don't add notes to notes!
-                                if ($fact != 'NOTE') {
-                                    print_add_layer('NOTE');
-                                    print_add_layer('SHARED_NOTE');
-                                }
-                                print_add_layer('ASSO');
-                                // allow to add godfather and godmother for CHR fact or best man and bridesmaid for MARR fact in one window
-                                if ($fact === 'BAPM' || $fact === 'CHR' || $fact === 'MARR') {
-                                    print_add_layer('ASSO2');
-                                }
-                                print_add_layer('RESN');
-                            } ?>
-                        </ul>
-					</div>
-				<?php }
+
+				<?php // Select appropriate additional facts based on current tag
+				if ($level0type === 'INDI' || $level0type === 'FAM') {
+					$facts1 = $facts2 = $facts3 = $facts4 = $facts5 = [];
+					if ($fact !== 'OBJE' && $fact !== 'NOTE' && $fact !== 'SHARED_NOTE' && $fact !== 'REPO' && $fact !== 'SOUR' && $fact !== 'ASSO' && $fact !== 'ALIA') {
+						$facts1 = ['SOUR', 'OBJE'];
+						if ($fact != 'NOTE') {
+							$facts2 = ['NOTE', 'SHARED_NOTE'];
+						}
+						$facts3 = ['ASSO'];
+						if ($fact === 'BAPM' || $fact === 'CHR' || $fact === 'MARR') {
+							$facts4 = ['ASSO2'];
+						}
+						$facts5 = ['RESN'];
+					}
+					$facts = array_merge($facts1, $facts2, $facts3, $facts4, $facts5);
+				}
+				echo  additionalFacts($facts);
 
                 echo no_update_chan($record);
 
-                echo submitButtons();
+                echo submitButtons(); ?>
 
-                ?>
 			</form>
 
 		<?php echo pageClose();
@@ -1274,60 +1265,62 @@ switch ($actionA) {
         $person = KT_Person::getInstance($pid);
 
         if ($person->getSex() == 'F') {
-            $controller->setPageTitle($person->getLifespanName() . ' - ' . KT_I18N::translate('Add a husband using an existing person'));
+           $subtitle =  KT_I18N::translate('Add a husband using an existing person');
         } else {
-            $controller->setPageTitle($person->getLifespanName() . ' - ' . KT_I18N::translate('Add a wife using an existing person'));
+            $subtitle =  KT_I18N::translate('Add a wife using an existing person');
         }
 
-        $controller->pageHeader();
+		$controller
+			->setPageTitle($person->getFullName())
+			->pageHeader()
+		;
 
-        init_calendar_popup();
+		init_calendar_popup();
 
-        echo pageStart('edit_interface', $controller->getPageTitle()); ?>
+		echo pageStart('edit_interface', $person->getLifespanName(), 'y', $subtitle); ?>
 
 			<form method="post" name="addchildform" action="edit_interface.php">
 				<input type="hidden" name="action" value="linkspouseaction">
 				<input type="hidden" name="pid" value="<?php echo $pid; ?>">
 				<input type="hidden" name="famid" value="new">
 				<input type="hidden" name="famtag" value="<?php echo $famtag; ?>">
-				<div id="add_facts">
-					<label>
-						<?php
-                        if ($famtag == "WIFE") {
-                            echo KT_I18N::translate('Wife');
-                        } else {
-                            echo KT_I18N::translate('Husband');
-                        }
-                        ?>
-					</label>
-					<div class="input">
-						<div class="input-group">
-							<input data-autocomplete-type="INDI" id="spouseid" type="text" name="spid" size="8">
-							<?php echo print_findindi_link('spouseid'); ?>
+				<div id="linkSpouse" class="cell">
+					<div class="grid-x">
+						<div class="cell small-12 medium-3">
+							<label class="middle">
+								<?php
+								if ($famtag == "WIFE") {
+									echo KT_I18N::translate('Wife');
+								} else {
+									echo KT_I18N::translate('Husband');
+								}
+								?>
+							</label>
+						</div>
+						<div class="cell small-10 medium-7">
+							<?php //<input data-autocomplete-type="INDI" id="spouseid" type="text" name="spid" size="8">?>
+							<div class="input-group autocomplete_container">
+								<?php echo autocompleteHtml(
+									'spouseid',
+									'INDI',
+									'',
+									'',
+									'Individual name',
+									'spid',
+									'',
+								); ?>
+							</div>
 						</div>
 					</div>
-					<?php
-                    add_simple_tag("0 MARR Y");
-                    add_simple_tag("0 DATE", "MARR");
-                    add_simple_tag("0 PLAC", "MARR");
-                    echo no_update_chan($person);
-                    ?>
 				</div>
-				<div id="additional_facts">
-                    <ul class="accordion" data-accordion data-multi-expand="true" data-allow-all-closed="true">
-    					<?php
-                            print_add_layer("SOUR");
-                            print_add_layer("OBJE");
-                            print_add_layer("NOTE");
-                            print_add_layer("SHARED_NOTE");
-                            print_add_layer("ASSO");
-                            // allow to add godfather and godmother for CHR fact or best man and bridesmaid for MARR fact in one window
-                            print_add_layer("ASSO2");
-                            print_add_layer("RESN");
-                        ?>
-                    </ul>
-				</div>
-				<?php echo submitButtons(); ?>
+				<?php
+                add_simple_tag("0 MARR Y");
+                add_simple_tag("0 DATE", "MARR");
+                add_simple_tag("0 PLAC", "MARR");
+                echo no_update_chan($person);
+
+				echo submitButtons(); ?>
+
 			</form>
 
 		<?php echo pageClose();
