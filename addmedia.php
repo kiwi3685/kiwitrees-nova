@@ -24,6 +24,7 @@
 define('KT_SCRIPT_NAME', 'addmedia.php');
 require './includes/session.php';
 require KT_ROOT . 'includes/functions/functions_edit.php';
+require KT_ROOT . 'includes/functions/functions_edit_gedcom.php';
 
 $pid         = KT_Filter::get('pid', KT_REGEX_XREF, KT_Filter::post('pid', KT_REGEX_XREF)); // edit this media object
 $linktoid    = KT_Filter::get('linktoid', KT_REGEX_XREF, KT_Filter::post('linktoid', KT_REGEX_XREF)); // create a new media object, linked to this record
@@ -417,32 +418,32 @@ switch ($action) {
 		throw new Exception('Bad $action (' . $action . ') in addmedia.php');
 }
 
-	// 'format' used only when this page opeened in administration
-	if (!KT_Filter::get('format')) {
-		$controller->pageHeader();
-	}
-	$controller->getPageTitle();
+// 'format' used only when this page opened in administration
+if (!KT_Filter::get('format')) {
+	$controller->pageHeader();
+}
+$controller->getPageTitle();
 
-?>
+echo pageStart('addmedia', $controller->getPageTitle()); ?>
 
-<div id="addmedia-page">
-	<h2><?php echo $controller->getPageTitle(); ?></h2>
 	<form method="post" name="newmedia" action="addmedia.php" enctype="multipart/form-data">
 		<input type="hidden" name="action" value="<?php echo $action; ?>">
 		<input type="hidden" name="ged" value="<?php echo KT_GEDCOM; ?>">
 		<input type="hidden" name="pid" value="<?php echo $pid; ?>">
+
 		<?php if ($linktoid) { ?>
 			<input type="hidden" name="linktoid" value="<?php echo $linktoid; ?>">
 		<?php } ?>
-		<div id="add_facts">
+
+		<div id="add_facts" class="grid-x">
 			<?php if (!$linktoid && $type != 'event' && $action == 'create') { ?>
-				<div id="MEDIA_factdiv">
-					<label>
+				<div class="cell small-12 medium-3">
+					<label class="middle">
 						<?php echo KT_I18N::translate('Enter a Person, Family, or Source ID'); ?>
 					</label>
-					<div class="input">
-						<input type="text" data-autocomplete-type="IFS" name="linktoid" id="linktoid" value="">
-					</div>
+				</div>
+				<div class="cell small-10 medium-7">>
+					<input type="text" data-autocomplete-type="IFS" name="linktoid" id="linktoid" value="">
 					<div class="help_text">
 						<span class="help_content">
 							<?php echo KT_I18N::translate('Enter or search for the ID of the person, family, or source to which this media item should be linked.'); ?>
@@ -452,63 +453,55 @@ switch ($action) {
 			<?php }
 
 			$gedrec = find_gedcom_record($pid, KT_GED_ID, true);
-
 			// 1 FILE
-			if (preg_match('/\n\d (FILE.*)/', $gedrec, $match)) {
+			if ($gedrec && preg_match('/\n\d (FILE.*)/', $gedrec, $match)) {
 				$gedfile = $match[1];
 			} elseif ($filename) {
 				$gedfile = 'FILE ' . $filename;
 			} else {
 				$gedfile = 'FILE';
 			}
-
 			if ($gedfile == 'FILE') { ?>
 
 				<!-- Option to use editing tool before uploading image -->
-				<div id="MEDIA_factdiv">
-					<label>
+				<div class="cell small-12 medium-3">
+					<label class="middle">
 						<?php echo KT_I18N::translate('External image editor'); ?>
 					</label>
-					<div class="input">
-						<?php echo '<a href="' . $IMAGE_EDITOR . '" target="_blank">' . $IMAGE_EDITOR . '</a>'; ?>
-					</div>
-					<div class="help_text">
-						<span class="help_content">
-							<?php echo KT_I18N::translate('You can use this editor to adjust your media images before uploading. It can help to resize, modify colours, change rotation etc. Please remember %s is not part of this %s website. The link is provided for your convenience, with no guarantees. For assistance using the software please contact its developers directly.', $IMAGE_EDITOR, KT_TREE_TITLE); ?>
-						</span>
+				</div>
+				<div class="cell small-10 medium-7">
+					<?php echo '<a class="imageEditorLink" href="' . $IMAGE_EDITOR . '" target="_blank">' . $IMAGE_EDITOR . '</a>'; ?>
+					<div class="cell callout info-help show-for-medium">
+						<?php echo KT_I18N::translate('You can use this editor to adjust your media images before uploading. It can help to resize, modify colours, change rotation etc. Please remember %s is not part of this %s website. The link is provided for your convenience, with no guarantees. For assistance using the software please contact its developers directly.', $IMAGE_EDITOR, KT_TREE_TITLE); ?>
 					</div>
 				</div>
 
 				<hr>
 
-				<!--  Box for user to choose to upload file from local computer -->
-				<div id="MEDIA-UP_factdiv">
-					<label>
+				<?php //  Box for user to choose to upload file from local computer ?>
+				<div class="cell small-12 medium-3">
+					<label class="middle">
 						<?php echo  KT_I18N::translate('Media file to upload'); ?>
 					</label>
-					<div class="input">
-						<input type="file" name="mediafile" onchange="updateFormat(this.value);">
-						<div class="help_text">
-							<span class="help_content">
-								<?php echo KT_I18N::translate('Maximum file size allowed is %s', detectMaxUploadFileSize()); ?>
-							</span>
-						</div>
+				</div>
+				<div class="cell small-10 medium-7">
+					<input type="file" name="mediafile" onchange="updateFormat(this.value);">
+					<div class="cell callout info-help show-for-medium">
+						<?php echo KT_I18N::translate('Maximum file size allowed is %s', detectMaxUploadFileSize()); ?>
 					</div>
 				</div>
-				<?php
-				// Check for thumbnail generation support
+
+				<?php // Check for thumbnail generation support
 				if (KT_USER_GEDCOM_ADMIN) { ?>
-					<div id="THUMB-UP_factdiv">
-						<label>
+					<div class="cell small-12 medium-3">
+						<label class="middle">
 							<?php echo KT_I18N::translate('Thumbnail to upload'); ?>
 						</label>
-						<div class="input">
-							<input type="file" name="thumbnail">
-						</div>
-						<div class="help_text">
-							<span class="help_content">
-								<?php echo KT_I18N::translate('Choose the thumbnail image that you want to upload.  Although thumbnails can be generated automatically for images, you may wish to generate your own thumbnail, especially for other media types.  For example, you can provide a still image from a video, or a photograph of the person who made an audio recording.'); ?>
-							</span>
+					</div>
+					<div class="cell small-10 medium-7">
+						<input type="file" name="thumbnail">
+						<div class="cell callout info-help show-for-medium">
+							<?php echo KT_I18N::translate('Choose the thumbnail image that you want to upload.  Although thumbnails can be generated automatically for images, you may wish to generate your own thumbnail, especially for other media types.  For example, you can provide a still image from a video, or a photograph of the person who made an audio recording.'); ?>
 						</div>
 					</div>
 				<?php }
@@ -518,20 +511,19 @@ switch ($action) {
 			$isExternal = isFileExternal($gedfile);
 			if ($gedfile == 'FILE') {
 				if (KT_USER_GEDCOM_ADMIN) { ?>
-					<div id="FILE_factdiv">
-						<?php add_simple_tag("1 $gedfile",'',KT_I18N::translate('File name on server')); ?>
-					</div>
-					<div class="help_text">
-						<span class="help_content">
-							<?php echo
-								KT_I18N::translate('Do not change to keep original file name.') .
-								KT_I18N::translate('You may enter a URL, beginning with "http://".');
-							?>
-						</span>
-					</div>
-				<?php }
-				$folder = '';
-			} else {
+					<?php add_simple_tag(
+						"1 $gedfile",
+						'',
+						KT_I18N::translate('File name on server')
+					);
+				}
+				$folder = ''; ?>
+				<div class="cell callout info-help show-for-medium medium-7 medium-offset-3">
+					<?php echo
+					KT_I18N::translate('Do not change to keep original file name.') . '<br>' .
+					KT_I18N::translate('You may enter a URL, beginning with "http://".'); ?>
+				</div>
+			<?php } else {
 				if ($isExternal) {
 					$fileName = substr($gedfile, 5);
 					$folder   = '';
@@ -543,94 +535,110 @@ switch ($action) {
 						$folder = '';
 					}
 				} ?>
-				<div id="SERVER_factdiv">
-					<label>
+				<div class="cell small-12 medium-3">
+					<label class="middle">
 						<?php echo KT_I18N::translate('File name on server'); ?>
 					</label>
-					<div class="input">
-						<?php if (KT_USER_GEDCOM_ADMIN) { ?>
-						    <input name="filename" type="text" value="<?php echo htmlspecialchars((string) $fileName); ?>" >
-						    <?php if ($isExternal) { ?>
-								<div class="help_text">
-									<span class="help_content">
-										<?php echo KT_I18N::translate('Do not change to keep original file name.'); ?>
-									</span>
-								</div>
-						    <?php } ?>
-						<?php } else { ?>
-						    <?php echo $fileName; ?>
-						    <input name="filename" type="hidden" value="<?php echo htmlspecialchars((string) $fileName); ?>">
-						<?php } ?>
-					</div>
-					<div class="help_text">
-						<span class="helpcontent">
-							<?php echo /* I18N: Help text for add media screens*/KT_I18N::translate('Leave this field blank to keep the original name of the file you have uploaded from your local computer.<br><br>Media files can and perhaps should be named differently on the server than on your local computer. This is because often the local file name has meaning to you but is less meaningful to others visiting this site. Consider also the possibility that you and someone else both try to upload different files called "granny.jpg".<br>In this field you specify the new name of the file. The name you enter here will also be used to name the thumbnail, which can be uploaded separately or generated automatically. You do not need to enter the file name extension (jpg, gif, pdf, doc, etc.)'); ?>
-						</span>
+				</div>
+				<div class="cell small-10 medium-7">
+					<?php if (KT_USER_GEDCOM_ADMIN) { ?>
+				    	<input name="filename" type="text" value="<?php echo htmlspecialchars((string) $fileName); ?>" >
+				    	<?php if ($isExternal) { ?>
+							<div class="cell callout info-help show-for-medium">
+								<?php echo KT_I18N::translate('Do not change to keep original file name.'); ?>
+							</div>
+				    	<?php } ?>
+					<?php } else { ?>
+				    	<?php echo $fileName; ?>
+				    	<input name="filename" type="hidden" value="<?php echo htmlspecialchars((string) $fileName); ?>">
+					<?php } ?>
+					<div class="cell callout info-help show-for-medium">
+							<?php echo /* I18N: Help text for add media screens*/
+								KT_I18N::translate('
+									Leave this field blank to keep the original name of the file you
+									have uploaded from your local computer.<br><br>Media files can and perhaps
+									should be named differently on the server than on your local computer.
+									This is because often the local file name has meaning to you but is less
+									meaningful to others visiting this site.
+									Consider also the possibility that you and someone else both try to upload
+									different files called "granny.jpg".
+									<br>
+									In this field you specify the new name of the file.
+									The name you enter here will also be used to name the thumbnail,
+									which can be uploaded separately or generated automatically.
+									You do not need to enter the file name extension (jpg, gif, pdf, doc, etc.)
+								')
+							; ?>
 					</div>
 				</div>
 			<?php } ?>
 
-			<div id="SERVER_factdiv">
-				<?php // Box for user to choose the folder to store the image
-				if (!$isExternal) { ?>
-						<label>
-							<?php echo KT_I18N::translate('Folder name on server'); ?>
-						</label>
-					<div class="input">
-						<?php //-- don’t let regular users change the location of media items
-						if ($action != 'update' || KT_USER_GEDCOM_ADMIN) {
-							$mediaFolders = KT_Query_Media::folderList();
-							echo '<span dir="ltr">
-								<select name="folder_list" onchange="document.newmedia.folder.value=this.options[this.selectedIndex].value;">
-									<option';
-										if ($folder == '') {
+			<?php // Box for user to choose the folder to store the image
+			if (!$isExternal) { ?>
+				<div class="cell small-12 medium-3">
+					<label class="middle">
+						<?php echo KT_I18N::translate('Folder name on server'); ?>
+					</label>
+				</div>
+				<div class="cell small-10 medium-7">
+					<?php //-- don’t let regular users change the location of media items
+					if ($action != 'update' || KT_USER_GEDCOM_ADMIN) {
+						$mediaFolders = KT_Query_Media::folderList();
+						echo '<span dir="ltr">
+							<select
+								name="folder_list"
+								onchange="document.newmedia.folder.value=this.options[this.selectedIndex].value;"
+							>
+								<option';
+									if ($folder == '') {
+										echo ' selected="selected"';
+									}
+									echo ' value=""> ' . KT_I18N::translate('Choose: ') . '
+								</option>';
+								if (KT_USER_IS_ADMIN) {
+									echo ' <option value="other" disabled>' .
+										KT_I18N::translate('Other folder... please type in') . '
+									</option>';
+								}
+								foreach ($mediaFolders as $f) {
+									echo '<option value="' . $f . '"';
+										if ($folder === $f) {
 											echo ' selected="selected"';
 										}
-										echo ' value=""> ' . KT_I18N::translate('Choose: ') . '
-									</option>';
-									if (KT_USER_IS_ADMIN) {
-										echo ' <option value="other" disabled>' .
-											KT_I18N::translate('Other folder... please type in') . '
-										</option>';
-									}
-									foreach ($mediaFolders as $f) {
-										echo '<option value="' . $f . '"';
-											if ($folder === $f) {
-												echo ' selected="selected"';
-											}
-										echo '>' . $f . '</option>';
-									}
-								echo '</select>
-							</span>';
-						} else {
-							echo $folder;
-						}
-						if (KT_USER_IS_ADMIN) {
-							echo '<br>
-							<span dir="ltr">
-								<input type="text" name="folder" value="' . $folder . '">
-							</span>';
-						} else { ?>
-							<input name="folder" type="hidden" value="<?php echo addslashes($folder); ?>">
+									echo '>' . $f . '</option>';
+								}
+							echo '</select>
+						</span>';
+					} else {
+						echo $folder;
+					}
+					if (KT_USER_IS_ADMIN) {
+						echo '<br>
+						<span dir="ltr">
+							<input type="text" name="folder" value="' . $folder . '">
+						</span>';
+					} else { ?>
+						<input name="folder" type="hidden" value="<?php echo addslashes($folder); ?>">
 					<?php } ?>
-					</div>
+
 					<?php if ($gedfile == 'FILE') { ?>
-						<div class="help_text">
-							<span class="help_content">
-								<?php echo KT_I18N::translate('This entry is ignored if you have entered a URL into the file name field.'); ?>
-							</span>
+						<div class="cell callout info-help show-for-medium">
+							<?php echo
+								KT_I18N::translate('
+									This entry is ignored if you have entered a URL into the file name field.
+								')
+							; ?>
 							<span id="upload_server_folder" class="help_text"></span>
 						</div>
-					<?php }
-				} else { ?>
-					<div class="input">
-						<input name="folder" type="hidden" value="">
-					</div>
-				<?php } ?>
-			</div>
+					<?php } ?>
+				</div>
+			<?php } else { ?>
+				<div class="input">
+					<input name="folder" type="hidden" value="">
+				</div>
+			<?php } ?>
 			<hr>
-			<?php
-			// 2 TITL
+			<?php // 2 TITL
 			if ($gedrec == '') {
 				$gedtitl = 'TITL';
 			} else {
@@ -696,15 +704,16 @@ switch ($action) {
 			');
 
 			// 3 TYPE
-			if ($gedrec == '')
+			if ($gedrec == '') {
 				$gedtype = 'TYPE photo'; // default to ‘Photo’ unless told otherwise
-			else {
+			} else {
 				$temp  = str_replace("\r\n", "\n", $gedrec) . "\n";
 				$types = preg_match("/3 TYPE(.*)\n/", $temp, $matches);
-				if (empty($matches[0]))
+				if (empty($matches[0])) {
 					$gedtype = 'TYPE photo'; // default to ‘Photo’ unless told otherwise
-				else
+				} else {
 					$gedtype = 'TYPE ' . trim($matches[1]);
+				}
 			}
 			add_simple_tag("3 $gedtype");
 
@@ -718,15 +727,17 @@ switch ($action) {
 				}
 			}
 			add_simple_tag("1 $gedprim",'','',''); ?>
-			<div class="help_text">
-				<span class="help_content">
-					<?php echo KT_I18N::translate('Use this field to signal that this media item is the highlighted or primary item for the person it is attached to.  The highlighted image is the one that will be used on charts and on the Individual page.'); ?>
-				</span>
+			<div class="cell callout info-help show-for-medium medium-7 medium-offset-3">
+				<?php echo
+					KT_I18N::translate('
+						Use this field to signal that this media item is the highlighted or primary item
+						for the person it is attached to.
+						The highlighted image is the one that will be used on charts and on the Individual page.
+					')
+				; ?>
 			</div>
-			<br>
 
-			<?php
-			//-- print out editing fields for any other data in the media record
+			<?php // Print out editing fields for any other data in the media record
 			$sourceSOUR = '';
 			if (!empty($gedrec)) {
 				preg_match_all('/\n(1 (?!FILE|FORM|TYPE|TITL|_PRIM|_THUM|CHAN|DATA).*(\n[2-9] .*)*)/', $gedrec, $matches);
@@ -797,28 +808,18 @@ switch ($action) {
 					add_simple_tag(($sourceLevel + 2) . ' DATE ' . $sourceDATE, '', KT_Gedcom_Tag::getLabel('DATA:DATE'));
 					add_simple_tag(($sourceLevel + 1) . ' QUAY ' . $sourceQUAY);
 				}
-			}
-
-			if (KT_USER_IS_ADMIN && $action != 'create') {
-				echo no_update_chan($media);
 			} ?>
+		</div>
 
-		</div>
-		<div id="additional_facts">
-			<p><?php echo print_add_layer('SOUR', 1); ?></p>
-			<p><?php echo print_add_layer('NOTE', 1); ?></p>
-			<p><?php echo print_add_layer('SHARED_NOTE', 1); ?></p>
-			<p><?php echo print_add_layer('RESN', 1); ?></p>
-		</div>
-		<p id="save-cancel">
-			<button class="btn btn-primary" type="submit">
-				<i class="<?php echo $iconStyle; ?> fa-save"></i>
-				<?php echo KT_I18N::translate('Save'); ?>
-			</button>
-			<button class="btn btn-primary" type="button" onclick="window.close();">
-				<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
-				<?php echo KT_I18N::translate('Cancel'); ?>
-			</button>
-		</p>
+		<?php echo additionalFacts (array('SOUR', 'NOTE', 'SHARED_NOTE', 'RESN'));
+
+		if (KT_USER_IS_ADMIN && $action != 'create') {
+			echo no_update_chan($media);
+		}
+
+		echo submitButtons(); ?>
+
 	</form>
-</div>
+
+<?php echo pageClose();
+

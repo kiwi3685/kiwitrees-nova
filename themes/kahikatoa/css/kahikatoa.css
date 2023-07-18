@@ -739,6 +739,583 @@ div[id$=-page] button[type=submit] {
 	font-size: 3.625rem;
 }
 
+#addmedia-page a.imageEditorLink {
+	display: block;
+	font-weight: 700;
+	margin: 0.575rem;
+}
+#addmedia-page div[id$=_factdiv] {
+	max-height: 3rem;
+}
+#addmedia-page div input[type=file] {
+	margin-bottom: 0;
+}
+#addmedia-page div.input-group {
+	margin-bottom: 0;
+}
+#addmedia-page span.input-group-label {
+	height: 2.4375rem;
+}
+
+#ancestry-page .chart ul {
+	list-style: none;
+	margin: 0;
+	width: auto;
+}
+#ancestry-page .chart ul li {
+	line-height: 5rem;
+}
+#ancestry-page .chart ul li div.ancestry-details-1 {
+	min-width: 15rem;
+}
+#ancestry-page .chart ul li div.ancestry-details-1 .compact_box_template {
+	line-height: initial;
+}
+#ancestry-page .chart ul li div.ancestry-details-2 {
+	line-height: 2;
+	margin-top: 1rem;
+}
+#ancestry-page .chart ul li div.ancestry-details-3 {
+	height: 2rem;
+	font-size: 0.875rem;
+	line-height: 2rem;
+	margin-top: 1rem;
+	padding-left: 4rem;
+}
+#ancestry-page .chart ul li .sosa {
+	padding: 0.125rem 0.125rem 0;
+	line-height: 1.25;
+	margin: 0 0.5rem;
+}
+#ancestry-page .chart ul li .sosa.person_box_template {
+	font-size: 0.675rem;
+}
+#ancestry-page .chart ul li ul {
+	margin: 0 5rem;
+}
+#ancestry-page .chart ul li.paginate_button {
+	line-height: initial;
+}
+#ancestry-page .chart ul li + li {
+	padding-top: 0.25rem;
+}
+#ancestry-page .chart ul button {
+	border: none;
+	margin: 0;
+	padding: 0;
+}
+#ancestry-page .chart ul .toggle_hide {
+	display: none;
+}
+
+#branches-page {
+	/* instigate the "d'Aboville" numbering system */
+}
+#branches-page ul {
+	counter-reset: section;
+	list-style: none;
+	margin: 2rem;
+}
+#branches-page ul li {
+	counter-increment: section;
+	line-height: 2;
+}
+#branches-page ul li.expandable::before, #branches-page ul li.collapsable::before {
+	margin-left: -0.35rem;
+}
+#branches-page ul li::before {
+	content: counters(section, ".") ". ";
+	display: inline-block;
+	margin-right: 1rem;
+	text-align: right;
+	min-width: 2rem;
+	width: auto;
+}
+#branches-page ul li ul {
+	margin-top: 0.5rem;
+}
+#branches-page ul .expandable-hitarea,
+#branches-page ul .collapsable-hitarea {
+	margin-left: -1rem;
+	float: left;
+	cursor: pointer;
+}
+#branches-page ul .expandable-hitarea::before,
+#branches-page ul .collapsable-hitarea::before {
+	display: inline-block;
+	font-family: "Font Awesome 6 Free";
+	overflow: hidden;
+	font-weight: 400;
+	line-height: 1;
+	width: 0;
+}
+#branches-page ul .expandable-hitarea:before {
+	font: var(--fa-font-solid);
+	content: "\f152";
+}
+#branches-page ul .collapsable-hitarea:before {
+	font: var(--fa-font-solid);
+	content: "\f150";
+}
+
+#calendar-page .cal-label {
+	text-align: left;
+}
+#calendar-page .cal-input input[type=text]#year {
+	display: inline-block;
+	margin: 0;
+	width: 4rem;
+}
+#calendar-page .cal-input select {
+	margin: 0;
+	width: 15rem;
+}
+#calendar-page .cal-input .fa-circle-notch::before {
+	color: #3adb76;
+}
+#calendar-page .tabs-panel .cal-month-days {
+	font-size: 0.875rem;
+	height: 180px;
+	overflow: auto;
+}
+#calendar-page .tabs-panel .cal-month-days .indent {
+	font-size: 0.75rem;
+	text-indent: 1rem;
+}
+#calendar-page .tabs-panel .current_day {
+	background-color: #faf5e8;
+	color: #ab3334;
+	display: block;
+	font-weight: 600;
+}
+#calendar-page .tabs-panel hr {
+	margin: 0.25rem 0;
+}
+#calendar-page .tabs-panel table {
+	border-collapse: separate;
+}
+#calendar-page .tabs-panel table td {
+	background-color: #e0e0e0;
+	vertical-align: top;
+}
+
+#calendar_utilities-page .card-section {
+	height: 18rem;
+}
+#calendar_utilities-page .card-section input[type=text].result {
+	color: #0193b7;
+	font-weight: 600;
+}
+#calendar_utilities-page .card-section input:disabled {
+	margin-bottom: 0;
+	height: 1.8rem;
+}
+#calendar_utilities-page .card-section button.small {
+	margin-bottom: 1.9rem;
+}
+#calendar_utilities-page .card-section div.callout.alert {
+	color: #0193b7;
+	font-weight: 600;
+	padding: 0.35rem;
+}
+#calendar_utilities-page #days h6 {
+	margin-top: 0.5rem;
+}
+
+#census_assist-page .head_summary label {
+	margin-bottom: 0;
+	padding-top: 0;
+}
+#census_assist-page .head_summary label span.label {
+	background: transparent;
+	color: #331919;
+	font-size: 1rem;
+	width: 12rem;
+}
+#census_assist-page .head_summary label span.field {
+	font-size: 0.95rem;
+	font-weight: 400;
+	margin-left: 1rem;
+}
+#census_assist-page .cens_source input {
+	font-size: 0.95rem;
+	margin-bottom: 0;
+}
+#census_assist-page .census-assistant-search {
+	font-size: 0.9rem;
+}
+#census_assist-page .census-assistant-search .nav_content .famnavTitleContainer {
+	border-bottom: 0.075rem solid #ab3334;
+	border-top: 0.075rem solid #ab3334;
+	font-size: 0.95rem;
+	font-weight: 700;
+}
+#census_assist-page .census-assistant-search .nav_content .lifeSpan {
+	font-size: 0.7rem;
+}
+#census_assist-page .census-assistant-search .nav_content .submenu {
+	background-color: #faf5e8;
+	box-shadow: rgba(0, 0, 0, 0.16) 0px 5px 18px 0px, rgba(0, 0, 0, 0.1) 0px 0px 0px 1px;
+	font-size: 0.75rem;
+	padding: 0.5rem;
+}
+#census_assist-page .census-assistant-search .nav_content .submenu span.NAME:hover {
+	opacity: 0.4;
+}
+#census_assist-page .census-assistant-search input {
+	margin: 0;
+}
+#census_assist-page .table-census-inputs {
+	font-size: 0.95rem;
+}
+#census_assist-page .table-census-inputs thead,
+#census_assist-page .table-census-inputs tbody,
+#census_assist-page .table-census-inputs tfoot {
+	background-color: #e0e0e0;
+}
+#census_assist-page .table-census-inputs tbody tr {
+	background-color: #e0e0e0;
+}
+#census_assist-page .table-census-inputs tbody tr td {
+	padding: 0;
+}
+#census_assist-page .table-census-inputs tbody tr td input {
+	font-size: 0.95rem;
+	margin: 0;
+}
+#census_assist-page .table-census-inputs tbody tr td.delete {
+	background-color: transparent;
+	padding: 0 0 0 0.5rem;
+}
+
+#compact-page table.unstriped {
+	width: 100%;
+	text-align: center;
+}
+#compact-page table.unstriped tbody {
+	background-color: transparent;
+	border: none;
+}
+#compact-page table.unstriped tbody tr {
+	background-color: transparent;
+	border: none;
+}
+#compact-page table.unstriped tbody tr td {
+	width: 1rem;
+}
+#compact-page table.unstriped tbody tr td.person_box_template {
+	border: 0.125rem solid #e0e0e0;
+	display: inline-block;
+	width: 12rem;
+}
+#compact-page table.unstriped tbody tr td.person_box_template.sosa1 {
+	background-color: #e0e0e0;
+}
+#compact-page table.unstriped tbody tr td.person_box_template.M {
+	border-color: #0193b7;
+}
+#compact-page table.unstriped tbody tr td.person_box_template.F {
+	border-color: #e09798;
+}
+#compact-page table.unstriped tbody tr td.person_box_template table.sosa123 {
+	width: 100%;
+}
+#compact-page table.unstriped tbody tr td.person_box_template table.sosa123 td.arrow {
+	width: 25%;
+}
+#compact-page table.unstriped tbody tr td.arrow {
+	padding: 0;
+	width: 0.25rem;
+}
+#compact-page table.unstriped tbody tr td i[class^=icon-silhouette-] {
+	float: left;
+	height: 3rem;
+	width: 2.5rem;
+}
+#compact-page table.unstriped tbody tr td img {
+	float: left;
+	margin: 0 0.125rem 0 0;
+	height: 3rem;
+	width: auto;
+	max-width: 5rem;
+}
+
+#edit_interface-page .input-group input,
+#edit_interface-page .input-group select,
+#edit_interface-page .input-group textarea {
+	margin: 0;
+}
+#edit_interface-page .input-group input.readonly,
+#edit_interface-page .input-group select.readonly,
+#edit_interface-page .input-group textarea.readonly {
+	background-color: #e0e0e0;
+}
+#edit_interface-page .input-group .input-group-label {
+	display: flex;
+	max-height: 2.625rem;
+	padding: 0;
+	width: 2.625rem;
+}
+#edit_interface-page .input-group .input-group-label button.autocomplete_icon {
+	max-height: 2.625rem;
+	padding: 0;
+	width: 2.625rem;
+}
+#edit_interface-page .input-group .input-group-label button.autocomplete_icon .svg-inline--fa {
+	color: #ab3334;
+}
+#edit_interface-page .input-group .input-group-label .svg-inline--fa {
+	margin: 0.25rem 0.5rem 0;
+}
+#edit_interface-page .input-group .input-group-label.addnew .svg-inline--fa {
+	color: #3adb76;
+	font-size: 1.375rem;
+}
+#edit_interface-page div[id$=_description] {
+	color: #8a8a8a;
+	margin-bottom: 1rem;
+	margin-top: -1rem;
+}
+#edit_interface-page .add_layer {
+	border-bottom: 0.0125rem solid #ab3334;
+	margin-bottom: 0.25rem;
+}
+#edit_interface-page .dropdown-pane.is-open :not(.help-text) {
+	background-color: #fffff4;
+	border-left: 0.25rem solid #ab3334;
+	border-right: 0.25rem solid #ab3334;
+	word-wrap: break-word;
+}
+#edit_interface-page .accordion .accordion-title {
+	padding: 1rem 3rem;
+}
+#edit_interface-page .accordion .accordion-title svg {
+	left: 0.5rem;
+	margin-top: 0.05rem;
+}
+#edit_interface-page div.callout div.factDetails {
+	display: inline-block;
+	font-size: 0.5rem;
+}
+#edit_interface-page div.sourceLinks {
+	margin-bottom: 1rem;
+}
+#edit_interface-page label {
+	font-size: 1.125rem;
+	font-weight: 500;
+}
+#edit_interface-page label.radio_inline {
+	display: inline-block !important;
+	font-weight: 400;
+	padding-left: 1.25rem;
+}
+#edit_interface-page label.switch-paddle {
+	font-size: 0.9rem;
+}
+#edit_interface-page div.last_change label {
+	margin-bottom: 1rem;
+	padding-top: 0;
+}
+#edit_interface-page span.yes {
+	margin: 0 0.9375rem;
+	vertical-align: bottom;
+}
+#edit_interface-page .svg-inline--fa.fa-user-pen {
+	font-size: 1.25rem;
+}
+#edit_interface-page select.census-assistant-selector {
+	margin-top: 1rem;
+}
+
+#family-page ul#famTabs {
+	margin-top: 1rem;
+	margin-bottom: 1rem;
+}
+#family-page .highlight img {
+	border: 0.1rem solid #ab3334;
+	border-radius: 0.5rem;
+	display: block;
+	height: auto;
+	margin: auto;
+	max-width: 100%;
+	width: 10rem;
+}
+@media print, screen and (max-width: 64.06125em) {
+	#family-page .highlight img {
+		height: 9rem;
+		margin: 1rem auto;
+	}
+}
+#family-page .highlight i.icon-silhouette-FAM {
+	height: 9rem;
+	width: 100%;
+	max-width: 12rem;
+}
+#family-page .tabs-panel .tabHeader {
+	border-bottom: 0.0125rem solid #ab3334;
+	font-size: 1rem;
+	padding: 0.5rem;
+}
+#family-page .tabs-panel .tabHeader label,
+#family-page .tabs-panel .tabHeader a {
+	font-weight: normal;
+	color: #ab3334;
+}
+#family-page .tabs-panel table td {
+	border: 0.025rem solid #cacaca;
+}
+#family-page .indiFact {
+	border: none;
+}
+#family-page .famFact {
+	border-bottom: 0.0125rem solid #ab3334;
+}
+#family-page .compact_box_template {
+	width: auto;
+}
+#family-page .compact_box_template small {
+	font-size: 100%;
+}
+#family-page .compact_box_template button {
+	border: none;
+	font-size: inherit;
+	margin: 0;
+	padding: 0;
+}
+#family-page #grandparents small,
+#family-page #parents small {
+	font-size: 90%;
+}
+#family-page #family_lines div {
+	border: 0.125rem solid #8a8a8a;
+	border-top: 0;
+	height: 2rem;
+}
+#family-page #family_lines div.self {
+	border-bottom: 0;
+}
+#family-page #children {
+	margin-top: 3rem;
+}
+#family-page #children .compact_box_template {
+	min-width: 10rem;
+}
+#family-page .empty_parent {
+	background-color: #fffff4;
+	border-width: 0.125rem;
+	border-style: solid;
+	font-size: 1rem;
+	height: 5rem;
+	overflow: hidden;
+	padding: 0.125rem !important;
+	width: auto;
+	min-width: 15rem;
+}
+#family-page .empty_parent i.icon-silhouette-M,
+#family-page .empty_parent i.icon-silhouette-F,
+#family-page .empty_parent i.icon-silhouette-U {
+	height: 2.5rem;
+	vertical-align: top;
+}
+#family-page .empty_parent.M {
+	border-color: #0193b7;
+}
+#family-page .empty_parent.F {
+	border-color: #e09798;
+}
+#family-page .empty_parent.U {
+	border-color: #8a8a8a;
+}
+
+#fanchart-page svg {
+	margin: auto;
+	cursor: -webkit-grab;
+	cursor: grab;
+}
+#fanchart-page svg:active {
+	cursor: -webkit-grabbing;
+	cursor: grabbing;
+}
+#fanchart-page svg .arc path {
+	stroke: #e0e0e0;
+	stroke-width: 0.125rem;
+}
+#fanchart-page svg .person .label {
+	font-weight: 700;
+}
+#fanchart-page svg .person .label .chart-date {
+	fill: #3f3f3f;
+	font-weight: 400;
+}
+#fanchart-page svg .person:hover .arc {
+	opacity: 0.75;
+}
+#fanchart-page svg .person:hover .arc path {
+	stroke: #939393;
+}
+#fanchart-page svg rect.background {
+	fill: none;
+	pointer-events: all;
+}
+#fanchart-page div.overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	text-align: center;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: rgba(0, 0, 0, 0.5);
+	pointer-events: none;
+	transition: opacity ease-in-out;
+	transition-duration: 0s;
+}
+#fanchart-page div.overlay .tooltip {
+	font-size: 1.5rem;
+	color: white;
+	position: relative;
+	margin: 0;
+	top: 50%;
+	-webkit-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+	transform: translateY(-50%);
+}
+
+#faq-page .accordion {
+	background: none;
+}
+#faq-page .accordion .accordion-item {
+	margin-bottom: 0.125rem;
+}
+#faq-page .accordion .accordion-content {
+	background: #fffff4;
+	padding: 1rem 4rem 0;
+}
+
+#favoriteslist-page form {
+	border: 0.125rem solid #ab3334;
+	padding: 0.75rem;
+}
+#favoriteslist-page form div.favInput {
+	height: 24rem;
+}
+#favoriteslist-page form div.favType {
+	border: 0.125rem solid #ab3334;
+	margin-top: 3rem;
+	padding: 0.5rem;
+}
+#favoriteslist-page form #favurl {
+	margin: 0;
+}
+#favoriteslist-page form #favurl div.favType {
+	margin-top: -0.5rem;
+}
+#favoriteslist-page form button {
+	margin-bottom: 0;
+}
+
 #indi-page h3 {
 	margin: 0;
 	padding: 0;
@@ -1182,575 +1759,6 @@ div[id$=-page] button[type=submit] {
 #indi-page .tabs-panel #tabi_changes_content #change_list table.DifferencesSideBySide tbody.ChangeDelete del {
 	color: blue;
 	text-decoration: initial;
-}
-
-#family-page ul#famTabs {
-	margin-top: 1rem;
-	margin-bottom: 1rem;
-}
-#family-page .highlight img {
-	border: 0.1rem solid #ab3334;
-	border-radius: 0.5rem;
-	display: block;
-	height: auto;
-	margin: auto;
-	max-width: 100%;
-	width: 10rem;
-}
-@media print, screen and (max-width: 64.06125em) {
-	#family-page .highlight img {
-		height: 9rem;
-		margin: 1rem auto;
-	}
-}
-#family-page .highlight i.icon-silhouette-FAM {
-	height: 9rem;
-	width: 100%;
-	max-width: 12rem;
-}
-#family-page .tabs-panel .tabHeader {
-	border-bottom: 0.0125rem solid #ab3334;
-	font-size: 1rem;
-	padding: 0.5rem;
-}
-#family-page .tabs-panel .tabHeader label,
-#family-page .tabs-panel .tabHeader a {
-	font-weight: normal;
-	color: #ab3334;
-}
-#family-page .tabs-panel table td {
-	border: 0.025rem solid #cacaca;
-}
-#family-page .indiFact {
-	border: none;
-}
-#family-page .famFact {
-	border-bottom: 0.0125rem solid #ab3334;
-}
-#family-page .compact_box_template {
-	width: auto;
-}
-#family-page .compact_box_template small {
-	font-size: 100%;
-}
-#family-page .compact_box_template button {
-	border: none;
-	font-size: inherit;
-	margin: 0;
-	padding: 0;
-}
-#family-page #grandparents small,
-#family-page #parents small {
-	font-size: 90%;
-}
-#family-page #family_lines div {
-	border: 0.125rem solid #8a8a8a;
-	border-top: 0;
-	height: 2rem;
-}
-#family-page #family_lines div.self {
-	border-bottom: 0;
-}
-#family-page #children {
-	margin-top: 3rem;
-}
-#family-page #children .compact_box_template {
-	min-width: 10rem;
-}
-#family-page .empty_parent {
-	background-color: #fffff4;
-	border-width: 0.125rem;
-	border-style: solid;
-	font-size: 1rem;
-	height: 5rem;
-	overflow: hidden;
-	padding: 0.125rem !important;
-	width: auto;
-	min-width: 15rem;
-}
-#family-page .empty_parent i.icon-silhouette-M,
-#family-page .empty_parent i.icon-silhouette-F,
-#family-page .empty_parent i.icon-silhouette-U {
-	height: 2.5rem;
-	vertical-align: top;
-}
-#family-page .empty_parent.M {
-	border-color: #0193b7;
-}
-#family-page .empty_parent.F {
-	border-color: #e09798;
-}
-#family-page .empty_parent.U {
-	border-color: #8a8a8a;
-}
-
-#ancestry-page .chart ul {
-	list-style: none;
-	margin: 0;
-	width: auto;
-}
-#ancestry-page .chart ul li {
-	line-height: 5rem;
-}
-#ancestry-page .chart ul li div.ancestry-details-1 {
-	min-width: 15rem;
-}
-#ancestry-page .chart ul li div.ancestry-details-1 .compact_box_template {
-	line-height: initial;
-}
-#ancestry-page .chart ul li div.ancestry-details-2 {
-	line-height: 2;
-	margin-top: 1rem;
-}
-#ancestry-page .chart ul li div.ancestry-details-3 {
-	height: 2rem;
-	font-size: 0.875rem;
-	line-height: 2rem;
-	margin-top: 1rem;
-	padding-left: 4rem;
-}
-#ancestry-page .chart ul li .sosa {
-	padding: 0.125rem 0.125rem 0;
-	line-height: 1.25;
-	margin: 0 0.5rem;
-}
-#ancestry-page .chart ul li .sosa.person_box_template {
-	font-size: 0.675rem;
-}
-#ancestry-page .chart ul li ul {
-	margin: 0 5rem;
-}
-#ancestry-page .chart ul li.paginate_button {
-	line-height: initial;
-}
-#ancestry-page .chart ul li + li {
-	padding-top: 0.25rem;
-}
-#ancestry-page .chart ul button {
-	border: none;
-	margin: 0;
-	padding: 0;
-}
-#ancestry-page .chart ul .toggle_hide {
-	display: none;
-}
-
-#branches-page {
-	/* instigate the "d'Aboville" numbering system */
-}
-#branches-page ul {
-	counter-reset: section;
-	list-style: none;
-	margin: 2rem;
-}
-#branches-page ul li {
-	counter-increment: section;
-	line-height: 2;
-}
-#branches-page ul li.expandable::before, #branches-page ul li.collapsable::before {
-	margin-left: -0.35rem;
-}
-#branches-page ul li::before {
-	content: counters(section, ".") ". ";
-	display: inline-block;
-	margin-right: 1rem;
-	text-align: right;
-	min-width: 2rem;
-	width: auto;
-}
-#branches-page ul li ul {
-	margin-top: 0.5rem;
-}
-#branches-page ul .expandable-hitarea,
-#branches-page ul .collapsable-hitarea {
-	margin-left: -1rem;
-	float: left;
-	cursor: pointer;
-}
-#branches-page ul .expandable-hitarea::before,
-#branches-page ul .collapsable-hitarea::before {
-	display: inline-block;
-	font-family: "Font Awesome 6 Free";
-	overflow: hidden;
-	font-weight: 400;
-	line-height: 1;
-	width: 0;
-}
-#branches-page ul .expandable-hitarea:before {
-	font: var(--fa-font-solid);
-	content: "\f152";
-}
-#branches-page ul .collapsable-hitarea:before {
-	font: var(--fa-font-solid);
-	content: "\f150";
-}
-
-#calendar-page .cal-label {
-	text-align: left;
-}
-#calendar-page .cal-input input[type=text]#year {
-	display: inline-block;
-	margin: 0;
-	width: 4rem;
-}
-#calendar-page .cal-input select {
-	margin: 0;
-	width: 15rem;
-}
-#calendar-page .cal-input .fa-circle-notch::before {
-	color: #3adb76;
-}
-#calendar-page .tabs-panel .cal-month-days {
-	font-size: 0.875rem;
-	height: 180px;
-	overflow: auto;
-}
-#calendar-page .tabs-panel .cal-month-days .indent {
-	font-size: 0.75rem;
-	text-indent: 1rem;
-}
-#calendar-page .tabs-panel .current_day {
-	background-color: #faf5e8;
-	color: #ab3334;
-	display: block;
-	font-weight: 600;
-}
-#calendar-page .tabs-panel hr {
-	margin: 0.25rem 0;
-}
-#calendar-page .tabs-panel table {
-	border-collapse: separate;
-}
-#calendar-page .tabs-panel table td {
-	background-color: #e0e0e0;
-	vertical-align: top;
-}
-
-#calendar_utilities-page .card-section {
-	height: 18rem;
-}
-#calendar_utilities-page .card-section input[type=text].result {
-	color: #0193b7;
-	font-weight: 600;
-}
-#calendar_utilities-page .card-section input:disabled {
-	margin-bottom: 0;
-	height: 1.8rem;
-}
-#calendar_utilities-page .card-section button.small {
-	margin-bottom: 1.9rem;
-}
-#calendar_utilities-page .card-section div.callout.alert {
-	color: #0193b7;
-	font-weight: 600;
-	padding: 0.35rem;
-}
-#calendar_utilities-page #days h6 {
-	margin-top: 0.5rem;
-}
-
-#census_assist-page .head_summary label {
-	margin-bottom: 0;
-	padding-top: 0;
-}
-#census_assist-page .head_summary label span.label {
-	background: transparent;
-	color: #331919;
-	font-size: 1rem;
-	width: 12rem;
-}
-#census_assist-page .head_summary label span.field {
-	font-size: 0.95rem;
-	font-weight: 400;
-	margin-left: 1rem;
-}
-#census_assist-page .cens_source input {
-	font-size: 0.95rem;
-	margin-bottom: 0;
-}
-#census_assist-page .census-assistant-search {
-	font-size: 0.9rem;
-}
-#census_assist-page .census-assistant-search .nav_content .famnavTitleContainer {
-	border-bottom: 0.075rem solid #ab3334;
-	border-top: 0.075rem solid #ab3334;
-	font-size: 0.95rem;
-	font-weight: 700;
-}
-#census_assist-page .census-assistant-search .nav_content .lifeSpan {
-	font-size: 0.7rem;
-}
-#census_assist-page .census-assistant-search .nav_content .submenu {
-	background-color: #faf5e8;
-	box-shadow: rgba(0, 0, 0, 0.16) 0px 5px 18px 0px, rgba(0, 0, 0, 0.1) 0px 0px 0px 1px;
-	font-size: 0.75rem;
-	padding: 0.5rem;
-}
-#census_assist-page .census-assistant-search .nav_content .submenu span.NAME:hover {
-	opacity: 0.4;
-}
-#census_assist-page .census-assistant-search input {
-	margin: 0;
-}
-#census_assist-page .table-census-inputs {
-	font-size: 0.95rem;
-}
-#census_assist-page .table-census-inputs thead,
-#census_assist-page .table-census-inputs tbody,
-#census_assist-page .table-census-inputs tfoot {
-	background-color: #e0e0e0;
-}
-#census_assist-page .table-census-inputs tbody tr {
-	background-color: #e0e0e0;
-}
-#census_assist-page .table-census-inputs tbody tr td {
-	padding: 0;
-}
-#census_assist-page .table-census-inputs tbody tr td input {
-	font-size: 0.95rem;
-	margin: 0;
-}
-#census_assist-page .table-census-inputs tbody tr td.delete {
-	background-color: transparent;
-	padding: 0 0 0 0.5rem;
-}
-
-#compact-page table.unstriped {
-	width: 100%;
-	text-align: center;
-}
-#compact-page table.unstriped tbody {
-	background-color: transparent;
-	border: none;
-}
-#compact-page table.unstriped tbody tr {
-	background-color: transparent;
-	border: none;
-}
-#compact-page table.unstriped tbody tr td {
-	width: 1rem;
-}
-#compact-page table.unstriped tbody tr td.person_box_template {
-	border: 0.125rem solid #e0e0e0;
-	display: inline-block;
-	width: 12rem;
-}
-#compact-page table.unstriped tbody tr td.person_box_template.sosa1 {
-	background-color: #e0e0e0;
-}
-#compact-page table.unstriped tbody tr td.person_box_template.M {
-	border-color: #0193b7;
-}
-#compact-page table.unstriped tbody tr td.person_box_template.F {
-	border-color: #e09798;
-}
-#compact-page table.unstriped tbody tr td.person_box_template table.sosa123 {
-	width: 100%;
-}
-#compact-page table.unstriped tbody tr td.person_box_template table.sosa123 td.arrow {
-	width: 25%;
-}
-#compact-page table.unstriped tbody tr td.arrow {
-	padding: 0;
-	width: 0.25rem;
-}
-#compact-page table.unstriped tbody tr td i[class^=icon-silhouette-] {
-	float: left;
-	height: 3rem;
-	width: 2.5rem;
-}
-#compact-page table.unstriped tbody tr td img {
-	float: left;
-	margin: 0 0.125rem 0 0;
-	height: 3rem;
-	width: auto;
-	max-width: 5rem;
-}
-
-#edit_interface-page .input-group input,
-#edit_interface-page .input-group select,
-#edit_interface-page .input-group textarea,
-#edit_interface-page .input-group.autocomplete_container input,
-#edit_interface-page .input-group.autocomplete_container select,
-#edit_interface-page .input-group.autocomplete_container textarea {
-	margin: 0;
-}
-#edit_interface-page .input-group input.readonly,
-#edit_interface-page .input-group select.readonly,
-#edit_interface-page .input-group textarea.readonly,
-#edit_interface-page .input-group.autocomplete_container input.readonly,
-#edit_interface-page .input-group.autocomplete_container select.readonly,
-#edit_interface-page .input-group.autocomplete_container textarea.readonly {
-	background-color: #e0e0e0;
-}
-#edit_interface-page .input-group .input-group-label,
-#edit_interface-page .input-group.autocomplete_container .input-group-label {
-	display: flex;
-	max-height: 2.625rem;
-	padding: 0;
-	width: 2.625rem;
-}
-#edit_interface-page .input-group .input-group-label button.autocomplete_icon,
-#edit_interface-page .input-group.autocomplete_container .input-group-label button.autocomplete_icon {
-	max-height: 2.625rem;
-	padding: 0;
-	width: 2.625rem;
-}
-#edit_interface-page .input-group .input-group-label .svg-inline--fa,
-#edit_interface-page .input-group.autocomplete_container .input-group-label .svg-inline--fa {
-	margin: 0.25rem 0.5rem 0;
-}
-#edit_interface-page .input-group .input-group-label.addnew .svg-inline--fa,
-#edit_interface-page .input-group.autocomplete_container .input-group-label.addnew .svg-inline--fa {
-	color: #3adb76;
-	font-size: 1.375rem;
-}
-#edit_interface-page div[id$=_description] {
-	color: #8a8a8a;
-	margin-bottom: 1rem;
-	margin-top: -1rem;
-}
-#edit_interface-page .add_layer {
-	border-bottom: 0.0125rem solid #ab3334;
-	margin-bottom: 0.25rem;
-}
-#edit_interface-page .dropdown-pane.is-open :not(.help-text) {
-	background-color: #fffff4;
-	border-left: 0.25rem solid #ab3334;
-	border-right: 0.25rem solid #ab3334;
-	word-wrap: break-word;
-}
-#edit_interface-page .accordion .accordion-title {
-	padding: 1rem 3rem;
-}
-#edit_interface-page .accordion .accordion-title svg {
-	left: 0.5rem;
-	margin-top: 0.05rem;
-}
-#edit_interface-page div.callout div.factDetails {
-	display: inline-block;
-	font-size: 0.5rem;
-}
-#edit_interface-page div.additional_facts li.accordion-item a.accordion-title {
-	padding: 0.75rem 1rem;
-}
-#edit_interface-page div.sourceLinks {
-	margin-bottom: 1rem;
-}
-#edit_interface-page label {
-	font-size: 1.125rem;
-	font-weight: 500;
-}
-#edit_interface-page label.radio_inline {
-	display: inline-block !important;
-	font-weight: 400;
-	padding-left: 1.25rem;
-}
-#edit_interface-page label.switch-paddle {
-	font-size: 0.9rem;
-}
-#edit_interface-page div.last_change label {
-	margin-bottom: 1rem;
-	padding-top: 0;
-}
-#edit_interface-page span.yes {
-	margin: 0 0.9375rem;
-	vertical-align: bottom;
-}
-#edit_interface-page .svg-inline--fa.fa-user-pen {
-	font-size: 1.25rem;
-}
-#edit_interface-page select.census-assistant-selector {
-	margin-top: 1rem;
-}
-
-#fanchart-page svg {
-	margin: auto;
-	cursor: -webkit-grab;
-	cursor: grab;
-}
-#fanchart-page svg:active {
-	cursor: -webkit-grabbing;
-	cursor: grabbing;
-}
-#fanchart-page svg .arc path {
-	stroke: #e0e0e0;
-	stroke-width: 0.125rem;
-}
-#fanchart-page svg .person .label {
-	font-weight: 700;
-}
-#fanchart-page svg .person .label .chart-date {
-	fill: #3f3f3f;
-	font-weight: 400;
-}
-#fanchart-page svg .person:hover .arc {
-	opacity: 0.75;
-}
-#fanchart-page svg .person:hover .arc path {
-	stroke: #939393;
-}
-#fanchart-page svg rect.background {
-	fill: none;
-	pointer-events: all;
-}
-#fanchart-page div.overlay {
-	position: absolute;
-	top: 0;
-	left: 0;
-	text-align: center;
-	width: 100%;
-	height: 100%;
-	margin: 0;
-	padding: 0;
-	border: 0;
-	background: rgba(0, 0, 0, 0.5);
-	pointer-events: none;
-	transition: opacity ease-in-out;
-	transition-duration: 0s;
-}
-#fanchart-page div.overlay .tooltip {
-	font-size: 1.5rem;
-	color: white;
-	position: relative;
-	margin: 0;
-	top: 50%;
-	-webkit-transform: translateY(-50%);
-	-ms-transform: translateY(-50%);
-	transform: translateY(-50%);
-}
-
-#faq-page .accordion {
-	background: none;
-}
-#faq-page .accordion .accordion-item {
-	margin-bottom: 0.125rem;
-}
-#faq-page .accordion .accordion-content {
-	background: #fffff4;
-	padding: 1rem 4rem 0;
-}
-
-#favoriteslist-page form {
-	border: 0.125rem solid #ab3334;
-	padding: 0.75rem;
-}
-#favoriteslist-page form div.favInput {
-	height: 24rem;
-}
-#favoriteslist-page form div.favType {
-	border: 0.125rem solid #ab3334;
-	margin-top: 3rem;
-	padding: 0.5rem;
-}
-#favoriteslist-page form #favurl {
-	margin: 0;
-}
-#favoriteslist-page form #favurl div.favType {
-	margin-top: -0.5rem;
-}
-#favoriteslist-page form button {
-	margin-bottom: 0;
 }
 
 #login-page button .svg-inline--fa,
@@ -2589,7 +2597,7 @@ button:focus {
 .quickfacts a::before {
 	content: " | ";
 }
-.quickfacts a:last-child::before {
+.quickfacts a:first-child::before {
 	content: "";
 }
 
@@ -2710,6 +2718,52 @@ input[type=search] {
 	position: sticky;
 	text-align: right;
 	width: 100%;
+}
+
+div#additional_facts div.accordion-content {
+	padding: 1rem;
+}
+div#additional_facts div.accordion-content .input-group input,
+div#additional_facts div.accordion-content .input-group select,
+div#additional_facts div.accordion-content .input-group textarea,
+div#additional_facts div.accordion-content .input-group.autocomplete_container input,
+div#additional_facts div.accordion-content .input-group.autocomplete_container select,
+div#additional_facts div.accordion-content .input-group.autocomplete_container textarea {
+	margin: 0;
+}
+div#additional_facts div.accordion-content .input-group input.readonly,
+div#additional_facts div.accordion-content .input-group select.readonly,
+div#additional_facts div.accordion-content .input-group textarea.readonly,
+div#additional_facts div.accordion-content .input-group.autocomplete_container input.readonly,
+div#additional_facts div.accordion-content .input-group.autocomplete_container select.readonly,
+div#additional_facts div.accordion-content .input-group.autocomplete_container textarea.readonly {
+	background-color: #e0e0e0;
+}
+div#additional_facts div.accordion-content .input-group .input-group-label,
+div#additional_facts div.accordion-content .input-group.autocomplete_container .input-group-label {
+	display: flex;
+	max-height: 2.625rem;
+	padding: 0;
+	width: 2.625rem;
+}
+div#additional_facts div.accordion-content .input-group .input-group-label button.autocomplete_icon,
+div#additional_facts div.accordion-content .input-group.autocomplete_container .input-group-label button.autocomplete_icon {
+	max-height: 2.625rem;
+	padding: 0;
+	width: 2.625rem;
+}
+div#additional_facts div.accordion-content .input-group .input-group-label button.autocomplete_icon .svg-inline--fa,
+div#additional_facts div.accordion-content .input-group.autocomplete_container .input-group-label button.autocomplete_icon .svg-inline--fa {
+	color: #ab3334;
+}
+div#additional_facts div.accordion-content .input-group .input-group-label .svg-inline--fa,
+div#additional_facts div.accordion-content .input-group.autocomplete_container .input-group-label .svg-inline--fa {
+	margin: 0.25rem 0.5rem 0;
+}
+div#additional_facts div.accordion-content .input-group .input-group-label.addnew .svg-inline--fa,
+div#additional_facts div.accordion-content .input-group.autocomplete_container .input-group-label.addnew .svg-inline--fa {
+	color: #3adb76;
+	font-size: 1.375rem;
 }
 
 div.dataTables_wrapper {
