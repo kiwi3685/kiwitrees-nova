@@ -593,17 +593,18 @@ function contact_links($ged_id = KT_GED_ID)
 function print_note_record($text, $nlevel, $nrec, $textOnly = false)
 {
 	global $KT_TREE, $EXPAND_NOTES, $iconStyle;
+
 	$element_id = '';
 	$first_line = '';
-	$text_cont = get_cont($nlevel, $nrec);
 	$revealText = '';
-	$noteType = '';
+	$noteType   = '';
+	$text_cont  = get_cont($nlevel, $nrec);
 
 	// Check if shared note (we have already checked that it exists)
 	preg_match('/^0 @(' . KT_REGEX_XREF . ')@ NOTE/', $nrec, $match);
 	if ($match) {
 		$element_id = $match[1] . '-' . (int) (microtime(true) * 1000000);
-		$note = KT_Note::getInstance($match[1], $KT_TREE);
+		$note  = KT_Note::getInstance($match[1], $KT_TREE);
 		$label = 'SHARED_NOTE';
 		// If Census assistant installed, allow it to format the note
 		if (array_key_exists('census_assistant', KT_Module::getActiveModules())) {
@@ -613,9 +614,9 @@ function print_note_record($text, $nlevel, $nrec, $textOnly = false)
 		}
 	} else {
 		$element_id = 'N-' . (int) (microtime(true) * 1000000);
-		$note = null;
-		$label = 'NOTE';
-		$html = KT_Filter::formatText($text . $text_cont);
+		$note       = null;
+		$label      = 'NOTE';
+		$html       = KT_Filter::formatText($text . $text_cont);
 	}
 
 	if ($textOnly) {
@@ -625,102 +626,107 @@ function print_note_record($text, $nlevel, $nrec, $textOnly = false)
 	if (false === strpos($text . $text_cont, "\n")) {
 		// A one-line note? strip the block-level tags, so it displays inline
 		return KT_Gedcom_Tag::getLabelValue($label, strip_tags($html, '<a><strong><em>'));
-	}
-	// A multi-line note, with an expand/collapse option
-	if ($note) {
-		if (KT_SCRIPT_NAME === 'note.php') {
-			$first_line = $note->getFullName();
-		} else {
-			KT_USER_CAN_EDIT ? $editIcon = '<i class="' . $iconStyle . ' fa-pen-to-square"></i>' : $editIcon = '';
-			$first_line = '
-					<a href="' . $note->getHtmlUrl() . '">' .
-					$note->getFullName() .
-					$editIcon . '
-					</a>';
-			$revealText = $note->getFullName();
-		}
-
-		// special case required to display title for census shared notes when is-shown by default
-		if (preg_match('/<span id="title">.*<\/span>/', $html, $match)) {
+	} else {
+		// A multi-line note, with an expand/collapse option
+		if ($note) {
 			if (KT_SCRIPT_NAME === 'note.php') {
-				$first_line = $match[0];
+				$first_line = $note->getFullName();
 			} else {
+				KT_USER_CAN_EDIT ? $editIcon = '<i class="' . $iconStyle . ' fa-pen-to-square"></i>' : $editIcon = '';
 				$first_line = '
-						<a href="' . $note->getHtmlUrl() . '">' .
-						$match[0] . '
-						</a>';
+					<a href="' . $note->getHtmlUrl() . '">' .
+						$note->getFullName() . $editIcon . '
+					</a>
+				';
+				$revealText = $note->getFullName();
 			}
-			$html = preg_replace('/<span id="title">.*<\/span>/', '', $html);
-		}
-	} else {
-		$noteType = 'standard_expandable';
-		if (strlen($text) > 100) {
-			$first_line = mb_substr($text, 0, 100) . KT_I18N::translate('…');
-		} else {
-			$first_line = KT_Filter::formatText($text);
-			$html = KT_Filter::formatText($text_cont);
-		}
-	}
 
-	if (KT_SCRIPT_NAME === 'note.php') {
-		$noteDisplay = '
-				<div class="fact_NOTE">
-					<span>
-						' . KT_Gedcom_Tag::getLabel($label) . ':
-					</span>
-					<span id="' . $element_id . '">' .
-					$first_line . '
-					</span>
-					<div id="' . $element_id . '">
-					  ' . $html . '
-					</div>
-				</div>
-			';
-	} else {
-		if ('standard_expandable' === $noteType) {
-			// togle display
+			// special case required to display title for census shared notes when is-shown by default
+			if (preg_match('/<span id="title">.*<\/span>/', $html, $match)) {
+				if (KT_SCRIPT_NAME === 'note.php') {
+					$first_line = $match[0];
+				} else {
+					$first_line = '
+						<a href="' . $note->getHtmlUrl() . '">' .
+							$match[0] . '
+						</a>
+					';
+				}
+				$html = preg_replace('/<span id="title">.*<\/span>/', '', $html);
+			}
+
+		} else {
+			$noteType = 'standard_expandable';
+			if (strlen($text) > 100) {
+				$first_line = mb_substr($text, 0, 100) . KT_I18N::translate('…');
+			} else {
+				$first_line = KT_Filter::formatText($text);
+				$html       = KT_Filter::formatText($text_cont);
+			}
+		}
+
+		if (KT_SCRIPT_NAME === 'note.php') {
 			$noteDisplay = '
-					<div class="fact_NOTE standard_expandable">
+					<div class="fact_NOTE">
 						<span>
 							' . KT_Gedcom_Tag::getLabel($label) . ':
-							<a data-toggle="' . $element_id . '">
+						</span>
+						<span id="' . $element_id . '">' .
+						$first_line . '
+						</span>
+						<div id="' . $element_id . '">
+					  	' . $html . '
+						</div>
+					</div>
+				';
+		} else {
+			if ('standard_expandable' === $noteType) {
+				// toggle display
+				$noteDisplay = '
+						<div class="fact_NOTE standard_expandable">
+							<span>
+								' . KT_Gedcom_Tag::getLabel($label) . ':
+								<a data-toggle="' . $element_id . '">
+									<i class="' . $iconStyle . ' fa-maximize"></i>
+								</a>
+								<span class="first-line">
+									' . $first_line . '
+								</span>
+							</span>
+							<div id="' . $element_id . '" class="first-line is-shown" data-toggler=".is-shown">
+								' . $html . '
+							</div>
+						</div>
+						<br>
+					';
+			} else {
+				// reveal in modal
+				$noteDisplay = '
+						<div class="fact_NOTE modal">
+							<span>
+								' . KT_Gedcom_Tag::getLabel($label) . ':
+							</span>
+							<a href="' . $note->getHtmlUrl() . '">
+								' . $revealText . '
+							</a>
+							<a data-open="' . $element_id . '">
 								<i class="' . $iconStyle . ' fa-maximize"></i>
 							</a>
-							<span class="first-line">
-								' . $first_line . '
-							</span>
-						</span>
-						<div id="' . $element_id . '" class="first-line is-shown" data-toggler=".is-shown">
-							' . $html . '
+							<div class="reveal" id="' . $element_id . '" data-reveal>
+								' . $first_line . '<br>' . $html . '
+								<button class="close-button" data-close aria-label="' . KT_I18N::translate('Close') . '" type="button">
+									<span aria-hidden="true">
+										<i class="' . $iconStyle . ' fa-xmark"></i>
+									</span>
+								</button>
+							</div>
 						</div>
-					</div>
-					<br>
-				';
-		} else {
-			// reveal in modal
-			$noteDisplay = '
-					<div class="fact_NOTE modal">
-						<span>
-							' . KT_Gedcom_Tag::getLabel($label) . ':
-						</span>
-						<a data-open="' . $element_id . '">
-							' . $revealText . '
-							<i class="' . $iconStyle . ' fa-maximize"></i>
-						</a>
-						<div class="reveal" id="' . $element_id . '" data-reveal>
-							' . $first_line . '<br>' . $html . '
-							<button class="close-button" data-close aria-label="' . KT_I18N::translate('Close') . '" type="button">
-								<span aria-hidden="true">
-									<i class="' . $iconStyle . ' fa-xmark"></i>
-								</span>
-							</button>
-						</div>
-					</div>
-				';
+					';
+			}
 		}
-	}
 
-	return $noteDisplay;
+		return $noteDisplay;
+	}
 }
 
 /**
