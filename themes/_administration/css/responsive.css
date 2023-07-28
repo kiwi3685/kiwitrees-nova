@@ -2,6 +2,26 @@
 	color: #34689c;
 }
 
+span.administrator {
+	color: #ff0000;
+}
+
+span.admin {
+	color: #34689c;
+}
+
+span.accept {
+	color: #5da423;
+}
+
+span.edit {
+	color: #ffae00;
+}
+
+span.access {
+	color: #878787 !important;
+}
+
 @media print, screen and (max-width: 48.06125em) {
 	#setup-body button.button {
 		width: 100% !important;

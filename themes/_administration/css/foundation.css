@@ -3,6 +3,26 @@
 	color: #34689c;
 }
 
+span.administrator {
+	color: #ff0000;
+}
+
+span.admin {
+	color: #34689c;
+}
+
+span.accept {
+	color: #5da423;
+}
+
+span.edit {
+	color: #ffae00;
+}
+
+span.access {
+	color: #878787 !important;
+}
+
 div[id^=moduleImage] button.close-button {
 	min-width: initial;
 	font-size: 1.5rem;
