@@ -82,11 +82,10 @@ $controller->pageHeader(); ?>
 		}
 	');
 
-	$linked_indi = $controller->record->fetchLinkedIndividuals();
-	$linked_fam  = $controller->record->fetchLinkedFamilies();
-	$linked_obje = $controller->record->fetchLinkedMedia();
-	$linked_note = $controller->record->fetchLinkedNotes();
-
+	$linked_indi       = $controller->record->fetchLinkedIndividuals();
+	$linked_fam        = $controller->record->fetchLinkedFamilies();
+	$linked_obje       = $controller->record->fetchLinkedMedia();
+	$linked_note       = $controller->record->fetchLinkedNotes();
 	$count_linked_indi = count($linked_indi);
 	$count_linked_fam  = count($linked_fam);
 	$count_linked_obje = count($linked_obje);
@@ -140,7 +139,7 @@ $controller->pageHeader(); ?>
 		</ul>
 		<div class="tabs-content" data-tabs-content="source-tabs">
 			<div class="tabs-panel is-active" id="source-edit">
-				<div class="facts grid-x grid-margin-x grid-margin-y  grid-padding-x grid-padding-y">
+				<div class="facts grid-x grid-margin-x grid-padding-x grid-padding-y">
 					<?php
 					$sourcefacts = $controller->record->getFacts();
 					foreach ($sourcefacts as $fact) {

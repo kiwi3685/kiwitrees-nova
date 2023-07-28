@@ -83,10 +83,14 @@ $controller->pageHeader(); ?>
 		}
 	');
 
-	$linked_indi	= $controller->record->fetchLinkedIndividuals();
-	$linked_fam 	= $controller->record->fetchLinkedFamilies();
-	$linked_obje	= $controller->record->fetchLinkedMedia();
-	$linked_sour	= $controller->record->fetchLinkedSources();
+	$linked_indi       = $controller->record->fetchLinkedIndividuals();
+	$linked_fam        = $controller->record->fetchLinkedFamilies();
+	$linked_obje       = $controller->record->fetchLinkedMedia();
+	$linked_sour       = $controller->record->fetchLinkedSources();
+	$count_linked_indi = count($linked_indi);
+	$count_linked_fam  = count($linked_fam);
+	$count_linked_obje = count($linked_obje);
+	$count_linked_sour = count($linked_sour);
 	?>
 
 	<div class="cell large-10 large-offset-1">
@@ -94,16 +98,44 @@ $controller->pageHeader(); ?>
 		<ul class="tabs" data-tabs id="note-tabs">
 			<li class="tabs-title is-active"><a href="#note-edit" aria-selected="true"><span><?php echo KT_I18N::translate('Details'); ?></span></a></li>
 			<?php if ($linked_indi) { ?>
-				<li class="tabs-title"><a href="#indi-note"><span id="indisource"><?php echo KT_I18N::translate('Individuals'); ?></span></a></li>
+				<li class="tabs-title">
+					<a href="#indi-note">
+						<span id="indisource">
+							<?php echo KT_I18N::translate('Individuals'); ?>
+							<sup><?php echo $count_linked_indi; ?></sup>
+						</span>
+					</a>
+				</li>
 			<?php }
 			if ($linked_fam) { ?>
-				<li class="tabs-title"><a href="#fam-note"><span id="famsource"><?php echo KT_I18N::translate('Families'); ?></span></a></li>
+				<li class="tabs-title">
+					<a href="#fam-note">
+						<span id="famsource">
+							<?php echo KT_I18N::translate('Families'); ?>
+							<sup><?php echo $count_linked_fam; ?></sup>
+						</span>
+					</a>
+				</li>
 			<?php }
 			if ($linked_obje) { ?>
-				<li class="tabs-title"><a href="#media-note"><span id="mediasource"><?php echo KT_I18N::translate('Media objects'); ?></span></a></li>
+				<li class="tabs-title">
+					<a href="#media-note">
+						<span id="mediasource">
+							<?php echo KT_I18N::translate('Media objects'); ?>
+							<sup><?php echo $count_linked_obje; ?></sup>
+						</span>
+					</a>
+				</li>
 			<?php }
 			if ($linked_sour) { ?>
-				<li class="tabs-title"><a href="#source-note"><span id="notesource"><?php echo KT_I18N::translate('Sources'); ?></span></a></li>
+				<li class="tabs-title">
+					<a href="#source-note">
+						<span id="notesource"><
+							?php echo KT_I18N::translate('Sources'); ?>
+							<sup><?php echo $count_linked_sour; ?></sup>
+						</span>
+					</a>
+				</li>
 			<?php } ?>
 		</ul>
 
@@ -115,7 +147,7 @@ $controller->pageHeader(); ?>
 
 		<div class="tabs-content" data-tabs-content="note-tabs">
 			<div class="tabs-panel is-active" id="note-edit">
-				<div class="facts grid-x grid-margin-x grid-margin-y  grid-padding-x grid-padding-y">
+				<div class="facts grid-x grid-margin-x grid-padding-x grid-padding-y">
 					<div class="cell medium-2 fact-title">
 						<?php if (KT_USER_CAN_EDIT) { ?>
 							<a class="has-tip" onclick="return edit_note('<?php echo $controller->record->getXref(); ?>')" title="<?php echo KT_I18N::translate('Edit'); ?>" data-tooltip aria-haspopup="true" data-click-open="false" data-disable-hover="false">
