@@ -1100,6 +1100,16 @@ div[id$=-page] button[type=submit] {
 #edit_interface-page div.sourceLinks {
 	margin-bottom: 1rem;
 }
+#edit_interface-page div.sourceLinks p {
+	display: inline-block;
+	margin-top: 0.125rem;
+	width: 12.5%;
+}
+#edit_interface-page div.sourceLinks p label {
+	font-size: 0.9rem;
+	margin: 0;
+	padding: 0;
+}
 #edit_interface-page label {
 	font-size: 1.125rem;
 	font-weight: 500;

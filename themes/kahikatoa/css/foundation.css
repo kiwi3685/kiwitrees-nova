@@ -86,6 +86,10 @@ div.reveal.media {
 	box-shadow: 0.25rem 0.25rem 0.5rem 0 #8a8a8a;
 }
 
+table.scroll {
+	display: inline-table !important;
+}
+
 .tabs-title.is-active {
 	background: #8a8a8a !important;
 }
