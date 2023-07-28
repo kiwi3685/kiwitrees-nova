@@ -406,24 +406,70 @@ function TopBarMenu($show_widgetbar)
 }
 
 /**
- * Set of addional fact inputs
+ * Set of additional fact inputs
  * in an accordion list
  *
  * @param an array of strings
  */
-function additionalFacts ($facts = array())
+function additionalFacts($tag)
 {
-//	require KT_ROOT . 'includes/functions/functions_edit_gedcom.php'; ?>
 
-	<div id="additional_facts">
-		<ul class="accordion" data-accordion data-multi-expand="true" data-allow-all-closed="true">
-			<?php
-				foreach ($facts as $fact) {
-					print_add_layer($fact);
+	$tagArray   = ['SOUR', 'NOTE', 'SHARED_NOTE', 'OBJE', 'ASSO', 'ASSO2', 'RESN'];
+	$asso2Array = ['BAPM', 'CHR', 'MARR'];
+	$remove     = [];
+	$remove1    = [];
+	$remove2    = [];
+	$remove3    = [];
+	$newArray   = [];
+
+	switch ($tag) {
+		case 'NAME_update':
+			// Name only uses first three elements of $tagArray
+			$facts = array_splice($tagArray, 0, 3);
+			break;
+		case 'NAME':
+			// Name only uses first four elements of $tagArray when $nextaction is not 'update'
+			$facts = array_splice($tagArray, 0, 4);
+			break;
+		case 'CHAN':
+		case 'SEX':
+			// No additional elements allowed
+			$facts = [];
+			break;
+		default:
+			// Tags cannot themselves
+			foreach ($tagArray as $value) {
+				// use strpos to include both NOTE and SHARED_NOTE
+				if (strpos($value, $tag) !== false){
+					$remove1[] = $value;
 				}
-			?>
-		</ul>
-	</div>
+			}
+			// ASSO and ASSO2 cannot be used in any tag in $tagArray
+			if (in_array($tag, $tagArray)) {
+				$remove2[] = 'ASSO';
+				$remove2[] = 'ASSO2';
+			}
+			// ASSO2 can only be used in tags from $asso2Array
+			if (!in_array($tag, $asso2Array)) {
+				$remove3[] = 'ASSO2';
+			}
+			$remove = array_unique(array_merge($remove1, $remove2, $remove3));
+			$newArray = array_diff($tagArray, $remove);
+			// sort array into standard order (as in $tagArray above)
+			$facts = array_intersect($newArray, $tagArray);
+			break;
+	}
 
+	?>
+	<div id="additional_facts">
+			<ul class="accordion" data-accordion data-multi-expand="true" data-allow-all-closed="true">
+				<?php
+					foreach ($facts as $fact) {
+						print_add_layer($fact);
+					}
+				?>
+			</ul>
+	</div>
 	<?php
+
 }
