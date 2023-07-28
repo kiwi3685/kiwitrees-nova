@@ -27,7 +27,7 @@ require './includes/session.php';
 /**
  * Defined in session.php
  *
- * @global Tree $WT_TREE
+ * @global Tree $KT_TREE
  */
 global $KT_TREE;
 
