@@ -1,23 +1,21 @@
 <?php
 /**
- * Kiwitrees: Web based Family History software
- * Copyright (C) 2012 to 2023 kiwitrees.net
+ * Kiwitrees: Web based Family History software Copyright (C) 2012 to 2023
+ * kiwitrees.net
  *
- * Derived from webtrees (www.webtrees.net)
- * Copyright (C) 2010 to 2012 webtrees development team
+ * Derived from webtrees (www.webtrees.net) Copyright (C) 2010 to 2012 webtrees
+ * development team
  *
- * Derived from PhpGedView (phpgedview.sourceforge.net)
- * Copyright (C) 2002 to 2010 PGV Development Team
+ * Derived from PhpGedView (phpgedview.sourceforge.net) Copyright (C) 2002 to
+ * 2010 PGV Development Team
  *
- * Kiwitrees is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- * You should have received a copy of the GNU General Public License
+ * Kiwitrees is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version. This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details. You should have received a copy of the GNU General Public License
  * along with Kiwitrees. If not, see <http://www.gnu.org/licenses/>
  */
 if (!defined('KT_KIWITREES')) {
@@ -27,8 +25,7 @@ if (!defined('KT_KIWITREES')) {
 }
 
 /**
- * Array of site administration menu items
- * $site_tools [array].
+ * Array of site administration menu items $site_tools [array].
  */
 $site_tools = [
 	'admin_summary_site.php' => KT_I18N::translate('Website'),
@@ -41,8 +38,7 @@ $site_tools = [
 ];
 
 /**
- * Array of Family tree tool menu items
- * $trees [array].
+ * Array of Family tree tool menu items $trees [array].
  */
 $trees = [
 	'admin_summary_trees.php'      => KT_I18N::translate('Family trees'),
@@ -64,8 +60,7 @@ $trees = [
 ];
 
 /**
- * Array of site administration menu items
- * $site_tools [array].
+ * Array of site administration menu items $site_tools [array].
  */
 $users = [
 	'admin_summary_users.php' 			=> KT_I18N::translate('User management'),
@@ -76,8 +71,7 @@ $users = [
 ];
 
 /**
- * Array of family tree administration menu items
- * $ft_tools [array].
+ * Array of family tree administration menu items $ft_tools [array].
  */
 $media = [
 	'admin_summary_media.php' => KT_I18N::translate('Media objects'),
@@ -86,8 +80,7 @@ $media = [
 ];
 
 /**
- * Array of Module menu items not sorted alphabetically
- * $module_config [array]
+ * Array of Module menu items not sorted alphabetically $module_config [array]
  * Manually ordered items before sorted.
  */
 $module_config = [
@@ -96,8 +89,8 @@ $module_config = [
 ];
 
 /**
- * Array of Module menu items sorted alphabetically
- * $module_config_files [array].
+ * Array of Module menu items sorted alphabetically $module_config_files
+ * [array].
  */
 $module_config_files = [
 	'admin_module_menus.php'     => KT_I18N::translate('Top level menu items'),
@@ -117,9 +110,9 @@ asort($module_config_files);
 $module_config = array_merge($module_config, $module_config_files);
 
 /**
- * Array of site administration menu items
- * $custom [array]
- * Excludes "Custom javascript' page as that is not an "admin_xxxxx.php" file that can be searched.
+ * Array of site administration menu items $custom [array] Excludes "Custom
+ * javascript' page as that is not an "admin_xxxxx.php" file that can be
+ * searched.
  */
 $custom = [
 	'admin_summary_custom.php' => KT_I18N::translate('Customizing'),
@@ -129,8 +122,7 @@ $custom = [
 ];
 
 /**
- * Array of site administration menu items
- * $tools [array].
+ * Array of site administration menu items $tools [array].
  */
 $tools = ['admin_summary_tools.php' => KT_I18N::translate('Tools')];
 foreach (KT_Module::getActiveModules(true) as $tool) {
@@ -139,9 +131,8 @@ foreach (KT_Module::getActiveModules(true) as $tool) {
 }
 
 /**
- * Array of items used in admin, but not as primary files
- * Needed for admin search tool
- * $other [array].
+ * Array of items used in admin, but not as primary files Needed for admin
+ * search tool $other [array].
  */
 $other_admin_files = [
 	'adminDownload.php'                    => KT_I18N::translate('Download a GEDCOM file'),
@@ -181,8 +172,8 @@ $searchAdminFiles = array_merge(
 asort($searchAdminFiles);
 
 /**
- * Array of items where file cannot be accessed directly
- * file name => module name.
+ * Array of items where file cannot be accessed directly file name => module
+ * name.
  */
 $indirectAccess = [
 	'admin_batch_update.php'               => 'batch_update',
@@ -210,9 +201,9 @@ foreach (KT_Module::getActiveModules(true) as $module) {
 };
 asort($moduleTools);
 
-// List custom theme files that might exist
 /*
- * Array of theme template files thatcan be customised
+ * List custom theme files that might exist
+ * Array of theme template files that can be customised
  * in admin_custom_theme.php
  *
  */
@@ -223,6 +214,3 @@ $customFiles = array(
 		'myfooter_template.php',
 		'myhome_page_template.php'
 	);
-
-
-
