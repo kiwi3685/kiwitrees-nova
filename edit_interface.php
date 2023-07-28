@@ -148,27 +148,13 @@ switch ($actionA) {
 					<?php echo create_add_form($fact); ?>
 				</div>
 
-				<?php // Select appropriate additional facts based on current tag
-				if ($level0type === 'INDI' || $level0type === 'FAM') {
-					$facts1 = $facts2 = $facts3 = $facts4 = $facts5 = [];
-					if ($fact !== 'OBJE' && $fact !== 'NOTE' && $fact !== 'SHARED_NOTE' && $fact !== 'REPO' && $fact !== 'SOUR' && $fact !== 'ASSO' && $fact !== 'ALIA') {
-						$facts1 = ['SOUR', 'OBJE'];
-						if ($fact != 'NOTE') {
-							$facts2 = ['NOTE', 'SHARED_NOTE'];
-						}
-						$facts3 = ['ASSO'];
-						if ($fact === 'BAPM' || $fact === 'CHR' || $fact === 'MARR') {
-							$facts4 = ['ASSO2'];
-						}
-						$facts5 = ['RESN'];
-					}
-					$facts = array_merge($facts1, $facts2, $facts3, $facts4, $facts5);
-				}
-				echo  additionalFacts($facts);
+				<?php
+				echo additionalFacts($fact);
 
                 echo no_update_chan($record);
 
-                echo submitButtons(); ?>
+                echo submitButtons();
+				?>
 
 			</form>
 
@@ -1000,49 +986,7 @@ switch ($actionA) {
 
 				<?php echo no_update_chan($record); ?>
 
-				<ul class="accordion" data-accordion data-allow-all-closed="true" data-multi-expand="true" TEST>
-					<?php switch ($level0type) {
-                        case 'OBJE':
-                        case 'NOTE':
-                            // OBJE and NOTE "facts" are all special, and none can take lower-level links
-                        break;
-                        case 'SOUR':
-                        case 'REPO':
-                            // SOUR and REPO "facts" may only take a NOTE
-                            if ($level1type != 'NOTE') {
-                                echo print_add_layer('NOTE');
-                            }
-                        break;
-                        case 'FAM':
-                        case 'INDI':
-                            // FAM and INDI records have "real facts".  They can take NOTE/SOUR/OBJE/etc.
-                            if ($level1type != 'SEX') {
-                                if ($level1type != 'SOUR' && $level1type != 'REPO') {
-                                    echo print_add_layer('SOUR');
-                                }
-                                if ($level1type != 'OBJE' && $level1type != 'REPO') {
-                                    echo print_add_layer('OBJE');
-                                }
-                                if ($level1type != 'NOTE') {
-                                    echo print_add_layer('NOTE');
-                                }
-                                // Shared Note addition ------------
-                                if ($level1type != 'SHARED_NOTE' && $level1type != 'NOTE') {
-                                    echo print_add_layer('SHARED_NOTE');
-                                }
-                                if ($level1type != 'ASSO' && $level1type != 'REPO' && $level1type != 'NOTE') {
-                                    echo print_add_layer('ASSO');
-                                }
-                                // allow to add godfather and godmother for CHR fact or best man and bridesmaid for MARR fact in one window
-                                if ($level1type == 'BAPM' || $level1type == 'CHR' || $level1type == 'MARR') {
-                                    echo print_add_layer('ASSO2');
-                                }
-                                // RESN can be added to all level 1 tags
-                                echo print_add_layer('RESN');
-                            }
-                        break;
-                    } ?>
-				</ul>
+				<?php echo additionalFacts($level1type); ?>
 
                 <?php echo submitButtons(); ?>
 
@@ -1242,18 +1186,11 @@ switch ($actionA) {
 
     					<?php echo no_update_chan(); ?>
 
-                        <?php echo print_add_layer("OBJE"); ?>
+                        <?php echo additionalFacts("SOUR"); ?>
+
+                    	<?php echo submitButtons(); ?>
 
     				</div>
-                    <ul class="accordion" data-accordion data-allow-all-closed="true" data-multi-expand="true">
-    					<?php
-                        print_add_layer("OBJE");
-                        print_add_layer("NOTE");
-                        print_add_layer("SHARED_NOTE");
-                        print_add_layer("RESN");
-                        ?>
-    				</ul>
-                    <?php echo submitButtons(); ?>
     			</form>
 
 		<?php echo pageClose();

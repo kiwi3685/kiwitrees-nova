@@ -472,7 +472,13 @@ echo pageStart('addmedia', $controller->getPageTitle()); ?>
 				<div class="cell small-10 medium-7">
 					<?php echo '<a class="imageEditorLink" href="' . $IMAGE_EDITOR . '" target="_blank">' . $IMAGE_EDITOR . '</a>'; ?>
 					<div class="cell callout info-help show-for-medium">
-						<?php echo KT_I18N::translate('You can use this editor to adjust your media images before uploading. It can help to resize, modify colours, change rotation etc. Please remember %s is not part of this %s website. The link is provided for your convenience, with no guarantees. For assistance using the software please contact its developers directly.', $IMAGE_EDITOR, KT_TREE_TITLE); ?>
+						<?php echo KT_I18N::translate('
+							You can use this editor to adjust your media images before uploading.
+							It can help to resize, modify colours, change rotation etc.
+							Please remember %s is not part of this %s website.
+							The link is provided for your convenience, with no guarantees.
+							For assistance using the software please contact its developers directly.
+						', $IMAGE_EDITOR, KT_TREE_TITLE); ?>
 					</div>
 				</div>
 
@@ -583,43 +589,45 @@ echo pageStart('addmedia', $controller->getPageTitle()); ?>
 				<div class="cell small-10 medium-7">
 					<?php //-- don’t let regular users change the location of media items
 					if ($action != 'update' || KT_USER_GEDCOM_ADMIN) {
-						$mediaFolders = KT_Query_Media::folderList();
-						echo '<span dir="ltr">
-							<select
-								name="folder_list"
-								onchange="document.newmedia.folder.value=this.options[this.selectedIndex].value;"
-							>
-								<option';
-									if ($folder == '') {
-										echo ' selected="selected"';
-									}
-									echo ' value=""> ' . KT_I18N::translate('Choose: ') . '
-								</option>';
-								if (KT_USER_IS_ADMIN) {
-									echo ' <option value="other" disabled>' .
-										KT_I18N::translate('Other folder... please type in') . '
-									</option>';
-								}
-								foreach ($mediaFolders as $f) {
-									echo '<option value="' . $f . '"';
-										if ($folder === $f) {
-											echo ' selected="selected"';
-										}
-									echo '>' . $f . '</option>';
-								}
-							echo '</select>
-						</span>';
-					} else {
+						$mediaFolders = KT_Query_Media::folderList(); ?>
+						<select
+							name="folder_list"
+							onchange="document.newmedia.folder.value=this.options[this.selectedIndex].value;"
+						>
+							<option
+								<?php if ($folder === '') {
+									echo ' value="">' .
+									KT_I18N::translate('Choose: ');
+								} else {
+									echo ' value="' . $folder . '" selected="selected">' .
+									$folder . '/';
+								} ?>
+							</option>
+							<?php if (KT_USER_IS_ADMIN) { ?>
+								<option value="other" disabled>
+									<?php echo KT_I18N::translate('Other folder... please type in'); ?>
+								</option>
+							<?php }
+							foreach ($mediaFolders as $f) {
+								if ($f !== $folder . '/') { ?>
+									<option value="<?php echo $f; ?>">
+										<?php echo $f; ?>
+									</option>
+								<?php }
+							} ?>
+						</select>
+					<?php } else {
 						echo $folder;
-					}
-					if (KT_USER_IS_ADMIN) {
-						echo '<br>
-						<span dir="ltr">
-							<input type="text" name="folder" value="' . $folder . '">
-						</span>';
-					} else { ?>
-						<input name="folder" type="hidden" value="<?php echo addslashes($folder); ?>">
-					<?php } ?>
+					} ?>
+					<input name="folder" type="hidden" value="<?php echo $folder; ?>">
+					<div class="cell callout info-help show-for-medium">
+						<?php echo /* I18N: Help text for add media screens*/
+							KT_I18N::translate('
+								Select a different folder, or type a new one,
+								to move this file to that new location.
+							')
+						; ?>
+					</div>
 
 					<?php if ($gedfile == 'FILE') { ?>
 						<div class="cell callout info-help show-for-medium">
@@ -726,7 +734,7 @@ echo pageStart('addmedia', $controller->getPageTitle()); ?>
 					$gedprim = '_PRIM';
 				}
 			}
-			add_simple_tag("1 $gedprim",'','',''); ?>
+			add_simple_tag("1 $gedprim"); ?>
 			<div class="cell callout info-help show-for-medium medium-7 medium-offset-3">
 				<?php echo
 					KT_I18N::translate('
@@ -811,15 +819,16 @@ echo pageStart('addmedia', $controller->getPageTitle()); ?>
 			} ?>
 		</div>
 
-		<?php echo additionalFacts (array('SOUR', 'NOTE', 'SHARED_NOTE', 'RESN'));
+		<?php
+		echo additionalFacts('OBJE');
 
 		if (KT_USER_IS_ADMIN && $action != 'create') {
 			echo no_update_chan($media);
 		}
 
-		echo submitButtons(); ?>
+		echo submitButtons();
+		?>
 
 	</form>
 
 <?php echo pageClose();
-

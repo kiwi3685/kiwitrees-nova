@@ -263,18 +263,6 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
             echo $extra; ?>
 
         </div>
-
-         <?php // Checkboxes to apply '1 SOUR' to BIRT/MARR/DEAT as '2 SOUR'
-        if ($fact == 'SOUR' && $level == 1) { ?>
-            <div class="source_links">
-                <h4><?php echo KT_I18N::translate('Link this source to these records'); ?></h4>
-
-                 <?php echo sourceLinks($bdm); ?>
-
-            </div>
-
-        <?php } ?>
-
     </div>
 
     <?php return $element_id;
@@ -326,7 +314,7 @@ function tagLevel($level, $islink, $fact)
 }
 
 /**
- * Disply current value / description under input field
+ * Display current value / description under input field
  *
  * @param string $upperlevel optional upper level tag (eg BIRT)
  * @param string $label An optional label to echo instead of the default
@@ -896,80 +884,7 @@ function otherInputs($fact, $level, $element_id, $upperlevel, $tags, $pid, $elem
 
 }
 
-/**
- * Checkboxes to apply '1 SOUR' to BIRT/MARR/DEAT as '2 SOUR'
- *
- * @param string $fact
- * @param string $value
- *
-**/
-function sourceLinks($bdm)
-{
-	$PREFER_LEVEL2_SOURCES   = get_gedcom_setting(KT_GED_ID, 'PREFER_LEVEL2_SOURCES');
 
-    if ($PREFER_LEVEL2_SOURCES === '0') {
-        $level1_checked = '';
-        $level2_checked = '';
-    } else if ($PREFER_LEVEL2_SOURCES === '1' || $PREFER_LEVEL2_SOURCES === true) {
-        $level1_checked = '';
-        $level2_checked = ' checked';
-    } else {
-        $level1_checked = ' checked';
-        $level2_checked = '';
-
-    }
-
-    if ($bdm && strpos($bdm, 'B') !== false) {
-        echo '
-            <p>
-                <input type="checkbox" name="SOUR_INDI" ', $level1_checked, ' value="Y">',
-                KT_I18N::translate('Individual'),
-            '</p>';
-        if (preg_match_all('/('.KT_REGEX_TAG.')/', $QUICK_REQUIRED_FACTS, $matches)) {
-            foreach ($matches[1] as $match) {
-                if (!in_array($match, explode('|', KT_EVENTS_DEAT))) {
-                    echo '
-                        <p>
-                            <input type="checkbox" name="SOUR_', $match, '"', $level2_checked, ' value="Y">',
-                            KT_Gedcom_Tag::getLabel($match),
-                        '</p>';
-                }
-            }
-        }
-    }
-
-    if ($bdm && strpos($bdm, 'D') !== false) {
-        if (preg_match_all('/('.KT_REGEX_TAG.')/', $QUICK_REQUIRED_FACTS, $matches)) {
-            foreach ($matches[1] as $match) {
-                if (in_array($match, explode('|', KT_EVENTS_DEAT))) {
-                    echo '
-                        <p>
-                            <input type="checkbox" name="SOUR_', $match, '"', $level2_checked, ' value="Y">',
-                            KT_Gedcom_Tag::getLabel($match),
-                        '</p>';
-                }
-            }
-        }
-    }
-
-    if ($bdm && strpos($bdm, 'M') !== false) {
-        echo '
-            <p>
-                <input type="checkbox" name="SOUR_FAM" ', $level1_checked, ' value="Y">',
-                KT_I18N::translate('Family'),
-            '</p>';
-        if (preg_match_all('/('.KT_REGEX_TAG.')/', $QUICK_REQUIRED_FAMFACTS, $matches)) {
-            foreach ($matches[1] as $match) {
-                echo '
-                    <p>
-                        <input type="checkbox" name="SOUR_', $match, '"', $level2_checked, ' value="Y">',
-                        KT_Gedcom_Tag::getLabel($match),
-                    '</p>';
-            }
-        }
-    }
-
-}
 
 /**
  * Input field placeholder texts
