@@ -289,7 +289,7 @@ class KT_Media extends KT_GedcomRecord
 	 */
 	public function getMediaType()
 	{
-		return strtolower(get_gedcom_value('FORM:TYPE', 2, $this->getGedcomRecord()));
+		return get_gedcom_value('FORM:TYPE', 2, $this->getGedcomRecord()) ? strtolower(get_gedcom_value('FORM:TYPE', 2, $this->getGedcomRecord())) : '';
 	}
 
 	// Is this object marked as a highlighted image?
