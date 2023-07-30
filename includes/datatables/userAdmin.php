@@ -32,8 +32,11 @@ $time = $days * 60 * 60 * 24;
 
 // Generate an AJAX/JSON response for datatables to load a block of rows
 $sSearch	= KT_Filter::get('sSearch');
+
 $WHERE		= " WHERE u.user_id>0";
+
 $ARGS		= array();
+
 if ($sSearch) {
 	$WHERE .=
 		" AND (".
@@ -43,15 +46,20 @@ if ($sSearch) {
 	$ARGS = array($sSearch, $sSearch, $sSearch);
 } else {
 }
+
 $iDisplayStart	= KT_Filter::getInteger('iDisplayStart');
 $iDisplayLength	= KT_Filter::getInteger('iDisplayLength');
+
 set_user_setting(KT_USER_ID, 'admin_users_page_size', $iDisplayLength);
-if ($iDisplayLength>0) {
+
+if ($iDisplayLength > 0) {
 	$LIMIT = " LIMIT " . $iDisplayStart . ',' . $iDisplayLength;
 } else {
 	$LIMIT = "";
 }
+
 $iSortingCols = KT_Filter::getInteger('iSortingCols');
+
 if ($iSortingCols) {
 	$ORDER_BY = ' ORDER BY ';
 	for ($i=0; $i<$iSortingCols; ++$i) {
@@ -73,7 +81,7 @@ if ($iSortingCols) {
 	$ORDER_BY='';
 }
 
-	 $sql = "
+$sql = "
 	SELECT SQL_CALC_FOUND_ROWS
 	'',
 	u.user_id,
@@ -89,12 +97,12 @@ if ($iSortingCols) {
 	us5.setting_value,
 	'',
 	''
-		FROM `##user` u
-		LEFT JOIN `##user_setting` us1 ON (u.user_id=us1.user_id AND us1.setting_name='language')
-		LEFT JOIN `##user_setting` us2 ON (u.user_id=us2.user_id AND us2.setting_name='reg_timestamp')
-		LEFT JOIN `##user_setting` us3 ON (u.user_id=us3.user_id AND us3.setting_name='sessiontime')
-		LEFT JOIN `##user_setting` us4 ON (u.user_id=us4.user_id AND us4.setting_name='verified')
-		LEFT JOIN `##user_setting` us5 ON (u.user_id=us5.user_id AND us5.setting_name='verified_by_admin')
+	FROM `##user` u
+	LEFT JOIN `##user_setting` us1 ON (u.user_id=us1.user_id AND us1.setting_name='language')
+	LEFT JOIN `##user_setting` us2 ON (u.user_id=us2.user_id AND us2.setting_name='reg_timestamp')
+	LEFT JOIN `##user_setting` us3 ON (u.user_id=us3.user_id AND us3.setting_name='sessiontime')
+	LEFT JOIN `##user_setting` us4 ON (u.user_id=us4.user_id AND us4.setting_name='verified')
+	LEFT JOIN `##user_setting` us5 ON (u.user_id=us5.user_id AND us5.setting_name='verified_by_admin')
  " .
  $WHERE .
  $ORDER_BY .

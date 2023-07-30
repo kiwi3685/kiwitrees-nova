@@ -732,7 +732,7 @@ switch (KT_Filter::get('action')) {
 										<?php foreach (KT_Tree::getAll() as $tree) { ?>
 											<tr>
 												<td>
-													<?php echo $tree->tree_title_html . '-' . $tree->tree_id; ?>
+													<?php echo $tree->tree_title_html . '&nbsp;' . KT_I18N::translate('(ID: %s)', $tree->tree_id); ?>
 												</td>
 												<!-- PEDIGREE ROOT PERSON -->
 												<td>

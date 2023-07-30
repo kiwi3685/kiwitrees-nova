@@ -65,9 +65,11 @@ $trees = [
 $users = [
 	'admin_summary_users.php' 			=> KT_I18N::translate('User management'),
 	'admin_users.php'         			=> KT_I18N::translate('Manage users'),
+	'admin_users_settings.php' 			=> KT_I18N::translate('List user settings per tree'),
 	'admin_users.php?action=edit' 		=> KT_I18N::translate('Add a new user'),
 	'admin_users.php?action=messaging' 	=> KT_I18N::translate('Broadcast messages'),
 	'admin_users.php?action=cleanup' 	=> KT_I18N::translate('Delete inactive users'),
+
 ];
 
 /**
@@ -214,3 +216,11 @@ $customFiles = array(
 		'myfooter_template.php',
 		'myhome_page_template.php'
 	);
+
+// Array of user roles and display versions
+$ALL_EDIT_OPTIONS = array(
+	'access'=> /* I18N: Listbox entry; name of a role */ KT_I18N::translate('Member'),
+	'edit'  => /* I18N: Listbox entry; name of a role */ KT_I18N::translate('Editor'),
+	'accept'=> /* I18N: Listbox entry; name of a role */ KT_I18N::translate('Moderator'),
+	'admin' => /* I18N: Listbox entry; name of a role */ KT_I18N::translate('Manager')
+);

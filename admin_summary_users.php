@@ -43,6 +43,13 @@ $user_tools = [
 		KT_I18N::translate('Administrator access only'),
 		'alert'
 	],
+	"admin_users_settings.php"	=> [
+		KT_I18N::translate('List user settings per tree'),
+		KT_I18N::translate('List  users by tree, showing their settings for that tree'),
+		KT_I18N::translate('Administrator access only'),
+		'alert'
+	],
+
 	 "admin_users.php?action=edit"		=> [
 		KT_I18N::translate('Add a new user'),
 		KT_I18N::translate('Direct link to manually add a new user'),

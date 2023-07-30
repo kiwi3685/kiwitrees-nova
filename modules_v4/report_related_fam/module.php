@@ -269,7 +269,7 @@ class report_related_fam_KT_Module extends KT_Module implements KT_Module_Report
 						$indifacts = $person->getIndiFacts();
 						sort_facts($indifacts);
 						if ($person && $person->canDisplayDetails()) { ?>
-							<h3><?php echo $person->getLifespanName(); ?></a></h3>
+							<h3><?php echo $person->getLifespanName(); ?></h3>
 							<div class="accordion-container">
 									<?php // Image displays
 									switch ($photos) {

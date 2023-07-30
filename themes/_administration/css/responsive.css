@@ -8,18 +8,22 @@ span.administrator {
 
 span.admin {
 	color: #34689c;
+	font-weight: 500;
 }
 
 span.accept {
 	color: #5da423;
+	font-weight: 500;
 }
 
 span.edit {
 	color: #ffae00;
+	font-weight: 500;
 }
 
 span.access {
-	color: #878787 !important;
+	color: #878787;
+	font-weight: 500;
 }
 
 @media print, screen and (max-width: 48.06125em) {
