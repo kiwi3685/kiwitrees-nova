@@ -190,7 +190,7 @@ class KT_Controller_Page extends KT_Controller_Base {
 		$META_TITLE			= KT_GED_ID ? get_gedcom_setting(KT_GED_ID, 'META_TITLE') : '';
 
 		// This javascript needs to be loaded in the header, *before* the CSS.
-		// All other javascript should be defered until the end of the page
+		// All other javascript should be deferred until the end of the page
 		$javascript = '<script src="' . KT_THEME_URL . 'js/theme.min.js" type="text/javascript"></script>';
 
 		// Give Javascript access to some PHP constants
