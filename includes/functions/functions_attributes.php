@@ -29,9 +29,9 @@ if (!defined('KT_KIWITREES')) {
 function privacyStatus($moduleName) {
 	// code based on similar in function_print_list.php
 	global $MAX_ALIVE_AGE, $SHOW_EST_LIST_DATES, $SEARCH_SPIDER;
-	$SHOW_EST_LIST_DATES=get_gedcom_setting(KT_GED_ID, 'SHOW_EST_LIST_DATES');
-	$controller = new KT_Controller_Individual();
-	$html = '<dl id="privacy_status">';
+	$SHOW_EST_LIST_DATES = get_gedcom_setting(KT_GED_ID, 'SHOW_EST_LIST_DATES');
+	$controller          = new KT_Controller_Individual();
+	$html                = '<dl id="privacy_status">';
 	if ($death_dates=$controller->record->getAllDeathDates()) {
 		$html .= '<dt>' . KT_I18N::translate('Dead') . help_link('privacy_status',$moduleName) . '</dt>';
 		foreach ($death_dates as $num=>$death_date) {
@@ -55,6 +55,7 @@ function privacyStatus($moduleName) {
 		$death_dates[0]=new KT_Date('');
 	}
 	$html .= '</dl>';
+
 	return $html;
 
 }

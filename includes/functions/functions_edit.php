@@ -167,7 +167,7 @@ function radio_switch_group($name, $values, $selected, $extra = '', $activeText 
 	foreach ($values as $key => $value) {
 		$uniqueID = $name . (int) (microtime(true) * 1000000);
 		$html .= '
-				<div class="switch ' . $size . ' cell small-8 medium-4 large-2">
+				<div class="switch ' . $size . ' cell small-6 medium-4 large-2">
 					<label>' . $value . '</label>
 					<input class="switch-input" id="' . $uniqueID . '" type="radio" name="' . $name . '" value="' . htmlspecialchars((string) $key) . '"';
 		if ((string) $key === (string) $selected) {
