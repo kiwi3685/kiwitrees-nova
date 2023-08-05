@@ -44,7 +44,7 @@ span.access {
 }
 
 /* sizes are 48 - 48.0625 - 64 - 64.0625 em */
-@media print, screen and (max-width: 64.0625em) {
+@media print, screen and (max-width: 64.06125em) {
 	.info-help:not(.summary) {
 		display: none;
 	}
@@ -61,5 +61,27 @@ span.access {
 	}
 	#admin-container .callout {
 		font-size: 0.75rem;
+	}
+
+	#admin_media-page div.dataTables_wrapper table.stack {
+		border-top: 0.0125rem solid #878787;
+	}
+	#admin_media-page div.dataTables_wrapper table.stack td.center {
+		text-align: initial;
+	}
+	#admin_media-page div.dataTables_wrapper table.stack td.medianame ul {
+		margin-bottom: 0;
+	}
+	#admin_media-page div.dataTables_wrapper table.stack td.editlinks {
+		display: inline-flex;
+	}
+	#admin_media-page div.dataTables_wrapper table.stack td.editlinks a {
+		margin: 0 1rem;
+	}
+	#admin_media-page div.dataTables_wrapper table.stack td.highlight {
+		display: none;
+	}
+	#admin_media-page div.dataTables_wrapper table.stack td.mediatype {
+		display: none;
 	}
 }

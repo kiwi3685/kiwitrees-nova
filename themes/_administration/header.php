@@ -68,13 +68,15 @@ $this
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title><?php echo htmlspecialchars((string) $title); ?></title>
 		<link rel="icon" href="<?php echo KT_THEME_URL; ?>images/kt.png" type="image/png">
-		<link rel="stylesheet" href="<?php echo KT_DATATABLES_CSS; ?>">
+		<link rel="stylesheet" href="<?php echo KT_DATATABLES_FOUNDATION_CSS; ?>">
+		<link rel="stylesheet" href="<?php echo KT_DATATABLES_FOUNDATION_BUTTONS_CSS; ?>">
 		<link rel="stylesheet" href="<?php echo KT_DATEPICKER_CSS; ?>">
 		<link rel="stylesheet" href="<?php echo KT_ICONPICKER_CSS; ?>">
 		<link rel="stylesheet" href="<?php echo KT_TOM_SELECT_CSS; ?>">
 		<link rel="stylesheet" href="<?php echo KT_THEME_URL; ?>css/foundation.min.css">
 		<link rel="stylesheet" href="<?php echo KT_THEME_URL; ?>css/administration.min.css">
 		<link rel="stylesheet" href="<?php echo KT_THEME_URL; ?>css/libraryfiles.min.css">
+		<link rel="stylesheet" href="<?php echo KT_THEME_URL; ?>css/responsive.min.css">
 	</head>
 
 	<body id="body">

@@ -134,6 +134,24 @@ div.dataTables_wrapper div div.dt-buttons button {
 	color: #fefefe;
 	padding: 0.7rem 1rem;
 }
+div.dataTables_wrapper div div.dt-buttons.button-group a {
+	margin-bottom: 0;
+	padding: 0.6875rem 1rem;
+}
+div.dataTables_wrapper div.dataTables_processing {
+	background: none;
+	background-color: #34689c;
+	color: #fefefe;
+	display: none;
+	font-weight: 900;
+	height: auto;
+	padding: 0.9375rem;
+	position: absolute;
+	text-align: center;
+	top: 30%;
+	width: auto;
+	z-index: 99;
+}
 div.dataTables_wrapper table.dataTable {
 	border-collapse: separate;
 }
