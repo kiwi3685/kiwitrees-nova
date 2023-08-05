@@ -46,7 +46,7 @@ if (!array_key_exists($media_path, $media_paths)) {
 }
 
 // subfolders within $media_path
-$subfolders = KT_Filter::get('subfolders', 'include|exclude', 'include');
+$subfolders = KT_Filter::get('subfolders', 'include|exclude', 'exclude');
 $action     = KT_Filter::get('action');
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -79,283 +79,6 @@ if ($delete_file) {
 	$controller->pageHeader();
 	exit;
 }
-
-////////////////////////////////////////////////////////////////////////////////
-// GET callback for server-side pagination
-////////////////////////////////////////////////////////////////////////////////
-
-switch($action) {
-case 'loadrows':
-	Zend_Session::writeClose();
-	$sSearch        = KT_Filter::get('sSearch');
-	$iDisplayStart  = KT_Filter::getInteger('iDisplayStart');
-	$iDisplayLength = KT_Filter::getInteger('iDisplayLength');
-
-	switch ($files) {
-	case 'local':
-		// Filtered rows
-		$SELECT1 =
-				"SELECT SQL_CALC_FOUND_ROWS TRIM(LEADING ? FROM m_filename) AS media_path, 'OBJE' AS type, m_titl, m_id AS xref, m_file AS ged_id, m_gedcom AS gedrec, m_filename" .
-				" FROM  `##media`" .
-				" JOIN  `##gedcom_setting` ON (m_file = gedcom_id AND setting_name = 'MEDIA_DIRECTORY')" .
-				" JOIN  `##gedcom`         USING (gedcom_id)" .
-				" WHERE setting_value=?" .
-				" AND   m_filename LIKE CONCAT(?, '%')" .
-				" AND   (SUBSTRING_INDEX(m_filename, '/', -1) LIKE CONCAT('%', ?, '%')" .
-				" OR   m_titl LIKE CONCAT('%', ?, '%'))" .
-				" AND   m_filename NOT LIKE 'http://%'" .
-				" AND   m_filename NOT LIKE 'https://%'";
-		$ARGS1 = array($media_path, $media_folder, $media_path, $sSearch, $sSearch);
-		// Unfiltered rows
-		$SELECT2 =
-				"SELECT COUNT(*)" .
-				" FROM  `##media`" .
-				" JOIN  `##gedcom_setting` ON (m_file = gedcom_id AND setting_name = 'MEDIA_DIRECTORY')" .
-				" WHERE setting_value=?" .
-				" AND   m_filename LIKE CONCAT(?, '%')" .
-				" AND   m_filename NOT LIKE 'http://%'" .
-				" AND   m_filename NOT LIKE 'https://%'";
-		$ARGS2 = array($media_folder, $media_path);
-
-		if ($subfolders=='exclude') {
-			$SELECT1 .= " AND m_filename NOT LIKE CONCAT(?, '%/%')";
-			$ARGS1[] = $media_path;
-			$SELECT2 .= " AND m_filename NOT LIKE CONCAT(?, '%/%')";
-			$ARGS2[] = $media_path;
-		}
-
-		if ($iDisplayLength>0) {
-			$LIMIT = " LIMIT " . $iDisplayStart . ',' . $iDisplayLength;
-		} else {
-			$LIMIT = "";
-		}
-		$iSortingCols = KT_Filter::get('iSortingCols');
-		if ($iSortingCols) {
-			$ORDER_BY = " ORDER BY ";
-			for ($i = 0; $i < $iSortingCols; ++$i) {
-				// Datatables numbers columns 0, 1, 2, ...
-				// MySQL numbers columns 1, 2, 3, ...
-				switch (KT_Filter::get('sSortDir_' . $i)) {
-				case 'asc':
-					$ORDER_BY .= (1 + KT_Filter::getInteger('iSortCol_' . $i)) .' ASC ';
-					break;
-				case 'desc':
-					$ORDER_BY .= (1 + KT_Filter::getInteger('iSortCol_' . $i)) .' DESC ';
-					break;
-				}
-				if ($i < $iSortingCols-1) {
-					$ORDER_BY .= ',';
-				}
-			}
-		} else {
-			$ORDER_BY = "1 ASC";
-		}
-
-		$rows = KT_DB::prepare($SELECT1 . $ORDER_BY . $LIMIT)->execute($ARGS1)->fetchAll(PDO::FETCH_ASSOC);
-		// Total filtered/unfiltered rows
-		$iTotalDisplayRecords = KT_DB::prepare("SELECT FOUND_ROWS()")->fetchColumn();
-		$iTotalRecords        = KT_DB::prepare($SELECT2)->execute($ARGS2)->fetchColumn();
-
-		$aaData = array();
-		foreach ($rows as $row) {
-			$media = KT_Media::getInstance($row);
-			switch ($media->isPrimary()) {
-			case 'Y':
-				$highlight = KT_I18N::translate('Yes');
-				break;
-			case 'N':
-				$highlight = KT_I18N::translate('No');
-				break;
-			default:
-				$highlight = '';
-				break;
-			}
-			$aaData[] = array(
-				media_file_info($media_folder, $media_path, $row['media_path']),
-				$media->displayImage(),
-				media_object_info($media),
-				media_object_edit($media),
-				$highlight,
-				KT_Gedcom_Tag::getFileFormTypeValue($media->getMediaType()),
-			);
-		}
-		break;
-
-	case 'external':
-		// Filtered rows
-		$SELECT1 =
-				"SELECT SQL_CALC_FOUND_ROWS m_filename AS media_path, 'OBJE' AS type, m_id AS xref, m_file AS ged_id, m_gedcom AS gedrec, m_titl, m_filename" .
-				" FROM  `##media`" .
-				" WHERE (m_filename LIKE 'http://%' OR m_filename LIKE 'https://%')" .
-				" AND   (m_filename LIKE CONCAT('%', ?, '%') OR m_titl LIKE CONCAT('%', ?, '%'))";
-		$ARGS1 = array($sSearch, $sSearch);
-		// Unfiltered rows
-		$SELECT2 =
-				"SELECT COUNT(*)" .
-				" FROM  `##media`" .
-				" WHERE (m_filename LIKE 'http://%' OR m_filename LIKE 'https://%')";
-		$ARGS2 = array();
-
-		if ($iDisplayLength>0) {
-			$LIMIT = " LIMIT " . $iDisplayStart . ',' . $iDisplayLength;
-		} else {
-			$LIMIT = "";
-		}
-		$iSortingCols = KT_Filter::get('iSortingCols');
-		if ($iSortingCols) {
-			$ORDER_BY = " ORDER BY ";
-			for ($i = 0; $i < $iSortingCols; ++$i) {
-				// Datatables numbers columns 0, 1, 2, ...
-				// MySQL numbers columns 1, 2, 3, ...
-				switch (KT_Filter::get('sSortDir_' . $i)) {
-				case 'asc':
-					$ORDER_BY .= (1 + KT_Filter::getInteger('iSortCol_' . $i)) .' ASC ';
-					break;
-				case 'desc':
-					$ORDER_BY .= (1 + KT_Filter::getInteger('iSortCol_' . $i)) .' DESC ';
-					break;
-				}
-				if ($i < $iSortingCols-1) {
-					$ORDER_BY .= ',';
-				}
-			}
-		} else {
-			$ORDER_BY="1 ASC";
-		}
-
-		$rows = KT_DB::prepare($SELECT1 . $ORDER_BY . $LIMIT)->execute($ARGS1)->fetchAll(PDO::FETCH_ASSOC);
-		// Total filtered/unfiltered rows
-		$iTotalDisplayRecords = KT_DB::prepare("SELECT FOUND_ROWS()")->fetchColumn();
-		$iTotalRecords        = KT_DB::prepare($SELECT2)->execute($ARGS2)->fetchColumn();
-
-		$aaData = array();
-		foreach ($rows as $row) {
-			$media = KT_Media::getInstance($row);
-			switch ($media->isPrimary()) {
-			case 'Y':
-				$highlight = KT_I18N::translate('Yes');
-				break;
-			case 'N':
-				$highlight = KT_I18N::translate('No');
-				break;
-			default:
-				$highlight = '';
-				break;
-			}
-			$aaData[] = array(
-			 	KT_Gedcom_Tag::getLabelValue('URL', $row['m_filename']),
-				$media->displayImage(),
-				media_object_info($media),
-				media_object_edit($media),
-				$highlight,
-				KT_Gedcom_Tag::getFileFormTypeValue($media->getMediaType()),
-			);
-		}
-		break;
-
-	case 'unused':
-		// Which trees use this media folder?
-		$media_trees = KT_DB::prepare(
-			"SELECT gedcom_name, gedcom_name" .
-			" FROM `##gedcom`" .
-			" JOIN `##gedcom_setting` USING (gedcom_id)" .
-			" WHERE setting_name='MEDIA_DIRECTORY' AND setting_value=? AND gedcom_id > 0"
-		)->execute(array($media_folder))->fetchAssoc();
-
-		$disk_files = all_disk_files ($media_folder, $media_path, $subfolders, $sSearch);
-		$db_files   = all_media_files($media_folder, $media_path, $subfolders, $sSearch);
-
-		// All unused files
-		$unused_files  = array_diff($disk_files, $db_files);
-		$iTotalRecords = count($unused_files);
-
-		// Filter unused files
-		if ($sSearch) {
-			$unused_files = array_filter($unused_files, function($x) use ($sSearch) {return strpos($x, $sSearch)!==false;});
-		}
-		$iTotalDisplayRecords = count($unused_files);
-
-		// Sort files - only option is column 0
-		sort($unused_files);
-		if (KT_Filter::get('sSortDir_0')=='desc') {
-			$unused_files = array_reverse($unused_files);
-		}
-
-		// Paginate unused files
-		$unused_files = array_slice($unused_files, $iDisplayStart, $iDisplayLength);
-
-		$aaData = array();
-		foreach ($unused_files as $unused_file) {
-			$full_path  = KT_DATA_DIR . $media_folder . $media_path . $unused_file;
-			$thumb_path = KT_DATA_DIR . $media_folder . 'thumbs/' . $media_path . $unused_file;
-			if (!file_exists($thumb_path)) {
-				$thumb_path = $full_path;
-			}
-
-			$imgsize = getimagesize($thumb_path);
-			if ($imgsize && $imgsize[0] && $imgsize[1]) {
-				// We can’t create a URL (not in public_html) or use the media firewall (no such object)
-				// so just the base64-encoded image inline.
-				$img = '<img src="data:' . $imgsize['mime'] . ';base64,' . base64_encode(file_get_contents($thumb_path)) . '" class="thumbnail" ' . $imgsize[3] . '" style="max-width:100px;height:auto;">';
-			} else {
-				$img = '-';
-			}
-
-			// Is there a pending record for this file?
-			$exists_pending = KT_DB::prepare("
-				SELECT 1 FROM `##change` WHERE status='pending' AND new_gedcom LIKE CONCAT('%\n1 FILE ', ?, '\n%')
-			")->execute(array($unused_file))->fetchOne();
-
-			// Form to create new media object in each tree
-			$create_form='';
-			if (!$exists_pending) {
-				foreach ($media_trees as $media_tree) {
-					$create_form .= '
-						<p>
-							<a onclick="window.open(\'addmedia.php?action=showmediaform&amp;ged=' . rawurlencode((string) $media_tree) . '&amp;filename=' . rawurlencode((string) $unused_file) . '\'); return false;">' .
-								KT_I18N::translate('Create') . '
-							</a>
-							 — ' .
-							KT_Filter::escapeHtml($media_tree) . '
-						<p>
-					';
-				}
-			}
-
-			$conf        = KT_Filter::escapeJS(KT_I18N::translate('Are you sure you want to delete “%s”?', strip_tags($unused_file)));
-			$delete_link = '
-				<p>
-					<a onclick="if (confirm(\'' . $conf . '\')) jQuery.post(\'admin_media.php\',{delete:\'' .addslashes($media_path . $unused_file) . '\',media_folder:\'' . addslashes($media_folder) . '\'},function(){location.reload();})" href="#">' .
-						KT_I18N::Translate('Delete') . '
-					</a>
-				</p>
-			';
-
-			$aaData[] = array(
-				media_file_info($media_folder, $media_path, $unused_file) . $delete_link,
-				$img,
-				$create_form,
-				'',
-				'',
-				'',
-			);
-		}
-		break;
-	}
-
-	header('Content-type: application/json');
-	echo json_encode(array( // See http://www.datatables.net/usage/server-side
-		'sEcho'                => KT_Filter::getInteger('sEcho'),
-		'iTotalRecords'        => $iTotalRecords,
-		'iTotalDisplayRecords' => $iTotalDisplayRecords,
-		'aaData'               => $aaData
-	));
-	exit;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-// Local functions
-////////////////////////////////////////////////////////////////////////////////
 
 // A unique list of media folders, from all trees.
 function all_media_folders() {
@@ -514,9 +237,28 @@ function media_object_info(KT_Media $media) {
 	return $html;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// Start here
-////////////////////////////////////////////////////////////////////////////////
+switch (KT_Filter::get('action')) {
+	case 'loadrows':
+
+		$search    = KT_Filter::get('sSearch', '');
+		$start     = KT_Filter::getInteger('iDisplayStart');
+		$length    = KT_Filter::getInteger('iDisplayLength');
+		$isort     = KT_Filter::getInteger('iSortingCols');
+		$draw      = KT_Filter::getInteger('sEcho');
+		$colsort   = [];
+		$sortdir   = [];
+		for ($i = 0; $i < $isort; ++$i) {
+			$colsort[$i] = KT_Filter::getInteger('iSortCol_' . $i);
+			$sortdir[$i] = KT_Filter::get('sSortDir_' . $i);
+		}
+
+		Zend_Session::writeClose();
+		header('Content-type: application/json');
+		echo json_encode(KT_DataTables_AdminMedia::mediaList($files, $media_folder, $media_path, $subfolders, $search, $start, $length, $isort, $draw, $colsort, $sortdir));
+		exit;
+}
+
+// Start display code
 
 // Preserve the pagination/filtering/sorting between requests, so that the
 // browser’s back button works.  Pagination is dependent on the currently
@@ -531,16 +273,16 @@ $controller
 	->addExternalJavascript(KT_DATATABLES_JS)
 	->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
 	->addExternalJavascript(KT_DATATABLES_BUTTONS)
+	->addExternalJavascript(KT_DATATABLES_FOUNDATION_BUTTONS)
 	->addExternalJavascript(KT_DATATABLES_HTML5)
 	->addInlineJavascript('
 		jQuery("#media-table-' . $table_id . '").dataTable({
 			dom: \'<"top"pBf<"clear">irl>t<"bottom"pl>\',
 			' . KT_I18N::datatablesI18N(array(5, 10, 20, 50, 100, 500, 1000, -1)) . ',
-			buttons: [{extend: "csvHtml5", exportOptions: {columns: [0,1,2,3,4,5] }}],
-			autoWidth: false,
+			buttons: [{extend: "csvHtml5", exportOptions: {columns: [0,1,2,3,4,6] }}],
 			processing: true,
 			serverSide: true,
-			ajaxSource: " ' . KT_SCRIPT_NAME . '?action=loadrows&files=' . $files . '&media_folder=' . $media_folder . '&media_path=' . $media_path . '&subfolders=' . $subfolders . '",
+			sAjaxSource: "' . KT_SCRIPT_NAME . '?action=loadrows&files=' . $files . '&media_folder=' . $media_folder . '&media_path=' . $media_path . '&subfolders=' . $subfolders . '",
 			pagingType: "full_numbers",
 			stateSave: true,
 			stateDuration: 300,
@@ -548,9 +290,10 @@ $controller
 				/*0 - media file */		{},
 				/*1 - media object */	{sortable: false, class: "center"},
 				/*2 - media name */		{sortable: ' . ($files === 'unused' ? 'false' : 'true') . '},
-				/*3 - edit links */		{},
-				/*4 - highlighted? */	{},
-				/*5 - media type */		{}
+				/*3 - highlighted? */	{},
+				/*4 - media type */		{},
+				/*5 - DELETE    */      { visible: ' . (KT_USER_GEDCOM_ADMIN && $files === 'unused' ? 'true' : 'false') . ', sortable: false, class: "center" },
+				/*6 - path for CSV only*/ { visible: false}
 			]
 		});
 	');
@@ -591,14 +334,12 @@ echo pageStart('admin_media', $controller->getPageTitle()); ?>
 								<?php // Don’t show a list of media folders if it just contains one folder
 								$extra = 'onchange="this.form.submit();"';
 								if (count($media_folders) > 1) { ?>
-									<label class="middle">
-										&nbsp;
-										<?php echo select_edit_control('media_folder', $media_folders, null, $media_folder, $extra); ?>
-									</label>
+									<?php echo select_edit_control('media_folder', $media_folders, null, $media_folder, $extra); ?>
 								<?php } else { ?>
 									<label class="middle">
-										<?php echo $media_folder . '<input type="hidden" name="media_folder" value="', htmlspecialchars((string) $media_folder), '">'; ?>
+										<?php echo $media_folder; ?>
 									</label>
+									<input type="hidden" name="media_folder" value="<?php echo htmlspecialchars((string) $media_folder); ?>" >
 								<?php } ?>
 							</div>
 							<?php
@@ -626,8 +367,8 @@ echo pageStart('admin_media', $controller->getPageTitle()); ?>
 				<?php echo radio_switch_group (
 					'subfolders',
 					array(
-						'include' => KT_I18N::translate('Include subfolders'),
-						'exclude' => KT_I18N::translate('Exclude subfolders')
+						'exclude' => KT_I18N::translate('Exclude subfolders'),
+						'include' => KT_I18N::translate('Include subfolders')
 					),
 					$subfolders,
 					'onchange="this.form.submit();"',
@@ -648,20 +389,29 @@ echo pageStart('admin_media', $controller->getPageTitle()); ?>
 		</div>
 	</form>
 	<hr class="cell">
-	<table class="media_table stack" id="media-table-<?php echo $table_id ?>">
-		<thead>
-			<tr>
-				<th><?php echo KT_I18N::translate('Media file'); ?></th>
-				<th><?php echo KT_I18N::translate('Media'); ?></th>
-				<th><?php echo KT_I18N::translate('Media object'); ?></th>
-				<th><?php echo KT_I18N::translate('Actions'); ?></th>
-				<th><?php echo KT_I18N::translate('Highlight'); ?></th>
-				<th><?php echo KT_I18N::translate('Media type'); ?></th>
-			</tr>
-		</thead>
-		<tbody>
-		</tbody>
-	</table>
+	<div class="cell">
+		<table class="media_table stack" id="media-table-<?php echo $table_id ?>">
+			<thead>
+				<tr>
+					<th><?php echo KT_I18N::translate('Media file'); ?></th>
+					<th><?php echo KT_I18N::translate('Media'); ?></th>
+					<th><?php echo KT_I18N::translate('Media object'); ?></th>
+					<th><?php echo KT_I18N::translate('Highlight'); ?></th>
+					<th><?php echo KT_I18N::translate('Media type'); ?></th>
+					<?php if (KT_USER_GEDCOM_ADMIN && $files === 'unused') { ?>
+						<th>
+							<div class="delete_src">
+								<input type="button" value="<?php echo KT_I18N::translate('Delete'); ?>" onclick="if (confirm('<?php echo htmlspecialchars(KT_I18N::translate('Permanently delete these records?')); ?>')) {return checkbox_delete('unusedmedia');} else {return false;}">
+								<input type="checkbox" onclick="toggle_select(this)" style="vertical-align:middle;">
+							</div>
+						</th>
+					<?php } ?>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</div>
 </div>
 
 <?php echo pageClose(); ?>

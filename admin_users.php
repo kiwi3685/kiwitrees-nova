@@ -169,11 +169,21 @@ switch (KT_Filter::get('action')) {
 		break;
 
 	case 'loadrows':
-		include_once KT_ROOT . 'includes/datatables/userAdmin.php';
+		$search    = KT_Filter::get('sSearch', '');
+		$start     = KT_Filter::getInteger('iDisplayStart');
+		$length    = KT_Filter::getInteger('iDisplayLength');
+		$isort     = KT_Filter::getInteger('iSortingCols');
+		$draw      = KT_Filter::getInteger('sEcho');
+		$colsort   = [];
+		$sortdir   = [];
+		for ($i = 0; $i < $isort; ++$i) {
+			$colsort[$i] = KT_Filter::getInteger('iSortCol_' . $i);
+			$sortdir[$i] = KT_Filter::get('sSortDir_' . $i);
+		}
 
 		Zend_Session::writeClose();
 		header('Content-type: application/json');
-		echo json_encode($data);
+		echo json_encode(KT_DataTables_AdminUsers::userList($search, $start, $length, $isort, $draw, $colsort, $sortdir));
 		exit;
 
 	case 'edit':
@@ -1044,6 +1054,7 @@ switch (KT_Filter::get('action')) {
 			->addExternalJavascript(KT_DATATABLES_JS)
 			->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
 			->addExternalJavascript(KT_DATATABLES_BUTTONS)
+			->addExternalJavascript(KT_DATATABLES_FOUNDATION_BUTTONS)
 			->addExternalJavascript(KT_DATATABLES_HTML5)
 			->addInlineJavascript('
 				jQuery("#list").dataTable({
@@ -1053,12 +1064,12 @@ switch (KT_Filter::get('action')) {
 					autoWidth: false,
 					processing: true,
 					serverSide: true,
-					ajax: "' . KT_SCRIPT_NAME . '?action=loadrows",
+					sAjaxSource: "' . KT_SCRIPT_NAME . '?action=loadrows",
 					pagingType: "full_numbers",
 					stateSave: true,
 					stateSaveParams: function (settings, data) {
 						data.columns.forEach(function(column) {
-							delete column.search;
+							delete column.sSearch;
 						});
 					},
 					stateDuration: -1,
