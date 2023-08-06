@@ -44,11 +44,12 @@ define('KT_FOUNDATION_JS',				KT_STATIC_URL . 'library/foundation/dist/js/founda
 define('KT_JQUERYUI_JS',				KT_STATIC_URL . 'js/jquery-ui.min.js');	 // 1.13.2 (all options. Also requires some css in individual theme stylesheets)
 define('KT_DATEPICKER_JS',				KT_STATIC_URL . 'library/foundation-datepicker/js/foundation-datepicker.min.js'); // 1.5.6
 
-define('KT_DATATABLES_JS',					KT_STATIC_URL . 'library/DataTables//DataTables-1.10.20/js/jquery.dataTables.min.js'); // 1.10.20 Updated OCT 2019
-define('KT_DATATABLES_FOUNDATION_JS',		KT_STATIC_URL . 'library/DataTables//DataTables-1.10.20/js/dataTables.foundation.min.js'); // 1.10.20 Updated OCT 2019
-define('KT_DATATABLES_BUTTONS',				KT_STATIC_URL . 'library/DataTables//Buttons-1.6.0/js/dataTables.buttons.min.js'); // 1.10.20 Updated OCT 2019
-define('KT_DATATABLES_HTML5',				KT_STATIC_URL . 'library/DataTables//Buttons-1.6.0/js/buttons.html5.min.js'); // 1.10.20 Updated OCT 2019
-define('KT_DATATABLES_FOUNDATION_BUTTONS',	KT_STATIC_URL . 'library/DataTables//Buttons-1.6.0/js/buttons.foundation.min.js'); // 1.10.20 Updated OCT 2019
+define('KT_DATATABLES_JS',					KT_STATIC_URL . 'library/DataTables/DataTables-1.10.20/js/jquery.dataTables.min.js'); // 1.10.20 Updated OCT 2019
+define('KT_DATATABLES_FOUNDATION_JS',		KT_STATIC_URL . 'library/DataTables/DataTables-1.10.20/js/dataTables.foundation.min.js'); // 1.10.20 Updated OCT 2019
+define('KT_DATATABLES_BUTTONS',				KT_STATIC_URL . 'library/DataTables/Buttons-1.6.0/js/dataTables.buttons.min.js'); // 1.10.20 Updated OCT 2019
+define('KT_DATATABLES_FOUNDATION_BUTTONS',	KT_STATIC_URL . 'library/DataTables/Buttons-1.6.0/js/buttons.foundation.min.js'); // 1.10.20 Updated OCT 2019
+define('KT_DATATABLES_HTML5',				KT_STATIC_URL . 'library/DataTables/Buttons-1.6.0/js/buttons.html5.min.js'); // 1.10.20 Updated OCT 2019
+define('KT_DATATABLES_KT_JS',				KT_STATIC_URL . 'library/KT/DataTables/KTdataTables.min.js'); //Combined datatables js files
 
 define('KT_CKEDITOR_CLASSIC',			KT_STATIC_URL . 'library/ckeditor-classic/build/ckeditor.js'); // 35.4.0  Updated 13-12-2022
 // other js

@@ -95,7 +95,7 @@ span.access {
 }
 
 div.dataTables_wrapper {
-	font-size: 0.95rem;
+	font-size: 0.95rem !important;
 	width: 100%;
 }
 div.dataTables_wrapper div div.clear {
@@ -154,6 +154,7 @@ div.dataTables_wrapper div.dataTables_processing {
 }
 div.dataTables_wrapper table.dataTable {
 	border-collapse: separate;
+	font-size: 0.95rem;
 }
 div.dataTables_wrapper table.dataTable.surname-list {
 	margin: 0 auto !important;
@@ -171,7 +172,7 @@ div.dataTables_wrapper table.dataTable thead tr.first-row-header {
 div.dataTables_wrapper table.dataTable thead tr th {
 	background-image: none !important;
 	font-weight: 600;
-	padding: 0.5rem;
+	padding: 0.5rem 0.9375rem;
 	position: relative;
 }
 div.dataTables_wrapper table.dataTable thead tr th .button-group {
@@ -202,9 +203,13 @@ div.dataTables_wrapper table.dataTable thead tr th.sorting_disabled::after {
 	content: "";
 }
 div.dataTables_wrapper table.dataTable thead tr th svg {
+	font-size: 0.75rem;
 	position: absolute;
-	right: 0.125rem;
+	right: 0.25rem;
 	top: 0.75rem;
+}
+div.dataTables_wrapper table.dataTable thead tr td {
+	font-size: 0.95rem;
 }
 div.dataTables_wrapper table#installed_table thead tr th svg.fa-gears {
 	left: 0.75rem;

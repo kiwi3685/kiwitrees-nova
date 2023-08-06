@@ -26,6 +26,11 @@ require './includes/session.php';
 require KT_ROOT . 'includes/functions/functions_edit.php';
 include KT_THEME_URL . 'templates/adminData.php';
 
+$controller = new KT_Controller_Page();
+$controller
+	->restrictAccess(KT_USER_IS_ADMIN)
+	->setPageTitle(KT_I18N::translate('Manage media'));
+
 // type of file/object to include
 $files = KT_Filter::get('files', 'local|external|unused', 'local');
 
@@ -259,44 +264,7 @@ switch (KT_Filter::get('action')) {
 }
 
 // Start display code
-
-// Preserve the pagination/filtering/sorting between requests, so that the
-// browser’s back button works.  Pagination is dependent on the currently
-// selected folder.
-$table_id  = md5($files . $media_folder . $media_path . $subfolders);
-
-$controller = new KT_Controller_Page();
-$controller
-	->pageHeader()
-	->restrictAccess(KT_USER_IS_ADMIN)
-	->setPageTitle(KT_I18N::translate('Manage media'))
-	->addExternalJavascript(KT_DATATABLES_JS)
-	->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
-	->addExternalJavascript(KT_DATATABLES_BUTTONS)
-	->addExternalJavascript(KT_DATATABLES_FOUNDATION_BUTTONS)
-	->addExternalJavascript(KT_DATATABLES_HTML5)
-	->addInlineJavascript('
-		jQuery("#media-table-' . $table_id . '").dataTable({
-			dom: \'<"top"pBf<"clear">irl>t<"bottom"pl>\',
-			' . KT_I18N::datatablesI18N(array(5, 10, 20, 50, 100, 500, 1000, -1)) . ',
-			buttons: [{extend: "csvHtml5", exportOptions: {columns: [0,1,2,3,4,6] }}],
-			processing: true,
-			serverSide: true,
-			sAjaxSource: "' . KT_SCRIPT_NAME . '?action=loadrows&files=' . $files . '&media_folder=' . $media_folder . '&media_path=' . $media_path . '&subfolders=' . $subfolders . '",
-			pagingType: "full_numbers",
-			stateSave: true,
-			stateDuration: 300,
-			columns: [
-				/*0 - media file */		{},
-				/*1 - media object */	{sortable: false, class: "center"},
-				/*2 - media name */		{sortable: ' . ($files === 'unused' ? 'false' : 'true') . '},
-				/*3 - highlighted? */	{},
-				/*4 - media type */		{},
-				/*5 - DELETE    */      { visible: ' . (KT_USER_GEDCOM_ADMIN && $files === 'unused' ? 'true' : 'false') . ', sortable: false, class: "center" },
-				/*6 - path for CSV only*/ { visible: false}
-			]
-		});
-	');
+// =======================
 
 // Array for switch group
 if (externalMedia() > 0){
@@ -311,6 +279,36 @@ if (externalMedia() > 0){
 		'unused'	=> KT_I18N::translate('Unused')
 	);
 }
+
+// Preserve the pagination/filtering/sorting between requests, so that the
+// browser’s back button works.  Pagination is dependent on the currently
+// selected folder.
+$table_id  = md5($files . $media_folder . $media_path . $subfolders);
+
+// Access default datatables settings
+include_once KT_ROOT . 'library/KT/DataTables/KTdatatables.js.php';
+
+$controller
+	->pageHeader()
+	->addExternalJavascript(KT_DATATABLES_KT_JS)
+	->addInlineJavascript('
+		datables_defaults();
+
+		jQuery("#media-table-' . $table_id . '").dataTable({
+			buttons: [{extend: "csv", exportOptions: {columns: [0,2,3,4,6] }}],
+			sAjaxSource: "' . KT_SCRIPT_NAME . '?action=loadrows&files=' . $files . '&media_folder=' . $media_folder . '&media_path=' . $media_path . '&subfolders=' . $subfolders . '",
+			columns: [
+				/*0 - media file */		{},
+				/*1 - media object */	{sortable: false, class: "center"},
+				/*2 - media name */		{sortable: ' . ($files === 'unused' ? 'false' : 'true') . '},
+				/*3 - highlighted? */	{},
+				/*4 - media type */		{},
+				/*5 - DELETE    */      { visible: ' . (KT_USER_GEDCOM_ADMIN && $files === 'unused' ? 'true' : 'false') . ', sortable: false, class: "center" },
+				/*6 - path for CSV only */ { visible: false}
+			]
+		});
+
+	');
 
 // Start page display
 echo relatedPages($media, KT_SCRIPT_NAME);

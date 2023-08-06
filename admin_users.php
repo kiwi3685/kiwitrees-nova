@@ -1049,30 +1049,17 @@ switch (KT_Filter::get('action')) {
 		break;
 
 	default:
+		// Access default datatables settings
+		include_once KT_ROOT . 'library/KT/DataTables/KTdatatables.js.php';
+
 		$controller
 			->pageHeader()
-			->addExternalJavascript(KT_DATATABLES_JS)
-			->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
-			->addExternalJavascript(KT_DATATABLES_BUTTONS)
-			->addExternalJavascript(KT_DATATABLES_FOUNDATION_BUTTONS)
-			->addExternalJavascript(KT_DATATABLES_HTML5)
+			->addExternalJavascript(KT_DATATABLES_KT_JS)
 			->addInlineJavascript('
+				datables_defaults();
+
 				jQuery("#list").dataTable({
-					dom: \'<"top"pBf<"clear">irl>t<"bottom"pl>\',
-					' . KT_I18N::datatablesI18N() . ',
-					buttons: [{extend: "csvHtml5", exportOptions: {columns: [1,2,3,5,7] }}],
-					autoWidth: false,
-					processing: true,
-					serverSide: true,
-					sAjaxSource: "' . KT_SCRIPT_NAME . '?action=loadrows",
-					pagingType: "full_numbers",
-					stateSave: true,
-					stateSaveParams: function (settings, data) {
-						data.columns.forEach(function(column) {
-							delete column.sSearch;
-						});
-					},
-					stateDuration: -1,
+					buttons: [{extend: "csv", exportOptions: { columns: [1,2,3,4,5,7,9,10,11] }}],
 					sorting: [[2,"asc"]],
 					columns: [
 						/*  0 edit          	*/ { sortable:false },
@@ -1092,6 +1079,7 @@ switch (KT_Filter::get('action')) {
 					],
 				})
 				.fnFilter("' . KT_Filter::get('filter') . '"); // View the details of a newly created user
+
 			');
 
 		echo relatedPages($users, KT_SCRIPT_NAME);
