@@ -23,7 +23,7 @@
 define('KT_SCRIPT_NAME', 'admin_site_logs.php');
 
 require './includes/session.php';
-
+require KT_ROOT . 'includes/functions/functions_edit.php';
 include KT_THEME_URL . 'templates/adminData.php';
 
 global $iconStyle;
@@ -34,74 +34,24 @@ $controller
 	->setPageTitle(KT_I18N::translate('%s logs', KT_KIWITREES))
 ;
 
-require KT_ROOT . 'includes/functions/functions_edit.php';
 
 $earliest = KT_DB::prepare('SELECT DATE(MIN(log_time)) FROM `##log`')->execute([])->fetchOne();
-$latest = KT_DB::prepare('SELECT DATE(MAX(log_time)) FROM `##log`')->execute([])->fetchOne();
+$latest   = KT_DB::prepare('SELECT DATE(MAX(log_time)) FROM `##log`')->execute([])->fetchOne();
 
 // Filtering
-$action = KT_Filter::get('action');
-$from = KT_Filter::get('from', '\d\d\d\d-\d\d-\d\d', $earliest);
-$to = KT_Filter::get('to', '\d\d\d\d-\d\d-\d\d', $latest);
-$type = KT_Filter::get('type', 'auth|change|config|debug|edit|error|media|search|spam');
-$text = KT_Filter::get('text');
-$ip = KT_Filter::get('ip');
-$user = KT_Filter::get('user');
-$search = KT_Filter::get('search');
-$search = $search['value'] ?? null;
-
+$action   = KT_Filter::get('action');
+$from     = KT_Filter::get('from', '\d\d\d\d-\d\d-\d\d', $earliest);
+$to       = KT_Filter::get('to', '\d\d\d\d-\d\d-\d\d', $latest);
+$type     = KT_Filter::get('type', 'auth|change|config|debug|edit|error|media|search|spam');
+$text     = KT_Filter::get('text');
+$ip       = KT_Filter::get('ip');
+$user     = KT_Filter::get('user');
 if (KT_USER_IS_ADMIN) {
 	// Administrators can see all logs
 	$gedc = KT_Filter::get('gedc');
 } else {
 	// Managers can only see logs relating to this gedcom
 	$gedc = KT_GEDCOM;
-}
-
-$query = [];
-$args = [];
-if ($from) {
-	$query[] = 'log_time>=?';
-	$args[] = $from;
-}
-if ($to) {
-	$query[] = 'log_time<TIMESTAMPADD(DAY, 1 , ?)'; // before end of the day
-	$args[] = $to;
-}
-if ($type) {
-	$query[] = 'log_type=?';
-	$args[] = $type;
-}
-if ($text) {
-	$query[] = "log_message LIKE CONCAT('%', ?, '%')";
-	$args[] = $text;
-}
-if ($ip) {
-	$query[] = "ip_address LIKE CONCAT('%', ?, '%')";
-	$args[] = $ip;
-}
-if ($user) {
-	$query[] = "user_name LIKE CONCAT('%', ?, '%')";
-	$args[] = $user;
-}
-if ($gedc) {
-	$query[] = "gedcom_name LIKE CONCAT('%', ?, '%')";
-	$args[] = $gedc;
-}
-
-$SELECT1 =
-	"SELECT SQL_CALC_FOUND_ROWS log_time, log_type, log_message, ip_address, IFNULL(user_name, '<none>') AS user_name, IFNULL(gedcom_name, '<none>') AS gedcom_name" .
-	' FROM `##log`' .
-	' LEFT JOIN `##user`   USING (user_id)' .   // user may be deleted
-	' LEFT JOIN `##gedcom` USING (gedcom_id)'; // gedcom may be deleted
-$SELECT2 =
-	'SELECT COUNT(*) FROM `##log`' .
-	' LEFT JOIN `##user`   USING (user_id)' .   // user may be deleted
-	' LEFT JOIN `##gedcom` USING (gedcom_id)'; // gedcom may be deleted
-if ($query) {
-	$WHERE = ' WHERE ' . implode(' AND ', $query);
-} else {
-	$WHERE = '';
 }
 
 switch ($action) {
@@ -115,94 +65,60 @@ switch ($action) {
 
 		break;
 
-	case 'load_json':
+	case 'loadrows':
+
+		$search    = KT_Filter::get('sSearch', '');
+		$start     = KT_Filter::getInteger('iDisplayStart');
+		$length    = KT_Filter::getInteger('iDisplayLength');
+		$isort     = KT_Filter::getInteger('iSortingCols');
+		$draw      = KT_Filter::getInteger('sEcho');
+		$colsort   = [];
+		$sortdir   = [];
+		for ($i = 0; $i < $isort; ++$i) {
+			$colsort[$i] = KT_Filter::getInteger('iSortCol_' . $i);
+			$sortdir[$i] = KT_Filter::get('sSortDir_' . $i);
+		}
+
 		Zend_Session::writeClose();
-		$iDisplayStart = (int) safe_GET('iDisplayStart');
-		$iDisplayLength = (int) safe_GET('iDisplayLength');
-		set_user_setting(KT_USER_ID, 'admin_site_log_page_size', $iDisplayLength);
-		if ($iDisplayLength > 0) {
-			$LIMIT = ' LIMIT ' . $iDisplayStart . ',' . $iDisplayLength;
-		} else {
-			$LIMIT = '';
-		}
-		$iSortingCols = safe_GET('iSortingCols');
-		if ($iSortingCols) {
-			$ORDER_BY = ' ORDER BY ';
-			for ($i = 0; $i < $iSortingCols; $i++) {
-				// Datatables numbers columns 0, 1, 2, ...
-				// MySQL numbers columns 1, 2, 3, ...
-				switch (safe_GET('sSortDir_' . $i)) {
-					case 'asc':
-						if (0 == (int) safe_GET('iSortCol_' . $i)) {
-							$ORDER_BY .= 'log_id ASC '; // column 0 is "timestamp", using log_id gives the correct order for events in the same second
-						} else {
-							$ORDER_BY .= (1 + (int) safe_GET('iSortCol_' . $i)) . ' ASC ';
-						}
-
-						break;
-
-					case 'desc':
-						if (0 == (int) safe_GET('iSortCol_' . $i)) {
-							$ORDER_BY .= 'log_id DESC ';
-						} else {
-							$ORDER_BY .= (1 + (int) safe_GET('iSortCol_' . $i)) . ' DESC ';
-						}
-
-						break;
-				}
-				if ($i < $iSortingCols - 1) {
-					$ORDER_BY .= ',';
-				}
-			}
-		} else {
-			$ORDER_BY = '1 DESC';
-		}
-
-		// This becomes a JSON list, not array, so need to fetch with numeric keys.
-		$data = KT_DB::prepare($SELECT1 . $WHERE . $ORDER_BY . $LIMIT)->execute($args)->fetchAll(PDO::FETCH_NUM);
-		foreach ($data as &$row) {
-			$row[2] = htmlspecialchars((string) $row[2]);
-		}
-
-		// Total filtered/unfiltered rows
-		$iTotalDisplayRecords = KT_DB::prepare('SELECT FOUND_ROWS()')->fetchColumn();
-		$iTotalRecords = KT_DB::prepare($SELECT2 . $WHERE)->execute($args)->fetchColumn();
-
 		header('Content-type: application/json');
-		echo json_encode([ // See http://www.datatables.net/usage/server-side
-			'sEcho' => (int) safe_GET('sEcho'),
-			'iTotalRecords' => $iTotalRecords,
-			'iTotalDisplayRecords' => $iTotalDisplayRecords,
-			'data' => $data,
-		]);
-
+		echo json_encode( KT_DataTables_AdminSiteLog::siteLog(
+			$from,
+			$to,
+			$type,
+			$text,
+			$ip,
+			$user,
+			$gedc,
+			$search,
+			$start,
+			$length,
+			$isort,
+			$draw,
+			$colsort,
+			$sortdir
+		));
 		exit;
 }
 
+// Access default datatables settings
+include_once KT_ROOT . 'library/KT/DataTables/KTdatatables.js.php';
+
 $controller
 	->pageHeader()
-	->addExternalJavascript(KT_DATATABLES_JS)
-	->addExternalJavascript(KT_DATATABLES_FOUNDATION_JS)
-	->addExternalJavascript(KT_DATATABLES_BUTTONS)
-	->addExternalJavascript(KT_DATATABLES_HTML5)
+	->addExternalJavascript(KT_DATATABLES_KT_JS)
 	->addExternalJavascript(KT_DATEPICKER_JS)
 	->addExternalJavascript(KT_DATEPICKER_JS_LOCALE)
 	->addInlineJavascript('
+		datables_defaults();
+
 		jQuery("#log_list").dataTable({
-			dom: \'<"top"pBf<"clear">irl>t<"bottom"pl>\',
-			' . KT_I18N::datatablesI18N([10, 20, 50, 100, 500, 1000, -1]) . ',
-			buttons: [{extend: "csvHtml5"}],
-			autoWidth: false,
-			processing: true,
-			displayLength: ' . get_user_setting(KT_USER_ID, 'admin_site_log_page_size', 10) . ',
-			serverSide: true,
-			pagingType: "full_numbers",
-			"sAjaxSource": "admin_site_logs.php?action=load_json&from=' . $from . '&to=' . $to . '&type=' . $type . '&text=' . rawurlencode((string) $text) . '&ip=' . rawurlencode((string) $ip) . '&user=' . rawurlencode((string) $user) . '&gedc=' . rawurlencode((string) $gedc) . '",
+			dom: \'<"top"pB<"clear">irl>t<"bottom"pl>\',
+			sAjaxSource: "' . KT_SCRIPT_NAME . '?action=loadrows&from=' . $from . '&to=' . $to . '&type=' . $type . '&text=' . rawurlencode((string) $text) . '&ip=' . rawurlencode((string) $ip) . '&user=' . rawurlencode((string) $user) . '&gedc=' . rawurlencode((string) $gedc) . '",
 			sorting: [[ 0, "desc" ]],
 			columns: [
 				/* 0 - Timestamp   */ { },
 				/* 1 - Type        */ { },
-				/* 2 - message     */ { },
+				/* 2 - message     */ {class: "message_col" },
 				/* 3 - IP address  */ { },
 				/* 4 - User        */ { },
 				/* 5 - Family tree */ { }

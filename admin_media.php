@@ -295,7 +295,7 @@ $controller
 		datables_defaults();
 
 		jQuery("#media-table-' . $table_id . '").dataTable({
-			buttons: [{extend: "csv", exportOptions: {columns: [0,2,3,4,6] }}],
+			buttons: [{extend: "csvHtml5", exportOptions: {columns: [0,2,3,4,6] }}],
 			sAjaxSource: "' . KT_SCRIPT_NAME . '?action=loadrows&files=' . $files . '&media_folder=' . $media_folder . '&media_path=' . $media_path . '&subfolders=' . $subfolders . '",
 			columns: [
 				/*0 - media file */		{},
@@ -410,6 +410,5 @@ echo pageStart('admin_media', $controller->getPageTitle()); ?>
 			</tbody>
 		</table>
 	</div>
-</div>
 
-<?php echo pageClose(); ?>
+<?php echo pageClose();

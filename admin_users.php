@@ -26,9 +26,7 @@ require './includes/session.php';
 include KT_THEME_URL . 'templates/adminData.php';
 
 $controller = new KT_Controller_Page();
-$controller
-	->restrictAccess(KT_USER_IS_ADMIN)
-	->setPageTitle(KT_I18N::translate('User administration'));
+$controller->restrictAccess(KT_USER_IS_ADMIN);
 
 require_once KT_ROOT.'includes/functions/functions_edit.php';
 
@@ -1054,12 +1052,13 @@ switch (KT_Filter::get('action')) {
 
 		$controller
 			->pageHeader()
+			->setPageTitle(KT_I18N::translate('User administration'))
 			->addExternalJavascript(KT_DATATABLES_KT_JS)
 			->addInlineJavascript('
 				datables_defaults();
 
 				jQuery("#list").dataTable({
-					buttons: [{extend: "csv", exportOptions: { columns: [1,2,3,4,5,7,9,10,11] }}],
+					buttons: [{extend: "csvHtml5", exportOptions: { columns: [1,2,3,4,5,7,9,10,11] }}],
 					sorting: [[2,"asc"]],
 					columns: [
 						/*  0 edit          	*/ { sortable:false },

@@ -906,60 +906,63 @@ main #admin-content #site_logs-page form {
 	margin-bottom: 0.9375rem;
 }
 main #admin-content #site_logs-page #log_list th {
-	min-width: 10rem;
 	white-space: nowrap;
 }
-main #admin-content #change_list {
-	width: 100%;
-}
-main #admin-content #change_list th {
-	vertical-align: top;
-	white-space: nowrap;
-}
-main #admin-content #change_list th:nth-child(4) {
+main #admin-content #site_logs-page #log_list th.message_col {
 	width: 50%;
 }
-main #admin-content #change_list td {
-	vertical-align: top;
-}
-main #admin-content #change_list table.DifferencesSideBySide {
-	border-collapse: collapse;
+main #admin-content table#change_list {
 	width: 100%;
 }
-main #admin-content #change_list table.DifferencesSideBySide thead th {
-	background-color: #c9c9c9;
+main #admin-content table#change_list th {
+	vertical-align: top;
+	white-space: nowrap;
+}
+main #admin-content table#change_list th.raw_gedcom {
+	width: 65%;
+}
+main #admin-content table#change_list td {
+	vertical-align: top;
+}
+main #admin-content table#change_list td table.DifferencesSideBySide {
+	border-collapse: collapse;
+}
+main #admin-content table#change_list td table.DifferencesSideBySide thead th {
+	background-color: #cacaca;
 	font-weight: normal;
 	padding: 0.3125rem;
 	text-align: center;
 }
-main #admin-content #change_list table.DifferencesSideBySide tbody td {
+main #admin-content table#change_list td table.DifferencesSideBySide tbody {
+	font-size: 0.9375rem;
+}
+main #admin-content table#change_list td table.DifferencesSideBySide tbody td {
 	vertical-align: top;
+}
+main #admin-content table#change_list td table.DifferencesSideBySide tbody td.Left span,
+main #admin-content table#change_list td table.DifferencesSideBySide tbody td.Right span {
 	white-space: pre-wrap;
-	word-wrap: break-word;
+	word-wrap: anywhere;
 }
-main #admin-content #change_list table.DifferencesSideBySide tbody td.Left,
-main #admin-content #change_list table.DifferencesSideBySide tbody td.Right {
-	width: 45%;
-}
-main #admin-content #change_list table.DifferencesSideBySide tbody th {
-	background-color: #c9c9c9;
+main #admin-content table#change_list td table.DifferencesSideBySide tbody th {
+	background-color: #cacaca;
 	font-weight: normal;
 }
-main #admin-content #change_list table.DifferencesSideBySide tbody.ChangeReplace,
-main #admin-content #change_list table.DifferencesSideBySide tbody.ChangeInsert,
-main #admin-content #change_list table.DifferencesSideBySide tbody.ChangeDelete {
-	background-color: yellow;
+main #admin-content table#change_list td table.DifferencesSideBySide tbody.ChangeReplace,
+main #admin-content table#change_list td table.DifferencesSideBySide tbody.ChangeInsert,
+main #admin-content table#change_list td table.DifferencesSideBySide tbody.ChangeDelete {
+	background-color: #ffd780;
 }
-main #admin-content #change_list table.DifferencesSideBySide tbody.ChangeReplace ins,
-main #admin-content #change_list table.DifferencesSideBySide tbody.ChangeInsert ins,
-main #admin-content #change_list table.DifferencesSideBySide tbody.ChangeDelete ins {
-	color: red;
+main #admin-content table#change_list td table.DifferencesSideBySide tbody.ChangeReplace ins,
+main #admin-content table#change_list td table.DifferencesSideBySide tbody.ChangeInsert ins,
+main #admin-content table#change_list td table.DifferencesSideBySide tbody.ChangeDelete ins {
+	color: #ff0000;
 	text-decoration: initial;
 }
-main #admin-content #change_list table.DifferencesSideBySide tbody.ChangeReplace del,
-main #admin-content #change_list table.DifferencesSideBySide tbody.ChangeInsert del,
-main #admin-content #change_list table.DifferencesSideBySide tbody.ChangeDelete del {
-	color: blue;
+main #admin-content table#change_list td table.DifferencesSideBySide tbody.ChangeReplace del,
+main #admin-content table#change_list td table.DifferencesSideBySide tbody.ChangeInsert del,
+main #admin-content table#change_list td table.DifferencesSideBySide tbody.ChangeDelete del {
+	color: #34689c;
 	text-decoration: initial;
 }
 main #admin-content #sanity_check-page fieldset.fieldset {

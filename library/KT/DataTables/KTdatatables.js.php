@@ -45,11 +45,14 @@ if (KT_USER_CAN_EDIT) {
 		{
 			dom: "<'top'p<?php echo $buttons; ?>f<'clear'>irl>t<'bottom'pl>",
 			<?php echo KT_I18N::datatablesI18N(array(5, 10, 20, 50, 100, 500, 1000, -1)); ?> ,
+			buttons: [{extend: "csvHtml5", exportOptions: {columns: ":visible"}}],
 			autoWidth: false,
 			processing: true,
 			serverSide: true,
 			sAjaxSource: "<?php echo KT_SCRIPT_NAME; ?>?action=loadrows",
+			deferRender: true,
 			pagingType: "full_numbers",
+			pageLength: 20,
 			stateSave: true,
 			stateSaveParams: function (settings, data)
 			{
