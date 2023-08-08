@@ -30,7 +30,7 @@
 	  * @return data array
 	  * Converted to json on display page
 	  */
-	 public static function changeLog($from, $to, $type, $oldged, $newged, $xref, $user, $gedc, $start, $length, $isort, $draw, $colsort, $sortdir) {
+	 public static function changeLog($from, $to, $type, $oldged, $newged, $xref, $user, $gedc, $search, $start, $length, $isort, $draw, $colsort, $sortdir) {
 
 		require_once KT_ROOT.'library/php-diff/lib/Diff.php';
 		require_once KT_ROOT.'library/php-diff/lib/Diff/Renderer/Html/SideBySide.php';
