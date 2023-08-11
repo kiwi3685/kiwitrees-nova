@@ -706,6 +706,9 @@ div[id$=-page]:not(#indi-page, #edit_interface-page) h3 {
 div[id$=-page]:not(#indi-page, #edit_interface-page) h3 svg {
 	font-size: 1.5rem;
 }
+div[id$=-page]:not(#indi-page, #edit_interface-page) h4.hide-for-print {
+	text-align: center;
+}
 
 div[id$=-page] button[type=submit] {
 	min-width: 6rem;

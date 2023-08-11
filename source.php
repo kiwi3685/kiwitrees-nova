@@ -28,7 +28,7 @@ require_once KT_ROOT.'includes/functions/functions_print_lists.php';
 $controller = new KT_Controller_Source();
 $controller->pageHeader();
 
-echo pageStart('source-details', $controller->record->getFullName(), 'y', $controller->record->getFullName()); ?>
+echo pageStart('source-details', KT_I18N::translate('Source details'), 'y', $controller->record->getFullName()); ?>
 
 	<div id="source-details-page" class="grid-x grid-padding-x">
 		<div class="cell large-10 large-offset-1">
