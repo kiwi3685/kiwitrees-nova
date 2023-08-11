@@ -89,7 +89,8 @@
 		<!--iPhone-->
 		<link rel="apple-touch-icon" sizes="180x180" href="<?php echo KT_THEME_URL; ?>images/apple-touch-icon.png">
 		<?php if ($view !='simple') { ?>
-			<link rel="stylesheet" href="<?php echo KT_DATATABLES_CSS; ?>">
+			<link rel="stylesheet" href="<?php echo KT_DATATABLES_FOUNDATION_CSS; ?>">
+			<link rel="stylesheet" href="<?php echo KT_DATATABLES_FOUNDATION_BUTTONS_CSS; ?>">
 			<link rel="stylesheet" href="<?php echo KT_DATEPICKER_CSS; ?>">
 			<link rel="stylesheet" href="<?php echo KT_THEME_URL; ?>css/foundation.min.css">
 			<link rel="stylesheet" href="<?php echo KT_THEME_URL; ?>css/kahikatoa.min.css">

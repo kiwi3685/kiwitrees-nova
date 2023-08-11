@@ -116,10 +116,9 @@ $controller
 	->addExternalJavascript(KT_DATEPICKER_JS)
 	->addExternalJavascript(KT_DATEPICKER_JS_LOCALE)
 	->addInlineJavascript('
-		datables_defaults();
+		datables_defaults("' . KT_SCRIPT_NAME . '?action=loadrows&from=' . $from . '&to=' . $to . '&type=' . $type . '&oldged=' . rawurlencode((string) $oldged) . '&newged=' . rawurlencode((string) $newged) . '&xref=' . rawurlencode((string) $xref) . '&user=' . rawurlencode((string) $user) . '&gedc=' . rawurlencode((string) $gedc) . '");
 
 		jQuery("#change_list").dataTable( {
-			sAjaxSource: "' . KT_SCRIPT_NAME . '?action=loadrows&from=' . $from . '&to=' . $to . '&type=' . $type . '&oldged=' . rawurlencode((string) $oldged) . '&newged=' . rawurlencode((string) $newged) . '&xref=' . rawurlencode((string) $xref) . '&user=' . rawurlencode((string) $user) . '&gedc=' . rawurlencode((string) $gedc) . '",
 			sorting: [[ 0, "desc" ]],
 			columns: [
 				/* 0 - Timestamp   */ {},

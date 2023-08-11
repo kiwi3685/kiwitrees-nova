@@ -128,7 +128,7 @@ $controller
 	->addExternalJavascript(KT_DATATABLES_KT_JS)
 	->addExternalJavascript(KT_JQUERY_JEDITABLE_URL)
 	->addInlineJavascript('
-		datables_defaults();
+		datables_defaults("' . KT_SCRIPT_NAME . '?action=loadrows1");
 
 		jQuery.fn.dataTableExt.oSort["unicode-asc" ]=function(a,b) {return a.replace(/<[^<]*>/, "").localeCompare(b.replace(/<[^<]*>/, ""))};
 		jQuery.fn.dataTableExt.oSort["unicode-desc"]=function(a,b) {return b.replace(/<[^<]*>/, "").localeCompare(a.replace(/<[^<]*>/, ""))};
@@ -154,6 +154,8 @@ $controller
 				});
 			}
 		});
+
+		datables_defaults("' . KT_SCRIPT_NAME . '?action=loadrows2");
 
 		jQuery("#unknown_site_visitors").dataTable({
 			buttons: [{extend: "csvHtml5", exportOptions: {columns: [0,2] }}],

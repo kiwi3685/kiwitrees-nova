@@ -35,8 +35,6 @@
 		require_once KT_ROOT.'library/php-diff/lib/Diff.php';
 		require_once KT_ROOT.'library/php-diff/lib/Diff/Renderer/Html/SideBySide.php';
 
-		Zend_Session::writeClose();
-
 		$QUERY	= [];
 		$ARGS	= [];
 		if ($from) {
@@ -73,7 +71,7 @@
 		}
 
 		if ($QUERY) {
-			$WHERE = " WHERE ".implode(' AND ', $QUERY);
+			$WHERE = " WHERE " . implode(' AND ', $QUERY);
 		} else {
 			$WHERE = '';
 		}
@@ -164,7 +162,7 @@
 
 		// Total filtered/unfiltered rows
 		$iTotalDisplayRecords = KT_DB::prepare("SELECT FOUND_ROWS()")->fetchOne();
-		$iTotalRecords        = KT_DB::prepare("SELECT COUNT(*) FROM `##user` WHERE user_id>0")->fetchOne();
+		$iTotalRecords        = KT_DB::prepare($SELECT2 . $WHERE)->execute($ARGS)->fetchOne();
 
 		// See http://www.datatables.net/usage/server-side
 		$data = [

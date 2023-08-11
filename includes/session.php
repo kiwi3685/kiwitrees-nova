@@ -75,9 +75,7 @@ define('KT_FANCY_TREEVIEW_JS_URL',		KT_STATIC_URL . 'js/fancytreeview.js'); // u
 define('KT_INTERACTIVETREE_JS_URL',		KT_STATIC_URL . 'js/interactivetree.js'); // used in the interctive tree tab
 
 // external css libraries
-define('KT_DATATABLES_CSS',						KT_STATIC_URL . 'library/DataTables/DataTables-1.10.20/css/jquery.dataTables.min.css'); // 1.10.20 Updated OCT 2019
 define('KT_DATATABLES_FOUNDATION_CSS',			KT_STATIC_URL . 'library/DataTables/DataTables-1.10.20/css/dataTables.foundation.min.css'); // 1.10.20 Updated OCT 2019
-define('KT_DATATABLES_BUTTONS_CSS',				KT_STATIC_URL . 'library/DataTables/Buttons-1.6.0/css/buttons.dataTables.min.css'); // 1.10.20 Updated OCT 2019
 define('KT_DATATABLES_FOUNDATION_BUTTONS_CSS',	KT_STATIC_URL . 'library/DataTables/Buttons-1.6.0/css/buttons.foundation.min.css'); // 1.10.20 Updated OCT 2019
 define('KT_DATEPICKER_CSS',						KT_STATIC_URL . 'library/foundation-datepicker/css/foundation-datepicker.min.css');
 define('KT_CONFIRM_CSS',						KT_STATIC_URL . 'library/jquery-confirm/dist/jquery-confirm.min.css'); // Ver 3.3.4 from https                       ://craftpip.github.io/jquery-confirm/

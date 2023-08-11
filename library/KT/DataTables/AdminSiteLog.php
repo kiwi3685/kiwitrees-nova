@@ -32,8 +32,6 @@
 	  */
 	 public static function siteLog($from, $to, $type, $text, $ip, $user, $gedc, $search, $start, $length, $isort, $draw, $colsort, $sortdir) {
 
-		Zend_Session::writeClose();
-
 		$QUERY = [];
 		$ARGS = [];
 		if ($from) {
@@ -85,7 +83,7 @@
 				switch ($sortdir[$i]) {
 					case 'asc':
 						if ( ($colsort[$i]) == 0) {
- 							$ORDER_BY .= 'og_id ASC '; // column 0 is "timestamp", using change_id gives the correct order for events in the same second
+ 							$ORDER_BY .= 'log_id ASC '; // column 0 is "timestamp", using change_id gives the correct order for events in the same second
 						} else {
  							$ORDER_BY .= (1 + ($colsort[$i])) . ' ASC ';
 						}
@@ -136,7 +134,7 @@
 
 		// Total filtered/unfiltered rows
 		$iTotalDisplayRecords = KT_DB::prepare("SELECT FOUND_ROWS()")->fetchOne();
-		$iTotalRecords        = KT_DB::prepare("SELECT COUNT(*) FROM `##user` WHERE user_id>0")->fetchOne();
+		$iTotalRecords        = KT_DB::prepare($SELECT2 . $WHERE)->execute($ARGS)->fetchOne();
 
 		// See http://www.datatables.net/usage/server-side
 		$data = [

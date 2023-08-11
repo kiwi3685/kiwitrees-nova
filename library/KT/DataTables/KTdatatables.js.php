@@ -39,7 +39,7 @@ if (KT_USER_CAN_EDIT) {
 	 * Individual pages add button, sorting, and column definitions as required
 	 * The following options can also be over-ridden as necessary
 	 */
-	function datables_defaults()
+	function datables_defaults(ajaxSource = "<?php echo KT_SCRIPT_NAME; ?>?action=loadrows")
 	{
 		jQuery.extend(jQuery.fn.dataTable.defaults,
 		{
@@ -49,10 +49,10 @@ if (KT_USER_CAN_EDIT) {
 			autoWidth: false,
 			processing: true,
 			serverSide: true,
-			sAjaxSource: "<?php echo KT_SCRIPT_NAME; ?>?action=loadrows",
+			sAjaxSource: ajaxSource,
 			deferRender: true,
 			pagingType: "full_numbers",
-			pageLength: 20,
+			pageLength: 10,
 			stateSave: true,
 			stateSaveParams: function (settings, data)
 			{

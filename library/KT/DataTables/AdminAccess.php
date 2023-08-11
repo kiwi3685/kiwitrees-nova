@@ -119,7 +119,7 @@
 
 		// Total filtered/unfiltered rows
 		$iTotalDisplayRecords = KT_DB::prepare("SELECT FOUND_ROWS()")->fetchOne();
-		$iTotalRecords        = KT_DB::prepare("SELECT COUNT(*) FROM `##user` WHERE user_id>0")->fetchOne();
+		$iTotalRecords        = KT_DB::prepare("SELECT COUNT(*) FROM `##site_access_rule` WHERE rule <> 'unknown'")->fetchOne();
 
 		// See http://www.datatables.net/usage/server-side
 		$data = [
@@ -208,7 +208,7 @@
 
 		// Total filtered/unfiltered rows
 		$iTotalDisplayRecords = KT_DB::prepare("SELECT FOUND_ROWS()")->fetchOne();
-		$iTotalRecords        = KT_DB::prepare("SELECT COUNT(*) FROM `##user` WHERE user_id>0")->fetchOne();
+		$iTotalRecords        = KT_DB::prepare("SELECT COUNT(*) FROM `##site_access_rule` WHERE rule = 'unknown'")->fetchOne();
 
 		// See http://www.datatables.net/usage/server-side
 		$data = [

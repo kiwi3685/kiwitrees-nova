@@ -292,11 +292,10 @@ $controller
 	->pageHeader()
 	->addExternalJavascript(KT_DATATABLES_KT_JS)
 	->addInlineJavascript('
-		datables_defaults();
+		datables_defaults("' . KT_SCRIPT_NAME . '?action=loadrows&files=' . $files . '&media_folder=' . $media_folder . '&media_path=' . $media_path . '&subfolders=' . $subfolders . '");
 
 		jQuery("#media-table-' . $table_id . '").dataTable({
-			buttons: [{extend: "csvHtml5", exportOptions: {columns: [0,2,3,4,6] }}],
-			sAjaxSource: "' . KT_SCRIPT_NAME . '?action=loadrows&files=' . $files . '&media_folder=' . $media_folder . '&media_path=' . $media_path . '&subfolders=' . $subfolders . '",
+			buttons: [{extend: "csvHtml5", exportOptions: {columns: [0,2,3,4,6]}}],
 			columns: [
 				/*0 - media file */		{},
 				/*1 - media object */	{sortable: false, class: "center"},

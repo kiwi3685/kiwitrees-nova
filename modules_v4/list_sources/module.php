@@ -83,24 +83,111 @@ class list_sources_KT_Module extends KT_Module implements KT_Module_List {
 
 	// Display list
 	public function show() {
+
 		global $iconStyle, $SHOW_LAST_CHANGE, $controller;
-		require_once KT_ROOT . 'includes/functions/functions_print_lists.php';
+
+		switch (KT_Filter::get('action')) {
+			case 'loadrows':
+				Zend_Session::writeClose();
+
+				$search  = KT_Filter::get('sSearch', '');
+				$start   = KT_Filter::getInteger('iDisplayStart');
+				$length  = KT_Filter::getInteger('iDisplayLength');
+				$isort   = KT_Filter::getInteger('iSortingCols');
+				$draw    = KT_Filter::getInteger('sEcho');
+				$colsort = [];
+				$sortdir = [];
+				for ($i = 0; $i < $isort; ++$i) {
+					$colsort[$i] = KT_Filter::getInteger('iSortCol_' . $i);
+					$sortdir[$i] = KT_Filter::get('sSortDir_' . $i);
+				}
+
+				header('Content-type: application/json');
+				echo json_encode(KT_DataTables_ListSources::sourceList($search, $start, $length, $isort, $draw, $colsort, $sortdir));
+
+				exit;
+		}
+
+		// Access default datatables settings
+		include_once KT_ROOT . 'library/KT/DataTables/KTdatatables.js.php';
 
 		$controller = new KT_Controller_Page();
 		$controller
-			->restrictAccess(KT_Module::isActiveList(KT_GED_ID, 'list_sources', KT_USER_ACCESS_LEVEL))
+			->pageHeader()
 			->setPageTitle(KT_I18N::translate('Sources'))
-			->pageHeader();
-		?>
+			->restrictAccess(KT_Module::isActiveList(KT_GED_ID, 'list_sources', KT_USER_ACCESS_LEVEL))
+			->addExternalJavascript(KT_DATATABLES_KT_JS)
+			->addInlineJavascript('
+				datables_defaults("module.php?mod=' . $this->getName() . '&mod_action=show&action=loadrows");
 
-		<!-- using old functions_print_list -->
-		<div id="sourlist-page" class="grid-x grid-padding-x">
-			<div class="cell large-10 large-offset-1">
-				<h3><?php echo $controller->getPageTitle(); ?></h3>
-				<?php echo format_sour_table(get_source_list(KT_GED_ID)); ?>
+				jQuery.fn.dataTableExt.oSort["unicode-asc" ]=function(a,b) {return a.replace(/<[^<]*>/, "").localeCompare(b.replace(/<[^<]*>/, ""))};
+				jQuery.fn.dataTableExt.oSort["unicode-desc"]=function(a,b) {return b.replace(/<[^<]*>/, "").localeCompare(a.replace(/<[^<]*>/, ""))};
+
+				jQuery("#sourTable").dataTable({
+					sorting: [[1,"asc"]],
+					columns: [
+						/*  0 xref        */ { type: "num", visible: false },
+						/*  1 TITL (sort) */ { type: "unicode", visible: false },
+						/*  2 title       */ { orderData: 1 , type: "unicode" },
+						/*  3 AUTH (sort) */ { type: "unicode", visible: false },
+						/*  4 author      */ { orderData: 3, type: "unicode" },
+						/*  5 INDI (sort) */ { type: "num", visible: false },
+						/*  6 indi        */ { orderData: 5, class: "text-center" },
+						/*  7 FAM  (sort) */ { type: "num", visible: false },
+						/*  8 fam         */ { orderData: 7, class: "text-center" },
+						/*  9 OBJE (sort) */ { type: "num", visible: false },
+						/* 10 obje        */ { orderData: 9, class: "text-center" },
+						/* 11 NOTE (sort) */ { type: "num", visible: false },
+						/* 12 note        */ { orderData: 11, class: "text-center" },
+						/* 13 CHAN (sort) */ { visible: false },
+						/* 14 chan        */ { orderData: 13, visible: ' . ($SHOW_LAST_CHANGE ? 'true' : 'false') . ', class: "text-center" },
+						/* 15 DELETE      */ { sortable: false, class: "text-center" },
+					]
+				});
+			')
+		;
+
+		echo pageStart('source-list', $controller->getPageTitle()); ?>
+
+			<div class="cell callout info-help">
+				<?php echo KT_I18N::translate('
+					A list of all source records for this family tree, limited only by privacy settings.
+					Addional columns show the number of other records (individuals, families, etc) each source is linked to.
+				'); ?>
 			</div>
-		</div>
-		<?php
+
+			<div class="cell">
+				<table id="sourTable" class="shadow scroll" >
+					<thead>
+						<tr>
+							<th></th>
+							<th></th>
+							<th><?php echo KT_Gedcom_Tag::getLabel('TITL'); ?></th>
+							<th></th>
+							<th><?php echo KT_Gedcom_Tag::getLabel('AUTH'); ?></th>
+							<th></th>
+							<th><?php echo KT_I18N::translate('Individuals'); ?></th>
+							<th></th>
+							<th><?php echo KT_I18N::translate('Families'); ?></th>
+							<th></th>
+							<th><?php echo KT_I18N::translate('Media objects'); ?></th>
+							<th></th>
+							<th><?php echo KT_I18N::translate('Shared notes'); ?></th>
+							<th><?php echo ($SHOW_LAST_CHANGE ? '' : ''); ?></th>
+							<th><?php echo ($SHOW_LAST_CHANGE ? '' : ''); ?><?php echo KT_Gedcom_Tag::getLabel('CHAN'); ?></th>
+							<th class="delete_src"style="<?php echo (KT_USER_GEDCOM_ADMIN ? '' : 'display: none;'); ?>">
+								<input type="button" class="button tiny" value="<?php echo KT_I18N::translate('Delete'); ?>" onclick="if (confirm('<?php echo htmlspecialchars(KT_I18N::translate('Permanently delete these records?')); ?>')) {return checkbox_delete('sources');} else {return false;}">
+								<input type="checkbox" onclick="toggle_select(this)" style="vertical-align:middle;">
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+
+		<?php echo pageClose();
+
 	}
 
 }

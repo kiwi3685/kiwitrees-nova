@@ -26,75 +26,75 @@ require './includes/session.php';
 require_once KT_ROOT.'includes/functions/functions_print_lists.php';
 
 $controller = new KT_Controller_Source();
-$controller->pageHeader(); ?>
+$controller->pageHeader();
 
-<div id="source-details-page" class="grid-x grid-padding-x">
-	<div class="cell large-10 large-offset-1">
-		<?php if ($controller->record && $controller->record->canDisplayDetails()) {
-			if ($controller->record->isMarkedDeleted()) {
-				if (KT_USER_CAN_ACCEPT) { ?>
-					<div class="callout alert">
-						<?php echo /* I18N: %1$s is “accept”, %2$s is “reject”.  These are links. */ KT_I18N::translate(
-							'This source has been deleted.  You should review the deletion and then %1$s or %2$s it.',
-							'<a href="#" onclick="jQuery.post(\'action.php\',{action:\'accept-changes\',xref:\'' . $controller->record->getXref() . '\'},function(){location.reload();})">' . KT_I18N::translate_c('You should review the deletion and then accept or reject it.', 'accept') . '</a>',
-							'<a href="#" onclick="jQuery.post(\'action.php\',{action:\'reject-changes\',xref:\'' . $controller->record->getXref() . '\'},function(){location.reload();})">' . KT_I18N::translate_c('You should review the deletion and then accept or reject it.', 'reject') . '</a>'
-						); ?>
-					</div>
-					<?php echo helpDropdown('pending_changes');
-				} elseif (KT_USER_CAN_EDIT) { ?>
-					<div class="callout alert">
-						<?php echo KT_I18N::translate('This source has been deleted. The deletion will need to be reviewed by a moderator.'); ?>
-					</div>
-					<?php echo helpDropdown('pending_changes');
+echo pageStart('source-details', $controller->record->getFullName(), 'y', $controller->record->getFullName()); ?>
+
+	<div id="source-details-page" class="grid-x grid-padding-x">
+		<div class="cell large-10 large-offset-1">
+			<?php if ($controller->record && $controller->record->canDisplayDetails()) {
+				if ($controller->record->isMarkedDeleted()) {
+					if (KT_USER_CAN_ACCEPT) { ?>
+						<div class="callout alert">
+							<?php echo /* I18N: %1$s is “accept”, %2$s is “reject”.  These are links. */ KT_I18N::translate(
+								'This source has been deleted.  You should review the deletion and then %1$s or %2$s it.',
+								'<a href="#" onclick="jQuery.post(\'action.php\',{action:\'accept-changes\',xref:\'' . $controller->record->getXref() . '\'},function(){location.reload();})">' . KT_I18N::translate_c('You should review the deletion and then accept or reject it.', 'accept') . '</a>',
+								'<a href="#" onclick="jQuery.post(\'action.php\',{action:\'reject-changes\',xref:\'' . $controller->record->getXref() . '\'},function(){location.reload();})">' . KT_I18N::translate_c('You should review the deletion and then accept or reject it.', 'reject') . '</a>'
+							); ?>
+						</div>
+						<?php echo helpDropdown('pending_changes');
+					} elseif (KT_USER_CAN_EDIT) { ?>
+						<div class="callout alert">
+							<?php echo KT_I18N::translate('This source has been deleted. The deletion will need to be reviewed by a moderator.'); ?>
+						</div>
+						<?php echo helpDropdown('pending_changes');
+					}
+				} elseif (find_updated_record($controller->record->getXref(), KT_GED_ID) !== null) {
+					if (KT_USER_CAN_ACCEPT) { ?>
+						<div class="callout alert">
+							<?php echo /* I18N: %1$s is “accept”, %2$s is “reject”.  These are links. */ KT_I18N::translate(
+								'This source has been edited.  You should review the changes and then %1$s or %2$s them.',
+								'<a href="#" onclick="jQuery.post(\'action.php\',{action:\'accept-changes\',xref:\'' . $controller->record->getXref() . '\'},function(){location.reload();})">' . KT_I18N::translate_c('You should review the changes and then accept or reject them.', 'accept') . '</a>',
+								'<a href="#" onclick="jQuery.post(\'action.php\',{action:\'reject-changes\',xref:\'' . $controller->record->getXref() . '\'},function(){location.reload();})">' . KT_I18N::translate_c('You should review the changes and then accept or reject them.', 'reject') . '</a>'
+							); ?>
+						</div>
+					<?php } elseif (KT_USER_CAN_EDIT) { ?>
+						<div class="callout alert">
+							<?php echo KT_I18N::translate('This source has been edited. The changes need to be reviewed by a moderator.'); ?>
+						</div>
+						<?php echo helpDropdown('pending_changes');
+					}
 				}
-			} elseif (find_updated_record($controller->record->getXref(), KT_GED_ID) !== null) {
-				if (KT_USER_CAN_ACCEPT) { ?>
-					<div class="callout alert">
-						<?php echo /* I18N: %1$s is “accept”, %2$s is “reject”.  These are links. */ KT_I18N::translate(
-							'This source has been edited.  You should review the changes and then %1$s or %2$s them.',
-							'<a href="#" onclick="jQuery.post(\'action.php\',{action:\'accept-changes\',xref:\'' . $controller->record->getXref() . '\'},function(){location.reload();})">' . KT_I18N::translate_c('You should review the changes and then accept or reject them.', 'accept') . '</a>',
-							'<a href="#" onclick="jQuery.post(\'action.php\',{action:\'reject-changes\',xref:\'' . $controller->record->getXref() . '\'},function(){location.reload();})">' . KT_I18N::translate_c('You should review the changes and then accept or reject them.', 'reject') . '</a>'
-						); ?>
-					</div>
-				<?php } elseif (KT_USER_CAN_EDIT) { ?>
-					<div class="callout alert">
-						<?php echo KT_I18N::translate('This source has been edited. The changes need to be reviewed by a moderator.'); ?>
-					</div>
-					<?php echo helpDropdown('pending_changes');
-				}
+			} else {
+				header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
+				$controller->pageHeader(); ?>
+				<div class="callout alert">
+					<?php echo KT_I18N::translate('This source does not exist or you do not have permission to view it.'); ?>
+				</div>
+				<?php exit;
+			} ?>
+		</div>
+
+		<?php
+		$linkToID = $controller->record->getXref(); // Tell addmedia.php what to link to
+
+		$controller->addInlineJavascript('
+			function show_gedcom_record() {
+				var recwin=window.open("gedrecord.php?pid=' . $controller->record->getXref() . '", "_blank", edit_window_specs);
 			}
-		} else {
-			header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
-			$controller->pageHeader(); ?>
-			<div class="callout alert">
-				<?php echo KT_I18N::translate('This source does not exist or you do not have permission to view it.'); ?>
-			</div>
-			<?php exit;
-		} ?>
-	</div>
+		');
 
-	<?php
-	$linkToID = $controller->record->getXref(); // Tell addmedia.php what to link to
+		$linked_indi       = $controller->record->fetchLinkedIndividuals();
+		$linked_fam        = $controller->record->fetchLinkedFamilies();
+		$linked_obje       = $controller->record->fetchLinkedMedia();
+		$linked_note       = $controller->record->fetchLinkedNotes();
+		$count_linked_indi = count($linked_indi);
+		$count_linked_fam  = count($linked_fam);
+		$count_linked_obje = count($linked_obje);
+		$count_linked_note = count($linked_note);
+		?>
 
-	$controller->addInlineJavascript('
-		function show_gedcom_record() {
-			var recwin=window.open("gedrecord.php?pid=' . $controller->record->getXref() . '", "_blank", edit_window_specs);
-		}
-	');
-
-	$linked_indi       = $controller->record->fetchLinkedIndividuals();
-	$linked_fam        = $controller->record->fetchLinkedFamilies();
-	$linked_obje       = $controller->record->fetchLinkedMedia();
-	$linked_note       = $controller->record->fetchLinkedNotes();
-	$count_linked_indi = count($linked_indi);
-	$count_linked_fam  = count($linked_fam);
-	$count_linked_obje = count($linked_obje);
-	$count_linked_note = count($linked_note);
-	?>
-
-	<div class="cell large-10 large-offset-1">
-		<h3><?php echo $controller->record->getFullName(); ?></h3>
-		<ul class="tabs" data-tabs id="source-tabs">
+		<ul class="cell tabs" data-tabs id="source-tabs">
 			<li class="tabs-title is-active"><a href="#source-edit"><span><?php echo KT_I18N::translate('Details'); ?></span></a></li>
 			<?php if ($linked_indi) { ?>
 				<li class="tabs-title">
@@ -137,7 +137,7 @@ $controller->pageHeader(); ?>
 				</li>
 			<?php } ?>
 		</ul>
-		<div class="tabs-content" data-tabs-content="source-tabs">
+		<div class="cell tabs-content shadow" data-tabs-content="source-tabs">
 			<div class="tabs-panel is-active" id="source-edit">
 				<div class="facts grid-x grid-margin-x grid-padding-x grid-padding-y">
 					<?php
@@ -175,7 +175,7 @@ $controller->pageHeader(); ?>
 			// Individuals linked to this source
 			if ($linked_indi) { ?>
 				<div class="tabs-panel" id="indi-sources">
-					<?php echo format_indi_table($linked_indi, $controller->record->getFullName()); ?>
+					<?php echo simple_indi_table($linked_indi, $controller->record->getFullName()); ?>
 				</div>
 			<?php }
 			// Families linked to this source
@@ -198,5 +198,5 @@ $controller->pageHeader(); ?>
 			<?php } ?>
 		</div>
 	</div>
-</div> <!-- close div "source-details-page" -->
-<?php
+
+<?php echo pageClose();

@@ -640,28 +640,11 @@ function simple_indi_table($datalist)
 			jQuery("#simpleIndiTable").dataTable({
 				dom: \'<"top"p' . $buttons . 'f<"clear">irl>t<"bottom"pl>\',
 				' . KT_I18N::datatablesI18N() . ',
-				buttons: [
-					{extend: "csvHtml5", 
-						exportOptions: {
-							columns: ":visible"
-						}
-					},
-					{text: "JSON",
-						action: function ( e, dt, button, config ) {
-							var data = dt.buttons.exportData({
-								columns: ":visible"
-							}); 
-							jQuery.fn.dataTable.fileSave(
-								new Blob( [ JSON.stringify( data ) ] ),
-								"Table export.json"
-							);
-						}
-					}
-				],
+				buttons: [{extend: "csvHtml5",exportOptions: {columns: ":visible"}}],
 				autoWidth: false,
 				processing: true,
 				retrieve: true,
-				displayLength: 20,
+				displayLength: 10,
 				pagingType: "full_numbers",
 				stateSave: true,
 				stateSaveParams: function (settings, data) {
@@ -678,7 +661,7 @@ function simple_indi_table($datalist)
 					/* 4 birt date */ { dataSort: 5, "width": "20%" },
 					/* 5 BIRT:DATE */ { visible: false },
 					/* 6 birt plac */ { type: "unicode", "width": "20%" },
-					/* 7 deat date */ { dataSort: 8, class, "width": "20%" },
+					/* 7 deat date */ { dataSort: 8, "width": "20%" },
 					/* 8 DEAT:DATE */ { visible: false },
 					/* 9 deat plac */ { type: "unicode", "width": "20%" },
 				],

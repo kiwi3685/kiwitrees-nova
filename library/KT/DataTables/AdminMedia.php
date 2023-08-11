@@ -36,14 +36,15 @@
 			case 'local':
 				// Filtered rows
 				$SELECT1 = "
-					SELECT SQL_CALC_FOUND_ROWS
-					TRIM(LEADING ? FROM m_filename) AS media_path,
-					'OBJE' AS type,
-					m_titl,
-					m_id AS xref,
-					m_file AS ged_id,
-					m_gedcom AS gedrec,
-					m_filename
+					SELECT
+						SQL_CALC_FOUND_ROWS
+						TRIM(LEADING ? FROM m_filename) AS media_path,
+						'OBJE' AS type,
+						m_titl,
+						m_id AS xref,
+						m_file AS ged_id,
+						m_gedcom AS gedrec,
+						m_filename
 					FROM  `##media`
 					JOIN  `##gedcom_setting` ON (m_file = gedcom_id AND setting_name = 'MEDIA_DIRECTORY')
 					JOIN  `##gedcom` USING (gedcom_id) WHERE setting_value=?
@@ -87,10 +88,10 @@
 						 // MySQL numbers columns 1, 2, 3, ...
 						 switch ($sortdir[$i]) {
 							 case 'asc':
-								 $ORDER_BY .= (1 + ($colsort[$i])) . ' ASC ';
+								 $ORDER_BY .= (1 + $colsort[$i]) . ' ASC ';
 								 break;
 							 case 'desc':
-								 $ORDER_BY .= (1 + ($colsort[$i])) . ' DESC ';
+								 $ORDER_BY .= (1 + $colsort[$i]) . ' DESC ';
 								 break;
 						 }
 						 if ($i < $isort - 1) {

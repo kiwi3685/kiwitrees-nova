@@ -73,7 +73,6 @@
 }
 
 div.dataTables_wrapper {
-	font-size: 0.95rem;
 	width: 100%;
 }
 div.dataTables_wrapper div div.clear {
@@ -107,10 +106,31 @@ div.dataTables_wrapper div div.dataTables_filter label input {
 	margin: 0 0.5rem;
 	width: 15rem;
 }
+div.dataTables_wrapper div div.dt-buttons.button-group {
+	margin-bottom: 0;
+}
+div.dataTables_wrapper div div.dt-buttons.button-group .button {
+	margin-bottom: 0;
+	height: 2.4375rem;
+}
 div.dataTables_wrapper div div.dt-buttons button {
 	background-color: #ab3334;
 	color: #fffff4;
 	padding: 0.7rem 1rem;
+}
+div.dataTables_wrapper div.dataTables_processing {
+	background: none;
+	background-color: #ab3334;
+	color: #fffff4;
+	display: none;
+	font-weight: 900;
+	height: auto;
+	padding: 0.9375rem;
+	position: absolute;
+	text-align: center;
+	top: 30%;
+	width: auto;
+	z-index: 99;
 }
 div.dataTables_wrapper table.dataTable {
 	border-collapse: separate;
@@ -131,7 +151,7 @@ div.dataTables_wrapper table.dataTable thead tr.first-row-header {
 div.dataTables_wrapper table.dataTable thead tr th {
 	background-image: none !important;
 	font-weight: 600;
-	padding: 0.5rem;
+	padding: 0 0.5rem;
 	position: relative;
 }
 div.dataTables_wrapper table.dataTable thead tr th .button-group {
@@ -163,8 +183,8 @@ div.dataTables_wrapper table.dataTable thead tr th.sorting_disabled::after {
 }
 div.dataTables_wrapper table.dataTable thead tr th svg {
 	position: absolute;
-	right: 0.125rem;
-	top: 0.75rem;
+	right: 0;
+	top: 0.5625rem;
 }
 div.dataTables_wrapper table#installed_table thead tr th svg.fa-gears {
 	left: 0.75rem;
@@ -329,7 +349,9 @@ input[type=radio]:checked::before {
 	Colorbox Core Style:
 	The following CSS is consistent between example themes and should not be altered.
 */
-#colorbox, #cboxOverlay, #cboxWrapper {
+#colorbox,
+#cboxOverlay,
+#cboxWrapper {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -348,7 +370,8 @@ input[type=radio]:checked::before {
 	height: 100%;
 }
 
-#cboxMiddleLeft, #cboxBottomLeft {
+#cboxMiddleLeft,
+#cboxBottomLeft {
 	clear: left;
 }
 
@@ -365,7 +388,8 @@ input[type=radio]:checked::before {
 	margin: 0;
 }
 
-#cboxLoadingOverlay, #cboxLoadingGraphic {
+#cboxLoadingOverlay,
+#cboxLoadingGraphic {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -373,7 +397,10 @@ input[type=radio]:checked::before {
 	height: 100%;
 }
 
-#cboxPrevious, #cboxNext, #cboxClose, #cboxSlideshow {
+#cboxPrevious,
+#cboxNext,
+#cboxClose,
+#cboxSlideshow {
 	cursor: pointer;
 }
 
@@ -395,7 +422,9 @@ input[type=radio]:checked::before {
 	margin: 0;
 }
 
-#colorbox, #cboxContent, #cboxLoadedContent {
+#colorbox,
+#cboxContent,
+#cboxLoadedContent {
 	box-sizing: content-box;
 	-moz-box-sizing: content-box;
 	-webkit-box-sizing: content-box;

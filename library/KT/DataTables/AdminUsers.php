@@ -34,13 +34,10 @@
 
 		global $iconStyle;
 
-		Zend_Session::writeClose();
-
 		// convert days to seconds
 		$days = (KT_Site::preference('VERIFY_DAYS') ? KT_Site::preference('VERIFY_DAYS') : 7);
 		$time = $days * 60 * 60 * 24;
 
-		// Generate an AJAX/JSON response for datatables to load a block of rows
 		$WHERE		= " WHERE u.user_id>0 ";
 
 		$ARGS		= [];
@@ -69,10 +66,10 @@
 				// MySQL numbers columns 1, 2, 3, ...
 				switch ($sortdir[$i]) {
 					case 'asc':
-						$ORDER_BY .= (1 + ($colsort[$i])) . ' ASC ';
+						$ORDER_BY .= (1 + $colsort[$i]) . ' ASC ';
 						break;
 					case 'desc':
-						$ORDER_BY .= (1 + ($colsort[$i])) . ' DESC ';
+						$ORDER_BY .= (1 + $colsort[$i]) . ' DESC ';
 						break;
 				}
 				if ($i < $isort - 1) {
@@ -84,21 +81,22 @@
 	 	}
 
 	 	$SELECT = "
-			SELECT SQL_CALC_FOUND_ROWS
-			'',
-			u.user_id,
-			user_name,
-			real_name,
-			email,
-			us1.setting_value,
-			us2.setting_value,
-			us2.setting_value,
-			us3.setting_value,
-			us3.setting_value,
-			us4.setting_value,
-			us5.setting_value,
-			'',
-			''
+			SELECT
+				SQL_CALC_FOUND_ROWS
+				'',
+				u.user_id,
+				user_name,
+				real_name,
+				email,
+				us1.setting_value,
+				us2.setting_value,
+				us2.setting_value,
+				us3.setting_value,
+				us3.setting_value,
+				us4.setting_value,
+				us5.setting_value,
+				'',
+				''
 			FROM `##user` u
 			LEFT JOIN `##user_setting` us1 ON (u.user_id=us1.user_id AND us1.setting_name='language')
 			LEFT JOIN `##user_setting` us2 ON (u.user_id=us2.user_id AND us2.setting_name='reg_timestamp')
