@@ -191,16 +191,18 @@ $highlightImage ? $class2 = " medium-9 large-10" : $class2 = ""; ?>
 									}
 								} ?>
 							</div>
-							<?php if (
-								// Relationship to default individual
-								array_key_exists('chart_relationship', KT_Module::getActiveModules()) && KT_USER_ID && get_gedcom_setting(KT_GED_ID, 'TAB_REL_TO_DEFAULT_INDI') > 0
-								) { ?>
-									<div class="cell text-right indi_rela"><?php echo printIndiRelationship(); ?></div>
-							<?php } ?>
 						</div>
 					</div>
 				</div>
 			</div>
+
+			<?php // =============== Relationship to default individuals ====================== ?>
+			<?php if (
+				array_key_exists('chart_relationship', KT_Module::getActiveModules()) && KT_USER_ID && get_gedcom_setting(KT_GED_ID, 'TAB_REL_TO_DEFAULT_INDI') > 0
+				) { ?>
+					<div class="cell text-right indi_rela"><?php echo printIndiRelationship(); ?></div>
+			<?php } ?>
+
 			<?php // =============== Individual page tabs ======================
 			foreach ($controller->tabs as $tab) {
 				echo $tab->getPreLoadContent();
