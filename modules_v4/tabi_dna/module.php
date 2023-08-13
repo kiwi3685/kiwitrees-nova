@@ -671,25 +671,13 @@ class tabi_dna_KT_Module extends KT_Module implements KT_Module_IndiTab {
 	public function DNAhelp($item) {
 		switch ($item) {
 			case 'cms':
-				return /* I18N: help for DNA tab module */ KT_I18N::translate('
-					A centiMorgan (cM) is a unit of measure for DNA. It tells you how much DNA you share with another match. In general, the more DNA you share with a match the higher the cM number will be and the more closely related you are.
-					<br>
-					Ref: https://www.yourdnaguide.com/scp
-				');
+				return /* I18N: help for DNA tab module */ KT_I18N::translate('A centiMorgan (cM) is a unit of measure for DNA. It tells you how much DNA you share with another match. In general, the more DNA you share with a match the higher the cM number will be and the more closely related you are.<br>Ref: https://www.yourdnaguide.com/scp');
 				break;
 			case 'seg':
-				return /* I18N: help for DNA tab module */ KT_I18N::translate('
-					A DNA segment is a block, chunk, piece, string of DNA on a chromosome. It is typically determined by a start location and an end location on a chromosome. A segment refers to all the DNA in between and including the start and end locations.
-					<br>
-					Ref: https://segmentology.org/2015/05/07/what-is-a-segment/
-				');
+				return /* I18N: help for DNA tab module */ KT_I18N::translate('A DNA segment is a block, chunk, piece, string of DNA on a chromosome. It is typically determined by a start location and an end location on a chromosome.A segment refers to all the DNA in between and including the start and end locations.<br>Ref: https://segmentology.org/2015/05/07/what-is-a-segment/');
 				break;
 			case 'pdna':
-				return /* I18N: help for DNA tab module */ KT_I18N::translate('
-					Percentage DNA is an alternative to Shared cMs as a way of describing DNA relationships. Used by some DNA testing companies, but not all.
-					<br>
-					Ref: https://isogg.org/wiki/Autosomal_DNA_statistics
-				');
+				return /* I18N: help for DNA tab module */ KT_I18N::translate('Percentage DNA is an alternative to Shared cMs as a way of describing DNA relationships. Used by some DNA testing companies, but not all.<br>Ref: https://isogg.org/wiki/Autosomal_DNA_statistics');
 				break;
 		}
 	}
