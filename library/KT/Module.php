@@ -510,11 +510,11 @@ abstract class KT_Module {
 		 */
 		$default_modules = array(
 			// indi tabs
-			'tabi_factsandevents'	=> array('enabled', 1, NULL, NULL, NULL, NULL, NULL),
-			'tabi_families'			=> array('enabled', 2, NULL, NULL, NULL, NULL, NULL),
-			'tabi_sources'			=> array('enabled', 3, NULL, NULL, NULL, NULL, NULL),
-			'tabi_notes'			=> array('enabled', 4, NULL, NULL, NULL, NULL, NULL),
-			'tabi_tree'				=> array('enabled', 5, NULL, NULL, NULL, NULL, NULL),
+			'tabi_facts'			=> array('enabled', 1, NULL, NULL, NULL, NULL, NULL),
+			'tabi_attributes'		=> array('enabled', 2, NULL, NULL, NULL, NULL, NULL),
+			'tabi_families'			=> array('enabled', 3, NULL, NULL, NULL, NULL, NULL),
+			'tabi_sources'			=> array('enabled', 4, NULL, NULL, NULL, NULL, NULL),
+			'tabi_notes'			=> array('enabled', 5, NULL, NULL, NULL, NULL, NULL),
 			'tabi_album'			=> array('enabled', 6, NULL, NULL, NULL, NULL, NULL),
 			// menus - main menu
 			'menu_homepage'			=> array('enabled', NULL, 1, NULL, NULL, NULL, NULL),
@@ -523,10 +523,11 @@ abstract class KT_Module {
 			'menu_lists'			=> array('enabled', NULL, 4, NULL, NULL, NULL, NULL),
 			'menu_reports'			=> array('enabled', NULL, 5, NULL, NULL, NULL, NULL),
 			'menu_search'			=> array('enabled', NULL, 6, NULL, NULL, NULL, NULL),
-			// menus - extra menu
-			'menu_login_link'			=> array('enabled', NULL, 13, NULL, NULL, NULL, NULL),
+			// menus - other menu
+			'menu_login_link'		=> array('enabled', NULL, 13, NULL, NULL, NULL, NULL),
 			'menu_favorites'		=> array('enabled', NULL, 14, NULL, NULL, NULL, NULL),
 			'menu_languages'		=> array('enabled', NULL, 15, NULL, NULL, NULL, NULL),
+			'menu_admin_links'		=> array('enabled', NULL, 16, NULL, NULL, NULL, NULL),
 			// sidebar
 			'sidebar_family_nav'	=> array('enabled', NULL, NULL, 1, NULL, NULL, NULL),
 			'sidebar_descendancy'	=> array('enabled', NULL, NULL, 2, NULL, NULL, NULL),

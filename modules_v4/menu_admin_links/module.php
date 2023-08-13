@@ -25,16 +25,18 @@ if (!defined('KT_KIWITREES')) {
 	header('HTTP/1.0 403 Forbidden');
 	exit;
 }
-
-class menu_admin_other_KT_Module extends KT_Module implements KT_Module_Menu {
+class menu_admin_links_KT_Module extends KT_Module implements KT_Module_Menu, KT_Module_Config {
 	// Extend KT_Module
 	public function getTitle() {
-		return /* I18N: Name of a module/menu */ KT_I18N::translate('Administration menu');
+		return /* I18N: Name of a module/menu */ KT_I18N::translate('Administration link options');
 	}
 
 	// Extend KT_Module
 	public function getDescription() {
-		return /* I18N: Description of the languages module */ KT_I18N::translate('The Administration menu item (other menus)');
+		return /* I18N: Description of the administration links module */
+			KT_I18N::translate('
+				Select your preferred location for a link or links to the site adminstration area
+			');
 	}
 
 	// Implement KT_Module_Menu
@@ -49,7 +51,20 @@ class menu_admin_other_KT_Module extends KT_Module implements KT_Module_Menu {
 
 	// Implement KT_Module_Menu
 	public function MenuType() {
-		return 'other';
+		$menuType = get_module_setting($this->getName(), 'ADMIN_LOCATION');
+		if ($menuType) {
+			switch ($menuType) {
+				case 'main':
+					return 'main';
+					break;
+				case 'other':
+					return 'other';
+					break;
+				case 'user':
+				default:
+					return false;
+			}
+		}
 	}
 
 	// Implement KT_Module_Menu
@@ -57,4 +72,23 @@ class menu_admin_other_KT_Module extends KT_Module implements KT_Module_Menu {
 		$menu = KT_MenuBar::getAdminMenu();
 		return $menu;
 	}
+
+	// Extend KT_Module
+	public function modAction($mod_action)
+	{
+		switch ($mod_action) {
+			case 'admin_config':
+				require KT_ROOT . KT_MODULES_DIR . $this->getName() . '/administration/' . $mod_action . '.php';
+				break;
+			default:
+				header('HTTP/1.0 404 Not Found');
+		}
+	}
+
+	// Implement KT_Module_Config
+	public function getConfigLink()
+	{
+		return 'module.php?mod=' . $this->getName() . '&amp;mod_action=admin_config';
+	}
+
 }

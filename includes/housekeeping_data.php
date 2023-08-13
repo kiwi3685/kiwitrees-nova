@@ -1366,6 +1366,9 @@ function old_paths() {
 		KT_ROOT . 'ancestry.php',
 		KT_ROOT . 'compact.php',
 		KT_ROOT . 'descendancy.php',
+		// Menus
+		KT_ROOT . 'modules_v4/menus_admin_main',
+		KT_ROOT . 'modules_v4/menus_admin_other',
 		// tabs
 		KT_ROOT . 'modules_v4/album',
 		KT_ROOT . 'modules_v4/census',

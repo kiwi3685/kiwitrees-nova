@@ -79,13 +79,11 @@ class KT_MenuBar
 			$menu->addSubmenu($submenu);
 		}
 
-		// -- admin submenu (only if not already included in main or other menu)
+		// -- admin submenu (if admin links set to 'user')
 		if (
-			KT_USER_GEDCOM_ADMIN
-			&& !(
-				array_key_exists('menu_admin_main', KT_Module::getActiveMenus())
-				|| array_key_exists('menu_admin_other', KT_Module::getActiveMenus())
-			)
+			KT_USER_GEDCOM_ADMIN &&
+			array_key_exists('menu_admin_links', KT_Module::getActiveMenus()) &&
+			get_module_setting('menu_admin_links', 'ADMIN_LOCATION') == 'user'
 		) {
 			$submenu = new KT_Menu(KT_I18N::translate('Administration'), 'admin.php', 'menu-admin');
 			$menu->addSubmenu($submenu);
@@ -112,28 +110,38 @@ class KT_MenuBar
 		return $menu;
 	}
 
-	// Main menu Administration links (called by module "menu_admin_main")
+	// Main menu Administration links (if admin links set to 'main')
 	public static function getAdminMenu()
 	{
-		$menu = new KT_Menu('<span class="show-for-medium">' . KT_I18N::translate('Administration') . '</span>', 'admin.php', 'menu-admin');
-		$menu->addClass('', '', 'fa-gears');
+		if (
+			KT_USER_GEDCOM_ADMIN &&
+			array_key_exists('menu_admin_links', KT_Module::getActiveMenus()) &&
+			get_module_setting('menu_admin_links', 'ADMIN_LOCATION') !== 'user'
+		) {
+			$menu = new KT_Menu('<span class="show-for-medium">' . KT_I18N::translate('Administration') . '</span>', 'admin.php', 'menu-admin');
+			$menu->addClass('', '', 'fa-gears');
 
-		$adminMenus = [
-			KT_I18N::translate('Dashboard') => 'admin.php',
-			KT_I18N::translate('Website') => 'admin_summary_site.php',
-			KT_I18N::translate('Family trees') => 'admin_summary_trees.php',
-			KT_I18N::translate('User management') => 'admin_summary_users.php',
-			KT_I18N::translate('Media objects') => 'admin_summary_media.php',
-			KT_I18N::translate('Modules') => 'admin_summary_modules.php',
-			KT_I18N::translate('Customizing') => 'admin_summary_custom.php',
-			KT_I18N::translate('Tools') => 'admin_summary_tools.php',
-		];
-		foreach ($adminMenus as $key => $value) {
-			$submenu = new KT_Menu($key, $value, '');
-			$menu->addSubmenu($submenu);
+			if (get_module_setting('menu_admin_links', 'ADMIN_SUBMENU')) {
+				$adminMenus = [
+					KT_I18N::translate('Dashboard') => 'admin.php',
+					KT_I18N::translate('Website') => 'admin_summary_site.php',
+					KT_I18N::translate('Family trees') => 'admin_summary_trees.php',
+					KT_I18N::translate('User management') => 'admin_summary_users.php',
+					KT_I18N::translate('Media objects') => 'admin_summary_media.php',
+					KT_I18N::translate('Modules') => 'admin_summary_modules.php',
+					KT_I18N::translate('Customizing') => 'admin_summary_custom.php',
+					KT_I18N::translate('Tools') => 'admin_summary_tools.php',
+				];
+				foreach ($adminMenus as $key => $value) {
+					$submenu = new KT_Menu($key, $value, '');
+					$menu->addSubmenu($submenu);
+				}
+			}
+
+			return $menu;
+		} else {
+			return false;
 		}
-
-		return $menu;
 	}
 
 	public static function getChartsMenu()
