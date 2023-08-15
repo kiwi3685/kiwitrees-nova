@@ -1369,9 +1369,10 @@ function old_paths() {
 		// Menus
 		KT_ROOT . 'modules_v4/menus_admin_main',
 		KT_ROOT . 'modules_v4/menus_admin_other',
-		KT_ROOT . 'modules_v4/widget_user_contacts',
-		KT_ROOT . 'modules_v4/float_contacts',
 		KT_ROOT . 'modules_v4/contact',
+		KT_ROOT . 'modules_v4/float_contacts',
+		KT_ROOT . 'modules_v4/footer_contacts',
+		KT_ROOT . 'modules_v4/widget_user_contacts',
 		// tabs
 		KT_ROOT . 'modules_v4/album',
 		KT_ROOT . 'modules_v4/census',
