@@ -44,7 +44,7 @@ $controller
 	');
 
 $modules    = KT_Module::getActiveWidgets(KT_GED_ID, KT_PRIV_HIDE);
-$component  = 'widgets';
+$component  = 'widget';
 $infoHelp   = KT_I18N::translate('
 		"Drag & drop" each module, or manually adjust the order numbers,
 		to change the order these modules will be displayed in.

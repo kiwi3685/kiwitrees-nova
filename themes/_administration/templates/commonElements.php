@@ -199,7 +199,7 @@ function singleButton($title = '', $note = '', $gedID = '', $moduleName = '') {
 		default:
 			$title = 'Save';
 			echo '
-				<div class="cell medium-2">
+				<div class="cell medium-2 buttonDiv">
 					<button class="button primary" type="submit">
 						<i class="' . $iconStyle . ' fa-save"></i>' .
 						KT_I18N::translate($title) . '
@@ -627,7 +627,7 @@ function verticalRadioSwitch ($name, $values, $selected, $extra = '', $activeTex
 					</label>
 				</div>
 				<div class="cell medium-11">
-					<label class="middle">' . $value . '</label>
+					<label class="KT_switch_label middle">' . $value . '</label>
 				</div>
 			';
 		}

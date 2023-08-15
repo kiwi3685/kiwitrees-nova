@@ -51,6 +51,10 @@ button .svg-inline--fa {
 	margin: 0 0.5rem -0.1rem 0;
 }
 
+.buttonDiv {
+	margin-left: 0 !important;
+}
+
 .loading-image {
 	height: 2rem;
 	text-align: center;
@@ -1504,6 +1508,13 @@ main #admin-content #sitemap-page pre {
 main #admin-content #fancy_treeview_ancestors-page hr {
 	border-color: #f3f3f3;
 	margin: 0 0.5rem 0.5rem;
+}
+main #admin-content #contact_links-page #other_options div.float_positions div.switch {
+	margin-bottom: 0;
+}
+main #admin-content #contact_links-page #other_options label.KT_switch_label {
+	margin-bottom: 0 !important;
+	padding-top: 0 !important;
 }
 
 footer {

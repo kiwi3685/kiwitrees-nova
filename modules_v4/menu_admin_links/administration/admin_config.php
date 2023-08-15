@@ -199,35 +199,18 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', ''); ?>
 	</div>
 
 	<?php // hidden reveals - main image ?>
-	<div class="reveal" id="adminImage1" data-reveal>
-		<h6 class="text-center"><?php echo $title1; ?>
-			<button class="close-button" aria-label="Dismiss image" type="button" data-close>
-				<span aria-hidden="true">
-					<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
-				</span>
-			</button>
-		</h6>
-		<img src="<?php echo KT_THEME_DIR; ?>images/module-categories/Admin_locations_1.png" alt="<?php echo KT_I18N::translate('Main menu'); ?>">
-	</div>
-	<div class="reveal" id="adminImage2" data-reveal>
-		<h6 class="text-center"><?php echo $title2; ?>
-			<button class="close-button" aria-label="Dismiss image" type="button" data-close>
-				<span aria-hidden="true">
-					<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
-				</span>
-			</button>
-		</h6>
-		<img src="<?php echo KT_THEME_DIR; ?>images/module-categories/Admin_locations_2.png" alt="<?php echo KT_I18N::translate('Other menu'); ?>">
-	</div>
-	<div class="reveal" id="adminImage3" data-reveal>
-		<h6 class="text-center"><?php echo $title3; ?>
-			<button class="close-button" aria-label="Dismiss image" type="button" data-close>
-				<span aria-hidden="true">
-					<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
-				</span>
-			</button>
-		</h6>
-		<img src="<?php echo KT_THEME_DIR; ?>images/module-categories/Admin_locations_3.png" alt="<?php echo KT_I18N::translate('User menu'); ?>">
-	</div>
+	<?php for ($x = 1; $x <= 3; ++$x) { ?>
+		<div class="reveal" id="adminImage<?php echo $x; ?>" data-reveal>
+			<h6 class="text-center">
+				<?php echo ${'title' . $x}; ?>
+				<button class="close-button" aria-label="Dismiss image" type="button" data-close>
+					<span aria-hidden="true">
+						<i class="<?php echo $iconStyle; ?> fa-xmark"></i>
+					</span>
+				</button>
+			</h6>
+			<img src="<?php echo KT_THEME_DIR; ?>images/module-categories/Admin_locations_<?php echo $x; ?>.png" alt="<?php echo ${'title' . $x}; ?>">
+		</div>
+	<?php } ?>
 
 <?php echo pageClose();

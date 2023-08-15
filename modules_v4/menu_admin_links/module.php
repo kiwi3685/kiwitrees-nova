@@ -35,7 +35,7 @@ class menu_admin_links_KT_Module extends KT_Module implements KT_Module_Menu, KT
 	public function getDescription() {
 		return /* I18N: Description of the administration links module */
 			KT_I18N::translate('
-				Select your preferred location for a link or links to the site adminstration area
+				Select your preferred location for a link to the site adminstration area
 			');
 	}
 
@@ -58,13 +58,11 @@ class menu_admin_links_KT_Module extends KT_Module implements KT_Module_Menu, KT
 					return 'main';
 					break;
 				case 'other':
-					return 'other';
+					return 'main';
 					break;
-				case 'user':
-				default:
-					return false;
 			}
 		}
+
 	}
 
 	// Implement KT_Module_Menu

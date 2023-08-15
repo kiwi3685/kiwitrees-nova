@@ -49,6 +49,8 @@ class widget_user_contacts_KT_Module extends KT_Module implements KT_Module_Widg
 
 	// Implement class KT_Module_Widget
 	public function getWidget($widget_id, $template=true, $cfg=null) {
+		global $iconStyle;
+
 		$id			= $this->getName();
 		$class		= $this->getName();
 		$title		= $this->getTitle();

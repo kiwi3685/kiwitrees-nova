@@ -223,9 +223,9 @@ function tableSort ()
  * initialisation of icon-picker
  *
  */
-function iconPicker ()
+function iconPicker (elementID = '#menuIcon')
 {
-	jQuery("#menuIcon")
+	jQuery(elementID)
 		.iconpicker(
 		{
 			placement: "bottomRight",

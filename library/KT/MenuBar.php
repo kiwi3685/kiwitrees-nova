@@ -140,6 +140,28 @@ class KT_MenuBar
 
 			return $menu;
 		} else {
+
+			return false;
+		}
+	}
+
+	// Main menu Administration links (if admin links set to 'main')
+	public static function getContactMenu()
+	{
+		if (
+			KT_USER_GEDCOM_ADMIN &&
+			array_key_exists('contact_links', KT_Module::getActiveMenus()) &&
+			(get_module_setting('contact_links', 'CONTACT_MAIN') == 'main' ||
+			get_module_setting('contact_links', 'CONTACT_OTHER') == 'other')
+
+		) {
+			$menu = new KT_Menu('<span class="show-for-medium">' . KT_I18N::translate('Contact') . '</span>', 'message.php', 'menu-contact');
+			$menu->addClass('', '', 'fa-envelope');
+
+			return $menu;
+
+		} else {
+
 			return false;
 		}
 	}
@@ -352,7 +374,7 @@ class KT_MenuBar
 	{
 		$menus = [];
 		foreach (KT_Module::getActiveMenus() as $module) {
-			if ('main' == $module->MenuType()) {
+			if ('main' == $module->MenuType() || 'both' == $module->MenuType()) {
 				$menu = $module->getMenu();
 				if ($menu) {
 					$menus[] = $menu;
@@ -367,7 +389,7 @@ class KT_MenuBar
 	{
 		$menus = [];
 		foreach (KT_Module::getActiveMenus() as $module) {
-			if ('other' == $module->MenuType()) {
+			if ('other' == $module->MenuType() || 'both' == $module->MenuType()) {
 				$menu = $module->getMenu();
 				if ($menu) {
 					$menus[] = $menu;
