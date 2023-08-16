@@ -142,7 +142,8 @@
 			// add floating contact link if it is configured
 			if (
 				array_key_exists('contact_links', KT_Module::getActiveMenus()) &&
-				get_module_setting('contact_links', 'CONTACT_FLOAT') == 'float'
+				get_module_setting('contact_links', 'CONTACT_FLOAT') == 'float' &&
+				KT_SCRIPT_NAME != 'message.php'
 			) {
 				contact_links_KT_Module::show();
 			}
