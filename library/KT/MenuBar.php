@@ -118,7 +118,7 @@ class KT_MenuBar
 			array_key_exists('menu_admin_links', KT_Module::getActiveMenus()) &&
 			get_module_setting('menu_admin_links', 'ADMIN_LOCATION') !== 'user'
 		) {
-			$menu = new KT_Menu('<span class="show-for-medium">' . KT_I18N::translate('Administration') . '</span>', 'admin.php', 'menu-admin');
+			$menu = new KT_Menu('<span>' . KT_I18N::translate('Administration') . '</span>', 'admin.php', 'menu-admin');
 			$menu->addClass('', '', 'fa-gears');
 
 			if (get_module_setting('menu_admin_links', 'ADMIN_SUBMENU')) {

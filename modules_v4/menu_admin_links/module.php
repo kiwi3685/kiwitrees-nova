@@ -58,7 +58,7 @@ class menu_admin_links_KT_Module extends KT_Module implements KT_Module_Menu, KT
 					return 'main';
 					break;
 				case 'other':
-					return 'main';
+					return 'other';
 					break;
 			}
 		}

@@ -114,7 +114,7 @@
 
 				<!-- Mobile top menu bar -->
 				<div class="cell hide-for-large">
-					<?php echo MobileTopBarMenu($menuID = 'MainMenu'); ?>
+					<?php echo MobileTopBarMenu('MainMenu'); ?>
 				</div>
 
 				<!-- Standard top menu bar -->
