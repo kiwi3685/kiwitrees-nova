@@ -442,7 +442,7 @@ echo pageStart('addmedia', $controller->getPageTitle()); ?>
 						<?php echo KT_I18N::translate('Enter a Person, Family, or Source ID'); ?>
 					</label>
 				</div>
-				<div class="cell small-10 medium-7">>
+				<div class="cell small-10 medium-7">
 					<input type="text" data-autocomplete-type="IFS" name="linktoid" id="linktoid" value="">
 					<div class="help_text">
 						<span class="help_content">
