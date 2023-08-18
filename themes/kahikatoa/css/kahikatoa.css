@@ -2251,6 +2251,10 @@ div[id$=-page] button[type=submit] {
 	font-size: 1rem;
 }
 
+#flash-messages {
+	margin: 0.5rem;
+}
+
 .person_box_template {
 	border-bottom: 0.125rem solid #e0e0e0;
 	font-size: 0.875rem;
