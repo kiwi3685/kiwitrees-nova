@@ -61,7 +61,7 @@ class KT_FlashMessages {
 
 		foreach (self::getMessages() as $message) {
 			$html .= '
-				<div class="callout ' . $message->status . '"  data-closable>' .
+				<div class="callout ' . $message->status . ' alert"  data-closable>' .
 					$message->text . '
 					<button class="close-button" aria-label="Dismiss alert" type="button" data-close>
 						<span aria-hidden="true">&times;</span>
