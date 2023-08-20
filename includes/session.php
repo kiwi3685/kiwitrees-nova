@@ -40,7 +40,7 @@ define('KT_STATIC_URL', '');
 
 // js & css libraries
 define('KT_JQUERY_JS',					KT_STATIC_URL . 'library/jquery/jquery.min.js'); // 3.7.0 AUG 2023
-define('KT_FOUNDATION_JS',				KT_STATIC_URL . 'library/foundation/dist/js/foundation.min.js'); // 6.7.5 14-07-22
+define('KT_FOUNDATION_JS',				KT_STATIC_URL . 'library/foundation/dist/js/foundation.min.js'); // 6.8.1 21-08-23
 define('KT_JQUERYUI_JS',				KT_STATIC_URL . 'js/jquery-ui.min.js');	 // 1.13.2 (all options. Also requires some css in individual theme stylesheets)
 define('KT_DATEPICKER_JS',				KT_STATIC_URL . 'library/foundation-datepicker/js/foundation-datepicker.min.js'); // 1.5.6
 
