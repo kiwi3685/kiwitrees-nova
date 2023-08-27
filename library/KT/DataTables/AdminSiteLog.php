@@ -147,4 +147,63 @@
 		return $data;
 
 	}
+
+	/**
+	  *
+	  * @return data array
+	  * Converted to json on display page
+	  */
+	 public static function deleteLog($from, $to, $type, $text, $ip, $user, $gedc) {
+
+		$QUERY = [];
+		$ARGS = [];
+		if ($from) {
+			$QUERY[] = 'log_time>=?';
+			$ARGS [] = $from;
+		}
+		if ($to) {
+			$QUERY[] = 'log_time<TIMESTAMPADD(DAY, 1 , ?)'; // before end of the day
+			$ARGS[] = $to;
+		}
+		if ($type) {
+			$QUERY[] = 'log_type=?';
+			$ARGS[] = $type;
+		}
+		if ($text) {
+			$QUERY[] = "log_message LIKE CONCAT('%', ?, '%')";
+			$ARGS[] = $text;
+		}
+		if ($ip) {
+			$QUERY[] = "ip_address LIKE CONCAT('%', ?, '%')";
+			$ARGS[] = $ip;
+		}
+		if ($user) {
+			$QUERY[] = "user_name LIKE CONCAT('%', ?, '%')";
+			$ARGS[] = $user;
+		}
+		if ($gedc) {
+			$QUERY[] = "gedcom_name LIKE CONCAT('%', ?, '%')";
+			$ARGS[] = $gedc;
+		}
+
+		if ($QUERY) {
+			$WHERE = " WHERE ".implode(' AND ', $QUERY);
+		} else {
+			$WHERE = '';
+		}
+
+		$DELETE = "
+			DELETE `##log`
+			FROM `##log`
+			LEFT JOIN `##user`   USING (user_id)
+			LEFT JOIN `##gedcom` USING (gedcom_id)
+		";
+
+		$delete = KT_DB::prepare($DELETE . $WHERE);
+		$delete->execute($ARGS);
+
+		return $delete->rowCount();
+
+	}
+
  }

@@ -35,7 +35,7 @@ if (KT_USER_CAN_EDIT) {
 
 <script>
 	/**
-	 * Initialise DataTables with standardKTN defaults
+	 * Initialise DataTables with standard KTN defaults
 	 * Individual pages add button, sorting, and column definitions as required
 	 * The following options can also be over-ridden as necessary
 	 */

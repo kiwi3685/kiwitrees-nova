@@ -56,13 +56,11 @@ if (KT_USER_IS_ADMIN) {
 
 switch ($action) {
 	case 'delete':
-		$DELETE =
-			'DELETE `##log` FROM `##log`' .
-			' LEFT JOIN `##user`   USING (user_id)' .   // user may be deleted
-			' LEFT JOIN `##gedcom` USING (gedcom_id)' . // gedcom may be deleted
-			$WHERE;
-		KT_DB::prepare($DELETE)->execute($args);
+		$return =  KT_DataTables_AdminSiteLog::deleteLog($from, $to, $type, $text, $ip, $user, $gedc);
 
+		if ($return > 0) {
+			KT_FlashMessages::addMessage(KT_I18N::translate('The selected entries are deleted'));
+		}
 		break;
 
 	case 'loadrows':
