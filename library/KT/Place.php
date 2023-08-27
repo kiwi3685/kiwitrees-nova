@@ -30,7 +30,7 @@ class KT_Place {
 	const GEDCOM_SEPARATOR = ', ';
 	private $gedcom_place;  // e.g. array("Westminster", "London", "England")
 	private $gedcom_id;     // We may have the same place in different trees
-	private $place_id; 
+	private $place_id;
 
 	public function __construct($gedcom_place, $gedcom_id) {
 		if ($gedcom_place) {
@@ -44,13 +44,19 @@ class KT_Place {
 	}
 
 	public function getPlaceId() {
-		$place_id=0;
+		$place_id = 0;
 		foreach (array_reverse($this->gedcom_place) as $place) {
-			$place_id=
-				KT_DB::prepare("SELECT p_id FROM `##places` WHERE p_parent_id=? AND p_place=? AND p_file=?")
+			$place_id =
+				KT_DB::prepare("
+					SELECT p_id FROM `##places`
+					WHERE p_parent_id=?
+					AND p_place=?
+					AND p_file=?
+				")
 				->execute(array($place_id, $place, $this->gedcom_id))
 				->fetchOne();
 		}
+
 		return $place_id;
 	}
 
@@ -82,7 +88,7 @@ class KT_Place {
 			$url.='&amp;parent%5B%5D=' . rawurlencode((string) $place);
 		}
 		$url .= '&amp;ged=' . rawurlencode(get_gedcom_from_id($this->gedcom_id));
-		$url .= '&amp;action=view';
+//		$url .= '&amp;action=view';
 		return $url;
 	}
 
@@ -91,8 +97,8 @@ class KT_Place {
 	}
 
 	public function getPlaceName() {
-		$place=reset($this->gedcom_place);
-		return $place ? '<span dir="auto">'.htmlspecialchars((string) $place).'</span>' : KT_I18N::translate('unknown');
+		$place = reset($this->gedcom_place);
+		return $place ? '<span>' . htmlspecialchars((string)$place) . '</span>' : KT_I18N::translate('unknown');
 	}
 
 	public function getFullName() {

@@ -24,6 +24,7 @@
 define('KT_SCRIPT_NAME', 'admin_media.php');
 require './includes/session.php';
 require KT_ROOT . 'includes/functions/functions_edit.php';
+require KT_ROOT . 'includes/functions/functions_media.php';
 include KT_THEME_URL . 'templates/adminData.php';
 
 $controller = new KT_Controller_Page();
@@ -201,45 +202,6 @@ function media_object_edit(KT_Media $media) {
 		<a onclick="if (confirm(\'' . $conf . '\')) jQuery.post(\'action.php\',{action:\'delete-media\',xref:\'' . $xref . '\',ged:\'' . $gedcom . '\'},function(){location.reload();})" href="#">' . KT_I18N::Translate('Delete') . '</a>
 		<a href="inverselink.php?mediaid=' . $xref . '&amp;linkto=manage" target="_blank">' . KT_I18N::Translate('Manage links') . '</a>
 	';
-}
-
-function media_object_info(KT_Media $media) {
-	$name   = $media->getFullName();
-	$html   =
-		'<b>' . $name . '</b>' .
-		'<div><i>' . htmlspecialchars((string) $media->getNote()) . '</i></div>' .
-		'<br>';
-
-	$linked = array();
-	foreach ($media->fetchLinkedIndividuals() as $link) {
-		$linked[] = '<a href="' . $link->getHtmlUrl() . '">' . $link->getFullName() .' <i>'.$link->getLifeSpan().'</i>'. '</a>';
-	}
-	foreach ($media->fetchLinkedFamilies() as $link) {
-		$linked[] = '<a href="' . $link->getHtmlUrl() . '">' . $link->getFullName() . '</a>';
-	}
-	foreach ($media->fetchLinkedNotes() as $link) {
-		$linked[] = '<a href="' . $link->getHtmlUrl() . '">' . $link->getFullName() . '</a>';
-	}
-	foreach ($media->fetchLinkedSources() as $link) {
-		$linked[] = '<a href="' . $link->getHtmlUrl() . '">' . $link->getFullName() . '</a>';
-	}
-	foreach ($media->fetchLinkedRepositories() as $link) {
-		$linked[] = '<a href="' . $link->getHtmlUrl() . '">' . $link->getFullName() . '</a>';
-	}
-	foreach ($media->fetchLinkedMedia() as $link) {
-		$linked[] = '<a href="' . $link->getHtmlUrl() . '">' . $link->getFullName() . '</a>';
-	}
-	if ($linked) {
-		$html .= '<ul>';
-		foreach ($linked as $link) {
-			$html .= '<li>' . $link . '</li>';
-		}
-		$html .= '</ul>';
-	} else {
-		$html .= '<div class="error">' . KT_I18N::translate('This media object is not linked to any other record.') . '</div>';
-	}
-
-	return $html;
 }
 
 switch (KT_Filter::get('action')) {

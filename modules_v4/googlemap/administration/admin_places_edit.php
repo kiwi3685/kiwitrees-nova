@@ -30,7 +30,12 @@ require KT_ROOT . 'includes/functions/functions_edit.php';
 
 $action = safe_REQUEST($_REQUEST, 'action');
 if (isset($_REQUEST['placeid'])) $placeid = $_REQUEST['placeid'];
-if (isset($_REQUEST['place_name'])) $place_name = $_REQUEST['place_name'];
+if (isset($_REQUEST['placeid'])) $placeid = $_REQUEST['placeid'];
+if ($placeid) {
+	$place_image = KT_DB::prepare("SELECT pl_image FROM `##placelocation` WHERE pl_id = ?")->execute([$placeid]);
+} else {
+	$place_image = '';
+}
 
 $controller = new KT_Controller_Page();
 $controller
@@ -81,11 +86,12 @@ if ($action == 'updaterecord' && KT_USER_IS_ADMIN) {
 if ($action == 'update') {
 	// --- find the place in the file
 	$row=
-		KT_DB::prepare("SELECT pl_place, pl_lati, pl_long, pl_icon, pl_parent_id, pl_level, pl_zoom FROM `##placelocation` WHERE pl_id=?")
+		KT_DB::prepare("SELECT pl_place, pl_lati, pl_long, pl_icon, pl_parent_id, pl_level, pl_zoom, pl_image FROM `##placelocation` WHERE pl_id=?")
 		->execute(array($placeid))
 		->fetchOneRow();
-	$place_name = $row->pl_place;
-	$place_icon = $row->pl_icon;
+	$place_name  = $row->pl_place;
+	$place_icon  = $row->pl_icon;
+	$place_image = $row->pl_image;
 	$selected_country = explode("/", $place_icon);
 	if (isset($selected_country[1]) && $selected_country[1]!="flags"){
 		$selected_country = $selected_country[1];
@@ -141,16 +147,17 @@ if ($action == 'add') {
 	// --- find the parent place in the file
 	if ($placeid != 0) {
 		if (!isset($place_name)) $place_name  = '';
-		$place_lati = null;
-		$place_long = null;
-		$zoomfactor = 1;
-		$parent_lati = '0.0';
-		$parent_long = '0.0';
-		$place_icon = '';
-		$parent_id=$placeid;
+			$place_lati  = null;
+			$place_long  = null;
+			$zoomfactor  = 1;
+			$parent_lati = '0.0';
+			$parent_long = '0.0';
+			$place_icon  = '';
+			$place_image = '';
+			$parent_id   =$placeid;
 		do {
-			$row=
-				KT_DB::prepare("SELECT pl_lati, pl_long, pl_parent_id, pl_zoom, pl_level FROM `##placelocation` WHERE pl_id=?")
+			$row =
+				KT_DB::prepare("SELECT  pl_lati, pl_long, pl_parent_id, pl_zoom, pl_level FROM `##placelocation` WHERE pl_id=?")
 				->execute(array($parent_id))
 				->fetchOneRow();
 			if ($row->pl_lati !== null && $row->pl_long !== null) {
@@ -166,15 +173,18 @@ if ($action == 'add') {
 		} while ($row->pl_parent_id != 0 && $row->pl_lati === null && $row->pl_long === null);
 	}
 	else {
-		if (!isset($place_name)) $place_name  = '';
-		$place_lati  = null;
-		$place_long  = null;
-		$parent_lati = "0.0";
-		$parent_long = "0.0";
-		$place_icon  = '';
-		$parent_id   = 0;
-		$level = 0;
-		$zoomfactor  = $GOOGLEMAP_MIN_ZOOM;
+		if (!isset($place_name)) {
+			$place_name  = '';
+			$place_lati  = null;
+			$place_long  = null;
+			$parent_lati = "0.0";
+			$parent_long = "0.0";
+			$place_icon  = '';
+			$place_image = '';
+			$parent_id   = 0;
+			$level       = 0;
+			$zoomfactor  = $GOOGLEMAP_MIN_ZOOM;
+		}
 	}
 	$selected_country = 'Countries';
 	$show_marker = false;
@@ -189,7 +199,6 @@ if ($action == 'add') {
 		}
 	}
 	echo '</h3>';
-
 
 	if ($place_name == null || $place_name == "") { ?>
 		<div id="editplaces-page" class="cell">
@@ -207,7 +216,9 @@ if ($action == 'add') {
 
 }
 
-include_once KT_MODULES_DIR . 'googlemap/places_edit.js.php';?>
+include_once KT_MODULES_DIR . 'googlemap/places_edit.js.php';
+require KT_ROOT . 'includes/functions/functions_media.php';
+global $iconStyle; ?>
 
 	<div id="editplaces-page" class="cell">
 		<div class="grid-x">
@@ -446,7 +457,7 @@ include_once KT_MODULES_DIR . 'googlemap/places_edit.js.php';?>
 						<?php echo KT_I18N::translate('This value will be used as the minimal value when displaying this geographic location on a map.'); ?>
 					</div>
 					<div class="cell medium-2">
-						<label for="NEW_ZOOM_FACTOR" class="middle">
+						<label class="middle">
 							<?php echo KT_I18N::translate('Flag'); ?>
 						</label>
 					</div>
@@ -464,6 +475,33 @@ include_once KT_MODULES_DIR . 'googlemap/places_edit.js.php';?>
 					</div>
 					<div class="cell callout medium-10 medium-offset-2 warning helpcontent">
 						<?php echo KT_I18N::translate('When this geographic location is shown, this flag will be displayed.'); ?>
+					</div>
+					<div class="cell medium-2">
+						<label class="middle">
+							<?php echo KT_I18N::translate('Place image'); ?>
+						</label>
+					</div>
+					<div class="cell medium-10">
+						<div class="grid-x" id="imageDiv">
+							<?php if ($place_image == null || $place_image == '') { ?>
+								<div class="cell">
+									<a class="button hollow" href="#" onclick="add_place_image();return false;">
+										<?php echo KT_I18N::translate('Add a place image'); ?>
+									</a>
+								</div>
+							<?php } else { ?>
+								<?php $media = KT_Media::getInstance($place_image); ?>
+								<div class="cell">
+									<?php echo $media->displayImage(); ?>
+								</div>
+								<div class="cell">
+									<?php echo media_object_info($media, false, true, true, [1,2,3], false) ?>
+								</div>
+							<?php } ?>
+						</div>
+						<div class="cell callout warning helpcontent">
+							<?php echo KT_I18N::translate('Place image help text.....'); ?>
+						</div>
 					</div>
 					<button class="button primary" type="submit">
 						<i class="<?php echo $iconStyle; ?> fa-save"></i>

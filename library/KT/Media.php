@@ -530,6 +530,41 @@ class KT_Media extends KT_GedcomRecord
 			'>' . $image . '</a>';
 	}
 
+	public function displayLargeImage()
+	{
+		if ($this->isExternal() || !file_exists($this->getServerFilename('thumb'))) {
+			// Use an icon
+			$mime_type = str_replace('/', '-', $this->mimeType());
+			$image =
+				'<i' .
+				' dir="auto"' . // For the tool-tip
+				' class="icon-mime-' . $mime_type . '"' .
+				' title="' . strip_tags($this->getFullName()) . '"' .
+				'></i>';
+		} else {
+			$imgsize = getimagesize($this->getServerFilename('main'));
+			// Use a thumbnail image
+			$image =
+				'<img' .
+				' dir="auto"' . // For the tool-tip
+				' src="' . $this->getHtmlUrlDirect('main') . '"' .
+				' alt="' . strip_tags($this->getFullName()) . '"' .
+				' title="' . strip_tags($this->getFullName()) . '"' .
+				'>';
+		}
+
+		return
+			'<a' .
+			' class=""' .
+			' href=""' .
+			' type="' . $this->mimeType() . '"' .
+			' data-obje-url="' . $this->getHtmlUrl() . '"' .
+			' data-obje-note="' . htmlspecialchars((string) $this->getNote()) . '"' .
+			' data-title="' . KT_Filter::escapeHtml($this->getFullName()) . '"' .
+			'>' . $image . '</a>';
+	}
+
+
 	// If this object has no name, what do we call it?
 	public function getFallBackName()
 	{

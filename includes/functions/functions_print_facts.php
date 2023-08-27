@@ -332,7 +332,7 @@ function print_fact(KT_Event $fact, KT_GedcomRecord $record)
 
 	// Print the place of this fact/event?>
 				<div class="place">
-					<?php echo format_fact_place($fact, true, true, true); ?>
+					<?php echo format_fact_place($fact, true, true, true, true); ?>
 				</div>
 				<?php echo print_address_structure($fact->getGedcomRecord(), 2); ?>
 
@@ -631,7 +631,7 @@ function print_timeline(KT_Event $fact, KT_GedcomRecord $record)
 			<div class="cell small-12 medium-3 small-order-3 medium-order-3 place">
 				<?php // Print the place of this fact/event -->?>
 				<div class="place">
-					<?php echo format_fact_place($fact, true, true, true); ?>
+					<?php echo format_fact_place($fact, true, true, true, true); ?>
 				</div>
 				<?php echo print_address_structure($fact->getGedcomRecord(), 2); ?>
 			</div>

@@ -24,7 +24,7 @@
 if (!defined('KT_KIWITREES')) {
 	header('HTTP/1.0 403 Forbidden');
 	exit;
-} 
+}
 ?>
 
 <head>
@@ -373,6 +373,16 @@ if (!defined('KT_KIWITREES')) {
 		function remove_icon() {
 			document.editplaces.icon.value = '';
 			document.getElementById('flagsDiv').innerHTML = '<a href="#" onclick="change_icon();return false;"><?php echo KT_I18N::translate('Change flag'); ?></a>';
+		}
+
+		function add_place_image() {
+			window.open('module.php?mod=googlemap&mod_action=admin_place_media&countrySelected=<?php echo $selected_country; ?>', '_blank');
+			return false;
+		}
+
+		function change_image() {
+			window.open('module.php?mod=googlemap&mod_action=admin_place_media&countrySelected=<?php echo $selected_country; ?>', '_blank');
+			return false;
 		}
 
 		function addAddressToMap(response) {

@@ -1206,10 +1206,10 @@ function format_fact_date(KT_Event $event, KT_GedcomRecord $record, $anchor = fa
  *
  * @param Event $event  gedcom fact record
  * @param bool  $anchor option to print a link to placelist
- * @param bool  $sub    option to print place subrecords
+ * @param bool  $sub    option to print place sub records
  * @param bool  $lds    option to print LDS TEMPle and STATus
  */
-function format_fact_place(KT_Event $event, $anchor = false, $sub = false, $lds = false)
+function format_fact_place(KT_Event $event, $anchor = false, $sub = false, $lds = false, $image = false)
 {
 	global $SHOW_PEDIGREE_PLACES, $SHOW_PEDIGREE_PLACES_SUFFIX, $SEARCH_SPIDER;
 
@@ -1286,7 +1286,29 @@ function format_fact_place(KT_Event $event, $anchor = false, $sub = false, $lds 
 		}
 	}
 
-	return $html;
+	if ($image && $event->getPlace()) {
+		if (array_key_exists('googlemap', KT_Module::getActiveModules())) {
+			$gm_place_id = getGmPlaceId($event->getPlace());
+			if ($gm_place_id) {
+				$place_image = KT_DB::prepare('SELECT pl_image FROM `##placelocation` WHERE pl_id = ?')->execute([$gm_place_id])->fetchOne();
+			} else {
+				$place_image = '';
+			}
+			$media = KT_Media::getInstance($place_image);
+			if ($media) {
+				$html .= '
+					<div class="grid-x" id="imageDiv">
+						<div class="cell">' .
+							$media->displayImage() . '
+						</div>
+					</div>';
+			} else {
+				$html .= '';
+			}
+		}
+
+		return $html;
+	}
 }
 
 /**

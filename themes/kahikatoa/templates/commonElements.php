@@ -240,7 +240,7 @@ function googlemap_links($parent = [], $coords = '', $gedcom = KT_GED_ID, $updat
 	global $iconStyle;
 
 	$preferences_url   = 'module.php?mod=googlemap&amp;mod_action=admin_preferences';
-	$placecheck_url    = 'module.php?mod=googlemap&amp;mod_action=admin_placecheck&amp;gedcom_id=1&amp;matching=1';
+	$placecheck_url    = 'module.php?mod=googlemap&amp;mod_action=admin_placecheck&amp;gedcom_id=' . $gedcom . '&amp;matching=1';
 	$adminplaces_url   = 'module.php?mod=googlemap&amp;mod_action=admin_places&amp;parent=' . $coords . '&status=all';
 	$update_places_url = 'admin_trees_places.php?ged=' . $gedcom;
 
@@ -264,21 +264,54 @@ function googlemap_links($parent = [], $coords = '', $gedcom = KT_GED_ID, $updat
 
 	$html .= '
 				<div class="cell' . $class1 . '">
-					<a href="' . $preferences_url . '">
-						<i class="' . $iconStyle . ' fa-globe"></i>
-						' . KT_I18N::translate('Google Maps™ preferences') . '
+					<a
+						href="' . $preferences_url . '"
+					>
+						<span
+							class="hide-for-medium"
+							title="' . KT_I18N::translate('Google Maps™ preferences') . '"
+							data-tooltip
+							aria-haspopup="true"
+							data-click-open="false"
+							data-disable-hover="false"
+						>
+							<i class="' . $iconStyle . ' fa-globe"></i>
+						</span>
+						<span class="show-for-medium">' . KT_I18N::translate('Google Maps™ preferences') . '</span>
 					</a>
 				</div>
 				<div class="cell' . $class2 . '">
-					<a href="' . $adminplaces_url . '">
-						<i class="' . $iconStyle . ' fa-map-pin"></i>
-						' . KT_I18N::translate('Geographic data') . '
+					<a
+						href="' . $adminplaces_url . '"
+					>
+						<span
+							class="hide-for-medium"
+							title="' . KT_I18N::translate('Geographic data') . '"
+							data-tooltip
+							aria-haspopup="true"
+							data-click-open="false"
+							data-disable-hover="false"
+							>
+								<i class="' . $iconStyle . ' fa-map-pin"></i>
+						</span>
+						<span class="show-for-medium">' . KT_I18N::translate('Geographic data') . '</span>
 					</a>
 				</div>
 				<div class="cell' . $class3 . '">
-					<a href="' . $placecheck_url . '">
-						<i class="' . $iconStyle . ' fa-location-crosshairs"></i>
-						' . KT_I18N::translate('Place Check') . '
+					<a
+						href="' . $placecheck_url . '"
+					>
+						<span
+							class="hide-for-medium"
+							title="' . KT_I18N::translate('Place Check') . '"
+							data-tooltip
+							aria-haspopup="true"
+							data-click-open="false"
+							data-disable-hover="false"
+						>
+							<i class="' . $iconStyle . ' fa-location-crosshairs"></i>
+						</span>
+						<span class="show-for-medium">' . KT_I18N::translate('Place Check') . '</span>
 					</a>
 				</div>
 			';
@@ -286,9 +319,20 @@ function googlemap_links($parent = [], $coords = '', $gedcom = KT_GED_ID, $updat
 	if ($update) {
 		$html .= '
 					<div class="cell' . $class4 . '">
-						<a href="' . $update_places_url . '">
-							<i class="' . $iconStyle . ' fa-pen-to-square"></i>
-							' . KT_I18N::translate('Update place names') . '
+						<a
+							href="' . $update_places_url . ' "
+						>
+							<span
+								class="hide-for-medium"
+								title="' . KT_I18N::translate('Update place names') . '"
+								data-tooltip
+								aria-haspopup="true"
+								data-click-open="false"
+								data-disable-hover="false"
+							>
+								<i class="' . $iconStyle . ' fa-pen-to-square"></i>
+							</span>
+							<span class="show-for-medium">' . KT_I18N::translate('Update place names') . '</span>
 						</a>
 					</div>
 				';

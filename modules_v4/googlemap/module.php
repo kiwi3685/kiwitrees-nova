@@ -82,6 +82,8 @@ class googlemap_KT_Module extends KT_Module implements KT_Module_Config, KT_Modu
 				require KT_ROOT . KT_MODULES_DIR . 'googlemap/defaultconfig.php';
 				require KT_ROOT . KT_MODULES_DIR . $this->getName() . '/administration/' . $mod_action . '.php';
 				break;
+			case 'admin_place_media':
+				require KT_ROOT . KT_MODULES_DIR . $this->getName() . '/administration/' . $mod_action . '.php';
 			default:
 				header('HTTP/1.0 404 Not Found');
 				break;
@@ -147,7 +149,7 @@ class googlemap_KT_Module extends KT_Module implements KT_Module_Config, KT_Modu
 	public function getTabContent() {
 		global $controller, $iconStyle;
 
-		ob_start();	 ?>	
+		ob_start();	 ?>
 		<div class="grid-x grid-padding-y" id="<?php echo $this->getName(); ?>_content">
 			<?php if ($this->checkMapData()) {
 				require_once KT_ROOT . KT_MODULES_DIR . 'googlemap/googlemap.php';

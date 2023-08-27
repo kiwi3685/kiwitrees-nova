@@ -1463,6 +1463,9 @@ div[id$=-page] button[type=submit] {
 #indi-page .tabs-panel#tabi_notes .indiFactHeader .edit {
 	padding: 0;
 }
+#indi-page .tabs-panel#tabi_events .indiFactHeader label, #indi-page .tabs-panel#tabi_attributes .indiFactHeader label, #indi-page .tabs-panel#tabi_notes .indiFactHeader label {
+	padding: 0 0.75rem;
+}
 #indi-page .tabs-panel#tabi_events .indiFact div.overflow-y, #indi-page .tabs-panel#tabi_attributes .indiFact div.overflow-y, #indi-page .tabs-panel#tabi_notes .indiFact div.overflow-y {
 	overflow-y: auto;
 }
@@ -1992,6 +1995,9 @@ div[id$=-page] button[type=submit] {
 	margin: 0 0.5rem;
 }
 
+#placelist-page #place_tabs {
+	margin-bottom: 1rem;
+}
 #placelist-page #place-list div.places {
 	background-color: #faf5e8;
 	border: 0.125rem solid #ab3334;
@@ -2002,11 +2008,6 @@ div[id$=-page] button[type=submit] {
 }
 #placelist-page #place-list li .list_item {
 	font-weight: 400;
-}
-#placelist-page #place_map {
-	height: 600px;
-	margin-bottom: 1rem;
-	width: 100%;
 }
 
 #repo-details-page .indiFact,

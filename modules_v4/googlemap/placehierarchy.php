@@ -46,34 +46,6 @@ function place_id_to_hierarchy($id) {
 	return $arr;
 }
 
-function get_placeid($place) {
-	$par		= explode (",", strip_tags($place));
-	$par		= array_reverse($par);
-	$place_id	= 0;
-	for ($i = 0; $i < count($par); $i ++) {
-		$par[$i] = trim($par[$i]);
-		if (empty($par[$i])) $par[$i] = "unknown";
-		$placelist = create_possible_place_names($par[$i], $i+1);
-		foreach ($placelist as $key => $placename) {
-			$pl_id =
-				KT_DB::prepare("
-					SELECT pl_id
-					FROM `##placelocation`
-					WHERE pl_level=?
-					AND pl_parent_id=?
-					AND pl_place LIKE ?
-					ORDER BY pl_place
-				")
-				->execute(array($i, $place_id, $placename))
-				->fetchOne();
-			if (!empty($pl_id)) break;
-		}
-		if (empty($pl_id)) break;
-		$place_id = $pl_id;
-	}
-	return $place_id;
-}
-
 function get_p_id($place) {
 	$par = explode (",", $place);
 	$par = array_reverse($par);
@@ -133,7 +105,7 @@ function set_levelm($level, $parent) {
 				$fullplace .= "Unknown, ";
 		}
 		$fullplace 	= substr($fullplace, 0, -2);
-		$levelm 	= get_placeid($fullplace);
+		$levelm 	= getGmPlaceId($fullplace);
 	}
 	return $levelm;
 }
@@ -408,7 +380,7 @@ function map_scripts($numfound, $level, $parent, $linklevels, $placelevels, $pla
 					document.getElementById(lastlinkid).className = "person_box:target";
 				}
 			});
-		}' . 
+		}' .
 
 		'jQuery("head").append(\'<link rel="stylesheet" type="text/css" href="' . KT_STATIC_URL . KT_MODULES_DIR . 'googlemap/css/googlemap.min.css" />\');
 		var numMarkers = "' . $numfound . '";

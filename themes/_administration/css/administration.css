@@ -65,6 +65,10 @@ button .svg-inline--fa {
 	margin: 0.9375rem;
 }
 
+div.editLinks {
+	margin: 0.375rem 0;
+}
+
 div.allcontent {
 	height: 98% !important;
 }
@@ -1443,7 +1447,7 @@ main #admin-content #editplaces-page div.input-group {
 	margin-bottom: 0;
 }
 main #admin-content #editplaces-page a.button {
-	margin-top: 0.125rem;
+	margin: 0.125rem 0 0 0;
 	font-weight: 600;
 }
 main #admin-content #editplaces-page a.button#new_pl_name1, main #admin-content #editplaces-page a.button#new_pl_name2 {
@@ -1451,6 +1455,9 @@ main #admin-content #editplaces-page a.button#new_pl_name1, main #admin-content 
 }
 main #admin-content #editplaces-page .precision span {
 	margin: 0 0.75rem;
+}
+main #admin-content #editplaces-page #imageDiv .thumbnail {
+	margin-bottom: 0;
 }
 main #admin-content #changeflags-page .flags_item {
 	float: left;

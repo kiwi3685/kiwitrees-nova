@@ -1306,11 +1306,11 @@ function handle_updates($newged, $levelOverride = "no") {
 			 }
 		 }
 
-		 if (trim($text[$j]) != '') {
+		 if (trim((string) $text[$j]) != '') {
 			 $pass = true;
 		 } else {
 			 //-- for facts with empty values they must have sub records
-			 //-- this section checks if they have subrecords
+			 //-- this section checks if they have sub-records
 			 $k    = $j + 1;
 			 $pass = false;
 			 while ($k < $count && $glevels[$k] > $glevels[$j]) {

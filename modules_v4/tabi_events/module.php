@@ -116,7 +116,7 @@ class tabi_events_KT_Module extends KT_Module implements KT_Module_IndiTab
 				<?php } ?>
 			</div>
 			<div class="cell show-for-medium indiFactHeader">
-				<div class="grid-x">
+				<div class="grid-x grid-padding-x">
 					<div class="cell medium-3 medium-offset-1 event">
 						<label><?php echo KT_I18N::translate('Event'); ?></label>
 					</div>
