@@ -79,7 +79,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', ''); ?>
 				<input type="hidden" name="action" value="update">
 				<div class="grid-x grid-margin-x grid-margin-y">
 					<div class="cell callout info-help">
-						<?php echo KT_I18N::translate('Select your preferred position for the Home page "Contact" link on either of the first two below. Then select any (or all) of the other three locations as you wish.'); ?>
+						<?php echo KT_I18N::translate('Enable your preferred position or positions from the options below. Then select any of the other options to enhance the links where appriopriate.'); ?>
 					</div>
 					<fieldset class="cell medium-4 fieldset">
 						<legend class="h5"><?php echo $title1; ?></legend>
