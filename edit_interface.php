@@ -2784,4 +2784,30 @@ switch ($actionB) {
 
     ////////////////////////////////////////////////////////////////////////////////
 
+	////////////////////////////////////////////////////////////////////////////////
+	case 'addnewnote_assisted':
+		require KT_ROOT . KT_MODULES_DIR . 'census_assistant/census-edit.php';
+		break;
+
+	////////////////////////////////////////////////////////////////////////////////
+	case 'addnoteaction_assisted':
+		require KT_ROOT . KT_MODULES_DIR . 'census_assistant/census-save.php';
+		break;
+
+	////////////////////////////////////////////////////////////////////////////////
+	case 'addmedia_links':
+		?>
+		<form method="post" action="edit_interface.php?pid=<?php echo $pid; ?>" onsubmit="findindi()">
+			<input type="hidden" name="action" value="addmedia_links">
+			<input type="hidden" name="noteid" value="newnote">
+			<?php require KT_ROOT . 'media_links.php'; ?>
+		</form>
+		<?php
+		Zend_Session::writeClose();
+		break;
+
+
+
+
+
 }
