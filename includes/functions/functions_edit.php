@@ -459,7 +459,7 @@ function print_addnewsource_link($element_id)
 }
 
 /**
- * Genearate a <select> element, with the dates/places of all known censuses.
+ * Generate a <select> element, with the dates/places of all known censuses.
  *
  * @param string $locale - Sort the censuses for this locale
  * @param string $xref   - The individual for whom we are adding a census
@@ -470,41 +470,34 @@ function censusDateSelector($locale, $xref)
 
 	// Show more likely census details at the top of the list.
 	switch (KT_LOCALE) {
-		case 'cs':
-			$census_places = [new KT_Census_CensusOfCzechRepublic()];
-
-			break;
-
 		case 'en_AU':
 		case 'en_GB':
 			$census_places = [new KT_Census_CensusOfEngland(), new KT_Census_CensusOfWales(), new KT_Census_CensusOfScotland()];
-
 			break;
 
 		case 'en_US':
 			$census_places = [new KT_Census_CensusOfUnitedStates()];
-
 			break;
 
 		case 'fr':
 		case 'fr_CA':
 			$census_places = [new KT_Census_CensusOfFrance()];
-
 			break;
 
 		case 'da':
 			$census_places = [new KT_Census_CensusOfDenmark()];
-
 			break;
 
 		case 'de':
 			$census_places = [new KT_Census_CensusOfDeutschland()];
+			break;
 
+		case 'cs':
+			$census_places = [new KT_Census_CensusOfCzechRepublic()];
 			break;
 
 		default:
 			$census_places = [];
-
 			break;
 	}
 
@@ -515,30 +508,29 @@ function censusDateSelector($locale, $xref)
 	}
 
 	$controller->addInlineJavascript('
-			function selectCensus(el) {
-				var option = jQuery(":selected", el);
-				jQuery("div.input input.DATE").val(option.val());
-				jQuery("div.input input.PLAC").val(option.data("place"));
-				jQuery("input.census-class", jQuery(el).closest("div.input")).val(option.data("census"));
-				if (option.data("place")) {
-					jQuery("#assistant-link").show();
-				} else {
-					jQuery("#assistant-link").hide();
-				}
+		function selectCensus(el) {
+			var option = jQuery(":selected", el);
+			jQuery("div.input input.DATE").val(option.val());
+			jQuery("div.input input.PLAC").val(option.data("place"));
+			jQuery("input.census-class", jQuery(el).closest("div.input")).val(option.data("census"));
+			if (option.data("place")) {
+				jQuery("#assistant-link").show();
+			} else {
+				jQuery("#assistant-link").hide();
 			}
-			function set_pid_array(pa) {
-				jQuery("#pid_array").val(pa);
-			}
-			function activateCensusAssistant() {
-				if (jQuery("#newshared_note_img").hasClass("icon-plus")) {
-					expand_layer("newshared_note");
-				}
-				var field  = jQuery("#newshared_note input.NOTE")[0];
-				var xref   = jQuery("input[name=pid]").val();
-				var census = jQuery(".census-assistant-selector :selected").data("census");
-				return addnewnote_assisted(field, xref, census);
-			}
-		');
+		}
+		function set_pid_array(pa) {
+			jQuery("#pid_array").val(pa);
+		}
+		function activateCensusAssistant() {
+			jQuery(".accordion .accordion-item:not(.is-active)  [data-external-trigger]").trigger("click");
+
+			var field  = jQuery("#newshared_note input.SHARED_NOTE")[0];
+			var xref   = jQuery("input[name=pid]").val();
+			var census = jQuery(".census-assistant-selector :selected").data("census");
+			return addnewnote_assisted(field, xref, census);
+		}
+	');
 
 	$options = '<option value="">' . KT_I18N::translate('Select a census country and date') . '</option>';
 
@@ -647,4 +639,28 @@ function full_rmdir($dir)
 	rmdir($dir);
 
 	return true;
+}
+
+/**
+ * Input field placeholder texts
+ *
+ * @param string $fact
+ * @param string $value
+ *
+**/
+function placeholder($fact)
+{
+	switch ($fact) {
+		case 'AGE':
+			return /* Placeholder text for age used with input fields */ KT_I18N::translate('placeholder="33y 5m 2d"');
+			break;
+		case 'DATE':
+			return /* Placeholder text for age used with input fields */ KT_I18N::translate('placeholder="13 FEB 1847"');
+			break;
+		case 'TIME':
+			return /* Placeholder text for time used with input fields */ KT_I18N::translate('placeholder="15:45"');
+			break;
+		default:
+			return '';
+	}
 }
