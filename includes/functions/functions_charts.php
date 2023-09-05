@@ -681,6 +681,7 @@ function print_parents($famid, $personcount = 1) {
 		return;
 	} else {
 		$husb = $family->getHusband();
+		$wife = $family->getWife();
 	}
 	if (is_null($husb)) {
 		$husb = new KT_Person('');

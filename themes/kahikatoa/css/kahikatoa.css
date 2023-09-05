@@ -1136,7 +1136,14 @@ div[id$=-page] button[type=submit] {
 	font-size: 1.25rem;
 }
 #edit_interface-page select.census-assistant-selector {
-	margin-top: 1rem;
+	margin: 0.9375rem 0;
+}
+#edit_interface-page textarea[id^=CENS_ADDR] {
+	margin-bottom: 0.9375rem;
+	width: 79%;
+}
+#edit_interface-page div.census_assistant_link_container {
+	margin-bottom: 0.9375rem;
 }
 
 #family-page ul#famTabs {
@@ -1182,6 +1189,9 @@ div[id$=-page] button[type=submit] {
 #family-page .famFact {
 	border-bottom: 0.0125rem solid #ab3334;
 }
+#family-page div[class$=_template] button .svg-inline--fa {
+	color: #ab3334;
+}
 #family-page .compact_box_template {
 	width: auto;
 }
@@ -1198,6 +1208,9 @@ div[id$=-page] button[type=submit] {
 #family-page #parents small {
 	font-size: 90%;
 }
+#family-page button .svg-inline--fa {
+	color: #ab3334;
+}
 #family-page #family_lines div {
 	border: 0.125rem solid #8a8a8a;
 	border-top: 0;
@@ -1208,6 +1221,9 @@ div[id$=-page] button[type=submit] {
 }
 #family-page #children {
 	margin-top: 3rem;
+}
+#family-page #children button .svg-inline--fa {
+	color: #ab3334;
 }
 #family-page #children .compact_box_template {
 	min-width: 10rem;
