@@ -179,7 +179,9 @@ function add_simple_tag($tag, $upperlevel = '', $label = '', $extra = null, $row
         (in_array($fact, ['ADDR']) && $upperlevel === 'PLAC')
     ) {
         $labelIndent = ' style="text-indent: 3rem;"';
-    } ?>
+    } else {
+		$labelIndent = '';
+	} ?>
 
      <?php // Layout ?>
     <div id="<?php echo $element_id; ?>_factdiv" class="cell <?php echo $class; ?>" <?php echo $style; ?>>
@@ -332,7 +334,6 @@ function currentValue($fact, $islink, $value, $upperlevel, $element_id)
             echo KT_I18N::translate('(Displayed as: %s)', $date->Display());
         }
 
-/*
         if ((in_array($fact, $currentValue) || ($fact == 'NOTE' && $islink)) && $value) {
             $record = KT_GedcomRecord::getInstance($value);
             if ($record) {
@@ -344,9 +345,8 @@ function currentValue($fact, $islink, $value, $upperlevel, $element_id)
         // pastable values
         if ($fact === 'FORM' && $upperlevel === 'OBJE') {
             print_autopaste_link($element_id, $FILE_FORM_accept);
-        }
-*/
- ?>
+        } ?>
+
     </div>
     <?php
 
@@ -476,17 +476,16 @@ function createInput($fact, $emptyfacts, $value, $element_id, $element_name, $so
                 if ($value) {
                     echo ' checked';
                 }
-                echo ' onclick="if (this.checked) ' . $element_id . '.value="Y"; else ' . $element_id . '.value=""';
-            echo '">'; ?>
+                echo ' onclick="if (this.checked) ' . $element_id . '.value=\'Y\'; else ' . $element_id . '.value=\'\'"
+			>'; ?>
             <span class="yes"><?php echo KT_I18N::translate('This event occurred, but the details are unknown.'); ?></span>
         <?php }
 
         if ($fact === 'CENS' && $value === 'Y') {
             if (array_key_exists('census_assistant', KT_Module::getActiveModules()) && KT_GedcomRecord::getInstance($pid) instanceof KT_Person) {
                 echo censusDateSelector(KT_LOCALE, $pid); ?>
-                <br>
-                <div class="cell medium-11 auto">
-                    <a href="#" style="display: none;" id="assistant-link" onclick="return activateCensusAssistant();">
+                <div class="cell medium-11 auto census_assistant_link_container">
+                    <a href="#" style="display: none;" id="assistant-link" onclick="return activateCensusAssistant();" >
                         <?php echo KT_I18N::translate('Create a shared note using the census assistant'); ?>
                     </a>
                 </div>
@@ -639,6 +638,7 @@ function dateSelection($element_id, $element_name, $value)
         value="<?php echo htmlspecialchars((string) $value); ?>"
         onblur="valid_date(this);"
         onmouseout="valid_date(this);"
+		<?php echo placeholder('DATE'); ?>
     >
     <?php // Holder for calendar ?>
     <div id="caldiv<?php echo $element_id; ?>" style="visibility: hidden;"></div>
@@ -882,26 +882,4 @@ function otherInputs($fact, $level, $element_id, $upperlevel, $tags, $pid, $elem
         ';
     }
 
-}
-
-
-
-/**
- * Input field placeholder texts
- *
- * @param string $fact
- * @param string $value
- *
-**/
-function placeholder($fact)
-{
-
-    switch ($fact) {
-        case 'AGE':
-            return 'placeholder="33y 5m 2d"';
-            break;
-        case 'TIME':
-            return 'placeholder="15:45"';
-            break;
-    }
 }

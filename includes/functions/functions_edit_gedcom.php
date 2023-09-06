@@ -772,7 +772,9 @@ function print_indi_form($nextaction, $famid, $linenum = '', $namerec = '', $fam
 					}
 				} ?>
 			</div>
-		<?php } ?>
+		<?php }
+
+		$GLOBALS['BDM'] = $bdm; // set variable for use elsewhere ?>
 
 		<div id="additional_facts" class="grid-x">
 			<ul class="cell accordion" data-accordion data-multi-expand="true" data-allow-all-closed="true">
@@ -986,6 +988,7 @@ function print_indi_form($nextaction, $famid, $linenum = '', $namerec = '', $fam
 			});
 		}
 	');
+
 }
 
 /**
@@ -996,8 +999,8 @@ function print_indi_form($nextaction, $famid, $linenum = '', $namerec = '', $fam
  */
 function print_add_layer($tag, $level = 2)
 {
-	global $MEDIA_DIRECTORY, $TEXT_DIRECTION;
-	global $gedrec, $FULL_SOURCES, $islink, $bdm, $iconStyle;
+	global $BDM, $MEDIA_DIRECTORY, $TEXT_DIRECTION;
+	global $gedrec, $FULL_SOURCES, $islink, $iconStyle;
 
 	if ('OBJE' == $tag && get_gedcom_setting(KT_GED_ID, 'MEDIA_UPLOAD') < KT_USER_ACCESS_LEVEL) {
 		return;
@@ -1021,7 +1024,7 @@ function print_add_layer($tag, $level = 2)
 								</label>
 							</div>
 							<div class="cell small-10 medium-7">
-								 <?php echo sourceLinks($bdm); ?>
+								 <?php echo sourceLinks($BDM); ?>
 							</div>
 						</div>
 						<?php // 3 PAGE
@@ -1099,7 +1102,7 @@ function print_add_layer($tag, $level = 2)
 	if ('SHARED_NOTE' == $tag) { ?>
 		<?php $text = ''; ?>
 		<li class="accordion-item" data-accordion-item>
-			<a href="#" class="accordion-title"><?php echo KT_I18N::translate('Add shared note'); ?></a>
+			<a href="#" class="accordion-title" data-external-trigger><?php echo KT_I18N::translate('Add shared note'); ?></a>
 			<div id="newshared_note" class="accordion-content" data-tab-content>
 				<div class="grid-x">
 					<div class="cell">
@@ -1481,6 +1484,7 @@ function create_add_form($fact)
 		add_simple_tag('1 MARR');
 		insert_missing_subtags($fact);
 	} else {
+		//  else handle all other facts
 		$tags[0] = $fact;
 		if ('_UID' == $fact) {
 			$fact .= ' ' . uuid();
