@@ -234,7 +234,7 @@ echo pageStart($this->getName(), $controller->getPageTitle(), '', '', ''); ?>
 					</span>
 				</button>
 			</h6>
-			<img src="<?php echo KT_THEME_DIR; ?>images/module-categories/Contact_locations_<?php echo $x; ?>.png" alt="<?php echo $title . $x; ?>">
+			<img src="<?php echo KT_THEME_DIR; ?>images/module-categories/Contact_locations_<?php echo $x; ?>.png" alt="<?php echo ${'title' . $x}; ?>">
 		</div>
 	<?php } ?>
 
