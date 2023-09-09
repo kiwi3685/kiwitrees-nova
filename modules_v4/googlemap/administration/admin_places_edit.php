@@ -92,7 +92,7 @@ if ($action == 'update') {
 	$place_name  = $row->pl_place;
 	$place_icon  = $row->pl_icon;
 	$place_image = $row->pl_image;
-	$selected_country = explode("/", $place_icon);
+	$selected_country = explode("/", (string)$place_icon);
 	if (isset($selected_country[1]) && $selected_country[1]!="flags"){
 		$selected_country = $selected_country[1];
 	} else {
