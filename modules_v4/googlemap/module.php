@@ -85,7 +85,6 @@ class googlemap_KT_Module extends KT_Module implements KT_Module_Config, KT_Modu
 			case 'admin_place_media':
 				require KT_ROOT . KT_MODULES_DIR . $this->getName() . '/administration/' . $mod_action . '.php';
 			default:
-				header('HTTP/1.0 404 Not Found');
 				break;
 		}
 	}
