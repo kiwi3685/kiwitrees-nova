@@ -42,9 +42,10 @@ class KT_Gedcom_Tag {
   		'DSCR', 'EDUC', 'EMIG', 'ENDL', 'ENGA', 'EVEN', 'FCOM', 'GRAD', 'IMMI',
   		'MARB', 'MARC', 'MARL', 'MARR', 'MARR:DATE', 'MARR:PLAC', 'MARS', 'NATU', 'OCCU', 'ORDN', 'PROB',
   		'PROP', 'RELI', 'RESI', 'RETI', 'SLGC', 'SLGS', 'TITL', 'WILL', '_TODO',
+		'_MILI', '_MILT',
 		'_BIRT_GCHI', '_MARR_GCHI', '_DEAT_GCHI', '_BIRT_CHIL', '_MARR_CHIL', '_DEAT_CHIL',
 		'_BIRT_SIBL', '_MARR_SIBL', '_DEAT_SIBL', '_DEAT_SPOU', '_MARR_PARE', '_DEAT_PARE',
-		'_DEAT_GPAR',
+		'_DEAT_GPAR'
 
 	);
 
@@ -90,7 +91,7 @@ class KT_Gedcom_Tag {
 		'_LOC', '_MARB_CHIL', '_MARB_FAMC', '_MARB_GCHI', '_MARB_GCH1', '_MARB_GCH2',
 		'_MARB_HSIB', '_MARB_PARE', '_MARB_SIBL', '_MARI', '_MARNM', '_PRIM', '_MARNM_SURN',
 		'_MARR_CHIL', '_MARR_FAMC', '_MARR_GCHI', '_MARR_GCH1', '_MARR_GCH2', '_MARR_HSIB',
-		'_MARR_PARE', '_MARR_SIBL', '_MBON', '_MDCL', '_MEDC', '_MEND', '_MILI', '_MILT',
+		'_MARR_PARE', '_MARR_SIBL', '_MBON', '_MDCL', '_MEDC', '_MEND',
 		'_MREL', '_MSTAT', '_NAME', '_NAMS', '_NLIV', '_NMAR', '_NMR', '_KT_USER', '_PRMN',
 		'_SCBK', '_SEPR', '_SSHOW', '_STAT', '_SUBQ', '_TYPE', '_URL', '_WEIG', '_WITN',
 		'_YART', '__BRTM_CHIL', '__BRTM_GCHI', '__BRTM_GCH1', '__BRTM_GCH2', '__BRTM_HSIB',
