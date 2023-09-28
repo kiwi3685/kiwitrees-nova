@@ -263,7 +263,8 @@ $controller
 echo relatedPages($trees, KT_SCRIPT_NAME);
 
 // Start settings form
-echo pageStart('sanity_check', $controller->getPageTitle(), 'y', KT_I18N::translate('%s checks to help you monitor the quality of your family history data', count($checks)), 'general-topics/sanity-check/'); ?>
+echo pageStart('sanity_check', $controller->getPageTitle(), 'y', KT_I18N::translate('%s checks to help you monitor the quality of your family history data', count($checks)), 'kb/user-guide/sanity-checker/'); ?>
+
 	<div class="cell callout warning help-content">
 		<?php echo KT_I18N::translate('
 			Options marked <i class="' . $iconStyle . ' fa-triangle-exclamation alert"></i>
