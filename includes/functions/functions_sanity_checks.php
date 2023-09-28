@@ -38,12 +38,12 @@ function birth_comparisons($gedID, $tag_array, $tag2 = '') {
 	$tag_count	= count($tag_array);
 	$start		= microtime(true);
 	$sql		= "
-					SELECT i_id AS xref
-					FROM `##individuals`
-					WHERE `i_file` = ?
-					AND `i_gedcom` LIKE CONCAT('%1 ', ?, '%')
-					AND `i_gedcom` NOT LIKE CONCAT('%1 ', ?, ' Y%')
-				  ";
+		SELECT i_id AS xref
+		FROM `##individuals`
+		WHERE `i_file` = ?
+		AND `i_gedcom` LIKE CONCAT('%1 ', ?, '%')
+		AND `i_gedcom` NOT LIKE CONCAT('%1 ', ?, ' Y%')
+	";
 
 	for ($i = 0; $i < $tag_count; $i ++) {
 		$rows = KT_DB::prepare($sql)->execute(array($gedID, $tag_array[$i], $tag_array[$i]))->fetchAll();

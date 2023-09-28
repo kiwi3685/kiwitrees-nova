@@ -37,11 +37,11 @@ function send404AndExit()
 {
 	$error = KT_I18N::translate('The media file was not found in this family tree.');
 
-	$width = mb_strlen($error) * 6.5 + 50;
+	$width  = mb_strlen($error) * 6.5 + 50;
 	$height = 60;
-	$im = imagecreatetruecolor($width, $height);  // Create a black image
-	$bgc = imagecolorallocate($im, 255, 255, 255); // set background color
-	imagefilledrectangle($im, 2, 2, $width - 4, $height - 4, $bgc); // create a rectangle, leaving 2 px border
+	$im  = imagecreatetruecolor($width, $height);  /* Create a black image */
+	$bgc = imagecolorallocate($im, 255, 255, 255); /* set background color */
+	imagefilledrectangle($im, 2, 2, $width-4, $height-4, $bgc); /* create a rectangle, leaving 2 px border */
 
 	embedText($im, $error, 100, '255, 0, 0', KT_FONT_DEJAVU_SANS_TTF, 'top', 'left');
 
@@ -55,7 +55,7 @@ function send404AndExit()
 /**
  * The media firewall passes in an image
  * this function can manipulate the image however it wants
- * before returning it back to the media firewall.
+ * before returning it back to the media firewall
  *
  * @param resource $im
  * @param Tree     KT_GED_ID
@@ -423,12 +423,13 @@ if ($generatewatermark) {
 		imagedestroy($im);
 
 		return;
-	}
+	} else {
 		// this image is defective.  log it
 		AddToLog('Media Firewall error: >' . KT_I18N::translate('This media file is broken and cannot be watermarked.') . '< in file >' . $serverFilename . '< memory used: ' . memory_get_usage(), 'media');
 
 		// set usewatermark to false so image will simply be passed through below
 		$usewatermark = false;
+	}
 }
 
 // pass the image through without manipulating it

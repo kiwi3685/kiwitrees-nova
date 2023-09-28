@@ -2026,6 +2026,13 @@ div[id$=-page] button[type=submit] {
 	font-weight: 400;
 }
 
+#family_tree-page #container {
+	background: url("/modules_v4/report_decorative_tree/images/tree.svg") no-repeat center center;
+	border: 1px solid #ab3334;
+	height: 50rem;
+	width: 100%;
+}
+
 #repo-details-page .indiFact,
 #source-details-page .indiFact {
 	border-bottom: 0.0125rem solid #ab3334;
