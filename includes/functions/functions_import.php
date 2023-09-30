@@ -1049,7 +1049,6 @@ function update_record($gedrec, $ged_id, $delete) {
 		->fetchOneColumn();
 
 	KT_DB::prepare("DELETE FROM `##placelinks` WHERE pl_gid=? AND pl_file=?")->execute(array($gid, $ged_id));
-	KT_DB::prepare("DELETE FROM `##dates`      WHERE d_gid =? AND d_file =?")->execute(array($gid, $ged_id));
 
 	//-- delete any unlinked places
 	foreach ($placeids as $p_id) {
@@ -1062,25 +1061,26 @@ function update_record($gedrec, $ged_id, $delete) {
 		}
 	}
 
-	KT_DB::prepare("DELETE FROM `##name` WHERE n_id=? AND n_file=?")->execute(array($gid, $ged_id));
-	KT_DB::prepare("DELETE FROM `##link` WHERE l_from=? AND l_file=?")->execute(array($gid, $ged_id));
+	KT_DB::prepare("DELETE FROM `##dates` WHERE d_gid =? AND d_file =?")->execute(array($gid, $ged_id));
+	KT_DB::prepare("DELETE FROM `##name`  WHERE n_id=? AND n_file=?")->execute(array($gid, $ged_id));
+	KT_DB::prepare("DELETE FROM `##link`  WHERE l_from=? AND l_file=?")->execute(array($gid, $ged_id));
 
 	switch ($type) {
-	case 'INDI':
-		KT_DB::prepare("DELETE FROM `##individuals` WHERE i_id=? AND i_file=?")->execute(array($gid, $ged_id));
-		break;
-	case 'FAM':
-		KT_DB::prepare("DELETE FROM `##families` WHERE f_id=? AND f_file=?")->execute(array($gid, $ged_id));
-		break;
-	case 'SOUR':
-		KT_DB::prepare("DELETE FROM `##sources` WHERE s_id=? AND s_file=?")->execute(array($gid, $ged_id));
-		break;
-	case 'OBJE':
-		KT_DB::prepare("DELETE FROM `##media` WHERE m_id=? AND m_file=?")->execute(array($gid, $ged_id));
-		break;
-	default:
-		KT_DB::prepare("DELETE FROM `##other` WHERE o_id=? AND o_file=?")->execute(array($gid, $ged_id));
-		break;
+		case 'INDI':
+			KT_DB::prepare("DELETE FROM `##individuals` WHERE i_id=? AND i_file=?")->execute(array($gid, $ged_id));
+			break;
+		case 'FAM':
+			KT_DB::prepare("DELETE FROM `##families` WHERE f_id=? AND f_file=?")->execute(array($gid, $ged_id));
+			break;
+		case 'SOUR':
+			KT_DB::prepare("DELETE FROM `##sources` WHERE s_id=? AND s_file=?")->execute(array($gid, $ged_id));
+			break;
+		case 'OBJE':
+			KT_DB::prepare("DELETE FROM `##media` WHERE m_id=? AND m_file=?")->execute(array($gid, $ged_id));
+			break;
+		default:
+			KT_DB::prepare("DELETE FROM `##other` WHERE o_id=? AND o_file=?")->execute(array($gid, $ged_id));
+			break;
 	}
 
 	if (!$delete) {

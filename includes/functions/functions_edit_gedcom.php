@@ -1286,30 +1286,60 @@ function addNewFact($fact)
 function handle_updates($newged, $levelOverride = "no") {
 	 global $glevels, $islink, $tag, $uploaded_files, $text;
 
+echo '<br>';
+echo '$text = '; print_r($text);
+echo '<br>';
+echo '$glevels = '; print_r($glevels);
+echo 'count($glevels) = ' . count($glevels);
+echo '<br>';
+echo '$glevels[0] = '; print_r($glevels[0]);
+echo '<br>';
+echo '$glevels[11] = '; print_r($glevels[11]);
+echo '<br>';
+
 	 if ($levelOverride == "no" || count($glevels) == 0) {
 		 $levelAdjust = 0;
 	 } else {
 		 $levelAdjust = $levelOverride - $glevels[0];
 	 }
 
+echo '<br>';
+echo '$levelOverride = '; print_r($levelOverride);
+echo '<br>';
+echo '$levelAdjust = '; print_r($levelAdjust);
+echo '<br>';
+
 	 // Assume all arrays are the same size.
-	 $count = count($glevels);
+	 $count = count($glevels) - 1;
+echo 'count($glevels) = ' . count($glevels);
+echo '<br>';
+echo '<br>';
+echo '<br>';
 
 	 for ($j = 0; $j < $count; $j++) {
-		 // Look for empty SOUR reference with non-empty sub-records.
+echo 'GROUP 1' . '<br>';
+echo '<br>';
+echo '$text = ' . $j . ' - ' . $text[$j] . '<br>';
 		 // This can happen when the SOUR entry is deleted but its sub-records
 		 // were incorrectly left intact.
 		 // The sub-records should be deleted.
-		 if ($tag[$j] === "SOUR" && ($text[$j] === "@@" || $text[$j] === '')) {
+		 if ($tag[$j] === "SOUR" && ($text[$j] === "@@" || empty($text[$j]))) {
+echo 'GROUP 1a' . '<br>';
+echo '<br>';
 			 $text[$j] = '';
 			 $k        = $j + 1;
 			 while ($k < $count && $glevels[$k] > $glevels[$j]) {
+echo 'GROUP 1b' . '<br>';
+echo '$glevels[$k] = ' . $glevels[$k];
+echo '<br>';
+echo '$glevels[$j] = ' . $glevels[$j];
+echo '<br>';
 				 $text[$k] = '';
 				 $k++;
 			 }
 		 }
 
-		 if (trim((string) $text[$j]) != '') {
+		 if (empty(trim((string)$text[$j]))) {
 			 $pass = true;
 		 } else {
 			 //-- for facts with empty values they must have sub records
@@ -1317,7 +1347,16 @@ function handle_updates($newged, $levelOverride = "no") {
 			 $k    = $j + 1;
 			 $pass = false;
 			 while ($k < $count && $glevels[$k] > $glevels[$j]) {
-				 if ($text[$k] !== '') {
+echo 'GROUP 2' . '<br>';
+echo '$k = ' . $k;
+echo '<br>';
+echo '$text = ' . $j . ' - ' . $text[$j] . '<br>';
+echo '$glevels[$k] = ' . $glevels[$k];
+echo '<br>';
+echo '$glevels[$j] = ' . $glevels[$j];
+echo '<br>';
+
+				 if (empty($text[$k])) {
 					 if (($tag[$j] !== "OBJE") || ($tag[$k] === "FILE")) {
 						 $pass = true;
 						 break;
@@ -1329,10 +1368,10 @@ function handle_updates($newged, $levelOverride = "no") {
 
 		 //-- if the value is not empty or it has sub lines
 		 //--- then write the line to the gedcom record
-		 //-- we have to let some emtpy text lines pass through... (DEAT, BIRT, etc)
+		 //-- we have to let some empty text lines pass through... (DEAT, BIRT, etc)
 		 if ($pass) {
 			 $newline = (int) $glevels[$j] + $levelAdjust . ' ' . $tag[$j];
-			 if ($text[$j] !== '') {
+			 if (empty($text[$j])) {
 				 if ($islink[$j]) {
 					 $newline .= ' @' . $text[$j] . '@';
 				 } else {
