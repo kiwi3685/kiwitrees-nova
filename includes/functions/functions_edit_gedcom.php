@@ -1286,6 +1286,7 @@ function addNewFact($fact)
 function handle_updates($newged, $levelOverride = "no") {
 	 global $glevels, $islink, $tag, $uploaded_files, $text;
 
+/* DEBUG
 echo '<br>';
 echo '$text = '; print_r($text);
 echo '<br>';
@@ -1296,26 +1297,27 @@ echo '$glevels[0] = '; print_r($glevels[0]);
 echo '<br>';
 echo '$glevels[11] = '; print_r($glevels[11]);
 echo '<br>';
-
+*/
 	 if ($levelOverride == "no" || count($glevels) == 0) {
 		 $levelAdjust = 0;
 	 } else {
 		 $levelAdjust = $levelOverride - $glevels[0];
 	 }
 
+/* DEBUG
 echo '<br>';
 echo '$levelOverride = '; print_r($levelOverride);
 echo '<br>';
 echo '$levelAdjust = '; print_r($levelAdjust);
 echo '<br>';
-
+*/
 	 // Assume all arrays are the same size.
 	 $count = count($glevels) - 1;
-echo 'count($glevels) = ' . count($glevels);
+/* DEBUG
 echo '<br>';
 echo '<br>';
 echo '<br>';
-
+*/
 	 for ($j = 0; $j < $count; $j++) {
 echo 'GROUP 1' . '<br>';
 echo '<br>';
