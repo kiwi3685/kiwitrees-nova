@@ -218,6 +218,7 @@ if ($action == 'add') {
 
 include_once KT_MODULES_DIR . 'googlemap/places_edit.js.php';
 require KT_ROOT . 'includes/functions/functions_media.php';
+require KT_ROOT . 'includes/functions/functions_edit_addsimpletags.php';
 global $iconStyle; ?>
 
 	<div id="editplaces-page" class="cell">
@@ -478,16 +479,30 @@ global $iconStyle; ?>
 					</div>
 					<div class="cell medium-2">
 						<label class="middle">
-							<?php echo KT_I18N::translate('Place image'); ?>
+							<?php echo KT_I18N::translate('Add new or existing place image'); ?>
 						</label>
 					</div>
 					<div class="cell medium-10">
 						<div class="grid-x" id="imageDiv">
 							<?php if ($place_image == null || $place_image == '') { ?>
-								<div class="cell">
-									<a class="button hollow" href="#" onclick="add_place_image();return false;">
-										<?php echo KT_I18N::translate('Add a place image'); ?>
+								<div class="input-group autocomplete_container">
+									<span class="input-group-label addnew">
+									<a href="#" onclick="pastefield=document.getElementById('OBJE1694228369071759'); window.open('addmedia.php?action=showmediaform&amp;type=event', '_blank', ''); return false;" title="">
+										<i class="fa-solid fa-square-plus"></i>
 									</a>
+									</span>
+									<input id="autocompleteInput-OBJE1694228369071759" data-autocomplete-type="OBJE" type="text" value="" class="ui-autocomplete-input" autocomplete="off">
+									<input type="hidden" name="text[]" id="selectedValue-OBJE1694228369071759" value="">
+									<span class="input-group-label">
+										<button id="OBJE1694228369071759" class="clearAutocomplete autocomplete_icon" data-position="top" data-alignment="center">
+											<i class="fa-solid fa-xmark"></i>
+										</button>
+									</span>
+									<span class="input-group-label">
+										<span class="show-for-medium has-tip" data-open="OBJE" title="">
+											<i class="fa-solid fa-question-circle alert"></i>
+										</span>
+									</span>
 								</div>
 							<?php } else { ?>
 								<?php $media = KT_Media::getInstance($place_image); ?>

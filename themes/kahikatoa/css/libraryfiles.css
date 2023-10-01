@@ -531,3 +531,8 @@ input[type=radio]:checked::before {
 #colorbox #cboxContent #cboxClose .svg-inline--fa:hover {
 	color: #3adb76;
 }
+
+[class*=hint--][data-hint]:after {
+	color: #faf5e8;
+	padding: 1rem 1.25rem;
+}

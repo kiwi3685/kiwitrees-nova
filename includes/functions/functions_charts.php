@@ -1035,3 +1035,191 @@ function print_children($famid, $childid = "", $personcount="1") {
 	</div>
 	<?php
 }
+
+/*
+ * display parents on decorative tree module
+*/
+function print_gparents_simplified($famid, $personcount = 1) {
+	global $GEDCOM, $pbwidth, $pbheight;
+	$controller = new KT_Controller_Family();
+	$ged_id		= get_id_from_gedcom($GEDCOM);
+	$family		= KT_Family::getInstance($famid);
+	if (is_null($family)) {
+		return;
+	} else {
+		$husb = $family->getHusband();
+		$wife = $family->getWife();
+	}
+	if (is_null($husb)) {
+		$husb = new KT_Person('');
+	} else {
+		$wife = $family->getWife();
+	}
+	if (is_null($wife))	{
+		$wife = new KT_Person('');
+	}
+	$newrec		= '';
+	$newparents	= '';
+
+	// -- get the new record and parents if in editing show_changes mode
+	if (find_gedcom_record($famid, $ged_id) != find_gedcom_record($famid, $ged_id, KT_USER_CAN_EDIT)) {
+		$newrec		= find_gedcom_record($famid, $ged_id, true);
+		$newparents	= find_parents_in_record($newrec);
+	} ?>
+
+	<div class="grid-x grid-margin-x" id="grandparents">
+		<!-- husband's parents -->
+		<?php
+		$hfams		= $husb->getChildFamilies();
+		$hparents	= false;
+		$upfamid	= "";
+		if ($hfams) {
+			$hparents = false;
+			foreach ($hfams as $hfamily) {
+				$hparents	= find_parents_in_record($hfamily->getGedcomRecord());
+				$upfamid	= $hfamily->getXref();
+				break;
+			} ?>
+			<div class="cell medium-4 medium-offset-2" id="husb_parents">
+				<div class="grid-x grid-margin-x">
+					<?php
+					$husb_father = KT_Person::getInstance($hparents['HUSB']);
+					$husb_mother = KT_Person::getInstance($hparents['WIFE']);
+
+					// husbands's father
+					if ($hparents && !empty($husb_father)) { ?>
+						<div class="cell medium-6 fam_parent">
+							<?php print_pedigree_person(KT_Person::getInstance($hparents['HUSB']), 1, 4, $personcount); ?>
+						</div>
+					<?php } else { ?>
+						<div class="cell medium-6 fam_parent">
+							  <div class="empty_parent M">
+							  </div>
+						</div>
+					<?php }
+					// husband's mother
+					if ($hparents && !empty($husb_mother)) { ?>
+						<div class="cell medium-6 fam_parent">
+							<?php print_pedigree_person($husb_mother, 1, 5, $personcount); ?>
+						</div>
+					<?php } else { ?>
+						<div class="cell medium-6 fam_parent">
+							  <div class="empty_parent F">
+							  </div>
+						</div>
+					<?php } ?>
+				</div>
+			</div>
+		<?php } else { ?>
+			<div class="cell medium-4 medium-offset-2" id="husb_parents">
+				<div class="grid-x grid-margin-x">
+					<div class="cell" style="height:2.625rem;"></div>
+					<div class="cell medium-6 fam_parent">
+						  <div class="empty_parent M">
+						  </div>
+					</div>
+					<div class="cell medium-6 fam_parent">
+						  <div class="empty_parent F">
+						  </div>
+					</div>
+				</div>
+			</div>
+		<?php }
+
+		/* wife's parents */
+		$wfams = $wife->getChildFamilies();
+		$wparents = false;
+		$upfamid = "";
+		if ($wfams) {
+			$wparents = false;
+			foreach ($wfams as $wfamily) {
+				$wparents = find_parents_in_record($wfamily->getGedcomRecord());
+				$upfamid = $wfamily->getXref();
+				break;
+			} ?>
+			<div class="cell medium-4" id="wife_parents">
+				<div class="grid-x grid-margin-x">
+					<?php
+					$wife_father = KT_Person::getInstance($wparents['HUSB']);
+					$wife_mother = KT_Person::getInstance($wparents['WIFE']);
+
+					// wife's father
+					if ($wparents && !empty($wife_father)) { ?>
+						<div class="cell medium-6 fam_parent">
+							<?php print_pedigree_person(KT_Person::getInstance($wparents['HUSB']), 1, 4, $personcount); ?>
+						</div>
+					<?php } else { ?>
+						<div class="cell medium-6 fam_parent">
+							  <div class="empty_parent M">
+							  </div>
+						</div>
+					<?php }
+					// wife's mother
+					if ($wparents && !empty($wife_mother)) { ?>
+						<div class="cell medium-6 fam_parent">
+							<?php print_pedigree_person($wife_mother, 1, 5, $personcount); ?>
+						</div>
+					<?php } else { ?>
+						<div class="cell medium-6 fam_parent">
+							  <div class="empty_parent F">
+							  </div>
+						</div>
+					<?php } ?>
+				</div>
+			</div>
+		<?php } else { ?>
+			<div class="cell medium-4" id="wife_parents">
+				<div class="grid-x grid-margin-x">
+					<div class="cell" style="height:2.625rem;"></div>
+					<div class="cell medium-6 fam_parent">
+						  <div class="empty_parent M">
+						  </div>
+					</div>
+					<div class="cell medium-6 fam_parent">
+						  <div class="empty_parent F">
+						  </div>
+					</div>
+				</div>
+			</div>
+		<?php } ?>
+	</div>
+
+	<!-- parents -->
+	<div class="grid-x" id="parents">
+		<div class="cell medium-4 medium-offset-4">
+			<div class="grid-x grid-margin-x">
+				<!-- husband -->
+				<?php if ($newparents && $husb && ($husb->getXref() != $newparents["HUSB"])) { ?>
+					<div class="cell medium-6 facts_valueblue parent_husb">
+						<?php print_pedigree_person(KT_Person::getInstance($newparents['HUSB']), 1, 2, $personcount); ?>
+					</div>
+				<?php } elseif ($husb->getXref()) { ?>
+					<div class="cell medium-6 parent_husb">
+						<?php print_pedigree_person($husb, 1, 2, $personcount); ?>
+					</div>
+				<?php } else { ?>
+					<div class="cell medium-6 parent_husb">
+						<div class="empty_parent M">
+						</div>
+					</div>
+				<?php } ?>
+				<!-- wife -->
+				<?php if ($newparents && $wife && ($wife->getXref() != $newparents["WIFE"])) { ?>
+					<div class="cell medium-6 facts_valueblue parent_wife">
+						<?php print_pedigree_person(KT_Person::getInstance($newparents['WIFE']), 1, 3, $personcount); ?>
+					</div>
+				<?php } elseif ($wife->getXref()) { ?>
+					<div class="cell medium-6 parent_wife">
+						<?php print_pedigree_person($wife, 1, 3, $personcount); ?>
+					</div>
+				<?php } else { ?>
+					<div class="cell medium-6 parent_wife">
+						<div class="empty_parent F">
+						</div>
+					</div>
+				<?php } ?>
+			</div>
+		</div>
+	</div>
+	<?php
+}

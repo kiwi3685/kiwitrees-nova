@@ -77,6 +77,7 @@ $this
 		<link rel="stylesheet" href="<?php echo KT_THEME_URL; ?>css/administration.min.css">
 		<link rel="stylesheet" href="<?php echo KT_THEME_URL; ?>css/libraryfiles.min.css">
 		<link rel="stylesheet" href="<?php echo KT_THEME_URL; ?>css/responsive.min.css">
+		<link rel="stylesheet" href="<?php echo KT_HINT_CSS; ?>">
 	</head>
 
 	<body id="body">

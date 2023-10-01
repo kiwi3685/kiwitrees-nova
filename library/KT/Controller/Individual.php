@@ -847,9 +847,10 @@ class KT_Controller_Individual extends KT_Controller_GedcomRecord {
 				// Some modules have links to configuration pages
 				if (KT_USER_GEDCOM_ADMIN && method_exists($module, 'getConfigLink') && $module->getConfigLink()) {
 					$configLink = '
-						<a class="config_link ' . $iconStyle . ' fa-cog" href="' . $module->getConfigLink() . '" title="' . KT_I18N::translate('Configure') .'">
-							&nbsp;
+						<a class="config_link hint--top" href="' . $module->getConfigLink() . '" data-hint="' . KT_I18N::translate('Configure') .'">
+							<i class="' . $iconStyle . ' fa-gears"></i>
 						</a>
+						<hr>
 					';
 				}
 
