@@ -249,11 +249,6 @@ class research_links_KT_Module extends KT_Module implements KT_Module_Config, KT
 
 			$globalfacts = $controller->getGlobalFacts();
 			$html = '<ul id="research_status">';
-				if (KT_USER_IS_ADMIN) {
-					$html .= '<a style="float:right;" href="module.php?mod=' . $this->getName() . '&amp;mod_action=admin_config" target="_blank" rel="noopener noreferrer" class="hide-for-print">
-						<i class="' . $iconStyle . ' fa-gears"></i>
-					</a>';
-				}
 				$i = 0;
 				$total_enabled_plugins = 0;
 				$RESEARCH_PLUGINS = unserialize(get_module_setting($this->getName(), 'RESEARCH_PLUGINS'));
