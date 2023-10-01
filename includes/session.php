@@ -81,6 +81,7 @@ define('KT_DATEPICKER_CSS',						KT_STATIC_URL . 'library/foundation-datepicker/
 define('KT_CONFIRM_CSS',						KT_STATIC_URL . 'library/jquery-confirm/dist/jquery-confirm.min.css'); // Ver 3.3.4 from https                       ://craftpip.github.io/jquery-confirm/
 define('KT_ICONPICKER_CSS',						KT_STATIC_URL . 'library/fontawesome-iconpicker/dist/css/fontawesome-iconpicker.min.css'); // ver 3.2.1 from https://github.com/itsjavi/fontawesome-iconpicker
 define('KT_TOM_SELECT_CSS',						KT_STATIC_URL . 'library/tom-select/dist/css/tom-select.min.css'); // tom-select dist files ver.2.2.2 from https  ://www.jsdelivr.com/?query=author%3A%20orchidjs
+define('KT_HINT_CSS',							KT_STATIC_URL . 'library/hint-css/hint.min.css'); // ver 2.7.0 from https://github.com/chinchang/hint.css/releases
 
 // Location of our modules and themes.  These are used as URLs and folder paths.
 define('KT_MODULES_DIR', 'modules_v4/'); // Update setup.php when this changes
