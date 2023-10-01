@@ -646,6 +646,9 @@ button.widget .svg-inline--fa {
 #sidebarAccordion .accordion-content {
 	font-size: 0.9rem;
 }
+#sidebarAccordion .accordion-content a.config_link + hr {
+	margin: 0 0 0.5rem 0;
+}
 #sidebarAccordion .accordion-content #sb_content_sidebar_attributes {
 	padding: 0.9375rem;
 }
@@ -1722,6 +1725,21 @@ div[id$=-page] button[type=submit] {
 }
 #indi-page .tabs-panel #tabi_dna_content .dropdown-pane {
 	width: 70%;
+}
+#indi-page .tabs-panel #tabi_cousins_content button {
+	font-size: 1rem;
+}
+#indi-page .tabs-panel #tabi_cousins_content button .svg-inline--fa {
+	color: #ab3334;
+	font-size: 1rem;
+}
+#indi-page .tabs-panel #tabi_cousins_content fieldset.fieldset {
+	border-radius: 0.65rem;
+	margin: 0 0.75rem 0.5rem 1rem;
+	padding: 0.25rem 0.75rem;
+}
+#indi-page .tabs-panel #tabi_cousins_content .indent {
+	margin: 0 1rem;
 }
 #indi-page .tabs-panel .subHeader {
 	margin-bottom: 0.125rem;

@@ -97,83 +97,83 @@ class tabi_cousins_KT_Module extends KT_Module implements KT_Module_IndiTab {
 				<?php echo KT_I18N::translate('No family available'); ?>
 			</div>
 		<?php } else { ?>
+		<div id="tabi_cousins_content" class="grid-x grid-padding-x grid-padding-y">
 			<div class="cell tabHeader">
 				<div class="grid-x">
 					<div class="cell medium-2">
-						<form name="cousinsForm" id="cousinsForm" method="post" action="">
-							<input type="hidden" name="cousins" value="<?php echo $cousins == 'second' ? 'first' : 'second'; ?>">
-							<button class="button clear" type="submit">
-								<i class="<?php echo $iconStyle; ?> fa-eye"></i>
-								<?php echo $cousins == 'second' ? KT_I18N::translate('Show first cousins') : KT_I18N::translate('Show second cousins'); ?>
-							</button>
-						</form>
-					</div>
+					<form name="cousinsForm" id="cousinsForm" method="post" action="">
+						<input type="hidden" name="cousins" value="<?php echo $cousins == 'second' ? 'first' : 'second'; ?>">
+						<button class="button clear" type="submit">
+							<i class="<?php echo $iconStyle; ?> fa-eye"></i>
+							<?php echo $cousins == 'second' ? KT_I18N::translate('Show first cousins') : KT_I18N::translate('Show second cousins'); ?>
+						</button>
+					</form>
+				</div>
 				</div>
 			</div>
-			<div class="cell">
-				<div class="grid-x">
-					<?php if ($cousins <> 'second') { ?>
-						<?php
-							$firstCousinsF	= $grandparentFamilyHusb ? $this->getFirstCousins($parentFamily, $grandparentFamilyHusb, 'husb') : array('',0,0,'');
-							$list 			= $firstCousinsF[3]; // list of cousins used by next function to assess possible duplicates due to siblings marry siblings links.
-							$firstCousinsM	= $grandparentFamilyWife ? $this->getFirstCousins($parentFamily, $grandparentFamilyWife, 'wife', $list) : array('',0,0);
-							$countCousinsF	= $firstCousinsF[1];
-							$countCousinsM	= $firstCousinsM[1];
-							$totalCousins	= $countCousinsF + $countCousinsM;
-							$duplicatesF	= $firstCousinsF[2];
-							$duplicatesM	= $firstCousinsM[2];
-							$duplicates		= $duplicatesF + $duplicatesM;
-						?>
-						<div class="cell subHeader">
-							<span class="h5">
-								<?php echo KT_I18N::plural('%2$s has %1$d first cousin recorded', '%2$s has %1$d first cousins recorded', $totalCousins, $totalCousins, $fullname); ?>
-							</span>
-							<?php if ($duplicates > 0) { ?>
-								<span class="h6"><?php echo /* I18N: a reference to cousins of siblings married to siblings */ KT_I18N::plural('%1$d is on both sides of the family', '%1$d are on both sides of the family', $duplicates, $duplicates); ?></span>
-							<?php } ?>
-						 </div>
-						<div class="cell medium-6 cousins_f">
-							<span class="h5">
-								<?php echo KT_I18N::translate('Father\'s family (%s)', $countCousinsF); ?>
-							</span>
-							<?php echo $firstCousinsF[0]; ?>
-						</div>
-						<div class="cell medium-6 cousins_m">
-							<span class="h5">
-								<?php echo KT_I18N::translate('Mother\'s family (%s)', $countCousinsM); ?>
-							</span>
-							<?php echo $firstCousinsM[0]; ?>
-						</div>
-					<?php } ?>
+			<div class="grid-x grid-margin-x">
+				<?php if ($cousins <> 'second') { ?>
+					<?php
+						$firstCousinsF	= $grandparentFamilyHusb ? $this->getFirstCousins($parentFamily, $grandparentFamilyHusb, 'husb') : array('',0,0,'');
+						$list 			= $firstCousinsF[3]; // list of cousins used by next function to assess possible duplicates due to siblings marry siblings links.
+						$firstCousinsM	= $grandparentFamilyWife ? $this->getFirstCousins($parentFamily, $grandparentFamilyWife, 'wife', $list) : array('',0,0);
+						$countCousinsF	= $firstCousinsF[1];
+						$countCousinsM	= $firstCousinsM[1];
+						$totalCousins	= $countCousinsF + $countCousinsM;
+						$duplicatesF	= $firstCousinsF[2];
+						$duplicatesM	= $firstCousinsM[2];
+						$duplicates		= $duplicatesF + $duplicatesM;
+					?>
+					<div class="cell subHeader">
+						<span class="h5">
+							<?php echo KT_I18N::plural('%2$s has %1$d first cousin recorded', '%2$s has %1$d first cousins recorded', $totalCousins, $totalCousins, $fullname); ?>
+						</span>
+						<?php if ($duplicates > 0) { ?>
+							<span class="h6"><?php echo /* I18N: a reference to cousins of siblings married to siblings */ KT_I18N::plural('%1$d is on both sides of the family', '%1$d are on both sides of the family', $duplicates, $duplicates); ?></span>
+						<?php } ?>
+				 	</div>
+					<fieldset class="cell fieldset medium-6 cousins_f">
+						<legend class="h5">
+							<?php echo KT_I18N::translate('Father\'s family (%s)', $countCousinsF); ?>
+						</legend>
+						<?php echo $firstCousinsF[0]; ?>
+					</fieldset>
+					<fieldset class="cell fieldset medium-6 cousins_m">
+						<legend class="h5">
+							<?php echo KT_I18N::translate('Mother\'s family (%s)', $countCousinsM); ?>
+						</legend>
+						<?php echo $firstCousinsM[0]; ?>
+					</fieldset>
+				<?php } ?>
 
-					<?php if ($cousins == 'second') { ?>
-						<?php
-							$secondCousinsF = $grandparentFamilyHusb ? $this->getSecondCousins($grandparentFamilyHusb) : array('',0);
-							$secondCousinsM = $grandparentFamilyWife ? $this->getSecondCousins($grandparentFamilyWife) : array('',0);
-							$countCousinsF	= $secondCousinsF[1];
-							$countCousinsM	= $secondCousinsM[1];
-							$totalCousins	= $countCousinsF + $countCousinsM;
-						?>
-						<div class="cell subHeader">
-							<span class="h5">
-								<?php echo KT_I18N::plural('%2$s has %1$d second cousin recorded', '%2$s has %1$d second cousins recorded', $totalCousins, $totalCousins, $fullname); ?>
-							</span>
-						</div>
-						<div class="cell medium-6 cousins_f">
-							<span class="h5">
-								<?php echo KT_I18N::translate('Second cousins on father\'s side (%s)', $countCousinsF); ?>
-							</span>
-							<?php echo $secondCousinsF[0]; ?>
-						</div>
-						<div class="cell medium-6 cousins_m">
-							<span class="h5">
-								<?php echo KT_I18N::translate('Second cousins on mother\'s side (%s)', $countCousinsM); ?>
-							</span>
-							<?php echo $secondCousinsM[0]; ?>
-						</div>
-					<?php } ?>
-				</div>
+				<?php if ($cousins == 'second') { ?>
+					<?php
+						$secondCousinsF = $grandparentFamilyHusb ? $this->getSecondCousins($grandparentFamilyHusb) : array('',0);
+						$secondCousinsM = $grandparentFamilyWife ? $this->getSecondCousins($grandparentFamilyWife) : array('',0);
+						$countCousinsF	= $secondCousinsF[1];
+						$countCousinsM	= $secondCousinsM[1];
+						$totalCousins	= $countCousinsF + $countCousinsM;
+					?>
+					<div class="cell subHeader">
+						<span class="h5">
+							<?php echo KT_I18N::plural('%2$s has %1$d second cousin recorded', '%2$s has %1$d second cousins recorded', $totalCousins, $totalCousins, $fullname); ?>
+						</span>
+					</div>
+					<fieldset class="cell fieldset medium-6 cousins_f">
+						<legend class="h5">
+							<?php echo KT_I18N::translate('Second cousins on father\'s side (%s)', $countCousinsF); ?>
+						</legend>
+						<?php echo $secondCousinsF[0]; ?>
+					</fieldset>
+					<fieldset class="cell fieldset medium-6 cousins_m">
+						<legend class="h5">
+							<?php echo KT_I18N::translate('Second cousins on mother\'s side (%s)', $countCousinsM); ?>
+						</legend>
+						<?php echo $secondCousinsM[0]; ?>
+					</fieldset>
+				<?php } ?>
 			</div>
+		</div>
 		<?php }
 
 		return ob_get_clean();
@@ -233,7 +233,7 @@ class tabi_cousins_KT_Module extends KT_Module implements KT_Module_IndiTab {
 									$i = 1;
 								}
 								$html .= '
-									<div class="person_box' . $isF . '">
+									<div class="person_box' . $isF . ' indent">
 										<span class="cousins_counter">' . $i . '</span>
 										<span class="cousins_name">
 											<a target="_blank" rel="noopener noreferrer" href="' . $child2->getHtmlUrl() . '">' . $child2->getFullName() . '</a>
@@ -292,7 +292,7 @@ class tabi_cousins_KT_Module extends KT_Module implements KT_Module_IndiTab {
 														$i = 1;
 													}
 													$html .= '
-														<div class="person_box' . $isF . '">
+														<div class="person_box' . $isF . ' indent">
 															<span class="cousins_counter">' . $i . '</span>
 															<span class="cousins_name">
 																<a target="_blank" rel="noopener noreferrer" href="' . $child3->getHtmlUrl() . '">' . $child3->getFullName() . '</a>
