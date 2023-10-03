@@ -54,7 +54,7 @@ echo KT_DB::getQueryLog();
 count($active_blocks) ? $ct_footer_blocks = min(count($active_blocks), 5) : $ct_footer_blocks = '1';
 
 // use the footer layout or customised version of it for the currently active theme
-if (file_exists(KT_THEME_URL . 'myfooter_template.php')) {
+if (file_exists(KT_ROOT . KT_THEME_URL . 'myfooter_template.php')) {
 	include KT_THEME_DIR . 'myfooter_template.php';
 } else {
 	include KT_THEME_DIR . 'templates/footer_template.php';
