@@ -1288,7 +1288,8 @@ function format_fact_place(KT_Event $event, $anchor = false, $sub = false, $lds 
 
 	if ($image && $event->getPlace()) {
 		if (array_key_exists('googlemap', KT_Module::getActiveModules())) {
-			$gm_place_id = getGmPlaceId($event->getPlace());
+//			$gm_place_id = KT_Mapping::getGmPlaceId($event->getPlace());
+			$gm_place_id = false;
 			if ($gm_place_id) {
 				$place_image = KT_DB::prepare('SELECT pl_image FROM `##placelocation` WHERE pl_id = ?')->execute([$gm_place_id])->fetchOne();
 			} else {
