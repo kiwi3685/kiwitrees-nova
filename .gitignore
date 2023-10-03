@@ -109,6 +109,8 @@ admin_awesome.php
 /modules_v4/gallery/galleria/themes/miniml
 /modules_v4/gallery/galleria/themes/twelve
 
+/modules_v4/report_decorative_tree
+
 themes/*/scss
 
 # Unregulated folder for media uploads
