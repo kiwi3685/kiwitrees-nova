@@ -142,14 +142,14 @@ class tabf_changes_KT_Module extends KT_Module implements KT_Module_FamTab {
 
 		<div class="cell tabHeader">
 			<div class="grid-x">
-				<div class="cell">
-					<h5><?php echo $this->getTitle(); ?></h5>
+				<div class="cell h5">
+					<?php echo $this->getTitle(); ?>
 				</div>
 			</div>
 		</div>
 
 		<div id="tab_changes_content" class="cell FamFact">
-			<div class="grid-x grid-padding-x">
+			<div class="grid-x">
 				<?php if ($rows && $item->canDisplayDetails()) {
 		            foreach ($rows as $row) {
 		                $a = explode("\n", htmlspecialchars((string) $row->old_gedcom));

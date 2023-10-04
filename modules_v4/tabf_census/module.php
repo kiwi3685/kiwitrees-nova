@@ -80,14 +80,14 @@ class tabf_census_KT_Module extends KT_Module implements KT_Module_FamTab {
 		?>
 		<div class="cell tabHeader">
 			<div class="grid-x">
-				<div class="cell">
-					<h5><?php echo KT_I18N::translate('Family group census summary for %s', $this->getCountry($controller->record->getXref())); ?></h5>
+				<div class="cell h5">
+					<?php echo KT_I18N::translate('Family group census summary for %s', $this->getCountry($controller->record->getXref())); ?>
 				</div>
 			</div>
 		</div>
-		<div class="cell FamFact">
-			<div class="grid-x grid-padding-x">
-				<table>
+
+		<div class="cell medium-10 medium-offset-1 FamFact">
+			<table class="cell">
 					<thead>
 						<tr>
 							<th><?php echo KT_I18N::translate('Family members'); ?></th>
@@ -135,9 +135,10 @@ class tabf_census_KT_Module extends KT_Module implements KT_Module_FamTab {
 						<?php } ?>
 					</tbody>
 				</table>
-				<div class="cell auto h6"><?php echo KT_I18N::translate('Key to summary'); ?></div>
-				<div class="cell auto"><?php echo $correct . KT_I18N::translate('Census entry found'); ?></div>
-				<div class="cell auto"><?php echo $nothing . KT_I18N::translate('No census entry expected'); ?></div>
+			<div class="grid-x grid-padding-x">
+				<label class="cell h6"><?php echo KT_I18N::translate('Key to summary'); ?></label>
+				<div class="cell medium-2"><?php echo $correct . KT_I18N::translate('Census entry found'); ?></div>
+				<div class="cell medium-2"><?php echo $nothing . KT_I18N::translate('No census entry expected'); ?></div>
 				<div class="cell medium-4"><?php echo $unknown . KT_I18N::translate('Birth or death date missing, but census is within expected lifetime'); ?></div>
 				<div class="cell auto"><?php echo $missing . KT_I18N::translate('Census entry missing'); ?></div>
 			</div>

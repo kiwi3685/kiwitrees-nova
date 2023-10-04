@@ -1175,13 +1175,13 @@ div[id$=-page] button[type=submit] {
 }
 #family-page .tabs-panel .tabHeader {
 	border-bottom: 0.0125rem solid #ab3334;
-	font-size: 1rem;
-	padding: 0.5rem;
 }
-#family-page .tabs-panel .tabHeader label,
 #family-page .tabs-panel .tabHeader a {
 	font-weight: normal;
 	color: #ab3334;
+}
+#family-page .tabs-panel .tabHeader .h5 {
+	margin: 0;
 }
 #family-page .tabs-panel table td {
 	border: 0.025rem solid #cacaca;

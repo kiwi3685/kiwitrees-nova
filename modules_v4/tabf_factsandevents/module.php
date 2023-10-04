@@ -75,11 +75,12 @@ class tabf_factsandevents_KT_Module extends KT_Module implements KT_Module_FamTa
 		?>
 		<div class="cell tabHeader">
 			<div class="grid-x">
-				<div class="cell">
-					<h5><?php echo KT_I18N::translate('Family group information'); ?></h5>
+				<div class="cell h5">
+					<?php echo KT_I18N::translate('Family group information'); ?>
 				</div>
 			</div>
 		</div>
+
 		<?php if ($controller->record->canDisplayDetails()) { ?>
 			<?php echo $controller->printFamilyFacts(); ?>
 		<?php } else { ?>
@@ -89,7 +90,7 @@ class tabf_factsandevents_KT_Module extends KT_Module implements KT_Module_FamTa
 		<?php }
 
 		return '
-			<div class="grid-x grid-margin-y">' .
+			<div class="grid-x">' .
 				ob_get_clean() . '
 			</div>
 		';
