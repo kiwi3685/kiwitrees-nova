@@ -1456,6 +1456,7 @@ div[id$=-page] button[type=submit] {
 }
 #indi-page .tabs-panel .tabHeader .svg-inline--fa {
 	font-size: 1.25rem;
+	color: #ab3334;
 }
 #indi-page .tabs-panel .tabHeader button.clear {
 	margin: 0;
@@ -1726,10 +1727,10 @@ div[id$=-page] button[type=submit] {
 #indi-page .tabs-panel #tabi_dna_content .dropdown-pane {
 	width: 70%;
 }
-#indi-page .tabs-panel #tabi_cousins_content button {
+#indi-page .tabs-panel #tabi_cousins_content form#cousinsForm a.button.clear {
 	font-size: 1rem;
 }
-#indi-page .tabs-panel #tabi_cousins_content button .svg-inline--fa {
+#indi-page .tabs-panel #tabi_cousins_content form#cousinsForm a.button.clear .svg-inline--fa {
 	color: #ab3334;
 	font-size: 1rem;
 }

@@ -103,75 +103,77 @@ class tabi_cousins_KT_Module extends KT_Module implements KT_Module_IndiTab {
 					<div class="cell medium-2">
 					<form name="cousinsForm" id="cousinsForm" method="post" action="">
 						<input type="hidden" name="cousins" value="<?php echo $cousins == 'second' ? 'first' : 'second'; ?>">
-						<button class="button clear" type="submit">
+						<a class="button clear" href="#" onclick="document.getElementById('cousinsForm').submit()">
 							<i class="<?php echo $iconStyle; ?> fa-eye"></i>
 							<?php echo $cousins == 'second' ? KT_I18N::translate('Show first cousins') : KT_I18N::translate('Show second cousins'); ?>
-						</button>
+						</a>
 					</form>
 				</div>
 				</div>
 			</div>
-			<div class="grid-x grid-margin-x">
-				<?php if ($cousins <> 'second') { ?>
-					<?php
-						$firstCousinsF	= $grandparentFamilyHusb ? $this->getFirstCousins($parentFamily, $grandparentFamilyHusb, 'husb') : array('',0,0,'');
-						$list 			= $firstCousinsF[3]; // list of cousins used by next function to assess possible duplicates due to siblings marry siblings links.
-						$firstCousinsM	= $grandparentFamilyWife ? $this->getFirstCousins($parentFamily, $grandparentFamilyWife, 'wife', $list) : array('',0,0);
-						$countCousinsF	= $firstCousinsF[1];
-						$countCousinsM	= $firstCousinsM[1];
-						$totalCousins	= $countCousinsF + $countCousinsM;
-						$duplicatesF	= $firstCousinsF[2];
-						$duplicatesM	= $firstCousinsM[2];
-						$duplicates		= $duplicatesF + $duplicatesM;
-					?>
-					<div class="cell subHeader">
-						<span class="h5">
-							<?php echo KT_I18N::plural('%2$s has %1$d first cousin recorded', '%2$s has %1$d first cousins recorded', $totalCousins, $totalCousins, $fullname); ?>
-						</span>
-						<?php if ($duplicates > 0) { ?>
-							<span class="h6"><?php echo /* I18N: a reference to cousins of siblings married to siblings */ KT_I18N::plural('%1$d is on both sides of the family', '%1$d are on both sides of the family', $duplicates, $duplicates); ?></span>
-						<?php } ?>
-				 	</div>
-					<fieldset class="cell fieldset medium-6 cousins_f">
-						<legend class="h5">
-							<?php echo KT_I18N::translate('Father\'s family (%s)', $countCousinsF); ?>
-						</legend>
-						<?php echo $firstCousinsF[0]; ?>
-					</fieldset>
-					<fieldset class="cell fieldset medium-6 cousins_m">
-						<legend class="h5">
-							<?php echo KT_I18N::translate('Mother\'s family (%s)', $countCousinsM); ?>
-						</legend>
-						<?php echo $firstCousinsM[0]; ?>
-					</fieldset>
-				<?php } ?>
+			<div class="cell tabContent">
+				<div class="grid-x grid-margin-x grid-margin-y">
+					<?php if ($cousins <> 'second') { ?>
+						<?php
+							$firstCousinsF	= $grandparentFamilyHusb ? $this->getFirstCousins($parentFamily, $grandparentFamilyHusb, 'husb') : array('',0,0,'');
+							$list 			= $firstCousinsF[3]; // list of cousins used by next function to assess possible duplicates due to siblings marry siblings links.
+							$firstCousinsM	= $grandparentFamilyWife ? $this->getFirstCousins($parentFamily, $grandparentFamilyWife, 'wife', $list) : array('',0,0);
+							$countCousinsF	= $firstCousinsF[1];
+							$countCousinsM	= $firstCousinsM[1];
+							$totalCousins	= $countCousinsF + $countCousinsM;
+							$duplicatesF	= $firstCousinsF[2];
+							$duplicatesM	= $firstCousinsM[2];
+							$duplicates		= $duplicatesF + $duplicatesM;
+						?>
+						<div class="cell subHeader">
+							<span class="h5">
+								<?php echo KT_I18N::plural('%2$s has %1$d first cousin recorded', '%2$s has %1$d first cousins recorded', $totalCousins, $totalCousins, $fullname); ?>
+							</span>
+							<?php if ($duplicates > 0) { ?>
+								<span class="h6"><?php echo /* I18N: a reference to cousins of siblings married to siblings */ KT_I18N::plural('%1$d is on both sides of the family', '%1$d are on both sides of the family', $duplicates, $duplicates); ?></span>
+							<?php } ?>
+						</div>
+						<fieldset class="cell fieldset medium-6 cousins_f">
+							<legend class="h5">
+								<?php echo KT_I18N::translate('Father\'s family (%s)', $countCousinsF); ?>
+							</legend>
+							<?php echo $firstCousinsF[0]; ?>
+						</fieldset>
+						<fieldset class="cell fieldset medium-6 cousins_m">
+							<legend class="h5">
+								<?php echo KT_I18N::translate('Mother\'s family (%s)', $countCousinsM); ?>
+							</legend>
+							<?php echo $firstCousinsM[0]; ?>
+						</fieldset>
+					<?php } ?>
 
-				<?php if ($cousins == 'second') { ?>
-					<?php
-						$secondCousinsF = $grandparentFamilyHusb ? $this->getSecondCousins($grandparentFamilyHusb) : array('',0);
-						$secondCousinsM = $grandparentFamilyWife ? $this->getSecondCousins($grandparentFamilyWife) : array('',0);
-						$countCousinsF	= $secondCousinsF[1];
-						$countCousinsM	= $secondCousinsM[1];
-						$totalCousins	= $countCousinsF + $countCousinsM;
-					?>
-					<div class="cell subHeader">
-						<span class="h5">
-							<?php echo KT_I18N::plural('%2$s has %1$d second cousin recorded', '%2$s has %1$d second cousins recorded', $totalCousins, $totalCousins, $fullname); ?>
-						</span>
-					</div>
-					<fieldset class="cell fieldset medium-6 cousins_f">
-						<legend class="h5">
-							<?php echo KT_I18N::translate('Second cousins on father\'s side (%s)', $countCousinsF); ?>
-						</legend>
-						<?php echo $secondCousinsF[0]; ?>
-					</fieldset>
-					<fieldset class="cell fieldset medium-6 cousins_m">
-						<legend class="h5">
-							<?php echo KT_I18N::translate('Second cousins on mother\'s side (%s)', $countCousinsM); ?>
-						</legend>
-						<?php echo $secondCousinsM[0]; ?>
-					</fieldset>
-				<?php } ?>
+					<?php if ($cousins == 'second') { ?>
+						<?php
+							$secondCousinsF = $grandparentFamilyHusb ? $this->getSecondCousins($grandparentFamilyHusb) : array('',0);
+							$secondCousinsM = $grandparentFamilyWife ? $this->getSecondCousins($grandparentFamilyWife) : array('',0);
+							$countCousinsF	= $secondCousinsF[1];
+							$countCousinsM	= $secondCousinsM[1];
+							$totalCousins	= $countCousinsF + $countCousinsM;
+						?>
+						<div class="cell subHeader">
+							<span class="h5">
+								<?php echo KT_I18N::plural('%2$s has %1$d second cousin recorded', '%2$s has %1$d second cousins recorded', $totalCousins, $totalCousins, $fullname); ?>
+							</span>
+						</div>
+						<fieldset class="cell fieldset medium-6 cousins_f">
+							<legend class="h5">
+								<?php echo KT_I18N::translate('Second cousins on father\'s side (%s)', $countCousinsF); ?>
+							</legend>
+							<?php echo $secondCousinsF[0]; ?>
+						</fieldset>
+						<fieldset class="cell fieldset medium-6 cousins_m">
+							<legend class="h5">
+								<?php echo KT_I18N::translate('Second cousins on mother\'s side (%s)', $countCousinsM); ?>
+							</legend>
+							<?php echo $secondCousinsM[0]; ?>
+						</fieldset>
+					<?php } ?>
+				</div>
 			</div>
 		</div>
 		<?php }
