@@ -147,7 +147,7 @@ class list_sources_KT_Module extends KT_Module implements KT_Module_List {
 			')
 		;
 
-		echo pageStart('source-list', $controller->getPageTitle()); ?>
+		echo pageStart('sourcelist', $controller->getPageTitle()); ?>
 
 			<div class="cell callout info-help">
 				<?php echo KT_I18N::translate('
