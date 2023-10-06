@@ -98,18 +98,19 @@ class list_families_KT_Module extends KT_Module implements KT_Module_List {
 			$falpha = KT_Filter::get('falpha'); // All first names beginning with this letter
 		}
 
-		$show_marnm = get_user_setting(KT_USER_ID, $module_url . '_show_marnm');
+		$databaseRef = 'famlist.php'; // Retained from kiwitrees ver3 for backwards compatibility
+		$show_marnm = get_user_setting(KT_USER_ID, $databaseRef . '_show_marnm');
 		switch (KT_Filter::get('show_marnm', 'no|yes')) {
 			case 'no':
 				$show_marnm = false;
 				if (KT_USER_ID) {
-					set_user_setting(KT_USER_ID, $module_url . '_show_marnm', $show_marnm);
+					set_user_setting(KT_USER_ID, $databaseRef . '_show_marnm', $show_marnm);
 				}
 				break;
 			case 'yes':
 				$show_marnm = true;
 				if (KT_USER_ID) {
-					set_user_setting(KT_USER_ID, $module_url . '_show_marnm', $show_marnm);
+					set_user_setting(KT_USER_ID, $databaseRef . '_show_marnm', $show_marnm);
 				}
 				break;
 		}
@@ -239,9 +240,9 @@ class list_families_KT_Module extends KT_Module implements KT_Module_List {
 					echo '<h6 class="text-center marr_names">';
 						if ($show != 'none') {
 							if ($show_marnm) {
-								echo '<a href="', $url, '&amp;show=' . $show . '&amp;show_marnm=no">', KT_I18N::translate('Exclude individuals with “%s” as a married name', $legend), '</a>';
+								echo '<a href="', $url, '&amp;show=' . $show . '&amp;show_marnm=no">', KT_I18N::translate('Click here to exclude individuals with “%s” as a married name', $legend), '</a>';
 							} else {
-								echo '<a href="', $url, '&amp;show=' . $show . '&amp;show_marnm=yes">', KT_I18N::translate('Include individuals with “%s” as a married name', $legend), '</a>';
+								echo '<a href="', $url, '&amp;show=' . $show . '&amp;show_marnm=yes">', KT_I18N::translate('Click here to include individuals with “%s” as a married name', $legend), '</a>';
 							}
 
 							if ($alpha != '@' && $alpha != ',' && !$surname) {
