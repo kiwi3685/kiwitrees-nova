@@ -189,6 +189,9 @@ div.dataTables_wrapper table.dataTable thead tr th svg.fa-bell, div.dataTables_w
 	left: 0.125rem;
 	top: -1rem;
 }
+div.dataTables_wrapper table.dataTable thead tr th svg.fa-sort {
+	margin-top: 0;
+}
 div.dataTables_wrapper table#installed_table thead tr th svg.fa-gears {
 	left: 0.75rem;
 	right: initial;
@@ -658,4 +661,5 @@ input[type=radio]:checked::before {
 [class*=hint--][aria-label]:after {
 	color: #faf5e8;
 	padding: 0.275rem;
+	text-align: center;
 }

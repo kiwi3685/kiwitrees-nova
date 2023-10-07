@@ -45,11 +45,10 @@ function print_sosa_number($sosa, $pid = '', $arrowDirection = 'up', $sex = 'U')
 		$visibility = 'none';
 	} else {
 		$visibility = 'block';
-	}
-	?>
-	<span class="sosa person_box_template <?php echo $sex; ?> has-tip top" title="<?php echo KT_I18N::translate('Sosa number'); ?>" data-tooltip aria-haspopup="true" data-disable-hover="false">
-		<?php echo $personLabel; ?>
-	</span>
+	} ?>
+
+	<?php echo hintElement("span", "sosa person_box_template $sex", "", KT_I18N::translate('Sosa number'), $personLabel); ?>
+
 	<span style="display: <?php echo $visibility; ?>">
 		<?php if ($sosa != '1' && $pid != '') {
 			if ($arrowDirection == 'left') {

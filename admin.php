@@ -323,16 +323,10 @@ echo pageStart('admin', KT_I18N::translate('Dashboard')); ?>
 				<div class="accordion-item" data-accordion-item>
 					<a href="#" class="accordion-title">
 						<span><?php echo KT_I18N::translate('User statistics'); ?></span>
-						<span class="fa-layers fa-lg has-tip top" data-tooltip aria-haspopup="true" data-disable-hover="false" title="<?php echo KT_I18N::translate('Total number of users'); ?>">
-							<i class="<?php echo $iconStyle; ?> fa-users"></i>
-							<span class="fa-layers-counter"><?php echo $total_users; ?></span>
-						</span>
-						<?php if ($incomplete) { ?>
-							<span class="fa-layers fa-lg has-tip top warning" data-tooltip aria-haspopup="true" data-disable-hover="false" title="<?php echo KT_I18N::translate('Unverified or not approved users'); ?>">
-								<i class="<?php echo $iconStyle; ?> fa-user-secret"></i>
-								<span class="fa-layers-counter fa-lg"><?php echo $incomplete; ?></span>
-							</span>
-						<?php } ?>
+						<?php echo hintElement("span", "fa-layers fa-lg ", "", KT_I18N::translate('Total number of users'), "<i class=\"' . $iconStyle . ' fa-users\"></i><span class=\"fa-layers-counter\">$total_users</span>"); ?>
+						<?php if ($incomplete) {
+							echo hintElement("span", "warning fa-layers fa-lg ", "", KT_I18N::translate('Unverified or not approved users'), "<i class=\"' . $iconStyle . ' fa-user-secret\"></i><span class=\"fa-layers-counter\">$incomplete</span>");
+						} ?>
 					</a>
 					<div class="accordion-content" data-tab-content>
 						<table class="admin_users">

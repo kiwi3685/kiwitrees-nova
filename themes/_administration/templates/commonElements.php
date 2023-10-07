@@ -636,3 +636,28 @@ function verticalRadioSwitch ($name, $values, $selected, $extra = '', $activeTex
 	return $html;
 
 }
+
+/**
+ *print an element with a tool-tip or hint
+ *
+ * @param string $element		name of the element used
+ * @param string $otherClass	extra classes other than the hint components
+ * @param string $otherTags		other element tags not part of hint code
+ * @param string $hint			the text displayed in the hint pop-up
+ * @param string $text			the hint displayed within the element
+ */
+function hintElement($element = '', $otherClass = '', $otherTags = '', $hint = '', $text = '')
+{
+	$html = '
+		<' . $element . '
+			class="hint--top hint--medium hint--no-animate hint--rounded ' . $otherClass . '"
+			aria-label="' . $hint . '" ' .
+			$otherTags . '
+		>' .
+			$text . '
+		</' . $element . '>
+	';
+
+	return $html;
+
+}

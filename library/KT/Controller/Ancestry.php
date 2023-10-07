@@ -138,10 +138,8 @@ class KT_Controller_Ancestry extends KT_Controller_Chart {
 					// print marriage info ?>
 
 					<div class="auto cell small-12 ancestry-details-3">
-						<button type="button" class="clear button show-for-medium has-tip top" data-tooltip aria-haspopup="true" data-disable-hover="false" title="<?php echo KT_I18N::translate('Hide or show ancestors'); ?>" data-toggle="sosa_<?php echo $sosa; ?>" >
-							<i class="<?php echo $iconStyle; ?> fa-minimize fa-lg"></i>
-						</button>
 						<?php
+						echo hintElement("button", "clear button show-for-medium ", "type=\"button\"", KT_I18N::translate('Hide or show ancestors'), "<i class=\"' . $iconStyle . ' fa-minimize fa-lg\"></i>");
 						print_sosa_number($sosa * 2, $person, 'blank', 'M');
 						echo KT_I18N::translate('and');
 						print_sosa_number($sosa * 2 + 1, $person, 'blank', 'F');

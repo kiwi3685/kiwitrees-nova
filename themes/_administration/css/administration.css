@@ -1446,6 +1446,9 @@ main #admin-content table#gm_check_details .latlong {
 main #admin-content #editplaces-page div.input-group {
 	margin-bottom: 0;
 }
+main #admin-content #editplaces-page div.input-group .input-group-label span.hint--top {
+	padding-left: 0;
+}
 main #admin-content #editplaces-page a.button {
 	margin: 0.125rem 0 0 0;
 	font-weight: 600;

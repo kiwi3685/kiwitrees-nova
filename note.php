@@ -150,11 +150,12 @@ $controller->pageHeader(); ?>
 				<div class="facts grid-x grid-margin-x grid-padding-x grid-padding-y">
 					<div class="cell medium-2 fact-title">
 						<?php if (KT_USER_CAN_EDIT) { ?>
-							<a class="has-tip" onclick="return edit_note('<?php echo $controller->record->getXref(); ?>')" title="<?php echo KT_I18N::translate('Edit'); ?>" data-tooltip aria-haspopup="true" data-click-open="false" data-disable-hover="false">
-							<?php echo KT_I18N::translate('Shared note'); ?></a>
+							<a onclick="return edit_note('<?php echo $controller->record->getXref(); ?>')">
+								<?php echo hintElement("span", "", "", KT_I18N::translate('Edit'), KT_I18N::translate('Shared note')); ?>
+							</a>
 							<div class="editfacts button-group">
-								<a class="button clear has-tip" onclick="return edit_note('<?php echo $controller->record->getXref(); ?>')" title="<?php echo KT_I18N::translate('Edit'); ?>" data-tooltip aria-haspopup="true" data-click-open="false" data-disable-hover="false">
-									<i class="fas fa-pen-to-square"></i>
+								<a class="button clear" onclick="return edit_note('<?php echo $controller->record->getXref(); ?>')">
+									<?php echo hintElement("span", "", "", KT_I18N::translate('Edit'), "<i class=\"' . $iconStyle . ' fa-pen-to-square fa-lg\"></i>"); ?>
 									<span class="link_text"><?php echo KT_I18N::translate('Edit'); ?></span>
 								</a>
 							</div>

@@ -171,143 +171,23 @@ function format_indi_table($datalist, $option = '')
 					<tr class="first-row-header">
 						<th colspan="24">
 							<div class="grid-x grid-margin-x">
-								<div class="cell medium-2 expanded button-group">
-									<button
-										class="button ui-state-default has-tip top"
-										data-tooltip
-										aria-haspopup="true"
-										data-disable-hover="false"
-										data-filter-column="20"
-										data-filter-value="M"
-										title="' . KT_I18N::translate('Show only males.') . '"
-										type="button"
-									>
-										' . KT_Person::sexImage('M', 'medium') . '
-									</button>
-									<button
-										class="button ui-state-default has-tip top"
-										data-tooltip
-										aria-haspopup="true"
-										data-disable-hover="false"
-										data-filter-column="20"
-										data-filter-value="F"
-										title="' . KT_I18N::translate('Show only females.') . '"
-										type="button"
-									>
-										' . KT_Person::sexImage('F', 'medium') . '
-									</button>
-									<button
-										class="button ui-state-default has-tip top"
-										data-tooltip
-										aria-haspopup="true"
-										data-disable-hover="false"
-										data-filter-column="20"
-										data-filter-value="U"
-										title="' . KT_I18N::translate('Show only individuals for whom the gender is not known.') . '"
-										type="button"
-									>
-										' . KT_Person::sexImage('U', 'medium') . '
-									</button>
+								<div class="cell medium-2 expanded button-group">' .
+									hintElement("button", "button", "data-filter-column=\"20\" data-filter-value=\"M\"", KT_I18N::translate('Show only males.'), KT_Person::sexImage('M', 'medium')) .
+									hintElement("button", "button", "data-filter-column=\"20\" data-filter-value=\"F\"", KT_I18N::translate('Show only females.'), KT_Person::sexImage('F', 'medium')) .
+									hintElement("button", "button", "data-filter-column=\"20\" data-filter-value=\"U\"", KT_I18N::translate('Show only individuals with gender unknown.'), KT_Person::sexImage('U', 'medium')) . '
 								</div>
-								<div class="cell medium-5 expanded button-group">
-									<button
-										class="button ui-state-default has-tip top"
-										data-tooltip
-										aria-haspopup="true"
-										data-disable-hover="false"
-										data-filter-column="22"
-										data-filter-value="N"
-										title="' . KT_I18N::translate('Show only individuals who are alive.') . '"
-										type="button"
-									>
-										' . KT_I18N::translate('Alive') . '
-									</button>
-									<button
-										class="button ui-state-default has-tip top"
-										data-tooltip
-										aria-haspopup="true"
-										data-disable-hover="false"
-										data-filter-column="22"
-										data-filter-value="Y"
-										title="' . KT_I18N::translate('Show only individuals who are dead.') . '"
-										type="button"
-									>
-										' . KT_I18N::translate('Dead') . '
-									</button>
-									<button
-										class="button ui-state-default has-tip top"
-										data-tooltip
-										aria-haspopup="true"
-										data-disable-hover="false"
-										data-filter-column="22"
-										data-filter-value="YES"
-										title="' . KT_I18N::translate('Show individuals who died more than 100 years ago.') . '"
-										type="button"
-									>
-										' . KT_Gedcom_Tag::getLabel('DEAT') . '&gt;100
-									</button>
-									<button
-										class="button ui-state-default has-tip top"
-										data-tooltip
-										aria-haspopup="true"
-										data-disable-hover="false"
-										data-filter-column="22"
-										data-filter-value="Y100"
-										title="' . KT_I18N::translate('Show individuals who died within the last 100 years.') . '"
-										type="button"
-									>
-										' . KT_Gedcom_Tag::getLabel('DEAT') . '&lt;=100
-									</button>
+								<div class="cell medium-5 expanded button-group">' .
+									hintElement("button", "button", "data-filter-column=\"22\" data-filter-value=\"N\"", KT_I18N::translate('Show only individuals who are alive.'), KT_I18N::translate('Alive')) .
+									hintElement("button", "button", "data-filter-column=\"22\" data-filter-value=\"Y\"", KT_I18N::translate('Show only individuals who are dead.'), KT_I18N::translate('Dead')) .
+									hintElement("button", "button", "data-filter-column=\"22\" data-filter-value=\"YES\"", KT_I18N::translate('Show individuals who died more than 100 years ago.'), KT_Gedcom_Tag::getLabel('DEAT') . '&gt;100') .
+									hintElement("button", "button", "data-filter-column=\"22\" data-filter-value=\"Y100\"", KT_I18N::translate('Show individuals who died within the last 100 years.'), KT_Gedcom_Tag::getLabel('DEAT') . '&lt;=100') . '
 								</div>
-								<div class="cell medium-5 expanded button-group">
-									<button
-										class="button ui-state-default has-tip top"
-										data-tooltip
-										aria-haspopup="true"
-										data-disable-hover="false"
-										data-filter-column="21"
-										data-filter-value="YES"
-										title="' . KT_I18N::translate('Show individuals born more than 100 years ago.') . '"
-										type="button"
-									>
-										' . KT_Gedcom_Tag::getLabel('BIRT') . '&gt;100
-									</button>
-									<button
-										class="button ui-state-default has-tip top"
-										data-tooltip
-										aria-haspopup="true"
-										data-disable-hover="false"
-										data-filter-column="21"
-										data-filter-value="Y100"
-										title="' . KT_I18N::translate('Show individuals born within the last 100 years.') . '"
-										type="button"
-									>
-										' . KT_Gedcom_Tag::getLabel('BIRT') . '&lt;=100
-									</button>
-									<button
-										class="button ui-state-default has-tip top"
-										data-tooltip
-										aria-haspopup="true"
-										data-disable-hover="false"
-										data-filter-column="23"
-										data-filter-value="R"
-										title="' . KT_I18N::translate('“Roots” are individuals who have no parents recorded in the database. They may also be called “patriarchs”.') . '"
-										type="button"
-									>
-										' . KT_I18N::translate('Roots') . '
-									</button>
-									<button
-										class="button ui-state-default has-tip top"
-										data-tooltip
-										aria-haspopup="true"
-										data-disable-hover="false"
-										data-filter-column="23"
-										data-filter-value="L"
-										title="' . KT_I18N::translate('“Leaves” are individuals who are alive but have no children recorded in the database.') . '"
-										type="button"
-									>
-										' . KT_I18N::translate('Leaves') . '
-									</button>
+
+								<div class="cell medium-5 expanded button-group">' .
+									hintElement("button", "button", "data-filter-column=\"21\" data-filter-value=\"YES\"",  KT_I18N::translate('Show individuals born more than 100 years ago.'),  KT_Gedcom_Tag::getLabel('BIRT') . '&gt;100') .
+									hintElement("button", "button", "data-filter-column=\"21\" data-filter-value=\"Y100\"",  KT_I18N::translate('“Roots” are individuals who have no parents recorded in the database. They may also be called “patriarchs”.'), KT_Gedcom_Tag::getLabel('BIRT') . '&lt;=100') .
+									hintElement("button", "button", "data-filter-column=\"21\" data-filter-value=\"R\"", KT_I18N::translate('Show individuals who died more than 100 years ago.'), KT_I18N::translate('Roots')) .
+									hintElement("button", "button", "data-filter-column=\"21\" data-filter-value=\"L\"",  KT_I18N::translate('“Leaves” are individuals who are alive but have no children recorded in the database.'), KT_I18N::translate('Leaves')) . '
 								</div>
 							</div>
 						</th>
@@ -319,27 +199,21 @@ function format_indi_table($datalist, $option = '')
 						<th colspan="6"></th>
 					</tr>
 					<tr class="third-row-header">
-						<th data-tooltip aria-haspopup="true" class="has-tip top" data-disable-hover="false" title="' . KT_I18N::translate('Sort by given names') . '">' . KT_Gedcom_Tag::getLabel('GIVN') . '</th>
-						<th data-tooltip aria-haspopup="true" class="has-tip top" data-disable-hover="false" title="' . KT_I18N::translate('Sort by surnames') . '">' . KT_Gedcom_Tag::getLabel('SURN') . '</th>
+						<th>' . hintElement("span", "", "", KT_I18N::translate('Sort by given names'), KT_Gedcom_Tag::getLabel('GIVN')) .'</th>
+						<th>' . hintElement("span", "", "", KT_I18N::translate('Sort by surnames'), KT_Gedcom_Tag::getLabel('SURN')) .'</th>
 						<th>GIVN</th>
 						<th>SURN</th>
 						<th class="table_sosa">' . /* I18N: Abbreviation for “Sosa-Stradonitz number”.  This is an individual’s surname, so may need transliterating into non-latin alphabets. */ KT_I18N::translate('Sosa') . '</th>
 						<th>SOSA</th>
 						<th>' . KT_I18N::translate('Date') . '</th>
 						<th>SORT_BIRT</th>
-						<th data-tooltip aria-haspopup="true" class="has-tip top" data-disable-hover="false" title="' . KT_I18N::translate('Years since birth') . '">
-							<i class="' . $iconStyle . ' fa-bell"></i>
-						</th>
+						<th>' . hintElement("span", "", "", KT_I18N::translate('Years since birth'), "<i class=\"' . $iconStyle . ' fa-bell\"></i>") .'</th>
 						<th>' . KT_Gedcom_Tag::getLabel('PLAC') . '</th>
-						<th data-tooltip aria-haspopup="true" class="has-tip top" data-disable-hover="false" title="' . KT_I18N::translate('Number of children') . '">
-							<i class="' . $iconStyle . ' fa-children"></i>
-						</th>
+						<th>' . hintElement("span", "", "", KT_I18N::translate('Number of children'), "<i class=\"' . $iconStyle . ' fa-children\"></i>") .'</th>
 						<th>NCHI</th>
 						<th>' . KT_I18N::translate('Date') . '</th>
 						<th>SORT_DEAT</th>
-						<th data-tooltip aria-haspopup="true" class="has-tip top" data-disable-hover="false" title="' . KT_I18N::translate('Years since death') . '">
-							<i class="' . $iconStyle . ' fa-bell"></i>
-						</th>
+						<th>' . hintElement("span", "", "", KT_I18N::translate('Years since death'), "<i class=\"' . $iconStyle . ' fa-bell\"></i>") .'</th>
 						<th>' . KT_Gedcom_Tag::getLabel('AGE') . '</th>
 						<th>AGE</th>
 						<th>' . KT_Gedcom_Tag::getLabel('PLAC') . '</th>
@@ -581,10 +455,10 @@ function format_indi_table($datalist, $option = '')
 	$html .= '
 		<div class="grid-x grid-margin-x" id="buttons-' . $table_id . '">
 			<div class="cell medium-4 medium-offset-4 text-center show-for-stacked">
-				<button type="button" class="button small ui-state-default btn-toggle-parents">
+				<button type="button" class="button small btn-toggle-parents">
 					' . KT_I18N::translate('Show parents') . '
 				</button>
-				<button type="button" class="button small ui-state-default btn-toggle-statistics">
+				<button type="button" class="button small btn-toggle-statistics">
 					' . KT_I18N::translate('Show statistics charts') . '
 				</button>
 			</div>
@@ -705,8 +579,8 @@ function simple_indi_table($datalist)
 						<th colspan="3" class="text-center">' . KT_Gedcom_Tag::getLabel('DEAT') . '</th>
 					</tr>
 					<tr>
-						<th data-tooltip aria-haspopup="true" class="has-tip top" data-disable-hover="false" title="' . KT_I18N::translate('Sort by given names') . '">' . KT_Gedcom_Tag::getLabel('GIVN') . '</th>
-						<th data-tooltip aria-haspopup="true" class="has-tip top" data-disable-hover="false" title="' . KT_I18N::translate('Sort by surnames') . '">' . KT_Gedcom_Tag::getLabel('SURN') . '</th>
+						<th>' . hintElement("span", "", "", KT_I18N::translate('Sort by given names'), KT_Gedcom_Tag::getLabel('GIVN')) .'</th>
+						<th>' . hintElement("span", "", "", KT_I18N::translate('Sort by surnames'), KT_Gedcom_Tag::getLabel('SURN')) .'</th>
 						<th>GIVN</th>
 						<th>SURN</th>
 						<th>' . KT_I18N::translate('Date') . '</th>
@@ -719,7 +593,7 @@ function simple_indi_table($datalist)
 				</thead>
 				<tbody>';
 
-	$d100y = new KT_Date(date('Y') - 100);  // 100 years ago
+	$d100y        = new KT_Date(date('Y') - 100);  // 100 years ago
 	$unique_indis = []; // Don't double-count indis with multiple names.
 
 	foreach ($datalist as $key => $value) {
@@ -937,9 +811,9 @@ function format_fam_table($datalist, $option = '')
 					/* 11 AGE       */ {type: "num", visible: false},
 					/* 12 marr date */ {dataSort: 13, class: "famListDate"},
 					/* 13 MARR:DATE */ {visible: false},
-					/* 14 anniv     */ {dataSort: 13, class: "text-center famListAnniv"},
+					/* 14 anniv     */ {dataSort: 13, class: "famListAnniv"},
 					/* 15 marr plac */ {type: "unicode"},
-					/* 16 children  */ {dataSort: 17, class: "text-center famListAnniv"},
+					/* 16 children  */ {dataSort: 17, class: "famListAnniv"},
 					/* 17 NCHI      */ {type: "num", visible: false},
 					/* 18 CHAN      */ {dataSort: 19, visible: ' . ($SHOW_LAST_CHANGE ? 'true' : 'false') . '},
 					/* 19 CHAN_sort */ {visible: false},
@@ -1005,180 +879,44 @@ function format_fam_table($datalist, $option = '')
 					<tr>
 						<th colspan="23">
 							<div class="grid-x">
-								<div class="cell medium-4 expanded button-group">
-									<button
-										class="button ui-state-default has-tip top"
-										data-tooltip
-										aria-haspopup="true"
-										data-disable-hover="false"
-										type="button"
-										data-filter-column="21"
-										data-filter-value="N"
-										class="ui-state-default"
-										title="' . KT_I18N::translate('Show couples where both partners are alive.') . '"
-									>
-										' . KT_I18N::translate('Both alive') . '
-									</button>
-									<button
-										class="button ui-state-default has-tip top"
-										data-tooltip
-										aria-haspopup="true"
-										data-disable-hover="false"
-										type="button"
-										data-filter-column="21"
-										data-filter-value="W"
-										class="ui-state-default"
-										title="' . KT_I18N::translate('Show couples where only the female partner is deceased.') . '"
-									>
-										' . KT_I18N::translate('Widower') . '
-									</button>
-									<button
-										class="button ui-state-default has-tip top"
-										data-tooltip
-										aria-haspopup="true"
-										data-disable-hover="false"
-										type="button"
-										data-filter-column="21"
-										data-filter-value="H"
-										class="ui-state-default"
-										title="' . KT_I18N::translate('Show couples where only the male partner is deceased.') . '"
-									>
-										' . KT_I18N::translate('Widow') . '
-									</button>
-									<button
-										class="button ui-state-default has-tip top"
-										data-tooltip
-										aria-haspopup="true"
-										data-disable-hover="false"
-										type="button"
-										data-filter-column="21"
-										data-filter-value="Y"
-										class="ui-state-default"
-										title="' . KT_I18N::translate('Show couples where both partners are deceased.') . '"
-									>
-										' . KT_I18N::translate('Both dead') . '
-									</button>
+								<div class="cell medium-4 expanded button-group">' .
+									hintElement("button", "button", "data-filter-column=\"21\" data-filter-value=\"N\"", KT_I18N::translate('Show couples where both partners are alive.'), KT_I18N::translate('Both alive')) .
+									hintElement("button", "button", "data-filter-column=\"21\" data-filter-value=\"w\"", KT_I18N::translate('Show couples where only the female partner is deceased.'), KT_I18N::translate('Widower')) .
+									hintElement("button", "button", "data-filter-column=\"21\" data-filter-value=\"H\"", KT_I18N::translate('Show couples where only the male partner is deceased.'), KT_I18N::translate('Widow')) .
+									hintElement("button", "button", "data-filter-column=\"21\" data-filter-value=\"Y\"", KT_I18N::translate('Show couples where both partners are deceased.'), KT_I18N::translate('Both dead')) . '
 								</div>
-								<div class="cell medium-3 expanded button-group">
-									<button
-										class="button ui-state-default has-tip top"
-										data-tooltip
-										aria-haspopup="true"
-										data-disable-hover="false"
-										type="button"
-										data-filter-column="22"
-										data-filter-value="R"
-										class="ui-state-default"
-										title="' . KT_I18N::translate('These couples may also be called “patriarchs”.  They are couples who have no parents recorded in the database.') . '"
-									>
-										' . KT_I18N::translate('Roots') . '
-									</button>
-									<button
-										class="button ui-state-default has-tip top"
-										data-tooltip
-										aria-haspopup="true"
-										data-disable-hover="false"
-										type="button"
-										data-filter-column="22"
-										data-filter-value="L"
-										class="ui-state-default"
-										title="' . KT_I18N::translate('These are couples who are alive but have no children recorded in the database.') . '"
-									>
-										' . KT_I18N::translate('Leaves') . '
-									</button>
+								<div class="cell medium-3 expanded button-group">' .
+									hintElement("button", "button", "data-filter-column=\"22\" data-filter-value=\"R\"", KT_I18N::translate('These couples may also be called “patriarchs”.  They are couples who have no parents recorded in the database.'), KT_I18N::translate('Roots')) .
+									hintElement("button", "button", "data-filter-column=\"22\" data-filter-value=\"L\"", KT_I18N::translate('These are couples who are alive but have no children recorded in the database.'), KT_I18N::translate('Leaves')) . '
 								</div>
-								<div class="cell medium-5 expanded button-group">
-									<button
-										class="button ui-state-default has-tip top"
-										data-tooltip
-										aria-haspopup="true"
-										data-disable-hover="false"
-										type="button"
-										data-filter-column="20"
-										data-filter-value="U"
-										class="ui-state-default"
-										title="' . KT_I18N::translate('Show couples with an unknown marriage date.') . '"
-									>
-										' . KT_Gedcom_Tag::getLabel('MARR') . '
-									</button>
-									<button
-										class="button ui-state-default has-tip top"
-										data-tooltip
-										aria-haspopup="true"
-										data-disable-hover="false"
-										type="button"
-										data-filter-column="20"
-										data-filter-value="YES"
-										class="ui-state-default"
-										title="' . KT_I18N::translate('Show couples who married more than 100 years ago.') . '"
-									>
-										' . KT_Gedcom_Tag::getLabel('MARR') . '&gt;100
-									</button>
-									<button
-										class="button ui-state-default has-tip top"
-										data-tooltip
-										aria-haspopup="true"
-										data-disable-hover="false"
-										type="button"
-										data-filter-column="20"
-										data-filter-value="Y100"
-										class="ui-state-default"
-										title="' . KT_I18N::translate('Show couples who married within the last 100 years.') . '"
-									>
-										' . KT_Gedcom_Tag::getLabel('MARR') . '&lt;=100
-									</button>
-									<button
-										class="button ui-state-default has-tip top"
-										data-tooltip
-										aria-haspopup="true"
-										data-disable-hover="false"
-										type="button"
-										data-filter-column="20"
-										data-filter-value="D"
-										class="ui-state-default"
-										title="' . KT_I18N::translate('Show divorced couples.') . '"
-									>
-										' . KT_Gedcom_Tag::getLabel('DIV') . '
-									</button>
-									<button
-										class="button ui-state-default has-tip top"
-										data-tooltip
-										aria-haspopup="true"
-										data-disable-hover="false"
-										type="button"
-										data-filter-column="20"
-										data-filter-value="M"
-										class="ui-state-default"
-										title="' . KT_I18N::translate('Show couples where either partner married more than once.') . '"
-									>
-										' . KT_I18N::translate('Multiple marriages') . '
-									</button>
+								<div class="cell medium-5 expanded button-group">' .
+									hintElement("button", "button", "data-filter-column=\"20\" data-filter-value=\"L\"", KT_I18N::translate('Show couples with an unknown marriage date.'), KT_Gedcom_Tag::getLabel('MARR')) .
+									hintElement("button", "button", "data-filter-column=\"20\" data-filter-value=\"YES\"", KT_I18N::translate('Show couples who married more than 100 years ago.'), KT_Gedcom_Tag::getLabel('MARR') . '&gt;100') .
+									hintElement("button", "button", "data-filter-column=\"20\" data-filter-value=\"Y100\"", KT_I18N::translate('Show couples who married within the last 100 years.'), KT_Gedcom_Tag::getLabel('MARR') . '&lt;=100') .
+									hintElement("button", "button", "data-filter-column=\"20\" data-filter-value=\"D\"", KT_I18N::translate('Show divorced couples.'), KT_Gedcom_Tag::getLabel('DIV')) .
+									hintElement("button", "button", "data-filter-column=\"20\" data-filter-value=\"M\"", KT_I18N::translate('Show couples where either partner married more than once.'), KT_I18N::translate('Multiple marriages')) . '
 								</div>
 							</div>
 						</th>
 					</tr>
 					<tr>
-						<th>' . KT_Gedcom_Tag::getLabel('GIVN') . '</th>
-						<th>' . KT_Gedcom_Tag::getLabel('SURN') . '</th>
+						<th>' . hintElement("span", "", "", KT_I18N::translate('Sort by given names'), KT_Gedcom_Tag::getLabel('GIVN')) .'</th>
+						<th>' . hintElement("span", "", "", KT_I18N::translate('Sort by surnames'), KT_Gedcom_Tag::getLabel('SURN')) .'</th>
 						<th>HUSB:GIVN_SURN</th>
 						<th>HUSB:SURN_GIVN</th>
 						<th>' . KT_Gedcom_Tag::getLabel('AGE') . '</th>
 						<th>AGE</th>
-						<th>' . KT_Gedcom_Tag::getLabel('GIVN') . '</th>
-						<th>' . KT_Gedcom_Tag::getLabel('SURN') . '</th>
+						<th>' . hintElement("span", "", "", KT_I18N::translate('Sort by given names'), KT_Gedcom_Tag::getLabel('GIVN')) .'</th>
+						<th>' . hintElement("span", "", "", KT_I18N::translate('Sort by surnames'), KT_Gedcom_Tag::getLabel('SURN')) .'</th>
 						<th>WIFE:GIVN_SURN</th>
 						<th>WIFE:SURN_GIVN</th>
 						<th>' . KT_Gedcom_Tag::getLabel('AGE') . '</th>
 						<th>AGE</th>
-						<th>' . KT_Gedcom_Tag::getLabel('MARR') . '</th>
+						<th>' . hintElement("span", "", "", KT_I18N::translate('Marriage date'), KT_I18N::translate('Date')) .'</th>
 						<th>MARR:DATE</th>
-						<th data-tooltip aria-haspopup="true" class="has-tip top" data-disable-hover="false" title="' . KT_I18N::translate('Years since marriage') . '">
-							<i class="' . $iconStyle . ' fa-bell"></i>
-						</th>
-						<th>' . KT_Gedcom_Tag::getLabel('PLAC') . '</th>
-						<th data-tooltip aria-haspopup="true" class="has-tip top" data-disable-hover="false" title="' . KT_I18N::translate('Number of children') . '">
-							<i class="' . $iconStyle . ' fa-child"></i>
-						</th>
+						<th>' . hintElement("span", "", "", KT_I18N::translate('Years since marriage'), "<i class=\"' . $iconStyle . ' fa-bell\"></i>") .'</th>
+						<th>' . hintElement("span", "", "", KT_I18N::translate('Marriage place'), KT_Gedcom_Tag::getLabel('PLAC')) .'</th>
+						<th>' . hintElement("span", "", "", KT_I18N::translate('Number of children'), "<i class=\"' . $iconStyle . ' fa-children\"></i>") .'</th>
 						<th>NCHI</th>
 						<th' . ($SHOW_LAST_CHANGE ? '' : '') . '>' . KT_Gedcom_Tag::getLabel('CHAN') . '</th>
 						<th' . ($SHOW_LAST_CHANGE ? '' : '') . '>CHAN</th>
@@ -1458,10 +1196,10 @@ function format_fam_table($datalist, $option = '')
 	$html .= '
 		<div class="grid-x grid-margin-x" id="buttons-' . $table_id . '">
 			<div class="cell medium-4 medium-offset-4 text-center show-for-stacked">
-				<button type="button" class="button small ui-state-default btn-toggle-parents">
+				<button type="button" class="button small btn-toggle-parents">
 					' . KT_I18N::translate('Show parents') . '
 				</button>
-				<button type="button" class="button small ui-state-default btn-toggle-statistics">
+				<button type="button" class="button small btn-toggle-statistics">
 					' . KT_I18N::translate('Show statistics charts') . '
 				</button>
 			</div>
@@ -1583,21 +1321,21 @@ function simple_fam_table($datalist)
 						<th colspan="3" class="text-center">' . KT_Gedcom_Tag::getLabel('MARR') . '</th>
 					</tr
 					<tr>
-						<th>' . KT_Gedcom_Tag::getLabel('GIVN') . '</th>
-						<th>' . KT_Gedcom_Tag::getLabel('SURN') . '</th>
+						<th>' . hintElement("span", "", "", KT_I18N::translate('Sort by given names'), KT_Gedcom_Tag::getLabel('GIVN')) .'</th>
+						<th>' . hintElement("span", "", "", KT_I18N::translate('Sort by surnames'), KT_Gedcom_Tag::getLabel('SURN')) .'</th>
 						<th>HUSB:GIVN_SURN</th>
 						<th>HUSB:SURN_GIVN</th>
 						<th>' . KT_Gedcom_Tag::getLabel('AGE') . '</th>
 						<th>AGE</th>
-						<th>' . KT_Gedcom_Tag::getLabel('GIVN') . '</th>
-						<th>' . KT_Gedcom_Tag::getLabel('SURN') . '</th>
+						<th>' . hintElement("span", "", "", KT_I18N::translate('Sort by given names'), KT_Gedcom_Tag::getLabel('GIVN')) .'</th>
+						<th>' . hintElement("span", "", "", KT_I18N::translate('Sort by surnames'), KT_Gedcom_Tag::getLabel('SURN')) .'</th>
 						<th>WIFE:GIVN_SURN</th>
 						<th>WIFE:SURN_GIVN</th>
 						<th>' . KT_Gedcom_Tag::getLabel('AGE') . '</th>
 						<th>AGE</th>
-						<th>' . KT_Gedcom_Tag::getLabel('MARR') . '</th>
+						<th>' . hintElement("span", "", "", KT_I18N::translate('Marriage date'), KT_I18N::translate('Date')) .'</th>
 						<th>MARR:DATE</th>
-						<th>' . KT_Gedcom_Tag::getLabel('PLAC') . '</th>
+						<th>' . hintElement("span", "", "", KT_I18N::translate('Marriage place'), KT_Gedcom_Tag::getLabel('PLAC')) .'</th>
 					</tr>
 				</thead>
 				<tbody>';

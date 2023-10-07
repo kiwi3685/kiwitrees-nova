@@ -488,7 +488,7 @@ global $iconStyle; ?>
 								<div class="input-group autocomplete_container">
 									<span class="input-group-label addnew">
 									<a href="#" onclick="pastefield=document.getElementById('OBJE1694228369071759'); window.open('addmedia.php?action=showmediaform&amp;type=event', '_blank', ''); return false;" title="">
-										<i class="fa-solid fa-square-plus"></i>
+										<?php echo hintElement("span", "", "", KT_I18N::translate('Upload a new place image'), "<i class=\"' . $iconStyle . ' fa-square-plus\"></i>"); ?>
 									</a>
 									</span>
 									<input id="autocompleteInput-OBJE1694228369071759" data-autocomplete-type="OBJE" type="text" value="" class="ui-autocomplete-input" autocomplete="off">
@@ -497,11 +497,6 @@ global $iconStyle; ?>
 										<button id="OBJE1694228369071759" class="clearAutocomplete autocomplete_icon" data-position="top" data-alignment="center">
 											<i class="fa-solid fa-xmark"></i>
 										</button>
-									</span>
-									<span class="input-group-label">
-										<span class="show-for-medium has-tip" data-open="OBJE" title="">
-											<i class="fa-solid fa-question-circle alert"></i>
-										</span>
 									</span>
 								</div>
 							<?php } else { ?>
