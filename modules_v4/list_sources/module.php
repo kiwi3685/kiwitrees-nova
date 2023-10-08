@@ -175,7 +175,7 @@ class list_sources_KT_Module extends KT_Module implements KT_Module_List {
 							<th><?php echo KT_I18N::translate('Shared notes'); ?></th>
 							<th><?php echo ($SHOW_LAST_CHANGE ? '' : ''); ?></th>
 							<th><?php echo ($SHOW_LAST_CHANGE ? '' : ''); ?><?php echo KT_Gedcom_Tag::getLabel('CHAN'); ?></th>
-							<th class="delete_src"style="<?php echo (KT_USER_GEDCOM_ADMIN ? '' : 'display: none;'); ?>">
+							<th class="delete_src" style="<?php echo (KT_USER_GEDCOM_ADMIN ? '' : 'display: none;'); ?>">
 								<input type="button" class="button tiny" value="<?php echo KT_I18N::translate('Delete'); ?>" onclick="if (confirm('<?php echo htmlspecialchars(KT_I18N::translate('Permanently delete these records?')); ?>')) {return checkbox_delete('sources');} else {return false;}">
 								<input type="checkbox" onclick="toggle_select(this)" style="vertical-align:middle;">
 							</th>
