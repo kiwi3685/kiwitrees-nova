@@ -114,7 +114,7 @@ class list_shared_notes_KT_Module extends KT_Module implements KT_Module_List {
 		$controller = new KT_Controller_Page();
 		$controller
 			->pageHeader()
-			->setPageTitle(KT_I18N::translate('Shared notes'))
+			->setPageTitle($this->getTitle())
 			->restrictAccess(KT_Module::isActiveList(KT_GED_ID, 'list_shared_notes', KT_USER_ACCESS_LEVEL))
 			->addExternalJavascript(KT_DATATABLES_KT_JS)
 			->addInlineJavascript('
