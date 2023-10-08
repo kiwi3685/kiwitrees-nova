@@ -57,13 +57,16 @@ class list_shared_notes_KT_Module extends KT_Module implements KT_Module_List {
 	// Implement KT_Module_List
 	public function getListMenus() {
 		global $controller, $SEARCH_SPIDER;
+
 		if ($SEARCH_SPIDER) {
 			return null;
 		}
+
 		// Do not show empty lists
 		$row = KT_DB::prepare(
 			"SELECT EXISTS(SELECT 1 FROM `##other` WHERE o_file=? AND o_type='NOTE')"
 		)->execute(array(KT_GED_ID))->fetchOneRow();
+
 		if ($row) {
 			$menus = array();
 			$menu  = new KT_Menu(
@@ -80,22 +83,107 @@ class list_shared_notes_KT_Module extends KT_Module implements KT_Module_List {
 
 	// Display list
 	public function show() {
-		global $controller;
-		require_once KT_ROOT . 'includes/functions/functions_print_lists.php';
+
+		global $iconStyle, $SHOW_LAST_CHANGE, $controller;
+
+		switch (KT_Filter::get('action')) {
+			case 'loadrows':
+				Zend_Session::writeClose();
+
+				$search  = KT_Filter::get('sSearch', '');
+				$start   = KT_Filter::getInteger('iDisplayStart');
+				$length  = KT_Filter::getInteger('iDisplayLength');
+				$isort   = KT_Filter::getInteger('iSortingCols');
+				$draw    = KT_Filter::getInteger('sEcho');
+				$colsort = [];
+				$sortdir = [];
+				for ($i = 0; $i < $isort; ++$i) {
+					$colsort[$i] = KT_Filter::getInteger('iSortCol_' . $i);
+					$sortdir[$i] = KT_Filter::get('sSortDir_' . $i);
+				}
+
+				header('Content-type: application/json');
+				echo json_encode(KT_DataTables_ListSharedNotes::noteList($search, $start, $length, $isort, $draw, $colsort, $sortdir));
+
+				exit;
+		}
+
+		// Access default datatables settings
+		include_once KT_ROOT . 'library/KT/DataTables/KTdatatables.js.php';
 
 		$controller = new KT_Controller_Page();
 		$controller
-			->restrictAccess(KT_Module::isActiveList(KT_GED_ID, 'list_shared_notes', KT_USER_ACCESS_LEVEL))
+			->pageHeader()
 			->setPageTitle(KT_I18N::translate('Shared notes'))
-			->pageHeader();
-		?>
-		<div id="sharednotes-page" class="grid-x grid-padding-x">
-			<div class="cell large-10 large-offset-1">
-				<h3><?php echo $controller->getPageTitle(); ?></h3>
-				<?php echo format_note_table(get_note_list(KT_GED_ID)); ?>
+			->restrictAccess(KT_Module::isActiveList(KT_GED_ID, 'list_shared_notes', KT_USER_ACCESS_LEVEL))
+			->addExternalJavascript(KT_DATATABLES_KT_JS)
+			->addInlineJavascript('
+				datables_defaults("module.php?mod=' . $this->getName() . '&mod_action=show&action=loadrows");
+
+				jQuery.fn.dataTableExt.oSort["unicode-asc" ]=function(a,b) {return a.replace(/<[^<]*>/, "").localeCompare(b.replace(/<[^<]*>/, ""))};
+				jQuery.fn.dataTableExt.oSort["unicode-desc"]=function(a,b) {return b.replace(/<[^<]*>/, "").localeCompare(a.replace(/<[^<]*>/, ""))};
+
+				jQuery("#noteTable").dataTable({
+					sorting: [[2,"asc"]],
+					columns: [
+						/*  0 xref         */ { type: "num", visible: false },
+						/*  1 title        */ { orderData: 2 , type: "unicode" },
+						/*  2 TITL (sort) */ { type: "unicode", visible: false },
+						/*  3 #indi        */ { orderData: 4, class: "text-center" },
+						/*  4 #INDI (sort) */ { type: "num", visible: false },
+						/*  5 #fam         */ { orderData: 6, class: "text-center" },
+						/*  6 #FAM  (sort) */ { type: "num", visible: false },
+						/*  7 #obje        */ { orderData: 8, class: "text-center" },
+						/*  8 #OBJE (sort) */ { type: "num", visible: false },
+						/*  9 #sour        */ { orderData: 10, class: "text-center" },
+						/* 10 #SOUR (sort) */ { type: "num", visible: false },
+						/* 11 chan         */ { orderData: 11, visible: ' . ($SHOW_LAST_CHANGE ? 'true' : 'false') . ', class: "text-center" },
+						/* 12 CHAN  (sort) */ { visible: false },
+						/* 13 DELETE       */ { sortable: false, class: "text-center" }
+					]
+				});
+			')
+		;
+
+		echo pageStart('sourcelist', $controller->getPageTitle()); ?>
+
+			<div class="cell callout info-help">
+				<?php echo KT_I18N::translate('
+					A list of all shared note records for this family tree, limited only by privacy settings.
+					Addional columns show the number of other records (individuals, families, etc) each note is linked to.
+				'); ?>
 			</div>
-		</div>
-		<?php
+
+			<div class="cell">
+				<table id="noteTable" class="shadow scroll" >
+					<thead>
+						<tr>
+							<th></th>
+							<th><?php echo KT_Gedcom_Tag::getLabel('TITL');  ?></th>
+							<th></th>
+							<th><?php echo KT_I18N::translate('Individuals');  ?></th>
+							<th></th>
+							<th><?php echo KT_I18N::translate('Families');  ?></th>
+							<th></th>
+							<th><?php echo KT_I18N::translate('Media objects');  ?></th>
+							<th></th>
+							<th><?php echo KT_I18N::translate('Sources');  ?></th>
+							<th></th>
+							<th><?php echo KT_Gedcom_Tag::getLabel('CHAN');  ?></th>
+							<th></th>
+							<th class="delete_src" style="<?php echo (KT_USER_GEDCOM_ADMIN ? '' : 'display: none;'); ?>">
+								<input type="button" class="button tiny" value="<?php echo KT_I18N::translate('Delete'); ?>" onclick="if (confirm('<?php echo htmlspecialchars(KT_I18N::translate('Permanently delete these records?')); ?>')) {return checkbox_delete('sources');} else {return false;}">
+								<input type="checkbox" onclick="toggle_select(this)" style="vertical-align:middle;">
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+
+		<?php echo pageClose();
+
 	}
 
 }
