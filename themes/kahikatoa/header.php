@@ -26,8 +26,8 @@
 	exit;
  }
 
- global $ALL_CAPS, $iconStyle;
- include 'templates/commonElements.php';
+global $ALL_CAPS, $iconStyle;
+include 'templates/commonElements.php';
 
  $this
 	->addExternalJavascript (KT_JQUERY_COLORBOX_URL)
@@ -55,20 +55,19 @@
 		});
 
 		autosize(jQuery("textarea"));
+
 	');
 
  if ($ALL_CAPS) {
 	$this->addInlineJavascript('all_caps();');
  }
 
- if (KT_USER_ID && KT_SCRIPT_NAME != 'index.php') {
+if (KT_USER_ID && KT_SCRIPT_NAME != 'index.php') {
 	$show_widgetbar = true;
 	$this->addInlineJavascript ('widget_bar();');
- } else {
+} else {
 	$show_widgetbar = false;
- }
-
- ?>
+}?>
 
 <!DOCTYPE html>
 <html <?php echo KT_I18N::html_markup(); ?>>
@@ -113,7 +112,6 @@
 			<?php } ?>
 
 			<nav class="grid-x hide-for-print">
-
 				<!-- Mobile top menu bar -->
 				<div class="cell hide-for-large">
 					<?php echo MobileTopBarMenu('MainMenu'); ?>
