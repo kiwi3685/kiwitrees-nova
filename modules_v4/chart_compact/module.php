@@ -57,8 +57,8 @@ class chart_compact_KT_Module extends KT_Module implements KT_Module_Chart {
 	// Implement KT_Module_Chart
 	public function getChartMobile() {
 		// exclude this module from mobile displays
-		require_once KT_ROOT . 'library/Mobile-Detect/Mobile_Detect.php';
-		$detect = new Mobile_Detect;
+		require_once KT_ROOT . 'library/Mobile-Detect-3.74.0/src/MobileDetect.php';
+		$detect = new Detection\MobileDetect;
 		if ($detect->isMobile() ) {
 			return true;
 		} else {
