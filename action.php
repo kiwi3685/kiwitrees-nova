@@ -28,7 +28,7 @@
  * parameters (because it effectively disables the "back" button).
  *
  * It also means we must hide such links from search engines,
- * which frequently penalize sites that generate different
+ * which frequently penalise sites that generate different
  * content for browsers/robots.
  *
  * Instead, use an AJAX request, such as
@@ -179,7 +179,7 @@ switch (KT_Filter::post('action')) {
             set_gedcom_setting(KT_GED_ID, 'THEME_DIR', $theme_dir);
             $KT_SESSION->theme_dir = $theme_dir;
         } else {
-            // Request for a non-existant theme.
+            // Request for a non-existent theme.
             header('HTTP/1.0 406 Not Acceptable');
         }
 
