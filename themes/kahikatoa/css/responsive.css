@@ -21,7 +21,9 @@
 	}
 }
 
-/* sizes are 48 - 48.0625 - 64 - 64.0625 em */
+/* sizes are 48 - 48.0625 - 64 - 64.0625 em
+ *       or 768 - 769 - 1024 - 1025 px
+ */
 @media print, screen and (max-width: 64.0625em) {
 	.info-help:not(.summary) {
 		display: none;
