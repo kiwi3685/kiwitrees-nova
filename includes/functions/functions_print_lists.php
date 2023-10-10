@@ -57,6 +57,16 @@ function format_indi_table($datalist, $option = '')
 		$buttons = '';
 	}
 
+	require_once KT_ROOT . 'library/Mobile-Detect-3.74.0/src/MobileDetect.php';
+	$detect = new Detection\MobileDetect;
+	if ($detect->isMobile() ) {
+		$dom = 'dom: \'<"top"p' . $buttons . 'f<"clear">irl><"table-scroll"t><"bottom"pl>\'';
+		$shadow = '';
+	} else {
+		$dom = 'dom: \'<"top"p' . $buttons . 'f<"clear">irl>t<"bottom"pl>\'';
+		$shadow = 'shadow';
+	}
+
 	$html = '';
 
 	$controller
@@ -66,7 +76,7 @@ function format_indi_table($datalist, $option = '')
 			jQuery.fn.dataTableExt.oSort["num-html-asc" ]=function(a,b) {a=parseFloat(a.replace(/<[^<]*>/, "")); b=parseFloat(b.replace(/<[^<]*>/, "")); return (a<b) ? -1 : (a>b ? 1 : 0);};
 			jQuery.fn.dataTableExt.oSort["num-html-desc"]=function(a,b) {a=parseFloat(a.replace(/<[^<]*>/, "")); b=parseFloat(b.replace(/<[^<]*>/, "")); return (a>b) ? -1 : (a<b ? 1 : 0);};
 			jQuery("#' . $table_id . '").dataTable({
-				dom: \'<"top"p' . $buttons . 'f<"clear">irl>t<"bottom"pl>\',
+				' . $dom . ',
 				' . KT_I18N::datatablesI18N() . ',
 				buttons: [{extend: "csvHtml5", exportOptions: {columns: ":visible"}}],
 				autoWidth: false,
@@ -109,6 +119,8 @@ function format_indi_table($datalist, $option = '')
 				],
 				sorting: [[' . ('sosa' === $option ? '4, "asc"' : '1, "asc"') . ']]
 			});
+
+			jQuery("table#' . $table_id . '").addClass("' . $shadow . '");
 
 			jQuery("#buttons-' . $table_id . '")
 			/* Hide/show parents */
@@ -154,7 +166,7 @@ function format_indi_table($datalist, $option = '')
 		$max_age = 0;
 	}
 
-	// Inititialise chart data
+	// Initialise chart data
 	for ($age = 0; $age <= $max_age; $age++) {
 		$deat_by_age[$age] = '';
 	}
@@ -163,30 +175,37 @@ function format_indi_table($datalist, $option = '')
 		$deat_by_decade[$year] = '';
 	}
 
+	$filterM = '<span class="M">' . KT_Person::sexImage('M', 'medium') . '</span>';
+	$filterF = '<span class="F">' . KT_Person::sexImage('F', 'medium') . '</span>';
+	$filterU = '<span class="U">' . KT_Person::sexImage('U', 'medium') . '</span>';
+
 	$html = '
 		<div class="loading-image">&nbsp;</div>
 		<div class="indi-list clearfix" style="visibility: hidden;">
-			<table class="shadow scroll" id="' . $table_id . '">
+			<table id="' . $table_id . '">
 				<thead>
 					<tr class="first-row-header">
 						<th colspan="24">
 							<div class="grid-x grid-margin-x">
-								<div class="cell medium-2 expanded button-group">' .
-									hintElement("button", "button", "data-filter-column=\"20\" data-filter-value=\"M\"", KT_I18N::translate('Show only males.'), KT_Person::sexImage('M', 'medium')) .
-									hintElement("button", "button", "data-filter-column=\"20\" data-filter-value=\"F\"", KT_I18N::translate('Show only females.'), KT_Person::sexImage('F', 'medium')) .
-									hintElement("button", "button", "data-filter-column=\"20\" data-filter-value=\"U\"", KT_I18N::translate('Show only individuals with gender unknown.'), KT_Person::sexImage('U', 'medium')) . '
+								<div class="cell small-2 hollow expanded no-gaps align-left button-group">' .
+									hintElement("button", "button", "data-filter-column=\"20\" data-filter-value=\"M\"", KT_I18N::translate('Show only males.'), $filterM) .
+									hintElement("button", "button", "data-filter-column=\"20\" data-filter-value=\"F\"", KT_I18N::translate('Show only females.'), $filterF) .
+									hintElement("button", "button", "data-filter-column=\"20\" data-filter-value=\"U\"", KT_I18N::translate('Show only individuals with gender unknown.'), $filterU) . '
 								</div>
-								<div class="cell medium-5 expanded button-group">' .
+								<div class="cell small-2 hollow align-right no-gaps button-group">' .
 									hintElement("button", "button", "data-filter-column=\"22\" data-filter-value=\"N\"", KT_I18N::translate('Show only individuals who are alive.'), KT_I18N::translate('Alive')) .
-									hintElement("button", "button", "data-filter-column=\"22\" data-filter-value=\"Y\"", KT_I18N::translate('Show only individuals who are dead.'), KT_I18N::translate('Dead')) .
+									hintElement("button", "button", "data-filter-column=\"22\" data-filter-value=\"Y\"", KT_I18N::translate('Show only individuals who are dead.'), KT_I18N::translate('Dead')) . '
+								</div>
+								<div class="cell small-3 hollow align-right no-gaps button-group">' .
+									hintElement("button", "button", "data-filter-column=\"21\" data-filter-value=\"YES\"",  KT_I18N::translate('Show individuals born more than 100 years ago.'),  KT_Gedcom_Tag::getLabel('BIRT') . '&gt;100') .
+									hintElement("button", "button", "data-filter-column=\"21\" data-filter-value=\"R\"", KT_I18N::translate('Show individuals who died more than 100 years ago.'), KT_Gedcom_Tag::getLabel('BIRT') . '&lt;=100') . '
+								</div>
+									<div class="cell small-3 hollow align-center no-gaps button-group">' .
 									hintElement("button", "button", "data-filter-column=\"22\" data-filter-value=\"YES\"", KT_I18N::translate('Show individuals who died more than 100 years ago.'), KT_Gedcom_Tag::getLabel('DEAT') . '&gt;100') .
 									hintElement("button", "button", "data-filter-column=\"22\" data-filter-value=\"Y100\"", KT_I18N::translate('Show individuals who died within the last 100 years.'), KT_Gedcom_Tag::getLabel('DEAT') . '&lt;=100') . '
 								</div>
-
-								<div class="cell medium-5 expanded button-group">' .
-									hintElement("button", "button", "data-filter-column=\"21\" data-filter-value=\"YES\"",  KT_I18N::translate('Show individuals born more than 100 years ago.'),  KT_Gedcom_Tag::getLabel('BIRT') . '&gt;100') .
-									hintElement("button", "button", "data-filter-column=\"21\" data-filter-value=\"Y100\"",  KT_I18N::translate('“Roots” are individuals who have no parents recorded in the database. They may also be called “patriarchs”.'), KT_Gedcom_Tag::getLabel('BIRT') . '&lt;=100') .
-									hintElement("button", "button", "data-filter-column=\"21\" data-filter-value=\"R\"", KT_I18N::translate('Show individuals who died more than 100 years ago.'), KT_I18N::translate('Roots')) .
+									<div class="cell small-2 hollow align-right no-gaps button-group">' .
+									hintElement("button", "button", "data-filter-column=\"21\" data-filter-value=\"Y100\"",  KT_I18N::translate('“Roots” are individuals who have no parents recorded in the database. They may also be called “patriarchs”.'), KT_I18N::translate('Roots')) .
 									hintElement("button", "button", "data-filter-column=\"21\" data-filter-value=\"L\"",  KT_I18N::translate('“Leaves” are individuals who are alive but have no children recorded in the database.'), KT_I18N::translate('Leaves')) . '
 								</div>
 							</div>
@@ -227,231 +246,231 @@ function format_indi_table($datalist, $option = '')
 				</thead>
 				<tbody>';
 
-	$d100y = new KT_Date(date('Y') - 100);  // 100 years ago
-	$unique_indis = []; // Don't double-count indis with multiple names.
-	foreach ($datalist as $key => $value) {
-		if (is_object($value)) { // Array of objects
-			$person = $value;
-		} elseif (!is_array($value)) { // Array of IDs
-			$person = KT_Person::getInstance($value);
-		} else { // Array of search results
-			$gid = $key;
-			if (isset($value['gid'])) {
-				$gid = $value['gid'];
-			} // from indilist
-			if (isset($value[4])) {
-				$gid = $value[4];
-			} // from indilist ALL
-			$person = KT_Person::getInstance($gid);
-		}
-		if (is_null($person)) {
-			continue;
-		}
-		if ('INDI' !== $person->getType()) {
-			continue;
-		}
-		if (!$person->canDisplayName()) {
-			continue;
-		}
-		// -- place filtering
-		if ('BIRT_PLAC' == $option && false === strstr($person->getBirthPlace(), $filter)) {
-			continue;
-		}
-		if ('DEAT_PLAC' == $option && false === strstr($person->getDeathPlace(), $filter)) {
-			continue;
-		}
-		$html .= '<tr>';
-		// -- Indi name(s)
-		$html .= '<td colspan="2" class="nowrap">';
-		foreach ($person->getAllNames() as $num => $name) {
-			if ('NAME' == $name['type']) {
-				$title = '';
-			} else {
-				$title = 'title="' . strip_tags(KT_Gedcom_Tag::getLabel($name['type'], $person)) . '"';
+		$d100y = new KT_Date(date('Y') - 100);  // 100 years ago
+		$unique_indis = []; // Don't double-count indis with multiple names.
+		foreach ($datalist as $key => $value) {
+			if (is_object($value)) { // Array of objects
+				$person = $value;
+			} elseif (!is_array($value)) { // Array of IDs
+				$person = KT_Person::getInstance($value);
+			} else { // Array of search results
+				$gid = $key;
+				if (isset($value['gid'])) {
+					$gid = $value['gid'];
+				} // from indilist
+				if (isset($value[4])) {
+					$gid = $value[4];
+				} // from indilist ALL
+				$person = KT_Person::getInstance($gid);
 			}
-			if ($num == $person->getPrimaryName()) {
-				$class = ' class="name2"';
-				$sex_image = $person->getSexImage();
-				[$surn, $givn] = explode(',', $name['sort']);
-			} else {
-				$class = '';
-				$sex_image = '';
+			if (is_null($person)) {
+				continue;
 			}
-			$html .= '<a ' . $title . ' href="' . $person->getHtmlUrl() . '"' . $class . '>' . highlight_search_hits($name['full']) . '</a>' . $sex_image . '<br>';
-		}
-		// Indi parents
-		$html .= $person->getPrimaryParentsNames('parents details1', 'none');
-		$html .= '</td>';
-		// Dummy column to match colspan in header
-		$html .= '<td hidden></td>';
-		// -- GIVN/SURN
-		// Use "AAAA" as a separator (instead of ",") as Javascript.localeCompare() ignores
-		// punctuation and "ANN,ROACH" would sort after "ANNE,ROACH", instead of before it.
-		// Similarly, @N.N. would sort as NN.
-		$html .= '<td>' . KT_Filter::escapeHtml(str_replace('@P.N.', 'AAAA', $givn)) . 'AAAA' . KT_Filter::escapeHtml(str_replace('@N.N.', 'AAAA', $surn)) . '</td>';
-		$html .= '<td>' . KT_Filter::escapeHtml(str_replace('@N.N.', 'AAAA', $surn)) . 'AAAA' . KT_Filter::escapeHtml(str_replace('@P.N.', 'AAAA', $givn)) . '</td>';
-		// -- SOSA
-		if ('sosa' === $option) {
-			$html .= '<td><a href="relationship.php?pid1=' . $datalist[1] . '&amp;pid2=' . $person->getXref() . '" title="' . KT_I18N::translate('Relationships') . '">' . KT_I18N::number($key) . '</a></td><td>' . $key . '</td>';
-		} else {
+			if ('INDI' !== $person->getType()) {
+				continue;
+			}
+			if (!$person->canDisplayName()) {
+				continue;
+			}
+			// -- place filtering
+			if ('BIRT_PLAC' == $option && false === strstr($person->getBirthPlace(), $filter)) {
+				continue;
+			}
+			if ('DEAT_PLAC' == $option && false === strstr($person->getDeathPlace(), $filter)) {
+				continue;
+			}
+			$html .= '<tr>';
+			// -- Indi name(s)
+			$html .= '<td colspan="2" class="nowrap">';
+			foreach ($person->getAllNames() as $num => $name) {
+				if ('NAME' == $name['type']) {
+					$title = '';
+				} else {
+					$title = 'title="' . strip_tags(KT_Gedcom_Tag::getLabel($name['type'], $person)) . '"';
+				}
+				if ($num == $person->getPrimaryName()) {
+					$class = ' class="name2"';
+					$sex_image = $person->getSexImage();
+					[$surn, $givn] = explode(',', $name['sort']);
+				} else {
+					$class = '';
+					$sex_image = '';
+				}
+				$html .= '<a ' . $title . ' href="' . $person->getHtmlUrl() . '"' . $class . '>' . highlight_search_hits($name['full']) . '</a>' . $sex_image . '<br>';
+			}
+			// Indi parents
+			$html .= $person->getPrimaryParentsNames('parents details1', 'none');
+			$html .= '</td>';
+			// Dummy column to match colspan in header
+			$html .= '<td hidden></td>';
+			// -- GIVN/SURN
+			// Use "AAAA" as a separator (instead of ",") as Javascript.localeCompare() ignores
+			// punctuation and "ANN,ROACH" would sort after "ANNE,ROACH", instead of before it.
+			// Similarly, @N.N. would sort as NN.
+			$html .= '<td>' . KT_Filter::escapeHtml(str_replace('@P.N.', 'AAAA', $givn)) . 'AAAA' . KT_Filter::escapeHtml(str_replace('@N.N.', 'AAAA', $surn)) . '</td>';
+			$html .= '<td>' . KT_Filter::escapeHtml(str_replace('@N.N.', 'AAAA', $surn)) . 'AAAA' . KT_Filter::escapeHtml(str_replace('@P.N.', 'AAAA', $givn)) . '</td>';
+			// -- SOSA
+			if ('sosa' === $option) {
+				$html .= '<td><a href="relationship.php?pid1=' . $datalist[1] . '&amp;pid2=' . $person->getXref() . '" title="' . KT_I18N::translate('Relationships') . '">' . KT_I18N::number($key) . '</a></td><td>' . $key . '</td>';
+			} else {
+				$html .= '
+					<td>&nbsp;</td>
+					<td>0</td>
+				';
+			}
+			// -- Birth date
+			$html .= '<td>';
+			if ($birth_dates = $person->getAllBirthDates()) {
+				foreach ($birth_dates as $num => $birth_date) {
+					if ($num) {
+						$html .= '<br>';
+					}
+					$html .= $birth_date->Display(!$SEARCH_SPIDER);
+				}
+				if ($birth_dates[0]->gregorianYear() >= 1550 && $birth_dates[0]->gregorianYear() < 2030 && !isset($unique_indis[$person->getXref()])) {
+					$birt_by_decade[(int) ($birth_dates[0]->gregorianYear() / 10) * 10] .= $person->getSex();
+				}
+			} else {
+				$birth_date = $person->getEstimatedBirthDate();
+				if ($SHOW_EST_LIST_DATES) {
+					$html .= $birth_date->Display(!$SEARCH_SPIDER);
+				} else {
+					$html .= '&nbsp;';
+				}
+				$birth_dates[0] = new KT_Date('');
+			}
+			$html .= '</td>';
+			// -- Event date (sortable)hidden by datatables code
+			$html .= '<td>' . $birth_date->JD() . '</td>';
+			// -- Birth anniversary
+			$html .= '<td>' . KT_Date::getAge($birth_dates[0], null, 2) . '</td>';
+			// -- Birth place
+			$html .= '<td>';
+			foreach ($person->getAllBirthPlaces() as $n => $birth_place) {
+				$tmp = new KT_Place($birth_place, KT_GED_ID);
+				if ($n) {
+					$html .= '<br>';
+				}
+				if ($SEARCH_SPIDER) {
+					$html .= $tmp->getShortName();
+				} else {
+					$html .= '<a href="' . $tmp->getURL() . '" title="' . strip_tags($tmp->getFullName()) . '">';
+					$html .= highlight_search_hits($tmp->getShortName()) . '</a>';
+				}
+			}
+			$html .= '</td>';
+			// -- Number of children
+			$nchi = $person->getNumberOfChildren();
 			$html .= '
-				<td>&nbsp;</td>
-				<td>0</td>
+				<td>' . KT_I18N::number($nchi) . '</td>
+				<td>' . $nchi . '</td>
 			';
-		}
-		// -- Birth date
-		$html .= '<td>';
-		if ($birth_dates = $person->getAllBirthDates()) {
-			foreach ($birth_dates as $num => $birth_date) {
-				if ($num) {
+			// -- Death date
+			$html .= '<td>';
+			if ($death_dates = $person->getAllDeathDates()) {
+				foreach ($death_dates as $num => $death_date) {
+					if ($num) {
+						$html .= '<br>';
+					}
+					$html .= $death_date->Display(!$SEARCH_SPIDER);
+				}
+				if ($death_dates[0]->gregorianYear() >= 1550 && $death_dates[0]->gregorianYear() < 2030 && !isset($unique_indis[$person->getXref()])) {
+					$deat_by_decade[(int) ($death_dates[0]->gregorianYear() / 10) * 10] .= $person->getSex();
+				}
+			} else {
+				$death_date = $person->getEstimatedDeathDate();
+				// Estimated death dates are a fixed number of years after the birth date.
+				// Don't show estimates in the future.
+				if ($SHOW_EST_LIST_DATES && $death_date->MinJD() < KT_CLIENT_JD) {
+					$html .= $death_date->Display(!$SEARCH_SPIDER);
+				} elseif ($person->isDead()) {
+					$html .= KT_I18N::translate('Yes');
+				} else {
+					$html .= '&nbsp;';
+				}
+				$death_dates[0] = new KT_Date('');
+			}
+			$html .= '</td>';
+			// -- Event date (sortable)hidden by datatables code
+			$html .= '<td>' . $death_date->JD() . '</td>';
+			// -- Death anniversary
+			$html .= '<td>' . KT_Date::getAge($death_dates[0], null, 2) . '</td>';
+			// -- Age at death
+			$age = KT_Date::getAge($birth_dates[0], $death_dates[0], 0);
+			if (!isset($unique_indis[$person->getXref()]) && $age >= 0 && $age <= $max_age) {
+				$deat_by_age[$age] .= $person->getSex();
+			}
+			// Need both display and sortable age
+			$html .= '
+				<td>' . KT_Date::getAge($birth_dates[0], $death_dates[0], 2) . '</td>
+				<td>' . KT_Date::getAge($birth_dates[0], $death_dates[0], 1) . '</td>
+			';
+			// -- Death place
+			$html .= '<td>';
+			foreach ($person->getAllDeathPlaces() as $n => $death_place) {
+				$tmp = new KT_Place($death_place, KT_GED_ID);
+				if ($n) {
 					$html .= '<br>';
 				}
-				$html .= $birth_date->Display(!$SEARCH_SPIDER);
-			}
-			if ($birth_dates[0]->gregorianYear() >= 1550 && $birth_dates[0]->gregorianYear() < 2030 && !isset($unique_indis[$person->getXref()])) {
-				$birt_by_decade[(int) ($birth_dates[0]->gregorianYear() / 10) * 10] .= $person->getSex();
-			}
-		} else {
-			$birth_date = $person->getEstimatedBirthDate();
-			if ($SHOW_EST_LIST_DATES) {
-				$html .= $birth_date->Display(!$SEARCH_SPIDER);
-			} else {
-				$html .= '&nbsp;';
-			}
-			$birth_dates[0] = new KT_Date('');
-		}
-		$html .= '</td>';
-		// -- Event date (sortable)hidden by datatables code
-		$html .= '<td>' . $birth_date->JD() . '</td>';
-		// -- Birth anniversary
-		$html .= '<td>' . KT_Date::getAge($birth_dates[0], null, 2) . '</td>';
-		// -- Birth place
-		$html .= '<td>';
-		foreach ($person->getAllBirthPlaces() as $n => $birth_place) {
-			$tmp = new KT_Place($birth_place, KT_GED_ID);
-			if ($n) {
-				$html .= '<br>';
-			}
-			if ($SEARCH_SPIDER) {
-				$html .= $tmp->getShortName();
-			} else {
-				$html .= '<a href="' . $tmp->getURL() . '" title="' . strip_tags($tmp->getFullName()) . '">';
-				$html .= highlight_search_hits($tmp->getShortName()) . '</a>';
-			}
-		}
-		$html .= '</td>';
-		// -- Number of children
-		$nchi = $person->getNumberOfChildren();
-		$html .= '
-			<td>' . KT_I18N::number($nchi) . '</td>
-			<td>' . $nchi . '</td>
-		';
-		// -- Death date
-		$html .= '<td>';
-		if ($death_dates = $person->getAllDeathDates()) {
-			foreach ($death_dates as $num => $death_date) {
-				if ($num) {
-					$html .= '<br>';
+				if ($SEARCH_SPIDER) {
+					$html .= $tmp->getShortName();
+				} else {
+					$html .= '<a href="' . $tmp->getURL() . '" title="' . strip_tags($tmp->getFullName()) . '">';
+					$html .= highlight_search_hits($tmp->getShortName()) . '</a>';
 				}
-				$html .= $death_date->Display(!$SEARCH_SPIDER);
 			}
-			if ($death_dates[0]->gregorianYear() >= 1550 && $death_dates[0]->gregorianYear() < 2030 && !isset($unique_indis[$person->getXref()])) {
-				$deat_by_decade[(int) ($death_dates[0]->gregorianYear() / 10) * 10] .= $person->getSex();
-			}
-		} else {
-			$death_date = $person->getEstimatedDeathDate();
-			// Estimated death dates are a fixed number of years after the birth date.
-			// Don't show estimates in the future.
-			if ($SHOW_EST_LIST_DATES && $death_date->MinJD() < KT_CLIENT_JD) {
-				$html .= $death_date->Display(!$SEARCH_SPIDER);
-			} elseif ($person->isDead()) {
-				$html .= KT_I18N::translate('Yes');
+			$html .= '</td>';
+			// -- Last change
+			if ($SHOW_LAST_CHANGE) {
+				$html .= '<td>' . $person->LastChangeTimestamp() . '</td>';
 			} else {
+				$html .= '<td>&nbsp;</td>';
+			}
+			// -- Last change hidden sort column
+			if ($SHOW_LAST_CHANGE) {
+				$html .= '<td>' . $person->LastChangeTimestamp(true) . '</td>';
+			} else {
+				$html .= '<td>&nbsp;</td>';
+			}
+			// -- Sorting by gender
+			$html .= '<td>';
+			$html .= $person->getSex();
+			$html .= '</td>';
+			// -- Filtering by birth date
+			$html .= '<td>';
+			if (!$person->canDisplayDetails() || KT_Date::Compare($birth_date, $d100y) > 0) {
+				$html .= 'Y100';
+			} else {
+				$html .= 'YES';
+			}
+			$html .= '</td>';
+			// -- Filtering by death date
+			$html .= '<td>';
+			// Died in last 100 years?  Died?  Not dead?
+			if (KT_Date::Compare($death_dates[0], $d100y) > 0) {
+				$html .= 'Y100';
+			} elseif ($death_dates[0]->minJD() || $person->isDead()) {
+				$html .= 'YES';
+			} else {
+				$html .= 'N';
+			}
+			$html .= '</td>';
+			// -- Roots or Leaves ?
+			$html .= '<td>';
+			if (!$person->getChildFamilies()) {
+				$html .= 'R';
+			}  // roots
+			elseif (!$person->isDead() && $person->getNumberOfChildren() < 1) {
+				$html .= 'L';
+			} // leaves
+			else {
 				$html .= '&nbsp;';
 			}
-			$death_dates[0] = new KT_Date('');
+			$html .= '</td>';
+			$html .= '</tr>';
+			$unique_indis[$person->getXref()] = true;
 		}
-		$html .= '</td>';
-		// -- Event date (sortable)hidden by datatables code
-		$html .= '<td>' . $death_date->JD() . '</td>';
-		// -- Death anniversary
-		$html .= '<td>' . KT_Date::getAge($death_dates[0], null, 2) . '</td>';
-		// -- Age at death
-		$age = KT_Date::getAge($birth_dates[0], $death_dates[0], 0);
-		if (!isset($unique_indis[$person->getXref()]) && $age >= 0 && $age <= $max_age) {
-			$deat_by_age[$age] .= $person->getSex();
-		}
-		// Need both display and sortable age
-		$html .= '
-			<td>' . KT_Date::getAge($birth_dates[0], $death_dates[0], 2) . '</td>
-			<td>' . KT_Date::getAge($birth_dates[0], $death_dates[0], 1) . '</td>
-		';
-		// -- Death place
-		$html .= '<td>';
-		foreach ($person->getAllDeathPlaces() as $n => $death_place) {
-			$tmp = new KT_Place($death_place, KT_GED_ID);
-			if ($n) {
-				$html .= '<br>';
-			}
-			if ($SEARCH_SPIDER) {
-				$html .= $tmp->getShortName();
-			} else {
-				$html .= '<a href="' . $tmp->getURL() . '" title="' . strip_tags($tmp->getFullName()) . '">';
-				$html .= highlight_search_hits($tmp->getShortName()) . '</a>';
-			}
-		}
-		$html .= '</td>';
-		// -- Last change
-		if ($SHOW_LAST_CHANGE) {
-			$html .= '<td>' . $person->LastChangeTimestamp() . '</td>';
-		} else {
-			$html .= '<td>&nbsp;</td>';
-		}
-		// -- Last change hidden sort column
-		if ($SHOW_LAST_CHANGE) {
-			$html .= '<td>' . $person->LastChangeTimestamp(true) . '</td>';
-		} else {
-			$html .= '<td>&nbsp;</td>';
-		}
-		// -- Sorting by gender
-		$html .= '<td>';
-		$html .= $person->getSex();
-		$html .= '</td>';
-		// -- Filtering by birth date
-		$html .= '<td>';
-		if (!$person->canDisplayDetails() || KT_Date::Compare($birth_date, $d100y) > 0) {
-			$html .= 'Y100';
-		} else {
-			$html .= 'YES';
-		}
-		$html .= '</td>';
-		// -- Filtering by death date
-		$html .= '<td>';
-		// Died in last 100 years?  Died?  Not dead?
-		if (KT_Date::Compare($death_dates[0], $d100y) > 0) {
-			$html .= 'Y100';
-		} elseif ($death_dates[0]->minJD() || $person->isDead()) {
-			$html .= 'YES';
-		} else {
-			$html .= 'N';
-		}
-		$html .= '</td>';
-		// -- Roots or Leaves ?
-		$html .= '<td>';
-		if (!$person->getChildFamilies()) {
-			$html .= 'R';
-		}  // roots
-		elseif (!$person->isDead() && $person->getNumberOfChildren() < 1) {
-			$html .= 'L';
-		} // leaves
-		else {
-			$html .= '&nbsp;';
-		}
-		$html .= '</td>';
-		$html .= '</tr>';
-		$unique_indis[$person->getXref()] = true;
-	}
-	$html .= '</tbody></table></div>';
+		$html .= '</tbody></table></div>';
 	$html .= '
 		<div class="grid-x grid-margin-x" id="buttons-' . $table_id . '">
 			<div class="cell medium-4 medium-offset-4 text-center show-for-stacked">
@@ -874,324 +893,324 @@ function format_fam_table($datalist, $option = '')
 	$html = '
 		<div class="loading-image">&nbsp;</div>
 		<div class="fam-list clearfix">
-			<table class="shadow scroll" id="' . $table_id . '">
-				<thead>
-					<tr>
-						<th colspan="23">
-							<div class="grid-x">
-								<div class="cell medium-4 expanded button-group">' .
-									hintElement("button", "button", "data-filter-column=\"21\" data-filter-value=\"N\"", KT_I18N::translate('Show couples where both partners are alive.'), KT_I18N::translate('Both alive')) .
-									hintElement("button", "button", "data-filter-column=\"21\" data-filter-value=\"w\"", KT_I18N::translate('Show couples where only the female partner is deceased.'), KT_I18N::translate('Widower')) .
-									hintElement("button", "button", "data-filter-column=\"21\" data-filter-value=\"H\"", KT_I18N::translate('Show couples where only the male partner is deceased.'), KT_I18N::translate('Widow')) .
-									hintElement("button", "button", "data-filter-column=\"21\" data-filter-value=\"Y\"", KT_I18N::translate('Show couples where both partners are deceased.'), KT_I18N::translate('Both dead')) . '
+				<table class="shadow scroll" id="' . $table_id . '">
+					<thead>
+						<tr>
+							<th colspan="23">
+								<div class="grid-x">
+									<div class="cell medium-4 hollow no-gaps align-left button-group">' .
+										hintElement("button", "button", "data-filter-column=\"21\" data-filter-value=\"N\"", KT_I18N::translate('Show couples where both partners are alive.'), KT_I18N::translate('Both alive')) .
+										hintElement("button", "button", "data-filter-column=\"21\" data-filter-value=\"w\"", KT_I18N::translate('Show couples where only the female partner is deceased.'), KT_I18N::translate('Widower')) .
+										hintElement("button", "button", "data-filter-column=\"21\" data-filter-value=\"H\"", KT_I18N::translate('Show couples where only the male partner is deceased.'), KT_I18N::translate('Widow')) .
+										hintElement("button", "button", "data-filter-column=\"21\" data-filter-value=\"Y\"", KT_I18N::translate('Show couples where both partners are deceased.'), KT_I18N::translate('Both dead')) . '
+									</div>
+									<div class="cell medium-3 hollow no-gaps align-center button-group">' .
+										hintElement("button", "button", "data-filter-column=\"22\" data-filter-value=\"R\"", KT_I18N::translate('These couples may also be called “patriarchs”.  They are couples who have no parents recorded in the database.'), KT_I18N::translate('Roots')) .
+										hintElement("button", "button", "data-filter-column=\"22\" data-filter-value=\"L\"", KT_I18N::translate('These are couples who are alive but have no children recorded in the database.'), KT_I18N::translate('Leaves')) . '
+									</div>
+									<div class="cell medium-5 hollow no-gaps align-right button-group">' .
+										hintElement("button", "button", "data-filter-column=\"20\" data-filter-value=\"L\"", KT_I18N::translate('Show couples with an unknown marriage date.'), KT_Gedcom_Tag::getLabel('MARR')) .
+										hintElement("button", "button", "data-filter-column=\"20\" data-filter-value=\"YES\"", KT_I18N::translate('Show couples who married more than 100 years ago.'), KT_Gedcom_Tag::getLabel('MARR') . '&gt;100') .
+										hintElement("button", "button", "data-filter-column=\"20\" data-filter-value=\"Y100\"", KT_I18N::translate('Show couples who married within the last 100 years.'), KT_Gedcom_Tag::getLabel('MARR') . '&lt;=100') .
+										hintElement("button", "button", "data-filter-column=\"20\" data-filter-value=\"D\"", KT_I18N::translate('Show divorced couples.'), KT_Gedcom_Tag::getLabel('DIV')) .
+										hintElement("button", "button", "data-filter-column=\"20\" data-filter-value=\"M\"", KT_I18N::translate('Show couples where either partner married more than once.'), KT_I18N::translate('Multiple marriages')) . '
+									</div>
 								</div>
-								<div class="cell medium-3 expanded button-group">' .
-									hintElement("button", "button", "data-filter-column=\"22\" data-filter-value=\"R\"", KT_I18N::translate('These couples may also be called “patriarchs”.  They are couples who have no parents recorded in the database.'), KT_I18N::translate('Roots')) .
-									hintElement("button", "button", "data-filter-column=\"22\" data-filter-value=\"L\"", KT_I18N::translate('These are couples who are alive but have no children recorded in the database.'), KT_I18N::translate('Leaves')) . '
-								</div>
-								<div class="cell medium-5 expanded button-group">' .
-									hintElement("button", "button", "data-filter-column=\"20\" data-filter-value=\"L\"", KT_I18N::translate('Show couples with an unknown marriage date.'), KT_Gedcom_Tag::getLabel('MARR')) .
-									hintElement("button", "button", "data-filter-column=\"20\" data-filter-value=\"YES\"", KT_I18N::translate('Show couples who married more than 100 years ago.'), KT_Gedcom_Tag::getLabel('MARR') . '&gt;100') .
-									hintElement("button", "button", "data-filter-column=\"20\" data-filter-value=\"Y100\"", KT_I18N::translate('Show couples who married within the last 100 years.'), KT_Gedcom_Tag::getLabel('MARR') . '&lt;=100') .
-									hintElement("button", "button", "data-filter-column=\"20\" data-filter-value=\"D\"", KT_I18N::translate('Show divorced couples.'), KT_Gedcom_Tag::getLabel('DIV')) .
-									hintElement("button", "button", "data-filter-column=\"20\" data-filter-value=\"M\"", KT_I18N::translate('Show couples where either partner married more than once.'), KT_I18N::translate('Multiple marriages')) . '
-								</div>
-							</div>
-						</th>
-					</tr>
-					<tr>
-						<th>' . hintElement("span", "", "", KT_I18N::translate('Sort by given names'), KT_Gedcom_Tag::getLabel('GIVN')) .'</th>
-						<th>' . hintElement("span", "", "", KT_I18N::translate('Sort by surnames'), KT_Gedcom_Tag::getLabel('SURN')) .'</th>
-						<th>HUSB:GIVN_SURN</th>
-						<th>HUSB:SURN_GIVN</th>
-						<th>' . KT_Gedcom_Tag::getLabel('AGE') . '</th>
-						<th>AGE</th>
-						<th>' . hintElement("span", "", "", KT_I18N::translate('Sort by given names'), KT_Gedcom_Tag::getLabel('GIVN')) .'</th>
-						<th>' . hintElement("span", "", "", KT_I18N::translate('Sort by surnames'), KT_Gedcom_Tag::getLabel('SURN')) .'</th>
-						<th>WIFE:GIVN_SURN</th>
-						<th>WIFE:SURN_GIVN</th>
-						<th>' . KT_Gedcom_Tag::getLabel('AGE') . '</th>
-						<th>AGE</th>
-						<th>' . hintElement("span", "", "", KT_I18N::translate('Marriage date'), KT_I18N::translate('Date')) .'</th>
-						<th>MARR:DATE</th>
-						<th>' . hintElement("span", "", "", KT_I18N::translate('Years since marriage'), "<i class=\"' . $iconStyle . ' fa-bell\"></i>") .'</th>
-						<th>' . hintElement("span", "", "", KT_I18N::translate('Marriage place'), KT_Gedcom_Tag::getLabel('PLAC')) .'</th>
-						<th>' . hintElement("span", "", "", KT_I18N::translate('Number of children'), "<i class=\"' . $iconStyle . ' fa-children\"></i>") .'</th>
-						<th>NCHI</th>
-						<th' . ($SHOW_LAST_CHANGE ? '' : '') . '>' . KT_Gedcom_Tag::getLabel('CHAN') . '</th>
-						<th' . ($SHOW_LAST_CHANGE ? '' : '') . '>CHAN</th>
-						<th>MARR</th>
-						<th>DEAT</th>
-						<th>TREE</th>
-					</tr>
-				</thead>
-				<tbody>';
-					$d100y = new KT_Date(date('Y') - 100);  // 100 years ago
-					foreach ($datalist as $family) {
-					// -- Retrieve husband and wife
-					$husb = $family->getHusband();
-					if (is_null($husb)) {
-						$husb = new KT_Person('');
-					}
-					$wife = $family->getWife();
-					if (is_null($wife)) {
-						$wife = new KT_Person('');
-					}
-					if (!$family->canDisplayDetails()) {
-						continue;
-					}
-					// -- place filtering
-					if ('MARR_PLAC' == $option && false === strstr($family->getMarriagePlace(), $filter)) {
-						continue;
-					}
-					$html .= '<tr>';
-					// -- Husband name(s)
-					$html .= '<td colspan="2">';
-					foreach ($husb->getAllNames() as $num => $name) {
-						if ('NAME' == $name['type']) {
-							$title = '';
-						} else {
-							$title = 'title="' . strip_tags(KT_Gedcom_Tag::getLabel($name['type'], $husb)) . '"';
+							</th>
+						</tr>
+						<tr>
+							<th>' . hintElement("span", "", "", KT_I18N::translate('Sort by given names'), KT_Gedcom_Tag::getLabel('GIVN')) .'</th>
+							<th>' . hintElement("span", "", "", KT_I18N::translate('Sort by surnames'), KT_Gedcom_Tag::getLabel('SURN')) .'</th>
+							<th>HUSB:GIVN_SURN</th>
+							<th>HUSB:SURN_GIVN</th>
+							<th>' . KT_Gedcom_Tag::getLabel('AGE') . '</th>
+							<th>AGE</th>
+							<th>' . hintElement("span", "", "", KT_I18N::translate('Sort by given names'), KT_Gedcom_Tag::getLabel('GIVN')) .'</th>
+							<th>' . hintElement("span", "", "", KT_I18N::translate('Sort by surnames'), KT_Gedcom_Tag::getLabel('SURN')) .'</th>
+							<th>WIFE:GIVN_SURN</th>
+							<th>WIFE:SURN_GIVN</th>
+							<th>' . KT_Gedcom_Tag::getLabel('AGE') . '</th>
+							<th>AGE</th>
+							<th>' . hintElement("span", "", "", KT_I18N::translate('Marriage date'), KT_I18N::translate('Date')) .'</th>
+							<th>MARR:DATE</th>
+							<th>' . hintElement("span", "", "", KT_I18N::translate('Years since marriage'), "<i class=\"' . $iconStyle . ' fa-bell\"></i>") .'</th>
+							<th>' . hintElement("span", "", "", KT_I18N::translate('Marriage place'), KT_Gedcom_Tag::getLabel('PLAC')) .'</th>
+							<th>' . hintElement("span", "", "", KT_I18N::translate('Number of children'), "<i class=\"' . $iconStyle . ' fa-children\"></i>") .'</th>
+							<th>NCHI</th>
+							<th' . ($SHOW_LAST_CHANGE ? '' : '') . '>' . KT_Gedcom_Tag::getLabel('CHAN') . '</th>
+							<th' . ($SHOW_LAST_CHANGE ? '' : '') . '>CHAN</th>
+							<th>MARR</th>
+							<th>DEAT</th>
+							<th>TREE</th>
+						</tr>
+					</thead>
+					<tbody>';
+						$d100y = new KT_Date(date('Y') - 100);  // 100 years ago
+						foreach ($datalist as $family) {
+						// -- Retrieve husband and wife
+						$husb = $family->getHusband();
+						if (is_null($husb)) {
+							$husb = new KT_Person('');
 						}
-						if ($num == $husb->getPrimaryName()) {
-							$class = ' class="name2"';
-							$sex_image = $husb->getSexImage();
-							[$surn, $givn] = explode(',', $name['sort']);
-						} else {
-							$class = '';
-							$sex_image = '';
+						$wife = $family->getWife();
+						if (is_null($wife)) {
+							$wife = new KT_Person('');
 						}
-						// Only show married names if they are the name we are filtering by.
-						if ('_MARNM' != $name['type'] || $num == $husb->getPrimaryName()) {
-							$html .= '<a ' . $title . ' href="' . $family->getHtmlUrl() . '"' . $class . '>' . highlight_search_hits($name['full']) . '</a>' . $sex_image . '<br>';
+						if (!$family->canDisplayDetails()) {
+							continue;
 						}
-					}
-					// Husband parents
-					$html .= $husb->getPrimaryParentsNames('parents details1', 'none');
-					$html .= '</td>';
-					// Dummy column to match colspan in header
-					$html .= '<td style="display:none;"></td>';
-					// -- Husb GIVN
-					// Use "AAAA" as a separator (instead of ",") as Javascript.localeCompare() ignores
-					// punctuation and "ANN,ROACH" would sort after "ANNE,ROACH", instead of before it.
-					// Similarly, @N.N. would sort as NN.
-					$html .= '<td>' . KT_Filter::escapeHtml(str_replace('@P.N.', 'AAAA', $givn)) . 'AAAA' . KT_Filter::escapeHtml(str_replace('@N.N.', 'AAAA', $surn)) . '</td>';
-					$html .= '<td>' . KT_Filter::escapeHtml(str_replace('@N.N.', 'AAAA', $surn)) . 'AAAA' . KT_Filter::escapeHtml(str_replace('@P.N.', 'AAAA', $givn)) . '</td>';
-					$mdate = $family->getMarriageDate();
-					// -- Husband age
-					$hdate = $husb->getBirthDate();
-					if ($hdate->isOK() && $mdate->isOK()) {
-						if ($hdate->gregorianYear() >= 1550 && $hdate->gregorianYear() < 2030) {
-							$birt_by_decade[(int) ($hdate->gregorianYear() / 10) * 10] .= $husb->getSex();
+						// -- place filtering
+						if ('MARR_PLAC' == $option && false === strstr($family->getMarriagePlace(), $filter)) {
+							continue;
 						}
-						$hage = KT_Date::getAge($hdate, $mdate, 0);
-						if ($hage >= 0 && $hage <= $max_age) {
-							$marr_by_age[$hage] .= $husb->getSex();
+						$html .= '<tr>';
+						// -- Husband name(s)
+						$html .= '<td colspan="2">';
+						foreach ($husb->getAllNames() as $num => $name) {
+							if ('NAME' == $name['type']) {
+								$title = '';
+							} else {
+								$title = 'title="' . strip_tags(KT_Gedcom_Tag::getLabel($name['type'], $husb)) . '"';
+							}
+							if ($num == $husb->getPrimaryName()) {
+								$class = ' class="name2"';
+								$sex_image = $husb->getSexImage();
+								[$surn, $givn] = explode(',', $name['sort']);
+							} else {
+								$class = '';
+								$sex_image = '';
+							}
+							// Only show married names if they are the name we are filtering by.
+							if ('_MARNM' != $name['type'] || $num == $husb->getPrimaryName()) {
+								$html .= '<a ' . $title . ' href="' . $family->getHtmlUrl() . '"' . $class . '>' . highlight_search_hits($name['full']) . '</a>' . $sex_image . '<br>';
+							}
 						}
-					}
-					$html .= '
-						<td>' . KT_Date::getAge($hdate, $mdate, 2) . '</td>
-						<td>' . KT_Date::getAge($hdate, $mdate, 1) . '</td>
-					';
-					// -- Wife name(s)
-					$html .= '<td colspan="2">';
-					foreach ($wife->getAllNames() as $num => $name) {
-						if ('NAME' == $name['type']) {
-							$title = '';
-						} else {
-							$title = 'title="' . strip_tags(KT_Gedcom_Tag::getLabel($name['type'], $wife)) . '"';
+						// Husband parents
+						$html .= $husb->getPrimaryParentsNames('parents details1', 'none');
+						$html .= '</td>';
+						// Dummy column to match colspan in header
+						$html .= '<td style="display:none;"></td>';
+						// -- Husb GIVN
+						// Use "AAAA" as a separator (instead of ",") as Javascript.localeCompare() ignores
+						// punctuation and "ANN,ROACH" would sort after "ANNE,ROACH", instead of before it.
+						// Similarly, @N.N. would sort as NN.
+						$html .= '<td>' . KT_Filter::escapeHtml(str_replace('@P.N.', 'AAAA', $givn)) . 'AAAA' . KT_Filter::escapeHtml(str_replace('@N.N.', 'AAAA', $surn)) . '</td>';
+						$html .= '<td>' . KT_Filter::escapeHtml(str_replace('@N.N.', 'AAAA', $surn)) . 'AAAA' . KT_Filter::escapeHtml(str_replace('@P.N.', 'AAAA', $givn)) . '</td>';
+						$mdate = $family->getMarriageDate();
+						// -- Husband age
+						$hdate = $husb->getBirthDate();
+						if ($hdate->isOK() && $mdate->isOK()) {
+							if ($hdate->gregorianYear() >= 1550 && $hdate->gregorianYear() < 2030) {
+								$birt_by_decade[(int) ($hdate->gregorianYear() / 10) * 10] .= $husb->getSex();
+							}
+							$hage = KT_Date::getAge($hdate, $mdate, 0);
+							if ($hage >= 0 && $hage <= $max_age) {
+								$marr_by_age[$hage] .= $husb->getSex();
+							}
 						}
-						if ($num == $wife->getPrimaryName()) {
-							$class = ' class="name2"';
-							$sex_image = $wife->getSexImage();
-							[$surn, $givn] = explode(',', $name['sort']);
-						} else {
-							$class = '';
-							$sex_image = '';
-						}
-						// Only show married names if they are the name we are filtering by.
-						if ('_MARNM' != $name['type'] || $num == $wife->getPrimaryName()) {
-							$html .= '<a ' . $title . ' href="' . $family->getHtmlUrl() . '"' . $class . '>' . highlight_search_hits($name['full']) . '</a>' . $sex_image . '<br>';
-						}
-					}
-					// Wife parents
-					$html .= $wife->getPrimaryParentsNames('parents details1', 'none');
-					$html .= '</td>';
-					// Dummy column to match colspan in header
-					$html .= '<td style="display:none;"></td>';
-					// -- Wife GIVN
-					// -- Husb GIVN
-					// Use "AAAA" as a separator (instead of ",") as Javascript.localeCompare() ignores
-					// punctuation and "ANN,ROACH" would sort after "ANNE,ROACH", instead of before it.
-					// Similarly, @N.N. would sort as NN.
-					$html .= '<td>' . KT_Filter::escapeHtml(str_replace('@P.N.', 'AAAA', $givn)) . 'AAAA' . KT_Filter::escapeHtml(str_replace('@N.N.', 'AAAA', $surn)) . '</td>';
-					$html .= '<td>' . KT_Filter::escapeHtml(str_replace('@N.N.', 'AAAA', $surn)) . 'AAAA' . KT_Filter::escapeHtml(str_replace('@P.N.', 'AAAA', $givn)) . '</td>';
-					$mdate = $family->getMarriageDate();
-					// -- Wife age
-					$wdate = $wife->getBirthDate();
-					if ($wdate->isOK() && $mdate->isOK()) {
-						if ($wdate->gregorianYear() >= 1550 && $wdate->gregorianYear() < 2030) {
-							$birt_by_decade[(int) ($wdate->gregorianYear() / 10) * 10] .= $wife->getSex();
-						}
-						$wage = KT_Date::getAge($wdate, $mdate, 0);
-						if ($wage >= 0 && $wage <= $max_age) {
-							$marr_by_age[$wage] .= $wife->getSex();
-						}
-					}
-					$html .= '
-						<td>' . KT_Date::getAge($wdate, $mdate, 2) . '</td>
-						<td>' . KT_Date::getAge($wdate, $mdate, 1) . '</td>
+						$html .= '
+							<td>' . KT_Date::getAge($hdate, $mdate, 2) . '</td>
+							<td>' . KT_Date::getAge($hdate, $mdate, 1) . '</td>
 						';
-					// -- Marriage date
-					$html .= '<td>';
-					if ($marriage_dates = $family->getAllMarriageDates()) {
-						foreach ($marriage_dates as $n => $marriage_date) {
+						// -- Wife name(s)
+						$html .= '<td colspan="2">';
+						foreach ($wife->getAllNames() as $num => $name) {
+							if ('NAME' == $name['type']) {
+								$title = '';
+							} else {
+								$title = 'title="' . strip_tags(KT_Gedcom_Tag::getLabel($name['type'], $wife)) . '"';
+							}
+							if ($num == $wife->getPrimaryName()) {
+								$class = ' class="name2"';
+								$sex_image = $wife->getSexImage();
+								[$surn, $givn] = explode(',', $name['sort']);
+							} else {
+								$class = '';
+								$sex_image = '';
+							}
+							// Only show married names if they are the name we are filtering by.
+							if ('_MARNM' != $name['type'] || $num == $wife->getPrimaryName()) {
+								$html .= '<a ' . $title . ' href="' . $family->getHtmlUrl() . '"' . $class . '>' . highlight_search_hits($name['full']) . '</a>' . $sex_image . '<br>';
+							}
+						}
+						// Wife parents
+						$html .= $wife->getPrimaryParentsNames('parents details1', 'none');
+						$html .= '</td>';
+						// Dummy column to match colspan in header
+						$html .= '<td style="display:none;"></td>';
+						// -- Wife GIVN
+						// -- Husb GIVN
+						// Use "AAAA" as a separator (instead of ",") as Javascript.localeCompare() ignores
+						// punctuation and "ANN,ROACH" would sort after "ANNE,ROACH", instead of before it.
+						// Similarly, @N.N. would sort as NN.
+						$html .= '<td>' . KT_Filter::escapeHtml(str_replace('@P.N.', 'AAAA', $givn)) . 'AAAA' . KT_Filter::escapeHtml(str_replace('@N.N.', 'AAAA', $surn)) . '</td>';
+						$html .= '<td>' . KT_Filter::escapeHtml(str_replace('@N.N.', 'AAAA', $surn)) . 'AAAA' . KT_Filter::escapeHtml(str_replace('@P.N.', 'AAAA', $givn)) . '</td>';
+						$mdate = $family->getMarriageDate();
+						// -- Wife age
+						$wdate = $wife->getBirthDate();
+						if ($wdate->isOK() && $mdate->isOK()) {
+							if ($wdate->gregorianYear() >= 1550 && $wdate->gregorianYear() < 2030) {
+								$birt_by_decade[(int) ($wdate->gregorianYear() / 10) * 10] .= $wife->getSex();
+							}
+							$wage = KT_Date::getAge($wdate, $mdate, 0);
+							if ($wage >= 0 && $wage <= $max_age) {
+								$marr_by_age[$wage] .= $wife->getSex();
+							}
+						}
+						$html .= '
+							<td>' . KT_Date::getAge($wdate, $mdate, 2) . '</td>
+							<td>' . KT_Date::getAge($wdate, $mdate, 1) . '</td>
+							';
+						// -- Marriage date
+						$html .= '<td>';
+						if ($marriage_dates = $family->getAllMarriageDates()) {
+							foreach ($marriage_dates as $n => $marriage_date) {
+								if ($n) {
+									$html .= '<br>';
+								}
+								$html .= '<div>' . $marriage_date->Display(!$SEARCH_SPIDER) . '</div>';
+							}
+							if ($marriage_dates[0]->gregorianYear() >= 1550 && $marriage_dates[0]->gregorianYear() < 2030) {
+								$marr_by_decade[(int) ($marriage_dates[0]->gregorianYear() / 10) * 10] .= $husb->getSex() . $wife->getSex();
+							}
+						} elseif (get_sub_record(1, '1 _NMR', $family->getGedcomRecord())) {
+							$hus = $family->getHusband();
+							$wif = $family->getWife();
+							if (empty($wif) && !empty($hus)) {
+								$html .= KT_Gedcom_Tag::getLabel('_NMR', $hus);
+							} elseif (empty($hus) && !empty($wif)) {
+								$html .= KT_Gedcom_Tag::getLabel('_NMR', $wif);
+							} else {
+								$html .= KT_Gedcom_Tag::getLabel('_NMR');
+							}
+						} elseif (get_sub_record(1, '1 _NMAR', $family->getGedcomRecord())) {
+							$hus = $family->getHusband();
+							$wif = $family->getWife();
+							if (empty($wif) && !empty($hus)) {
+								$html .= KT_Gedcom_Tag::getLabel('_NMAR', $hus);
+							} elseif (empty($hus) && !empty($wif)) {
+								$html .= KT_Gedcom_Tag::getLabel('_NMAR', $wif);
+							} else {
+								$html .= KT_Gedcom_Tag::getLabel('_NMAR');
+							}
+						} else {
+							$factdetail = explode(' ', trim($family->getMarriageRecord()));
+							if (isset($factdetail)) {
+								if (count($factdetail) >= 3) {
+									if ('N' != strtoupper($factdetail[2])) {
+										$html .= KT_I18N::translate('Yes');
+									} else {
+										$html .= KT_I18N::translate('No');
+									}
+								} else {
+									$html .= '&nbsp;';
+								}
+							}
+						}
+						$html .= '</td>';
+						// -- Event date (sortable)hidden by datatables code
+						$html .= '<td>';
+						if ($marriage_dates) {
+							$html .= $marriage_date->JD();
+						} else {
+							$html .= 0;
+						}
+						$html .= '</td>';
+						// -- Marriage anniversary
+						$html .= '<td>' . KT_Date::getAge($mdate, null, 2) . '</td>';
+						// -- Marriage place
+						$html .= '<td>';
+						foreach ($family->getAllMarriagePlaces() as $n => $marriage_place) {
+							$tmp = new KT_Place($marriage_place, KT_GED_ID);
 							if ($n) {
 								$html .= '<br>';
 							}
-							$html .= '<div>' . $marriage_date->Display(!$SEARCH_SPIDER) . '</div>';
-						}
-						if ($marriage_dates[0]->gregorianYear() >= 1550 && $marriage_dates[0]->gregorianYear() < 2030) {
-							$marr_by_decade[(int) ($marriage_dates[0]->gregorianYear() / 10) * 10] .= $husb->getSex() . $wife->getSex();
-						}
-					} elseif (get_sub_record(1, '1 _NMR', $family->getGedcomRecord())) {
-						$hus = $family->getHusband();
-						$wif = $family->getWife();
-						if (empty($wif) && !empty($hus)) {
-							$html .= KT_Gedcom_Tag::getLabel('_NMR', $hus);
-						} elseif (empty($hus) && !empty($wif)) {
-							$html .= KT_Gedcom_Tag::getLabel('_NMR', $wif);
-						} else {
-							$html .= KT_Gedcom_Tag::getLabel('_NMR');
-						}
-					} elseif (get_sub_record(1, '1 _NMAR', $family->getGedcomRecord())) {
-						$hus = $family->getHusband();
-						$wif = $family->getWife();
-						if (empty($wif) && !empty($hus)) {
-							$html .= KT_Gedcom_Tag::getLabel('_NMAR', $hus);
-						} elseif (empty($hus) && !empty($wif)) {
-							$html .= KT_Gedcom_Tag::getLabel('_NMAR', $wif);
-						} else {
-							$html .= KT_Gedcom_Tag::getLabel('_NMAR');
-						}
-					} else {
-						$factdetail = explode(' ', trim($family->getMarriageRecord()));
-						if (isset($factdetail)) {
-							if (count($factdetail) >= 3) {
-								if ('N' != strtoupper($factdetail[2])) {
-									$html .= KT_I18N::translate('Yes');
-								} else {
-									$html .= KT_I18N::translate('No');
-								}
+							if ($SEARCH_SPIDER) {
+								$html .= $tmp->getShortName();
 							} else {
-								$html .= '&nbsp;';
+								$html .= '<a href="' . $tmp->getURL() . '" title="' . strip_tags($tmp->getFullName()) . '">';
+								$html .= highlight_search_hits($tmp->getShortName()) . '</a>';
 							}
 						}
-					}
-					$html .= '</td>';
-					// -- Event date (sortable)hidden by datatables code
-					$html .= '<td>';
-					if ($marriage_dates) {
-						$html .= $marriage_date->JD();
-					} else {
-						$html .= 0;
-					}
-					$html .= '</td>';
-					// -- Marriage anniversary
-					$html .= '<td>' . KT_Date::getAge($mdate, null, 2) . '</td>';
-					// -- Marriage place
-					$html .= '<td>';
-					foreach ($family->getAllMarriagePlaces() as $n => $marriage_place) {
-						$tmp = new KT_Place($marriage_place, KT_GED_ID);
-						if ($n) {
-							$html .= '<br>';
-						}
-						if ($SEARCH_SPIDER) {
-							$html .= $tmp->getShortName();
+						$html .= '</td>';
+						// -- Number of children
+						$nchi = $family->getNumberOfChildren();
+						$html .= '
+							<td class="text-center">' . KT_I18N::number($nchi) . '</td>
+							<td>' . $nchi . '</td>
+						';
+						// -- Last change
+						if ($SHOW_LAST_CHANGE) {
+							$html .= '<td>' . $family->LastChangeTimestamp() . '</td>';
 						} else {
-							$html .= '<a href="' . $tmp->getURL() . '" title="' . strip_tags($tmp->getFullName()) . '">';
-							$html .= highlight_search_hits($tmp->getShortName()) . '</a>';
+							$html .= '<td>&nbsp;</td>';
 						}
-					}
-					$html .= '</td>';
-					// -- Number of children
-					$nchi = $family->getNumberOfChildren();
-					$html .= '
-						<td>' . KT_I18N::number($nchi) . '</td>
-						<td>' . $nchi . '</td>
-					';
-					// -- Last change
-					if ($SHOW_LAST_CHANGE) {
-						$html .= '<td>' . $family->LastChangeTimestamp() . '</td>';
-					} else {
-						$html .= '<td>&nbsp;</td>';
-					}
-					// -- Last change hidden sort column
-					if ($SHOW_LAST_CHANGE) {
-						$html .= '<td>' . $family->LastChangeTimestamp(true) . '</td>';
-					} else {
-						$html .= '<td>&nbsp;</td>';
-					}
-					// -- Sorting by marriage date
-					$html .= '<td>';
-					if (!$family->canDisplayDetails() || !$mdate->isOK()) {
-						$html .= 'U';
-					} else {
-						if (KT_Date::Compare($mdate, $d100y) > 0) {
-							$html .= 'Y100';
+						// -- Last change hidden sort column
+						if ($SHOW_LAST_CHANGE) {
+							$html .= '<td>' . $family->LastChangeTimestamp(true) . '</td>';
 						} else {
-							$html .= 'YES';
+							$html .= '<td>&nbsp;</td>';
 						}
-					}
-					if ($family->isDivorced()) {
-						$html .= 'D';
-					}
-					if (count($husb->getSpouseFamilies()) > 1 || count($wife->getSpouseFamilies()) > 1) {
-						$html .= 'M';
-					}
-					$html .= '</td>';
-					// -- Sorting alive/dead
-					$html .= '<td>';
-					if ($husb->isDead() && $wife->isDead()) {
-						$html .= 'Y';
-					}
-					if ($husb->isDead() && !$wife->isDead()) {
-						if ('F' == $wife->getSex()) {
-							$html .= 'H';
+						// -- Sorting by marriage date
+						$html .= '<td>';
+						if (!$family->canDisplayDetails() || !$mdate->isOK()) {
+							$html .= 'U';
+						} else {
+							if (KT_Date::Compare($mdate, $d100y) > 0) {
+								$html .= 'Y100';
+							} else {
+								$html .= 'YES';
+							}
 						}
-						if ('M' == $wife->getSex()) {
-							$html .= 'W';
-						} // male partners
-					}
-					if (!$husb->isDead() && $wife->isDead()) {
-						if ('M' == $husb->getSex()) {
-							$html .= 'W';
+						if ($family->isDivorced()) {
+							$html .= 'D';
 						}
-						if ('F' == $husb->getSex()) {
-							$html .= 'H';
-						} // female partners
+						if (count($husb->getSpouseFamilies()) > 1 || count($wife->getSpouseFamilies()) > 1) {
+							$html .= 'M';
+						}
+						$html .= '</td>';
+						// -- Sorting alive/dead
+						$html .= '<td>';
+						if ($husb->isDead() && $wife->isDead()) {
+							$html .= 'Y';
+						}
+						if ($husb->isDead() && !$wife->isDead()) {
+							if ('F' == $wife->getSex()) {
+								$html .= 'H';
+							}
+							if ('M' == $wife->getSex()) {
+								$html .= 'W';
+							} // male partners
+						}
+						if (!$husb->isDead() && $wife->isDead()) {
+							if ('M' == $husb->getSex()) {
+								$html .= 'W';
+							}
+							if ('F' == $husb->getSex()) {
+								$html .= 'H';
+							} // female partners
+						}
+						if (!$husb->isDead() && !$wife->isDead()) {
+							$html .= 'N';
+						}
+						$html .= '</td>';
+						// -- Roots or Leaves
+						$html .= '<td>';
+						if (!$husb->getChildFamilies() && !$wife->getChildFamilies()) {
+							$html .= 'R';
+						} // roots
+						elseif (!$husb->isDead() && !$wife->isDead() && $family->getNumberOfChildren() < 1) {
+							$html .= 'L';
+						} // leaves
+						else {
+							$html .= '&nbsp;';
+						}
+						$html .= '</td>
+						</tr>';
 					}
-					if (!$husb->isDead() && !$wife->isDead()) {
-						$html .= 'N';
-					}
-					$html .= '</td>';
-					// -- Roots or Leaves
-					$html .= '<td>';
-					if (!$husb->getChildFamilies() && !$wife->getChildFamilies()) {
-						$html .= 'R';
-					} // roots
-					elseif (!$husb->isDead() && !$wife->isDead() && $family->getNumberOfChildren() < 1) {
-						$html .= 'L';
-					} // leaves
-					else {
-						$html .= '&nbsp;';
-					}
-					$html .= '</td>
-					</tr>';
-				}
 
-			$html .= '</tbody>
-		</table>
+				$html .= '</tbody>
+			</table>
 	</div>';
 	$html .= '
 		<div class="grid-x grid-margin-x" id="buttons-' . $table_id . '">

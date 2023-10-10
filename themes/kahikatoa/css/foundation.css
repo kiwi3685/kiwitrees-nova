@@ -93,6 +93,14 @@ table.scroll {
 .tabs-title.is-active {
 	background: #8a8a8a !important;
 }
+.tabs-title.rela a {
+	background-color: #f0f0f0;
+	opacity: 0.5;
+}
+.tabs-title.histo {
+	background-color: #e0e0e0;
+	color: #0193b7;
+}
 .tabs-title a {
 	font-weight: 600;
 }

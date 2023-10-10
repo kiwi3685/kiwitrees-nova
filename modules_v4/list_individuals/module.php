@@ -231,7 +231,7 @@ class list_individuals_KT_Module extends KT_Module implements KT_Module_List {
 						$list[] = '<a href="' . $module_url . 'show_all=yes' . '&amp;ged=' . KT_GEDURL . '">' . KT_I18N::translate('All') . '</a>';
 					}
 				}
-				echo '<h6 class="text-center alpha_index">', join(' | ', $list), '</h6>';
+				echo '<h5 class="text-center alpha_index">', join(' | ', $list), '</h5>';
 
 				// Search spiders don't get an option to show/hide the surname sublists,
 				// nor does it make sense on the all/unknown/surname views

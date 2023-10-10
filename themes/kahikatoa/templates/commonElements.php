@@ -516,10 +516,12 @@ function additionalFacts($tag)
 	</div>
 	<?php
 
-}
+}
+
 /**
  *print an element with a tool-tip or hint
  *
+ * @param string $position		position of the hint pop-up
  * @param string $element		name of the element used
  * @param string $otherClass	extra classes other than the hint components
  * @param string $otherTags		other element tags not part of hint code
@@ -528,10 +530,22 @@ function additionalFacts($tag)
  */
 function hintElement($element = '', $otherClass = '', $otherTags = '', $hint = '', $text = '')
 {
+	global $iconStyle;
+
+	require_once KT_ROOT . 'library/Mobile-Detect-3.74.0/src/MobileDetect.php';
+	$detect = new Detection\MobileDetect;
+	if ($detect->isMobile() ) {
+		$hintClass = '';
+		$ariaLabel = '';
+	} else {
+		$hintClass = ' hint--top hint--medium hint--no-animate hint--rounded';
+		$ariaLabel = 'aria-label="' . $hint . '"';
+	}
+
 	$html = '
 		<' . $element . '
-			class="hint--top hint--medium hint--no-animate hint--rounded ' . $otherClass . '"
-			aria-label="' . $hint . '" ' .
+			class="' . $otherClass  . $hintClass . '"' .
+			$ariaLabel .
 			$otherTags . '
 		>' .
 			$text . '

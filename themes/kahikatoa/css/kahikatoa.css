@@ -1749,14 +1749,6 @@ div[id$=-page] button[type=submit] {
 	margin-bottom: 0.125rem;
 	padding: 0.5rem;
 }
-#indi-page .tabs-panel .rela {
-	background-color: #e0e0e0;
-	opacity: 0.65;
-}
-#indi-page .tabs-panel .histo {
-	background-color: #e0e0e0;
-	color: #0193b7;
-}
 #indi-page .tabs-panel .census_text table {
 	font-size: 95%;
 }
@@ -2884,7 +2876,6 @@ div#additional_facts div.accordion-content .input-group.autocomplete_container .
 		/* expanded button only for small */
 		display: block;
 		margin: 1rem auto;
-		width: 98%;
 	}
 
 	div.dt-buttons {
