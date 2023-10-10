@@ -41,7 +41,7 @@ class KT_Census_AbstractCensusColumn {
 	 * Create a column for a census
 	 *
 	 * @param KT_Census_CensusInterface $census - The census to which this column forms part.
-	 * @param string          $abbr   - The abbrievated on-screen name "BiC"
+	 * @param string          $abbr   - The abbreviated on-screen name "BiC"
 	 * @param string          $title  - The full column heading "Born in the county"
 	 * @param string          $style  - Optional additional styling for column headers "width: 250px;"
 	 */
