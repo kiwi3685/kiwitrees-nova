@@ -44,6 +44,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	$url				= KT_Filter::postUrl('url', KT_Filter::getUrl('url'));
 	$termsConditions	= KT_Filter::post('termsConditions', '1', '0');
 
+	// Only an administration can use the distribution lists.
+	$controller->restrictAccess(!in_array($to, ['all', 'never_logged', 'last_6mo']) || KT_USER_IS_ADMIN);
+
+	$recipients = recipients($to);
+
 	// Different validation for admin/user/visitor.
 	$errors		= false;
 	$urlRegex	= '/(?!' . preg_quote(KT_SERVER_NAME, '/') . ')((?:ftp|http|https|www|\:|\/\/)?(?>[a-z\-0-9]{1,}\.){1,}[a-z]{2,8})/m';
