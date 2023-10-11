@@ -145,7 +145,7 @@ switch ($type) {
 			KT_DB::prepare("
 				SELECT 'INDI' AS type, i_id AS xref, i_file AS ged_id, i_gedcom AS gedrec
 				 FROM `##individuals`
-				 WHERE i_gedcom REGEXP '(.*)\n1 EVEN.*\n2 TYPE ([^\n]*)'" . $term . "'*[^\n]*' 
+				 WHERE i_gedcom REGEXP '(.*)\n1 EVEN.*\n2 TYPE ([^\n]*)'" . $term . "'*[^\n]*'
 				 AND i_file=?
 				 ORDER BY SUBSTRING_INDEX(i_gedcom, '\n2 TYPE ', -1) COLLATE '" . KT_I18N::$collation . "'
 			")
@@ -175,7 +175,7 @@ switch ($type) {
 			KT_DB::prepare("
 				SELECT 'INDI' AS type, i_id AS xref, i_file AS ged_id, i_gedcom AS gedrec
 				 FROM `##individuals`
-				 WHERE i_gedcom REGEXP '(.*)\n1 FACT.*\n2 TYPE ([^\n]*)'" . $term . "'*[^\n]*' 
+				 WHERE i_gedcom REGEXP '(.*)\n1 FACT.*\n2 TYPE ([^\n]*)'" . $term . "'*[^\n]*'
 				 AND i_file=?
 				 ORDER BY SUBSTRING_INDEX(i_gedcom, '\n2 TYPE ', -1) COLLATE '" . KT_I18N::$collation . "'
 			")
@@ -205,7 +205,7 @@ switch ($type) {
 			KT_DB::prepare("
 				SELECT 'INDI' AS type, i_id AS xref, i_file AS ged_id, i_gedcom AS gedrec
 				 FROM `##individuals`
-				 WHERE i_gedcom REGEXP '(.*)\n1 [EVEN FACT].*\n2 TYPE ([^\n]*)'" . $term . "'*[^\n]*' 
+				 WHERE i_gedcom REGEXP '(.*)\n1 [EVEN FACT].*\n2 TYPE ([^\n]*)'" . $term . "'*[^\n]*'
 				 AND i_file=?
 				 ORDER BY SUBSTRING_INDEX(i_gedcom, '\n2 TYPE ', -1) COLLATE '" . KT_I18N::$collation . "'
 			")
@@ -533,7 +533,7 @@ switch ($type) {
 
 		// Filter for privacy
 		foreach ($rows as $row) {
-			$repository = KT_Repository::getInstance($row);
+			$repository = KT_Repository::getInstance($row['xref']);
 			if ($repository->canDisplayName()) {
 				$data[] = array(
 					'value' => $row['xref'],
@@ -596,7 +596,7 @@ switch ($type) {
 			KT_DB::prepare("
 				SELECT 'INDI' AS type, i_id AS xref, i_file AS ged_id, i_gedcom AS gedrec
 				 FROM `##individuals`
-				 WHERE i_gedcom LIKE CONCAT('%\n_ SOUR @', ?, '@%', REPLACE(?, ' ', '%'), '%') 
+				 WHERE i_gedcom LIKE CONCAT('%\n_ SOUR @', ?, '@%', REPLACE(?, ' ', '%'), '%')
 				 AND i_file=?
 				 LIMIT 100
 			")
@@ -621,7 +621,7 @@ switch ($type) {
 			KT_DB::prepare("
 				SELECT 'FAM' AS type, f_id AS xref, f_file AS ged_id, f_gedcom AS gedrec
 				 FROM `##families`
-				 WHERE f_gedcom LIKE CONCAT('%\n_ SOUR @', ?, '@%', REPLACE(?, ' ', '%'), '%') 
+				 WHERE f_gedcom LIKE CONCAT('%\n_ SOUR @', ?, '@%', REPLACE(?, ' ', '%'), '%')
 				 AND f_file=?
 				 LIMIT 100
 			")
@@ -646,7 +646,7 @@ switch ($type) {
 			KT_DB::prepare("
 				SELECT 'OBJE' AS type, m_id AS xref, m_file AS ged_id, m_gedcom AS gedrec
 				 FROM `##media`
-				 WHERE m_gedcom LIKE CONCAT('%\n_ SOUR @', ?, '@%', REPLACE(?, ' ', '%'), '%') 
+				 WHERE m_gedcom LIKE CONCAT('%\n_ SOUR @', ?, '@%', REPLACE(?, ' ', '%'), '%')
 				 AND m_file=?
 				 LIMIT 100
 			")
@@ -992,11 +992,11 @@ function get_REPO_rows($term) {
 	if (strlen($term) >= 2 && substr($term,0,1) === $REPO_ID_PREFIX && is_numeric(substr($term,1,1))) {
 		// Search for Xref only
 		return KT_DB::prepare("
-			SELECT o_id AS xref
+			SELECT o_id AS xref, n_full
 			FROM `##other`
 			JOIN `##name` ON (o_id=n_id AND o_file=n_file)
 			WHERE o_id LIKE ?
-			AND o_type='REPO'
+			AND o_type = 'REPO'
 			AND o_file = ?
 		")
 		->execute(array($term, KT_GED_ID))
@@ -1004,12 +1004,12 @@ function get_REPO_rows($term) {
 
 	} elseif (strlen($term) >= 3) {
 		return KT_DB::prepare("
-			SELECT o_id AS xref
+			SELECT o_id AS xref, n_full
 			FROM `##other`
 			JOIN `##name` ON (o_id=n_id AND o_file=n_file)
 			WHERE n_full LIKE CONCAT('%', REPLACE(?, ' ', '%'), '%')
+			AND o_type = 'REPO'
 			AND o_file = ?
-			AND o_type LIKE 'REPO'
 		")
 		->execute(array($term, KT_GED_ID))
 		->fetchAll(PDO::FETCH_ASSOC);
