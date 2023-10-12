@@ -390,13 +390,20 @@ footer .card .card-divider p {
 footer .card .card-divider a.configure {
 	color: #faf5e8;
 }
-footer .card .card-section p,
-footer .card .card-section a {
+footer .card .card-section p {
 	color: #faf5e8;
-	font-size: 0.9rem;
 }
 footer .card .card-section .contact_links {
 	font-size: 0.9rem;
+	color: #faf5e8;
+}
+footer .card .card-section .contact_links a {
+	color: #faf5e8;
+	font-weight: 600;
+}
+footer .card .card-section .contact_links a:hover,
+footer .card .card-section .contact_links a .svg-inline--fa:hover {
+	color: #2c1616;
 }
 
 .small-block {

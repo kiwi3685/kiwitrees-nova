@@ -85,6 +85,15 @@ div.dataTables_wrapper div.top {
 		text-align: center;
 	}
 }
+div.dataTables_wrapper div.bottom {
+	margin-top: 0.5rem;
+	overflow: hidden;
+}
+@media print, screen and (max-width: 48.06125em) {
+	div.dataTables_wrapper div.bottom {
+		text-align: center;
+	}
+}
 div.dataTables_wrapper div.table-scroll {
 	overflow: hidden;
 }
@@ -687,4 +696,8 @@ input[type=radio]:checked::before {
 	color: #faf5e8;
 	padding: 0.275rem;
 	text-align: center;
+}
+
+.hint--small:after {
+	width: auto;
 }
