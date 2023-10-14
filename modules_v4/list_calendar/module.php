@@ -96,7 +96,7 @@ class list_calendar_KT_Module extends KT_Module implements KT_Module_List {
 		// Create a Date_Calendar from the parameters
 
 		// advance-year "year range"
-		if (preg_match('/^(\d+)-(\d+)$/', $year, $match)) {
+		if ($year && preg_match('/^(\d+)-(\d+)$/', $year, $match)) {
 			if (strlen($match[1]) > strlen($match[2])){
 				$match[2] = substr($match[1], 0, strlen($match[1]) - strlen($match[2])) . $match[2];
 			}
@@ -104,7 +104,7 @@ class list_calendar_KT_Module extends KT_Module implements KT_Module_List {
 			$view		= 'year';
 		} else
 			// advanced-year "decade/century wildcard"
-			if (preg_match('/^(\d+)(\?+)$/', $year, $match)) {
+			if ($year && preg_match('/^(\d+)(\?+)$/', $year, $match)) {
 				$y1				= $match[1] . str_replace('?', '0', $match[2]);
 				$y2				= $match[1] . str_replace('?', '9', $match[2]);
 				$ged_date	= new Date("FROM {$cal} {$y1} TO {$cal} {$y2}");
