@@ -86,5 +86,14 @@ try {
     // Perhaps we have already deleted this data?
 }
 
+// Set a default position for an administration link in the header.
+try {
+	self::exec("UPDATE `##module` SET `status` = 'enabled' WHERE `module_name` = 'menu_admin_links'");
+	self::exec("INSERT IGNORE INTO `##module_setting`('module_name','setting_name','setting_value') VALUES ('menu_admin_links','ADMIN_LOCATION','other')");
+	self::exec("INSERT IGNORE INTO `##module_setting`('module_name','setting_name','setting_value') VALUES ('menu_admin_links','ADMIN_SUBMENU','1')");
+} catch (PDOException $ex) {
+	// Perhaps we have already deleted this data?
+}
+
 // Update the version to indicate success
 KT_Site::preference($schema_name, $next_version);
