@@ -188,6 +188,9 @@ class KT_Controller_Page extends KT_Controller_Base {
 
 		$META_GENERATOR		= KT_KIWITREES . '-' . KT_VERSION_TEXT . ' - ' . KT_KIWITREES_URL;
 		$META_TITLE			= KT_GED_ID ? get_gedcom_setting(KT_GED_ID, 'META_TITLE') : '';
+		if ($META_TITLE) {
+			$title .= ' - ' . $META_TITLE;
+		}
 
 		// This javascript needs to be loaded in the header, *before* the CSS.
 		// All other javascript should be deferred until the end of the page

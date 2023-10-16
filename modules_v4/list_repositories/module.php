@@ -110,8 +110,8 @@ class list_repositories_KT_Module extends KT_Module implements KT_Module_List {
 
 		$controller = new KT_Controller_Page();
 		$controller
-			->pageHeader()
 			->setPageTitle($this->getTitle())
+			->pageHeader()
 			->restrictAccess(KT_Module::isActiveList(KT_GED_ID, 'list_repositories', KT_USER_ACCESS_LEVEL))
 			->addExternalJavascript(KT_DATATABLES_KT_JS)
 			->addInlineJavascript('
