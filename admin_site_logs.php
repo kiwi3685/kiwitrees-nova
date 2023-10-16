@@ -65,16 +65,16 @@ switch ($action) {
 
 	case 'loadrows':
 
-		$search    = KT_Filter::get('sSearch', '');
-		$start     = KT_Filter::getInteger('iDisplayStart');
-		$length    = KT_Filter::getInteger('iDisplayLength');
-		$isort     = KT_Filter::getInteger('iSortingCols');
-		$draw      = KT_Filter::getInteger('sEcho');
+		$search    = KT_Filter::post('sSearch', '');
+		$start     = KT_Filter::postInteger('iDisplayStart');
+		$length    = KT_Filter::postInteger('iDisplayLength');
+		$isort     = KT_Filter::postInteger('iSortingCols');
+		$draw      = KT_Filter::postInteger('sEcho');
 		$colsort   = [];
 		$sortdir   = [];
 		for ($i = 0; $i < $isort; ++$i) {
-			$colsort[$i] = KT_Filter::getInteger('iSortCol_' . $i);
-			$sortdir[$i] = KT_Filter::get('sSortDir_' . $i);
+			$colsort[$i] = KT_Filter::postInteger('iSortCol_' . $i);
+			$sortdir[$i] = KT_Filter::post('sSortDir_' . $i);
 		}
 
 		Zend_Session::writeClose();

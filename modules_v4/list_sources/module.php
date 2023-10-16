@@ -124,6 +124,7 @@ class list_sources_KT_Module extends KT_Module implements KT_Module_List {
 				jQuery.fn.dataTableExt.oSort["unicode-desc"]=function(a,b) {return b.replace(/<[^<]*>/, "").localeCompare(a.replace(/<[^<]*>/, ""))};
 
 				jQuery("#sourTable").dataTable({
+					' . KT_I18N::datatablesI18N(array(10, 20, 50, 100, 250)) . ',
 					sorting: [[1,"asc"]],
 					columns: [
 						/*  0 xref        */ { type: "num", visible: false },
