@@ -35,7 +35,7 @@ class list_favorites_KT_Module extends KT_Module implements KT_Module_List {
 
 	// Extend class KT_Module
 	public function getDescription() {
-		return /* I18N: Description of the sources list module */ KT_I18N::translate('Display and manage all your personal and family tree favorites on a single page.');
+		return /* I18N: Description of the favourites list module */ KT_I18N::translate('Display and manage all your personal and family tree favorites on a single page.');
 	}
 
 	// Extend KT_Module
