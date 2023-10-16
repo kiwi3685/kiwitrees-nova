@@ -528,9 +528,11 @@ function additionalFacts($tag)
  * @param string $hint			the text displayed in the hint pop-up
  * @param string $text			the hint displayed within the element
  */
-function hintElement($element = '', $otherClass = '', $otherTags = '', $hint = '', $text = '')
+function hintElement($element = '', $otherClass = '', $otherTags = '', $hint = '', $text = '', $size="medium")
 {
 	global $iconStyle;
+
+	$hintSize = 'hint--' . $size;
 
 	require_once KT_ROOT . 'library/Mobile-Detect-3.74.0/src/MobileDetect.php';
 	$detect = new Detection\MobileDetect;
@@ -538,7 +540,7 @@ function hintElement($element = '', $otherClass = '', $otherTags = '', $hint = '
 		$hintClass = '';
 		$ariaLabel = '';
 	} else {
-		$hintClass = ' hint--top hint--medium hint--no-animate hint--rounded';
+		$hintClass = ' hint--top ' . $hintSize . ' hint--no-animate hint--rounded';
 		$ariaLabel = 'aria-label="' . $hint . '"';
 	}
 

@@ -44,15 +44,15 @@ if (KT_USER_CAN_EDIT) {
 		jQuery.extend(jQuery.fn.dataTable.defaults,
 		{
 			dom: "<'top'p<?php echo $buttons; ?>f<'clear'>irl>t<'bottom'pl>",
-			<?php echo KT_I18N::datatablesI18N(array(5, 10, 20, 50, 100, 500, 1000, -1)); ?> ,
-			buttons: [{extend: "csvHtml5", exportOptions: {columns: ":visible"}}],
+			<?php echo KT_I18N::datatablesI18N(array(10, 20, 50, 100, 250, 500, 1000, -1)); ?> ,
 			autoWidth: false,
+			buttons: [{extend: "csvHtml5", exportOptions: {columns: ":visible"}}],
 			processing: true,
-			serverSide: true,
-			sAjaxSource: ajaxSource,
-			deferRender: true,
 			pagingType: "full_numbers",
 			pageLength: 10,
+			sAjaxSource: ajaxSource,
+			serverSide: true,
+			sServerMethod: "POST",
 			stateSave: true,
 			stateSaveParams: function (settings, data)
 			{

@@ -208,8 +208,10 @@ div.dataTables_wrapper table.dataTable thead tr th.sorting_disabled::after {
 	content: "";
 }
 div.dataTables_wrapper table.dataTable thead tr th svg {
+	font-size: 0.9375rem;
+	position: absolute;
 	right: 0.125rem;
-	top: 0.75rem;
+	top: 0.8125rem;
 }
 div.dataTables_wrapper table.dataTable thead tr th svg.fa-bell, div.dataTables_wrapper table.dataTable thead tr th svg.fa-children {
 	position: initial;

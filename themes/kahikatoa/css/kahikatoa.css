@@ -121,6 +121,19 @@ textarea {
 	min-height: 2.625rem;
 }
 
+a.secondaryName {
+	font-style: italic;
+}
+
+span.secondaryNameSpan {
+	display: inline-block;
+	width: 1.575rem;
+}
+
+.nowrap {
+	white-space: nowrap;
+}
+
 body {
 	display: flex;
 	flex-direction: column;
@@ -2593,13 +2606,14 @@ div[id$=-page] button[type=submit] {
 .svg-inline--fa.vertical {
 	margin-top: 0.5rem;
 }
-
-.fa-female {
+.svg-inline--fa.fa-female, .svg-inline--fa.fa-person-dress {
 	color: #e09798;
 }
-
-.fa-male {
+.svg-inline--fa.fa-male, .svg-inline--fa.fa-person {
 	color: #0193b7;
+}
+.svg-inline--fa.fa-genderless {
+	color: #8a8a8a;
 }
 
 .icon-silhouette-FAM {

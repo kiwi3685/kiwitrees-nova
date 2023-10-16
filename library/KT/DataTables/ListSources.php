@@ -34,6 +34,30 @@
 
 		global $iconStyle, $SHOW_LAST_CHANGE;
 
+		$SELECT1 = "
+			SELECT
+				s_id,
+				s_name,
+				'',
+				IF(`s_gedcom` LIKE '%1 AUTH %', SUBSTRING_INDEX(SUBSTRING_INDEX(`s_gedcom`, '1 AUTH ', -1),'\n',1), '') AS auth,
+				'',
+				(SELECT COUNT(*) FROM `##individuals` JOIN `##link` ON l_from = i_id AND l_file = i_file WHERE l_type = 'SOUR' AND i_file = s_file AND l_to = s_id GROUP BY l_to) as indi,
+				'',
+				(SELECT COUNT(*) FROM `##families` JOIN `##link` ON l_from = f_id AND l_file = f_file WHERE l_type = 'SOUR' AND f_file = s_file AND l_to = s_id GROUP BY l_to) as fam,
+				'',
+				(SELECT COUNT(*) FROM `##media` JOIN `##link` ON l_from = m_id AND l_file = m_file WHERE l_type = 'SOUR' AND m_file = s_file AND l_to = s_id GROUP BY l_to) as obj,
+				'',
+				(SELECT COUNT(*) FROM `##other` JOIN `##link` ON l_from = o_id AND l_file = o_file WHERE l_type = 'SOUR' AND o_file = s_file AND l_to = s_id GROUP BY l_to) as note,
+				'',
+				'',
+				'',
+				''
+			FROM `##sources`
+		";
+
+		$SELECT2 = "SELECT COUNT(*) FROM `##sources`";
+
+
 		$WHERE = " WHERE s_file=" . KT_GED_ID;
 
 		if ($search) {
@@ -58,11 +82,12 @@
 						break;
 				}
 				if ($i < $isort - 1) {
-					$ORDER_BY .= ',';
+					$ORDER_BY .= ', ';
 				}
 			}
 		} else {
-			$ORDER_BY = 'ORDER BY 1 ASC';
+			$ORDER_BY = 'ORDER BY 1 ASC ';
+			$ORDER_BY = '';
 		}
 
 		if ($length > 0) {
@@ -70,29 +95,6 @@
 		} else {
 			$LIMIT = '';
 		}
-
-		$SELECT1 = "
-			SELECT
-				s_id AS xref,
-				s_name AS name,
-				'',
-				IF(`s_gedcom` LIKE '%1 AUTH %', SUBSTRING_INDEX(SUBSTRING_INDEX(`s_gedcom`, '1 AUTH ', -1),'\n',1), '') AS auth,
-				'',
-				(SELECT COUNT(*) FROM `##individuals` JOIN `##link` ON l_from = i_id AND l_file = i_file WHERE l_type = 'SOUR' AND i_file = s_file AND l_to = xref GROUP BY l_to) as indi,
-				'',
-				(SELECT COUNT(*) FROM `##families` JOIN `##link` ON l_from = f_id AND l_file = f_file WHERE l_type = 'SOUR' AND f_file = s_file AND l_to = xref GROUP BY l_to) as fam,
-				'',
-				(SELECT COUNT(*) FROM `##media` JOIN `##link` ON l_from = m_id AND l_file = m_file WHERE l_type = 'SOUR' AND m_file = s_file AND l_to = xref GROUP BY l_to) as obj,
-				'',
-				(SELECT COUNT(*) FROM `##other` JOIN `##link` ON l_from = o_id AND l_file = o_file WHERE l_type = 'SOUR' AND o_file = s_file AND l_to = xref GROUP BY l_to) as note,
-				'',
-				'',
-				'',
-				''
-			FROM `##sources`
-		";
-
-		$SELECT2 = "SELECT COUNT(*) FROM `##sources`";
 
 		// Total filtered/unfiltered rows
 		$iTotalDisplayRecords = KT_DB::prepare($SELECT2 . $WHERE . $QUERY . $LIMIT)->execute($ARGS)->fetchOne();
