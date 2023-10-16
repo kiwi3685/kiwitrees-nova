@@ -30,7 +30,7 @@ class list_sources_KT_Module extends KT_Module implements KT_Module_List {
 
 	// Extend class KT_Module
 	public function getTitle() {
-		return /* I18N: Name of a module */ KT_I18N::translate('Sources list');
+		return /* I18N: Name of a module */ KT_I18N::translate('Sources');
 	}
 
 	// Extend class KT_Module
@@ -152,7 +152,7 @@ class list_sources_KT_Module extends KT_Module implements KT_Module_List {
 
 			<div class="cell callout info-help">
 				<?php echo KT_I18N::translate('
-					A list of all shared note records for this family tree, limited only by privacy settings.
+					A list of all source records for this family tree, limited only by privacy settings.
 					Addional columns show the number of other records (individuals, families, etc) each note is linked to.
 				'); ?>
 			</div>
