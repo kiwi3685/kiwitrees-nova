@@ -124,6 +124,7 @@ class list_shared_notes_KT_Module extends KT_Module implements KT_Module_List {
 				jQuery.fn.dataTableExt.oSort["unicode-desc"]=function(a,b) {return b.replace(/<[^<]*>/, "").localeCompare(a.replace(/<[^<]*>/, ""))};
 
 				jQuery("#noteTable").dataTable({
+					' . KT_I18N::datatablesI18N(array(10, 20, 50, 100, 250)) . ',
 					sorting: [[2,"asc"]],
 					columns: [
 						/*  0 xref         */ { type: "num", visible: false },
@@ -152,6 +153,14 @@ class list_shared_notes_KT_Module extends KT_Module implements KT_Module_List {
 					A list of all shared note records for this family tree, limited only by privacy settings.
 					Addional columns show the number of other records (individuals, families, etc) each note is linked to.
 				'); ?>
+			</div>
+			<div class="cell callout warning" data-closable>
+				<?php echo KT_I18N::translate('
+					Long lists may be slow to load, or could fail.
+				'); ?>
+				<button class="close-button" aria-label="<?php echo KT_I18N::translate('Dismiss'); ?>" type="button" data-close>
+					<span aria-hidden="true"><i class="<?php echo $iconStyle; ?> fa-xmark"></i></span>
+				</button>
 			</div>
 
 			<div class="cell">
