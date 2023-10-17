@@ -1055,7 +1055,7 @@ switch (KT_Filter::get('action')) {
 			->setPageTitle(KT_I18N::translate('User administration'))
 			->addExternalJavascript(KT_DATATABLES_KT_JS)
 			->addInlineJavascript('
-				datables_defaults();
+				datatable_defaults();
 
 				jQuery("#list").dataTable({
 					buttons: [{extend: "csvHtml5", exportOptions: { columns: [1,2,3,4,5,7,9,10,11] }}],

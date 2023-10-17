@@ -254,7 +254,10 @@ $controller
 	->pageHeader()
 	->addExternalJavascript(KT_DATATABLES_KT_JS)
 	->addInlineJavascript('
-		datables_defaults("' . KT_SCRIPT_NAME . '?action=loadrows&files=' . $files . '&media_folder=' . $media_folder . '&media_path=' . $media_path . '&subfolders=' . $subfolders . '");
+		datatable_defaults("' . KT_SCRIPT_NAME . '?action=loadrows&files=' . $files . '&media_folder=' . $media_folder . '&media_path=' . $media_path . '&subfolders=' . $subfolders . '");
+
+		jQuery.fn.dataTableExt.oSort["unicode-asc" ]=function(a,b) {return a.replace(/<[^<]*>/, "").localeCompare(b.replace(/<[^<]*>/, ""))};
+		jQuery.fn.dataTableExt.oSort["unicode-desc"]=function(a,b) {return b.replace(/<[^<]*>/, "").localeCompare(a.replace(/<[^<]*>/, ""))};
 
 		jQuery("#media-table-' . $table_id . '").dataTable({
 			buttons: [{extend: "csvHtml5", exportOptions: {columns: [0,2,3,4,6]}}],
@@ -262,7 +265,7 @@ $controller
 				/*0 - media file */		{},
 				/*1 - media object */	{sortable: false, class: "center"},
 				/*2 - media name */		{sortable: ' . ($files === 'unused' ? 'false' : 'true') . '},
-				/*3 - highlighted? */	{},
+				/*3 - highlighted? */	{type: "text"},
 				/*4 - media type */		{},
 				/*5 - DELETE    */      { visible: ' . (KT_USER_GEDCOM_ADMIN && $files === 'unused' ? 'true' : 'false') . ', sortable: false, class: "center" },
 				/*6 - path for CSV only */ { visible: false}

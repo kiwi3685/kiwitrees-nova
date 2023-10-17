@@ -107,7 +107,7 @@ $controller
 	->addExternalJavascript(KT_DATEPICKER_JS)
 	->addExternalJavascript(KT_DATEPICKER_JS_LOCALE)
 	->addInlineJavascript('
-		datables_defaults("' . KT_SCRIPT_NAME . '?action=loadrows&from=' . $from . '&to=' . $to . '&type=' . $type . '&text=' . rawurlencode((string) $text) . '&ip=' . rawurlencode((string) $ip) . '&user=' . rawurlencode((string) $user) . '&gedc=' . rawurlencode((string) $gedc) . '");
+		datatable_defaults("' . KT_SCRIPT_NAME . '?action=loadrows&from=' . $from . '&to=' . $to . '&type=' . $type . '&text=' . rawurlencode((string) $text) . '&ip=' . rawurlencode((string) $ip) . '&user=' . rawurlencode((string) $user) . '&gedc=' . rawurlencode((string) $gedc) . '");
 
 		jQuery("#log_list").dataTable({
 			dom: \'<"top"pB<"clear">irl>t<"bottom"pl>\',

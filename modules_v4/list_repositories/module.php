@@ -115,7 +115,7 @@ class list_repositories_KT_Module extends KT_Module implements KT_Module_List {
 			->restrictAccess(KT_Module::isActiveList(KT_GED_ID, 'list_repositories', KT_USER_ACCESS_LEVEL))
 			->addExternalJavascript(KT_DATATABLES_KT_JS)
 			->addInlineJavascript('
-				datables_defaults("module.php?mod=' . $this->getName() . '&mod_action=show&action=loadrows");
+				datatable_defaults("module.php?mod=' . $this->getName() . '&mod_action=show&action=loadrows");
 
 				jQuery.fn.dataTableExt.oSort["unicode-asc" ]=function(a,b) {return a.replace(/<[^<]*>/, "").localeCompare(b.replace(/<[^<]*>/, ""))};
 				jQuery.fn.dataTableExt.oSort["unicode-desc"]=function(a,b) {return b.replace(/<[^<]*>/, "").localeCompare(a.replace(/<[^<]*>/, ""))};

@@ -39,7 +39,7 @@ if (KT_USER_CAN_EDIT) {
 	 * Individual pages add button, sorting, and column definitions as required
 	 * The following options can also be over-ridden as necessary
 	 */
-	function datables_defaults(ajaxSource = "<?php echo KT_SCRIPT_NAME; ?>?action=loadrows")
+	function datatable_defaults(ajaxSource = "<?php echo KT_SCRIPT_NAME; ?>?action=loadrows")
 	{
 		jQuery.extend(jQuery.fn.dataTable.defaults,
 		{

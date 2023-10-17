@@ -73,6 +73,11 @@ button .svg-inline--fa {
 	margin-bottom: 0.9375rem;
 	padding: 0.5rem 0.75rem;
 }
+.callout button.close-button .svg-inline--fa {
+	color: #ab3334;
+	margin: 0 0 -0.1rem 0;
+	font-size: 1.25rem;
+}
 
 form input.error {
 	color: #ab3334;
